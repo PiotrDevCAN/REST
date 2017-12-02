@@ -1,5 +1,5 @@
 <?php
-do_auth($_SESSION['userBg']);
+// do_auth($_SESSION['userBg']);
 ?>
 
 
