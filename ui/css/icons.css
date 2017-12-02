@@ -1,0 +1,81 @@
+@charset "utf-8";
+/*-----------------------------------------------------
+w3 general styles for screen media
+Used by: only those w3 web pages that use additional icons; most common icons are in screen.css
+$Id: icons.css,v 1.8.4.3 2004/08/31 13:41:56 ejp Exp $
+-----------------------------------------------------*/
+.expand-link-dark,
+.expand-link-light,
+.collapse-link-dark,
+.collapse-link-light,
+.add-link-dark,
+.add-link-light,
+.delete-link-dark,
+.delete-link-light,
+.refresh-link,
+.inbox-link,
+.compose-link,
+.calendar-link,
+.create-link,
+.download-link,
+.audio-link,
+.video-link,
+.print-link,
+.email-link,
+.rate-link,
+.secured-link,
+.secure-access-link,
+.install-link,	
+.upload-link, 
+.move-link {padding:0 0 1em 24px; display:block;}
+
+.expand-link-dark	{background:url(/ui/images/icon-link-expand-dark.gif) 7px 2px no-repeat;}
+.expand-link-light	{background:url(/ui/v8/images/icon-link-expand-light.gif) 7px 1px no-repeat;}
+.collapse-link-dark	{background:url(/ui/v8/images/icon-link-collapse-dark.gif) 7px 2px no-repeat;}
+.collapse-link-light	{background:url(/ui/v8/images/icon-link-collapse-light.gif) 7px 1px no-repeat;}
+.add-link-dark		{background:url(/ui/v8/images/icon-link-add-dark.gif) 7px 2px no-repeat;}
+.add-link-light	{background:url(/ui/v8/images/icon-link-add-light.gif) 7px 1px no-repeat;}
+.delete-link-dark	{background:url(/ui/v8/images/icon-link-delete-dark.gif) 7px 2px no-repeat;}
+.delete-link-light	{background:url(/ui/v8/images/icon-link-delete-light.gif) 7px 1px no-repeat;}
+.refresh-link	{background:url(/ui/v8/images/icon-link-refresh.gif) 9px 2px no-repeat;}
+.inbox-link	{background:url(/ui/v8/images/icon-link-inbox.gif) 0 1px no-repeat;}
+.compose-link	{background:url(/ui/v8/images/icon-link-compose.gif) 0 1px no-repeat;}
+.calendar-link	{background:url(/ui/v8/images/icon-link-calendar.gif) 0 1px no-repeat;}
+.create-link	{background:url(/ui/v8/images/icon-link-create-event.gif) 0 1px no-repeat;}
+.download-link	{background:url(/ui/v8/images/icon-link-download.gif) 8px 2px no-repeat;}
+.audio-link	{background:url(/ui/v8/images/icon-link-audio.gif) 6px 2px no-repeat;}
+.video-link	{background:url(/ui/v8/images/icon-link-video.gif) 7px 2px no-repeat;}
+.print-link	{background:url(/ui/v8/images/icon-link-print.gif) 7px 1px no-repeat;}
+.email-link	{background:url(/ui/v8/images/icon-link-email.gif) 0 2px no-repeat;}
+.rate-link	{background:url(/ui/v8/images/icon-link-rate.gif) 2px 0 no-repeat;}
+.secured-link	{background:url(/ui/v8/images/icon-link-secured.gif) 3px 4px no-repeat; font-size:smaller;}
+.secure-access-link	{background:url(/ui/v8/images/icon-link-secure-access.gif) 2px 2px no-repeat;}
+.install-link	{background:url(/ui/v8/images/icon-link-install.gif) 0 0 no-repeat;}
+.upload-link	{background:url(/ui/v8/images/icon-link-upload.gif) 7px 2px  no-repeat;}
+.move-link	{background:url(/ui/v8/images/icon-link-move.gif) 0px 2px no-repeat;}
+
+/* These classes below should not be used due to accessibility issue. */
+.help-link-dark,
+.help-link-light,
+.popup-link,
+.popup-help-link,
+.sort-u-link-light,
+.sort-u-link-dark,
+.sort-d-link-light,
+.sort-d-link-dark,
+.sort-a-link-light,
+.sort-a-link-dark {padding:0 0 1em 24px; display:block;}
+
+.help-link-light	{background:url(/ui/v8/images/icon-help-contextual-light.gif) 7px 2px no-repeat;}
+.help-link-dark	{background:url(/ui/v8/images/icon-help-contextual-dark.gif) 7px 2px no-repeat;}
+.sort-u-link-light	{background:url(/ui/v8/images/icon-link-sort-u-light.gif) 2px 4px no-repeat;}
+.sort-d-link-light	{background:url(/ui/v8/images/icon-link-sort-d-light.gif) 2px 4px no-repeat;}
+.sort-a-link-light	{background:url(/ui/v8/images/icon-link-sort-a-light.gif) 2px 4px no-repeat;}
+.sort-u-link-dark	{background:url(/ui/v8/images/icon-link-sort-u-dark.gif) 2px 4px no-repeat;}
+.sort-d-link-dark	{background:url(/ui/v8/images/icon-link-sort-d-dark.gif) 2px 4px no-repeat;}
+.sort-a-link-dark	{background:url(/ui/v8/images/icon-link-sort-a-dark.gif) 2px 4px no-repeat;}
+.popup-link		{background:url(/ui/v8/images/icon-link-popup.gif) 7px 2px no-repeat;}
+.popup-help-link	{background:url(/ui/v8/images/icon-link-popup.gif) 7px 2px no-repeat;}
+.sametime-status	{color:#666; font-size:.9em; display:block;}
+.sametime-status a.sametime-active	{padding:0 0 1em 15px; background:url(/ui/v8/images/icon-sametime-active.gif) 1px 2px no-repeat;}
+.sametime-status a.sametime-away	{padding:0 0 1em 15px; background:url(/ui/v8/images/icon-sametime-away.gif) 1px 1px no-repeat;}

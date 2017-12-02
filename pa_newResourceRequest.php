@@ -1,0 +1,256 @@
+<?php
+use itdq\Trace;
+use rest\resourceRequestRecord;
+use itdq\FormClass;
+use rest\resourceRequestTable;
+use rest\allTables;
+
+set_time_limit(0);
+
+include_once 'connect.php';
+
+do_auth($_SESSION['pmoBg']);
+
+Trace::pageOpening($_SERVER['PHP_SELF']);
+
+?>
+<div class='container'>
+<h2>Resource Request Form</h2>
+<?php
+if(isset($_REQUEST['resource'])){
+    $mode = FormClass::$modeEDIT;
+    $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
+    $resourceRecord = new resourceRequestRecord();
+    $resourceRecord->set('RESOURCE_REFERENCE', $_REQUEST['resource']);
+    $resourceData = $resourceTable->getRecord($resourceRecord);
+    $resourceRecord->setFromArray($resourceData);
+
+} else {
+    $resourceRecord = new resourceRequestRecord();
+    $mode = FormClass::$modeDEFINE;
+}
+
+$resourceRecord->displayForm($mode);
+?>
+</div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Resource Request Save Result</h4>
+      </div>
+      <div class="modal-body" >
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+<script>
+$(document).ready(function() {
+
+	$('#CURRENT_PLATFORM').attr('required',false);
+	$('#OOH').attr('required',false);
+	$('#LINK_TO_PGMP').attr('required',false);
+});
+
+
+$("form").on("reset", function () {
+	$(".select").val('').trigger('change');
+	console.log($('.select'));
+
+});
+
+
+$(document).ready(function(){
+
+	var startDate,
+    	endDate,
+    updateStartDate = function() {
+		console.log('updatedStartDate');
+        startPicker.setStartRange(startDate);
+        endPicker.setStartRange(startDate);
+        endPicker.setMinDate(startDate);
+    },
+    updateEndDate = function() {
+		console.log('updatedEndDate');
+        startPicker.setEndRange(endDate);
+        startPicker.setMaxDate(endDate);
+        endPicker.setEndRange(endDate);
+    },
+    startPicker = new Pikaday({
+    	firstDay:1,
+		disableDayFn: function(date){
+		    // Disable weekend
+		    return date.getDay() === 0 || date.getDay() === 6;
+		},
+        field: document.getElementById('InputSTART_DATE'),
+        format: 'D MMM YYYY',
+        showTime: false,
+        onSelect: function() {
+            console.log(this.getMoment().format('Do MMMM YYYY'));
+            var db2Value = this.getMoment().format('YYYY-MM-DD')
+            console.log(db2Value);
+            jQuery('#START_DATE').val(db2Value);
+            startDate = this.getDate();
+            console.log(startDate);
+            updateStartDate();
+        }
+    }),
+    endPicker = new Pikaday({
+    	firstDay:1,
+		disableDayFn: function(date){
+		    // Disable weekend
+		    return date.getDay() === 0 || date.getDay() === 6;
+		},
+        field: document.getElementById('InputEND_DATE'),
+        format: 'D MMM YYYY',
+        showTime: false,
+        onSelect: function() {
+            console.log(this.getMoment().format('Do MMMM YYYY'));
+            var db2Value = this.getMoment().format('YYYY-MM-DD')
+            console.log(db2Value);
+            jQuery('#END_DATE').val(db2Value);
+            endDate = this.getDate();
+            updateEndDate();
+        }
+    }),
+    _startDate = startPicker.getDate(),
+    _endDate = endPicker.getDate();
+
+    if (_startDate) {
+        startDate = _startDate;
+        updateStartDate();
+    }
+
+    if (_endDate) {
+        endDate = _endDate;
+        updateEndDate();
+    }
+});
+
+$(document).ready(function() {
+    var text_max = 1500;
+    $('#textarea_feedbackadditional_comments').html(text_max + ' characters remaining');
+
+    $('#additional_comments').keyup(function() {
+        var text_length = $('#additional_comments').val().length;
+        var text_remaining = text_max - text_length;
+
+        $('#textarea_feedbackadditional_comments').html(text_remaining + ' characters remaining');
+        if(text_remaining<=0){
+            $("#additional_commentsFormGroup").addClass("has-error");
+            $("#textarea_feedbackadditional_comments").addClass("textarea-full");
+        } else {
+            $("#additional_commentsFormGroup").removeClass("has-error");
+            $("#textarea_feedbackadditional_comments").removeClass("textarea-full");
+        }
+    });
+});
+
+
+$(document).ready(function() {
+    var text_max = 500;
+    $('#textarea_feedbackDESCRIPTION').html(text_max + ' characters remaining');
+
+    $('#DESCRIPTION').keyup(function() {
+        var text_length = $('#DESCRIPTION').val().length;
+        var text_remaining = text_max - text_length;
+
+        $('#textarea_feedbackDESCRIPTION').html(text_remaining + ' characters remaining');
+        if(text_remaining<=0){
+            $("#DESCRIPTIONFormGroup").addClass("has-error");
+            $("#textarea_feedbackDESCRIPTION").addClass("textarea-full");
+        } else {
+            $("#DESCRIPTIONFormGroup").removeClass("has-error");
+            $("#textarea_feedbackDESCRIPTION").removeClass("textarea-full");
+        }
+    });
+});
+
+
+
+$(document).ready(function(){
+
+	$( "#resourceRequestForm" ).submit(function( event ) {
+		var url = 'ajax/saveResourceRecord.php';
+		var disabledFields = $(':disabled');
+		$(disabledFields).removeAttr('disabled');
+		var formData = $("#resourceRequestForm").serialize();
+		$(disabledFields).attr('disabled',true);
+		jQuery.ajax({
+			type:'post',
+		  	url: url,
+		  	data:formData,
+		  	context: document.body,
+ 	      	beforeSend: function(data) {
+	        	//	do the following before the save is started
+	        	},
+	      	success: function(response) {
+	            // 	do what ever you want with the server response if that response is "success"
+	            	console.log(response);
+	            	console.log(JSON.parse(response));
+	               // $('.modal-body').html(JSON.parse(response));
+	               var responseObj = JSON.parse(response);
+	               var resourceRef =  "<p>Resource Ref:" + responseObj.resourceReference + "</p>";
+	               var savedResponse =  "<p>Saved:" + responseObj.saveResponse +  "</p>";
+	               var hoursResponse =  "<p>" + responseObj.hoursResponse +  "</p>";
+	               var messages =  "<p>" + responseObj.Messages +  "</p>";
+	                $('.modal-body').html(resourceRef + savedResponse + hoursResponse + messages);
+	                $('#myModal').modal('show');
+	                $('#myModal').on('hidden.bs.modal', function () {
+	                	  // do something…
+		                if(responseObj.Update==true){
+	    	            	window.close();
+	        	        } else {
+	            	    	$('#resetResourceRequest').click();
+	                	}
+              	})
+          		},
+	      	fail: function(response){
+					console.log('Failed');
+					console.log(response);
+// 					FormClass.displayAjaxError('<p>ActionPlanRecord.initialiseForm</p><p>Ajax call has failed.<br/>HTTP Code ' + xmlDoc.status + '<br/>HTTP Text:' +xmlDoc.statusText + '<br/>Response:' + xmlDoc.responseText + '</p>');
+// 					console.log(xmlDoc.responseXML);
+// 					console.log(xmlDoc.responseText);
+// 					jQuery('.slaSave').prop('disable',true );
+	                $('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
+	                $('#myModal').modal('show');
+				},
+	      	error: function(error){
+	            //	handle errors here. What errors	            :-)!
+	        		console.log('Ajax error' );
+	        		console.log(error.statusText);
+	        		FormClass.displayAjaxError('<p>Ajax call has errored.</p><p>URL:"' + url + '"</p><p>Error Status:"' + error.statusText + '"</p>');
+	        		jQuery('.slaSave').html('Save').prop('disable',true );
+	        	},
+	      	always: function(){
+	        		console.log('--- saved resource request ---');
+
+	      	}
+		});
+	event.preventDefault();
+	});
+});
+
+
+</script>
+
+
+
+<?php
+Trace::pageLoadComplete($_SERVER['PHP_SELF']);

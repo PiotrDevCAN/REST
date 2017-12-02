@@ -1,0 +1,24 @@
+/*
+ * Use for my own CSS
+ */
+
+table tr.section-title th		{
+	background:#05a;
+	color:#fff;
+	font-size:1.5em;
+}
+table tr.sub-section th		{
+	background:#05a;
+	color:#fff;
+	font-size:1.0em;
+}
+
+[readonly] { /* Text and background colour, medium red on light yellow */
+color:#000;
+background-color:#ddd;
+}
+[disabled] { /* Text and background colour, medium red on light yellow */
+color:#000;
+background-color:#ddd;
+}
+

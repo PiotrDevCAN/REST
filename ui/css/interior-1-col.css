@@ -1,0 +1,24 @@
+@charset "utf-8";
+/*-----------------------------------------------------
+w3 general styles for interior pages with no sidebar
+Used by: w3 web pages that want wide content and no sidebar
+Note: for "1 column pages,"
+	@import this file AFTER the other @import
+	statements in the html file.
+$Id: interior-1-col.css,v 1.4.4.2 2004/08/11 21:55:12 coop Exp $
+-----------------------------------------------------*/
+
+#content-main {
+	width:95% !important;
+	border:0;
+}
+
+* html #content-main	{ 
+	\width:80% !important;
+	w\idth:95% !important;
+	border:0;
+}
+
+#content-sidebar    {
+	display:none;
+} 

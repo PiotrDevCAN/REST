@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+/* used for table title and navigation */
+
+span.tbltitle {
+	float: left; 
+	width: 48%; 
+	text-align: left; 
+	white-space: nowrap;
+}
+
+span.tblnav {
+	float: right;
+	width: 48%;
+	text-align: right; 
+	font-weight: normal; 
+	white-space: nowrap;
+}
