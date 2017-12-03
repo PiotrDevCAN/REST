@@ -35,8 +35,7 @@ $w3php = array(
 );
 
 
-
-$ds = _ldaps_connect();
+$ds = ldap_connect($w3php['ldaps_host']);
 var_dump($ds);
 
 $filter = "(&(mail=rob.daniel@uk.ibm.com)(objectclass=ibmPerson))";
@@ -52,7 +51,7 @@ var_dump($entry);
 $user_dn = ldap_get_dn($ds, $entry);
 var_dump($user_dn);
 
-$pass='xxxxxxx';
+$pass='Dc17Ujhy';
 $bind = ldap_bind($ds, $user_dn, $pass);
 var_dump($bind);
 
