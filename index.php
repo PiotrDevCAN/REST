@@ -1,12 +1,6 @@
 <?php
 // do_auth($_SESSION['userBg']);
 include "class/include.php";
-$auth = new Auth();
-if(!$auth->ensureAuthorized()){
-    var_dump($auth);
-}
-
-
 ?>
 
 
