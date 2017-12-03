@@ -26,6 +26,6 @@ if ($conn) {
     echo "Connection failed.<BR>";
     exit();
 }
-db2_autocommit($conn, TRUE); // This is how it was on the Wintel Box - so the code has no/few commit points.
+// db2_autocommit($conn, TRUE); // This is how it was on the Wintel Box - so the code has no/few commit points.
 
 ?>
