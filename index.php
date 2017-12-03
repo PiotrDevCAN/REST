@@ -1,6 +1,5 @@
 <?php
 // do_auth($_SESSION['userBg']);
-include "class/include.php";
 ?>
 
 
