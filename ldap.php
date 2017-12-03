@@ -34,11 +34,11 @@ $w3php = array(
     'ldap_basedn' => 'ou=bluepages,o=ibm.com'
 );
 
+$ds = ldap_connect('nonsense.addr.com');
+var_dump($ds);
 
 $ds = ldap_connect($w3php['ldaps_host']);
 var_dump($ds);
-
-die('here');
 
 $filter = "(&(mail=rob.daniel@uk.ibm.com)(objectclass=ibmPerson))";
 
@@ -46,6 +46,8 @@ $sr = ldap_search($ds, $w3php['ldap_basedn'], $filter, $w3php['ldap_attr']);
 
 var_dump($sr);
 var_dump($ds);
+
+die('here2');
 
 $entry = ldap_first_entry($ds, $sr);
 var_dump($entry);
