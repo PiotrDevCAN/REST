@@ -35,8 +35,6 @@ $w3php = array(
 );
 
 
-die('here');
-
 $ds = _ldaps_connect();
 var_dump($ds);
 
