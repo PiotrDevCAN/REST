@@ -9,10 +9,6 @@ include realpath(dirname(__FILE__))."/../class/include.php";
 $auth = new Auth();
 if($auth->verifyResponse($_GET))
 {
-
-    print_r($_GET);
-    die('here');
-
 	header("Location: ".$_GET['state']);
 	exit();
 }
