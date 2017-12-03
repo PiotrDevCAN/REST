@@ -5,7 +5,7 @@ include ('php/menuconf.php');
 include ('itdq/PlannedOutages.php');
 include ('itdq/DbTable.php');
 $plannedOutages = new PlannedOutages();
-include ('../UserComms/responsiveOutages_V2.php');
+include ('UserComms/responsiveOutages_V2.php');
 
 ?>
 
