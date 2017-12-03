@@ -40,6 +40,8 @@ include ('UserComms/responsiveOutages_V2.php');
 
               $pageDetails = explode("/", $_SERVER['PHP_SELF']);
 
+              var_dump($pageDetails);
+
               foreach ($navBar_data as $navBarItem) {
                    $label = $navBarItem[0];
                    $link = $navBarItem[1];
