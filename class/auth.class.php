@@ -105,7 +105,7 @@
 					&& isset($userData['uid']) && !empty($userData['uid'])
 					)
 				{
-					$_SESSION['email'] = $userData['emailAddress'];
+					$_SESSION['ssoEmail'] = $userData['emailAddress'];
 					$_SESSION['firstName'] = $userData['firstName'];
 					$_SESSION['lastName'] = $userData['lastName'];
 					$_SESSION['exp'] = $userData['exp'];
@@ -114,14 +114,14 @@
 				}
 				//if using this code on IBM ID
 				else if(isset($userData) && !empty($userData)
-					&& isset($userData['email']) && !empty($userData['email'])
+					&& isset($userData['ssoEmail']) && !empty($userData['email'])
 					&& isset($userData['given_name']) && !empty($userData['given_name'])
 					&& isset($userData['family_name']) && !empty($userData['family_name'])
 					&& isset($userData['exp']) && !empty($userData['exp'])
 					&& isset($userData['uniqueSecurityName']) && !empty($userData['uniqueSecurityName'])
 					)
 				{
-					$_SESSION['email'] = $userData['email'];
+					$_SESSION['ssoEmail'] = $userData['email'];
 					$_SESSION['firstName'] = $userData['given_name'];
 					$_SESSION['lastName'] = $userData['family_name'];
 					$_SESSION['exp'] = $userData['exp'];

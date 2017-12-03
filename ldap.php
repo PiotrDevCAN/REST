@@ -34,8 +34,6 @@ $w3php = array(
     'ldap_basedn' => 'ou=bluepages,o=ibm.com'
 );
 
-$ds = ldap_connect('nonsense.addr.com');
-var_dump($ds);
 
 $ds = ldap_connect($w3php['ldaps_host']);
 var_dump($ds);
