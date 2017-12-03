@@ -45,3 +45,14 @@ $sr = ldap_search($ds, $w3php['ldap_basedn'], $filter, $w3php['ldap_attr']);
 
 var_dump($sr);
 var_dump($ds);
+
+$entry = ldap_first_entry($ds, $sr);
+var_dump($entry);
+
+$user_dn = ldap_get_dn($ds, $entry);
+var_dump($user_dn);
+
+$pass='xxxxxxx';
+$bind = ldap_bind($ds, $user_dn, $pass);
+var_dump($bind);
+
