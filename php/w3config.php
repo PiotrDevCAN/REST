@@ -114,7 +114,7 @@ $meta = array(
 $w3php = array(
 
     // enable debug only during testing
-    'debug' => FALSE,
+    'debug' => TRUE,
 
     // location of error documents
     'error_doc' => $_SERVER['DOCUMENT_ROOT'] . "/" .  $site['prefix'] . '/error_doc/',
