@@ -4,6 +4,9 @@ include realpath(dirname(__FILE__))."/class/include.php";
 $auth = new Auth();
 if(!$auth->ensureAuthorized()){
     die('Invalid logon attempt');
+} else {
+    $GLOBALS['ltcuser']['mail'] = $_SESSION['ssoEmail'];
+    var_dump($_SESSION);
 }
 
 ?>
