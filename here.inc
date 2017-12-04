@@ -1,3 +1,3 @@
 <?php
-echo __FILE__;
+echo "<br/>" . __FILE__;
 ?>
