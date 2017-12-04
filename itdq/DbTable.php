@@ -474,7 +474,7 @@ class DbTable
         // order by 1,2";
 
         echo "<pre>";
-        var_dump($SESSION);
+        var_dump($_SESSION);
         var_dump($_SESSION['conn']);
         var_dump($_SESSION['Db2Schema']);
         var_dump($this->tableName);
