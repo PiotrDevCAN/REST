@@ -482,7 +482,7 @@ class DbTable
 
 
 
-        $rs = db2_columns($_SESSION['conn'], 'REST', $_SESSION['Db2Schema'], strtoupper($this->tableName), '%');
+        $rs = db2_columns($_SESSION['conn'], null, $_SESSION['Db2Schema'], strtoupper($this->tableName), '%');
 
         // echo "<br/>" . __METHOD__ . __LINE__;
         // var_dump($rs);
