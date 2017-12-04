@@ -12,8 +12,9 @@ $endDate = !empty($_POST['endDate']) ? $_POST['endDate'] : null;
 
 $data = $resourceRequestTable->returnAsArray($startDate,$endDate);
 
-$response = array("data"=>$data);
+$messages = ob_get_clean();
 
+$response = array("data"=>$data,'messages'=>$messages);
 
 ob_clean();
 echo json_encode($response);
