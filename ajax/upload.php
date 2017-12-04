@@ -4,11 +4,7 @@ use rest\inflightProjectsTable;
 use rest\uploadLogRecord;
 
 set_time_limit(0);
-session_start();
-
 ob_start();
-
-include_once 'connect.php';
 
 $tempFilename = $_FILES ['uploadingFile'] ['tmp_name'];
 $newFilename = $_SERVER['DOCUMENT_ROOT'] .   "/" . $_SERVER['environment'] . "/uploads/" . $_FILES ['uploadingFile'] ['name'];
