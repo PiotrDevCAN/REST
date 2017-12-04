@@ -3,18 +3,8 @@ use rest\allTables;
 use rest\inflightProjectsTable;
 use rest\uploadLogTable;
 use rest\uploadLogRecord;
-
 set_time_limit(0);
-
-session_start();
-
 ob_start();
-include_once 'connect.php';
-
-if(!isset($_SESSION['conn'])){
-    die('didnt connect');
-}
-
 $inflightTable = new inflightProjectsTable($_POST['tableName']);
 
 $data = $inflightTable->returnAsArray();
