@@ -166,7 +166,7 @@ function do_error($page = array())
 
 function do_auth($group = null)
 {
-include "class/include.php";
+include_once "class/include.php";
 $auth = new Auth();
 if(!$auth->ensureAuthorized()){
     die('Invalid logon attempt');
