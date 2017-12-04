@@ -11,6 +11,9 @@ session_start();
 ob_start();
 include_once 'connect.php';
 
+var_dump($_SESSION);
+var_dump($_POST);
+
 $inflightTable = new inflightProjectsTable($_POST['tableName']);
 
 $data = $inflightTable->returnAsArray();
@@ -37,5 +40,5 @@ $response = array('messages'=>$messages
                 );
 
 
-ob_clean();
-echo json_encode($response);
+// ob_clean();
+// echo json_encode($response);
