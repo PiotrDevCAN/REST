@@ -22,7 +22,7 @@ if( getenv( "VCAP_SERVICES" ) )
     {
         echo "<p>Connection succeeded.</p>";
         $_SESSION['conn'] = $conn;
-        $schema = isser($_SESSION['Db2Schema']) ? $_SESSION['Db2Schema'] : 'REST';
+        $schema = isset($_SESSION['Db2Schema']) ? $_SESSION['Db2Schema'] : 'REST';
         $Statement = "SET CURRENT SCHEMA='$schema';";
 
         var_dump($_SESSION);
