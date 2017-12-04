@@ -468,29 +468,7 @@ class DbTable
     function getDBColumns()
     {
         Trace::traceComment(null, __METHOD__);
-        // $sql = "select TABLE_CAT,TABLE_SCHEM, TABLE_NAME, COLUMN_NAME, DATA_TYPE, TYPE_NAME, COLUMN_SIZE, BUFFER_LENGTH, DECIMAL_DIGITS, NUM_PREC_RADIX, NULLABLE, REMARKS, COLUMN_DEF, SQL_DATA_TYPE, SQL_DATETIME_SUB, CHAR_OCTET_LENGTH,ORDINAL_POSITION, IS_NULLABLE
-        // from sysibm.SQLCOLumns2
-        // where table_schem = '" . $_SESSION['Db2Schema'] . "' and TABLE_NAME = '" . $this->tableName . "'
-        // order by 1,2";
-
-        echo "<pre>";
-        var_dump($_SESSION);
-        var_dump($_SESSION['conn']);
-        var_dump($_SESSION['Db2Schema']);
-        var_dump($this->tableName);
-        echo "</pre>";
-
-
-
         $rs = db2_columns($_SESSION['conn'], null, $_SESSION['Db2Schema'], strtoupper($this->tableName), '%');
-
-        // echo "<br/>" . __METHOD__ . __LINE__;
-        // var_dump($rs);
-
-        // $row = db2_fetch_assoc ( $rs );
-        // echo "<br/>" . __METHOD__ . __LINE__;
-        // var_dump($row);
-
         while ($row = db2_fetch_assoc($rs)) {
             Trace::traceVariable($row, __METHOD__, __LINE__);
             $this->columns[trim($row['COLUMN_NAME'])] = $row;
