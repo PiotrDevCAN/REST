@@ -473,8 +473,13 @@ class DbTable
         // where table_schem = '" . $_SESSION['Db2Schema'] . "' and TABLE_NAME = '" . $this->tableName . "'
         // order by 1,2";
 
-        var_dump($_SESSION);
-        $rs = db2_columns($_SESSION['conn'], null, $_SESSION['Db2Schema'], strtoupper($this->tableName), '%');
+        var_dump($_SESSION['conn']);
+        var_dump($_SESSION['Db2Schema']);
+        var_dump($this->tableName);
+
+
+
+        $rs = db2_columns($_SESSION['conn'], 'REST', $_SESSION['Db2Schema'], strtoupper($this->tableName), '%');
 
         // echo "<br/>" . __METHOD__ . __LINE__;
         // var_dump($rs);
