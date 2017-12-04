@@ -473,9 +473,12 @@ class DbTable
         // where table_schem = '" . $_SESSION['Db2Schema'] . "' and TABLE_NAME = '" . $this->tableName . "'
         // order by 1,2";
 
+        echo "<pre>";
+        var_dump($SESSION);
         var_dump($_SESSION['conn']);
         var_dump($_SESSION['Db2Schema']);
         var_dump($this->tableName);
+        echo "</pre>";
 
 
 
