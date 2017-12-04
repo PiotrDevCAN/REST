@@ -8,18 +8,19 @@ $rs = db2_exec($_SESSION['conn'],$sql);
 var_dump($rs);
 
 if($rs){
-    $row = db2_fetch_assoc($rs);
+    while(($row = db2_fetch_assoc($rs))==true){
     echo "<br/>" . var_dump($row);
+    }
 }
-
 echo "<hr/>";
 
 $rs2 = db2_columns($_SESSION['conn'], null, $_SESSION['Db2Schema'], 'INFLIGHT_PROJECTS', '%');
 var_dump($rs2);
 
 if($rs2){
-    while(($row = db2_fetch_assoc($rs2))==true);
+    while(($row = db2_fetch_assoc($rs2))==true){
     echo "<br/>" . var_dump($row);
+    }
 }
 
 echo "<hr/>";
@@ -29,8 +30,10 @@ $rs3 = db2_tables($_SESSION['conn'], null, $_SESSION['Db2Schema']);
 var_dump($rs3);
 
 if($rs3){
-    while(($row = db2_fetch_assoc($rs3))==true);
-    echo "<br/>" . var_dump($row);
+    while(($row = db2_fetch_assoc($rs3))==true){
+        echo "<br/>" . var_dump($row);
+    }
+
 }
 
 
