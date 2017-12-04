@@ -20,15 +20,9 @@ if( getenv( "VCAP_SERVICES" ) )
     $conn = db2_connect( $conn_string, "", "" );
     if( $conn )
     {
-        echo "<p>Connection succeeded.</p>";
         $_SESSION['conn'] = $conn;
         $schema = isset($_SESSION['Db2Schema']) ? $_SESSION['Db2Schema'] : 'REST';
         $Statement = "SET CURRENT SCHEMA='$schema';";
-
-        var_dump($_SESSION);
-        var_dump($Statement);
-
-
         $rs = db2_exec($conn, $Statement);
 
         if (! $rs) {
