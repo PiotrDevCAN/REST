@@ -1,17 +1,6 @@
 <?php
-// do_auth($_SESSION['userBg']);
-include realpath(dirname(__FILE__))."/class/include.php";
-$auth = new Auth();
-if(!$auth->ensureAuthorized()){
-    die('Invalid logon attempt');
-} else {
-    $GLOBALS['ltcuser']['mail'] = $_SESSION['ssoEmail'];
-    var_dump($_SESSION);
-}
 
 ?>
-
-
 <style type="text/css" class="init">
 body {
 	background: url('./public/img/rawpixel-com-284723.jpg')
