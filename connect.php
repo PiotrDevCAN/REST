@@ -1,31 +1,45 @@
 <?php
-$conn_parms = "connect_" . $_SERVER['environment'] . ".php";
+if( getenv( "VCAP_SERVICES" ) )
+{
+    # Get database details from the VCAP_SERVICES environment variable
+    #
+    # *This can only work if you have used the Bluemix dashboard to
+    # create a connection from your dashDB service to your PHP App.
+    #
+    $details  = json_decode( getenv( "VCAP_SERVICES" ), true );
+    $dsn      = $details [ "dashDB For Transactions" ][0][ "credentials" ][ "dsn" ];
+    $ssl_dsn  = $details [ "dashDB For Transactions" ][0][ "credentials" ][ "ssldsn" ];
 
-include "$conn_parms"; // include the connect_$country.php file (relevant connection file)
+    # Build the connection string
+    #
+    $driver = "DRIVER={IBM DB2 ODBC DRIVER};";
+    $conn_string = $driver . $dsn;     # Non-SSL
+    $conn_string = $driver . $ssl_dsn; # SSL
 
-//$conn = db2_connect($system, $userid, $pwd); // connect to DB2 itself
-$conn=true;
-if ($conn) {
-    // echo "Connection succeeded.<BR>";
-    // if connection ok then connect to the relevant app schema (prefix is defined in the relevant connect_$country.php file
+    $conn = db2_connect( $conn_string, "", "" );
+    if( $conn )
+    {
+     //   echo "<p>Connection succeeded.</p>";
+        $Statement = "SET CURRENT SCHEMA='" . strtoupper($_SESSION['Db2Schema']) . "';";
+        $rs = db2_exec($conn, $Statement);
 
-//     $Statement = "SET CURRENT SCHEMA='" . strtoupper($_SESSION['Db2Schema']) . "';";
-//     $rs = db2_exec($conn, $Statement);
-//     if (! $rs) {
-//         echo "<br/>" . $Statement . "<br/>";
-//         echo "<BR>" . db2_stmt_errormsg() . "<BR>";
-//         echo "<BR>" . db2_stmt_error() . "<BR>";
-//         exit("Set current schema failed");
-//     }
-    $_SESSION['conn'] = $conn;
-} else {
-    echo "<BR>" . "Connection Error Message :";
-    echo db2_conn_errormsg();
-    echo "<BR>" . "Connection Error Code :";
-    echo db2_conn_error();
-    echo "Connection failed.<BR>";
-    exit();
+        if (! $rs) {
+            echo "<br/>" . $Statement . "<br/>";
+            echo "<BR>" . db2_stmt_errormsg() . "<BR>";
+            echo "<BR>" . db2_stmt_error() . "<BR>";
+            exit("Set current schema failed");
+        }
+        db2_autocommit($conn, TRUE); // This is how it was on the Wintel Box - so the code has no/few commit points.
+    }
+    else
+    {
+        echo "<p>Connection failed.</p>";
+    }
 }
-// db2_autocommit($conn, TRUE); // This is how it was on the Wintel Box - so the code has no/few commit points.
+else
+{
+    echo "<p>No credentials.</p>";
+}
+
 
 ?>
