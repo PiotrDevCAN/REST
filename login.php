@@ -73,8 +73,8 @@ if( getenv( "VCAP_SERVICES" ) )
     # create a connection from your dashDB service to your PHP App.
     #
     $details  = json_decode( getenv( "VCAP_SERVICES" ), true );
-    $dsn      = $details [ "dashDB" ][0][ "credentials" ][ "dsn" ];
-    $ssl_dsn  = $details [ "dashDB" ][0][ "credentials" ][ "ssldsn" ];
+    $dsn      = $details [ "dashDB For Transactions" ][0][ "credentials" ][ "dsn" ];
+    $ssl_dsn  = $details [ "dashDB For Transactions" ][0][ "credentials" ][ "ssldsn" ];
 
     # Build the connection string
     #

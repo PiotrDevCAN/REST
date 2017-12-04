@@ -2,6 +2,7 @@
   "name" : "REST_bm",
   "require" : {
     "phpoffice/phpexcel" : "1.8.1",
+    "php": "7.1.2",
     "ext-ldap": "*"
   },
   "repositories" : [ {
