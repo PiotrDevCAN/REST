@@ -11,6 +11,10 @@ session_start();
 ob_start();
 include_once 'connect.php';
 
+if(!isset($_SESSION['conn'])){
+    die('didnt connect');
+}
+
 $inflightTable = new inflightProjectsTable($_POST['tableName']);
 
 $data = $inflightTable->returnAsArray();

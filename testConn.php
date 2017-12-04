@@ -37,6 +37,14 @@ var_dump($cols);
 
 echo "<hr/>";
 
+
+$rs4 = db2_server_info($_SESSION['conn']);
+var_dump($rs4);
+
+
+echo "<hr/>";
+
+
 // $rs3 = db2_tables($_SESSION['conn'], null, $_SESSION['Db2Schema']);
 
 // var_dump($rs3);
