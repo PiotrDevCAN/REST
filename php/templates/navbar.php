@@ -8,8 +8,6 @@ $plannedOutages = new PlannedOutages();
 include ('UserComms/responsiveOutages_V2.php');
 
 ?>
-
-
        <nav class="navbar navbar-inverse navbar-fixed-top">
           <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -39,8 +37,7 @@ include ('UserComms/responsiveOutages_V2.php');
               <?php
 
               $pageDetails = explode("/", $_SERVER['PHP_SELF']);
-
-              var_dump($pageDetails);
+              $page = isset($pageDetails[2]) ? $pageDetails[2] : $pageDetails[1];
 
               foreach ($navBar_data as $navBarItem) {
                    $label = $navBarItem[0];
@@ -61,7 +58,7 @@ include ('UserComms/responsiveOutages_V2.php');
                               break;
 
                           default:
-                              $class = trim($link)==trim($pageDetails[2]) ? " class='active' " : null;
+                              $class = trim($link)==trim($page) ? " class='active' " : null;
                               echo "<li $class id='" . str_replace(" ","_",$label) . "' ><a href=\"$link\">$label";
                               if($label=='Planned Outages'){
                                   echo "&nbsp;" . $plannedOutages->getBadge();
