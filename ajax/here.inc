@@ -1,0 +1,3 @@
+<?php
+// ajax\here.inc
+?>
