@@ -104,6 +104,9 @@ class resourceRequestTable extends DbTable
 
         $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";
 
+
+        echo $sql;
+
         $resultSet = $this->execute($sql);
 
         $resultSet ? null : die("SQL Failed");
