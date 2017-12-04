@@ -1,8 +1,5 @@
 <?php
 
-var_dump($_SESSION);
-
-
 if( getenv( "VCAP_SERVICES" ) )
 {
     # Get database details from the VCAP_SERVICES environment variable
@@ -23,8 +20,12 @@ if( getenv( "VCAP_SERVICES" ) )
     $conn = db2_connect( $conn_string, "", "" );
     if( $conn )
     {
-     //   echo "<p>Connection succeeded.</p>";
-        $Statement = "SET CURRENT SCHEMA='" . strtoupper($_SESSION['Db2Schema']) . "';";
+        echo "<p>Connection succeeded.</p>";
+        $Statement = "SET CURRENT SCHEMA='REST';";
+
+        var_dump($Statement);
+
+
         $rs = db2_exec($conn, $Statement);
 
         if (! $rs) {
@@ -44,6 +45,9 @@ else
 {
     echo "<p>No credentials.</p>";
 }
+
+
+var_dump($_SESSION);
 
 
 ?>
