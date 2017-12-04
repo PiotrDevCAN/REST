@@ -1,4 +1,8 @@
 <?php
+
+var_dump($_SESSION);
+
+
 if( getenv( "VCAP_SERVICES" ) )
 {
     # Get database details from the VCAP_SERVICES environment variable
