@@ -9,7 +9,7 @@ set_time_limit(0);
 session_start();
 
 ob_start();
-include_once '../connect.php';
+include_once 'connect.php';
 
 $inflightTable = new inflightProjectsTable($_POST['tableName']);
 
