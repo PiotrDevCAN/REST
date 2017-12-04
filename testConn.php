@@ -25,7 +25,7 @@ if( getenv( "VCAP_SERVICES" ) )
     if( $conn )
     {
         echo "<p>Connection succeeded.</p>";
-        db2_close( $conn );
+      //  db2_close( $conn );
     }
     else
     {
@@ -38,8 +38,14 @@ else
 }
 
 
+
+var_dump($conn);
+
 $Statement = "SET CURRENT SCHEMA='REST';";
 $rs = db2_exec($conn, $Statement);
+
+var_dump($rs);
+
 if (! $rs) {
     echo "<br/>" . $Statement . "<br/>";
     echo "<BR>" . db2_stmt_errormsg() . "<BR>";
