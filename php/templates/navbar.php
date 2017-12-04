@@ -90,7 +90,7 @@ include ('UserComms/responsiveOutages_V2.php');
 
   $isAdmin = true;
   $validUser = true;
-  $itItdq = false;
+  $isItdq = false;
   $isPmo = false;
 
   ?>
