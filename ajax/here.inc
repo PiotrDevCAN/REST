@@ -1,3 +1,3 @@
 <?php
-// ajax\here.inc
+echo __FILE__;
 ?>

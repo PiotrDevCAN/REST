@@ -1,3 +1,3 @@
 <?php
-// root/here.inc
+echo __FILE__;
 ?>
