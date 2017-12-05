@@ -17,30 +17,30 @@ function bluegroups_subgroups($group)
     }
     if (sizeof($group) > 1)
         $filter = "(|" . $filter . ")";
-        
+
         // setup the connection resource
     if (! $ds = _ldap_connect()) {
         return FALSE;
     }
     $filter = "(&(objectclass=groupofuniquenames)(uniquegroup=*)$filter)";
     $basedn = "ou=memberlist,ou=ibmgroups,o=ibm.com";
-    
+
     // connect, bind, and search
     if (! $sr = @ldap_search($ds, $basedn, $filter, array(
         'uniquegroup'
     ))) {
         return FALSE;
     }
-    
+
     // check if sub groups are present
     if (@ldap_count_entries($ds, $sr) == 0) {
         return FALSE;
     }
-    
+
     // build a new filter from the sub-groups found
     $subgroup = array();
     for ($entry = ldap_first_entry($ds, $sr); $entry != FALSE; $entry = ldap_next_entry($ds, $entry)) {
-        
+
         $val = ldap_get_values($ds, $entry, 'uniquegroup');
         for ($i = 0; $i < $val['count']; $i ++) {
             list ($cn, ) = ldap_explode_dn($val[$i], 1);
@@ -74,15 +74,15 @@ function employee_in_group($group, $employee, $depth = 2)
         // passed something we don't know how to handle
         return FALSE;
     }
-    
+
     // setup ldap connection resource
     $basedn = "ou=memberlist,ou=ibmgroups,o=ibm.com";
     if (! $ds = _ldap_connect())
         return FALSE;
-    
+
     $result = FALSE;
     while ($depth >= 0) {
-        
+
         // filter to look for $dn in $group list
         $filter = "";
         foreach ($group as $cn) {
@@ -91,20 +91,20 @@ function employee_in_group($group, $employee, $depth = 2)
         if (sizeof($group) > 1)
             $filter = "(|" . $filter . ")";
         $filter = "(&(objectclass=groupofuniquenames)(uniquemember=$user_dn)$filter)";
-        
+
         // connect, bind and search for $dn in $group
         if (! $sr = @ldap_search($ds, $basedn, $filter, array(
             'cn'
         ))) {
             break;
         }
-        
+
         // bail out if $dn is found in this $group list
         if (@ldap_count_entries($ds, $sr) > 0) {
             $result = TRUE;
             break;
         }
-        
+
         // bail out if there are no sub-groups
         if (! $group = bluegroups_subgroups($group)) {
             break;
@@ -132,30 +132,30 @@ function employee_by_dn($dn, $attr = null)
         'uid'
     );
     $filter = "(objectclass=*)";
-    
+
     // setup ldap connection
     if (! $ds = _ldap_connect())
         return FALSE;
-        
+
         // connect, bind and do a parallel search
     $conn = array_fill(0, sizeof($dn), $ds);
     $search_result = ldap_read($conn, $dn, $filter, $attr);
-    
+
     // process each of the search results
     $result = array();
     foreach ($search_result as $sr) {
-        
+
         // check to see if we have hits for this result
         if (@ldap_count_entries($ds, $sr) == 0)
             continue;
-            
+
             // get the values of each entry found
         for ($entry = @ldap_first_entry($ds, $sr); $entry != FALSE; $entry = @ldap_next_entry($ds, $entry)) {
-            
+
             // results are a dn keyed hash
             $dn = @ldap_get_dn($ds, $entry);
             $result[$dn]['dn'] = $dn;
-            
+
             // get each attr, missing attrs are stored as null values
             foreach ($attr as $a) {
                 $val = @ldap_get_values($ds, $entry, $a);
@@ -183,22 +183,22 @@ function bluegroup_metadata($group, $attr = null)
         'description',
         'viewaccess'
     );
-    
+
     // setup ldap connection
     if (! is_resource($ds)) {
         if (! $ds = _ldap_connect())
             return FALSE;
     }
-    
+
     // connect, bind, and search for groups
     if (! $sr = @ldap_search($ds, $basedn, $filter, $bg_attr)) {
         return FALSE;
     }
-    
+
     // make sure we got one group back
     if (@ldap_count_entries($ds, $sr) == 0)
         return FALSE;
-        
+
         // extract the meta data
     if (! $entry = @ldap_first_entry($ds, $sr))
         return FALSE;
@@ -212,7 +212,7 @@ function bluegroup_metadata($group, $attr = null)
             $result[$a] = ($val) ? $val[0] : null;
         }
     }
-    
+
     // get employee info for admin and owner
     foreach (array(
         'admin',
@@ -225,7 +225,7 @@ function bluegroup_metadata($group, $attr = null)
         if ($employees)
             $result[$a] = $employees;
     }
-    
+
     // change expirationdate from YYYYMMDD to a timestamp
     if ($result['expirationdate']) {
         $result['expirationdate'] = strtotime($result['expirationdate']);
@@ -243,7 +243,7 @@ function bluegroup_employees($group, $attr = null, $maxdepth = 2)
     // get the group members
     if (! $members = bluegroup_members($group, $maxdepth))
         return FALSE;
-        
+
         // build the search filter
     $members = array_map("_uid_filter", $members);
     $filters = array_chunk($members, "200");
@@ -265,7 +265,7 @@ function bluegroup_members($group, $maxdepth = 2, $depth = 0, $ds = FALSE)
         'uniquemember',
         'uniquegroup'
     );
-    
+
     // build a search filter
     if (! is_array($group))
         $group = array(
@@ -276,32 +276,32 @@ function bluegroup_members($group, $maxdepth = 2, $depth = 0, $ds = FALSE)
         $filter .= "(cn=" . $cn . ")";
     }
     $filter .= ")";
-    
+
     // setup ldap connection
     if (! is_resource($ds)) {
         if (! $ds = _ldap_connect())
             return FALSE;
     }
-    
+
     // connect, bind, and search for groups
     if (! $sr = @ldap_search($ds, $basedn, $filter, $attr)) {
         return FALSE;
     }
-    
+
     // make sure we got one group back
     if (@ldap_count_entries($ds, $sr) == 0)
         return FALSE;
-        
+
         // walk the entries (groups) found
     $members = array();
     for ($entry = @ldap_first_entry($ds, $sr); $entry != FALSE; $entry = @ldap_next_entry($ds, $entry)) {
-        
+
         // get the members of this group
         if ($uniquemember = @ldap_get_values($ds, $entry, 'uniquemember')) {
             unset($uniquemember['count']);
             $members = array_merge($uniquemember, $members);
         }
-        
+
         // check sub groups for additional members
         if (($depth + 1 < $maxdepth) && ($uniquegroup = @ldap_get_values($ds, $entry, 'uniquegroup'))) {
             // build a filter of sub-groups
@@ -339,28 +339,28 @@ function employee_bluegroups($employee)
         // passed something we don't know how to handle
         return FALSE;
     }
-    
+
     // setup ldap connection
     if (! $ds = _ldap_connect())
         return FALSE;
     $filter = "(uniquemember=" . $user_dn . ")";
     $basedn = "ou=ibmgroups,o=ibm.com";
-    
+
     // connect, bind, and search
     if (! $sr = @ldap_search($ds, $basedn, $filter, array(
         'cn'
     ))) {
         return FALSE;
     }
-    
+
     // bail out if there aren't any groups (unlikely)
     if (@ldap_count_entries($ds, $sr) == 0)
         return FALSE;
-        
+
         // build an array of groups found
     $groups = array();
     for ($entry = ldap_first_entry($ds, $sr); $entry != FALSE; $entry = ldap_next_entry($ds, $entry)) {
-        
+
         $val = ldap_get_values($ds, $entry, 'cn');
         array_push($groups, $val[0]);
     }
@@ -386,33 +386,33 @@ function bluepages_search($filter, $attr = null, $key_attr = 'dn')
         'mail',
         'uid'
     );
-    
+
     // make sure $key is in attr array or we cannot use it
     if ($key_attr != 'dn' && ! in_array($key_attr, $attr))
         $attr[] = $key_attr;
-        
+
         // setup ldap connection
     if (! $ds = _ldap_connect())
         return FALSE;
-        
+
         // connect, bind and do a parallel search
     $conn = array_fill(0, sizeof($filter), $ds);
     $search_result = ldap_search($conn, $basedn, $filter, $attr);
-    
+
     // process each of the search results
     $result = array();
     foreach ($search_result as $sr) {
-        
+
         // check to see if we have hits for this result
         if (@ldap_count_entries($ds, $sr) == 0)
             continue;
-            
+
             // get the values of each entry found
         for ($entry = @ldap_first_entry($ds, $sr); $entry != FALSE; $entry = @ldap_next_entry($ds, $entry)) {
-            
+
             // get the dn of this entry, always
             $dn = @ldap_get_dn($ds, $entry);
-            
+
             // get the hash key
             if ($key_attr && $key_attr != 'dn') {
                 $key_val = @ldap_get_values($ds, $entry, $key_attr);
@@ -420,10 +420,10 @@ function bluepages_search($filter, $attr = null, $key_attr = 'dn')
             } else {
                 $key_val = $dn;
             }
-            
+
             // put the dn into the result hash
             $result[$key_val]['dn'] = $dn;
-            
+
             // get each attr, missing attrs are stored as null values
             foreach ($attr as $a) {
                 $val = @ldap_get_values($ds, $entry, $a);
@@ -477,7 +477,7 @@ function dn2uid($dn)
 // emulate old user_info() function for compatablity
 function user_info($value, $key = "mail")
 {
-    
+
     // search for the employee using site wide attribs
     $attr = $GLOBALS['w3php']['ldap_attr'];
     if (! $result = bluepages_search("($key=$value)", $attr))
@@ -487,19 +487,19 @@ function user_info($value, $key = "mail")
 }
 
 // internal funciton used to connect to ED server
-function _ldap_connect($host = "ldap://bluepages.ibm.com/")
+function _ldap_connect($host = "ldaps://bluepages.ibm.com:636")
 {
     // use a previously opened connection
     if (isset($GLOBALS['ibm_ldap_ds']) && is_resource($GLOBALS['ibm_ldap_ds'])) {
         return $GLOBALS['ibm_ldap_ds'];
     }
-    
+
     // setup the ldap resource
     if (! $ds = @ldap_connect($host)) {
         $GLOBALS['ibm_ldap_errno'] = ldap_errno($ds);
         return FALSE;
     }
-    
+
     // use ldap protocol v3
     if (! @ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3)) {
         $GLOBALS['ibm_ldap_errno'] = ldap_errno($ds);
