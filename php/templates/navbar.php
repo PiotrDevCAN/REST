@@ -88,11 +88,6 @@ include ('UserComms/responsiveOutages_V2.php');
   $isItdq = employee_in_group($_SESSION['itdqBg'], $GLOBALS['ltcuser']['mail']);
   $isPmo = employee_in_group($_SESSION['pmoBg'], $GLOBALS['ltcuser']['mail']);
 
-  $isAdmin = true;
-  $validUser = true;
-  $isItdq = false;
-  $isPmo = false;
-
   ?>
   <script>
   $(document).ready(function () {
