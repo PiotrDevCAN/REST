@@ -2,7 +2,6 @@
 namespace rest;
 
 use itdq\DbTable;
-use itdq\date;
 
 class resourceRequestHoursTable extends DbTable
 {
