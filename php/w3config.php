@@ -123,7 +123,7 @@ $w3php = array(
     'log_auth' => FALSE,
 
     // ldap ssl connection url for authentication (iip authentication, bluepages)
-    'ldaps_host' => 'bluepages.ibm.com',
+    'ldaps_host' => 'bluepages.ibm.com:636',
 
     // attributes returned by default for authenticated users
     'ldap_attr' => array(
