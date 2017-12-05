@@ -178,22 +178,22 @@ function user_auth($user, $pass)
         return FALSE;
 
         // connect, bind, and search for $user
-    if (! $sr = @ldap_search($ds, $w3php['ldap_basedn'], $filter, $w3php['ldap_attr'])) {
+    if (! $sr = ldap_search($ds, $w3php['ldap_basedn'], $filter, $w3php['ldap_attr'])) {
         define("IIP_LDAP_ERRNO", ldap_errno($ds));
         define("IIP_AUTH_ERRNO", 3);
         return FALSE;
     }
 
     // retrive the first entry (if any)
-    if (! $entry = @ldap_first_entry($ds, $sr)) {
+    if (! $entry = ldap_first_entry($ds, $sr)) {
         define("IIP_LDAP_ERRNO", 0);
         define("IIP_AUTH_ERRNO", 4);
         return FALSE;
     }
 
     // authenticated bind using $user_dn and $pass
-    $user_dn = @ldap_get_dn($ds, $entry);
-    if (! @ldap_bind($ds, $user_dn, $pass)) {
+    $user_dn = ldap_get_dn($ds, $entry);
+    if (! ldap_bind($ds, $user_dn, $pass)) {
         define("IIP_LDAP_ERRNO", ldap_errno($ds));
         define("IIP_AUTH_ERRNO", 6);
         return FALSE;
@@ -204,7 +204,7 @@ function user_auth($user, $pass)
         'dn' => $user_dn
     );
     foreach ($w3php['ldap_attr'] as $a) {
-        $val = @ldap_get_values($ds, $entry, $a);
+        $val = ldap_get_values($ds, $entry, $a);
         $user[$a] = ($val) ? $val[0] : null;
     }
 
@@ -365,14 +365,18 @@ function _ldaps_connect()
     }
 
     // setup the ldap resource
-    if (! $ds = @ldap_connect($w3php['ldaps_host'])) {
+    $ds = ldap_connect($w3php['ldaps_host']);
+    if (! $ds) {
         define("IIP_LDAP_ERRNO", 0);
         define("IIP_AUTH_ERRNO", 1);
+
+        var_dump($ds);
+
         return FALSE;
     }
 
     // use ldap protocol v3
-    if (! @ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3)) {
+    if (! ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, 3)) {
         define("IIP_LDAP_ERRNO", ldap_errno($ds));
         define("IIP_AUTH_ERRNO", 3);
         return FALSE;
