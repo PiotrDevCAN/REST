@@ -16,7 +16,7 @@ function Rfs() {
 	this.listenForEditRfs = function(){
 		$(document).on('click','.editRfs', function(e){
 			var rfsId = $(e.target).data('rfsid');
-			var URL = "pa_newRFS.php?rfs=" + rfsId;
+			var URL = "pa_newRfs.php?rfs=" + rfsId;
 			var child = window.open(URL, "_blank");
 			child.onunload = function(){ console.log('Child window closed'); Rfs.table.ajax.reload(); };
 		});
