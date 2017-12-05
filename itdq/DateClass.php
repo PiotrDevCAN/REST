@@ -2,7 +2,7 @@
 namespace itdq;
 
 
-class Date {
+class DateClass {
 
     static function weekEnding($date){
         $dateObj = new \DateTime($date);
@@ -37,7 +37,7 @@ class Date {
         $claimCutofFriday->modify('previous friday');
 
         if($dateObj > $claimCutofFriday){
-            $claimCutofFriday = Date::claimMonth($nextMonthString); // We've past the cutoff - get the next cutoff
+            $claimCutofFriday = DateClassphp::claimMonth($nextMonthString); // We've past the cutoff - get the next cutoff
         }
 
         return $claimCutofFriday;

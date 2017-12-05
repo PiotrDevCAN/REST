@@ -2,6 +2,8 @@
 namespace rest;
 
 use itdq\DbTable;
+use itdq\DateClass;
+
 
 class resourceRequestHoursTable extends DbTable
 {
@@ -54,8 +56,8 @@ class resourceRequestHoursTable extends DbTable
 
     static function getDateComplimentaryFields($date){
 
-        $weekEndingFriday = Date::weekEnding($date->format('Y-m-d'));
-        $claimCutoff  = Date::claimMonth($date->format('Y-m-d'));
+        $weekEndingFriday = DateClass::weekEnding($date->format('Y-m-d'));
+        $claimCutoff  = DateClass::claimMonth($date->format('Y-m-d'));
 
         $complimentaryField['WEEK_ENDING_FRIDAY'] = $weekEndingFriday->format('Y-m-d');
         $complimentaryField['CLAIM_CUTOFF'] = $claimCutoff->format('Y-m-d');
