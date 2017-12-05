@@ -37,7 +37,7 @@ class DateClass {
         $claimCutofFriday->modify('previous friday');
 
         if($dateObj > $claimCutofFriday){
-            $claimCutofFriday = DateClassphp::claimMonth($nextMonthString); // We've past the cutoff - get the next cutoff
+            $claimCutofFriday = self::claimMonth($nextMonthString); // We've past the cutoff - get the next cutoff
         }
 
         return $claimCutofFriday;
