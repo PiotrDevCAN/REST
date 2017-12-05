@@ -16,7 +16,7 @@ $navBar_data = array(
     array("",'endOfDropDown'),
 
     array("Define",'dropDown'),
-    array('New RFS','pa_newRFS.php'),
+    array('New RFS','pa_newRfs.php'),
     array('New Resource Request','pa_newResourceRequest.php'),
     array("",'endOfDropDown'),
 
