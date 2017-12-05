@@ -289,8 +289,8 @@ function _microtime_float()
     return ((float) $usec + (float) $sec);
 }
 
-// do_auth();
-// include ('php/ldap.php');
+do_auth();
+include ('php/ldap.php');
 include ('php/templates/interior.header.html');
 include ('itdq/java/scripts.html');
 include ('rest/java/scripts.html');
