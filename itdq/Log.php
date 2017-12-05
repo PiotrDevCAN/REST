@@ -1,8 +1,8 @@
-<?php 
+<?php
 namespace itdq;
 /**
  * This class logs simple messages to a LOG table.
- * 
+ *
  * The definition of the LOG table is hardcoded within this class.
  * Any $entry sent to the Log will first be db2_escape_string'd then any occurances of $pwd will be replaced by '********', so it's quite safe to log almost anything.
  *
@@ -10,11 +10,11 @@ namespace itdq;
  * @package itdqLib
  *
  */
-class Log extends DBTable  {
+class Log extends DbTable  {
 
 static function logEntry($entry,$pwd=null){
-    
-    
+
+
 
 
 	$userid = $GLOBALS['ltcuser']['mail'];
@@ -32,10 +32,10 @@ static function logEntry($entry,$pwd=null){
 		{
 		echo "<BR>Error: " . db2_stmt_error();
 		echo "<BR>Msg: " . db2_stmt_errormsg() . "<BR>";
-		exit("Error in: " . __FILE__ . ":" .  __METHOD__ . "-" .  __LINE__ . "<BR>running: $sql");	
+		exit("Error in: " . __FILE__ . ":" .  __METHOD__ . "-" .  __LINE__ . "<BR>running: $sql");
 	}
-} 
-	
+}
+
 	static function deleteLogRecords($keepDays=1){
 		$sql = "DELETE FROM " . $_SESSION['Db2Schema'] . "." . AllItdqTables::$LOG . " WHERE LASTUPDATED < (CURRENT TIMESTAMP - $keepDays DAYS) ";
 		$rs = DB2_EXEC($_SESSION['conn'],$sql);
@@ -45,6 +45,6 @@ static function logEntry($entry,$pwd=null){
 			echo "<BR>Msg: " . db2_stmt_errormsg() . "<BR>";
 			exit("Error in: " . __METHOD__ .  __LINE__ . "<BR>running: $sql");
 		}
-	}	
+	}
 }
 ?>

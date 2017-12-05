@@ -10,7 +10,7 @@ namespace itdq;
  * @package remind
  *
  */
-class IconRolesTable extends DBTable {
+class IconRolesTable extends DbTable {
 	protected $rolesSelectionBar;
 	protected $rolesPerRow;
 	public static $emailModeTo = 'roleTo';

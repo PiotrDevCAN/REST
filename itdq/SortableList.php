@@ -1714,7 +1714,7 @@ class SortableList
     {
         if ($this->profileSaveable && isset(AllITdqTables::$PROFILES) && isset($_REQUEST['sbifProfile_Name']) && isset($_REQUEST['sbbSave_Profile'])) {
             if (! empty($_REQUEST['sbifProfile_Name']) && ! empty($_REQUEST['sbbSave_Profile'])) {
-                $table = new DBTable(AllITdqTables::$PROFILES);
+                $table = new DbTable(AllITdqTables::$PROFILES);
                 $predicate = " PAGE='" . db2_escape_string(trim($_SERVER['PHP_SELF'])) . "' AND PROFILE_NAME='" . db2_escape_string(trim($_REQUEST['sbifProfile_Name'])) . "' AND INTRANET='" . db2_escape_string(trim($GLOBALS['ltcuser']['mail'])) . "' ";
                 $userid = $GLOBALS['ltcuser']['mail'];
                 if (isset($_SESSION['adminBg'])) {
@@ -1746,7 +1746,7 @@ class SortableList
     {
         if ($this->profileSaveable && isset(AllITdqTables::$PROFILES) && isset($_REQUEST['sbsLoad_Profile']) && isset($_REQUEST['sbbDelete_Profile'])) {
             if (! empty($_REQUEST['sbsLoad_Profile']) && ! empty($_REQUEST['sbbDelete_Profile'])) {
-                $table = new DBTable(AllITdqTables::$PROFILES);
+                $table = new DbTable(AllITdqTables::$PROFILES);
                 $predicate = " PAGE='" . db2_escape_string(trim($_SERVER['PHP_SELF'])) . "' AND PROFILE_NAME='" . db2_escape_string(trim($_REQUEST['sbsLoad_Profile'])) . "' AND INTRANET='" . db2_escape_string(trim($GLOBALS['ltcuser']['mail'])) . "' ";
                 $userid = $GLOBALS['ltcuser']['mail'];
                 if (isset($_SESSION['adminBg'])) {

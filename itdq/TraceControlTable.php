@@ -2,11 +2,11 @@
 namespace itdq;
 /**
  * @author GB001399
- * 
- * 
+ *
+ *
  *
  */
-class TraceControlTable extends DBTable {
+class TraceControlTable extends DbTable {
 	/**
 	 * Deletes a record from the Delegate Table.
 	 * @param string $delegateIntranet
@@ -40,7 +40,7 @@ class TraceControlTable extends DBTable {
 			echo "<BR/>" . db2_stmt_errormsg () . "<BR/>";
 			exit ( "Error in: " . __METHOD__ . " running: " . $sql );
 		}
-	}	
-	
+	}
+
 }
 ?>

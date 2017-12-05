@@ -8,7 +8,7 @@ use itdq\AllItdqTables;
  * @package esoft
  *
  */
-class DiaryTable  extends DBTable {
+class DiaryTable  extends DbTable {
 
 	static function insertEntry( $entry) {
 		$sql = "INSERT INTO " . $_SESSION['Db2Schema'] . "." . AllItdqTables::$DIARY . " ( ENTRY, INTRANET_ID) ";

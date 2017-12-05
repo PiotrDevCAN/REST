@@ -1,7 +1,7 @@
 <?php
 namespace itdq;
 
-use itdq\DBTable;
+use itdq\DbTable;
 
 /**
  * Interfaces to the RCA_SUB_CAUSE_CATEGORY table, basically by inserting entries.
@@ -11,7 +11,7 @@ use itdq\DBTable;
  *
  *
  */
-class RcaCauseSubCategoryTable extends DBTable
+class RcaCauseSubCategoryTable extends DbTableTable
 {
 
     static function getAsXML($predicate = null)
@@ -23,7 +23,7 @@ class RcaCauseSubCategoryTable extends DBTable
         $rs = db2_exec($_SESSION['conn'], $sql);
 
         if (! $rs) {
-            DBTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
         }
 
         $xmlString = "<rcaCategories>";

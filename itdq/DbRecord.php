@@ -409,7 +409,7 @@ class DbRecord extends FormClass {
 		return $noOfCols;
 	}
 
-	function validateForTable(DBTable $table) {
+	function validateForTable(DbTable $table) {
 		Trace::traceComment(null,__METHOD__);
 		$valid = $this->validateMandatoryFields ();
 		if ($valid) {

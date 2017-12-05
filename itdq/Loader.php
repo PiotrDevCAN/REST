@@ -51,7 +51,7 @@ class Loader
         $preDb2Time = microtime(TRUE);
         $rs5 = db2_exec($_SESSION['conn'], $sql);
         if (! $rs5) {
-            DBTable::displayErrorMessage($rs5, __CLASS__, __METHOD__, $sql);
+            DbTable::displayErrorMessage($rs5, __CLASS__, __METHOD__, $sql);
             return false;
         }
         $queryCompleted = microtime(TRUE);
@@ -103,7 +103,7 @@ class Loader
         Trace::traceVariable($sql, __METHOD__, __LINE__);
         $rs5 = db2_exec($_SESSION['conn'], $sql);
         if (! $rs5) {
-            DBTable::displayErrorMessage($rs5, __CLASS__, __METHOD__, $sql);
+            DbTable::displayErrorMessage($rs5, __CLASS__, __METHOD__, $sql);
         }
 
         while (($row = db2_fetch_both($rs5)) == true) {
@@ -168,7 +168,7 @@ class Loader
 
         $rs5 = db2_exec($_SESSION['conn'], $sql);
         if (! $rs5) {
-            DBTable::displayErrorMessage($rs5, __CLASS__, __METHOD__, $sql);
+            DbTable::displayErrorMessage($rs5, __CLASS__, __METHOD__, $sql);
         }
 
         while ($row = db2_fetch_both($rs5)) {
@@ -211,7 +211,7 @@ class Loader
 
         $rs5 = db2_exec($_SESSION['conn'], $sql);
         if (! $rs5) {
-            DBTable::displayErrorMessage($rs5, __CLASS__, __METHOD__, $sql);
+            DbTable::displayErrorMessage($rs5, __CLASS__, __METHOD__, $sql);
         }
 
         while ($row = db2_fetch_both($rs5)) {
@@ -256,7 +256,7 @@ class Loader
 
         $rs = db2_exec($_SESSION['conn'], $sql);
         if (! $rs) {
-            DBTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
         }
 
         $currentKey = null;
