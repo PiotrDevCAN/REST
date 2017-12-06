@@ -46,7 +46,7 @@
 		//verifies openID response
 		private function verifyCodeOpenIDConnect($code)
 		{
-			$url = $this->config->token_url;
+		    $url = $this->config->token_url;
 
 		    $fields = array(
 				'code' => $code,
@@ -57,12 +57,6 @@
 			);
 
 			$postvars = http_build_query($fields);
-
-			var_dump($fields);
-			var_dump($postvars);
-			die('here');
-
-
 			$ch = curl_init();
 
 			curl_setopt($ch, CURLOPT_URL, $url);
@@ -169,7 +163,7 @@
 		private function generateOpenIDConnectAuthorizeURL()
 		{
 			$current_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-			return $this->config->authorize_url . "?scope=openid&response_type=code&client_id=".$this->config->client_id."&state=".urlencode($current_link)."&redirect_uri=".$this->config->redirect_url;
+			return $this->config->authorize_url . "?scope=openid&response_type=code&client_id=".$this->config->client_id[strtolower($_SERVER['environment'])]."&state=".urlencode($current_link)."&redirect_uri=".$this->config->redirect_url[strtolower($_SERVER['environment'])];
 		}
 
 		//loads openidconnect
@@ -197,7 +191,7 @@
 				&& isset($config->authorize_url) && !empty($config->authorize_url)
 				&& isset($config->token_url) && !empty($config->token_url)
 				&& isset($config->introspect_url) && !empty($config->introspect_url)
-				&& isset($config->client_id) && !empty($config->client_id)
+				&& isset($config->client_id[strtolower($_SERVER['environment'])]) && !empty($config->client_id[strtolower($_SERVER['environment'])])
 				&& isset($config->client_secret[strtolower($_SERVER['environment'])]) && !empty($config->client_secret[strtolower($_SERVER['environment'])])
 				&& isset($config->redirect_url[strtolower($_SERVER['environment'])]) && !empty($config->redirect_url[strtolower($_SERVER['environment'])])
 				)
