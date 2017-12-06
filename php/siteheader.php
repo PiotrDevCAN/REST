@@ -169,6 +169,7 @@ function do_auth($group = null)
 
     echo "<pre>";
     print_r($_SESSION);
+    print_r($_SERVER);
     echo "</pre>";
 
 
