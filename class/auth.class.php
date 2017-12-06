@@ -193,7 +193,7 @@
 				&& isset($config->token_url) && !empty($config->token_url)
 				&& isset($config->introspect_url) && !empty($config->introspect_url)
 				&& isset($config->client_id) && !empty($config->client_id)
-				&& isset($config->client_secret[strtolower($_SESSION['environment'])]) && !empty($config->client_secret[strtolower($_SESSION['environment'])])
+				&& isset($config->client_secret[strtolower($_SERVER['environment'])]) && !empty($config->client_secret[strtolower($_SERVER['environment'])])
 				&& isset($config->redirect_url) && !empty($config->redirect_url)
 				)
 			{
