@@ -166,10 +166,6 @@ function do_error($page = array())
 
 function do_auth($group = null)
 {
-    echo "<pre>";
-    print_r($_SESSION);
-    print_r($_SERVER);
-    echo "</pre>";
 include_once "class/include.php";
 $auth = new Auth();
 if(!$auth->ensureAuthorized()){
