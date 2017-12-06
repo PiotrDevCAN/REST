@@ -48,7 +48,7 @@
 		{
 			$url = $this->config->token_url;
 
-			$fields = array(
+		    $fields = array(
 				'code' => $code,
 				'client_id' => $this->config->client_id[strtolower($_SERVER['environment'])],
 				'client_secret' => $this->config->client_secret[strtolower($_SERVER['environment'])],
@@ -57,6 +57,11 @@
 			);
 
 			$postvars = http_build_query($fields);
+
+			var_dump($fields);
+			var_dump($postvars);
+			die('here');
+
 
 			$ch = curl_init();
 
