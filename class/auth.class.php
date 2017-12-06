@@ -50,8 +50,8 @@
 
 			$fields = array(
 				'code' => $code,
-				'client_id' => $this->config->client_id,
-				'client_secret' => $this->config->client_secret,
+				'client_id' => $this->config->client_id[strtolower($_SESSION['environment'])],
+				'client_secret' => $this->config->client_secret[strtolower($_SESSION['environment'])],
 				'redirect_uri' => $this->config->redirect_url,
 				'grant_type' => 'authorization_code'
 			);
@@ -193,7 +193,7 @@
 				&& isset($config->token_url) && !empty($config->token_url)
 				&& isset($config->introspect_url) && !empty($config->introspect_url)
 				&& isset($config->client_id) && !empty($config->client_id)
-				&& isset($config->client_secret) && !empty($config->client_secret)
+				&& isset($config->client_secret[strtolower($_SESSION['environment'])]) && !empty($config->client_secret[strtolower($_SESSION['environment'])])
 				&& isset($config->redirect_url) && !empty($config->redirect_url)
 				)
 			{
