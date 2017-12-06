@@ -52,7 +52,7 @@
 				'code' => $code,
 				'client_id' => $this->config->client_id[strtolower($_SERVER['environment'])],
 				'client_secret' => $this->config->client_secret[strtolower($_SERVER['environment'])],
-				'redirect_uri' => $this->config->redirect_url,
+				'redirect_uri' => $this->config->redirect_url[strtolower($_SERVER['environment'])],
 				'grant_type' => 'authorization_code'
 			);
 
@@ -194,7 +194,7 @@
 				&& isset($config->introspect_url) && !empty($config->introspect_url)
 				&& isset($config->client_id) && !empty($config->client_id)
 				&& isset($config->client_secret[strtolower($_SERVER['environment'])]) && !empty($config->client_secret[strtolower($_SERVER['environment'])])
-				&& isset($config->redirect_url) && !empty($config->redirect_url)
+				&& isset($config->redirect_url[strtolower($_SERVER['environment'])]) && !empty($config->redirect_url[strtolower($_SERVER['environment'])])
 				)
 			{
 				return true;
