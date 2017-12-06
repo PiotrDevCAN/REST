@@ -8,5 +8,3 @@ AddType application/x-httpd-php .php .html
 
 # handle errors for the site
 ErrorDocument 404 /error_doc/404.html
-
-SetEnv environment rest
