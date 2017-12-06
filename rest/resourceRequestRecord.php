@@ -71,12 +71,6 @@ class resourceRequestRecord extends DbRecord
         $endDateStr = empty($endDate) ? null : $endDate->format('dMy');
         $endDateStr2 = empty($endDate) ? null : $endDate->format('Y-m-d');
 
-//         $startDateStr = '5Feb1961';
-
-        var_dump($startDateStr);
-        var_dump($endDateStr);
-
-
         ?>
 <!--         <div class="form-group required" id="RFS_IDFormGroup"> -->
 

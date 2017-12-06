@@ -6,8 +6,6 @@ use rest\inflightProjectsRecord;
 
 set_time_limit(0);
 
-include_once 'connect.php';
-
 do_auth($_SESSION['userBg']);
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
