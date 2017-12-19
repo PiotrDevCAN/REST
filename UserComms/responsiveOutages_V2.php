@@ -1,2 +1,2 @@
 <?php
-$plannedOutages->defineOutage(new DateTime('2018-01-01'),"Testing, Happy new year");
+$plannedOutages->defineOutage(new DateTime('2018-01-02'),"Migrating Data to new tool");

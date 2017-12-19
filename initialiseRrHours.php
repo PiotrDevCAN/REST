@@ -1,22 +1,29 @@
 <?php
+use rest\resourceRequestTable;
+use rest\allTables;
+use rest\resourceRequestHoursTable;
+
 set_time_limit(0);
 
 do_auth();
 
 
-$sql = " SELECT RESOURCE_REFERENCE, START_DATE, END_DATE, HOURS FROM " . $_SESSION['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
+$sql = " SELECT RESOURCE_REFERENCE, START_DATE, END_DATE, HRS_PER_WEEK FROM " . $_SESSION['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
 
 echo $sql;
+
+$resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
 
 $resultSet = db2_exec($_SESSION['conn'],$sql);
 
 if($resultSet){
     while (($row=db2_fetch_assoc($resultSet))==true){
         print_r($row);
-        if(!empty($row['START_DATE']) && !empty($row['END_DATE']) && !empty($row['HOURS'])){
-            echo "Process : " . $row['RESOURCE_REFERENCE'];
+        if(!empty($row['START_DATE']) && !empty($row['END_DATE']) && !empty($row['HRS_PER_WEEK'])){
+            $resourceHoursTable->createResourceRequestHours($row['RESOURCE_REFERENCE'],$row['START_DATE'], $row['END_DATE'], $row['HRS_PER_WEEK']);
+            echo "<br/>Processed : " . $row['RESOURCE_REFERENCE'];
         } else {
-            echo "Can't Process : " . $row['RESOURCE_REFERENCE'];
+            echo "<br/>Can't Process : " . $row['RESOURCE_REFERENCE'];
         }
     }
 } else {
