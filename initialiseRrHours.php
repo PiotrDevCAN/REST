@@ -1,6 +1,10 @@
 <?php
+set_time_limit(0);
 
-include_once 'connect.php';
+do_auth();
+
+print_r($_SESSION);
+
 
 $sql = " SELECT RESOURCE_REFERENCE, START_DATE, END_DATE, HOURS FROM " . $_SESSION['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
 
