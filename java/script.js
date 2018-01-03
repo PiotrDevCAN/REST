@@ -23,7 +23,7 @@ function surpressMenuOptions(isAdmin, validUser, isItdq, isPmo){
 
 	if(!validUser){
 		$('#dropDown_Manage').remove();
-		$('#welcomeJumotron').html('<p>You have no access to this tool. Please contact <a href=\'mailto:MDBLAKE@uk.ibm.com\'>Michell D Blake</a></p>').css('color','red');
+		$('#welcomeJumotron').html('<p>You have no access to this tool. Please contact <a href=\'mailto:gopal.kulkarni@in.ibm.com\'>Gopal Kulkarni</a><br/>or&nbsp<a href=\'mailto:elaine.barclay@uk.ibm.com\'>Elaine Barclay</a></p>').css('color','red');
 	}
 
 }
