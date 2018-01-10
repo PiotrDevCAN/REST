@@ -131,6 +131,7 @@ class resourceRequestTable extends DbTable
         $startDate = trim($row['START_DATE']);
         $resourceType = trim($row['RESOURCE_TYPE']);
         $bwo_parent = trim($row['PARENT_BWO']);
+        $description = trim($row['DESCRIPTION']);
         $isBulkWorkOrder = $resourceType==resourceRequestRecord::$bulkWorkOrder;
         $clonedFromBwo = ((!empty($bwo_parent) && !$bwo_parent==0 )) ? true : false;
 
@@ -143,7 +144,10 @@ class resourceRequestTable extends DbTable
 
         $timeIcon = $isBulkWorkOrder ? 'glyphicon-download-alt' : 'glyphicon-time';
 
-
+        $row['DESCRIPTION'] =
+        "<button type='button' class='btn btn-default btn-xs deleteRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' >
+            <span class='glyphicon glyphicon-edit ' aria-hidden='true'></span>
+            </button>" . $description;
         $row['RESOURCE_NAME'] =
             "<button type='button' class='btn btn-default btn-xs editRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$resourceType . "' data-parent='" . $bwo_parent . "' >
             <span class='glyphicon glyphicon-edit ' aria-hidden='true'></span>
