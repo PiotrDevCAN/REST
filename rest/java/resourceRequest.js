@@ -110,6 +110,15 @@ function ResourceRequest() {
 		});
 	},
 
+	this.listenForDeleteRecord = function(){
+		$(document).on('click','.deleteRecord', function(e){
+			var resourceReference = $(e.target).data('reference');
+			var message = "<p>Please confirm you wish to delete Resource Reference : " + resourceReference + "</p>";
+			$('#deleteMessageBody').html(message);
+			$('#confirmDeleteModal').modal('show');
+		});
+	},
+
 	this.listenForEditRecord = function(){
 		$(document).on('click','.editRecord', function(e){
 			var resourceReference = $(e.target).data('reference');
