@@ -118,8 +118,8 @@ function ResourceRequest() {
 
 
 			var message = "<p>Please confirm you wish to delete Resource Reference : " + resourceReference + "</p>";
-			message .= "<br/><b>Platform:</b>" + platform;
-			message .= "<br/><b>Type:</b>"  +type;
+			message += "<br/><b>Platform:</b>" + platform;
+			message += "<br/><b>Type:</b>"  +type;
 			$('#deleteMessageBody').html(message);
 			$('#confirmDeleteModal').modal('show');
 		});

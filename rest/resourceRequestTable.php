@@ -147,7 +147,7 @@ class resourceRequestTable extends DbTable
         $row['DESCRIPTION'] =
         "<button type='button' class='btn btn-default btn-xs deleteRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['PLATFORM']) . "' data-type='" . $resourceType . "' >
             <span class='glyphicon glyphicon-trash ' aria-hidden='true'></span>
-            </button>" . $description;
+            </button>&nbsp;" . $description;
         $row['RESOURCE_NAME'] =
             "<button type='button' class='btn btn-default btn-xs editRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$resourceType . "' data-parent='" . $bwo_parent . "' >
             <span class='glyphicon glyphicon-edit ' aria-hidden='true'></span>
