@@ -113,7 +113,13 @@ function ResourceRequest() {
 	this.listenForDeleteRecord = function(){
 		$(document).on('click','.deleteRecord', function(e){
 			var resourceReference = $(e.target).data('reference');
+			var platform = $(e.target).data('platform');
+			var type = $(e.target).data('type');
+
+
 			var message = "<p>Please confirm you wish to delete Resource Reference : " + resourceReference + "</p>";
+			message .= "<br/><b>Platform:</b>" + platform;
+			message .= "<br/><b>Type:</b>"  +type;
 			$('#deleteMessageBody').html(message);
 			$('#confirmDeleteModal').modal('show');
 		});

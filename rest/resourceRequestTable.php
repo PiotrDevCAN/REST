@@ -145,7 +145,7 @@ class resourceRequestTable extends DbTable
         $timeIcon = $isBulkWorkOrder ? 'glyphicon-download-alt' : 'glyphicon-time';
 
         $row['DESCRIPTION'] =
-        "<button type='button' class='btn btn-default btn-xs deleteRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' >
+        "<button type='button' class='btn btn-default btn-xs deleteRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['PLATFORM']) . "' data-type='" . $resourceType . "' >
             <span class='glyphicon glyphicon-trash ' aria-hidden='true'></span>
             </button>" . $description;
         $row['RESOURCE_NAME'] =
