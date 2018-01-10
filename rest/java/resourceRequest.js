@@ -131,6 +131,11 @@ function ResourceRequest() {
 	this.listenForConfirmedDelete = function(){
 		$(document).on('click','#confirmDeleteResource', function(e){
 			var formData = $('#confirmDeleteModalForm').serialize();
+
+			console.log(formData);
+
+
+
 		    $.ajax({
 		    	url: "ajax/deleteResourceRequest.php",
 		        type: 'POST',

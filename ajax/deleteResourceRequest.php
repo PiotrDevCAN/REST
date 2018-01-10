@@ -2,7 +2,6 @@
 use rest\allTables;
 use rest\resourceRequestTable;
 
-session_start();
 set_time_limit(0);
 
 $rrTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
