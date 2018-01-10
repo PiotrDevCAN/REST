@@ -125,6 +125,12 @@ function ResourceRequest() {
 		});
 	},
 
+	this.listenForConfirmedDelete = function(){
+		$(document).on('click','#confirmDeleteResource', function(e){
+			$('#confirmDeleteModal').modal('hide');
+		});
+	},
+
 	this.listenForEditRecord = function(){
 		$(document).on('click','.editRecord', function(e){
 			var resourceReference = $(e.target).data('reference');

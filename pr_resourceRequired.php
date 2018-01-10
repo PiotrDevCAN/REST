@@ -249,7 +249,7 @@ unset($allResourceType[resourceRequestRecord::$bulkWorkOrder]);
       <div class="modal-body" id='deleteMessageBody'>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id='deleteConfirmed'>Confirm</button>
+        <button type="button" class="btn btn-primary" id='confirmDeleteResource'>Confirm</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -285,6 +285,7 @@ $(document).ready(function() {
 	resourceRequest.listenForSeekBwo();
 	resourceRequest.listenForEditRecord();
 	resourceRequest.listenForDeleteRecord();
+	resourceRequest.listenForConfirmedDelete();
 });
 
 </script>
