@@ -115,9 +115,12 @@ function ResourceRequest() {
 			var resourceReference = $(e.target).data('reference');
 			var platform = $(e.target).data('platform');
 			var type = $(e.target).data('type');
+			var rfs = $(e.target).data('rfs');
 
+			$('#deleteResourceRef').val(resourceReference);
 
 			var message = "<p>Please confirm you wish to delete Resource Reference : " + resourceReference + "</p>";
+			message += "<br/><b>RFS:</b>" + rfs;
 			message += "<br/><b>Platform:</b>" + platform;
 			message += "<br/><b>Type:</b>"  +type;
 			$('#deleteMessageBody').html(message);
@@ -127,7 +130,19 @@ function ResourceRequest() {
 
 	this.listenForConfirmedDelete = function(){
 		$(document).on('click','#confirmDeleteResource', function(e){
-			$('#confirmDeleteModal').modal('hide');
+			var formData = $('#confirmDeleteModalForm').serialize();
+		    $.ajax({
+		    	url: "ajax/deleteResourceRequest.php",
+		        type: 'POST',
+		    	data: formData,
+		    	success: function(result){
+		    		console.log(result);
+					$('#confirmDeleteModal').modal('hide');
+		    		ResourceRequest.table.ajax.reload();
+		    		}
+		    });
+
+
 		});
 	},
 

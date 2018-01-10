@@ -248,6 +248,9 @@ unset($allResourceType[resourceRequestRecord::$bulkWorkOrder]);
       </div>
       <div class="modal-body" id='deleteMessageBody'>
       </div>
+      <form id='confirmDeleteForm'>
+      <input type='hidden' id='deleteResourceRef' name='RESOURCE_REFERENCE' val=''>
+      </form>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" id='confirmDeleteResource'>Confirm</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
