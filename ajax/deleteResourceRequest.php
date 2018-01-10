@@ -1,7 +1,7 @@
 <?php
 use rest\allTables;
 use rest\resourceRequestTable;
-
+ob_start();
 set_time_limit(0);
 
 $rrTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
