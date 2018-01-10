@@ -289,6 +289,9 @@ $(document).ready(function() {
 	resourceRequest.listenForEditRecord();
 	resourceRequest.listenForDeleteRecord();
 	resourceRequest.listenForConfirmedDelete();
+	
+	
+	$('[data-toggle="tooltip"]').tooltip(); 
 });
 
 </script>
