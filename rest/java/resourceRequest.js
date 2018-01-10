@@ -140,7 +140,7 @@ function ResourceRequest() {
 		    		console.log(result);
 		    		resultObj = JSON.parse(result);
 		    		var message = "Record deleted, you may now close this window";
-		    		message += "<br/>Feedback from Delete : " +resultObj.message
+		    		message += "<br/>Feedback from Delete : " +resultObj.messages
 		    		$('#deleteMessageBody').html(message);
 		    		$('#confirmDeleteResource').attr('disabled',true);
 		    		ResourceRequest.table.ajax.reload();
