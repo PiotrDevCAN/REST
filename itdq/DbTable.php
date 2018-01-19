@@ -2130,5 +2130,38 @@ class DbTable
         return $this->tableName;
     }
 
+    function findBadData(){
+        $sql = " SELECT * FROM " . $_SESSION['Db2Schema'] . "." . $this->tableName;
+
+        $rs = db2_exec($_SESSION['conn'], $sql);
+
+        while(($row=db2_fetch_assoc($rs))==true){
+            $testRow = json_encode($row);
+            if(!$testRow){
+                echo "<br/>Record with bad chars found :";
+                echo "<pre>";
+                print_r($row);
+                echo "</pre>";
+                foreach ($row as $key => $value){
+                    $testData = json_encode($value);
+                    if(!$testData){
+                        echo "<BR/>Bad Data in :  <b>$key:</b>$value";
+                        for($c=0;$c<strlen($value);$c++){
+                            $char = substr($value, $c,1);
+                            if(ord($char)> 127){
+                                echo "<br/> ---> " .  $c . "  : =====> " . $char . ":=====> " . ord($char) ;
+                            }
+
+                        }
+
+
+                    }
+                }
+            }
+        }
+
+
+    }
+
 }
 ?>
