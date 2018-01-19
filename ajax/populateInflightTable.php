@@ -29,19 +29,14 @@ $response = array('messages'=>$messages
                   ,'lastAttempted'=>array('tableName'=>trim($lastLoadAttempted->UPLOAD_TABLENAME),'fileName'=>trim($lastLoadAttempted->UPLOAD_FILENAME)
                                          ,'intranet'=>trim($lastLoadAttempted->UPLOAD_INTRANET),'timestamp'=>trim($lastLoadAttempted->UPLOAD_TIMESTAMP ))
                  ,'lastloadSuccessful'=> $detailsOfLastLoad['Successful']
-//                 ,'data'=>$data
+                 ,'data'=>$data
                 );
 
 
 ob_clean();
-var_dump($response);
-echo "<hr/>";
-var_dump($data);
-echo "<hr/>";
-
-$dataJson = json_encode($data);
-var_dump($dataJson);
-
 $json =  json_encode($response);
-var_dump($json);
-die('the end');
+if($json){
+    echo $json;
+} else {
+    echo json_encode(array('code'=>json_last_error(), 'msg'=>json_last_error_msg()));
+}
