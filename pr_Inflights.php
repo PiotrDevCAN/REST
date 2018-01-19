@@ -108,7 +108,7 @@ $(document).ready(function() {
             	},
             data: function ( d ) {
                     d.tableName = $("#tableName").text()
-        	},
+        	}
     	},
     	responsive: true,
     	processing: true,
