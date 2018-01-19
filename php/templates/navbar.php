@@ -88,6 +88,10 @@ include ('UserComms/responsiveOutages_V2.php');
   $isItdq = employee_in_group($_SESSION['itdqBg'], $GLOBALS['ltcuser']['mail']);
   $isPmo = employee_in_group($_SESSION['pmoBg'], $GLOBALS['ltcuser']['mail']);
 
+  $isAdmin   = stripos($_SERVER['environment'], 'REST') ? $isAdmin : true;
+  $isPmo   = stripos($_SERVER['environment'], 'REST')  ? $isPmo : true;
+  $validUser   = stripos($_SERVER['environment'], 'REST')  ? $validUser : true;
+
   ?>
   <script>
   $(document).ready(function () {
