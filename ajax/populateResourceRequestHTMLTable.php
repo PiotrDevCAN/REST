@@ -12,9 +12,32 @@ $endDate = !empty($_POST['endDate']) ? $_POST['endDate'] : null;
 
 $data = $resourceRequestTable->returnAsArray($startDate,$endDate);
 
+$testJson = json_encode($data);
+$badRecords = 0;
+$badRecordArray = array();
+if (!$testJson){
+    foreach ($data as $ref => $record){
+        $testRecord = json_encode($record);
+        if(!$testRecord){
+            $badRecords++;
+            unset($data[$ref]);
+        }
+    }
+}
+
+echo "Bad Records removed:$badRecords";
+
+
 $messages = ob_get_clean();
 
-$response = array("data"=>$data,'messages'=>$messages);
+$response = array('messages'=>$messages,'badrecords'=>$badRecords,"data"=>$data);
 
 ob_clean();
-echo json_encode($response);
+
+$json = json_encode($response);
+
+if($json){
+    echo $json;
+} else {
+    echo json_encode(array('code'=>json_last_error(),'msg'=>json_last_error_msg()));
+}

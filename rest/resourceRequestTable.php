@@ -104,9 +104,6 @@ class resourceRequestTable extends DbTable
 
         $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";
 
-
-        echo $sql;
-
         $resultSet = $this->execute($sql);
 
         $resultSet ? null : die("SQL Failed");
@@ -114,6 +111,10 @@ class resourceRequestTable extends DbTable
         $allData = null;
 
         while(($row = db2_fetch_assoc($resultSet))==true){
+            $testJson = json_encode($row);
+            if(!$testJson){
+                break; // It's got invalid chars in it that will be a problem later.
+            }
             $this->addGlyphicons($row);
             foreach ($row as $key=>$data){
                 $row[] = trim($row[$key]);
