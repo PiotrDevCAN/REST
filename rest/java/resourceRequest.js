@@ -12,10 +12,10 @@ function ResourceRequest() {
 		$('#resourceHoursModal').on('shown.bs.modal', function (e) {
 			ModalstartPicker = new Pikaday({
 				firstDay:1,
-				disableDayFn: function(date){
-				    // Disable all but Monday
-				    return date.getDay() === 0 || date.getDay() === 2 || date.getDay() === 3 || date.getDay() === 4 || date.getDay() === 5 || date.getDay() === 6;
-				},
+//				disableDayFn: function(date){
+//				    // Disable all but Monday
+//				    return date.getDay() === 0 || date.getDay() === 2 || date.getDay() === 3 || date.getDay() === 4 || date.getDay() === 5 || date.getDay() === 6;
+//				},
 				field: document.getElementById('InputModalSTART_DATE'),
 				format: 'D MMM YYYY',
 				showTime: false,
@@ -26,10 +26,10 @@ function ResourceRequest() {
 			}),
 			ModalendPicker = new Pikaday({
 				firstDay:1,
-				disableDayFn: function(date){
-				    // Disable all but Friday
-				    return date.getDay() === 0 || date.getDay() === 1 || date.getDay() === 2 || date.getDay() === 3 || date.getDay() === 4 || date.getDay() === 6;
-				},
+//				disableDayFn: function(date){
+//				    // Disable all but Friday
+//				    return date.getDay() === 0 || date.getDay() === 1 || date.getDay() === 2 || date.getDay() === 3 || date.getDay() === 4 || date.getDay() === 6;
+//				},
 				field: document.getElementById('InputModalEND_DATE'),
 				format: 'D MMM YYYY',
 				showTime: false,
@@ -514,10 +514,10 @@ function ResourceRequest() {
 
 		startPicker = new Pikaday({
 			firstDay:1,
-			disableDayFn: function(date){
-			    // Disable all but Monday
-			    return date.getDay() === 0 || date.getDay() === 2 || date.getDay() === 3 || date.getDay() === 4 || date.getDay() === 5 || date.getDay() === 6;
-			},
+//			disableDayFn: function(date){
+//			    // Disable all but Monday
+//			    return date.getDay() === 0 || date.getDay() === 2 || date.getDay() === 3 || date.getDay() === 4 || date.getDay() === 5 || date.getDay() === 6;
+//			},
 			field: document.getElementById('InputSTART_DATE'),
 			format: 'D MMM YYYY',
 			showTime: false,
@@ -533,10 +533,10 @@ function ResourceRequest() {
 		}),
 		endPicker = new Pikaday({
 			firstDay:1,
-			disableDayFn: function(date){
-				// Disable all but Monday
-				return date.getDay() === 0 || date.getDay() === 1 || date.getDay() === 2 || date.getDay() === 3 || date.getDay() === 4 || date.getDay() === 6;
-			},
+//			disableDayFn: function(date){
+//				// Disable all but Monday
+//				return date.getDay() === 0 || date.getDay() === 1 || date.getDay() === 2 || date.getDay() === 3 || date.getDay() === 4 || date.getDay() === 6;
+//			},
 			field: document.getElementById('InputEND_DATE'),
 			format: 'D MMM YYYY',
 			showTime: false,
