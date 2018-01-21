@@ -140,45 +140,24 @@ $(document).ready(function(){
     }
 });
 
-$(document).ready(function() {
-    var text_max = 1500;
-    $('#textarea_feedbackadditional_comments').html(text_max + ' characters remaining');
+// $(document).ready(function() {
+//     var text_max = 1500;
+//     $('#textarea_feedbackadditional_comments').html(text_max + ' characters remaining');
 
-    $('#additional_comments').keyup(function() {
-        var text_length = $('#additional_comments').val().length;
-        var text_remaining = text_max - text_length;
+//     $('#additional_comments').keyup(function() {
+//         var text_length = $('#additional_comments').val().length;
+//         var text_remaining = text_max - text_length;
 
-        $('#textarea_feedbackadditional_comments').html(text_remaining + ' characters remaining');
-        if(text_remaining<=0){
-            $("#additional_commentsFormGroup").addClass("has-error");
-            $("#textarea_feedbackadditional_comments").addClass("textarea-full");
-        } else {
-            $("#additional_commentsFormGroup").removeClass("has-error");
-            $("#textarea_feedbackadditional_comments").removeClass("textarea-full");
-        }
-    });
-});
-
-
-$(document).ready(function() {
-    var text_max = 500;
-    $('#textarea_feedbackDESCRIPTION').html(text_max + ' characters remaining');
-
-    $('#DESCRIPTION').keyup(function() {
-        var text_length = $('#DESCRIPTION').val().length;
-        var text_remaining = text_max - text_length;
-
-        $('#textarea_feedbackDESCRIPTION').html(text_remaining + ' characters remaining');
-        if(text_remaining<=0){
-            $("#DESCRIPTIONFormGroup").addClass("has-error");
-            $("#textarea_feedbackDESCRIPTION").addClass("textarea-full");
-        } else {
-            $("#DESCRIPTIONFormGroup").removeClass("has-error");
-            $("#textarea_feedbackDESCRIPTION").removeClass("textarea-full");
-        }
-    });
-});
-
+//         $('#textarea_feedbackadditional_comments').html(text_remaining + ' characters remaining');
+//         if(text_remaining<=0){
+//             $("#additional_commentsFormGroup").addClass("has-error");
+//             $("#textarea_feedbackadditional_comments").addClass("textarea-full");
+//         } else {
+//             $("#additional_commentsFormGroup").removeClass("has-error");
+//             $("#textarea_feedbackadditional_comments").removeClass("textarea-full");
+//         }
+//     });
+// });
 
 
 $(document).ready(function(){

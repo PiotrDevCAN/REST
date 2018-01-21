@@ -201,7 +201,7 @@ class resourceRequestRecord extends DbRecord
               </div>
         </div>
         <?php
-   		$this->formTextArea('Description', 'DESCRIPTION', null, null, null,500, 'top',null, 1, "High level description of work required");
+   		$this->formTextArea('Description', 'DESCRIPTION', null, null, null,2000, 'top',null, 1, "High level description of work required");
    		$this->formHiddenInput('mode',$mode,'mode');
    		$this->formHiddenInput('RESOURCE_REFERENCE',$this->RESOURCE_REFERENCE,'RESOURCE_REFERENCE');
    		$this->formHiddenInput('CREATED_BY',$GLOBALS['ltcuser']['mail'],'CREATED_BY');

@@ -359,8 +359,8 @@ function formTextArea($label, $fieldName, $state = null, $textAreaclass = null, 
             <script>
             $(document).ready(function() {
                 var text_max = <?=$maxlength?>;
-                $('#textarea_feedback<?=$fieldName?>').html(text_max + ' characters remaining');
 
+                $('#textarea_feedback<?=$fieldName?>').html(text_max + ' characters remaining');
                 $('#<?=$fieldName?>').keyup(function() {
                     var text_length = $('#<?=$fieldName?>').val().length;
                     var text_remaining = text_max - text_length;
