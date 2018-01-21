@@ -9,6 +9,7 @@ set_time_limit(0);
 do_auth($_SESSION['pmoBg']);
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
+rfsTable::loadKnownRfsToJs();
 ?>
 <div class='container'>
 <h2>RFS Definition Form</h2>
@@ -67,6 +68,20 @@ $("form").on("reset", function () {
 	console.log($('.select'));
 
 });
+
+
+$('#RFS_ID').on('focusout',function(e){
+	var newRfsId = $(this).val().trim();
+	if(!$.inArray(newRfsId, knownRfs)){ // comes back with Position in array(true) or false is it's NOT in the array.
+		$('#saveRfs').attr('disabled',true);
+		$(this).css("background-color","LightPink");
+		alert('RFS already defined');
+	} else {
+		$(this).css("background-color","LightGreen");
+		$('#saveRfs').attr('disabled',false);
+	};
+});
+
 
 
 $(document).ready(function(){

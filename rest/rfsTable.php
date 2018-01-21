@@ -6,6 +6,29 @@ use itdq\DbTable;
 class rfsTable extends DbTable
 {
 
+    static function loadKnownRfsToJs($predicate=null){
+        $sql = " SELECT RFS_ID FROM " . $_SESSION['Db2Schema'] . "." .  allTables::$RFS;
+
+        $rs = db2_exec($_SESSION['conn'], $sql);
+
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+            return false;
+        }
+
+        ?><script type="text/javascript">
+        var knownRfs = [];
+        <?php
+
+        while(($row=db2_fetch_assoc($rs))==true){
+            ?>knownRfs.push("<?=trim($row['RFS_ID']);?>");
+            <?php
+        }
+        ?>console.log(knownRfs);<?php
+        ?></script><?php
+
+    }
+
     function returnAsArray($predicate=null){
         $sql .= " SELECT * ";
         $sql .= " FROM  " . $_SESSION['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
