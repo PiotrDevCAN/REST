@@ -30,13 +30,17 @@ class rfsTable extends DbTable
 
     }
 
-    function returnAsArray($predicate=null){
-        $sql .= " SELECT * ";
+    function returnAsArray($predicate=null, $withArchive=false){
+        $sql  = " SELECT * ";
         $sql .= " FROM  " . $_SESSION['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
-        $sql .= " WHERE ARCHIVE is null ";
+        $sql .= " WHERE 1=1 " ;
+        $sql .= $withArchive ? " AND ARCHIVE is not null " : " AND ARCHIVE is null ";
         $sql .= !empty($predicate) ? " AND  $predicate " : null ;
 
         $resultSet = $this->execute($sql);
+
+
+        echo $sql;
 
         $resultSet ? null : die("SQL Failed");
 
@@ -61,7 +65,7 @@ class rfsTable extends DbTable
     function addGlyphicons(&$row){
         $rfsId = trim($row['RFS_ID']);
         $today = new \DateTime();
-        $rfsEndDate = $this->rfsMaxEndDate($rfsid);
+        $rfsEndDate = $this->rfsMaxEndDate($rfsId);
         $archiveable = false;
         if($rfsEndDate){
             $archiveable = $rfsEndDate < $today ? true : false;
@@ -95,11 +99,30 @@ class rfsTable extends DbTable
             }
 
             while (($row=db2_fetch_assoc($rs))==true) {
-                $this->rfsMaxEndDate[strtoupper(trim($row['RFS']))] = trim($row['END_DATE']);
+                $this->rfsMaxEndDate[strtoupper(trim($row['RFS']))] = isset($row['END_DATE']) ? trim($row['END_DATE']) : null ;
             }
         }
         return isset($this->rfsMaxEndDate[strtoupper(trim($rfsid))]) ? new \DateTime($this->rfsMaxEndDate[strtoupper(trim($rfsid))]) : false;
 
+    }
+
+    function  archiveRfs($rfsid){
+        if(empty($rfsid)){
+            return false;
+        }
+
+        $sql  = " UPDATE " . $_SESSION['Db2Schema'] . "." . allTables::$RFS;
+        $sql .= " SET ARCHIVE = CURRENT TIMESTAMP ";
+        $sql .= " WHERE RFS_ID ='" . db2_escape_string($rfsid) . "' " ;
+
+        $rs = db2_exec($_SESSION['conn'], $sql);
+
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+            return false;
+        }
+
+        return true;
     }
 
 

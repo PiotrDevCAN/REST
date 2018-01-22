@@ -30,6 +30,27 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
     </div>
   </div>
 </div>
+
+<!-- Modal -->
+<div id="archiveRfsModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Archive RFS</h4>
+      </div>
+      <div class="modal-body" id='archiveRfsModalBody'>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary glyphicon	" id='archiveConfirmedRfs'>Confirm</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Retain</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <?php
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 ?>
@@ -41,6 +62,10 @@ $(document).ready(function() {
 	rfs.listenForDeleteRfs();
 	rfs.listenForConfirmDeleteRfs();
 	rfs.listenForEditRfs();
+	rfs.listenForArchiveRfs();
+	rfs.listenForConfirmArchiveRfs();
+
+
 });
 
 

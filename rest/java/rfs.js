@@ -13,6 +13,40 @@ function Rfs() {
 
 	},
 
+	this.listenForArchiveRfs = function(){
+		$(document).on('click','.archiveRfs', function(e){
+			var rfsId = $(e.target).data('rfsid');
+			$('#archiveRfsModalBody').html("<h5>Please confirm you wish to ARCHIVE RFS:" + rfsId + " and all it's associated Resource</h5>" +
+					"<form id='rfsForm'><input type='hidden' name='RFS_ID' value='" + rfsId + "' /></form>");
+			$('#archiveRfsModal').modal('show');
+			console.log(rfsId);
+			});
+	},
+
+	this.listenForConfirmArchiveRfs = function(){
+		$(document).on('click','#archiveConfirmedRfs', function(e){
+			$('#archiveConfirmedRfs').addClass('spinning');
+			var formData = $('#rfsForm').serialize();
+		    $.ajax({
+		    	url: "ajax/archiveRfs.php",
+		        type: 'POST',
+		    	data: formData,
+		    	success: function(result){
+		    		console.log(result);
+					Rfs.table.ajax.reload();
+		    		var resultObj = JSON.parse(result);
+					$('#archiveRfsModalBody').html(resultObj.messages);
+					setTimeout(function(){ $('#archiveRfsModal').modal('hide'); }, 2000);
+					$('#archiveConfirmedRfs').removeClass('spinning');
+		    		}
+		    });
+		});
+	},
+
+
+
+
+
 	this.listenForEditRfs = function(){
 		$(document).on('click','.editRfs', function(e){
 			var rfsId = $(e.target).data('rfsid');
@@ -32,6 +66,9 @@ function Rfs() {
 			console.log(rfsId);
 			});
 	},
+
+
+
 
 	this.listenForConfirmDeleteRfs = function(){
 		$(document).on('click','#deleteConmfirmedRfs', function(e){

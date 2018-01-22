@@ -54,7 +54,7 @@ class resourceRequestTable extends DbTable
 
 
 
-    function returnAsArray($startDate,$endDate, $predicate=null){
+    function returnAsArray($startDate,$endDate, $predicate=null, $withArchive = false){
         $startDateObj = new \DateTime($startDate);
         $endDateObj = new \DateTime($endDate);
 
@@ -100,11 +100,14 @@ class resourceRequestTable extends DbTable
         $sql .= " ON RR.RESOURCE_REFERENCE = RH.RR ";
 
         $sql .=  " WHERE RR.RFS is not null ";
+        $sql .= $withArchive ? " AND ARCHIVE is not null " : " AND ARCHIVE is null ";
         $sql .= !empty($predicate) ? " AND $predicate " : null ;
 
         $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";
 
         $resultSet = $this->execute($sql);
+
+        echo $sql;
 
         $resultSet ? null : die("SQL Failed");
 
