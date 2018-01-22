@@ -1,0 +1,3 @@
+  ALTER TABLE rest.RFS
+      ADD COLUMN ARCHIVE
+      DATE

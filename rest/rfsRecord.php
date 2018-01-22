@@ -23,6 +23,7 @@ class rfsRecord extends DbRecord
     protected $LINK_TO_PGMP;
     protected $RFS_CREATOR;
     protected $RFS_CREATED_TIMESTAMP;
+    protected $ARCHIVE;
 
     static public $columnHeadings = array("RFS ID", "PRN", "Project Title", "Project Code", "Requestor Name", "Requestor Email", "CIO", "Link to PGMP", "RFS Creator", "RFS Created");
 
