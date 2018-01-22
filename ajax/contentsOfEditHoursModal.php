@@ -45,23 +45,23 @@ ob_start();
 
 
 <div class='row'>
-<div class='col-md-6'><h5><b>RFS:</b><?=$resourceRecord->get('RFS');?></h5></div>
-<div class='col-md-6'><h5><b>PRN:</b><?=$rfsRecord->get('PRN');?></h5></div>
+<div class='col-md-6'><h5><b>RFS:</b><?=trim($resourceRecord->get('RFS'));?></h5></div>
+<div class='col-md-6'><h5><b>PRN:</b><?=trim($rfsRecord->get('PRN'));?></h5></div>
 </div>
 <div class='row'>
-<div class='col-md-6'><h5><b>CIO:</b><?=$rfsRecord->get('CIO');?></h5></div>
-<div class='col-md-6'><h5><b>Phase:</b><?=$resourceRecord->get('PHASE');?></h5></div>
+<div class='col-md-6'><h5><b>CIO:</b><?=trim($rfsRecord->get('CIO'));?></h5></div>
+<div class='col-md-6'><h5><b>Phase:</b><?=trim($resourceRecord->get('PHASE'));?></h5></div>
 </div>
 
 <div class='row'>
-<div class='col-md-12'><h5><b>Resource Type:</b><?=$resourceRecord->get('RESOURCE_TYPE');?></h5></div>
+<div class='col-md-12'><h5><b>Resource Type:</b><?=trim($resourceRecord->get('RESOURCE_TYPE'));?></h5></div>
 </div>
 <div class='row'>
-<div class='col-md-12'><h5><b>Resource Name:</b><?=$resourceRecord->get('RESOURCE_NAME');?></h5></div>
+<div class='col-md-12'><h5><b>Resource Name:</b><?=trim($resourceRecord->get('RESOURCE_NAME'));?></h5></div>
 </div>
 
 <form id='resourceHoursForm'>
-   <input type='hidden' name='ModalResourceReference' id='ModalResourceReference' value='<?=$resourceRecord->get('RESOURCE_REFERENCE')?>' />
+   <input type='hidden' name='ModalResourceReference' id='ModalResourceReference' value='<?=trim($resourceRecord->get('RESOURCE_REFERENCE'))?>' />
    <div class='row'>
    <div class='form-group' >
      <div id='ModalSTART_DATE" . "FormGroup' >
@@ -69,7 +69,7 @@ ob_start();
        <div class='col-md-4'>
          <div id='calendarFormGroupModalSTART_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='ModalSTART_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
            <input id='InputModalSTART_DATE' class='form-control' type='text' readonly value='' placeholder='Select From' required />
-           <input type='hidden' id='ModalSTART_DATE' name='ModalSTART_DATE' value='<?=$resourceRecord->get('START_DATE');?>' />
+           <input type='hidden' id='ModalSTART_DATE' name='ModalSTART_DATE' value='<?=trim($resourceRecord->get('START_DATE'));?>' />
            <span class='input-group-addon'><span id='calendarIconModalSTART_DATE' class='glyphicon glyphicon-calendar'></span></span>
            </div>
        </div>
@@ -81,6 +81,7 @@ ob_start();
          <div id='calendarFormGroupModalEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='ModalEND_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
            <input id='InputModalEND_DATE' class='form-control' type='text' readonly value='' placeholder='Select To' required />
            <input type='hidden' id='ModalEND_DATE' name='ModalEND_DATE' value='<?=$resourceRecord->get('END_DATE');?>' />
+           <input type='hidden' id='endDateWas' name='endDateWas' value='<?=$resourceRecord->get('END_DATE');?>' />
            <span class='input-group-addon'><span id='calendarIconModalEND_DATE' class='glyphicon glyphicon-calendar'></span></span>
            </div>
        </div>
@@ -103,17 +104,18 @@ ob_start();
 	</div>
 
     <div class='row'>
-    <div class='col-md-3'></div>
-       <div class='col-md-6'>
+    <div class='col-sm-2'></div>
+       <div class='col-sm-8'>
 
         <?php
         if(!$clonedFromBwo && !$bulkWorkOrder){
-            ?><button type="button" class="btn btn-sm btn-warning" id='slipStartDate'>Move Start Date</button><?php
-            ?><button type="button" class="btn btn-sm btn-warning" id='reinitialise'>Re-Initialise</button><?php
+            ?><button type="button" class="btn btn-sm btn-warning  " id='slipStartDate'>Move Start Date</button><?php
+            ?><button type="button" class="btn btn-sm btn-warning  " id='reinitialise'>Re-Initialise</button><?php
+            ?><button type="button" class="btn btn-sm btn-warning  " id='moveEndDate'>Change End Date</button><?php
         }
         ?>
        </div>
-    <div class='col-md-3'></div>
+    <div class='col-sm-2'></div>
     </div>
 
 

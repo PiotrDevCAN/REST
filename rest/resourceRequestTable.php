@@ -164,7 +164,7 @@ class resourceRequestTable extends DbTable
 
         $row['RESOURCE_NAME'] .=
             "<button type='button' class='btn btn-default btn-xs editHours' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-startDate='" . $startDate . "' >
-             <span class='glyphicon " . $timeIcon . " text-primary' aria-hidden='true'></span>
+             <span class=' glyphicon " . $timeIcon . " text-primary' aria-hidden='true'></span>
              </button>";
         $row['RESOURCE_NAME'] .= trim($row['RESOURCE_TYPE'])==resourceRequestRecord::$bulkWorkOrder ?
             "<button type='button' class='btn btn-xs seekBwo' aria-label='Left Align'
@@ -197,4 +197,26 @@ class resourceRequestTable extends DbTable
               </button>";
         }
     }
+
+
+    static function setEndDate($resourceReference, $endDate){
+        $sql  = " UPDATE " . $_SESSION['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
+        $sql .= "  SET END_DATE = DATE('" . db2_escape_string($endDate) ."') ";
+        $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference) ." ";
+
+        echo $sql;
+
+
+        $rs = db2_exec($_SESSION['conn'], $sql);
+
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+            return false;
+        }
+
+        return true;
+    }
+
+
+
 }

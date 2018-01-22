@@ -9,7 +9,7 @@ class resourceRequestHoursTable extends DbTable
 {
     private $preparedGetTotalHrsStatement;
 
-    function createResourceRequestHours($resourceReference, $startDate,$endDate,$hours){
+    function createResourceRequestHours($resourceReference, $startDate,$endDate,$hours,$additionOnly=false){
         $sdate = new \DateTime($startDate);
         $edate = new \DateTime($endDate);
         $nextDate = $sdate;
@@ -19,7 +19,7 @@ class resourceRequestHoursTable extends DbTable
 
         $weeksCreated = 0;
 
-        $this->clearResourceReference($resourceReference);
+        $additionOnly ? $this->clearResourceReference($resourceReference) : null;
 
         $temp = 3;
         $oneWeek = new \DateInterval('P1W');

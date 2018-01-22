@@ -55,6 +55,7 @@ unset($allResourceType[resourceRequestRecord::$bulkWorkOrder]);
 <button id='ddDetails' class='btn btn-primary btn-sm'>DD Details</button>
 <button id='resetReport' class='btn btn-primary btn-sm'>Reset</button>
 <input type='hidden' id='bwo' value='' />
+<div id='messageArea'></div>
 <div id='resourceTableDiv'>
 </div>
 </div>
@@ -278,6 +279,7 @@ $(document).ready(function() {
 	resourceRequest.listenForEditHours();
 	resourceRequest.listenForSlipStartDate();
 	resourceRequest.listenForReinitialise();
+	resourceRequest.listenForMoveEndDate();
 	resourceRequest.listenForDuplicateResource();
  	resourceRequest.listenForConfirmedDuplication();
  	resourceRequest.listenForSaveAdjustedHours();

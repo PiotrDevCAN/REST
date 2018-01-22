@@ -197,16 +197,19 @@ function ResourceRequest() {
 			var resourceReference = $(e.target).data('reference');
 			var startDate = $(e.target).data('startDate');
 			$('#resourceHoursForm').find('#RESOURCE_REFERENCE').val(resourceReference);
-		    $.ajax({
+			$('#messageArea').html("<div class='col-sm-4'></div><dic class='col-sm-4'><h3>Form loading.... <span class='glyphicon glyphicon-refresh spinning'></span></h3></div><div class='col-sm-4></div>");
+			$.ajax({
 		    	url: "ajax/contentsOfEditHoursModal.php",
 		        type: 'POST',
 		    	data: {	resourceReference: resourceReference
 		    	},
 		    	success: function(result){
+		    		//$('#resourceHoursModal').modal('hide');
 		    		resultObj = JSON.parse(result);
+		    		$('#messageArea').html("");
 		    		$('#editResourceHours').html(resultObj.editResourceHours);
 		    		$('#editResourceHoursFooter').html(resultObj.editResourceHoursFooter);
-					$('#resourceHoursModal').modal('show');
+		    		$('#resourceHoursModal').modal('show');
 		    	}
 		    	});
 			});
@@ -230,6 +233,35 @@ function ResourceRequest() {
 		    });
 		});
 	},
+
+	this.listenForMoveEndDate = function(){
+		$(document).on('click','#moveEndDate', function(e){
+			console.log('move end date listener fired');
+			var endDate = $('#ModalEND_DATE').val();
+			var endDateWas = $('#endDateWas').val();
+			var hrsPerWeek = $('#ModalHRS_PER_WEEK').val();
+			var resourceReference = $('#ModalResourceReference').val();
+			$('#moveEndDate').addClass('spinning').addClass('glyphicon');
+			console.log(endDate + ":" + hrsPerWeek + ":" + endDateWas + ":" + resourceReference);
+		    $.ajax({
+		    	url: "ajax/moveEndDate.php",
+		        type: 'POST',
+		    	data: {endDate: endDate,
+		    		   endDateWas : endDateWas,
+		    		   hrsPerWeek : hrsPerWeek,
+		    		   resourceReference : resourceReference },
+		    	success: function(result){
+		    		console.log(result);
+					$('#moveEndDate').removeClass('spinning').removeClass('glyphicon');
+				    $('#editResourceHours').html('<p></p>');
+					$('#resourceHoursModal').modal('hide');
+		    		ResourceRequest.table.ajax.reload();
+		    		}
+		    });
+		});
+	},
+
+
 
 	this.listenForReinitialise = function(){
 		console.log('listener being set');
