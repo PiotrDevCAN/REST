@@ -116,6 +116,14 @@ function Rfs() {
 	                  'print'
 	              ],
 	    });
+
+	    Rfs.table.columns([10]).visible(false,false);
+
+	    Rfs.table.columns.adjust().draw(false);
+
+
+
+
 	    // Apply the search
 	    Rfs.table.columns().every( function () {
 	        var that = this;

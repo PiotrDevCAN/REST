@@ -71,7 +71,7 @@ class rfsTable extends DbTable
             $archiveable = $rfsEndDate < $today ? true : false;
         }
 
-        if(!$archiveable) {
+        if($archiveable) {
             $row['RFS_ID'] = "<button type='button' class='btn btn-default btn-xs archiveRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
               <span class='glyphicon glyphicon-floppy-remove' aria-hidden='true'></span>
               </button>";
