@@ -25,7 +25,7 @@ class rfsRecord extends DbRecord
     protected $RFS_CREATED_TIMESTAMP;
     protected $ARCHIVE;
 
-    static public $columnHeadings = array("RFS ID", "PRN", "Project Title", "Project Code", "Requestor Name", "Requestor Email", "CIO", "Link to PGMP", "RFS Creator", "RFS Created");
+    static public $columnHeadings = array("RFS ID", "PRN", "Project Title", "Project Code", "Requestor Name", "Requestor Email", "CIO", "Link to PGMP", "RFS Creator", "RFS Created",'Archived');
 
     function get($field){
         return empty($this->$field) ? null : $this->$field;

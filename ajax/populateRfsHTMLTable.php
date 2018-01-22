@@ -8,7 +8,7 @@ ob_start();
 
 $rfsTable = new rfsTable(allTables::$RFS);
 $data = $rfsTable->returnAsArray();
-$response = array("data"=>$data);
 $message = ob_get_clean();
+$response = array("data"=>$data,'message'=>$message);
 ob_clean();
 echo json_encode($response);
