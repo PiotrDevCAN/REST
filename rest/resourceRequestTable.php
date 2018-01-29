@@ -84,6 +84,13 @@ class resourceRequestTable extends DbTable
         $sql .= "        SELECT RESOURCE_REFERENCE ";
 
         $startDateObj = new \DateTime($startDate);
+        $day =  $startDateObj->format('d');
+        if($day > 28){
+            // We can't step through adding months if we start on 29th,30th or 31st.
+            $year = $startDateObj->format('Y');
+            $month = $startDateObj->format('m');
+            $startDateObj->setDate($year, $month, '28');
+        }
 
         while($startDateObj->format('Ym') <= $endDateObj->format('Ym')){
             $columnName =  $startDateObj->format('M_Y');
