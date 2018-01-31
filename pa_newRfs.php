@@ -77,7 +77,7 @@ $('#RFS_ID').on('focusout',function(e){
 
 	var allreadyExists = $.inArray(newRfsId, knownRfs)
 	console.log(allreadyExists);
-	if(allreadyExists)){ // comes back with Position in array(true) or false is it's NOT in the array.
+	if(allreadyExists){ // comes back with Position in array(true) or false is it's NOT in the array.
 		$('#saveRfs').attr('disabled',true);
 		$(this).css("background-color","LightPink");
 		alert('RFS already defined');
