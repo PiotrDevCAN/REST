@@ -75,7 +75,7 @@ $('#RFS_ID').on('focusout',function(e){
 	console.log(newRfsId);
 
 
-	var allreadyExists = $.inArray(newRfsId, knownRfs)
+	var allreadyExists = ($.inArray(newRfsId, knownRfs) >= 0 );
 	console.log(allreadyExists);
 	if(allreadyExists){ // comes back with Position in array(true) or false is it's NOT in the array.
 		$('#saveRfs').attr('disabled',true);
