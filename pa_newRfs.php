@@ -72,6 +72,8 @@ $("form").on("reset", function () {
 
 $('#RFS_ID').on('focusout',function(e){
 	var newRfsId = $(this).val().trim();
+	console.log(newRfsId);
+	console.log($.inArray(newRfsId, knownRfs));
 	if(!$.inArray(newRfsId, knownRfs)){ // comes back with Position in array(true) or false is it's NOT in the array.
 		$('#saveRfs').attr('disabled',true);
 		$(this).css("background-color","LightPink");
