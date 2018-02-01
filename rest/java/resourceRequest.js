@@ -513,6 +513,7 @@ function ResourceRequest() {
 	},
 
 	this.buildResourceReport =  function(){
+		console.log('build Resource Report');
 		var formData = $('form').serialize();
 		var resourceRequest = new ResourceRequest();
 
@@ -530,11 +531,13 @@ function ResourceRequest() {
 	    		}
 	    });
 
-	    $(document).on('draw.dt','#resourceRequestsTable_id', function () {
-	        if($('#userLevel').html()!='Admin User'    ){
-	        //	$('.editRecord').hide();
-	        };
-	    } );
+//	    $(document).on('draw.dt','#resourceRequestsTable_id', function () {
+//	    	console.log('drawing');
+//	    	console.log($('.editRecord'));
+//	        if($('#userLevel').html()!='Admin User'    ){
+//	        	//	$('.editRecord').hide();
+//	        };
+//	    } );
 
 
 	},

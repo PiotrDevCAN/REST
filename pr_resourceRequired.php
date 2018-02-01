@@ -269,6 +269,7 @@ Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 
 <script>
 $(document).ready(function() {
+	console.log('setup all the listeners');
 	var resourceRequest = new ResourceRequest();
 	resourceRequest.initialiseDateSelect();
 	resourceRequest.buildResourceReport();
