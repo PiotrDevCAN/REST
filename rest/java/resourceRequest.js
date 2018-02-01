@@ -531,8 +531,8 @@ function ResourceRequest() {
 	    });
 
 	    $(document).on('draw.dt','#resourceRequestsTable_id', function () {
-	        if($('#userLevel').html()!='Admin User'){
-	        	$('.editRecord').hide();
+	        if($('#userLevel').html()!='Admin User'    ){
+	        //	$('.editRecord').hide();
 	        };
 	    } );
 
