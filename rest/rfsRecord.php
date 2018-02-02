@@ -52,12 +52,13 @@ class rfsRecord extends DbRecord
         $notEditable = $mode == FormClass::$modeEDIT ? ' disabled ' : '';
 
         ?>
-        <div class="form-group required" id="RFS_IDFormGroup">
-
-        	<label for="RFS_ID" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">RFS ID</label>
-        	<div class="col-md-2">
-        	<input class="form-control" id="RFS_ID" name="RFS_ID" value="<?=$this->RFS_ID?>" placeholder="Enter RFS Id" required="required" type="text" <?=$notEditable?>>
-        	<input id="originalRFS_ID" name="originalRFS_ID" value="<?=$this->RFS_ID?>" type="hidden">
+        <div class="form-group " id="RFS_IDFormGroup">
+			<div class='required'>
+        		<label for="RFS_ID" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">RFS ID</label>
+        		<div class="col-md-2">
+        		<input class="form-control" id="RFS_ID" name="RFS_ID" value="<?=$this->RFS_ID?>" placeholder="Enter RFS Id" required="required" type="text" <?=$notEditable?>>
+        		<input id="originalRFS_ID" name="originalRFS_ID" value="<?=$this->RFS_ID?>" type="hidden">
+        		</div>
         	</div>
 
         	<div class='col-md-1'></div>
