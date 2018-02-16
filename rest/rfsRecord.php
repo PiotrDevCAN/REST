@@ -71,18 +71,20 @@ class rfsRecord extends DbRecord
 
 
         </div>
-   		<div class="form-group required" id="PROJECT_TITLEFormGroup" >
+   		<div class="form-group"  id="PROJECT_TITLEFormGroup" >
 
-              <label for="PROJECT_CODE" class="col-md-2	 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Project Code</label>
+              <label for="PROJECT_CODE" class="col-md-2	 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Project Code<br/><span style="font-size:0.8em">(WBS Number)</span> </label>
               <div class="col-md-3">
-                  <input class="form-control " id="PROJECT_CODE" name="PROJECT_CODE" value="<?=$this->PROJECT_CODE?>" placeholder="Enter Code" required="required" type="text">
+                  <input class="form-control " id="PROJECT_CODE" name="PROJECT_CODE" value="<?=$this->PROJECT_CODE?>" placeholder="Enter Code" type="text">
                   <input id="originalPROJECT_CODE" name="originalPROJECT_CODE" value="<?=$this->PROJECT_CODE?>" type="hidden">
               </div>
 
+			<div class='required'>
             <label for="PROJECT_TITLE" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Project Title</label>
             <div class="col-md-5">
                 <input class="form-control required" id="PROJECT_TITLE" name="PROJECT_TITLE" value="<?=$this->PROJECT_TITLE?>" placeholder="Enter Title" required="required" type="text">
               	<input id="originalPROJECT_TITLE" name="originalPROJECT_TITLE" value="<?=$this->PROJECT_TITLE?>" type="hidden">
+            </div>
             </div>
 
 
