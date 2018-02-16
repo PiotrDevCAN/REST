@@ -195,7 +195,9 @@ class resourceRequestTable extends DbTable
                   >
               <span class='glyphicon glyphicon-duplicate text-primary' aria-hidden='true'></span>
               </button>" : null;
-        $row['RESOURCE_NAME'] .= "&nbsp;" . $resourceName ;
+        $displayedResourceName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $resourceName;
+
+        $row['RESOURCE_NAME'] .= "&nbsp;" . var_dump($resourceName) .  $displayedResourceName ;
 
 
         if(trim($row['CURRENT_PLATFORM']) == resourceRequestRecord::$tbd){
