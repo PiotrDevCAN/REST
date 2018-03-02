@@ -9,7 +9,9 @@ set_time_limit(0);
 ob_start();
 
 $rfsRecord = new rfsRecord();
-$rfsRecord->setFromArray($_POST);
+$parmsTrimmed = array_map('trim', $_POST); 
+
+$rfsRecord->setFromArray($parmsTrimmed);
 $rfsTable = new rfsTable(allTables::$RFS);
 if(trim($_POST['mode'])==FormClass::$modeEDIT){
     $rfsTable = new rfsTable(allTables::$RFS);
@@ -25,7 +27,7 @@ if(trim($_POST['mode'])==FormClass::$modeEDIT){
 }
 $messages = ob_get_clean();
 
-$response = array('rfsId' => $_POST['RFS_ID'], 'saveResponse' => $saveResponse, 'Messages'=>$messages,'Update'=>$update);
+$response = array('rfsId' => $parmsTrimmed['RFS_ID'], 'saveResponse' => $saveResponse, 'Messages'=>$messages,'Update'=>$update,'new'=>true);
 
 ob_clean();
 echo json_encode($response);
