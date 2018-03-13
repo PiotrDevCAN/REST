@@ -37,6 +37,8 @@ if(trim($_POST['mode'])==FormClass::$modeEDIT){
 $endDate = !empty($_POST['END_DATE']) ? $_POST['END_DATE'] : $_POST['START_DATE'];
 $hours   = !empty($_POST['HRS_PER_WEEK']) ? $_POST['HRS_PER_WEEK'] : 0;
 
+$hoursResponse = '';
+
 if($saveResponse && trim($_POST['mode'])!=FormClass::$modeEDIT ){ // if they were editing, dont change the hours, that's done a different way.
     $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
     $resourceHoursSaved = false;
