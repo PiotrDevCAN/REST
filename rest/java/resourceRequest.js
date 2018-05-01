@@ -403,6 +403,34 @@ function ResourceRequest() {
 		});
 	},
 
+	this.listenForSaveStatusChange = function(){
+		$(document).on('click','#saveStatusChange', function(e){
+			console.log('save status change triggered');
+
+			var disabled = $('input:disabled');
+
+			console.log(disabled);
+
+			$(disabled).prop('disabled',false);
+			var formData = $('#statusChangeForm').serialize();
+			$(disabled).prop('disabled',true);
+
+			console.log(formData);
+
+		    $.ajax({
+		    	url: "ajax/saveStatusChange.php",
+		        type: 'POST',
+		    	data: formData,
+		    	success: function(result){
+		    		console.log(result);
+		    		ResourceRequest.table.ajax.reload();
+					$('#statusModal').modal('hide');
+		    		}
+		    	});
+		});
+	},
+
+
 
 	this.listenForReportOne = function(){
 		$(document).on('click','#reportOne', function(e){
@@ -439,6 +467,26 @@ function ResourceRequest() {
 	},
 
 
+	this.listenForChangeStatus = function(){
+		$(document).on('click','.changeStatus', function(e){
+
+			console.log($(e.target));
+			var resourceReference = $(e.target).data('reference');
+			$('#statusChangeRR').val($.trim($(e.target).data('reference')));
+			$('#statusChangeRfs').val($.trim($(e.target).data('rfs')));
+			$('#statusChangePhase').val($.trim($(e.target).data('phase')));
+			$('#statusChangePlatform').val($.trim($(e.target).data('platform')));
+			$('#statusChangeStart').val($.trim($(e.target).data('start')));
+			$('#statusChangeType').val($.trim($(e.target).data('type')));
+			$('#statusModal').modal('show');
+
+			var status = $(e.target).data('status') ;
+			var statusId = '#statusRadio' + status.replace(' ','_');
+
+			$(statusId).prop("checked", true).trigger("click");
+		});
+	},
+
 
 	this.initialiseDataTable = function(){
 	    // Setup - add a text input to each footer cell
@@ -473,7 +521,7 @@ function ResourceRequest() {
 	    });
 
 
-	    ResourceRequest.table.columns([0,1,2,3,4,5,6,7,8,9,10,11,18,19,21,22,23,24,25,26,27]).visible(false,false);
+	    ResourceRequest.table.columns([0,1,2,3,4,5,6,7,8,9,10,11,18,19,21,22,23,24,25,26,28,29,30,31,32,33,34,]).visible(false,false);
 	    ResourceRequest.table.columns.adjust().draw(false);
 
 

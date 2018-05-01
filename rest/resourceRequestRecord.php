@@ -27,13 +27,27 @@ class resourceRequestRecord extends DbRecord
     protected $RR_CREATED_TIMESTAMP;
     protected $PARENT_BWO;
     protected $CLONED_FROM;
+    protected $DRAWN_DOWN_FOR_PRN;
+    protected $DRAWN_DOWN_FOR_PROJECT_CODE;
+    protected $STATUS;
 
     static public $columnHeadings = array("Resource Ref", "RFS", "Phase", "Current Platform", "Resource Type",
                                           "Description", "Start Date", "End Date", "Hrs Per Week", "Resource Name",
-                                          "Request Creator", "Request Created", "Parent BWO" , "Cloned From", "Drawn Down For PRN", "Drawn Down For Project Code" );
+                                          "Request Creator", "Request Created", "Parent BWO" , "Cloned From", "Drawn Down For PRN", "Drawn Down For Project Code",
+                                          "Status"    );
 
     static public $bulkWorkOrder = 'Work Order - Bulk';
     static public $tbd = 'tbd';
+
+    CONST STATUS_NEW        = 'New';
+    CONST STATUS_REDIRECTED = 'Re-Directed';
+    CONST STATUS_PLATFORM   = 'With Platform Team';
+    CONST STATUS_REQUESTOR  = 'With Requestor';
+    CONST STATUS_ASSIGNED   = 'Assigned';
+    CONST STATUS_COMPLETED  = 'Completed';
+
+    static public $allStatus = array(self::STATUS_NEW,self::STATUS_REDIRECTED,self::STATUS_PLATFORM,
+                                      self::STATUS_REQUESTOR,self::STATUS_ASSIGNED,self::STATUS_COMPLETED);
 
     function get($field){
         return empty($this->$field) ? null : $this->$field;
@@ -145,7 +159,7 @@ class resourceRequestRecord extends DbRecord
    		<div class='form-group required'>
 
             <label for='PHASE' class='col-md-2 control-label ceta-label-left'>Phase</label>
-        	<div class='col-md-4'>
+        	<div class='col-md-3'>
               	<select class='form-control select' id='PHASE'
                   	          name='PHASE'
                   	          required='required'
@@ -162,10 +176,28 @@ class resourceRequestRecord extends DbRecord
                </select>
             </div>
 
+            <label for='STATUS' class='col-md-2 control-label ceta-label-left'>Status</label>
+        	<div class='col-md-3'>
+              	<select class='form-control select' id='PHASE'
+                  	          name='STATUS'
+                  	          required='required'
+                  	          data-tags="true" data-placeholder="Select Status" data-allow-clear="true"
+                  	           >
+            	<option value=''>Select Status<option>
+                <?php
+                    foreach (self::$allStatus as $key => $value) {
+                         $displayValue = trim($value);
+                         $returnValue  = trim($value);
+                         ?><option value='<?=$returnValue?>' <?=(trim($this->STATUS) == $returnValue) or (empty($this->STATUS && $returnValue==self::STATUS_NEW)) ? 'selected' : null;?>  ><?=$displayValue?></option><?php
+                    }
+               ?>
+               </select>
+            </div>
+
+
 
 
         </div>
-
         <div class='form-group required'>
 	       	<label for='CURRENT_PLATFORM' class='col-md-2 control-label ceta-label-left'>Current Platform</label>
     	       	<div class='col-md-3'>

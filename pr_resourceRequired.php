@@ -2,7 +2,6 @@
 use itdq\Trace;
 use rest\allTables;
 use rest\resourceRequestRecord;
-use rest\uploadLogTable;
 use itdq\Loader;
 
 set_time_limit(0);
@@ -262,6 +261,81 @@ unset($allResourceType[resourceRequestRecord::$bulkWorkOrder]);
 </div>
 
 
+ <!-- Modal for Status -->
+<div id="statusModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header" >
+        <h4 class="modal-title">Status</h4>
+      </div>
+      <div class="modal-body" >
+
+		<form id='statusChangeForm' class='form-horizontal' >
+		<div class="form-group">
+		    <label for="statusChangeRR" class='col-sm-2' >Reference</label>
+		    <div class='col-sm-8'>
+	    	<input type="text" class="form-control" id="statusChangeRR"  name="statusChangeRR" disabled>
+	    	</div>
+  		</div>
+  		<div class="form-group">
+		    <label for="statusChangeRfs" class='col-sm-2' >RFS</label>
+		    <div class='col-sm-8'>
+	    	<input type="text" class="form-control" id="statusChangeRfs" name="statusChangeRfs" disabled>
+	    	</div>
+  		</div>
+  		<div class="form-group" >
+		    <label for="statusChangePhase" class='col-sm-2'>Phase</label>
+		    <div class='col-sm-8'>
+	    	<input type="text" class="form-control" id="statusChangePhase" name="statusChangePhase" disabled>
+	    	</div>
+  		</div>
+		<div class="form-group">
+		    <label for="statusChangePlatform" class='col-sm-2' >Platform</label>
+		    <div class='col-sm-8'>
+	    	<input type="text" class="form-control" id="statusChangePlatform" name="statusChangePlatform" disabled>
+	    	</div>
+  		</div>
+		<div class="form-group">
+		    <label for="statusChangeStart" class='col-sm-2' >Start</label>
+		    <div class='col-sm-8'>
+	    	<input type="text" class="form-control" id="statusChangeStart" name="statusChangeStart" disabled>
+	    	</div>
+  		</div>
+  		<div class="form-group">
+		    <label for="statusChangeType" class='col-sm-2' >Type</label>
+		    <div class='col-sm-8'>
+	    	<input type="text" class="form-control" id="statusChangeType" name="statusChangeType" disabled>
+	    	</div>
+  		</div>
+
+  		<div class="form-group">
+  		<label class='col-sm-2'>Status</label>
+
+  		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_ASSIGNED ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_ASSIGNED)?>' ><?=resourceRequestRecord::STATUS_ASSIGNED ?></label>
+		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_COMPLETED ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_COMPLETED)?>'><?=resourceRequestRecord::STATUS_COMPLETED ?></label>
+		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_NEW ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_NEW)?>'><?=resourceRequestRecord::STATUS_NEW ?></label>
+		</div>
+
+		<div class="form-group">
+		 <label class='col-sm-2'></label>
+		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_PLATFORM ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_PLATFORM)?>'><?=resourceRequestRecord::STATUS_PLATFORM ?></label>
+		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_REDIRECTED ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_REDIRECTED)?>'><?=resourceRequestRecord::STATUS_REDIRECTED ?></label>
+		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_REQUESTOR ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_REQUESTOR)?>'><?=resourceRequestRecord::STATUS_REQUESTOR ?></label>
+		 </div>
+        </form>
+
+	</div>
+    <div class="modal-footer" >
+       	<button type="button" class="btn btn-primary" id='saveStatusChange'>Save</button>
+    </div>
+    </div>
+  </div>
+</div>
+
+
+
 
 <?php
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);
@@ -286,12 +360,14 @@ $(document).ready(function() {
  	resourceRequest.listenForSaveAdjustedHours();
  	resourceRequest.listenForSaveAdjustedHoursWithDelta();
  	resourceRequest.listenForSaveAdjustedHoursWithDrawDown();
+ 	resourceRequest.listenForSaveStatusChange();
 	resourceRequest.listenForResetReport();
 	resourceRequest.listenForDdDetails();
 	resourceRequest.listenForSeekBwo();
 	resourceRequest.listenForEditRecord();
 	resourceRequest.listenForDeleteRecord();
 	resourceRequest.listenForConfirmedDelete();
+	resourceRequest.listenForChangeStatus();
 
 	$('[data-toggle="tooltip"]').tooltip();
 });

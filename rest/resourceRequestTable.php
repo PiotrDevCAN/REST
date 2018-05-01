@@ -122,7 +122,7 @@ class resourceRequestTable extends DbTable
 
         $resultSet = $this->execute($sql);
 
-        echo $sql;
+       // echo $sql;
 
         $resultSet ? null : die("SQL Failed");
 
@@ -140,6 +140,7 @@ class resourceRequestTable extends DbTable
             }
             $allData[]  = $row;
         }
+
         return $allData ;
     }
 
@@ -151,6 +152,7 @@ class resourceRequestTable extends DbTable
         $resourceType = trim($row['RESOURCE_TYPE']);
         $bwo_parent = trim($row['PARENT_BWO']);
         $description = trim($row['DESCRIPTION']);
+        $status = !empty(trim($row['STATUS'])) ? trim($row['STATUS']) : resourceRequestRecord::STATUS_NEW;
         $isBulkWorkOrder = $resourceType==resourceRequestRecord::$bulkWorkOrder;
         $clonedFromBwo = ((!empty($bwo_parent) && !$bwo_parent==0 )) ? true : false;
 
@@ -163,10 +165,22 @@ class resourceRequestTable extends DbTable
 
         $timeIcon = $isBulkWorkOrder ? 'glyphicon-download-alt' : 'glyphicon-time';
 
+        $row['STATUS'] =
+        "<button type='button' class='btn btn-success btn-xs changeStatus' aria-label='Left Align'
+                    data-reference='" .trim($resourceReference) . "'
+                    data-platform='" .trim($row['CURRENT_PLATFORM']) .  "'
+                    data-rfs='" .trim($row['RFS_ID']) . "'
+                    data-type='" . $resourceType . "'
+                    data-start='" . $row['START_DATE'] . "'
+                    data-phase='" . $row['PHASE'] . "'
+                    data-status='" . $status . "'
+         >
+         <span data-toggle='tooltip' title='Change Status' class='glyphicon glyphicon-tags ' aria-hidden='true' ></span>
+            </button>&nbsp;" . $status;
         $row['DESCRIPTION'] =
         "<button type='button' class='btn btn-default btn-xs deleteRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['CURRENT_PLATFORM']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $resourceType . "' >
             <span data-toggle='tooltip' title='Delete Resource' class='glyphicon glyphicon-trash ' aria-hidden='true' ></span>
-            </button>" . $description;
+            </button>&nbsp;" . $description;
         $row['RESOURCE_NAME'] =
             "<button type='button' class='btn btn-default btn-xs editRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$resourceType . "' data-parent='" . $bwo_parent . "' >
             <span class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Name'></span>
