@@ -15,7 +15,7 @@ function Rfs() {
 
 	this.listenForArchiveRfs = function(){
 		$(document).on('click','.archiveRfs', function(e){
-			var rfsId = $(e.target).data('rfsid');
+			var rfsId = $(this).data('rfsid');
 			$('#archiveRfsModalBody').html("<h5>Please confirm you wish to ARCHIVE RFS:" + rfsId + " and all it's associated Resource</h5>" +
 					"<form id='rfsForm'><input type='hidden' name='RFS_ID' value='" + rfsId + "' /></form>");
 			$('#archiveRfsModal').modal('show');
@@ -49,7 +49,7 @@ function Rfs() {
 
 	this.listenForEditRfs = function(){
 		$(document).on('click','.editRfs', function(e){
-			var rfsId = $(e.target).data('rfsid');
+			var rfsId = $(this).data('rfsid');
 			var URL = "pa_newRfs.php?rfs=" + rfsId;
 			var child = window.open(URL, "_blank");
 			child.onunload = function(){ console.log('Child window closed'); Rfs.table.ajax.reload(); };
@@ -59,7 +59,7 @@ function Rfs() {
 
 	this.listenForDeleteRfs = function(){
 		$(document).on('click','.deleteRfs', function(e){
-			var rfsId = $(e.target).data('rfsid');
+			var rfsId = $(this).data('rfsid');
 			$('#deleteRfsModalBody').html("<h5>Please confirm you wish to delete RFS:" + rfsId + " and all it's associated Resource</h5>" +
 					"<form id='rfsForm'><input type='hidden' name='RFS_ID' value='" + rfsId + "' /></form>");
 			$('#deleteRfsModal').modal('show');

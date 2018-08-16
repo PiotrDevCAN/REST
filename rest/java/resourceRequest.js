@@ -55,7 +55,7 @@ function ResourceRequest() {
 			if(	$('#bwo').val()){
 				$('#bwo').val('');
 			} else {
-				$('#bwo').val($(e.target).data('reference'));
+				$('#bwo').val($(this).data('reference'));
 			}
 			ResourceRequest.table.draw();
 		});
@@ -65,7 +65,7 @@ function ResourceRequest() {
 
 	this.listenForAddPlatformTypePrnCode = function(){
 		$(document).on('click','.setPlatformTypePrnCode', function(e){
-			addPlatformTypePrnCode($(e.target).data('reference'),$(e.target).data('parent'));
+			addPlatformTypePrnCode($(this).data('reference'),$(this).data('parent'));
 		});
 	},
 
@@ -112,10 +112,10 @@ function ResourceRequest() {
 
 	this.listenForDeleteRecord = function(){
 		$(document).on('click','.deleteRecord', function(e){
-			var resourceReference = $(e.target).data('reference');
-			var platform = $(e.target).data('platform');
-			var type = $(e.target).data('type');
-			var rfs = $(e.target).data('rfs');
+			var resourceReference = $(this).data('reference');
+			var platform = $(this).data('platform');
+			var type = $(this).data('type');
+			var rfs = $(this).data('rfs');
 
 			$('#deleteResourceRef').val(resourceReference);
 
@@ -153,7 +153,7 @@ function ResourceRequest() {
 
 	this.listenForEditRecord = function(){
 		$(document).on('click','.editRecord', function(e){
-			var resourceReference = $(e.target).data('reference');
+			var resourceReference = $(this).data('reference');
 			var URL = "pa_newResourceRequest.php?resource=" + resourceReference;
 			var child = window.open(URL, "_blank");
 			child.onunload = function(){ ResourceRequest.table.ajax.reload(); };
@@ -163,8 +163,8 @@ function ResourceRequest() {
 
 	this.listenForEditResourceName = function(){
 		$(document).on('click','.editResource', function(e){
-			var resourceReference = $(e.target).data('reference');
-			var parent            = $(e.target).data('parent');
+			var resourceReference = $(this).data('reference');
+			var parent            = $(this).data('parent');
 			console.log(parent);
 			$('#resourceNameForm').find('#RESOURCE_REFERENCE').val(resourceReference);
 			$('#resourceNameModal').modal('show');
@@ -194,8 +194,8 @@ function ResourceRequest() {
 	this.listenForEditHours = function(){
 		$(document).on('click','.editHours', function(e){
 			var resourceRequest = new ResourceRequest();
-			var resourceReference = $(e.target).data('reference');
-			var startDate = $(e.target).data('startDate');
+			var resourceReference = $(this).data('reference');
+			var startDate = $(this).data('startDate');
 			$('#resourceHoursForm').find('#RESOURCE_REFERENCE').val(resourceReference);
 			$('#messageArea').html("<div class='col-sm-4'></div><dic class='col-sm-4'><h3>Form loading.... <span class='glyphicon glyphicon-refresh spinning'></span></h3></div><div class='col-sm-4></div>");
 			$.ajax({
@@ -284,10 +284,10 @@ function ResourceRequest() {
 
 	this.listenForDuplicateResource = function(){
 		$(document).on('click','.requestDuplication', function(e){
-			$('#confirmDuplicateRR').text($.trim($(e.target).data('reference')));
-			$('#confirmDuplicateRFS').text($.trim($(e.target).data('rfs')));
-			$('#confirmDuplicateType').text($.trim($(e.target).data('type')));
-			$('#confirmDuplicateStart').text($.trim($(e.target).data('start')));
+			$('#confirmDuplicateRR').text($.trim($(this).data('reference')));
+			$('#confirmDuplicateRFS').text($.trim($(this).data('rfs')));
+			$('#confirmDuplicateType').text($.trim($(this).data('type')));
+			$('#confirmDuplicateStart').text($.trim($(this).data('start')));
 			$('#confirmDuplicationModal').modal('show');
 		});
 	},
@@ -392,7 +392,7 @@ function ResourceRequest() {
                                formData          : formData },
 				    	success: function(result){
 				    		console.log(result);
-				    		addPlatformTypePrnCode(resultObj.resourceReference,$(e.target).data('parent'));
+				    		addPlatformTypePrnCode(resultObj.resourceReference,$(this).data('parent'));
 				    		ResourceRequest.table.ajax.reload();
 							$('#resourceHoursModal').modal('hide');
 				    		}
@@ -470,17 +470,17 @@ function ResourceRequest() {
 	this.listenForChangeStatus = function(){
 		$(document).on('click','.changeStatus', function(e){
 
-			console.log($(e.target));
-			var resourceReference = $(e.target).data('reference');
-			$('#statusChangeRR').val($.trim($(e.target).data('reference')));
-			$('#statusChangeRfs').val($.trim($(e.target).data('rfs')));
-			$('#statusChangePhase').val($.trim($(e.target).data('phase')));
-			$('#statusChangePlatform').val($.trim($(e.target).data('platform')));
-			$('#statusChangeStart').val($.trim($(e.target).data('start')));
-			$('#statusChangeType').val($.trim($(e.target).data('type')));
+			console.log($(this));
+			var resourceReference = $(this).data('reference');
+			$('#statusChangeRR').val($.trim($(this).data('reference')));
+			$('#statusChangeRfs').val($.trim($(this).data('rfs')));
+			$('#statusChangePhase').val($.trim($(this).data('phase')));
+			$('#statusChangePlatform').val($.trim($(this).data('platform')));
+			$('#statusChangeStart').val($.trim($(this).data('start')));
+			$('#statusChangeType').val($.trim($(this).data('type')));
 			$('#statusModal').modal('show');
 
-			var status = $(e.target).data('status') ;
+			var status = $(this).data('status') ;
 			var statusId = '#statusRadio' + status.replace(' ','_');
 
 			$(statusId).prop("checked", true).trigger("click");
