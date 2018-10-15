@@ -211,7 +211,7 @@ class resourceRequestTable extends DbTable
               </button>" : null;
         $displayedResourceName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $resourceName;
 
-        $row['RESOURCE_NAME'] .= "&nbsp;" . var_dump($resourceName) .  $displayedResourceName ;
+        $row['RESOURCE_NAME'] .= "&nbsp;" . $displayedResourceName ;
 
 
         if(trim($row['CURRENT_PLATFORM']) == resourceRequestRecord::$tbd){

@@ -4,6 +4,7 @@ use rest\resourceRequestTable;
 use rest\resourceRequestRecord;
 
 set_time_limit(0);
+
 ob_start();
 $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 
@@ -14,12 +15,11 @@ $data = $resourceRequestTable->returnAsArray($startDate,$endDate);
 
 $testJson = json_encode($data);
 $badRecords = 0;
-$badRecordArray = array();
 if (!$testJson){
     foreach ($data as $ref => $record){
         $testRecord = json_encode($record);
         if(!$testRecord){
-            $badRecords++;
+            $badRecords++;            
             unset($data[$ref]);
         }
     }
