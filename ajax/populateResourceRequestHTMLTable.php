@@ -2,10 +2,12 @@
 use rest\allTables;
 use rest\resourceRequestTable;
 use rest\resourceRequestRecord;
+use itdq\Trace;
 
 set_time_limit(0);
 
 ob_start();
+Trace::pageOpening($_SERVER['PHP_SELF']);
 $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 
 $startDate = !empty($_POST['startDate']) ? $_POST['startDate'] : null;
@@ -41,3 +43,5 @@ if($json){
 } else {
     echo json_encode(array('code'=>json_last_error(),'msg'=>json_last_error_msg()));
 }
+
+Trace::pageLoadComplete($_SERVER['PHP_SELF']);
