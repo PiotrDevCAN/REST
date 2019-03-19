@@ -6,9 +6,11 @@ use rest\resourceRequestRecord;
 use rest\resourceRequestTable;
 use rest\resourceRequestHoursRecord;
 use rest\resourceRequestHoursTable;
+use itdq\Trace;
 
 set_time_limit(0);
 ob_start();
+Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $resourceReference = $_POST['ModalResourceReference'];
 
@@ -43,3 +45,4 @@ $response = array('Messages'=>$messages);
 
 ob_clean();
 echo json_encode($response);
+Trace::pageLoadComplete($_SERVER['PHP_SELF']);

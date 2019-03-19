@@ -8,9 +8,11 @@ use rest\resourceRequestHoursRecord;
 use rest\resourceRequestHourseTable;
 use rest\resourceRequestHoursTable;
 use itdq\FormClass;
+use itdq\Trace;
 
 set_time_limit(0);
 ob_start();
+Trace::pageOpening($_SERVER['PHP_SELF']);
 $resourceRecord = new resourceRequestRecord();
 $resourceRecord->setFromArray($_POST);
 $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
@@ -57,3 +59,4 @@ $response = array('resourceReference'=>$resourceReference, 'saveResponse' => $sa
 
 ob_clean();
 echo json_encode($response);
+Trace::pageLoadComplete($_SERVER['PHP_SELF']);
