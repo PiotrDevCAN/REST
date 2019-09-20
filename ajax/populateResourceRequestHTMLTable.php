@@ -13,19 +13,21 @@ $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 $startDate = !empty($_POST['startDate']) ? $_POST['startDate'] : null;
 $endDate = !empty($_POST['endDate']) ? $_POST['endDate'] : null;
 
-$data = $resourceRequestTable->returnAsArray($startDate,$endDate);
+//$data = $resourceRequestTable->returnAsArray($startDate,$endDate);
+
+$data = "hello";
 
 $testJson = json_encode($data);
 $badRecords = 0;
-if (!$testJson){
-    foreach ($data as $ref => $record){
-        $testRecord = json_encode($record);
-        if(!$testRecord){
-            $badRecords++;            
-            unset($data[$ref]);
-        }
-    }
-}
+// if (!$testJson){
+//     foreach ($data as $ref => $record){
+//         $testRecord = json_encode($record);
+//         if(!$testRecord){
+//             $badRecords++;
+//             unset($data[$ref]);
+//         }
+//     }
+// }
 
 echo "Bad Records removed:$badRecords";
 
