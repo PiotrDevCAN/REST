@@ -120,6 +120,10 @@ class resourceRequestTable extends DbTable
 
         $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";
 
+
+        echo $sql;
+        die('here');
+
         $resultSet = $this->execute($sql);
 
        // echo $sql;
