@@ -166,7 +166,7 @@ function do_error($page = array())
 
 function do_auth($group = null)
 {
-    if(stripos($_SERVER['environment'], 'dev')) {
+    if(!stripos($_SERVER['environment'], 'dev')) {
         $GLOBALS['ltcuser']['mail'] = $_SERVER['SERVER_ADMIN'];
         $_SESSION['ssoEmail'] = $_SERVER['SERVER_ADMIN'];
     } else {
