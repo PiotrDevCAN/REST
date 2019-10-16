@@ -297,10 +297,11 @@ function _microtime_float()
 }
 
 do_auth();
-
-die('auth done');
-
 include ('php/ldap.php');
+
+die('php/ldap done');
+
+
 include ('php/templates/interior.header.html');
 include ('itdq/java/scripts.html');
 include ('rest/java/scripts.html');
