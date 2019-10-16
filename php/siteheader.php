@@ -169,7 +169,6 @@ function do_auth($group = null)
     if(!stripos($_SERVER['environment'], 'dev')) {
         $GLOBALS['ltcuser']['mail'] = $_SERVER['SERVER_ADMIN'];
         $_SESSION['ssoEmail'] = $_SERVER['SERVER_ADMIN'];
-        die('on dev path');
     } else {
         die('attempting to call SSO');
         include_once "class/include.php";
