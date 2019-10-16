@@ -21,9 +21,6 @@
 		public function ensureAuthorized()
 		{
 		    if(isset($_SESSION['uid']) && isset($_SESSION['exp']) && ($_SESSION['exp']-300) > time()) {
-		        echo "Authorised";
-		        echo "<pre>";
-		        var_dump($_SESSION);
 		        return true;
 		    }
 
