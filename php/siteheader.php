@@ -169,6 +169,7 @@ function do_auth($group = null)
     if(!stripos($_SERVER['environment'], 'dev')) {
         $GLOBALS['ltcuser']['mail'] = $_SERVER['SERVER_ADMIN'];
         $_SESSION['ssoEmail'] = $_SERVER['SERVER_ADMIN'];
+        echo "<br>On the dev path";
     } else {
         die('attempting to call SSO');
         include_once "class/include.php";
@@ -296,6 +297,9 @@ function _microtime_float()
 }
 
 do_auth();
+
+die('auth done');
+
 include ('php/ldap.php');
 include ('php/templates/interior.header.html');
 include ('itdq/java/scripts.html');
