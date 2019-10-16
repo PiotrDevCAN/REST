@@ -166,12 +166,12 @@ function do_error($page = array())
 
 function do_auth($group = null)
 {
-    if(!stripos($_SERVER['environment'], 'dev')) {
+    if(stripos($_SERVER['environment'], 'dev')) {
         $GLOBALS['ltcuser']['mail'] = $_SERVER['SERVER_ADMIN'];
         $_SESSION['ssoEmail'] = $_SERVER['SERVER_ADMIN'];
         echo "<br>On the dev path";
     } else {
-        die('attempting to call SSO');
+        echo ('<br/>On the prod path');
         include_once "class/include.php";
         $auth = new Auth();
         if(!$auth->ensureAuthorized()){
