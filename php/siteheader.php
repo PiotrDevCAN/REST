@@ -169,9 +169,7 @@ function do_auth($group = null)
     if(stripos($_SERVER['environment'], 'dev')) {
         $GLOBALS['ltcuser']['mail'] = $_SERVER['SERVER_ADMIN'];
         $_SESSION['ssoEmail'] = $_SERVER['SERVER_ADMIN'];
-        echo "<br>On the dev path";
     } else {
-        echo ('<br/>On the prod path');
         include_once "class/include.php";
         $auth = new Auth();
         if(!$auth->ensureAuthorized()){
@@ -307,11 +305,5 @@ include ('vendor/autoload.php');
 include ('splClassLoader.php');
 include ('connect.php');
 include ('php/templates/navbar.php');
-
-die('siteheader done');
-
-
-
-
 
 ?>
