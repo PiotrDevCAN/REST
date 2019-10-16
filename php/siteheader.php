@@ -299,16 +299,18 @@ function _microtime_float()
 do_auth();
 include ('php/ldap.php');
 include ('php/templates/interior.header.html');
-
-
-die('php/templates/interior.header.html done');
-
-
-include ('php/templates/interior.header.html');
+include ('itdq/java/scripts.html');
 include ('itdq/java/scripts.html');
 include ('rest/java/scripts.html');
 include ('vendor/autoload.php');
 include ('splClassLoader.php');
+
+
+die('just before connect done');
+
+
+
+
 include ('connect.php');
 include ('php/templates/navbar.php');
 
