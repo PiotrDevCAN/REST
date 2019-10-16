@@ -13,6 +13,11 @@ if(!isset($_SERVER['environment'])){
     die('environment not set');
 }
 
+
+echo "<pre>";
+var_dump($_SERVER);
+die('environment set');
+
 $site = array(
 
     // if not empty will override the site title from menuconf.php
