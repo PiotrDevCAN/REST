@@ -302,12 +302,16 @@ include ('php/templates/interior.header.html');
 include ('itdq/java/scripts.html');
 include ('itdq/java/scripts.html');
 include ('rest/java/scripts.html');
+
+die('after scripts done');
+
+
 include ('vendor/autoload.php');
 include ('splClassLoader.php');
 include ('connect.php');
 include ('php/templates/navbar.php');
 
-die('siteheader done');
+
 
 
 
