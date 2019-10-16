@@ -170,6 +170,7 @@ function do_auth($group = null)
         $GLOBALS['ltcuser']['mail'] = $_SERVER['SERVER_ADMIN'];
         $_SESSION['ssoEmail'] = $_SERVER['SERVER_ADMIN'];
     } else {
+        die('attempting to call SSO');
         include_once "class/include.php";
         $auth = new Auth();
         if(!$auth->ensureAuthorized()){
