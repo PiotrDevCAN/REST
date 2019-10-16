@@ -298,8 +298,10 @@ function _microtime_float()
 
 do_auth();
 include ('php/ldap.php');
+include ('php/templates/interior.header.html');
 
-die('php/ldap done');
+
+die('php/templates/interior.header.html done');
 
 
 include ('php/templates/interior.header.html');
