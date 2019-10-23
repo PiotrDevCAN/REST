@@ -957,10 +957,14 @@ class DbTable
         if (! $rs) {
             $this->lastDb2StmtError = db2_stmt_error();
             $this->lastDb2StmtErrorMsg = db2_stmt_errormsg();
+            echo "<br/>Last Insert SQL:<br/>";
+            print_r($this->preparedInsertSQL);
             echo "<BR/>Insert Array<pre>";
             print_r($insertArray);
             echo "</pre>";
             self::displayErrorMessage($rs, __CLASS__, __METHOD__, $this->preparedInsertSQL, $this->pwd, $this->lastDb2StmtError, $this->lastDb2StmtErrorMsg, $insertArray);
+            debug_print_backtrace();
+            echo "</pre>";
         } else {
             $this->lastId = db2_last_insert_id($_SESSION['conn']);
         }

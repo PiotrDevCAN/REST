@@ -16,7 +16,7 @@ class resourceRequestRecord extends DbRecord
     protected $RESOURCE_REFERENCE;
     protected $RFS;
     protected $PHASE;
-    protected $CURRENT_PLATFORM;
+    protected $CTB_SERVICE; // was known as CURRENT_PLATFORM
     protected $RESOURCE_TYPE;
     protected $DESCRIPTION;
     protected $START_DATE;
@@ -75,7 +75,7 @@ class resourceRequestRecord extends DbRecord
         $allCio = $loader->load('CIO',allTables::$STATIC_CIO);
 
         $allPhase = array('Design','Build','Develop','Deploy','Deliver');
-        $allPlatform = $loader->load('CURRENT_PLATFORM',allTables::$STATIC_CURRENT_PLATFORM);
+        $allPlatform = $loader->load('CTB_SERVICE',allTables::$STATIC_CTB_SERVICE);
         $allResourceType = $loader->load('RESOURCE_TYPE',allTables::$STATIC_RESOURCE_TYPE);
 
         $startDate = empty($this->START_DATE) ? null : new \DateTime($this->START_DATE);
@@ -199,19 +199,19 @@ class resourceRequestRecord extends DbRecord
 
         </div>
         <div class='form-group required'>
-	       	<label for='CURRENT_PLATFORM' class='col-md-2 control-label ceta-label-left'>Current Platform</label>
+	       	<label for='CTB_SERVICE' class='col-md-2 control-label ceta-label-left'>CTB Service</label>
     	       	<div class='col-md-3'>
                 <select class='form-control select'
-                		id='CURRENT_PLATFORM'
-                        name='CURRENT_PLATFORM'
-                        data-tags="true" data-placeholder="Select current platform" data-allow-clear="true">
-                <option value=''>Select Current Platform<option>
+                		id='CTB_SERVICE'
+                        name='CTB_SERVICE'
+                        data-tags="true" data-placeholder="Select CTB Service" data-allow-clear="true">
+                <option value=''>Select CTB Service<option>
                 <?php
                     foreach ($allPlatform as $key => $value) {
                         $displayValue = trim($value);
                         $returnValue  = trim($value);
                 ?>
-                <option value='<?=$returnValue?>' <?=trim($this->CURRENT_PLATFORM) == $returnValue ? 'selected' : null;?>><?=$displayValue?></option>
+                <option value='<?=$returnValue?>' <?=trim($this->CTB_SERVICE) == $returnValue ? 'selected' : null;?>><?=$displayValue?></option>
                 <?php }?>
                 </select>
                 </div>
@@ -242,6 +242,9 @@ class resourceRequestRecord extends DbRecord
    		$resetButton  = $this->formButton('reset','Reset','resetResourceRequest',null,'Reset','btn-warning');
    		$allButtons[] = $submitButton;
    		$allButtons[] = $resetButton;
+   		?>
+   		<div class='col-md-2'></div>
+   		<?php
    		$this->formBlueButtons($allButtons);
   		?>
 	</form>

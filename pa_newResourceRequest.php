@@ -60,7 +60,7 @@ $resourceRecord->displayForm($mode);
 <script>
 $(document).ready(function() {
 
-	$('#CURRENT_PLATFORM').attr('required',false);
+	$('#CTB_SERVICE').attr('required',false);
 	$('#OOH').attr('required',false);
 	$('#LINK_TO_PGMP').attr('required',false);
 });

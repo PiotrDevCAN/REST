@@ -11,7 +11,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $loader = new Loader();
 
-$allPlatform = $loader->load('CURRENT_PLATFORM',allTables::$STATIC_CURRENT_PLATFORM);
+$allPlatform = $loader->load('CTB_SERVICE',allTables::$STATIC_CTB_SERVICE);
 $allResourceType = $loader->load('RESOURCE_TYPE',allTables::$STATIC_RESOURCE_TYPE);
 unset($allPlatform[resourceRequestRecord::$bulkWorkOrder]);
 unset($allResourceType[resourceRequestRecord::$bulkWorkOrder]);
@@ -110,11 +110,11 @@ unset($allResourceType[resourceRequestRecord::$bulkWorkOrder]);
         <div class='form-group required' id='PlatformFormGroup'>
         <input type='hidden' id="ptpcRESOURCE_REFERENCE" name="ptpcRESOURCE_REFERENCE" value="" >
         <div class='row'>
-	       	<label for='CURRENT_PLATFORM' class='col-md-3 control-label ceta-label-left'>Current Platform</label>
+	       	<label for='CTB_SERVICE' class='col-md-3 control-label ceta-label-left'>Current Platform</label>
     	       	<div class='col-md-9'>
                 <select class='form-control select'
-                		id='CURRENT_PLATFORM'
-                        name='CURRENT_PLATFORM'
+                		id='CTB_SERVICE'
+                        name='CTB_SERVICE'
                         data-tags="true" data-placeholder="Select current platform" data-allow-clear="true">
                 <option value=''>Select Current Platform<option>
                 <?php

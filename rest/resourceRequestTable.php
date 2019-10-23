@@ -40,7 +40,7 @@ class resourceRequestTable extends DbTable
             throw new \Exception('Parameters Missing in call to ' . __FUNCTION__);
         }
         $sql  = " UPDATE " . $_SESSION['Db2Schema'] . "." . $this->tableName;
-        $sql .= " SET CURRENT_PLATFORM='" . db2_escape_string($platform) . "', ";
+        $sql .= " SET CTB_SERVICE='" . db2_escape_string($platform) . "', ";
         $sql .= " RESOURCE_TYPE='" . db2_escape_string($resourceType). "' ,";
         $sql .= " DRAWN_DOWN_FOR_PRN='" . db2_escape_string($prn) . "' ,";
         $sql .= " DRAWN_DOWN_FOR_PROJECT_CODE='" . db2_escape_string($projectCode) . "' ";
@@ -168,7 +168,7 @@ class resourceRequestTable extends DbTable
         $row['STATUS'] =
         "<button type='button' class='btn btn-success btn-xs changeStatus' aria-label='Left Align'
                     data-reference='" .trim($resourceReference) . "'
-                    data-platform='" .trim($row['CURRENT_PLATFORM']) .  "'
+                    data-platform='" .trim($row['CTB_SERVICE']) .  "'
                     data-rfs='" .trim($row['RFS_ID']) . "'
                     data-type='" . $resourceType . "'
                     data-start='" . $row['START_DATE'] . "'
@@ -178,7 +178,7 @@ class resourceRequestTable extends DbTable
          <span data-toggle='tooltip' title='Change Status' class='glyphicon glyphicon-tags ' aria-hidden='true' ></span>
             </button>&nbsp;" . $status;
         $row['DESCRIPTION'] =
-        "<button type='button' class='btn btn-default btn-xs deleteRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['CURRENT_PLATFORM']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $resourceType . "' >
+        "<button type='button' class='btn btn-default btn-xs deleteRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['CTB_SERVICE']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $resourceType . "' >
             <span data-toggle='tooltip' title='Delete Resource' class='glyphicon glyphicon-trash ' aria-hidden='true' ></span>
             </button>&nbsp;" . $description;
         $row['RESOURCE_NAME'] =
@@ -214,8 +214,8 @@ class resourceRequestTable extends DbTable
         $row['RESOURCE_NAME'] .= "&nbsp;" . $displayedResourceName ;
 
 
-        if(trim($row['CURRENT_PLATFORM']) == resourceRequestRecord::$tbd){
-            $row['CURRENT_PLATFORM'] =   "<button type='button' class='btn btn-xs setPlatformTypePrnCode' aria-label='Left Align'
+        if(trim($row['CTB_SERVICE']) == resourceRequestRecord::$tbd){
+            $row['CTB_SERVICE'] =   "<button type='button' class='btn btn-xs setPlatformTypePrnCode' aria-label='Left Align'
                     data-reference='" . $resourceReference . "' data-type='" .$resourceType . "' data-parent='" . $bwo_parent . "' >
               <span class='glyphicon glyphicon-edit text-primary' aria-hidden='true'></span>
               </button>";

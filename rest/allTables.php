@@ -21,7 +21,7 @@ class allTables
     public static $RFS = 'RFS';
 
     public static $STATIC_CIO = 'STATIC_CIO';
-    public static $STATIC_CURRENT_PLATFORM = 'STATIC_CURRENT_PLATFORM';
+    public static $STATIC_CTB_SERVICE = 'STATIC_CTB_SERVICE';
     public static $STATIC_RESOURCE_TYPE = 'STATIC_RESOURCE_TYPE';
 
     public static $UPLOAD_LOG = 'UPLOAD_LOG';

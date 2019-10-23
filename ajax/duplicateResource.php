@@ -31,7 +31,7 @@ $resourceRecord->set('CLONED_FROM',$_POST['resourceReference']);
 
 if(trim($_POST['drawDown'])=='true'){
     $drawDown = 'yes';
-    $resourceRecord->set('CURRENT_PLATFORM',resourceRequestRecord::$tbd);
+    $resourceRecord->set('CTB_SERVICE',resourceRequestRecord::$tbd);
     $resourceRecord->set('RESOURCE_TYPE',resourceRequestRecord::$tbd);
     $resourceRecord->set('PARENT_BWO',$_POST['resourceReference']);
 }
