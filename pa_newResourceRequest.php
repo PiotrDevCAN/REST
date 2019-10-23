@@ -76,10 +76,14 @@ $(document).ready(function() {
     	    $('#CTB_SUB_SERVICE').val("").trigger("change");
     		$('#CTB_SUB_SERVICE').empty().select2('destroy').attr('disabled',true);
     	}
-
     	$("#CTB_SUB_SERVICE").select2({
     		  data: data
     	}).attr('disabled',false).val('').trigger('change');
+
+
+    	if(data.length==2){
+    		$("#CTB_SUB_SERVICE").val(data[1].text).trigger('change');
+        }
 
 	});
 

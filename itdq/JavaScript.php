@@ -176,7 +176,7 @@ class JavaScript {
 			$id = 0;
 			$poolString .=  ',{id:' . $id++ . ',text:""}';
 			foreach ($pools as $poolName ){
-				$poolString .=  ',{id:' . $id++ . ',text:"' . $poolName . '"}';
+			    $poolString .=  ',{id:"' . $poolName . '",text:"' . $poolName . '"}';
 			}
 			$poolString .= ']; ';
 			echo str_replace("[,","[",$poolString);
