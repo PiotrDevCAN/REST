@@ -15,13 +15,12 @@ $navBar_data = array(
     array('Upload','pa_upload.php'),
     array("",'endOfDropDown'),
 
-    array("Define",'dropDown'),
+    array("Request",'dropDown'),
     array('New RFS','pa_newRfs.php'),
     array('New Resource Request','pa_newResourceRequest.php'),
     array("",'endOfDropDown'),
 
-    array("Manage",'dropDown'),
-    array('Inflight Projects','pr_Inflights.php'),
+    array("Assign",'dropDown'),
     array('RFS','pr_RFS.php'),
     array('Resources','pr_resourceRequired.php'),
     array("",'endOfDropDown'),
