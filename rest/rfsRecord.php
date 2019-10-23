@@ -133,6 +133,9 @@ class rfsRecord extends DbRecord
    		$resetButton  = $this->formButton('reset','Reset','resetRfs',null,'Reset','btn-warning');
    		$allButtons[] = $submitButton;
    		$allButtons[] = $resetButton;
+   		?>
+   		<div class='col-md-2'></div>
+   		<?php
    		$this->formBlueButtons($allButtons);
   		?>
 	</form>

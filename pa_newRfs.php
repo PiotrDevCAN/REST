@@ -92,6 +92,7 @@ $('#RFS_ID').on('focusout',function(e){
 $(document).ready(function(){
 
 	$( "#rfsForm" ).submit(function( event ) {
+		$(':submit').addClass('spinning').attr('disabled',true);
 		var url = 'ajax/saveRfsRecord.php';
 		var disabledFields = $(':disabled');
 		$(disabledFields).removeAttr('disabled');
@@ -131,6 +132,8 @@ $(document).ready(function(){
 	    	            	window.close();
 	        	        } else {
 	            	    	 $('#resetRfs').click();
+	            	    	 $(':submit').removeClass('spinning').attr('disabled',false);
+	            	    	 $('#RFS_ID').css('#ffffff');
 	                	}
                 	})
           	},
