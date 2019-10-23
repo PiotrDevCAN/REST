@@ -163,6 +163,7 @@ $(document).ready(function(){
 $(document).ready(function(){
 
 	$( "#resourceRequestForm" ).submit(function( event ) {
+		$(':submit').addClass('spinning').attr('disabled',true);
 		var url = 'ajax/saveResourceRecord.php';
 		var disabledFields = $(':disabled');
 		$(disabledFields).removeAttr('disabled');
@@ -194,6 +195,7 @@ $(document).ready(function(){
 	    	            	window.close();
 	        	        } else {
 	            	    	$('#resetResourceRequest').click();
+	            	    	$(':submit').removeClass('spinning').attr('disabled',false);
 	                	}
               	})
           		},

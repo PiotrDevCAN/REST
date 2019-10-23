@@ -11,10 +11,10 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $loader = new Loader();
 
-$allPlatform = $loader->load('CTB_SERVICE',allTables::$STATIC_CTB_SERVICE);
-$allResourceType = $loader->load('RESOURCE_TYPE',allTables::$STATIC_RESOURCE_TYPE);
-unset($allPlatform[resourceRequestRecord::$bulkWorkOrder]);
-unset($allResourceType[resourceRequestRecord::$bulkWorkOrder]);
+$allCtbService = $loader->load('CTB_SERVICE',allTables::$STATIC_CTB_SERVICE);
+$allSubService = $loader->load('CTB_SUB_SERVICE',allTables::CTB_SUB_SERVICE);
+unset($allCtbService[resourceRequestRecord::$bulkWorkOrder]);
+unset($allSubService[resourceRequestRecord::$bulkWorkOrder]);
 ?>
 <div class='container'>
 
@@ -102,23 +102,23 @@ unset($allResourceType[resourceRequestRecord::$bulkWorkOrder]);
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Define Platform etc.</h4>
+        <h4 class="modal-title">Define CTB Service</h4>
       </div>
       <div class="modal-body">
       	<div class="container col-md-12">
         <form id='platformTypePrnCodeForm'>
-        <div class='form-group required' id='PlatformFormGroup'>
+        <div class='form-group required' id='CtbServiceGroup'>
         <input type='hidden' id="ptpcRESOURCE_REFERENCE" name="ptpcRESOURCE_REFERENCE" value="" >
         <div class='row'>
-	       	<label for='CTB_SERVICE' class='col-md-3 control-label ceta-label-left'>Current Platform</label>
+	       	<label for='CTB_SERVICE' class='col-md-3 control-label ceta-label-left'>CTB Service</label>
     	       	<div class='col-md-9'>
                 <select class='form-control select'
                 		id='CTB_SERVICE'
                         name='CTB_SERVICE'
-                        data-tags="true" data-placeholder="Select current platform" data-allow-clear="true">
-                <option value=''>Select Current Platform<option>
+                        data-tags="true" data-placeholder="Select CTB Service" data-allow-clear="true">
+                <option value=''>Select CTB Service<option>
                 <?php
-                    foreach ($allPlatform as $key => $value) {
+                    foreach ($allCtbService as $key => $value) {
                         $displayValue = trim($value);
                         $returnValue  = trim($value);
                 ?>
@@ -128,17 +128,17 @@ unset($allResourceType[resourceRequestRecord::$bulkWorkOrder]);
                 </div>
           </div>
           </div>
-          <div class='form-group required' id='ResourceTypeFormGroup'>
+          <div class='form-group required' id='CtbSubServiceFormGroup'>
 		  <div class='row'>
-          <label for='RESOURCE_TYPE' class='col-md-3 control-label ceta-label-left'>Resource Type</label>
+          <label for='CTB_SUB_SERVICE' class='col-md-3 control-label ceta-label-left'>CTB SubService</label>
                <div class='col-md-9'>
-               <select class='form-control select' id='RESOURCE_TYPE'
-                       name='RESOURCE_TYPE'
+               <select class='form-control select' id='CTB_SUB_SERVICE'
+                       name='CTB_SUB_SERVICE'
                        required='required'
-                       data-tags="true" data-placeholder="Select Resource Type" data-allow-clear="true">
-              <option value=''>Select Resource Type<option>
+                       data-tags="true" data-placeholder="Select CTB SubService" data-allow-clear="true">
+              <option value=''>Select CTB SubService<option>
               <?php
-              foreach ($allResourceType as $key => $value) {
+              foreach ($allSubService as $key => $value) {
                   $displayValue = trim($value);
                   $returnValue  = trim($value);
                   ?><option value='<?=$returnValue?>'><?=$displayValue?></option>
@@ -202,7 +202,7 @@ unset($allResourceType[resourceRequestRecord::$bulkWorkOrder]);
       </div>
       <div class="modal-body" id='confirmDuplication'>
       <p><b>RFS :</b><span id='confirmDuplicateRFS'></span></p>
-      <p><b>Resource Type :</b><span id='confirmDuplicateType'></span></p>
+      <p><b>CTB SubService :</b><span id='confirmDuplicateType'></span></p>
       <p><b>Start Date :</b><span id='confirmDuplicateStart'></span></p>
       <p><b>Resource Reference :</b><span id='confirmDuplicateRR'></span></p>
 

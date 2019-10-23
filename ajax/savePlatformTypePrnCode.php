@@ -12,7 +12,7 @@ ob_start();
 
 try {
     $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
-    $resourceTable->updatePlatformTypePrnCode($_POST['ptpcRESOURCE_REFERENCE'], $_POST['CTB_SERVICE'], $_POST['RESOURCE_TYPE'], $_POST['PRN'], $_POST['PROJECT_CODE'] );
+    $resourceTable->updateServicePrnCode($_POST['ptpcRESOURCE_REFERENCE'], $_POST['CTB_SERVICE'], $_POST['CTB_SUB_SERVICE'], $_POST['PRN'], $_POST['PROJECT_CODE'] );
     $exception = false;
 } catch (Exception $e) {
     $exception = $e->getMessage();
@@ -20,7 +20,7 @@ try {
 
 $messages = ob_get_clean();
 
-$response = array('resourceReference'=>$_POST['ptpcRESOURCE_REFERENCE'], 'currentPlatform' => $_POST['CTB_SERVICE'], 'resourceType'=>$_POST['RESOURCE_TYPE'], 'prn'=>$_POST['PRN'],'projectCode'=>$_POST['PROJECT_CODE'], 'Messages'=>$messages, 'Exception'=> $exception) ;
+$response = array('resourceReference'=>$_POST['ptpcRESOURCE_REFERENCE'], 'currentPlatform' => $_POST['CTB_SERVICE'], 'ctbSubService'=>$_POST['CTB_SUB_SERVICE'], 'prn'=>$_POST['PRN'],'projectCode'=>$_POST['PROJECT_CODE'], 'Messages'=>$messages, 'Exception'=> $exception) ;
 
 ob_clean();
 echo json_encode($response);

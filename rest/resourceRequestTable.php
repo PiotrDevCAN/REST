@@ -35,13 +35,13 @@ class resourceRequestTable extends DbTable
         return $result;
     }
 
-    function updatePlatformTypePrnCode($resourceReference,$platform, $resourceType, $prn, $projectCode){
-        if(empty($resourceReference) or empty($platform) or empty($resourceType) or empty($prn) or empty($projectCode)){
+    function updateServicePrnCode($resourceReference,$ctbService, $ctbSubService, $prn, $projectCode){
+        if(empty($resourceReference) or empty($ctbService) or empty($ctbSubService) or empty($prn) or empty($projectCode)){
             throw new \Exception('Parameters Missing in call to ' . __FUNCTION__);
         }
         $sql  = " UPDATE " . $_SESSION['Db2Schema'] . "." . $this->tableName;
-        $sql .= " SET CTB_SERVICE='" . db2_escape_string($platform) . "', ";
-        $sql .= " RESOURCE_TYPE='" . db2_escape_string($resourceType). "' ,";
+        $sql .= " SET CTB_SERVICE='" . db2_escape_string($ctbService) . "', ";
+        $sql .= " CTB_SUB_SERVICE='" . db2_escape_string($ctbSubService). "' ,";
         $sql .= " DRAWN_DOWN_FOR_PRN='" . db2_escape_string($prn) . "' ,";
         $sql .= " DRAWN_DOWN_FOR_PROJECT_CODE='" . db2_escape_string($projectCode) . "' ";
         $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference);
@@ -149,11 +149,11 @@ class resourceRequestTable extends DbTable
         $resourceReference = trim($row['RESOURCE_REFERENCE']);
         $resourceName = trim($row['RESOURCE_NAME']);
         $startDate = trim($row['START_DATE']);
-        $resourceType = trim($row['RESOURCE_TYPE']);
+        $subService = trim($row['CTB_SUB_SERVICE']);
         $bwo_parent = trim($row['PARENT_BWO']);
         $description = trim($row['DESCRIPTION']);
         $status = !empty(trim($row['STATUS'])) ? trim($row['STATUS']) : resourceRequestRecord::STATUS_NEW;
-        $isBulkWorkOrder = $resourceType==resourceRequestRecord::$bulkWorkOrder;
+        $isBulkWorkOrder = $subService==resourceRequestRecord::$bulkWorkOrder;
         $clonedFromBwo = ((!empty($bwo_parent) && !$bwo_parent==0 )) ? true : false;
 
         $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';
@@ -170,7 +170,7 @@ class resourceRequestTable extends DbTable
                     data-reference='" .trim($resourceReference) . "'
                     data-platform='" .trim($row['CTB_SERVICE']) .  "'
                     data-rfs='" .trim($row['RFS_ID']) . "'
-                    data-type='" . $resourceType . "'
+                    data-type='" . $subService . "'
                     data-start='" . $row['START_DATE'] . "'
                     data-phase='" . $row['PHASE'] . "'
                     data-status='" . $status . "'
@@ -178,16 +178,16 @@ class resourceRequestTable extends DbTable
          <span data-toggle='tooltip' title='Change Status' class='glyphicon glyphicon-tags ' aria-hidden='true' ></span>
             </button>&nbsp;" . $status;
         $row['DESCRIPTION'] =
-        "<button type='button' class='btn btn-default btn-xs deleteRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['CTB_SERVICE']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $resourceType . "' >
+        "<button type='button' class='btn btn-default btn-xs deleteRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['CTB_SERVICE']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $subService . "' >
             <span data-toggle='tooltip' title='Delete Resource' class='glyphicon glyphicon-trash ' aria-hidden='true' ></span>
             </button>&nbsp;" . $description;
         $row['RESOURCE_NAME'] =
-            "<button type='button' class='btn btn-default btn-xs editRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$resourceType . "' data-parent='" . $bwo_parent . "' >
+            "<button type='button' class='btn btn-default btn-xs editRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "' >
             <span class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Name'></span>
             </button>";
 
         $row['RESOURCE_NAME'] .= $canAssignPerson ?
-             "<button type='button' class='btn btn-default btn-xs editResource' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$resourceType . "' data-parent='" . $bwo_parent . "' >
+             "<button type='button' class='btn btn-default btn-xs editResource' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "' >
               <span class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true'></span>
               </button>" : null;
 
@@ -195,7 +195,7 @@ class resourceRequestTable extends DbTable
             "<button type='button' class='btn btn-default btn-xs editHours' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-startDate='" . $startDate . "' >
              <span class=' glyphicon " . $timeIcon . " text-primary' aria-hidden='true'></span>
              </button>";
-        $row['RESOURCE_NAME'] .= trim($row['RESOURCE_TYPE'])==resourceRequestRecord::$bulkWorkOrder ?
+        $row['RESOURCE_NAME'] .= trim($row['CTB_SUB_SERVICE'])==resourceRequestRecord::$bulkWorkOrder ?
             "<button type='button' class='btn btn-xs seekBwo' aria-label='Left Align'
                 data-reference='" . $resourceReference . "'                        >
                 <span class='glyphicon glyphicon-search text-primary' aria-hidden='true'></span>
@@ -204,7 +204,7 @@ class resourceRequestTable extends DbTable
               "<button type='button' class='btn btn-xs requestDuplication' aria-label='Left Align'
                     data-reference='" . $resourceReference . "'
                     data-rfs='" . $row['RFS_ID'] . "'
-                    data-type='" . $row['RESOURCE_TYPE'] . "'
+                    data-type='" . $row['CTB_SUB_SERVICE'] . "'
                     data-start='" . $row['START_DATE'] . "'
                   >
               <span class='glyphicon glyphicon-duplicate text-primary' aria-hidden='true'></span>
@@ -216,13 +216,13 @@ class resourceRequestTable extends DbTable
 
         if(trim($row['CTB_SERVICE']) == resourceRequestRecord::$tbd){
             $row['CTB_SERVICE'] =   "<button type='button' class='btn btn-xs setPlatformTypePrnCode' aria-label='Left Align'
-                    data-reference='" . $resourceReference . "' data-type='" .$resourceType . "' data-parent='" . $bwo_parent . "' >
+                    data-reference='" . $resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "' >
               <span class='glyphicon glyphicon-edit text-primary' aria-hidden='true'></span>
               </button>";
         }
-        if(trim($row['RESOURCE_TYPE']) == resourceRequestRecord::$tbd){
-            $row['RESOURCE_TYPE'] =   "<button type='button' class='btn btn-xs setPlatformTypePrnCode' aria-label='Left Align'
-                    data-reference='" . $resourceReference . "' data-type='" .$resourceType . "' data-parent='" . $bwo_parent . "'
+        if(trim($row['CTB_SUB_SERVICE']) == resourceRequestRecord::$tbd){
+            $row['CTB_SUB_SERVICE'] =   "<button type='button' class='btn btn-xs setPlatformTypePrnCode' aria-label='Left Align'
+                    data-reference='" . $resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "'
                     id='setResourceType" . $resourceReference . "'  >
               <span class='glyphicon glyphicon-edit text-primary' aria-hidden='true'></span>
               </button>";

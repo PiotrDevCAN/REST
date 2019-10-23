@@ -30,6 +30,11 @@ td {
     -webkit-animation: spin2 1s infinite linear;
 }
 
+.btn.spinning {
+    animation: spin 1s infinite linear;
+    -webkit-animation: spin2 1s infinite linear;
+}
+
 @keyframes spin {
     from { transform: scale(1) rotate(0deg); }
     to { transform: scale(1) rotate(360deg); }
@@ -45,5 +50,9 @@ th { font-size: 11px; }
 td { font-size: 10px; }
 
 
+.select2-container .select2-selection--single {
+	padding-top: 5px;
+    height: 38px;
+}
 
 

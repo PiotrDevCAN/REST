@@ -17,7 +17,7 @@ class resourceRequestRecord extends DbRecord
     protected $RFS;
     protected $PHASE;
     protected $CTB_SERVICE; // was known as CURRENT_PLATFORM
-    protected $RESOURCE_TYPE;
+    protected $CTB_SUB_SERVICE;
     protected $DESCRIPTION;
     protected $START_DATE;
     protected $END_DATE;
@@ -31,7 +31,7 @@ class resourceRequestRecord extends DbRecord
     protected $DRAWN_DOWN_FOR_PROJECT_CODE;
     protected $STATUS;
 
-    static public $columnHeadings = array("Resource Ref", "RFS", "Phase", "Current Platform", "Resource Type",
+    static public $columnHeadings = array("Resource Ref", "RFS", "Phase", "CTB Service", "CTB Sub Service",
                                           "Description", "Start Date", "End Date", "Hrs Per Week", "Resource Name",
                                           "Request Creator", "Request Created", "Parent BWO" , "Cloned From", "Drawn Down For PRN", "Drawn Down For Project Code",
                                           "Status"    );
@@ -75,8 +75,8 @@ class resourceRequestRecord extends DbRecord
         $allCio = $loader->load('CIO',allTables::$STATIC_CIO);
 
         $allPhase = array('Design','Build','Develop','Deploy','Deliver');
-        $allPlatform = $loader->load('CTB_SERVICE',allTables::$STATIC_CTB_SERVICE);
-        $allResourceType = $loader->load('RESOURCE_TYPE',allTables::$STATIC_RESOURCE_TYPE);
+        $allCtbService = $loader->load('CTB_SERVICE',allTables::$STATIC_CTB_SERVICE);
+        $allSubService = $loader->load('CTB_SUB_SERVICE',allTables::$STATIC_CTB_SUB_SERVICE);
 
         $startDate = empty($this->START_DATE) ? null : new \DateTime($this->START_DATE);
         $startDateStr = empty($startDate) ? null : $startDate->format('dMy');
@@ -207,7 +207,7 @@ class resourceRequestRecord extends DbRecord
                         data-tags="true" data-placeholder="Select CTB Service" data-allow-clear="true">
                 <option value=''>Select CTB Service<option>
                 <?php
-                    foreach ($allPlatform as $key => $value) {
+                    foreach ($allCtbService as $key => $value) {
                         $displayValue = trim($value);
                         $returnValue  = trim($value);
                 ?>
@@ -216,18 +216,18 @@ class resourceRequestRecord extends DbRecord
                 </select>
                 </div>
 
-          <label for='RESOURCE_TYPE' class='col-md-2 control-label ceta-label-left'>Resource Type</label>
+          <label for='CTB_SUB_SERVICE' class='col-md-2 control-label ceta-label-left'>CTB SubService</label>
                <div class='col-md-4'>
-               <select class='form-control select' id='RESOURCE_TYPE'
-                       name='RESOURCE_TYPE'
+               <select class='form-control select' id='CTB_SUB_SERVICE'
+                       name='CTB_SUB_SERVICE'
                        required='required'
-                       data-tags="true" data-placeholder="Select Resource Type" data-allow-clear="true" >
-              <option value=''>Select Resource Type<option>
+                       data-tags="true" data-placeholder="Select CTB SubService" data-allow-clear="true" >
+              <option value=''>Select CTB SubService<option>
               <?php
-              foreach ($allResourceType as $key => $value) {
+              foreach ($allSubService as $key => $value) {
                   $displayValue = trim($value);
                   $returnValue  = trim($value);
-                  ?><option value='<?=$returnValue?>' <?=trim($this->RESOURCE_TYPE) == $returnValue ? 'selected' : null;?>><?=$displayValue?></option>
+                  ?><option value='<?=$returnValue?>' <?=trim($this->CTB_SUB_SERVICE) == $returnValue ? 'selected' : null;?>><?=$displayValue?></option>
               <?php } ?>
               </select>
               </div>

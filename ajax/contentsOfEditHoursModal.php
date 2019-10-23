@@ -18,8 +18,8 @@ $resourceRecord = new resourceRequestRecord();
 
 $resourceRecord->setFromArray($resourceTable->getWithPredicate(" RESOURCE_REFERENCE='" . trim($_POST['resourceReference']) . "' "));
 
-$resourceType = $resourceRecord->get('RESOURCE_TYPE');
-$bulkWorkOrder = trim($resourceType) == resourceRequestRecord::$bulkWorkOrder ? true : false;
+$ctb_subserviceervice = $resourceRecord->get('CTB_SUB_SERVICE');
+$bulkWorkOrder = trim($ctb_subserviceervice) == resourceRequestRecord::$bulkWorkOrder ? true : false;
 
 
 $parentBWO = $resourceRecord->get('PARENT_BWO');
@@ -54,7 +54,7 @@ ob_start();
 </div>
 
 <div class='row'>
-<div class='col-md-12'><h5><b>Resource Type:</b><?=trim($resourceRecord->get('RESOURCE_TYPE'));?></h5></div>
+<div class='col-md-12'><h5><b>CTB Sub Service:</b><?=trim($resourceRecord->get('CTB_SUB_SERVICE'));?></h5></div>
 </div>
 <div class='row'>
 <div class='col-md-12'><h5><b>Resource Name:</b><?=trim($resourceRecord->get('RESOURCE_NAME'));?></h5></div>
@@ -154,7 +154,7 @@ while (($row = db2_fetch_assoc($resourceHoursRs))==true){
 
 $modalBody = ob_get_clean();
 
-if(trim($resourceRecord->get('RESOURCE_TYPE'))==trim(resourceRequestRecord::$bulkWorkOrder)){
+if(trim($resourceRecord->get('CTB_SUB_SERVICE'))==trim(resourceRequestRecord::$bulkWorkOrder)){
     ?><button type="button" class="btn btn-warning" id='saveAdjustedHoursWithDrawDown'>Draw Down</button><?php
 } elseif(!$clonedFromBwo) { // If this a drawn down - they can't addjust the hours.
     ?><button type="button" class="btn btn-warning" id='saveAdjustedHoursWithDelta'>Auto-Delta</button><?php
