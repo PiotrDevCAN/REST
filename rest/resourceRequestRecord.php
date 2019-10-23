@@ -4,6 +4,7 @@ namespace rest;
 use itdq\DbRecord;
 use itdq\Loader;
 use itdq\FormClass;
+use itdq\JavaScript;
 
 /**
  *
@@ -72,11 +73,12 @@ class resourceRequestRecord extends DbRecord
 
         $loader = new Loader();
         $allRfs = $loader->load('RFS_ID',allTables::$RFS);
-        $allCio = $loader->load('CIO',allTables::$STATIC_CIO);
 
         $allPhase = array('Design','Build','Develop','Deploy','Deliver');
+
         $allCtbService = $loader->load('CTB_SERVICE',allTables::$STATIC_CTB_SERVICE);
-        $allSubService = $loader->load('CTB_SUB_SERVICE',allTables::$STATIC_CTB_SUB_SERVICE);
+        $allSubService = StaticCtbServiceTable::getAllCtbSubService();
+        JavaScript::buildSelectArray($allSubService, 'ctbService');
 
         $startDate = empty($this->START_DATE) ? null : new \DateTime($this->START_DATE);
         $startDateStr = empty($startDate) ? null : $startDate->format('dMy');
@@ -221,14 +223,9 @@ class resourceRequestRecord extends DbRecord
                <select class='form-control select' id='CTB_SUB_SERVICE'
                        name='CTB_SUB_SERVICE'
                        required='required'
-                       data-tags="true" data-placeholder="Select CTB SubService" data-allow-clear="true" >
-              <option value=''>Select CTB SubService<option>
-              <?php
-              foreach ($allSubService as $key => $value) {
-                  $displayValue = trim($value);
-                  $returnValue  = trim($value);
-                  ?><option value='<?=$returnValue?>' <?=trim($this->CTB_SUB_SERVICE) == $returnValue ? 'selected' : null;?>><?=$displayValue?></option>
-              <?php } ?>
+                       data-tags="true" data-placeholder="Select CTB SubService" data-allow-clear="true"
+                       disabled >
+              <option value=''>Select CTB Service First<option>
               </select>
               </div>
         </div>

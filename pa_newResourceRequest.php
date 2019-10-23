@@ -60,9 +60,33 @@ $resourceRecord->displayForm($mode);
 <script>
 $(document).ready(function() {
 
-	$('#CTB_SERVICE').attr('required',false);
+	console.log(ctbService);
+
+//	$('#CTB_SERVICE').attr('required',false);
 	$('#OOH').attr('required',false);
 	$('#LINK_TO_PGMP').attr('required',false);
+
+	$('#CTB_SERVICE').on('select2:select',function(e){
+		var serviceSelected= $(e.params.data)[0].text;
+    	var entry = ctbService[0].indexOf(serviceSelected);
+    	var data = ctbService[entry];
+
+    	if ($('#CTB_SUB_SERVICE').hasClass("select2-hidden-accessible")) {
+    	    // Select2 has been initialized
+    	    $('#CTB_SUB_SERVICE').val("").trigger("change");
+    		$('#CTB_SUB_SERVICE').empty().select2('destroy').attr('disabled',true);
+    	}
+
+    	$("#CTB_SUB_SERVICE").select2({
+    		  data: data
+    	}).attr('disabled',false).val('').trigger('change');
+
+	});
+
+
+
+
+
 });
 
 
