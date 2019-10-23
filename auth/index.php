@@ -11,5 +11,9 @@ if($auth->verifyResponse($_GET))
 {
     header("Location: ".$_GET['state']);
 	exit();
+} else {
+    echo "<pre>";
+    var_dump($_GET);
+    die('verify response returned false');
 }
 ?>

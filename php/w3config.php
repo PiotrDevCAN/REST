@@ -7,6 +7,12 @@
 $_SESSION['SITE_NAME'] = 'rest';
 $_SESSION['country'] = 'E4'; // Used in Connect.php
 
+if(!isset($_SERVER['environment'])){
+    echo "<pre>";
+    var_dump($_SERVER);
+    die('environment not set');
+}
+
 $site = array(
 
     // if not empty will override the site title from menuconf.php

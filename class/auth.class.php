@@ -20,7 +20,9 @@
 		//returns boolean
 		public function ensureAuthorized()
 		{
-			if(isset($_SESSION['uid']) && isset($_SESSION['exp']) && ($_SESSION['exp']-300) > time()) return true;
+		    if(isset($_SESSION['uid']) && isset($_SESSION['exp']) && ($_SESSION['exp']-300) > time()) {
+		        return true;
+		    }
 
 			switch ($this->technology) {
 				case "openidconnect":
