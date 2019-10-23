@@ -125,7 +125,7 @@ class rfsRecord extends DbRecord
         </div>
 
         <?php
-   		$this->formHiddenInput('RFS_CREATOR',$GLOBALS['ltcuser']['mail'],'RFS_CREATOR');
+   		$this->formHiddenInput('RFS_CREATOR',$_SESSION['ssoEmail'],'RFS_CREATOR');
    		$this->formHiddenInput('mode',$mode,'mode');
    		$this->formInput('Link to PGMP','LINK_TO_PGMP');
 

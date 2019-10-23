@@ -12,16 +12,16 @@ use rest\allTables;
 
 // var_dump($resp);
 
-// $GLOBALS['ltcuser']['mail'] = 'rob.daniel@uk.ibm.com';
+// $_SESSION['ssoEmail'] = 'rob.daniel@uk.ibm.com';
 // $_SESSION['adminBg'] = 'REST_Admin';
 // $_SESSION['userBg'] = 'REST_User';
 // $_SESSION['pmoBg'] = 'REST_Pmo';
 // $_SESSION['itdqBg'] = 'ITDQ';
 
-//     $isAdmin = employee_in_group($_SESSION['adminBg'], $GLOBALS['ltcuser']['mail']);
-//     $validUser = employee_in_group($_SESSION['userBg'], $GLOBALS['ltcuser']['mail']);
-//     $isItdq = employee_in_group($_SESSION['itdqBg'], $GLOBALS['ltcuser']['mail']);
-//     $isPmo = employee_in_group($_SESSION['pmoBg'], $GLOBALS['ltcuser']['mail']);
+//     $isAdmin = employee_in_group($_SESSION['adminBg'], $_SESSION['ssoEmail']);
+//     $validUser = employee_in_group($_SESSION['userBg'], $_SESSION['ssoEmail']);
+//     $isItdq = employee_in_group($_SESSION['itdqBg'], $_SESSION['ssoEmail']);
+//     $isPmo = employee_in_group($_SESSION['pmoBg'], $_SESSION['ssoEmail']);
 
 
 //     var_dump($isAdmin);

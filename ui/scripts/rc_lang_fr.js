@@ -43,17 +43,17 @@ text['monthNamesShort'] = new Array(
 
 text['monthNames'] = new Array(
 'Janvier',
-'Février',
+'Fï¿½vrier',
 'Mars',
 'Avril',
 'Mai',
 'Juin',
 'Juillet',
-'Août',
+'Aoï¿½t',
 'Septembre',
 'Octobre',
 'Novembre',
-'Décembre'
+'Dï¿½cembre'
 );
 
 
@@ -62,16 +62,15 @@ text['dateFormat'] = '%Y-%m-%d',
 text['footerDefaultText'] = 'Choisir la date',
 
 text['clear'] = 'Annuler',
-text['prev_year'] = 'Année précedente',
-text['prev_month'] = 'Mois précédent',
+text['prev_year'] = 'Annï¿½e prï¿½cedente',
+text['prev_month'] = 'Mois prï¿½cï¿½dent',
 text['next_month'] = 'Mois prochain',
-text['next_year'] = 'Année prochaine',
+text['next_year'] = 'Annï¿½e prochaine',
 text['close'] = 'Fermer',
 
 
 // weekend days (0 - sunday, ... 6 - saturday)
 text['weekend'] = "0,6";
 text['make_first'] = "1<sup>er</sup> jour %s";
-
 
 RichCalendar.rc_lang_data['fr'] = text;
