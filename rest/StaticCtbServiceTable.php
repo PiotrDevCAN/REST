@@ -2,6 +2,7 @@
 namespace rest;
 
 use itdq\DbRecord;
+use itdq\DbTable;
 
 /**
  *
@@ -12,7 +13,7 @@ class StaticCtbServiceTable extends DbRecord
 {
     static function getAllCtbSubService(){
         $sql = " SELECT * FROM " . $_SESSION['Db2Schema'] . "." . allTables::$STATIC_CTB_SERVICE;
-        $sql .= " ORDER BY CTB_SERVICE, CTB_SUB_SERVICE ";
+        $sql .= " ORDER BY CTB_SERVICE, CTB_SUB_SERVICE  ";
         $resultSet = db2_exec($_SESSION['conn'], $sql);
 
         $allCtbServices = array();
