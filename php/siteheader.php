@@ -167,7 +167,7 @@ function do_error($page = array())
 function do_auth($group = null)
 {
     if(stripos($_SERVER['environment'], 'dev')) {
-        $GLOBALS['ltcuser']['mail'] = $_SERVER['SERVER_ADMIN'];
+        $_SESSION['ssoEmail'] = $_SERVER['SERVER_ADMIN'];
         $_SESSION['ssoEmail'] = $_SERVER['SERVER_ADMIN'];
     } else {
         include_once "class/include.php";
@@ -175,7 +175,7 @@ function do_auth($group = null)
         if(!$auth->ensureAuthorized()){
             die('Invalid logon attempt');
         } else {
-            $GLOBALS['ltcuser']['mail'] = $_SESSION['ssoEmail'];
+            $_SESSION['ssoEmail'] = $_SESSION['ssoEmail'];
             if(isset($_SESSION['somethingChanged']))
             {
                 echo "<br/><br/><span style='font-weight:bold;'>Warning: </span> The values that are returned from w3ID/IBMID has probably been changed.<br/><br/>No need to panic, this is very easy to fix.<br/>This is your session currently:<br/><br/><code>";

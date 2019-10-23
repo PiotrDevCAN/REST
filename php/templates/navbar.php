@@ -83,10 +83,10 @@ include ('UserComms/responsiveOutages_V2.php');
 
   <?php
 
-  $isAdmin = employee_in_group($_SESSION['adminBg'], $GLOBALS['ltcuser']['mail']);
-  $validUser = employee_in_group($_SESSION['userBg'], $GLOBALS['ltcuser']['mail']);
-  $isItdq = employee_in_group($_SESSION['itdqBg'], $GLOBALS['ltcuser']['mail']);
-  $isPmo = employee_in_group($_SESSION['pmoBg'], $GLOBALS['ltcuser']['mail']);
+  $isAdmin = employee_in_group($_SESSION['adminBg'], $_SESSION['ssoEmail']);
+  $validUser = employee_in_group($_SESSION['userBg'], $_SESSION['ssoEmail']);
+  $isItdq = employee_in_group($_SESSION['itdqBg'], $_SESSION['ssoEmail']);
+  $isPmo = employee_in_group($_SESSION['pmoBg'], $_SESSION['ssoEmail']);
 
   $isAdmin   = stripos($_SERVER['environment'], 'REST') ? $isAdmin : true;
   $isPmo   = stripos($_SERVER['environment'], 'REST')  ? $isPmo : true;

@@ -17,7 +17,7 @@ class Email
         $headers .= "\r\n" . "MIME-Version: 1.0\n" . "Content-type: text/html; charset=iso-8859-1";
         $message = wordwrap($message, 100);
         $rand = rand();
-        // Log::logEntry("<B>Email: $subject </B><BR/>Sent to: $to <BR/>CC: $cc <BR>By " . $GLOBALS['ltcuser']['mail'],$pwd );
+        // Log::logEntry("<B>Email: $subject </B><BR/>Sent to: $to <BR/>CC: $cc <BR>By " . $_SESSION['ssoEmail'],$pwd );
         if ($log) {
             $emailLogRecordId = self::prelog($to, $cc, $subject, $message, $replyto);
         }
