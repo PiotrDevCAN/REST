@@ -24,8 +24,15 @@ class rfsRecord extends DbRecord
     protected $RFS_CREATOR;
     protected $RFS_CREATED_TIMESTAMP;
     protected $ARCHIVE;
+    protected $RFS_TYPE;
+    protected $ILC_WORK_ITEM;
 
-    static public $columnHeadings = array("RFS ID", "PRN", "Project Title", "Project Code", "Requestor Name", "Requestor Email", "CIO", "Link to PGMP", "RFS Creator", "RFS Created",'Archived');
+    const RFS_TYPE_TANDM = 'T&M';
+    const RFS_TYPE_FIXED_PRICE = 'Fixed Price';
+    static public $rfsType        = array(self::RFS_TYPE_TANDM,self::RFS_TYPE_FIXED_PRICE);
+
+
+    static public $columnHeadings = array("RFS ID", "PRN", "Project Title", "Project Code", "Requestor Name", "Requestor Email", "CIO", "Link to PGMP", "RFS Creator", "RFS Created",'Archived','RFS Type','ILC Work Item');
 
     function get($field){
         return empty($this->$field) ? null : $this->$field;
@@ -88,7 +95,7 @@ class rfsRecord extends DbRecord
             </div>
 
 
-         </div>
+        </div>
 
    		<div class="form-group required " id="REQUESTOR_NAMEFormGroup">
    			<label for="REQUESTOR_NAME" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Requestor Name</label>
@@ -104,7 +111,6 @@ class rfsRecord extends DbRecord
    		</div>
 
    		<div class='form-group required'>
-
         	<label for='CIO' class='col-md-2 control-label ceta-label-left'>CIO</label>
         	<div class='col-md-3'>
               	<select class='form-control select' id='CIO'
@@ -119,11 +125,32 @@ class rfsRecord extends DbRecord
                          $returnValue  = trim($value);
                          ?><option value='<?=$returnValue?>' <?=trim($this->CIO)==$returnValue ? 'selected' : null;?>><?=$displayValue?></option><?php
                     }
-               ?>
-               </select>
+                ?>
+               	</select>
             </div>
         </div>
 
+        <div class="form-group " id="RFS_TypeIlcFormGroup">
+			<div class='required'>
+        	<label for="ILC_WORK_ITEM" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">ILC Work Item</label>
+            <div class="col-md-3">
+            <input class="form-control" id="ILC_WORK_ITEM" name="ILC_WORK_ITEM" value="<?=$this->ILC_WORK_ITEM?>" placeholder="ILC_WORK_ITEM" type="text">
+            </div>
+        	</div>
+
+			<div class='required'>
+            <label for='Flags' class='col-md-2 control-label ceta-label-left'>Flags</label>
+        	<div class='form-group col-md-3' id='Flags'>
+        		<?php
+        		foreach (self::$rfsType as $rfsType) {
+        		    $checked = trim($this->RFS_TYPE)== $rfsType ? ' checked ' : null;
+        		    ?><label class="radio-inline"><input type="radio" name="RFS_TYPE" <?=$checked?> value='<?=$rfsType?>' required='required' ><?=$rfsType?></label>
+        		    <?php
+        		}
+        		?>
+            </div>
+         	</div>
+        </div>
         <?php
    		$this->formHiddenInput('RFS_CREATOR',$_SESSION['ssoEmail'],'RFS_CREATOR');
    		$this->formHiddenInput('mode',$mode,'mode');

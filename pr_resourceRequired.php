@@ -12,7 +12,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 $loader = new Loader();
 
 $allCtbService = $loader->load('CTB_SERVICE',allTables::$STATIC_CTB_SERVICE);
-$allSubService = $loader->load('CTB_SUB_SERVICE',allTables::CTB_SUB_SERVICE);
+$allSubService = $loader->load('CTB_SUB_SERVICE',allTables::$STATIC_CTB_SERVICE);
 unset($allCtbService[resourceRequestRecord::$bulkWorkOrder]);
 unset($allSubService[resourceRequestRecord::$bulkWorkOrder]);
 ?>

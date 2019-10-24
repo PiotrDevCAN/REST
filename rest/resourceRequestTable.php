@@ -122,7 +122,7 @@ class resourceRequestTable extends DbTable
 
         $resultSet = $this->execute($sql);
 
-       // echo $sql;
+       echo $sql;
 
         $resultSet ? null : die("SQL Failed");
 
