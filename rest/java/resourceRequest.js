@@ -62,54 +62,6 @@ function ResourceRequest() {
 	},
 
 
-
-	this.listenForAddPlatformTypePrnCode = function(){
-		$(document).on('click','.setPlatformTypePrnCode', function(e){
-			addPlatformTypePrnCode($(this).data('reference'),$(this).data('parent'));
-		});
-	},
-
-	addPlatformTypePrnCode = function(resourceReference){
-		console.log(resourceReference);
-		$('#platformTypePrnCodeForm').find('#ptpcRESOURCE_REFERENCE').val(resourceReference);
-		$('#PlatformTypePrnCodeModal').modal('show');
-	},
-
-	this.listenForSavePlatformTypePrnCode = function(){
-		$(document).on('click','#savePlatformTypePrnCode', function(e){
-			var formData = $('#platformTypePrnCodeForm').serialize();
-			console.log(formData);
-		    $.ajax({
-		    	url: "ajax/savePlatformTypePrnCode.php",
-		        type: 'POST',
-		    	data: formData,
-		    	success: function(result){
-		    		var resultObj = JSON.parse(result);
-		    		console.log(resultObj);
-					$('#platformTypePrnCodeForm').find('#pcptRESOURCE_REFERENCE').val("");
-					$('#platformTypePrnCodeForm').find('#pcptRESOURCE_NAME').val("");
-					$('#platformTypePrnCodeForm').find('#PRN').val("");
-					$('#platformTypePrnCodeForm').find('#PROJECT_CODE').val("");
-					$('#PlatformTypePrnCodeModal').modal('hide');
-					ResourceRequest.table.ajax.reload();
-					var errorMessageText = '';
-					if(resultObj.Messages!=''){
-						errorMessageText += "<h5>Message</h5><p>" + resultObj.Messages + "</p>";
-					};
-					if(resultObj.Exception!=''){
-						errorMessageText += "<h4 class='text-warning'>Exception</h4><p class='text-warning'>" + resultObj.Exception + "</p>";
-					};
-					if(errorMessageText!=''){
-						console.log()
-						$('#errorMessageBody').html(errorMessageText);
-						$('#errorMessageModal').modal('show');
-					};
-					console.log(errorMessageText);
-		    	}
-		    });
-		});
-	},
-
 	this.listenForDeleteRecord = function(){
 		$(document).on('click','.deleteRecord', function(e){
 			var resourceReference = $(this).data('reference');
@@ -519,12 +471,9 @@ function ResourceRequest() {
 	                  'print'
 	              ],
 	    });
-
-
-	    ResourceRequest.table.columns([0,1,2,3,4,5,6,7,8,9,10,11,18,19,21,22,23,24,25,26,28,29,30,31,32,33,34,]).visible(false,false);
+	    console.log('setup columns');
+	    ResourceRequest.table.columns([0,1,2,3,4,5,6,7,8,9,10,11,12,13,20,21,23,24,25,26,27,28,30,31,32,33,34,35,36,37]).visible(false,false);
 	    ResourceRequest.table.columns.adjust().draw(false);
-
-
 
 	    // Apply the search
 	    ResourceRequest.table.columns().every( function () {
@@ -578,16 +527,6 @@ function ResourceRequest() {
 	        	resourceRequest.initialiseDataTable();
 	    		}
 	    });
-
-//	    $(document).on('draw.dt','#resourceRequestsTable_id', function () {
-//	    	console.log('drawing');
-//	    	console.log($('.editRecord'));
-//	        if($('#userLevel').html()!='Admin User'    ){
-//	        	//	$('.editRecord').hide();
-//	        };
-//	    } );
-
-
 	},
 
 
@@ -683,11 +622,7 @@ $( document ).ready(function() {
 	var resourceRequest = new ResourceRequest();
     resourceRequest.init();
     $('#resourceNameModal').on('shown.bs.modal', function () {
-    $('#resourceNameModal').find('select').select2("destroy").select2();
-    });
-
-    $('#PlatformTypePrnCodeModal').on('shown.bs.modal', function () {
-    $('#PlatformTypePrnCodeModal').find('select').select2("destroy").select2();
+    		$('#resourceNameModal').find('select').select2("destroy").select2();
     });
 
 });

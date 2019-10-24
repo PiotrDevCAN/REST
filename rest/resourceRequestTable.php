@@ -35,25 +35,6 @@ class resourceRequestTable extends DbTable
         return $result;
     }
 
-    function updateServicePrnCode($resourceReference,$ctbService, $ctbSubService, $prn, $projectCode){
-        if(empty($resourceReference) or empty($ctbService) or empty($ctbSubService) or empty($prn) or empty($projectCode)){
-            throw new \Exception('Parameters Missing in call to ' . __FUNCTION__);
-        }
-        $sql  = " UPDATE " . $_SESSION['Db2Schema'] . "." . $this->tableName;
-        $sql .= " SET CTB_SERVICE='" . db2_escape_string($ctbService) . "', ";
-        $sql .= " CTB_SUB_SERVICE='" . db2_escape_string($ctbSubService). "' ,";
-        $sql .= " DRAWN_DOWN_FOR_PRN='" . db2_escape_string($prn) . "' ,";
-        $sql .= " DRAWN_DOWN_FOR_PROJECT_CODE='" . db2_escape_string($projectCode) . "' ";
-        $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference);
-
-        $result = $this->execute($sql);
-
-        return $result;
-    }
-
-
-
-
     function returnAsArray($startDate,$endDate, $predicate=null, $withArchive = false){
         $startDateObj = new \DateTime($startDate);
         $endDateObj = new \DateTime($endDate);
@@ -212,21 +193,6 @@ class resourceRequestTable extends DbTable
         $displayedResourceName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $resourceName;
 
         $row['RESOURCE_NAME'] .= "&nbsp;" . $displayedResourceName ;
-
-
-        if(trim($row['CTB_SERVICE']) == resourceRequestRecord::$tbd){
-            $row['CTB_SERVICE'] =   "<button type='button' class='btn btn-xs setPlatformTypePrnCode' aria-label='Left Align'
-                    data-reference='" . $resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "' >
-              <span class='glyphicon glyphicon-edit text-primary' aria-hidden='true'></span>
-              </button>";
-        }
-        if(trim($row['CTB_SUB_SERVICE']) == resourceRequestRecord::$tbd){
-            $row['CTB_SUB_SERVICE'] =   "<button type='button' class='btn btn-xs setPlatformTypePrnCode' aria-label='Left Align'
-                    data-reference='" . $resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "'
-                    id='setResourceType" . $resourceReference . "'  >
-              <span class='glyphicon glyphicon-edit text-primary' aria-hidden='true'></span>
-              </button>";
-        }
     }
 
 
