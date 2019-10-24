@@ -270,8 +270,6 @@ $(document).ready(function() {
 	var resourceRequest = new ResourceRequest();
 	resourceRequest.initialiseDateSelect();
 	resourceRequest.buildResourceReport();
-	resourceRequest.listenForAddPlatformTypePrnCode();
-	resourceRequest.listenForSavePlatformTypePrnCode();
 	resourceRequest.listenForEditResourceName();
 	resourceRequest.listenForSaveResourceName();
 	resourceRequest.listenForEditHours();
@@ -291,7 +289,6 @@ $(document).ready(function() {
 	resourceRequest.listenForDeleteRecord();
 	resourceRequest.listenForConfirmedDelete();
 	resourceRequest.listenForChangeStatus();
-
 	$('[data-toggle="tooltip"]').tooltip();
 });
 

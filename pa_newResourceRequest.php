@@ -21,7 +21,6 @@ if(isset($_REQUEST['resource'])){
     $resourceRecord->set('RESOURCE_REFERENCE', $_REQUEST['resource']);
     $resourceData = $resourceTable->getRecord($resourceRecord);
     $resourceRecord->setFromArray($resourceData);
-
 } else {
     $resourceRecord = new resourceRequestRecord();
     $mode = FormClass::$modeDEFINE;
@@ -50,11 +49,6 @@ $resourceRecord->displayForm($mode);
 
   </div>
 </div>
-
-
-
-
-
 
 
 <script>

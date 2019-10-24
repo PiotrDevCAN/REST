@@ -190,7 +190,7 @@ class resourceRequestRecord extends DbRecord
                     foreach (self::$allStatus as $key => $value) {
                          $displayValue = trim($value);
                          $returnValue  = trim($value);
-                         ?><option value='<?=$returnValue?>' <?=(trim($this->STATUS) == $returnValue) or (empty($this->STATUS && $returnValue==self::STATUS_NEW)) ? 'selected' : null;?>  ><?=$displayValue?></option><?php
+                         ?><option value='<?=$returnValue?>' <?=(trim($this->STATUS) == $returnValue) || (empty($this->STATUS) && $returnValue==self::STATUS_NEW) ? ' selected ' : null;?>  ><?=$displayValue?></option><?php
                     }
                ?>
                </select>
@@ -213,19 +213,36 @@ class resourceRequestRecord extends DbRecord
                         $displayValue = trim($value);
                         $returnValue  = trim($value);
                 ?>
-                <option value='<?=$returnValue?>' <?=trim($this->CTB_SERVICE) == $returnValue ? 'selected' : null;?>><?=$displayValue?></option>
+                <option value='<?=$returnValue?>' <?=trim($this->CTB_SERVICE) == $returnValue ? 'selected ' : null;?> ><?=$displayValue?></option>
                 <?php }?>
                 </select>
                 </div>
+			<?php
+			$disabledSubService = isset($this->CTB_SERVICE) && isset($this->CTB_SUB_SERVICE) ? null : 'disabled';
+			?>
 
           <label for='CTB_SUB_SERVICE' class='col-md-2 control-label ceta-label-left'>CTB SubService</label>
                <div class='col-md-4'>
                <select class='form-control select' id='CTB_SUB_SERVICE'
                        name='CTB_SUB_SERVICE'
                        required='required'
-                       data-tags="true" data-placeholder="Select CTB SubService" data-allow-clear="true"
-                       disabled >
+                       data-tags="true"
+                       data-placeholder="Select CTB SubService"
+                       data-allow-clear="true"
+                       <?=$disabledSubService;?> >
               <option value=''>Select CTB Service First<option>
+              <?php
+              if(!empty($this->CTB_SERVICE) && !empty($this->CTB_SUB_SERVICE) ){
+                  $subService = $allSubService[$this->CTB_SERVICE];
+                  foreach ($subService as $key => $value) {
+                        $displayValue = trim($value);
+                        $returnValue  = trim($value);
+                        ?>
+        		        <option value='<?=$returnValue?>' <?=trim($this->CTB_SUB_SERVICE) == $returnValue ? 'selected ' : null;?> ><?=$displayValue?></option>
+                		<?php
+                  }
+                }
+                ?>
               </select>
               </div>
         </div>
