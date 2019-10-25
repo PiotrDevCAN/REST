@@ -166,21 +166,14 @@ class resourceRequestTable extends DbTable
             "<button type='button' class='btn btn-default btn-xs editRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "' >
             <span class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Name'></span>
             </button>";
-
         $row['RESOURCE_NAME'] .= $canAssignPerson ?
-             "<button type='button' class='btn btn-default btn-xs editResource' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "' >
+             "<button type='button' class='btn btn-default btn-xs editResource' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "' data-resource-name='" . $resourceName . "' >
               <span class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true'></span>
               </button>" : null;
-
         $row['RESOURCE_NAME'] .=
             "<button type='button' class='btn btn-default btn-xs editHours' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-startDate='" . $startDate . "' >
              <span class=' glyphicon " . $timeIcon . " text-primary' aria-hidden='true'></span>
              </button>";
-        $row['RESOURCE_NAME'] .= trim($row['CTB_SUB_SERVICE'])==resourceRequestRecord::$bulkWorkOrder ?
-            "<button type='button' class='btn btn-xs seekBwo' aria-label='Left Align'
-                data-reference='" . $resourceReference . "'                        >
-                <span class='glyphicon glyphicon-search text-primary' aria-hidden='true'></span>
-            </button>" : null ;
         $row['RESOURCE_NAME'] .= $duplicatable ?
               "<button type='button' class='btn btn-xs requestDuplication' aria-label='Left Align'
                     data-reference='" . $resourceReference . "'

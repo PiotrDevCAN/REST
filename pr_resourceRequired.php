@@ -94,6 +94,7 @@ unset($allSubService[resourceRequestRecord::$bulkWorkOrder]);
                	</select>
                   <input type='hidden' id="RESOURCE_REFERENCE" name="RESOURCE_REFERENCE" value="" >
                   <input type='hidden' id="parent" name="parent" value="" >
+                  <input type='hidden' id="currentResourceName"  value="" >
               </div>
         </div>
         </div>

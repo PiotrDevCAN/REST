@@ -117,11 +117,18 @@ function ResourceRequest() {
 		$('#resourceNameModal').on('shown.bs.modal', function(){
 			console.log($('#resourceNameModal').find('select').hasClass("select2-hidden-accessible"));
 			console.log($('#RESOURCE_NAME'));
+			var currentResourceName = $('#currentResourceName').val();
 			if (!$('#resourceNameModal').find('select').hasClass("select2-hidden-accessible")){
 				$('#resourceNameModal')
 				.find('select')
-				.select2({data : resourceNamesForSelect2				
-				});
+				.select2({data : resourceNamesForSelect2})
+				.val(currentResourceName)
+				.trigger('change');
+			} else {
+				$('#resourceNameModal')
+				.find('select')
+				.val(currentResourceName)
+				.trigger('change');
 			}			
 		});
 	},
@@ -131,8 +138,10 @@ function ResourceRequest() {
 		$(document).on('click','.editResource', function(e){
 			$(this).addClass('spinning');
 			var resourceReference = $(this).data('reference');
+			var resourceName      = $(this).data('resourceName');
 			var parent            = $(this).data('parent');
-			$('#resourceNameForm').find('#RESOURCE_REFERENCE').val(resourceReference);			
+			$('#resourceNameForm').find('#RESOURCE_REFERENCE').val(resourceReference);	
+			$('#currentResourceName').val(resourceName);
 			
 			if(resourceNamesForSelect2.length){
 				console.log('resourcenames alreadt populated');
