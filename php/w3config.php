@@ -55,10 +55,13 @@ $site = array(
     'dirPrefix' => $_SERVER['environment'],
     'csvPrefix' => $_SERVER['environment'],
 
-    'itdqBg' => 'itdq',
-    'adminBg' => 'rest_admin',
-    'pmoBg' => 'rest_pmo',
-    'userBg' => 'rest_user',
+    'cdiBg'     => 'ventus_cdi',
+    'adminBg'   => 'ventus_rest_admin',
+    'demandBg'  => 'ventus_rest_demand',
+    'supplyBg'  => 'ventus_rest_supply',
+    'rfsBg'     => 'ventus_rest_rfs',
+    'reportsBg' => 'ventus_rest_reports',
+
     'nullBg' => null,
 
     'email' => false,

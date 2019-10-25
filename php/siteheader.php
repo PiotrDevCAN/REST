@@ -304,6 +304,6 @@ include ('rest/java/scripts.html');
 include ('vendor/autoload.php');
 include ('splClassLoader.php');
 include ('connect.php');
-include ('php/templates/navbar.php');
+include ('php/displayNavbar.php');
 
 ?>
