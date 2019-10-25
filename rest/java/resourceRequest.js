@@ -115,18 +115,17 @@ function ResourceRequest() {
 
 	this.populateResourceDropDownWhenModalShown = function(){
 		$('#resourceNameModal').on('shown.bs.modal', function(){
-			console.log($('#resourceNameModal').find('select').hasClass("select2-hidden-accessible"));
+			console.log($('#resourceNameModal').find('select'));
 			console.log($('#RESOURCE_NAME'));
 			var currentResourceName = $('#currentResourceName').val();
-			if (!$('#resourceNameModal').find('select').hasClass("select2-hidden-accessible")){
-				$('#resourceNameModal')
-				.find('select')
+			if (!$('#RESOURCE_NAME').hasClass("select2-hidden-accessible")){
+				$('#RESOURCE_NAME')
 				.select2({data : resourceNamesForSelect2})
 				.val(currentResourceName)
 				.trigger('change');
 			} else {
-				$('#resourceNameModal')
-				.find('select')
+				$('#RESOURCE_NAME')
+				.val('')
 				.val(currentResourceName)
 				.trigger('change');
 			}			
@@ -140,7 +139,7 @@ function ResourceRequest() {
 			var resourceReference = $(this).data('reference');
 			var resourceName      = $(this).data('resourceName');
 			var parent            = $(this).data('parent');
-			$('#resourceNameForm').find('#RESOURCE_REFERENCE').val(resourceReference);	
+			$('#RESOURCE_REFERENCE').val(resourceReference);	
 			$('#currentResourceName').val(resourceName);
 			
 			if(resourceNamesForSelect2.length){
