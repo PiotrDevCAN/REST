@@ -69,9 +69,8 @@ unset($allSubService[resourceRequestRecord::$bulkWorkOrder]);
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Allocate Resource Name</h4>
       </div>
+      <form id='resourceNameForm'>
       <div class="modal-body">
-      	<div class="container col-md-12">
-        <form id='resourceNameForm'>
   		<div class="form-group required" id="PROJECT_TITLEFormGroup" >
   		<div class='row'>
             <label for="RESOURCE_NAME" class="col-md-3	control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Resource Name</label>
@@ -82,13 +81,12 @@ unset($allSubService[resourceRequestRecord::$bulkWorkOrder]);
               </div>
         </div>
         </div>
-      </form>
-      </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" id='saveResourceName'>Save</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
+     </form>
     </div>
 
   </div>
