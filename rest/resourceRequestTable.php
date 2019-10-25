@@ -215,5 +215,26 @@ class resourceRequestTable extends DbTable
     }
 
 
+    static function getVbacActiveResourcesForSelect2(){
+        $vbacEmployees = array();
+        $url = $_SERVER['vbac_url'] . '/api/employeePlus.php?token=soEkCfj8zGNDLZ8yXH2YJjpehd8ijzlS&plus=email_address,role_on_the_account,work_stream';
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HEADER,         1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER,        FALSE);
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        $allEmployeesJson = curl_exec($ch);
+        $allEmployees = json_decode($allEmployeesJson);
+
+        foreach ($allEmployees as $employeeDetails) {
+            $vbacEmployees[] = array('id'=>trim($employeeDetails->EMAIL_ADDRESS), 'text'=>trim($employeeDetails->NOTES_ID) . " (" . trim($employeeDetails->WORK_STREAM) . ") ");
+        }
+
+        return $vbacEmployees;
+    }
+
+
 
 }

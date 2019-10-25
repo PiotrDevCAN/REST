@@ -3,6 +3,7 @@ use itdq\Trace;
 use rest\allTables;
 use rest\resourceRequestRecord;
 use itdq\Loader;
+use rest\resourceRequestTable;
 
 set_time_limit(0);
 do_auth($_SESSION['userBg']);
@@ -10,6 +11,14 @@ do_auth($_SESSION['userBg']);
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $loader = new Loader();
+
+// $start =  microtime(true);
+// $activeEmployees = resourceRequestTable::getVbacActiveResourcesForSelect2();
+// $end = microtime(true);
+
+// echo "Time taken:" . ($end - $start);
+
+// var_dump($activeEmployees);
 
 $allCtbService = $loader->load('CTB_SERVICE',allTables::$STATIC_CTB_SERVICE);
 $allSubService = $loader->load('CTB_SUB_SERVICE',allTables::$STATIC_CTB_SERVICE);
@@ -75,7 +84,14 @@ unset($allSubService[resourceRequestRecord::$bulkWorkOrder]);
   		<div class='row'>
             <label for="RESOURCE_NAME" class="col-md-3	control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Resource Name</label>
               <div class="col-md-9">
-                  <input class="form-control " id="RESOURCE_NAME" name="RESOURCE_NAME" value="" placeholder="Enter Resource Name" required="required" type="text">
+<!--            <input class="form-control " id="RESOURCE_NAME" name="RESOURCE_NAME" value="" placeholder="Enter Resource Name" required="required" type="text"> -->
+              	<select class='form-control select' id='RESOURCE_NAME'
+                  	          name='RESOURCE_NAME'
+                  	          required='required'
+                  	          data-tags="true" data-placeholder="Select Resource" data-allow-clear="true"
+                  	           >
+            	<option value=''>Select Resource<option>
+               	</select>
                   <input type='hidden' id="RESOURCE_REFERENCE" name="RESOURCE_REFERENCE" value="" >
                   <input type='hidden' id="parent" name="parent" value="" >
               </div>
@@ -268,6 +284,7 @@ $(document).ready(function() {
 	var resourceRequest = new ResourceRequest();
 	resourceRequest.initialiseDateSelect();
 	resourceRequest.buildResourceReport();
+	resourceRequest.populateResourceDropDownWhenModalShown();
 	resourceRequest.listenForEditResourceName();
 	resourceRequest.listenForSaveResourceName();
 	resourceRequest.listenForEditHours();

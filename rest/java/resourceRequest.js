@@ -6,6 +6,7 @@
 function ResourceRequest() {
 
 	var table;
+	var resourceNamesForSelect2 = [];
 
 	this.init = function(){
 		console.log('+++ Function +++ ResourceRequest.init');
@@ -112,20 +113,51 @@ function ResourceRequest() {
 		});
 	},
 
+	this.populateResourceDropDownWhenModalShown = function(){
+		$('#resourceNameModal').on('shown.bs.modal', function(){
+			console.log($('#resourceNameModal').find('select').hasClass("select2-hidden-accessible"));
+			console.log($('#RESOURCE_NAME'));
+			if (!$('#resourceNameModal').find('select').hasClass("select2-hidden-accessible")){
+				$('#resourceNameModal')
+				.find('select')
+				.select2({data : resourceNamesForSelect2				
+				});
+			}			
+		});
+	},
+	
 
 	this.listenForEditResourceName = function(){
 		$(document).on('click','.editResource', function(e){
+			$(this).addClass('spinning');
 			var resourceReference = $(this).data('reference');
 			var parent            = $(this).data('parent');
-			console.log(parent);
-			$('#resourceNameForm').find('#RESOURCE_REFERENCE').val(resourceReference);
-			$('#resourceNameModal').modal('show');
-			console.log(resourceReference);
+			$('#resourceNameForm').find('#RESOURCE_REFERENCE').val(resourceReference);			
+			
+			if(resourceNamesForSelect2.length){
+				console.log('resourcenames alreadt populated');
+	    		$('#resourceNameModal').modal('show');
+				$('.spinning').removeClass('spinning');				
+			} else {
+				console.log('need to popualte names');
+				$.ajax({
+			    	url: "ajax/getVbacActiveResourcesForSelect2.php",
+			        type: 'POST',
+			    	success: function(result){
+			    		console.log(result);
+			    		var resultObj = JSON.parse(result);
+			    		resourceNamesForSelect2 = resultObj.data;
+			    		$('#resourceNameModal').modal('show');
+						$('.spinning').removeClass('spinning');
+			    		}
+			    });				
+			}
 		});
 	},
 
 	this.listenForSaveResourceName = function(){
 		$(document).on('click','#saveResourceName', function(e){
+			$(this).addClass('spinning');
 			var formData = $('#resourceNameForm').serialize();
 		    $.ajax({
 		    	url: "ajax/saveResourceName.php",
@@ -134,8 +166,9 @@ function ResourceRequest() {
 		    	success: function(result){
 		    		console.log(result);
 					$('#resourceNameForm').find('#RESOURCE_REFERENCE').val("");
-					$('#resourceNameForm').find('#RESOURCE_NAME').val("");
+					$('#resourceNameForm').find('#RESOURCE_NAME').val("").trigger('change');
 					$('#resourceNameModal').modal('hide');
+					$('.spinning').removeClass('spinning');
 					ResourceRequest.table.ajax.reload();
 		    		}
 		    });
@@ -621,10 +654,6 @@ function ResourceRequest() {
 $( document ).ready(function() {
 	var resourceRequest = new ResourceRequest();
     resourceRequest.init();
-    $('#resourceNameModal').on('shown.bs.modal', function () {
-    		$('#resourceNameModal').find('select').select2("destroy").select2();
-    });
-
 });
 
 
