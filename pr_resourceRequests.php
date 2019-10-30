@@ -84,7 +84,6 @@ unset($allSubService[resourceRequestRecord::$bulkWorkOrder]);
   		<div class='row'>
             <label for="RESOURCE_NAME" class="col-md-3	control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Resource Name</label>
               <div class="col-md-9">
-<!--            <input class="form-control " id="RESOURCE_NAME" name="RESOURCE_NAME" value="" placeholder="Enter Resource Name" required="required" type="text"> -->
               	<select class='form-control select' id='RESOURCE_NAME'
                   	          name='RESOURCE_NAME'
                   	          required='required'

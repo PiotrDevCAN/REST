@@ -15,33 +15,11 @@ if(!isset($_SERVER['environment'])){
 
 $site = array(
 
-    // if not empty will override the site title from menuconf.php
-    'site_title' => 'rest : Resourcing Tool', // CHANGE THIS WHEN STARTING NEW APP
-
-    // enable w3 local search
-    'local_search' => FALSE,
-
-    // show bread crumb navigation
-    'bread_crumbs' => TRUE,
-
     // url to send feedback too. See meta tags below as well
     'feedback_uri' => 'mailto:daniero@uk.ibm.com',
 
     // base location of css, js, and images
     'assets' => '/ui',
-
-    // display the IBM w3 Intranet Password logo
-    'secure_logo' => TRUE,
-
-    // display the cool Linux logo
-    'linux_logo' => FALSE,
-
-    // display the xhtml valid icon
-    // this only works for http pages, not https pages
-    'xhtml_valid' => FALSE,
-
-    // page dates displayed are either 'LASTMOD' or 'CURRENT' or FALSE
-    'page_date' => 'CURRENT',
 
     // prefix to use if your site is not located at /
     // do not include the trailing slash
