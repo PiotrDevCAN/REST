@@ -76,8 +76,9 @@ class resourceRequestRecord extends DbRecord
 
         $allPhase = array('Design','Build','Develop','Deploy','Deliver');
 
-        $allCtbService = $loader->load('CTB_SERVICE',allTables::$STATIC_CTB_SERVICE);
-        $allSubService = StaticCtbServiceTable::getAllCtbSubService();
+        $predicate = " STATUS='" . StaticCtbServiceTable::ENABLED . "' ";
+        $allCtbService = $loader->load('CTB_SERVICE',allTables::$STATIC_CTB_SERVICE,$predicate);
+        $allSubService = StaticCtbServiceTable::getAllCtbSubService($predicate);
         JavaScript::buildSelectArray($allSubService, 'ctbService');
 
         $startDate = empty($this->START_DATE) ? null : new \DateTime($this->START_DATE);

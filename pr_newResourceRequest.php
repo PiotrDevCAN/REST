@@ -51,17 +51,15 @@ $resourceRecord->displayForm($mode);
 
 <script>
 $(document).ready(function() {
+	$(".select").select2();
 
-	console.log(ctbService);
-
-//	$('#CTB_SERVICE').attr('required',false);
-	$('#OOH').attr('required',false);
-	$('#LINK_TO_PGMP').attr('required',false);
-
-	$('#CTB_SERVICE').on('select2:select',function(e){
+	$('#CTB_SERVICE').on('select2:select', function(e){
+		console.log(e);
 		var serviceSelected= $(e.params.data)[0].text;
     	var entry = ctbService[0].indexOf(serviceSelected);
     	var data = ctbService[entry];
+
+    	console.log(data);
 
     	if ($('#CTB_SUB_SERVICE').hasClass("select2-hidden-accessible")) {
     	    // Select2 has been initialized

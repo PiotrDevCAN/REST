@@ -30,6 +30,8 @@ $cdiAdmin->addOption($traceControl);
 $cdiAdmin->addOption($traceDelete);
 
 $adminMenu      = new NavbarMenu('REST Admin','accessCdi accessAdmin');
+$service        = new NavbarOption('CTB Service','pa_ctbService.php'                 ,'accessCdi accessAdmin');
+$adminMenu->addOption($service);
 
 $request        = new NavbarMenu(  'Request'                                          ,'accessCdi accessAdmin accessDemand accessRfs');
 $newRfs         = new NavbarOption('New RFS','pr_newRfs.php'                          ,'accessCdi accessAdmin accessDemand accessRfs');
