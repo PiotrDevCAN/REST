@@ -13,6 +13,9 @@ td {
 	cursor: hand;
 }
 
+.userLevel {
+	color:#ffffff;
+}
 
 .required .control-label:after {
   content:"*";
