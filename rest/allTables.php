@@ -22,7 +22,6 @@ class allTables
 
     public static $STATIC_CIO = 'STATIC_CIO';
     public static $STATIC_CTB_SERVICE = 'STATIC_CTB_SERVICE';
-    public static $STATIC_CTB_SUB_SERVICE = 'STATIC_CTB_SUB_SERVICE';
 
     public static $UPLOAD_LOG = 'UPLOAD_LOG';
 
