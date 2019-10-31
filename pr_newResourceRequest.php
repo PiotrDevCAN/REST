@@ -54,12 +54,9 @@ $(document).ready(function() {
 	$(".select").select2();
 
 	$('#CTB_SERVICE').on('select2:select', function(e){
-		console.log(e);
 		var serviceSelected= $(e.params.data)[0].text;
     	var entry = ctbService[0].indexOf(serviceSelected);
     	var data = ctbService[entry];
-
-    	console.log(data);
 
     	if ($('#CTB_SUB_SERVICE').hasClass("select2-hidden-accessible")) {
     	    // Select2 has been initialized
