@@ -32,14 +32,14 @@ $cdiAdmin->addOption($traceDelete);
 $adminMenu      = new NavbarMenu('REST Admin','accessCdi accessAdmin');
 
 $request        = new NavbarMenu(  'Request'                                          ,'accessCdi accessAdmin accessDemand accessRfs');
-$newRfs         = new NavbarOption('New RFS','pa_newRfs.php'                          ,'accessCdi accessAdmin accessDemand accessRfs');
-$newResReq      = new NavbarOption('New Resource Request', 'pa_newResourceRequest.php','accessCdi accessAdmin accessDemand accessRfs');
+$newRfs         = new NavbarOption('New RFS','pr_newRfs.php'                          ,'accessCdi accessAdmin accessDemand accessRfs');
+$newResReq      = new NavbarOption('New Resource Request', 'pr_newResourceRequest.php','accessCdi accessAdmin accessDemand accessRfs');
 $request->addOption($newRfs);
 $request->addOption($newResReq);
 
 $supply         = new NavbarMenu(  'Supply');
-$rfs            = new NavbarOption('RFS', 'pr_rfs.php'                           ,'accessCdi accessAdmin accessDemand accessSupply');
-$resRequest     = new NavbarOption('Resource Requests', 'pr_resourceRequests.php','accessCdi accessAdmin accessDemand accessSupply');
+$rfs            = new NavbarOption('RFS', 'ps_rfs.php'                           ,'accessCdi accessAdmin accessDemand accessSupply');
+$resRequest     = new NavbarOption('Resource Requests', 'ps_resourceRequests.php','accessCdi accessAdmin accessDemand accessSupply');
 $supply->addOption($rfs);
 $supply->addOption($resRequest);
 
