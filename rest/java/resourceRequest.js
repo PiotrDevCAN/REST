@@ -104,14 +104,38 @@ function ResourceRequest() {
 		});
 	},
 
-	this.listenForEditRecord = function(){
-		$(document).on('click','.editRecord', function(e){
+//	this.listenForEditRecord = function(){
+//		$(document).on('click','.editRecord', function(e){
+//			var resourceReference = $(this).data('reference');
+//			var URL = "pa_newResourceRequest.php?resource=" + resourceReference;
+//			var child = window.open(URL, "_blank");
+//			child.onunload = function(){ ResourceRequest.table.ajax.reload(); };
+//		});
+//	},
+	
+	this.listenForEditRfs = function(){
+		$(document).on('click','.editRfs', function(e){			
+			$(this).addClass('spinning').attr('disabled',true);			
+			$(this).prev('td.details-control').trigger('click');	
+			
 			var resourceReference = $(this).data('reference');
-			var URL = "pa_newResourceRequest.php?resource=" + resourceReference;
-			var child = window.open(URL, "_blank");
-			child.onunload = function(){ ResourceRequest.table.ajax.reload(); };
+			
+		    $.ajax({
+		    	url: "ajax/getEditResourceForm.php",
+		        type: 'POST',
+		    	data: {resourceReference:resourceReference},
+		    	success: function(result){
+		    		$('.spinning').removeClass('spinning').attr('disabled',false);
+		    		console.log(result);
+		    		var resultObj = JSON.parse(result);		    		
+		    		$('#editRequestModalBody').html(resultObj.form);
+		    		$('#editRequestModal').modal('show');
+		    	}
+		    });			
+			
 		});
 	},
+	
 
 	this.populateResourceDropDownWhenModalShown = function(){
 		$('#resourceNameModal').on('shown.bs.modal', function(){

@@ -26,10 +26,15 @@ class rfsRecord extends DbRecord
     protected $ARCHIVE;
     protected $RFS_TYPE;
     protected $ILC_WORK_ITEM;
+    protected $RFS_STATUS;
 
     const RFS_TYPE_TANDM = 'T&M';
     const RFS_TYPE_FIXED_PRICE = 'Fixed Price';
     static public $rfsType        = array(self::RFS_TYPE_TANDM,self::RFS_TYPE_FIXED_PRICE);
+
+    const RFS_STATUS_LIVE     = 'Live';
+    const RFS_STATUS_PIPELINE = 'Internal Pipeline';
+    static public $rfsStatus  = array(self::RFS_STATUS_PIPELINE,self::RFS_STATUS_LIVE);
 
 
     static public $columnHeadings = array("RFS ID", "PRN", "Project Title", "Project Code", "Requestor Name", "Requestor Email", "CIO", "Link to PGMP", "RFS Creator", "RFS Created",'Archived','RFS Type','ILC Work Item');
@@ -79,7 +84,6 @@ class rfsRecord extends DbRecord
 
         </div>
    		<div class="form-group"  id="PROJECT_TITLEFormGroup" >
-
               <label for="PROJECT_CODE" class="col-md-2	 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Project Code<br/><span style="font-size:0.8em">(WBS Number)</span> </label>
               <div class="col-md-3">
                   <input class="form-control " id="PROJECT_CODE" name="PROJECT_CODE" value="<?=$this->PROJECT_CODE?>" placeholder="Enter Code" type="text">
@@ -128,6 +132,24 @@ class rfsRecord extends DbRecord
                 ?>
                	</select>
             </div>
+
+            <div class='required'>
+            <label for='rfsStatus' class='col-md-2 control-label ceta-label-left'>RFS Status</label>
+        	<div class='form-group col-md-3' id='rfsStatus'>
+        		<?php
+        		foreach (self::$rfsStatus as $rfsState) {
+        		    $checked = trim($this->RFS_STATUS)== $rfsState ? ' checked ' : null;
+        		    $checked =  $_SESSION['isRfs'] && $rfsState==self::RFS_STATUS_PIPELINE? ' checked ' : $checked;
+        		    $disabled = $_SESSION['isRfs'] ? ' disabled ' : null ;
+        		    ?><label class="radio-inline"><input type="radio" name="RFS_STATUS" <?=$checked?> value='<?=$rfsState?>' required='required' <?=$disabled;?> ><?=$rfsState?></label>
+        		    <?php
+        		}
+        		?>
+            </div>
+         	</div>
+
+
+
         </div>
 
         <div class="form-group " id="RFS_TypeIlcFormGroup">

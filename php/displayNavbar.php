@@ -40,8 +40,8 @@ $request->addOption($newRfs);
 $request->addOption($newResReq);
 
 $supply         = new NavbarMenu(  'Supply');
-$rfs            = new NavbarOption('RFS', 'ps_rfs.php'                           ,'accessCdi accessAdmin accessDemand accessSupply');
-$resRequest     = new NavbarOption('Resource Requests', 'ps_resourceRequests.php','accessCdi accessAdmin accessDemand accessSupply');
+$rfs            = new NavbarOption('RFS', 'ps_rfs.php'                           ,'accessCdi accessAdmin accessDemand accessSupply accessRfs');
+$resRequest     = new NavbarOption('Resource Requests', 'ps_resourceRequests.php','accessCdi accessAdmin accessDemand accessSupply accessRfs');
 $supply->addOption($rfs);
 $supply->addOption($resRequest);
 
@@ -62,11 +62,13 @@ $navbar->addOption($privacy);
 
 $navbar->createNavbar($page);
 
-$isCdi    = employee_in_group($_SESSION['cdiBg'],     $_SESSION['ssoEmail']) || strstr($_SERVER['environment'], 'dev') ? ".not('.accessCdi')" : null;
-$isAdmin  = employee_in_group($_SESSION['adminBg'],   $_SESSION['ssoEmail']) || strstr($_SERVER['environment'], 'dev') ? ".not('.accessAdmin')" : null;
+$isCdi    = employee_in_group($_SESSION['cdiBg'],     $_SESSION['ssoEmail']) ? ".not('.accessCdi')" : null;
+$isAdmin  = employee_in_group($_SESSION['adminBg'],   $_SESSION['ssoEmail']) ? ".not('.accessAdmin')" : null;
 $isDemand = employee_in_group($_SESSION['demandBg'],  $_SESSION['ssoEmail']) ? ".not('.accessDemand')" : null;
 $isSupply = employee_in_group($_SESSION['supplyBg'],  $_SESSION['ssoEmail']) ? ".not('.accessSupply')" : null;
-$isRfs    = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail']) ? ".not('.accessRfs')" : null;
+$isRfs    = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail']) || strstr($_SERVER['environment'], 'dev')? ".not('.accessRfs')" : null;
+
+
 $isReports= employee_in_group($_SESSION['reportsBg'],     $_SESSION['ssoEmail']) ? ".not('.accessReports')" : null;
 
 $isUser = (!empty($isCdi) || !empty($isAdmin) || !empty($isDemand) || !empty($isSupply)  || !empty($isRfs)) ? ".not('.accessUser')" : null;
@@ -80,6 +82,7 @@ $_SESSION['isSupply']  = !empty($isSupply);
 $_SESSION['isUser']    = !empty($isUser);
 $_SESSION['isRfs']     = !empty($isRfs);
 $_SESSION['isReports'] = !empty($isReports);
+
 
 
 $plannedOutagesId = str_replace(" ","_",$plannedOutagesLabel);
@@ -111,11 +114,51 @@ $userLevel.= $isCdi     ? ':CDI'    : null;
 $userLevel.= $isAdmin   ? ':Admin'  : null;
 $userLevel.= $isDemand  ? ':Demand' : null;
 $userLevel.= $isSupply  ? ':Supply' : null;
-$userLevel.= $isRfs     ? ':Rfs'    : null;
+$userLevel.= $isRfs     ? ':Rfs Team' : null;
 $userLevel.= $isReports ? ':Reports Only'   : null;
-
-
 ?>
+
+restrictButtonAccess = function(){
+	var userLevel  = $('#userLevel').text();
+	var isCdi      = userLevel.indexOf('CDI')     !== -1;
+	var isAdmin    = userLevel.indexOf('Admin')   !== -1;
+	var isDemand   = userLevel.indexOf('Demand')  !== -1;
+	var isSupply   = userLevel.indexOf('Supply')  !== -1;
+	var isUser     = userLevel.indexOf('User')    !== -1;
+	var isRfs      = userLevel.indexOf('Rfs Team')!== -1;
+	var isReports  = userLevel.indexOf('Reports') !== -1;
+
+	var nonPermittedButtons = $('button.accessRestrict'); // We will remove all accessRestrict buttons, unless they have the access.
+	if(isCdi){
+		// We remove .accessCdi buttons from the list of nonPermittedButtons as the person is CDI so those buttons are allowed.
+		nonPermittedButtons = $(nonPermittedButtons).not('.accessCdi');
+	}
+	if(isAdmin){
+		nonPermittedButtons = $(nonPermittedButtons).not('.accessAdmin');
+	}
+	if(isDemand){
+		nonPermittedButtons = $(nonPermittedButtons).not('.accessDemand');
+	}
+	if(isSupply){
+		nonPermittedButtons = $(nonPermittedButtons).not('.accessSupply');
+	}
+	if(isUser){
+		nonPermittedButtons = $(nonPermittedButtons).not('.accessUser');
+	}
+	if(isRfs){
+		nonPermittedButtons = $(nonPermittedButtons).not('.accessRfs');
+	}
+	if(isReports){
+		nonPermittedButtons = $(nonPermittedButtons).not('.accessReports');
+	}
+	console.log('will remove restricted buttons');
+	$(nonPermittedButtons).remove();
+};
+
+$(document).on('draw.dt',function(){
+	restrictButtonAccess();
+	});
+
 
 $(document).ready(function () {
     $('button.accessRestrict')<?=$isCdi?><?=$isAdmin?><?=$isDemand?><?=$isSupply?><?=$isUser?><?=$isReports?><?=$isRfs?>.remove();

@@ -38,7 +38,7 @@ $site = array(
     'demandBg'  => 'ventus_rest_demand',
     'supplyBg'  => 'ventus_rest_supply',
     'rfsBg'     => 'ventus_rest_rfs',
-    'reportsBg' => 'ventus_rest_reports',
+    'reportsBg' => 'ventus_rest_ro',
 
     'nullBg' => null,
 

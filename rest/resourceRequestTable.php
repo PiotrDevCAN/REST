@@ -147,7 +147,7 @@ class resourceRequestTable extends DbTable
         $timeIcon = $isBulkWorkOrder ? 'glyphicon-download-alt' : 'glyphicon-time';
 
         $row['STATUS'] =
-        "<button type='button' class='btn btn-success btn-xs changeStatus' aria-label='Left Align'
+        "<button type='button' class='btn btn-success btn-xs changeStatus accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
                     data-reference='" .trim($resourceReference) . "'
                     data-platform='" .trim($row['CTB_SERVICE']) .  "'
                     data-rfs='" .trim($row['RFS_ID']) . "'
@@ -159,23 +159,23 @@ class resourceRequestTable extends DbTable
          <span data-toggle='tooltip' title='Change Status' class='glyphicon glyphicon-tags ' aria-hidden='true' ></span>
             </button>&nbsp;" . $status;
         $row['DESCRIPTION'] =
-        "<button type='button' class='btn btn-default btn-xs deleteRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['CTB_SERVICE']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $subService . "' >
+        "<button type='button' class='btn btn-default btn-xs deleteRecord accessRestrict accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['CTB_SERVICE']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $subService . "' >
             <span data-toggle='tooltip' title='Delete Resource' class='glyphicon glyphicon-trash ' aria-hidden='true' ></span>
             </button>&nbsp;" . $description;
         $row['RESOURCE_NAME'] =
-            "<button type='button' class='btn btn-default btn-xs editRecord' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "' >
+            "<button type='button' class='btn btn-default btn-xs editRecord accessRestrict accessAdmin accessCdi accessDemand' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "' >
             <span class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Name'></span>
             </button>";
         $row['RESOURCE_NAME'] .= $canAssignPerson ?
-             "<button type='button' class='btn btn-default btn-xs editResource' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "' data-resource-name='" . $resourceName . "' >
+             "<button type='button' class='btn btn-default btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "' data-resource-name='" . $resourceName . "' >
               <span class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true'></span>
               </button>" : null;
         $row['RESOURCE_NAME'] .=
-            "<button type='button' class='btn btn-default btn-xs editHours' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-startDate='" . $startDate . "' >
+            "<button type='button' class='btn btn-default btn-xs editHours accessRestrict accessAdmin accessCdi accessSupply' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-startDate='" . $startDate . "' >
              <span class=' glyphicon " . $timeIcon . " text-primary' aria-hidden='true'></span>
              </button>";
         $row['RESOURCE_NAME'] .= $duplicatable ?
-              "<button type='button' class='btn btn-xs requestDuplication' aria-label='Left Align'
+              "<button type='button' class='btn btn-xs requestDuplication accessRestrict accessAdmin accessCdi accessSupply accessDemand' aria-label='Left Align'
                     data-reference='" . $resourceReference . "'
                     data-rfs='" . $row['RFS_ID'] . "'
                     data-type='" . $row['CTB_SUB_SERVICE'] . "'

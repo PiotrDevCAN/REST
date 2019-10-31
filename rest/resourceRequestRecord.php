@@ -72,7 +72,8 @@ class resourceRequestRecord extends DbRecord
         $this->additional_comments = null;
 
         $loader = new Loader();
-        $allRfs = $loader->load('RFS_ID',allTables::$RFS);
+        $rfsPredicate = rfsTable::rfsPredicateFilterOnPipeline();
+        $allRfs = $loader->load('RFS_ID',allTables::$RFS,$rfsPredicate);
 
         $allPhase = array('Design','Build','Develop','Deploy','Deliver');
 

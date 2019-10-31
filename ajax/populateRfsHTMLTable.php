@@ -9,7 +9,7 @@ ob_start();
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $rfsTable = new rfsTable(allTables::$RFS);
-$data = $rfsTable->returnAsArray();
+$data = $rfsTable->returnAsArray(rfsTable::rfsPredicateFilterOnPipeline());
 $message = ob_get_clean();
 $response = array("data"=>$data,'message'=>$message);
 ob_clean();

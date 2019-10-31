@@ -3,6 +3,7 @@ use rest\allTables;
 use rest\resourceRequestTable;
 use rest\resourceRequestRecord;
 use itdq\Trace;
+use rest\rfsTable;
 
 set_time_limit(0);
 
@@ -13,7 +14,7 @@ $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 $startDate = !empty($_POST['startDate']) ? $_POST['startDate'] : null;
 $endDate = !empty($_POST['endDate']) ? $_POST['endDate'] : null;
 
-$data = $resourceRequestTable->returnAsArray($startDate,$endDate);
+$data = $resourceRequestTable->returnAsArray($startDate,$endDate,rfsTable::rfsPredicateFilterOnPipeline());
 
 $testJson = json_encode($data);
 $badRecords = 0;
