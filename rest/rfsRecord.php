@@ -151,11 +151,22 @@ class rfsRecord extends DbRecord
             </div>
          	</div>
         </div>
+
+        <div class="form-group" id='LinkToPgmpFormGroup' >
+            <label for="LINK_TO_PGMP" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Paste URL Link to PGMP Document" >Link to PGMP</label>
+            <div class="col-md-7">
+                <input class="form-control" id="LINK_TO_PGMP" name="LINK_TO_PGMP" value="<?=$this->LINK_TO_PGMP?>" placeholder="URL Link to PGMP" type="text">
+              	<input id="originalLINK_TO_PGMP" name="originalLINK_TO_PGMP" value="<?=$this->LINK_TO_PGMP?>" type="hidden">
+            </div>
+        </div>
+
+
+
+
         <?php
+        $allButtons = array();
    		$this->formHiddenInput('RFS_CREATOR',$_SESSION['ssoEmail'],'RFS_CREATOR');
    		$this->formHiddenInput('mode',$mode,'mode');
-   		$this->formInput('Link to PGMP','LINK_TO_PGMP');
-
    		$submitButton = $mode==FormClass::$modeEDIT ?  $this->formButton('submit','Submit','updateRfs',null,'Update') :  $this->formButton('submit','Submit','saveRfs',null,'Submit');
    		$resetButton  = $this->formButton('reset','Reset','resetRfs',null,'Reset','btn-warning');
    		$allButtons[] = $submitButton;

@@ -49,6 +49,26 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
   </div>
 </div>
 
+<!-- Modal -->
+<div id="editRfsModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit RFS</h4>
+      </div>
+      <div class="modal-body" id='editRfsModalBody'>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
 <?php
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);
@@ -63,9 +83,16 @@ $(document).ready(function() {
 	rfs.listenForEditRfs();
 	rfs.listenForArchiveRfs();
 	rfs.listenForConfirmArchiveRfs();
-
-
 });
+
+
+$(document).on('shown.bs.modal',function(e){
+	var rfs = new Rfs();
+	rfs.preventDuplicateRfsEntry();
+	rfs.listenForSaveRfs();
+	rfs.refreshReportOnRfsUpdate();
+});
+
 
 
 </script>
