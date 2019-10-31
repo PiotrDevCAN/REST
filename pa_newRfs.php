@@ -6,8 +6,6 @@ use rest\rfsTable;
 use rest\allTables;
 set_time_limit(0);
 
-do_auth($_SESSION['pmoBg']);
-
 Trace::pageOpening($_SERVER['PHP_SELF']);
 rfsTable::loadKnownRfsToJs();
 ?>

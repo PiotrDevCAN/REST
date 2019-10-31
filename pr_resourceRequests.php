@@ -6,7 +6,6 @@ use itdq\Loader;
 use rest\resourceRequestTable;
 
 set_time_limit(0);
-do_auth($_SESSION['userBg']);
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
