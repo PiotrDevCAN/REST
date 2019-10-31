@@ -9,7 +9,7 @@ use rest\StaticCtbServiceTable;
 
 ?>
 <div class='container'>
-<h2>Define Country</h2>
+<h2>Define CTB Service/Sub Service</h2>
 <?php
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
