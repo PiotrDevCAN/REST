@@ -20,7 +20,11 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Delete RFS</h4>
       </div>
-      <div class="modal-body" id='deleteRfsModalBody'>
+      <div class="modal-body">
+          <div class="panel panel-danger">
+      		<div class="panel-heading">Caution</div>
+      		<div class="panel-body" id='deleteRfsModalBody'></div>
+    		</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" id='deleteConmfirmedRfs'>Confirm</button>
@@ -39,7 +43,13 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Archive RFS</h4>
       </div>
-      <div class="modal-body" id='archiveRfsModalBody'>
+      <div class="modal-body" >
+            <div class="panel panel-warning">
+      		<div class="panel-heading">Caution</div>
+      		<div class="panel-body" id='archiveRfsModalBody'></div>
+    		</div>
+
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary glyphicon	" id='archiveConfirmedRfs'>Confirm</button>
