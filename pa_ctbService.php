@@ -188,7 +188,7 @@ function initialiseTable(){
         })
           ],
         ajax: {
-        	    "url":"/ajax/populatectbServiceTable.php",
+        	    "url":"/ajax/populateCtbServiceTable.php",
         	    "type": "GET",
         },
         drawCallback: function( row, data ) {
