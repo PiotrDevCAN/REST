@@ -1,7 +1,7 @@
 applications:
 - path: ../
   memory: 512M
-  instances: 1
+  instances: 2
   domain: w3ibm.mybluemix.net
   name: REST-xt
   host: REST-xt
