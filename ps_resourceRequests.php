@@ -9,23 +9,8 @@ set_time_limit(0);
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
-$loader = new Loader();
-
-// $start =  microtime(true);
-// $activeEmployees = resourceRequestTable::getVbacActiveResourcesForSelect2();
-// $end = microtime(true);
-
-// echo "Time taken:" . ($end - $start);
-
-// var_dump($activeEmployees);
-
-$allCtbService = $loader->load('CTB_SERVICE',allTables::$STATIC_CTB_SERVICE);
-$allSubService = $loader->load('CTB_SUB_SERVICE',allTables::$STATIC_CTB_SERVICE);
-unset($allCtbService[resourceRequestRecord::$bulkWorkOrder]);
-unset($allSubService[resourceRequestRecord::$bulkWorkOrder]);
 ?>
 <div class='container'>
-
 
 <h3>Select Dates for Report</h3>
 <form id='reportDates'>

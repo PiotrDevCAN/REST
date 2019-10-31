@@ -37,7 +37,7 @@ class rfsRecord extends DbRecord
     static public $rfsStatus  = array(self::RFS_STATUS_PIPELINE,self::RFS_STATUS_LIVE);
 
 
-    static public $columnHeadings = array("RFS ID", "PRN", "Project Title", "Project Code", "Requestor Name", "Requestor Email", "CIO", "Link to PGMP", "RFS Creator", "RFS Created",'Archived','RFS Type','ILC Work Item');
+    static public $columnHeadings = array("RFS ID", "PRN", "Project Title", "Project Code", "Requestor Name", "Requestor Email", "CIO", "Link to PGMP", "RFS Creator", "RFS Created",'Archived','RFS Type','ILC Work Item','RFS Status');
 
     function get($field){
         return empty($this->$field) ? null : $this->$field;
@@ -140,7 +140,8 @@ class rfsRecord extends DbRecord
         		foreach (self::$rfsStatus as $rfsState) {
         		    $checked = trim($this->RFS_STATUS)== $rfsState ? ' checked ' : null;
         		    $checked =  $_SESSION['isRfs'] && $rfsState==self::RFS_STATUS_PIPELINE? ' checked ' : $checked;
-        		    $disabled = $_SESSION['isRfs'] ? ' disabled ' : null ;
+        		    $checked =  $_SESSION['isDemand'] && $rfsState==self::RFS_STATUS_LIVE? ' checked ' : $checked;
+        		    $disabled = $_SESSION['isRfs'] || $_SESSION['isDemand']  ? ' disabled ' : null ;
         		    ?><label class="radio-inline"><input type="radio" name="RFS_STATUS" <?=$checked?> value='<?=$rfsState?>' required='required' <?=$disabled;?> ><?=$rfsState?></label>
         		    <?php
         		}

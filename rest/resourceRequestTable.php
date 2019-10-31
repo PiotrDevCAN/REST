@@ -131,20 +131,17 @@ class resourceRequestTable extends DbTable
         $resourceName = trim($row['RESOURCE_NAME']);
         $startDate = trim($row['START_DATE']);
         $subService = trim($row['CTB_SUB_SERVICE']);
-        $bwo_parent = trim($row['PARENT_BWO']);
         $description = trim($row['DESCRIPTION']);
         $status = !empty(trim($row['STATUS'])) ? trim($row['STATUS']) : resourceRequestRecord::STATUS_NEW;
-        $isBulkWorkOrder = $subService==resourceRequestRecord::$bulkWorkOrder;
-        $clonedFromBwo = ((!empty($bwo_parent) && !$bwo_parent==0 )) ? true : false;
 
         $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';
         $editButtonColor = substr($resourceName,0,6)=='Dup of' ? 'text-success' : $editButtonColor;
         $editButtonColor = substr($resourceName,0,10)=='Delta from' ? 'text-danger' : $editButtonColor;
 
-        $duplicatable = ((substr($resourceName,0,6)=='Dup of') or (substr($resourceName,0,10)=='Delta from') or ($isBulkWorkOrder) or ($clonedFromBwo)) ? false : true;
-        $canAssignPerson = $isBulkWorkOrder ? false : true;
+        $duplicatable = ((substr($resourceName,0,6)=='Dup of') or (substr($resourceName,0,10)=='Delta from')) ? false : true;
+        $canAssignPerson = true;
 
-        $timeIcon = $isBulkWorkOrder ? 'glyphicon-download-alt' : 'glyphicon-time';
+        $timeIcon = 'glyphicon-time';
 
         $row['STATUS'] =
         "<button type='button' class='btn btn-success btn-xs changeStatus accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'

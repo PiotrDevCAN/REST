@@ -59,7 +59,7 @@ class Navbar
         ?>
         </ul>
 
-		<p class='nav navbar-nav navbar-right userLevel '>User Level is:<scan id='userLevel'></scan><br/>Powered by CDI</p>
+		<p class='nav navbar-nav navbar-right userLevel '>User Access is<scan id='userLevel'></scan><br/>Powered by CDI</p>
         <ul class="nav navbar-nav navbar-right">
         <li class='accessCdi accessPmo accessFm accessUser'
                id='Help_Page'

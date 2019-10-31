@@ -12,10 +12,15 @@ class rfsTable extends DbTable
         $predicate = null;
 
         switch (true) {
+            case $_SESSION['isCdi']:
+            case $_SESSION['isAdmin']:
+                $predicate = null;
+                break;
             case $_SESSION['isRfs']:
                 $predicate =  " RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " ;
-            break;
+                break;
             case $_SESSION['isSupply']:
+            case $_SESSION['isDemand']:
                 $predicate =  " RFS_STATUS!='" . rfsRecord::RFS_STATUS_PIPELINE . "' " ;
                 break;
             default:

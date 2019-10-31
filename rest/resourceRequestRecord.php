@@ -26,19 +26,12 @@ class resourceRequestRecord extends DbRecord
     protected $RESOURCE_NAME;
     protected $RR_CREATOR;
     protected $RR_CREATED_TIMESTAMP;
-    protected $PARENT_BWO;
     protected $CLONED_FROM;
-    protected $DRAWN_DOWN_FOR_PRN;
-    protected $DRAWN_DOWN_FOR_PROJECT_CODE;
     protected $STATUS;
 
     static public $columnHeadings = array("Resource Ref", "RFS", "Phase", "CTB Service", "CTB Sub Service",
                                           "Description", "Start Date", "End Date", "Hrs Per Week", "Resource Name",
-                                          "Request Creator", "Request Created", "Parent BWO" , "Cloned From", "Drawn Down For PRN", "Drawn Down For Project Code",
-                                          "Status"    );
-
-    static public $bulkWorkOrder = 'Work Order - Bulk';
-    static public $tbd = 'tbd';
+                                          "Request Creator", "Request Created","Cloned From", "Status"    );
 
     CONST STATUS_NEW        = 'New';
     CONST STATUS_REDIRECTED = 'Re-Directed';

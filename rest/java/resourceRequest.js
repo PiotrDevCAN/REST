@@ -113,8 +113,8 @@ function ResourceRequest() {
 //		});
 //	},
 	
-	this.listenForEditRfs = function(){
-		$(document).on('click','.editRfs', function(e){			
+	this.listenForEditRecord = function(){
+		$(document).on('click','.editRecord', function(e){			
 			$(this).addClass('spinning').attr('disabled',true);			
 			$(this).prev('td.details-control').trigger('click');	
 			
@@ -537,7 +537,7 @@ function ResourceRequest() {
 	              ],
 	    });
 	    console.log('setup columns');
-	    ResourceRequest.table.columns([0,1,2,3,4,5,6,7,8,9,10,11,12,13,20,21,23,24,25,26,27,28,30,31,32,33,34,35,36,37]).visible(false,false);
+	    ResourceRequest.table.columns([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,21,22,24,25,26,27,28]).visible(false,false);
 	    ResourceRequest.table.columns.adjust().draw(false);
 
 	    // Apply the search
@@ -552,26 +552,6 @@ function ResourceRequest() {
 	            }
 	        } );
 	    } );
-
-	    /* Custom filtering function which will search for BWO and it's child records, when the hidden BWO input field has a value */
-	    /* The hidden BWO input field has it's value set when the search glphicon for the BWO is clicked - and datatables draw is then called */
-	    $.fn.dataTable.ext.search.push(
-	        function( settings, data, dataIndex ) {
-	            var seekBWO = parseInt( $('#bwo').val(), 10 );
-	            var ParentBwo = parseInt( data[22],10 ); // use data for the ParentBWO column
-	            var Bwo = parseInt( data[10],10 );       // use data for the RR  column
-	            if ( isNaN( seekBWO) ||
-	               ( ( seekBWO == Bwo ) || ( seekBWO == ParentBwo ) )
-	               )
-	            {
-	                return true;
-	            }
-	            return false;
-	        }
-	    );
-
-
-
 	},
 
 	this.buildResourceReport =  function(){
