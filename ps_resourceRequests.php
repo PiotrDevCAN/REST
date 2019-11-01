@@ -12,7 +12,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 ?>
 <div class='container'>
 
-<h3>Select Dates for Report</h3>
+<h3>Report from</h3>
 <form id='reportDates'>
 	<div class='form-group' >
        <div id='START_DATE" . "FormGroup' >
@@ -26,16 +26,16 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
        </div>
        </div>
 
-       <div id='END_DATE" . "FormGroup'>
-       <label for='END_DATE' class='col-md-1 control-label ' data-toggle='tooltip' data-placement='top' title=''>To</label>
-       <div class='col-md-2'>
-       <div id='calendarFormGroupEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
-       <input id='InputEND_DATE' class='form-control' type='text' readonly value='' placeholder='Select To' required />
-       <input type='hidden' id='END_DATE' name='END_DATE' value='' />
-       <span class='input-group-addon'><span id='calendarIconEND_DATE' class='glyphicon glyphicon-calendar'></span></span>
-       </div>
-       </div>
-       </div>
+<!--        <div id='END_DATE" . "FormGroup'> -->
+<!--        <label for='END_DATE' class='col-md-1 control-label ' data-toggle='tooltip' data-placement='top' title=''>To</label> -->
+<!--        <div class='col-md-2'> -->
+<!--        <div id='calendarFormGroupEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'> -->
+<!--        <input id='InputEND_DATE' class='form-control' type='text' readonly value='' placeholder='Select To' required /> -->
+<!--        <input type='hidden' id='END_DATE' name='END_DATE' value='' /> -->
+<!--        <span class='input-group-addon'><span id='calendarIconEND_DATE' class='glyphicon glyphicon-calendar'></span></span> -->
+<!--        </div> -->
+<!--        </div> -->
+<!--        </div> -->
        </div>
 </form>
 </div>

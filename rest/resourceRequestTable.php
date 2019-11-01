@@ -38,6 +38,7 @@ class resourceRequestTable extends DbTable
     }
 
     function returnAsArray($startDate,$endDate, $predicate=null, $withArchive = false){
+        $monthNumber = 0;
         $startDateObj = new \DateTime($startDate);
         $endDateObj = new \DateTime($endDate);
 
@@ -53,13 +54,13 @@ class resourceRequestTable extends DbTable
             $endDateObj->modify("+6 months");
         }
 
-
         $sql =  " WITH resource_hours as (";
         $sql .= "  SELECT RESOURCE_REFERENCE as RR ";
 
         while($startDateObj->format('Ym') <= $endDateObj->format('Ym')){
+            $dataTableColName = "MONTH_" . substr("00" . ++$monthNumber,-2);
             $columnName =  $startDateObj->format('M_Y');
-            $sql .= ",SUM(" . $columnName . ") as " . $columnName;
+            $sql .= ",SUM(" . $columnName . ") as " . $dataTableColName;
             $startDateObj->modify('+1 month');
         }
 
@@ -114,11 +115,8 @@ class resourceRequestTable extends DbTable
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
             }
+            $row = array_map('trim',$row);
             $this->addGlyphicons($row);
-            foreach ($row as $key=>$data){
-                $row[] = trim($row[$key]);
-                unset($row[$key]);
-            }
             $allData[]  = $row;
         }
 
@@ -127,23 +125,36 @@ class resourceRequestTable extends DbTable
 
 
     function addGlyphicons(&$row){
-        $resourceReference = trim($row['RESOURCE_REFERENCE']);
-        $resourceName = trim($row['RESOURCE_NAME']);
-        $startDate = trim($row['START_DATE']);
-        $subService = trim($row['CTB_SUB_SERVICE']);
-        $description = trim($row['DESCRIPTION']);
-        $status = !empty(trim($row['STATUS'])) ? trim($row['STATUS']) : resourceRequestRecord::STATUS_NEW;
+        $rfsId = $row['RFS_ID'];
+        $resourceReference = $row['RESOURCE_REFERENCE'];
+        $resourceName = $row['RESOURCE_NAME'];
+        $phase = $row['PHASE'];
+        $prn = $row['PRN'];
+        $cio = $row['CIO'];
+        $startDate = $row['START_DATE'];
+        $endDate = $row['END_DATE'];
+        $service = $row['CTB_SERVICE'];
+        $subService = $row['CTB_SUB_SERVICE'];
+        $description = $row['DESCRIPTION'];
+        $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
+
+        var_dump($resourceName);
+
 
         $row['STATUS'] =
-        "<button type='button' class='btn btn-success btn-xs changeStatus accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
-                    data-reference='" .trim($resourceReference) . "'
-                    data-platform='" .trim($row['CTB_SERVICE']) .  "'
-                    data-rfs='" .trim($row['RFS_ID']) . "'
-                    data-resourcereference='" .trim($row['RESOURCE_REFERENCE']) . "'
-                    data-type='" . $subService . "'
-                    data-start='" . $row['START_DATE'] . "'
-                    data-phase='" . $row['PHASE'] . "'
+        "<button type='button' class='btn btn-xs changeStatus accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
+                    data-rfs='" .$rfsId . "'
+                    data-resourcereference='" .$resourceReference . "'
+                    data-prn='" .$prn . "'
+                    data-cio='" .$cio . "'
+                    data-phase='" . $phase. "'
                     data-status='" . $status . "'
+                    data-service='" .$service .  "'
+                    data-subservice='" . $subService . "'
+                    data-resourcename='" . $resourceName . "'
+                    data-start='" . $startDate . "'
+                    data-end='" . $endDate . "'
+
          >
          <span data-toggle='tooltip' title='Change Status' class='glyphicon glyphicon-tags ' aria-hidden='true' ></span>
             </button>&nbsp;" . $status;
@@ -167,16 +178,32 @@ class resourceRequestTable extends DbTable
         $duplicatable = ((substr($resourceName,0,strlen(resourceRequestTable::DUPLICATE))!=resourceRequestTable::DUPLICATE)
                       && (substr($resourceName,0,strlen(resourceRequestTable::DELTA))!=resourceRequestTable::DELTA));
 
-        $row['RESOURCE_NAME'] =
-            "<button type='button' class='btn btn-default btn-xs editRecord accessRestrict accessAdmin accessCdi accessDemand' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' >
+        $canBeAmendedByDemandTeam = empty(trim($resourceName)) || $duplicatable ? 'accessDemand' : null;
+
+        $row['RESOURCE_NAME'] = "<span class='dataOwner' ";
+        $row['RESOURCE_NAME'].= "  data-rfs='" .$rfsId . "' ";
+        $row['RESOURCE_NAME'].= "  data-resourcereference='" .$prn . "' ";
+        $row['RESOURCE_NAME'].= "  data-prn='" .$resourceReference . "' ";
+        $row['RESOURCE_NAME'].= "  data-cio='" . $cio. "' ";
+        $row['RESOURCE_NAME'].= "  data-phase='" . $phase. "' ";
+        $row['RESOURCE_NAME'].= "  data-status='" . $status . "' ";
+        $row['RESOURCE_NAME'].= "  data-service='" .$service .  "' ";
+        $row['RESOURCE_NAME'].= "  data-subservice='" . $subService . "' ";
+        $row['RESOURCE_NAME'].= "  data-resourcename='" . $resourceName . "' ";
+        $row['RESOURCE_NAME'].= "  data-start='" . $startDate . "' ";
+        $row['RESOURCE_NAME'].= "  data-end='" . $endDate . "' ";
+        $row['RESOURCE_NAME'].= "  >";
+
+        $row['RESOURCE_NAME'].=
+            "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' >
             <span class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Name'></span>
             </button>";
-        $row['RESOURCE_NAME'] .=
-             "<button type='button' class='btn btn-default btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-resource-name='" . $resourceName . "' >
+        $row['RESOURCE_NAME'].=
+             "<button type='button' class='btn btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-resource-name='" . $resourceName . "' >
               <span class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true'></span>
               </button>";
         $row['RESOURCE_NAME'] .=
-            "<button type='button' class='btn btn-default btn-xs editHours accessRestrict accessAdmin accessCdi accessSupply' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-startDate='" . $startDate . "' >
+            "<button type='button' class='btn btn-xs editHours accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-startDate='" . $startDate . "' >
              <span class=' glyphicon glyphicon-time text-primary' aria-hidden='true'></span>
              </button>";
         $row['RESOURCE_NAME'] .= $duplicatable ?
@@ -190,7 +217,8 @@ class resourceRequestTable extends DbTable
               </button>" : null;
         $displayedResourceName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $displayedResourceName;
 
-        $row['RESOURCE_NAME'] .= "&nbsp;" . $displayedResourceName ;
+        $row['RESOURCE_NAME'].= "&nbsp;" . $displayedResourceName ;
+        $row['RESOURCE_NAME']." </span>";
     }
 
 

@@ -6,7 +6,7 @@ use rest\rfsRecord;
 
 set_time_limit(0);
 ob_start();
-$RRheaderCells = resourceRequestRecord::htmlHeaderCells($_POST['START_DATE'],$_POST['END_DATE']);
+$RRheaderCells = resourceRequestRecord::htmlHeaderCells($_POST['START_DATE']);
 $RFSheaderCells = rfsRecord::htmlHeaderCells();
 
 ob_clean();

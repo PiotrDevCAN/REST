@@ -44,14 +44,14 @@ class resourceRequestRecord extends DbRecord
                                       self::STATUS_REQUESTOR,self::STATUS_ASSIGNED,self::STATUS_COMPLETED);
 
     function get($field){
-        return empty($this->$field) ? null : $this->$field;
+        return empty($this->$field) ? null : trim($this->$field);
     }
 
     function set($field,$value){
         if(!property_exists(__CLASS__,$field)){
             return false;
         } else {
-            $this->$field = $value;
+            $this->$field = trim($value);
         }
     }
 
@@ -271,7 +271,7 @@ class resourceRequestRecord extends DbRecord
     }
 
 
-    static function htmlHeaderCells($startDate=null, $endDate=null){
+    static function htmlHeaderCells($startDate=null){
         $headerCells = "";
         foreach (resourceRequestRecord::$columnHeadings as $key => $value )
         {
@@ -295,7 +295,7 @@ class resourceRequestRecord extends DbRecord
 
         if(empty($endDate)){
             $endDateObj = \DateTime::createFromFormat('Y-m-d',$startDateObj->format('Y-m-d'));
-            $endDateObj->modify("+6 months");
+            $endDateObj->modify("+5 months");
         }
 
         while($startDateObj->format('Ym') <= $endDateObj->format('Ym')){

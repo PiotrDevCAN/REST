@@ -2,53 +2,47 @@
  *
  */
 
+var ModalstartPicker;
+var ModalendPicker
+
+
 
 function ResourceRequest() {
 
 	var table;
 	var resourceNamesForSelect2 = [];
+	
+	this.initialiseStartEndDates = function(){
+		console.log('initialiseStartEndDates');
+		ModalstartPicker = new Pikaday({
+			firstDay:1,
+			field: document.getElementById('InputModalSTART_DATE'),
+			format: 'D MMM YYYY',
+			showTime: false,
+			onSelect: function() {
+				console.log('selected start date');
+				var db2Value = this.getMoment().format('YYYY-MM-DD')
+				$('#ModalSTART_DATE').val(db2Value);	
+			}
+		});
+		
+		ModalendPicker = new Pikaday({
+			firstDay:1,
+			field: document.getElementById('InputModalEND_DATE'),
+			format: 'D MMM YYYY',
+			showTime: false,
+			onSelect: function() {
+				console.log('selected end date');
+				var db2Value = this.getMoment().format('YYYY-MM-DD')
+				$('#ModalEND_DATE').val(db2Value);				
+			}
+		});
+	},
+	
 
 	this.init = function(){
 		console.log('+++ Function +++ ResourceRequest.init');
-		$('#resourceHoursModal').on('shown.bs.modal', function (e) {
-			ModalstartPicker = new Pikaday({
-				firstDay:1,
-//				disableDayFn: function(date){
-//				    // Disable all but Monday
-//				    return date.getDay() === 0 || date.getDay() === 2 || date.getDay() === 3 || date.getDay() === 4 || date.getDay() === 5 || date.getDay() === 6;
-//				},
-				field: document.getElementById('InputModalSTART_DATE'),
-				format: 'D MMM YYYY',
-				showTime: false,
-				onSelect: function() {
-					var db2Value = this.getMoment().format('YYYY-MM-DD')
-					jQuery('#ModalSTART_DATE').val(db2Value);
-				}
-			}),
-			ModalendPicker = new Pikaday({
-				firstDay:1,
-//				disableDayFn: function(date){
-//				    // Disable all but Friday
-//				    return date.getDay() === 0 || date.getDay() === 1 || date.getDay() === 2 || date.getDay() === 3 || date.getDay() === 4 || date.getDay() === 6;
-//				},
-				field: document.getElementById('InputModalEND_DATE'),
-				format: 'D MMM YYYY',
-				showTime: false,
-				onSelect: function() {
-					var db2Value = this.getMoment().format('YYYY-MM-DD')
-					jQuery('#ModalEND_DATE').val(db2Value);
-				}
-			}),
-			console.log('hours modal shown');
-
-			var initialDate = $('#ModalSTART_DATE').val();
-			ModalstartPicker.setDate(initialDate);
-
-			var initialEndDate = $('#ModalEND_DATE').val();
-			ModalendPicker.setDate(initialEndDate);
-		})
 		console.log('--- Function --- ResourceRequest.init');
-
 	},
 
 	this.listenForDeleteRecord = function(){
@@ -199,11 +193,50 @@ function ResourceRequest() {
 
 	this.listenForEditHours = function(){
 		$(document).on('click','.editHours', function(e){
-			var resourceRequest = new ResourceRequest();
-			var resourceReference = $(this).data('reference');
-			var startDate = $(this).data('startDate');
+			$(this).addClass('spinning');
+			
+			console.log($(this));
+			console.log($(this).parent('span'));
+			
+			var dataDetails = $(this).parent('span');		
+			
+    		$('#resourceHoursModal').on('shown.bs.modal',function(){
+    			console.log('populate static fields on edit hours form')
+    			var resourceRequest = new ResourceRequest();
+			   
+    			
+    			$('#editHoursRfs').text($(dataDetails).data('rfs'));	
+    			$('#editHoursPrn').text($(dataDetails).data('prn'));
+    			$('#editHoursPhase').text($(dataDetails).data('phase'));
+    			$('#editHoursCio').text($(dataDetails).data('cio'));
+    			$('#editHoursService').text($(dataDetails).data('service'));
+    			$('#editHoursSubService').text($(dataDetails).data('subservice'));
+    			$('#editHoursResourceName').text($(dataDetails).data('resourcename'));
+    			
+    			console.log($(dataDetails).data('start'));
+    			console.log($(dataDetails).data('end'));
+
+    			
+    			$('#InputModalSTART_DATE').val('2019-10-01');
+    			$('#InputModalEND_DATE').val('01-01-2019');
+    			
+				resourceRequest.initialiseStartEndDates();
+				$('#slipStartDate').attr('disabled',true);				
+				$('#moveEndDate').attr('disabled',true);
+				
+    			var db2Value = moment('2019-10-01').format('DD/MM/YYYY');
+    			// .getMoment().format('DD/MM/YYYY');
+    			// .getMoment().format('YYYY-MM-DD');
+    			console.log(db2Value);
+				
+				
+				
+				$('#resourceHoursModal').off('shown.bs.modal');				
+    		});
+
+    		var resourceReference = $(this).data('reference');
 			$('#resourceHoursForm').find('#RESOURCE_REFERENCE').val(resourceReference);
-			$('#messageArea').html("<div class='col-sm-4'></div><dic class='col-sm-4'><h3>Form loading.... <span class='glyphicon glyphicon-refresh spinning'></span></h3></div><div class='col-sm-4></div>");
+			$('#messageArea').html("<div class='col-sm-4'></div><div class='col-sm-4'><h4>Form loading...<span class='glyphicon glyphicon-refresh spinning'></span></h4><br/><small>This may take a few seconds</small></div><div class='col-sm-4'></div>");
 			$.ajax({
 		    	url: "ajax/contentsOfEditHoursModal.php",
 		        type: 'POST',
@@ -213,11 +246,14 @@ function ResourceRequest() {
 		    		//$('#resourceHoursModal').modal('hide');
 		    		resultObj = JSON.parse(result);
 		    		$('#messageArea').html("");
+		    		$('.spinning').removeClass('spinning');
 		    		$('#editResourceHours').html(resultObj.editResourceHours);
 		    		$('#editResourceHoursFooter').html(resultObj.editResourceHoursFooter);
 		    		$('#resourceHoursModal').modal('show');
+		    		
+
 		    	}
-		    	});
+		    	});			
 			});
 	},
 
@@ -487,6 +523,44 @@ function ResourceRequest() {
 	                  'csvHtml5',
 	                  'print'
 	              ],
+	        columns: [
+	            { data: "RFS_ID"           , defaultContent: "", visible:false },
+	            { data: "PRN",defaultContent: "", visible:false },
+	            { data: "PROJECT_TITLE",defaultContent: "", visible:false },
+	            { data: "PROJECT_CODE",defaultContent: "", visible:false },
+	            { data: "REQUESTOR_NAME",defaultContent: "", visible:false },
+	            { data: "REQUESTOR_EMAIL",defaultContent: "", visible:false },
+	            { data: "CIO",defaultContent: "", visible:false },
+	            { data: "LINK_TO_PGMP",defaultContent: "", visible:false },
+	            { data: "RFS_CREATOR",defaultContent: "", visible:false },
+	            { data: "RFS_CREATED_TIMESTAMP",defaultContent: "", visible:false },
+	            { data: "ARCHIVE",defaultContent: "", visible:false },
+	            { data: "RFS_TYPE",defaultContent: "", visible:false },
+	            { data: "ILC_WORK_ITEM",defaultContent: "", visible:false },
+	            { data: "RFS_STATUS",defaultContent: "", visible:false },
+	            { data: "RESOURCE_REFERENCE",defaultContent: "", visible:false },
+	            { data: "RFS",defaultContent: "", visible:true },	           
+	            { data: "PHASE",defaultContent: "", visible:true },
+	            { data: "CTB_SERVICE",defaultContent: "", visible:true },
+	            { data: "CTB_SUB_SERVICE",defaultContent: "", visible:true },
+	            { data: "DESCRIPTION",defaultContent: "", visible:true },
+	            { data: "START_DATE",defaultContent: "", visible:true },
+	            { data: "END_DATE",defaultContent: "", visible:false },
+	            { data: "HRS_PER_WEEK",defaultContent: "", visible:true },
+	            { data: "RESOURCE_NAME",defaultContent: "", visible:true },
+	            { data: "RR_CREATOR",defaultContent: "", visible:false },
+	            { data: "RR_CREATED_TIMESTAMP",defaultContent: "", visible:false },
+	            { data: "CLONED_FROM",defaultContent: "", visible:false },
+	            { data: "STATUS",defaultContent: "", visible:true },
+	            { data: "RR",defaultContent: "", visible:false },
+	            { data: "MONTH_01",defaultContent: "",visible:true},
+	            { data: "MONTH_02",defaultContent: "",visible:true},
+	            { data: "MONTH_03",defaultContent: "",visible:true},
+	            { data: "MONTH_04",defaultContent: "",visible:true},
+	            { data: "MONTH_05",defaultContent: "",visible:true},
+	            { data: "MONTH_06",defaultContent: "",visible:true},
+	        	
+	        ],
 	    });
 	    console.log('setup columns');
 	    ResourceRequest.table.columns([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,21,22,24,25,26,27,28]).visible(false,false);
@@ -540,10 +614,12 @@ function ResourceRequest() {
 			field: document.getElementById('InputSTART_DATE'),
 			format: 'D MMM YYYY',
 			showTime: false,
-			onSelect: function() {
+			onSelect: function(date) {
+				console.log(date);
 				console.log(this.getMoment().format('Do MMMM YYYY'));
 				var db2Value = this.getMoment().format('YYYY-MM-DD')
 				console.log(db2Value);
+				console.log($('#START_DATE'));
 				jQuery('#START_DATE').val(db2Value);
 				startDate = this.getDate();
 				console.log(startDate);
@@ -552,10 +628,6 @@ function ResourceRequest() {
 		}),
 		endPicker = new Pikaday({
 			firstDay:1,
-//			disableDayFn: function(date){
-//				// Disable all but Monday
-//				return date.getDay() === 0 || date.getDay() === 1 || date.getDay() === 2 || date.getDay() === 3 || date.getDay() === 4 || date.getDay() === 6;
-//			},
 			field: document.getElementById('InputEND_DATE'),
 			format: 'D MMM YYYY',
 			showTime: false,
