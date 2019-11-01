@@ -98,9 +98,9 @@ ob_start();
     <div class='col-sm-2'></div>
        <div class='col-sm-8'>
 
-       <button type="button" class="btn btn-sm btn-warning  " id='slipStartDate' disabled >Move Start Date</button>
-       <button type="button" class="btn btn-sm btn-warning  " id='reinitialise'>Re-Initialise</button>
-       <button type="button" class="btn btn-sm btn-warning  " id='moveEndDate' disabled >Change End Date</button>
+       <button type="button" class="btn btn-sm btn-warning  " id='slipStartDate' disabled data-toggle='tooltip' data-placement='top' title='Will amend the Start Date of the Request, keeping the "profile" of the hours/week the same. Used to slip a request to a new start date, whilst maintaining the hours profile.' >Move Start Date</button>
+       <button type="button" class="btn btn-sm btn-warning  " id='reinitialise' data-toggle='tooltip' data-placement='top' title='Using the supplied Start Date, End Date and Avg Hrs per Week, will reset the hours profile for the request' >Re-Initialise</button>
+       <button type="button" class="btn btn-sm btn-warning  " id='moveEndDate' disabled data-toggle='tooltip' data-placement='top' title='Will amend the End Date of the Request, either deleting weeks or adding weeks as appropriate' >Change End Date</button>
        </div>
     <div class='col-sm-2'></div>
     </div>
@@ -141,8 +141,8 @@ while (($row = db2_fetch_assoc($resourceHoursRs))==true){
 
 $modalBody = ob_get_clean();
 
-?><button type="button" class="btn btn-warning" id='saveAdjustedHoursWithDelta'>Auto-Delta</button><?php
-?><button type="button" class="btn btn-primary" id='saveAdjustedHours'>Adjust Hrs Profile</button><?php
+?><button type="button" class="btn btn-warning" id='saveAdjustedHoursWithDelta' data-toggle='tooltip' data-placement='top' title='Will save this request with the adjusted hours BUT also create a new request for the hours that have been removed from this request'>Auto-Delta</button><?php
+?><button type="button" class="btn btn-primary" id='saveAdjustedHours' data-toggle='tooltip' data-placement='top' title='Will save the adjusted hours/week, without changing the Start or End Dates.'>Adjust Hrs Profile</button><?php
 ?><button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 <?php
 $modalFooter = ob_get_clean();

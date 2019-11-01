@@ -136,6 +136,7 @@ class resourceRequestTable extends DbTable
         $service = $row['CTB_SERVICE'];
         $subService = $row['CTB_SUB_SERVICE'];
         $description = $row['DESCRIPTION'];
+        $hrsPerWeek = $row['HRS_PER_WEEK'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
 
         var_dump($resourceName);
@@ -182,8 +183,8 @@ class resourceRequestTable extends DbTable
 
         $row['RESOURCE_NAME'] = "<span class='dataOwner' ";
         $row['RESOURCE_NAME'].= "  data-rfs='" .$rfsId . "' ";
-        $row['RESOURCE_NAME'].= "  data-resourcereference='" .$prn . "' ";
-        $row['RESOURCE_NAME'].= "  data-prn='" .$resourceReference . "' ";
+        $row['RESOURCE_NAME'].= "  data-resourcereference='" .$resourceReference . "' ";
+        $row['RESOURCE_NAME'].= "  data-prn='" .$prn . "' ";
         $row['RESOURCE_NAME'].= "  data-cio='" . $cio. "' ";
         $row['RESOURCE_NAME'].= "  data-phase='" . $phase. "' ";
         $row['RESOURCE_NAME'].= "  data-status='" . $status . "' ";
@@ -192,6 +193,7 @@ class resourceRequestTable extends DbTable
         $row['RESOURCE_NAME'].= "  data-resourcename='" . $resourceName . "' ";
         $row['RESOURCE_NAME'].= "  data-start='" . $startDate . "' ";
         $row['RESOURCE_NAME'].= "  data-end='" . $endDate . "' ";
+        $row['RESOURCE_NAME'].= "  data-hrs='" . $hrsPerWeek . "' ";
         $row['RESOURCE_NAME'].= "  >";
 
         $row['RESOURCE_NAME'].=

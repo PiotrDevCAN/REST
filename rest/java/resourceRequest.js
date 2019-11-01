@@ -12,8 +12,8 @@ function ResourceRequest() {
 	var table;
 	var resourceNamesForSelect2 = [];
 	
-	this.initialiseStartEndDates = function(){
-		console.log('initialiseStartEndDates');
+	this.initialiseEditHoursModalStartEndDates = function(){
+		console.log('initialiseEditHoursModalStartEndDates');
 		ModalstartPicker = new Pikaday({
 			firstDay:1,
 			field: document.getElementById('InputModalSTART_DATE'),
@@ -23,6 +23,9 @@ function ResourceRequest() {
 				console.log('selected start date');
 				var db2Value = this.getMoment().format('YYYY-MM-DD')
 				$('#ModalSTART_DATE').val(db2Value);	
+				$('#saveAdjustedHoursWithDelta').attr('disabled',true);	
+				$('#saveAdjustedHours').attr('disabled',true);
+				$('#slipStartDate').attr('disabled',false);
 			}
 		});
 		
@@ -34,7 +37,10 @@ function ResourceRequest() {
 			onSelect: function() {
 				console.log('selected end date');
 				var db2Value = this.getMoment().format('YYYY-MM-DD')
-				$('#ModalEND_DATE').val(db2Value);				
+				$('#ModalEND_DATE').val(db2Value);	
+				$('#saveAdjustedHoursWithDelta').attr('disabled',true);	
+				$('#saveAdjustedHours').attr('disabled',true);
+				$('#moveEndDate').attr('disabled',false);
 			}
 		});
 	},
@@ -193,18 +199,10 @@ function ResourceRequest() {
 
 	this.listenForEditHours = function(){
 		$(document).on('click','.editHours', function(e){
-			$(this).addClass('spinning');
-			
-			console.log($(this));
-			console.log($(this).parent('span'));
-			
+			$(this).addClass('spinning').attr('disabled',true);
 			var dataDetails = $(this).parent('span');		
 			
     		$('#resourceHoursModal').on('shown.bs.modal',function(){
-    			console.log('populate static fields on edit hours form')
-    			var resourceRequest = new ResourceRequest();
-			   
-    			
     			$('#editHoursRfs').text($(dataDetails).data('rfs'));	
     			$('#editHoursPrn').text($(dataDetails).data('prn'));
     			$('#editHoursPhase').text($(dataDetails).data('phase'));
@@ -212,47 +210,32 @@ function ResourceRequest() {
     			$('#editHoursService').text($(dataDetails).data('service'));
     			$('#editHoursSubService').text($(dataDetails).data('subservice'));
     			$('#editHoursResourceName').text($(dataDetails).data('resourcename'));
-    			
-    			console.log($(dataDetails).data('start'));
-    			console.log($(dataDetails).data('end'));
+    			$('#ModalHRS_PER_WEEK').val($(dataDetails).data('hrs'));
 
-    			
-    			$('#InputModalSTART_DATE').val('2019-10-01');
-    			$('#InputModalEND_DATE').val('01-01-2019');
-    			
-				resourceRequest.initialiseStartEndDates();
+    			var resourceRequest = new ResourceRequest();
+				resourceRequest.initialiseEditHoursModalStartEndDates();    			
+    			ModalstartPicker.setDate($(dataDetails).data('start'));
+    			ModalendPicker.setDate($(dataDetails).data('end'));
+
 				$('#slipStartDate').attr('disabled',true);				
-				$('#moveEndDate').attr('disabled',true);
-				
-    			var db2Value = moment('2019-10-01').format('DD/MM/YYYY');
-    			// .getMoment().format('DD/MM/YYYY');
-    			// .getMoment().format('YYYY-MM-DD');
-    			console.log(db2Value);
-				
-				
-				
+				$('#moveEndDate').attr('disabled',true);			
 				$('#resourceHoursModal').off('shown.bs.modal');				
     		});
 
-    		var resourceReference = $(this).data('reference');
+    		var resourceReference = $(dataDetails).data('resourcereference');
 			$('#resourceHoursForm').find('#RESOURCE_REFERENCE').val(resourceReference);
 			$('#messageArea').html("<div class='col-sm-4'></div><div class='col-sm-4'><h4>Form loading...<span class='glyphicon glyphicon-refresh spinning'></span></h4><br/><small>This may take a few seconds</small></div><div class='col-sm-4'></div>");
 			$.ajax({
 		    	url: "ajax/contentsOfEditHoursModal.php",
 		        type: 'POST',
-		    	data: {	resourceReference: resourceReference
-		    	},
-		    	success: function(result){
-		    		//$('#resourceHoursModal').modal('hide');
+		    	data: {	resourceReference: resourceReference  	},
+		    	success: function(result){		    	
 		    		resultObj = JSON.parse(result);
 		    		$('#messageArea').html("");
-		    		$('.spinning').removeClass('spinning');
+		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		$('#editResourceHours').html(resultObj.editResourceHours);
 		    		$('#editResourceHoursFooter').html(resultObj.editResourceHoursFooter);
-		    		$('#resourceHoursModal').modal('show');
-		    		
-
-		    	}
+		    		$('#resourceHoursModal').modal('show');		    	}
 		    	});			
 			});
 	},
@@ -260,6 +243,7 @@ function ResourceRequest() {
 	this.listenForSlipStartDate = function(){
 		console.log('listener being set');
 		$(document).on('click','#slipStartDate', function(e){
+			$(this).addClass('spinning').attr('disabled',true);
 			console.log('listener fired');
 			var formData = $('#resourceHoursForm').serialize();
 		    $.ajax({
@@ -268,7 +252,7 @@ function ResourceRequest() {
 		    	data: formData,
 		    	success: function(result){
 		    		console.log(result);
-				    $('#editResourceHours').html('<p></p>');
+				    $('#editResourceHours').html('');
 					$('#resourceHoursModal').modal('hide');
 		    		ResourceRequest.table.ajax.reload();
 		    		}
@@ -278,6 +262,7 @@ function ResourceRequest() {
 
 	this.listenForMoveEndDate = function(){
 		$(document).on('click','#moveEndDate', function(e){
+			$(this).addClass('spinning').attr('disabled',true);
 			console.log('move end date listener fired');
 			var endDate = $('#ModalEND_DATE').val();
 			var endDateWas = $('#endDateWas').val();
@@ -295,7 +280,7 @@ function ResourceRequest() {
 		    	success: function(result){
 		    		console.log(result);
 					$('#moveEndDate').removeClass('spinning').removeClass('glyphicon');
-				    $('#editResourceHours').html('<p></p>');
+				    $('#editResourceHours').html('');
 					$('#resourceHoursModal').modal('hide');
 		    		ResourceRequest.table.ajax.reload();
 		    		}
@@ -308,6 +293,7 @@ function ResourceRequest() {
 	this.listenForReinitialise = function(){
 		console.log('listener being set');
 		$(document).on('click','#reinitialise', function(e){
+			$(this).addClass('spinning').attr('disabled',true);
 			console.log('listener fired');
 			var formData = $('#resourceHoursForm').serialize();
 		    $.ajax({
@@ -338,7 +324,7 @@ function ResourceRequest() {
 
 	this.listenForConfirmedDuplication = function(){
 		$(document).on('click','#duplicationConfirmed', function(e){			
-			$(this).addClass('spinning');
+			$(this).addClass('spinning').attr('disabled',true);
 			var resourceReference = $('#confirmDuplicateRR').text();
 		    $.ajax({
 		    	url: "ajax/duplicateResource.php",
@@ -358,6 +344,7 @@ function ResourceRequest() {
 
 	this.listenForSaveAdjustedHours = function(){
 		$(document).on('click','#saveAdjustedHours', function(e){
+			$(this).addClass('spinning').attr('disabled',true);
 			console.log('save adjusted triggered');
 			var formData = $('#resourceHoursForm').serialize();
 		    $.ajax({
@@ -375,6 +362,7 @@ function ResourceRequest() {
 
 	this.listenForSaveAdjustedHoursWithDelta = function(){
 		$(document).on('click','#saveAdjustedHoursWithDelta', function(e){
+			$(this).addClass('spinning').attr('disabled',true);
 			// First create a duplicate Record.
 			var resourceReference = $('#ModalResourceReference').val();
 			var formData = $('#resourceHoursForm').serialize();
@@ -410,6 +398,7 @@ function ResourceRequest() {
 	},
 	this.listenForSaveStatusChange = function(){
 		$(document).on('click','#saveStatusChange', function(e){
+			$(this).addClass('spinning').attr('disabled',true);
 			console.log('save status change triggered');
 
 			var disabled = $('input:disabled');
@@ -474,7 +463,7 @@ function ResourceRequest() {
 
 	this.listenForChangeStatus = function(){
 		$(document).on('click','.changeStatus', function(e){
-
+			$(this).addClass('spinning').attr('disabled',true);
 			console.log($(this));
 			var resourceReference = $(this).data('reference');
 			$('#statusChangeRR').val($.trim($(this).data('reference')));
