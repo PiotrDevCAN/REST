@@ -5,6 +5,8 @@ use itdq\DbTable;
 
 class resourceRequestTable extends DbTable
 {
+    const DUPLICATE = 'Dup of';
+    const DELTA     = 'Delta from';
 
     function buildHTMLTable($startDate,$endDate){
         ?>
@@ -103,8 +105,6 @@ class resourceRequestTable extends DbTable
 
         $resultSet = $this->execute($sql);
 
-       echo $sql;
-
         $resultSet ? null : die("SQL Failed");
 
         $allData = null;
@@ -134,20 +134,12 @@ class resourceRequestTable extends DbTable
         $description = trim($row['DESCRIPTION']);
         $status = !empty(trim($row['STATUS'])) ? trim($row['STATUS']) : resourceRequestRecord::STATUS_NEW;
 
-        $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';
-        $editButtonColor = substr($resourceName,0,6)=='Dup of' ? 'text-success' : $editButtonColor;
-        $editButtonColor = substr($resourceName,0,10)=='Delta from' ? 'text-danger' : $editButtonColor;
-
-        $duplicatable = ((substr($resourceName,0,6)=='Dup of') or (substr($resourceName,0,10)=='Delta from')) ? false : true;
-        $canAssignPerson = true;
-
-        $timeIcon = 'glyphicon-time';
-
         $row['STATUS'] =
         "<button type='button' class='btn btn-success btn-xs changeStatus accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
                     data-reference='" .trim($resourceReference) . "'
                     data-platform='" .trim($row['CTB_SERVICE']) .  "'
                     data-rfs='" .trim($row['RFS_ID']) . "'
+                    data-resourcereference='" .trim($row['RESOURCE_REFERENCE']) . "'
                     data-type='" . $subService . "'
                     data-start='" . $row['START_DATE'] . "'
                     data-phase='" . $row['PHASE'] . "'
@@ -155,21 +147,37 @@ class resourceRequestTable extends DbTable
          >
          <span data-toggle='tooltip' title='Change Status' class='glyphicon glyphicon-tags ' aria-hidden='true' ></span>
             </button>&nbsp;" . $status;
+
+
+
         $row['DESCRIPTION'] =
         "<button type='button' class='btn btn-default btn-xs deleteRecord accessRestrict accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['CTB_SERVICE']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $subService . "' >
             <span data-toggle='tooltip' title='Delete Resource' class='glyphicon glyphicon-trash ' aria-hidden='true' ></span>
             </button>&nbsp;" . $description;
+
+
+
+
+        $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';
+        $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::DUPLICATE))==resourceRequestTable::DUPLICATE ? 'text-success' : $editButtonColor;
+        $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::DELTA))==resourceRequestTable::DELTA ? 'text-success' : $editButtonColor;
+
+        $displayedResourceName = $editButtonColor == 'text-success' ? "<i>$resourceName</i>" : $resourceName;
+
+        $duplicatable = ((substr($resourceName,0,strlen(resourceRequestTable::DUPLICATE))!=resourceRequestTable::DUPLICATE)
+                      && (substr($resourceName,0,strlen(resourceRequestTable::DELTA))!=resourceRequestTable::DELTA));
+
         $row['RESOURCE_NAME'] =
-            "<button type='button' class='btn btn-default btn-xs editRecord accessRestrict accessAdmin accessCdi accessDemand' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "' >
+            "<button type='button' class='btn btn-default btn-xs editRecord accessRestrict accessAdmin accessCdi accessDemand' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' >
             <span class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Name'></span>
             </button>";
-        $row['RESOURCE_NAME'] .= $canAssignPerson ?
-             "<button type='button' class='btn btn-default btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-parent='" . $bwo_parent . "' data-resource-name='" . $resourceName . "' >
+        $row['RESOURCE_NAME'] .=
+             "<button type='button' class='btn btn-default btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-resource-name='" . $resourceName . "' >
               <span class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true'></span>
-              </button>" : null;
+              </button>";
         $row['RESOURCE_NAME'] .=
             "<button type='button' class='btn btn-default btn-xs editHours accessRestrict accessAdmin accessCdi accessSupply' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-startDate='" . $startDate . "' >
-             <span class=' glyphicon " . $timeIcon . " text-primary' aria-hidden='true'></span>
+             <span class=' glyphicon glyphicon-time text-primary' aria-hidden='true'></span>
              </button>";
         $row['RESOURCE_NAME'] .= $duplicatable ?
               "<button type='button' class='btn btn-xs requestDuplication accessRestrict accessAdmin accessCdi accessSupply accessDemand' aria-label='Left Align'
@@ -180,7 +188,7 @@ class resourceRequestTable extends DbTable
                   >
               <span class='glyphicon glyphicon-duplicate text-primary' aria-hidden='true'></span>
               </button>" : null;
-        $displayedResourceName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $resourceName;
+        $displayedResourceName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $displayedResourceName;
 
         $row['RESOURCE_NAME'] .= "&nbsp;" . $displayedResourceName ;
     }

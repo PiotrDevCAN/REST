@@ -14,27 +14,19 @@ $autoCommit = db2_autocommit($_SESSION['conn'],DB2_AUTOCOMMIT_OFF);
 
 $resourceRecord = new resourceRequestRecord();
 $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
+$resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
 $resourceData = $resourceTable->getWithPredicate(" RESOURCE_REFERENCE='" . $_POST['resourceReference'] . "' ");
 $resourceRecord->setFromArray($resourceData);
-
-$originalRecord = print_r($resourceRecord,true);
 
 $resourceRecord->set('RESOURCE_REFERENCE', null); // So we get a new record when we insert.
 $resourceRecord->set('RR_CREATED_TIMESTAMP', null); // so we know when the clone was created.
 $currentResource =$resourceRecord->get('RESOURCE_NAME');
 
-$resourceNamePrefix = empty($_POST['delta']) ? 'Dup of' : 'Delta from ';
+$resourceNamePrefix = $_POST['delta'] ? resourceRequestTable::DELTA : resourceRequestTable::DUPLICATE;
 
-!empty($currentResource) ? $resourceRecord->set('RESOURCE_NAME', resourceNamePrefix . $resourceRecord->get('RESOURCE_NAME')) : null;
+!empty($currentResource) ? $resourceRecord->set('RESOURCE_NAME', $resourceNamePrefix . $resourceRecord->get('RESOURCE_NAME')) : null;
 
 $resourceRecord->set('CLONED_FROM',$_POST['resourceReference']);
-
-if(trim($_POST['drawDown'])=='true'){
-    $drawDown = 'yes';
-    $resourceRecord->set('CTB_SERVICE',resourceRequestRecord::$tbd);
-    $resourceRecord->set('CTB_SUB_SERVICE',resourceRequestRecord::$tbd);
-    $resourceRecord->set('PARENT_BWO',$_POST['resourceReference']);
-}
 
 $saveResponse  = $resourceTable->insert($resourceRecord);
 
@@ -46,8 +38,6 @@ $hours   = $resourceRecord->get('HRS_PER_WEEK');
 
 
 if($saveResponse){
-    $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
-    $resourceHoursSaved = false;
     try {
         $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference,$startDate,$endDate,$hours );
         $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";

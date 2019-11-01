@@ -18,7 +18,7 @@ if(isset($_REQUEST['resourceReference'])){
     $mode = FormClass::$modeEDIT;
     $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
     $resourceRequestRecord = new resourceRequestRecord();
-    $resourceRequestRecord->set('RESOURCE_REQUEST', $_REQUEST['resourceReference']);
+    $resourceRequestRecord->set('RESOURCE_REFERENCE', $_REQUEST['resourceReference']);
     $resourceRequestData = $resourceRequestTable->getRecord($resourceRequestRecord);
     $resourceRequestRecord->setFromArray($resourceRequestData);
 

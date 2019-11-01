@@ -147,7 +147,11 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Error Message</h4>
       </div>
-      <div class="modal-body" id='errorMessageBody'>
+      <div class="modal-body" >
+         <div class="panel panel-danger">
+      		<div class="panel-heading">Error</div>
+      		<div class="panel-body" id='errorMessageBody'></div>
+    		</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -283,6 +287,14 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 ?>
 
+<style>
+.dataTables_wrapper .dataTables_processing {
+background-color:red;
+}
+</style>
+
+
+
 <script>
 $(document).ready(function() {
 	console.log('setup all the listeners');
@@ -300,11 +312,9 @@ $(document).ready(function() {
  	resourceRequest.listenForConfirmedDuplication();
  	resourceRequest.listenForSaveAdjustedHours();
  	resourceRequest.listenForSaveAdjustedHoursWithDelta();
- 	resourceRequest.listenForSaveAdjustedHoursWithDrawDown();
  	resourceRequest.listenForSaveStatusChange();
 	resourceRequest.listenForResetReport();
 	resourceRequest.listenForDdDetails();
-	resourceRequest.listenForSeekBwo();
 	resourceRequest.listenForEditRecord();
 	resourceRequest.listenForDeleteRecord();
 	resourceRequest.listenForConfirmedDelete();

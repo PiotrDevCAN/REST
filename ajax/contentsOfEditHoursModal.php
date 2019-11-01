@@ -154,15 +154,9 @@ while (($row = db2_fetch_assoc($resourceHoursRs))==true){
 
 $modalBody = ob_get_clean();
 
-if(trim($resourceRecord->get('CTB_SUB_SERVICE'))==trim(resourceRequestRecord::$bulkWorkOrder)){
-    ?><button type="button" class="btn btn-warning" id='saveAdjustedHoursWithDrawDown'>Draw Down</button><?php
-} elseif(!$clonedFromBwo) { // If this a drawn down - they can't addjust the hours.
-    ?><button type="button" class="btn btn-warning" id='saveAdjustedHoursWithDelta'>Auto-Delta</button><?php
-    ?><button type="button" class="btn btn-primary" id='saveAdjustedHours'>Adjust Hrs Profile</button><?php
-}
-
-?>
-<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+?><button type="button" class="btn btn-warning" id='saveAdjustedHoursWithDelta'>Auto-Delta</button><?php
+?><button type="button" class="btn btn-primary" id='saveAdjustedHours'>Adjust Hrs Profile</button><?php
+?><button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 <?php
 $modalFooter = ob_get_clean();
 $result = array('editResourceHours'=>$modalBody,'editResourceHoursFooter'=>$modalFooter);

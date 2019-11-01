@@ -22,8 +22,9 @@ try {
 }
 
 $messages = ob_get_clean();
+$success = empty($messages);
 
-$response = array('resourceReference'=>$_POST['RESOURCE_REFERENCE'], 'resourceName' => $_POST['RESOURCE_NAME'], 'Messages'=>$messages, 'Exception'=> $exception) ;
+$response = array('success'=>$success,'resourceReference'=>$_POST['RESOURCE_REFERENCE'], 'resourceName' => $_POST['RESOURCE_NAME'], 'Messages'=>$messages, 'Exception'=> $exception) ;
 
 ob_clean();
 echo json_encode($response);

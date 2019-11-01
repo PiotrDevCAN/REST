@@ -348,7 +348,7 @@ function formTextArea($label, $fieldName, $state = null, $textAreaclass = null, 
             ?>
             <div class='form-group' id='<?=$fieldName;?>" . "FormGroup' >
             <label for='<?=$fieldName;?>' class='col-md-2 control-label' data-toggle='tooltip' data-placement='<?=$dataPlacement;?>' title='<?=$help;?>' ><?=$label;?></label>
-            <div class='col-md-10'>
+            <div class='col-md-9'>
             <div id='spaceForGlyphicon' style='display: none;'></div>
             <div class='<?=$textAreaDivClass;?>'>
             <textarea rows='<?=$rows;?>' class='form-control <?=$textAreaclass;?>' id='<?=$fieldName;?>' name='<?=$fieldName;?>' <?=$state;?> maxLength='<?=$maxlength;?>' placeholder='<?=$placeholder;?>'><?=trim($this->$fieldName);?></textarea>

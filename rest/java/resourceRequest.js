@@ -51,18 +51,6 @@ function ResourceRequest() {
 
 	},
 
-	this.listenForSeekBwo = function(){
-		$(document).on('click','.seekBwo', function(e){
-			if(	$('#bwo').val()){
-				$('#bwo').val('');
-			} else {
-				$('#bwo').val($(this).data('reference'));
-			}
-			ResourceRequest.table.draw();
-		});
-	},
-
-
 	this.listenForDeleteRecord = function(){
 		$(document).on('click','.deleteRecord', function(e){
 			var resourceReference = $(this).data('reference');
@@ -104,15 +92,6 @@ function ResourceRequest() {
 		});
 	},
 
-//	this.listenForEditRecord = function(){
-//		$(document).on('click','.editRecord', function(e){
-//			var resourceReference = $(this).data('reference');
-//			var URL = "pa_newResourceRequest.php?resource=" + resourceReference;
-//			var child = window.open(URL, "_blank");
-//			child.onunload = function(){ ResourceRequest.table.ajax.reload(); };
-//		});
-//	},
-	
 	this.listenForEditRecord = function(){
 		$(document).on('click','.editRecord', function(e){			
 			$(this).addClass('spinning').attr('disabled',true);			
@@ -197,11 +176,21 @@ function ResourceRequest() {
 		    	data: formData,
 		    	success: function(result){
 		    		console.log(result);
-					$('#resourceNameForm').find('#RESOURCE_REFERENCE').val("");
-					$('#resourceNameForm').find('#RESOURCE_NAME').val("").trigger('change');
-					$('#resourceNameModal').modal('hide');
-					$('.spinning').removeClass('spinning');
-					ResourceRequest.table.ajax.reload();
+		    		var resultObj = JSON.parse(result);
+		    		if(resultObj.success==true){
+						$('#resourceNameForm').find('#RESOURCE_REFERENCE').val("");
+						$('#resourceNameForm').find('#RESOURCE_NAME').val("").trigger('change');
+						$('#resourceNameModal').modal('hide');
+						$('.spinning').removeClass('spinning');
+						ResourceRequest.table.ajax.reload();		    			
+		    		} else {
+		    			$('#errorMessageBody').html(resultObj.Messages);
+		    			$('#resourceNameModal').modal('hide');
+						$('.spinning').removeClass('spinning');
+						ResourceRequest.table.ajax.reload();
+		    			$('#errorMessageModal').modal('show');
+		    		}
+
 		    		}
 		    });
 		});
@@ -301,6 +290,7 @@ function ResourceRequest() {
 
 	this.listenForDuplicateResource = function(){
 		$(document).on('click','.requestDuplication', function(e){
+			$(this).addClass('spinning').attr('disabled',true);
 			$('#confirmDuplicateRR').text($.trim($(this).data('reference')));
 			$('#confirmDuplicateRFS').text($.trim($(this).data('rfs')));
 			$('#confirmDuplicateType').text($.trim($(this).data('type')));
@@ -311,15 +301,17 @@ function ResourceRequest() {
 
 
 	this.listenForConfirmedDuplication = function(){
-		$(document).on('click','#duplicationConfirmed', function(e){
+		$(document).on('click','#duplicationConfirmed', function(e){			
+			$(this).addClass('spinning');
 			var resourceReference = $('#confirmDuplicateRR').text();
 		    $.ajax({
 		    	url: "ajax/duplicateResource.php",
 		        type: 'POST',
 		    	data: { resourceReference : resourceReference,
 		    			delta: false,
-		    			drawDown: false},
+		    			},
 		    	success: function(result){
+		    		$('.spinning').removeClass('spinning');
 					$('#confirmDuplicationModal').modal('hide');
 		    		ResourceRequest.table.ajax.reload();
 		    		console.log(result);
@@ -356,7 +348,7 @@ function ResourceRequest() {
 		        type: 'POST',
 		    	data: { resourceReference : resourceReference,
                         delta: true,
-                        drawDown: false},
+                        },
 		    	success: function(result){
 					$('#confirmDuplicationModal').modal('hide');
 					var resultObj = JSON.parse(result);
@@ -380,46 +372,6 @@ function ResourceRequest() {
 		    	});
 		});
 	},
-
-
-	this.listenForSaveAdjustedHoursWithDrawDown = function(){
-		$(document).on('click','#saveAdjustedHoursWithDrawDown', function(e){
-			// First create a duplicate Record.
-			var resourceReference = $('#ModalResourceReference').val();
-			var formData = $('#resourceHoursForm').serialize();
-			console.log(resourceReference);
-		    $.ajax({
-		    	url: "ajax/duplicateResource.php",
-		        type: 'POST',
-		    	data: { resourceReference : resourceReference,
-                        drawDown: true,
-                        delta : false},
-		    	success: function(result){
-					$('#confirmDuplicationModal').modal('hide');
-					var resultObj = JSON.parse(result);
-		    		var deltaResourceReference = resultObj.resourceReference;
-		    		console.log(resultObj);
-					console.log('Delta is' + deltaResourceReference);
-
-				    $.ajax({
-				    	url: "ajax/saveAdjustedHoursWithDrawDown.php",
-				        type: 'POST',
-				    	data: {deltaResourceRef  : deltaResourceReference,
-				    		   originalResourceRef : resourceReference,
-                               formData          : formData },
-				    	success: function(result){
-				    		console.log(result);
-				    		addPlatformTypePrnCode(resultObj.resourceReference,$(this).data('parent'));
-				    		ResourceRequest.table.ajax.reload();
-							$('#resourceHoursModal').modal('hide');
-				    		}
-				    	});
-
-		    		}
-		    	});
-		});
-	},
-
 	this.listenForSaveStatusChange = function(){
 		$(document).on('click','#saveStatusChange', function(e){
 			console.log('save status change triggered');
