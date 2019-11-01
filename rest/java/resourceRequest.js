@@ -6,7 +6,6 @@ var ModalstartPicker;
 var ModalendPicker
 
 
-
 function ResourceRequest() {
 
 	var table;
@@ -17,6 +16,7 @@ function ResourceRequest() {
 		ModalstartPicker = new Pikaday({
 			firstDay:1,
 			field: document.getElementById('InputModalSTART_DATE'),
+			events:['Sat Jun 24 2017', 'Sun Jun 25 2017', 'Sat Jul 01 2017',],
 			format: 'D MMM YYYY',
 			showTime: false,
 			onSelect: function() {
@@ -591,8 +591,7 @@ function ResourceRequest() {
 
 
 	this.initialiseDateSelect = function(){
-		var startDate,
-		endDate,
+		var endDate;
 
 		startPicker = new Pikaday({
 			firstDay:1,
@@ -614,7 +613,7 @@ function ResourceRequest() {
 				console.log(startDate);
 				updateStartDate();
 			}
-		}),
+		});
 		endPicker = new Pikaday({
 			firstDay:1,
 			field: document.getElementById('InputEND_DATE'),
@@ -626,7 +625,7 @@ function ResourceRequest() {
 				endDate = this.getDate();
 				updateEndDate();
 			}
-		}),
+		});
 
 		updateStartDate = function() {
 			var resourceRequest = new ResourceRequest();
@@ -637,7 +636,7 @@ function ResourceRequest() {
 		    console.log($('#START_DATE').val());
 		    resourceRequest.destroyResourceReport();
 		    resourceRequest.buildResourceReport();
-		},
+		};
 
 		updateEndDate = function() {
 			var resourceRequest = new ResourceRequest();
@@ -647,7 +646,7 @@ function ResourceRequest() {
 		    endPicker.setEndRange(endDate);
 		    resourceRequest.destroyResourceReport();
 		    resourceRequest.buildResourceReport();
-		},
+		};
 
 
 	_startDate = startPicker.getDate(),
