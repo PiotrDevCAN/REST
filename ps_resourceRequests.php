@@ -342,7 +342,7 @@ for($year=$currentYear-1;$year<=$currentYear+1;$year++){
     for($month=1;$month<=12;$month++){
         $date = '01-' . substr('00' . $month,2) . "-" . $year;
         $claimCutoff = DateClass::claimMonth($date);
-         ?>[data-pika-year="<?=$year;?>"][data-pika-month="<?=$month-1;?>"][data-pika-day="<?=$claimCutoff->format('d');?>"] {background-color: white; color:red; outline:solid; outline-color:grey;outline-width:thin}<?php
+         ?>[data-pika-year="<?=$year;?>"][data-pika-month="<?=$month-1;?>"][data-pika-day="<?=$claimCutoff->format('d');?>"] {background-color: white; color:red; outline:solid; outline-color:grey;outline-width:thin; content='claim'}<?php
     }
 }
 ?>

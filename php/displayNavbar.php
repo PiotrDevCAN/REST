@@ -39,11 +39,14 @@ $newResReq      = new NavbarOption('New Resource Request', 'pr_newResourceReques
 $request->addOption($newRfs);
 $request->addOption($newResReq);
 
+
 $supply         = new NavbarMenu(  'Supply');
 $rfs            = new NavbarOption('RFS', 'ps_rfs.php'                           ,'accessCdi accessAdmin accessDemand accessSupply accessRfs');
 $resRequest     = new NavbarOption('Resource Requests', 'ps_resourceRequests.php','accessCdi accessAdmin accessDemand accessSupply accessRfs');
+// $info           = new NavbarOption('PHP Info', 'phpinfo.php','accessCdi accessAdmin accessDemand accessSupply accessRfs');
 $supply->addOption($rfs);
 $supply->addOption($resRequest);
+// $supply->addOption($info);
 
 // $reports        = new NavbarMenu('Reports');
 // $dummy          = new NavbarOption('Dummy entry', 'pr_dummyReport.php','accessUser accessReports');

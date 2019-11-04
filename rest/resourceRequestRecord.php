@@ -291,6 +291,7 @@ class resourceRequestRecord extends DbRecord
             $startDateObj->setDate($year, $month, '28');
         }
 
+        $endDate = null;
         $endDateObj = new \DateTime($endDate);
 
         if(empty($endDate)){

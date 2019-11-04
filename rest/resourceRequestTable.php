@@ -2,6 +2,7 @@
 namespace rest;
 
 use itdq\DbTable;
+use itdq\PhpMemoryTrace;
 
 class resourceRequestTable extends DbTable
 {
@@ -111,6 +112,7 @@ class resourceRequestTable extends DbTable
         $allData = null;
 
         while(($row = db2_fetch_assoc($resultSet))==true){
+            PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
@@ -125,6 +127,7 @@ class resourceRequestTable extends DbTable
 
 
     function addGlyphicons(&$row){
+        PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
         $rfsId = $row['RFS_ID'];
         $resourceReference = $row['RESOURCE_REFERENCE'];
         $resourceName = $row['RESOURCE_NAME'];
@@ -138,10 +141,6 @@ class resourceRequestTable extends DbTable
         $description = $row['DESCRIPTION'];
         $hrsPerWeek = $row['HRS_PER_WEEK'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
-
-        var_dump($resourceName);
-
-
         $row['STATUS'] =
         "<button type='button' class='btn btn-xs changeStatus accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
                     data-rfs='" .$rfsId . "'
@@ -221,6 +220,7 @@ class resourceRequestTable extends DbTable
 
         $row['RESOURCE_NAME'].= "&nbsp;" . $displayedResourceName ;
         $row['RESOURCE_NAME']." </span>";
+
     }
 
 

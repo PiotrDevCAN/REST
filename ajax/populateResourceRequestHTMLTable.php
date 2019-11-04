@@ -4,17 +4,30 @@ use rest\resourceRequestTable;
 use rest\resourceRequestRecord;
 use itdq\Trace;
 use rest\rfsTable;
+use itdq\PhpMemoryTrace;
 
 set_time_limit(0);
+ini_set('memory_limit','300M');
 
 ob_start();
+PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
+
 Trace::pageOpening($_SERVER['PHP_SELF']);
 $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 
 $startDate = !empty($_POST['startDate']) ? $_POST['startDate'] : null;
 $endDate = !empty($_POST['endDate']) ? $_POST['endDate'] : null;
 
+
+$_SESSION['loops'] =0;
+
+
+PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
+
 $data = $resourceRequestTable->returnAsArray($startDate,$endDate,rfsTable::rfsPredicateFilterOnPipeline());
+
+PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
+
 
 $testJson = json_encode($data);
 $badRecords = 0;
@@ -28,14 +41,14 @@ if (!$testJson){
     }
 }
 
+PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
+
 echo "Bad Records removed:$badRecords";
 
 
 $messages = ob_get_clean();
 
 $response = array('messages'=>$messages,'badrecords'=>$badRecords,"data"=>$data);
-
-ob_clean();
 
 $json = json_encode($response);
 
@@ -45,4 +58,5 @@ if($json){
     echo json_encode(array('code'=>json_last_error(),'msg'=>json_last_error_msg()));
 }
 
+PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);
