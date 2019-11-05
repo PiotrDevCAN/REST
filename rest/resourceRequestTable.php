@@ -3,6 +3,7 @@ namespace rest;
 
 use itdq\DbTable;
 use itdq\PhpMemoryTrace;
+use \DateTime;
 
 class resourceRequestTable extends DbTable
 {
@@ -24,11 +25,13 @@ class resourceRequestTable extends DbTable
         <?php
     }
 
-    function updateResourceName($resourceReference,$resourceName){
-        if(empty($resourceReference) or empty($resourceName)){
-            throw new \Exception('Paramaters Missing in call to ' . __FUNCTION__);
-        }
+    function updateResourceName($resourceReference,$resourceName, $clear=null){
 
+        if(!empty($clear)){
+            $resourceName = '';
+        } else if(empty($resourceReference) or empty($resourceName)){
+                throw new \Exception('Paramaters Missing in call to ' . __FUNCTION__);
+        }
         $sql  = " UPDATE " . $_SESSION['Db2Schema'] . "." . $this->tableName;
         $sql .= " SET RESOURCE_NAME='" . db2_escape_string($resourceName) . "' ";
         $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference);
@@ -134,13 +137,14 @@ class resourceRequestTable extends DbTable
         $phase = $row['PHASE'];
         $prn = $row['PRN'];
         $cio = $row['CIO'];
-        $startDate = $row['START_DATE'];
-        $endDate = $row['END_DATE'];
+        $startDate = isset($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d-M-Y') : null;
+        $endDate = isset($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d-M-Y') : null;
         $service = $row['CTB_SERVICE'];
         $subService = $row['CTB_SUB_SERVICE'];
         $description = $row['DESCRIPTION'];
         $hrsPerWeek = $row['HRS_PER_WEEK'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
+        $ctbService = $row['CTB_SERVICE'];
         $row['STATUS'] =
         "<button type='button' class='btn btn-xs changeStatus accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
                     data-rfs='" .$rfsId . "'
@@ -177,7 +181,7 @@ class resourceRequestTable extends DbTable
 
         $duplicatable = true; //Can clone any record.
 
-        $canBeAmendedByDemandTeam = empty(trim($resourceName)) ? 'accessDemand' : null;
+        $canBeAmendedByDemandTeam = empty(trim($resourceName)) ? 'accessDemand' : null; // Demand can amend any Request that is yet to have resource allocated to it.
 
         $row['RESOURCE_NAME'] = "<span class='dataOwner' ";
         $row['RESOURCE_NAME'].= "  data-rfs='" .$rfsId . "' ";
@@ -219,6 +223,14 @@ class resourceRequestTable extends DbTable
 
         $row['RESOURCE_NAME'].= "&nbsp;" . $displayedResourceName ;
         $row['RESOURCE_NAME']." </span>";
+
+
+        $displayRfsId =  $rfsId . " : " . $row['RESOURCE_REFERENCE'];
+        $displayRfsId.= $row['CLONED_FROM']> 0 ? "&nbsp;<i>(" . $row['CLONED_FROM'] . ")</i>" : null;
+
+        $row['RFS']        = array('display'=> $displayRfsId, 'sort'=>$rfsId);
+        $row['START_DATE'] = array('display'=> $startDate . " to " . $endDate . "<br/>Avg Hrs/Week:" . $row['HRS_PER_WEEK'], 'sort'=>$startDate);
+        $row['CTB_SERVICE']=array('display'=>$row['CTB_SERVICE'] . "<br/><small>" . $row['CTB_SUB_SERVICE'] . "</small>", 'sort'=>$ctbService);
 
     }
 

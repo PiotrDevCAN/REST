@@ -85,6 +85,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" id='saveResourceName'>Save</button>
+        <button type="button" class="btn btn-primary" id='clearResourceName'>Clear Resource Name</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
      </form>
@@ -309,6 +310,7 @@ $(document).ready(function() {
 	resourceRequest.populateResourceDropDownWhenModalShown();
 	resourceRequest.listenForEditResourceName();
 	resourceRequest.listenForSaveResourceName();
+	resourceRequest.listenForClearResourceName();
 	resourceRequest.listenForEditHours();
 	resourceRequest.listenForSlipStartDate();
 	resourceRequest.listenForReinitialise();

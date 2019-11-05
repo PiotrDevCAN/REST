@@ -3,7 +3,21 @@
  */
 
 var ModalstartPicker;
-var ModalendPicker
+var ModalendPicker;
+
+
+var buttonCommon = {
+		 exportOptions: {
+            format: {
+               body: function ( data, row, column, node ) {
+               	console.log(data);
+               //   return data ?  data.replace( /<br\s*\/?>/ig, "\n") : data ;
+               return data ? data.replace( /<br\s*\/?>/ig, "\n").replace(/(&nbsp;|<([^>]+)>)/ig, "") : data ;
+               //    data.replace( /[$,.]/g, '' ) : data.replace(/(&nbsp;|<([^>]+)>)/ig, "");
+               }
+            }
+        }
+};
 
 
 function ResourceRequest() {
@@ -174,6 +188,42 @@ function ResourceRequest() {
 		    	url: "ajax/saveResourceName.php",
 		        type: 'POST',
 		    	data: formData,
+		    	success: function(result){
+		    		console.log(result);
+		    		var resultObj = JSON.parse(result);
+		    		if(resultObj.success==true){
+						$('#resourceNameForm').find('#RESOURCE_REFERENCE').val("");
+						$('#resourceNameForm').find('#RESOURCE_NAME').val("").trigger('change');
+						$('#resourceNameModal').modal('hide');
+						$('.spinning').removeClass('spinning');
+						ResourceRequest.table.ajax.reload();		    			
+		    		} else {
+		    			$('#errorMessageBody').html(resultObj.Messages);
+		    			$('#resourceNameModal').modal('hide');
+						$('.spinning').removeClass('spinning');
+						ResourceRequest.table.ajax.reload();
+		    			$('#errorMessageModal').modal('show');
+		    		}
+
+		    		}
+		    });
+		});
+	},
+	
+	this.listenForClearResourceName = function(){
+		$(document).on('click','#clearResourceName', function(e){
+			$(this).addClass('spinning');
+			var formData = $('#resourceNameForm').serialize();
+			
+			formData += "&clear=clear";
+			
+			console.log(formData);
+			
+			
+		    $.ajax({
+		    	url: "ajax/saveResourceName.php",
+		        type: 'POST',
+		    	data: formData, 
 		    	success: function(result){
 		    		console.log(result);
 		    		var resultObj = JSON.parse(result);
@@ -505,20 +555,44 @@ function ResourceRequest() {
 	        }	,
 	    	autoWidth: false,
 	    	deferRender: true,
-	    	responsive: false,
-	    	// scrollX: true,
 	    	processing: true,
 	    	responsive: true,
 	    	colReorder: true,
 	    	dom: 'Blfrtip',
 	        buttons: [
-	                  'colvis',
-	                  'excelHtml5',
-	                  'csvHtml5',
-	                  'print'
-	              ],
+                'colvis',
+                $.extend( true, {}, buttonCommon, {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        orthogonal: 'sort',
+                        stripHtml: true,
+                        stripNewLines:false
+                    },
+                    filename: 'REST_Export',
+                    customize: function( xlsx ) {
+                         var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                     }
+            }),
+            $.extend( true, {}, buttonCommon, {
+                extend: 'csvHtml5',                
+                exportOptions: {
+                    orthogonal: 'sort',
+                    stripHtml: true,
+                    stripNewLines:false
+                },
+                filename: 'REST_Export',
+            }),
+            $.extend( true, {}, buttonCommon, {
+                extend: 'print',
+                exportOptions: {
+                    orthogonal: 'sort',
+                    stripHtml: true,
+                    stripNewLines:false
+                }
+            })
+            ],
 	        columns: [
-	            { data: "RFS_ID"           , defaultContent: "", visible:false },
+	            { data: "RFS_ID"           , defaultContent: "" },
 	            { data: "PRN",defaultContent: "", visible:false },
 	            { data: "PROJECT_TITLE",defaultContent: "", visible:false },
 	            { data: "PROJECT_CODE",defaultContent: "", visible:false },
@@ -533,12 +607,12 @@ function ResourceRequest() {
 	            { data: "ILC_WORK_ITEM",defaultContent: "", visible:false },
 	            { data: "RFS_STATUS",defaultContent: "", visible:false },
 	            { data: "RESOURCE_REFERENCE",defaultContent: "", visible:false },
-	            { data: "RFS",defaultContent: "", visible:true },	           
+	            { data: "RFS",defaultContent: "", visible:true, render: { _:'display', sort:'sort' }, },	           
 	            { data: "PHASE",defaultContent: "", visible:true },
-	            { data: "CTB_SERVICE",defaultContent: "", visible:true },
-	            { data: "CTB_SUB_SERVICE",defaultContent: "", visible:true },
+	            { data: "CTB_SERVICE",defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
+	            { data: "CTB_SUB_SERVICE",defaultContent: "", visible:false },
 	            { data: "DESCRIPTION",defaultContent: "", visible:true },
-	            { data: "START_DATE",defaultContent: "", visible:true },
+	            { data: "START_DATE",defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
 	            { data: "END_DATE",defaultContent: "", visible:false },
 	            { data: "HRS_PER_WEEK",defaultContent: "", visible:true },
 	            { data: "RESOURCE_NAME",defaultContent: "", visible:true },
@@ -556,10 +630,6 @@ function ResourceRequest() {
 	        	
 	        ],
 	    });
-	    console.log('setup columns');
-	    ResourceRequest.table.columns([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,21,22,24,25,26,27,28]).visible(false,false);
-	    ResourceRequest.table.columns.adjust().draw(false);
-
 	    // Apply the search
 	    ResourceRequest.table.columns().every( function () {
 	        var that = this;

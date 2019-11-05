@@ -13,9 +13,11 @@ set_time_limit(0);
 ob_start();
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
+$clear = isset($_POST['clear']) ? $_POST['clear'] : null;
+
 try {
     $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
-    $resourceTable->updateResourceName($_POST['RESOURCE_REFERENCE'], $_POST['RESOURCE_NAME']);
+    $resourceTable->updateResourceName($_POST['RESOURCE_REFERENCE'], $_POST['RESOURCE_NAME'], $clear);
     $exception = false;
 } catch (Exception $e) {
     $exception = $e->getMessage();

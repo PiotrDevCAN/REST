@@ -4,6 +4,7 @@ use rest\resourceRequestRecord;
 use itdq\FormClass;
 use rest\resourceRequestTable;
 use rest\allTables;
+use itdq\DateClass;
 
 set_time_limit(0);
 Trace::pageOpening($_SERVER['PHP_SELF']);
@@ -242,6 +243,21 @@ $(document).ready(function(){
 
 
 </script>
+<style>
+
+<?php
+$date = new DateTime();
+$currentYear = $date->format('Y');
+
+for($year=$currentYear-1;$year<=$currentYear+1;$year++){
+    for($month=1;$month<=12;$month++){
+        $date = '01-' . substr('00' . $month,2) . "-" . $year;
+        $claimCutoff = DateClass::claimMonth($date);
+         ?>[data-pika-year="<?=$year;?>"][data-pika-month="<?=$month-1;?>"][data-pika-day="<?=$claimCutoff->format('d');?>"] {background-color: white; color:red; outline:solid; outline-color:grey;outline-width:thin; content='claim'}<?php
+    }
+}
+?>
+</style>
 
 
 
