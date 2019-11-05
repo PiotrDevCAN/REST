@@ -22,7 +22,7 @@ $resourceRecord->set('RESOURCE_REFERENCE', null); // So we get a new record when
 $resourceRecord->set('RR_CREATED_TIMESTAMP', null); // so we know when the clone was created.
 $currentResource =$resourceRecord->get('RESOURCE_NAME');
 
-$resourceNamePrefix = $_POST['delta'] ? resourceRequestTable::DELTA : resourceRequestTable::DUPLICATE;
+$resourceNamePrefix = $_POST['delta']==true ? resourceRequestTable::DELTA : resourceRequestTable::DUPLICATE;
 
 !empty($currentResource) ? $resourceRecord->set('RESOURCE_NAME', $resourceNamePrefix . $resourceRecord->get('RESOURCE_NAME')) : null;
 
