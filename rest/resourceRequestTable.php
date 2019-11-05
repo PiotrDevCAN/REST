@@ -175,10 +175,9 @@ class resourceRequestTable extends DbTable
 
         $displayedResourceName = $editButtonColor == 'text-success' ? "<i>$resourceName</i>" : $resourceName;
 
-        $duplicatable = ((substr($resourceName,0,strlen(resourceRequestTable::DUPLICATE))!=resourceRequestTable::DUPLICATE)
-                      && (substr($resourceName,0,strlen(resourceRequestTable::DELTA))!=resourceRequestTable::DELTA));
+        $duplicatable = true; //Can clone any record.
 
-        $canBeAmendedByDemandTeam = empty(trim($resourceName)) || $duplicatable ? 'accessDemand' : null;
+        $canBeAmendedByDemandTeam = empty(trim($resourceName)) ? 'accessDemand' : null;
 
         $row['RESOURCE_NAME'] = "<span class='dataOwner' ";
         $row['RESOURCE_NAME'].= "  data-rfs='" .$rfsId . "' ";
@@ -208,7 +207,7 @@ class resourceRequestTable extends DbTable
              <span class=' glyphicon glyphicon-time text-primary' aria-hidden='true'></span>
              </button>";
         $row['RESOURCE_NAME'] .= $duplicatable ?
-              "<button type='button' class='btn btn-xs requestDuplication accessRestrict accessAdmin accessCdi accessSupply accessDemand' aria-label='Left Align'
+              "<button type='button' class='btn btn-xs requestDuplication accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam' aria-label='Left Align'
                     data-reference='" . $resourceReference . "'
                     data-rfs='" . $row['RFS_ID'] . "'
                     data-type='" . $row['CTB_SUB_SERVICE'] . "'
