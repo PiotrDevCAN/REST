@@ -267,8 +267,7 @@ function ResourceRequest() {
 			var endDate = $('#ModalEND_DATE').val();
 			var endDateWas = $('#endDateWas').val();
 			var hrsPerWeek = $('#ModalHRS_PER_WEEK').val();
-			var resourceReference = $('#ModalResourceReference').val();
-			$('#moveEndDate').addClass('spinning').addClass('glyphicon');
+			var resourceReference = $('#ModalResourceReference').val();			
 			console.log(endDate + ":" + hrsPerWeek + ":" + endDateWas + ":" + resourceReference);
 		    $.ajax({
 		    	url: "ajax/moveEndDate.php",
@@ -279,7 +278,7 @@ function ResourceRequest() {
 		    		   resourceReference : resourceReference },
 		    	success: function(result){
 		    		console.log(result);
-					$('#moveEndDate').removeClass('spinning').removeClass('glyphicon');
+		    		$('.spinning').removeClass('spinning').attr('disabled',false);					
 				    $('#editResourceHours').html('');
 					$('#resourceHoursModal').modal('hide');
 		    		ResourceRequest.table.ajax.reload();
@@ -302,6 +301,7 @@ function ResourceRequest() {
 		    	data: formData,
 		    	success: function(result){
 		    		console.log(result);
+		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		ResourceRequest.table.ajax.reload();
 		    		$('#editResourceHours').html('<p></p>');
 				    $('#resourceHoursModal').modal('hide');
@@ -316,8 +316,8 @@ function ResourceRequest() {
 			$('#confirmDuplicateRR').text($.trim($(this).data('reference')));
 			$('#confirmDuplicateRFS').text($.trim($(this).data('rfs')));
 			$('#confirmDuplicateType').text($.trim($(this).data('type')));
-			$('#confirmDuplicateStart').text($.trim($(this).data('start')));
-			$('#confirmDuplicationModal').modal('show');
+			$('#confirmDuplicateStart').text($.trim($(this).data('start')));			
+			$('#confirmDuplicationModal').modal('show');			
 		});
 	},
 
@@ -333,8 +333,9 @@ function ResourceRequest() {
 		    			delta: false,
 		    			},
 		    	success: function(result){
-		    		$('.spinning').removeClass('spinning');
+		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 					$('#confirmDuplicationModal').modal('hide');
+					
 		    		ResourceRequest.table.ajax.reload();
 		    		console.log(result);
 		    		}
@@ -353,6 +354,7 @@ function ResourceRequest() {
 		    	data: formData,
 		    	success: function(result){
 		    		console.log(result);
+		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		ResourceRequest.table.ajax.reload();
 					$('#resourceHoursModal').modal('hide');
 		    		}
@@ -387,6 +389,7 @@ function ResourceRequest() {
                                formData          : formData },
 				    	success: function(result){
 				    		console.log(result);
+				    		$('.spinning').removeClass('spinning').attr('disabled',false);
 				    		ResourceRequest.table.ajax.reload();
 							$('#resourceHoursModal').modal('hide');
 				    		}
@@ -399,30 +402,32 @@ function ResourceRequest() {
 	this.listenForSaveStatusChange = function(){
 		$(document).on('click','#saveStatusChange', function(e){
 			$(this).addClass('spinning').attr('disabled',true);
-			console.log('save status change triggered');
-
 			var disabled = $('input:disabled');
-
-			console.log(disabled);
-
 			$(disabled).prop('disabled',false);
 			var formData = $('#statusChangeForm').serialize();
 			$(disabled).prop('disabled',true);
-
-			console.log(formData);
-
 		    $.ajax({
 		    	url: "ajax/saveStatusChange.php",
 		        type: 'POST',
 		    	data: formData,
 		    	success: function(result){
 		    		console.log(result);
+		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		ResourceRequest.table.ajax.reload();
 					$('#statusModal').modal('hide');
 		    		}
 		    	});
 		});
 	},
+	
+	this.listenForChangingHours = function (){
+		$(document).on('focus','input[type=number]',function(){
+			$('#saveAdjustedHoursWithDelta').attr('disabled',false);
+			$('#saveAdjustedHours').attr('disabled',false);
+			$('#slipStartDate').attr('disabled',true);
+			$('#moveEndDate').attr('disabled',true);
+		});
+	}
 
 
 

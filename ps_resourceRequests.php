@@ -315,6 +315,7 @@ $(document).ready(function() {
 	resourceRequest.listenForMoveEndDate();
 	resourceRequest.listenForDuplicateResource();
  	resourceRequest.listenForConfirmedDuplication();
+ 	resourceRequest.listenForChangingHours();
  	resourceRequest.listenForSaveAdjustedHours();
  	resourceRequest.listenForSaveAdjustedHoursWithDelta();
  	resourceRequest.listenForSaveStatusChange();
