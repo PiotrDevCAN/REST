@@ -164,6 +164,67 @@ function Rfs() {
 	    		}
 	    });
 	},
+	
+	this.buildPipelineReport =  function(){
+		var formData = $('form').serialize();
+		var rfs = new Rfs();
+	    $.ajax({
+	    	url: "ajax/createPipelineHTMLTable.php",
+	        type: 'POST',
+	    	data: formData,
+	        before: function(){
+	        	$('#rfsTableDiv').html('<h2>Table being built</h2>');
+	        },
+	    	success: function(result){
+	    		$('#rfsTable_id').DataTable().destroy();
+	        	$("#rfsTableDiv").html(result);
+	        	rfs.initialisePipelineDataTable();
+	    		}
+	    });
+	},
+	
+	this.initialisePipelineDataTable = function(){
+	    // Setup - add a text input to each footer cell
+	    $('#rfsTable_id tfoot th').each( function () {
+	        var title = $(this).text();
+	        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+	    } );
+		// DataTable
+	    Rfs.table = $('#rfsTable_id').DataTable({
+	    	ajax: {
+	            url: 'ajax/populatePipelineRfsHTMLTable.php',
+	            type: 'POST',
+	        }	,
+	    	autoWidth: true,
+	    	responsive: true,
+	    	processing: true,
+	    	colReorder: true,
+	    	dom: 'Blfrtip',
+	        buttons: [
+	                  'colvis',
+	                  'excelHtml5',
+	                  'csvHtml5',
+	                  'print'
+	              ],
+	    });
+
+	    // Apply the search
+	    Rfs.table.columns().every( function () {
+	        var that = this;
+
+	        $( 'input', this.footer() ).on( 'keyup change', function () {
+	            if ( that.search() !== this.value ) {
+	                that
+	                    .search( this.value )
+	                    .draw();
+	            }
+	        } );
+	    } );
+	},
+
+	
+	
+	
 
 	this.destroyRfsReport = function(){
 		$('#rfsTable_id').DataTable().destroy();

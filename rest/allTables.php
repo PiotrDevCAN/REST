@@ -19,6 +19,7 @@ class allTables
     public static $RESOURCE_REQUEST_HOURS = 'RESOURCE_REQUEST_HOURS';
 
     public static $RFS = 'RFS';
+    public static $RFS_PIPELINE = 'RFS_PIPELINE';
 
     public static $STATIC_CIO = 'STATIC_CIO';
     public static $STATIC_CTB_SERVICE = 'STATIC_CTB_SERVICE';

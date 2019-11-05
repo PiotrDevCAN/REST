@@ -36,8 +36,10 @@ $adminMenu->addOption($service);
 $request        = new NavbarMenu(  'Request'                                          ,'accessCdi accessAdmin accessDemand accessRfs');
 $newRfs         = new NavbarOption('New RFS','pr_newRfs.php'                          ,'accessCdi accessAdmin accessDemand accessRfs');
 $newResReq      = new NavbarOption('New Resource Request', 'pr_newResourceRequest.php','accessCdi accessAdmin accessDemand accessRfs');
+$managePipeline = new NavbarOption('Manage Pipeline', 'pr_managePipeline.php','accessCdi accessAdmin accessDemand ');;
 $request->addOption($newRfs);
 $request->addOption($newResReq);
+$request->addOption($managePipeline);
 
 
 $supply         = new NavbarMenu(  'Supply');
@@ -67,8 +69,8 @@ $navbar->createNavbar($page);
 
 $isCdi    = employee_in_group($_SESSION['cdiBg'],     $_SESSION['ssoEmail']) ? ".not('.accessCdi')" : null;
 $isAdmin  = employee_in_group($_SESSION['adminBg'],   $_SESSION['ssoEmail']) ? ".not('.accessAdmin')" : null;
-$isDemand = employee_in_group($_SESSION['demandBg'],  $_SESSION['ssoEmail']) ? ".not('.accessDemand')" : null;
-$isSupply = employee_in_group($_SESSION['supplyBg'],  $_SESSION['ssoEmail'])  || strstr($_SERVER['environment'], 'dev')   ? ".not('.accessSupply')" : null;
+$isDemand = employee_in_group($_SESSION['demandBg'],  $_SESSION['ssoEmail'])  || strstr($_SERVER['environment'], 'dev') ? ".not('.accessDemand')" : null;
+$isSupply = employee_in_group($_SESSION['supplyBg'],  $_SESSION['ssoEmail']) ? ".not('.accessSupply')" : null;
 $isRfs    = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail']) ? ".not('.accessRfs')" : null;
 
 
