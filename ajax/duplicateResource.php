@@ -24,6 +24,8 @@ $currentResource =$resourceRecord->get('RESOURCE_NAME');
 
 $resourceNamePrefix = $_POST['delta']===true ? resourceRequestTable::DELTA : resourceRequestTable::DUPLICATE;
 
+echo $_POST['delta']===true ? "delta is true" : "delta is not true";
+
 !empty($currentResource) ? $resourceRecord->set('RESOURCE_NAME', $resourceNamePrefix . $resourceRecord->get('RESOURCE_NAME')) : null;
 
 $resourceRecord->set('CLONED_FROM',$_POST['resourceReference']);
@@ -54,7 +56,7 @@ db2_autocommit($_SESSION['conn'],$autoCommit);
 $messages = ob_get_clean();
 
 $response = array('resourceReference'=>$resourceReference, 'saveResponse' => $saveResponse, 'hoursResponse'=>$hoursResponse,
-                  'Messages'=>$messages);
+                  'Messages'=>$messages, 'POST',print_r($_POST,true),'resourceNamePrefix',$resourceNamePrefix);
 
 ob_clean();
 echo json_encode($response);
