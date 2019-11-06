@@ -137,10 +137,10 @@ class resourceRequestTable extends DbTable
         $phase = $row['PHASE'];
         $prn = $row['PRN'];
         $cio = $row['CIO'];
-        $startDate4Picka = isset($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Y-m-d') : null;
-        $endDate4Picka = isset($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Y-m-d') : null;
-        $startDate = isset($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
-        $endDate   = isset($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
+        $startDate4Picka = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Y-m-d') : null;
+        $endDate4Picka = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Y-m-d') : null;
+        $startDate = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
+        $endDate   = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
         $service = $row['CTB_SERVICE'];
         $subService = $row['CTB_SUB_SERVICE'];
         $description = $row['DESCRIPTION'];
