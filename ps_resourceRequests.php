@@ -10,6 +10,9 @@ set_time_limit(0);
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
+$defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
+$canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
+
 ?>
 <div class='container'>
 
@@ -29,7 +32,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
        <div class ='pipelineLive_FormGroup'>
        <label for='pipelineLive' class='col-md-1 control-label ' data-toggle='tooltip' data-placement='top' title='Toggle between viewing the LIVE records or the Internal Pipline'>Database:</label>
        <div class='col-md-2'>
-       <input id='pipelineLive' class='toggle pipelineLive' type='checkbox' checked data-toggle='toggle' >
+       <input id='pipelineLive' class='toggle pipelineLive' type='checkbox' <?=$defaultForPipelineLive;?>  <?=$canSeeLive;?>data-toggle='toggle' >
        </div>
        </div>
 

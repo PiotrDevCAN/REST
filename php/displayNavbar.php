@@ -69,9 +69,9 @@ $navbar->createNavbar($page);
 
 $isCdi    = employee_in_group($_SESSION['cdiBg'],     $_SESSION['ssoEmail']) ? ".not('.accessCdi')" : null;
 $isAdmin  = employee_in_group($_SESSION['adminBg'],   $_SESSION['ssoEmail']) ? ".not('.accessAdmin')" : null;
-$isDemand = employee_in_group($_SESSION['demandBg'],  $_SESSION['ssoEmail'])  || strstr($_SERVER['environment'], 'dev') ? ".not('.accessDemand')" : null;
+$isDemand = employee_in_group($_SESSION['demandBg'],  $_SESSION['ssoEmail']) ? ".not('.accessDemand')" : null;
 $isSupply = employee_in_group($_SESSION['supplyBg'],  $_SESSION['ssoEmail']) ? ".not('.accessSupply')" : null;
-$isRfs    = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail']) ? ".not('.accessRfs')" : null;
+$isRfs    = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail']) || strstr($_SERVER['environment'], 'dev')  ? ".not('.accessRfs')" : null;
 
 
 $isReports= employee_in_group($_SESSION['reportsBg'],     $_SESSION['ssoEmail']) ? ".not('.accessReports')" : null;
