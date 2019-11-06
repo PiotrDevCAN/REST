@@ -98,6 +98,25 @@ function Rfs() {
 		    });
 		});
 	},
+	
+	
+	this.listenForGoLiveRfs = function(){
+		$(document).on('click','.goLiveRfs', function(e){
+			console.log('go live');
+			$(this).addClass('spinning').attr('disabled');
+			var rfsid = $(this).data('rfsid');
+		    $.ajax({
+		    	url: "ajax/goLiveRfs.php",
+		        type: 'POST',
+		    	data: {rfsid:rfsid},
+		    	success: function(result){
+		    		console.log(result);
+		    		var resultObj = JSON.parse(result);
+					Rfs.table.ajax.reload();
+	    		}
+		    });
+		});
+	},
 
 	this.initialiseDataTable = function(){
 	    // Setup - add a text input to each footer cell
@@ -124,14 +143,8 @@ function Rfs() {
 	                  'print'
 	              ],
 	    });
-
 	    Rfs.table.columns([10]).visible(false,false);
-
 	    Rfs.table.columns.adjust().draw(false);
-
-
-
-
 	    // Apply the search
 	    Rfs.table.columns().every( function () {
 	        var that = this;
@@ -195,7 +208,7 @@ function Rfs() {
 	            url: 'ajax/populatePipelineRfsHTMLTable.php',
 	            type: 'POST',
 	        }	,
-	    	autoWidth: true,
+	    	autoWidth:  true,
 	    	responsive: true,
 	    	processing: true,
 	    	colReorder: true,
@@ -207,7 +220,6 @@ function Rfs() {
 	                  'print'
 	              ],
 	    });
-
 	    // Apply the search
 	    Rfs.table.columns().every( function () {
 	        var that = this;

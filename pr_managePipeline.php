@@ -48,8 +48,6 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
       		<div class="panel-heading">Caution</div>
       		<div class="panel-body" id='archiveRfsModalBody'></div>
     		</div>
-
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary glyphicon	" id='archiveConfirmedRfs'>Confirm</button>
@@ -89,6 +87,7 @@ $(document).ready(function() {
 	var rfs = new Rfs();
 	rfs.buildPipelineReport();
 	rfs.listenForDeleteRfs();
+	rfs.listenForGoLiveRfs();
 	rfs.listenForConfirmDeleteRfs();
 	rfs.listenForEditRfs();
 	rfs.listenForArchiveRfs();

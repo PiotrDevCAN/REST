@@ -56,15 +56,20 @@ class rfsPipelineView extends DbTable
         $inTheFuture = !empty($row['FROM']) ? DateTime::createFromFormat('Y-m-d',$row['FROM'])>$today : false;
         $ableToGoLive = $inTheFuture>0;
 
+        $disableIdNotAbleToGoLive = $ableToGoLive ? null : ' readonly ';
+        $toolTip = $ableToGoLive ? "Click to toggle RFS to Live Status" : "Unable to go-live, check Resource Request Start Dates";
+        $amberIfNotLive = $ableToGoLive ? ' btn-success ' : ' btn-warning ';
+
         $row['RFS_ID'] = "";
-        if($ableToGoLive) {
-            $row['RFS_ID'].= "<button type='button' class='btn btn-xs goLiveRfs accessRestrict accessAdmin accessDemand accessCdi' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
-              <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true' data-html='true' data-toggle='tooltip' title='RFS Go Live' ></span>
-              </button>";
-        };
+        $row['RFS_ID'].= "<button type='button' class='btn btn-xs $amberIfNotLive goLiveRfs accessRestrict accessAdmin accessDemand accessCdi' $disableIdNotAbleToGoLive aria-label='Left Align' data-rfsid='" .$rfsId . "'>";
+        $row['RFS_ID'].= "<span class='glyphicon glyphicon-thumbs-up' aria-hidden='true' data-html='true' data-toggle='tooltip' title='$toolTip' ></span>";
+        $row['RFS_ID'].= "</button>&nbsp;";
+
         $row['RFS_ID'].= "<button type='button' class='btn  btn-xs editRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>";
         $row['RFS_ID'].= "<span class='glyphicon glyphicon-edit' aria-hidden='true'  data-toggle='tooltip' title='Edit RFS' ></span>";
-        $row['RFS_ID'].= "</button>&nbsp;<button type='button' class='btn btn-danger btn-xs deleteRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>";
+        $row['RFS_ID'].= "</button>&nbsp;";
+
+        $row['RFS_ID'].= "<button type='button' class='btn btn-danger btn-xs deleteRfs accessRestrict accessAdmin accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>";
         $row['RFS_ID'].= "<span class='glyphicon glyphicon-trash' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Delete RFS<br/><em>Can not be recovered</em>' ></span>";
         $row['RFS_ID'].= "</button>&nbsp;" . $rfsId;
 
