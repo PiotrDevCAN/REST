@@ -5,10 +5,16 @@ use rest\resourceRequestRecord;
 use itdq\Loader;
 use rest\resourceRequestTable;
 use itdq\DateClass;
+use rest\rfsTable;
 
 set_time_limit(0);
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
+
+$loader = new Loader();
+$rfsPredicate = rfsTable::rfsPredicateFilterOnPipeline();
+$allRfs = $loader->load('RFS_ID',allTables::$RFS,$rfsPredicate);
+
 
 $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
 $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
@@ -16,11 +22,11 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 ?>
 <div class='container'>
 
-<h3>Report from</h3>
+<h3>Report Selection </h3>
 <form id='reportDates'>
-	<div class='form-group' >
+	<div class='form-group text-right' >
        <div id='START_DATE" . "FormGroup' >
-       <label for='START_DATE' class='col-md-1 control-label ' data-toggle='tooltip' data-placement='top' title=''>From</label>
+       <label for='START_DATE' class='col-md-2 control-label  ' data-toggle='tooltip' data-placement='top' title=''>Show 6 mths from</label>
        <div class='col-md-2'>
        <div id='calendarFormGroupSTART_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='START_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
        <input id='InputSTART_DATE' class='form-control' type='text' readonly value='' placeholder='Select From' required />
@@ -29,25 +35,32 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
        </div>
        </div>
        </div>
-       <div class ='pipelineLive_FormGroup'>
-       <label for='pipelineLive' class='col-md-1 control-label ' data-toggle='tooltip' data-placement='top' title='Toggle between viewing the LIVE records or the Internal Pipline'>Database:</label>
-       <div class='col-md-2'>
+
+       <label for='pipelineLive' class='col-md-1 control-label text-right' data-toggle='tooltip' data-placement='top' title='Toggle between viewing the LIVE records or the Internal Pipline'>Database:</label>
+       <div class='col-md-1'>
        <input id='pipelineLive' class='toggle pipelineLive' type='checkbox' <?=$defaultForPipelineLive;?>  <?=$canSeeLive;?>data-toggle='toggle' >
        </div>
-       </div>
+
+       <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>
+        	<div class='col-md-2 text-left'>
+              	<select class='form-control select' id='selectRfs'
+                  	          name='selectRfs'
+                  	          data-placeholder="Select RFS" data-allow-clear="true"
+                  	          >
+            	<option value=''>Select RFS<option>
+                <?php
+                    foreach ($allRfs as $value) {
+                         $displayValue = trim($value);
+                         $returnValue  = trim($value);
+                         ?><option value='<?=$returnValue?>'><?=$displayValue?></option><?php
+                    }
+               ?>
+               </select>
+            </div>
 
 
-<!--        <div id='END_DATE" . "FormGroup'> -->
-<!--        <label for='END_DATE' class='col-md-1 control-label ' data-toggle='tooltip' data-placement='top' title=''>To</label> -->
-<!--        <div class='col-md-2'> -->
-<!--        <div id='calendarFormGroupEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'> -->
-<!--        <input id='InputEND_DATE' class='form-control' type='text' readonly value='' placeholder='Select To' required /> -->
-<!--        <input type='hidden' id='END_DATE' name='END_DATE' value='' /> -->
-<!--        <span class='input-group-addon'><span id='calendarIconEND_DATE' class='glyphicon glyphicon-calendar'></span></span> -->
-<!--        </div> -->
-<!--        </div> -->
-<!--        </div> -->
-       </div>
+
+    </div>
 </form>
 </div>
 
@@ -320,6 +333,7 @@ var startPicker;
 
 
 $(document).ready(function() {
+	$(".select").select2();
 	console.log('setup all the listeners');
 	var resourceRequest = new ResourceRequest();
 	resourceRequest.initialiseDateSelect();
@@ -345,6 +359,7 @@ $(document).ready(function() {
 	resourceRequest.listenForConfirmedDelete();
 	resourceRequest.listenForChangeStatus();
 	resourceRequest.listenForChangePipelineLive();
+	resourceRequest.listenForSelectSpecificRfs();
 	$('[data-toggle="tooltip"]').tooltip();
 
 });

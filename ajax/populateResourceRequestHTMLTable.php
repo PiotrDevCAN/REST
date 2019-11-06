@@ -19,9 +19,14 @@ $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 $startDate = !empty($_POST['startDate']) ? $_POST['startDate'] : null;
 $endDate = !empty($_POST['endDate']) ? $_POST['endDate'] : null;
 $piplineLive = $_POST['pipelineLive']=='true' ? rfsRecord::RFS_STATUS_LIVE : rfsRecord::RFS_STATUS_PIPELINE;
+$rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
+
 PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
 
-$data = $resourceRequestTable->returnAsArray($startDate,$endDate,rfsTable::rfsPredicateFilterOnPipeline($piplineLive));
+$predicate = rfsTable::rfsPredicateFilterOnPipeline($piplineLive);
+$predicate.= !empty($rfsId) ? " AND RFS='" . db2_escape_string($rfsId) . "' " : null;
+
+$data = $resourceRequestTable->returnAsArray($startDate,$endDate,$predicate);
 
 PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
 

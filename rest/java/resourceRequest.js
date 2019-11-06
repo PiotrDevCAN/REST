@@ -485,6 +485,17 @@ function ResourceRequest() {
 			ResourceRequest.table.ajax.reload();
 		});
 	},
+	
+	this.listenForSelectSpecificRfs = function(){
+		$(document).on('change','#selectRfs',function(){
+			console.log('rfs selected');
+			console.log($('#selectRfs'));
+			console.log($('#selectRfs option:selected').text());
+			
+			ResourceRequest.table.ajax.reload();
+		});
+		
+	},
 
 
 
@@ -558,6 +569,7 @@ function ResourceRequest() {
 	                d.startDate = $('#START_DATE').val();
 	                d.endDate = $('#END_DATE').val();
 	                d.pipelineLive  = $('#pipelineLive').prop('checked');
+	                d.rfsid = $('#selectRfs option:selected').val();
 	            },
 	            type: 'POST',
 	        }	,
