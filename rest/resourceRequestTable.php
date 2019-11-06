@@ -112,7 +112,7 @@ class resourceRequestTable extends DbTable
 
         $resultSet ? null : die("SQL Failed");
 
-        $allData = null;
+        $allData = array();
 
         while(($row = db2_fetch_assoc($resultSet))==true){
             PhpMemoryTrace::reportPeek(__FILE__,__LINE__);

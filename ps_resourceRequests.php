@@ -14,6 +14,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 $loader = new Loader();
 $rfsPredicate = rfsTable::rfsPredicateFilterOnPipeline();
 $allRfs = $loader->load('RFS_ID',allTables::$RFS,$rfsPredicate);
+$allCtbService =  $loader->load('CTB_SERVICE',allTables::$RESOURCE_REQUESTS);
 
 
 $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
@@ -26,7 +27,7 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 <form id='reportDates'>
 	<div class='form-group text-right' >
        <div id='START_DATE" . "FormGroup' >
-       <label for='START_DATE' class='col-md-2 control-label  ' data-toggle='tooltip' data-placement='top' title=''>Show 6 mths from</label>
+       <label for='START_DATE' class='col-md-1 control-label  ' data-toggle='tooltip' data-placement='top' title=''>6 mths from</label>
        <div class='col-md-2'>
        <div id='calendarFormGroupSTART_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='START_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
        <input id='InputSTART_DATE' class='form-control' type='text' readonly value='' placeholder='Select From' required />
@@ -50,6 +51,23 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
             	<option value=''>Select RFS<option>
                 <?php
                     foreach ($allRfs as $value) {
+                         $displayValue = trim($value);
+                         $returnValue  = trim($value);
+                         ?><option value='<?=$returnValue?>'><?=$displayValue?></option><?php
+                    }
+               ?>
+               </select>
+            </div>
+
+        <label for='selectService' class='col-md-1 control-label text-right'>CTB Service</label>
+        	<div class='col-md-3 text-left'>
+              	<select class='form-control select' id='ctbservice'
+                  	          name='ctbservice'
+                  	          data-placeholder="Select CTB Service" data-allow-clear="true"
+                  	          >
+            	<option value=''>Select CTB Service<option>
+                <?php
+                    foreach ($allCtbService as $value) {
                          $displayValue = trim($value);
                          $returnValue  = trim($value);
                          ?><option value='<?=$returnValue?>'><?=$displayValue?></option><?php
@@ -360,6 +378,7 @@ $(document).ready(function() {
 	resourceRequest.listenForChangeStatus();
 	resourceRequest.listenForChangePipelineLive();
 	resourceRequest.listenForSelectSpecificRfs();
+	resourceRequest.listenForSelectSpecificCtbService();
 	$('[data-toggle="tooltip"]').tooltip();
 
 });
