@@ -477,7 +477,13 @@ function ResourceRequest() {
 			$('#slipStartDate').attr('disabled',true);
 			$('#moveEndDate').attr('disabled',true);
 		});
-	}
+	},
+	
+	this.listenForChangePipelineLive = function(){
+		$(document).on('change','#pipelineLive',function(){
+			ResourceRequest.table.ajax.reload();
+		});
+	},
 
 
 
@@ -550,6 +556,7 @@ function ResourceRequest() {
 	            data: function ( d ) {
 	                d.startDate = $('#START_DATE').val();
 	                d.endDate = $('#END_DATE').val();
+	                d.pipelineLive  = $('#pipelineLive').prop('checked');
 	            },
 	            type: 'POST',
 	        }	,

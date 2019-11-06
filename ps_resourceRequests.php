@@ -26,6 +26,13 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
        </div>
        </div>
        </div>
+       <div class ='pipelineLive_FormGroup'>
+       <label for='pipelineLive' class='col-md-1 control-label ' data-toggle='tooltip' data-placement='top' title='Toggle between viewing the LIVE records or the Internal Pipline'>Database:</label>
+       <div class='col-md-2'>
+       <input id='pipelineLive' class='toggle pipelineLive' type='checkbox' checked data-toggle='toggle' >
+       </div>
+       </div>
+
 
 <!--        <div id='END_DATE" . "FormGroup'> -->
 <!--        <label for='END_DATE' class='col-md-1 control-label ' data-toggle='tooltip' data-placement='top' title=''>To</label> -->
@@ -299,6 +306,13 @@ background-color:red;
 
 <script>
 
+$("[data-toggle='toggle']").bootstrapToggle('destroy')
+$(".pipelineLive").bootstrapToggle({
+    on: 'Live',
+  off: 'Pipeline'
+});
+
+
 var startPicker;
 
 
@@ -327,6 +341,7 @@ $(document).ready(function() {
 	resourceRequest.listenForDeleteRecord();
 	resourceRequest.listenForConfirmedDelete();
 	resourceRequest.listenForChangeStatus();
+	resourceRequest.listenForChangePipelineLive();
 	$('[data-toggle="tooltip"]').tooltip();
 
 });

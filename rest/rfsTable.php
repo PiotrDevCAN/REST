@@ -7,26 +7,34 @@ class rfsTable extends DbTable
 {
     protected $rfsMaxEndDate;
 
-    static function rfsPredicateFilterOnPipeline(){
+    static function rfsPredicateFilterOnPipeline($option=null){
         // Determines if the user is in a group that can only see the pipeline, can NOT see the pipline, or can see both pipeline and live.
         $predicate = null;
 
-        switch (true) {
-            case $_SESSION['isCdi']:
-            case $_SESSION['isAdmin']:
-                $predicate = null;
-                break;
-            case $_SESSION['isRfs']:
-                $predicate =  " RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " ;
-                break;
-            case $_SESSION['isSupply']:
-            case $_SESSION['isDemand']:
-                $predicate =  " RFS_STATUS!='" . rfsRecord::RFS_STATUS_PIPELINE . "' " ;
-                break;
-            default:
-                $predicate =  null;
-            break;
-        }
+//         if(empty($option)){
+//             switch (true) {
+//                 case $_SESSION['isCdi']:
+//                 case $_SESSION['isAdmin']:
+//                 case $_SESSION['isReport']:
+//                     // can see BOTH
+//                     $predicate = null;
+//                     break;
+//                 case $_SESSION['isRfs']:
+//                     // Can only see pipeline
+//                    $predicate =  " RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " ;
+//                     break;
+//                 case $_SESSION['isSupply']:
+//                 case $_SESSION['isDemand']:
+//                     // Can only see Live
+//                       $predicate =  " RFS_STATUS='" . rfsRecord::RFS_STATUS_LIVE . "' " ;
+//                     break;
+//                 default:
+//                     $predicate =  null;
+//                     break;
+//             }
+//         } else {
+             $predicate = " RFS_STATUS='" . trim($option) . "' " ;
+//         }
         return $predicate;
     }
 

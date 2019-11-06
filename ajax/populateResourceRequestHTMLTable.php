@@ -5,6 +5,7 @@ use rest\resourceRequestRecord;
 use itdq\Trace;
 use rest\rfsTable;
 use itdq\PhpMemoryTrace;
+use rest\rfsRecord;
 
 set_time_limit(0);
 ini_set('memory_limit','300M');
@@ -17,14 +18,10 @@ $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 
 $startDate = !empty($_POST['startDate']) ? $_POST['startDate'] : null;
 $endDate = !empty($_POST['endDate']) ? $_POST['endDate'] : null;
-
-
-$_SESSION['loops'] =0;
-
-
+$piplineLive = $_POST['pipelineLive']=='true' ? rfsRecord::RFS_STATUS_LIVE : rfsRecord::RFS_STATUS_PIPELINE;
 PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
 
-$data = $resourceRequestTable->returnAsArray($startDate,$endDate,rfsTable::rfsPredicateFilterOnPipeline());
+$data = $resourceRequestTable->returnAsArray($startDate,$endDate,rfsTable::rfsPredicateFilterOnPipeline($piplineLive));
 
 PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
 

@@ -46,9 +46,13 @@ foreach ($currentHours as $oldRecord){
     $resourceHoursRecord = new resourceRequestHoursRecord();
     $resourceHoursRecord->setFromArray($oldRecord);
     $resourceHoursRecord->DATE = $nextDate->format(('Y-m-d'));
-    $complimentaryData = resourceRequestHoursTable::getDateComplimentaryFields($nextDate);
+//     $complimentaryData = resourceRequestHoursTable::getDateComplimentaryFields($nextDate);
     resourceRequestHoursTable::populateComplimentaryDateFields($nextDate, $resourceHoursRecord);
-    $resourceHoursTable->saveRecord($resourceHoursRecord, true, true, false);
+    echo "<pre>";
+    $resourceHoursRecord->iterateVisible();
+    echo "</pre>";
+//    $resourceHoursTable->saveRecord($resourceHoursRecord, true, true, false);
+    $resourceHoursTable->insert($resourceHoursRecord);
     $nextDate->modify('+1 week');
     $weeksSaved++;
 }
