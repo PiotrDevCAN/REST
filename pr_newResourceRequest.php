@@ -107,13 +107,10 @@ $(document).ready(function(){
     },
     startPicker = new Pikaday({
     	firstDay:1,
-// 		disableDayFn: function(date){
-// 		    // Disable weekend
-// 		    return date.getDay() === 0 || date.getDay() === 6;
-// 		},
         field: document.getElementById('InputSTART_DATE'),
         format: 'D MMM YYYY',
         showTime: false,
+        minDate: new Date(),
         onSelect: function() {
             console.log(this.getMoment().format('Do MMMM YYYY'));
             var db2Value = this.getMoment().format('YYYY-MM-DD')
@@ -133,6 +130,7 @@ $(document).ready(function(){
         field: document.getElementById('InputEND_DATE'),
         format: 'D MMM YYYY',
         showTime: false,
+        minDate: new Date(),
         onSelect: function() {
             console.log(this.getMoment().format('Do MMMM YYYY'));
             var db2Value = this.getMoment().format('YYYY-MM-DD')

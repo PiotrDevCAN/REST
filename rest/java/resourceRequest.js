@@ -29,10 +29,10 @@ function ResourceRequest() {
 		console.log('initialiseEditHoursModalStartEndDates');
 		ModalstartPicker = new Pikaday({
 			firstDay:1,
-			field: document.getElementById('InputModalSTART_DATE'),
-			events:['Sat Jun 24 2017', 'Sun Jun 25 2017', 'Sat Jul 01 2017',],
+			field: document.getElementById('InputModalSTART_DATE'),		
 			format: 'D MMM YYYY',
 			showTime: false,
+			minDate: new Date(),
 			onSelect: function() {
 				console.log('selected start date');
 				var db2Value = this.getMoment().format('YYYY-MM-DD')
@@ -48,6 +48,7 @@ function ResourceRequest() {
 			field: document.getElementById('InputModalEND_DATE'),
 			format: 'D MMM YYYY',
 			showTime: false,
+			minDate: new Date(),
 			onSelect: function() {
 				console.log('selected end date');
 				var db2Value = this.getMoment().format('YYYY-MM-DD')
@@ -684,6 +685,7 @@ function ResourceRequest() {
 			field: document.getElementById('InputSTART_DATE'),
 			format: 'D MMM YYYY',
 			showTime: false,
+			minDate: new Date(),
 			onSelect: function(date) {
 				console.log(date);
 				console.log(this.getMoment().format('Do MMMM YYYY'));
@@ -701,6 +703,7 @@ function ResourceRequest() {
 			field: document.getElementById('InputEND_DATE'),
 			format: 'D MMM YYYY',
 			showTime: false,
+			minDate: new Date(),
 			onSelect: function() {
 				var db2Value = this.getMoment().format('YYYY-MM-DD')
 				jQuery('#END_DATE').val(db2Value);
