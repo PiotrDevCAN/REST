@@ -131,9 +131,12 @@ $(document).ready(function(){
 	        	        } else {
 	            	    	 $('#resetRfs').click();
 	            	    	 $(':submit').removeClass('spinning').attr('disabled',false);
-	            	    	 $('#RFS_ID').css('#ffffff');
 	                	}
                 	})
+	               knownRfs.push(responseObj.rfsId);
+	               $('#RFS_ID').css("background-color","#ffffff");
+	               console.log($('#RFS_ID'));
+	               console.log(knownRfs);
           	},
 	      	fail: function(response){
 					console.log('Failed');
