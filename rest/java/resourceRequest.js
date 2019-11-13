@@ -5,7 +5,6 @@
 var ModalstartPicker;
 var ModalendPicker;
 
-
 var buttonCommon = {
 		 exportOptions: {
             format: {
@@ -133,20 +132,23 @@ function ResourceRequest() {
 
 	this.populateResourceDropDownWhenModalShown = function(){
 		$('#resourceNameModal').on('shown.bs.modal', function(){
-			console.log($('#resourceNameModal').find('select'));
-			console.log($('#RESOURCE_NAME'));
-			var currentResourceName = $('#currentResourceName').val();
-			if (!$('#RESOURCE_NAME').hasClass("select2-hidden-accessible")){
-				$('#RESOURCE_NAME')
-				.select2({data : resourceNamesForSelect2})
-				.val(currentResourceName)
-				.trigger('change');
+			var currentResourceName = $('#currentResourceName').val();	
+			if (!resourceNamesForSelect2.length){
+				console.log('first time');
+				$.ajax({
+			    	url: "ajax/getVbacActiveResourcesForSelect2.php",
+			        type: 'POST',
+			    	success: function(result){
+			    		console.log(result);
+			    		var resultObj = JSON.parse(result);
+			    		resourceNamesForSelect2 = resultObj.data;
+						$('#RESOURCE_NAME').select2({data : resourceNamesForSelect2}).val(currentResourceName).trigger('change');
+						$('.spinning').removeClass('spinning');
+			    		}
+			    });	
 			} else {
-				$('#RESOURCE_NAME')
-				.val('')
-				.val(currentResourceName)
-				.trigger('change');
-			}			
+				$('#RESOURCE_NAME').val(currentResourceName).trigger('change');
+			}
 		});
 	},
 	
@@ -158,26 +160,9 @@ function ResourceRequest() {
 			var resourceName      = $(this).data('resourceName');
 			var parent            = $(this).data('parent');
 			$('#RESOURCE_REFERENCE').val(resourceReference);	
-			$('#currentResourceName').val(resourceName);
-			
-			if(resourceNamesForSelect2.length){
-				console.log('resourcenames alreadt populated');
-	    		$('#resourceNameModal').modal('show');
-				$('.spinning').removeClass('spinning');				
-			} else {
-				console.log('need to popualte names');
-				$.ajax({
-			    	url: "ajax/getVbacActiveResourcesForSelect2.php",
-			        type: 'POST',
-			    	success: function(result){
-			    		console.log(result);
-			    		var resultObj = JSON.parse(result);
-			    		resourceNamesForSelect2 = resultObj.data;
-			    		$('#resourceNameModal').modal('show');
-						$('.spinning').removeClass('spinning');
-			    		}
-			    });				
-			}
+			$('#currentResourceName').val(resourceName);	
+    		$('#resourceNameModal').modal('show');
+			$('.spinning').removeClass('spinning');	
 		});
 	},
 

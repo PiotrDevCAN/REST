@@ -135,8 +135,6 @@ $(document).ready(function(){
                 	})
 	               knownRfs.push(responseObj.rfsId);
 	               $('#RFS_ID').css("background-color","#ffffff");
-	               console.log($('#RFS_ID'));
-	               console.log(knownRfs);
           	},
 	      	fail: function(response){
 					console.log('Failed');
