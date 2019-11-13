@@ -648,6 +648,12 @@ function ResourceRequest() {
 	            }
 	        } );
 	    } );
+	    
+	    ResourceRequest.table.on( 'responsive-display', function () {
+	    	console.log('responsive display');
+	    	restrictButtonAccess();
+	    });
+
 	},
 
 	this.buildResourceReport =  function(){

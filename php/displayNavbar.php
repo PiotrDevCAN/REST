@@ -43,8 +43,8 @@ $request->addOption($managePipeline);
 
 
 $supply         = new NavbarMenu(  'Supply');
-$rfs            = new NavbarOption('RFS', 'ps_rfs.php'                           ,'accessCdi accessAdmin accessDemand accessSupply accessRfs');
-$resRequest     = new NavbarOption('Resource Requests', 'ps_resourceRequests.php','accessCdi accessAdmin accessDemand accessSupply accessRfs');
+$rfs            = new NavbarOption('RFS', 'ps_rfs.php'                           ,'accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
+$resRequest     = new NavbarOption('Resource Requests', 'ps_resourceRequests.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
 // $info           = new NavbarOption('PHP Info', 'phpinfo.php','accessCdi accessAdmin accessDemand accessSupply accessRfs');
 $supply->addOption($rfs);
 $supply->addOption($resRequest);
@@ -69,16 +69,12 @@ $navbar->createNavbar($page);
 
 $isCdi    = employee_in_group($_SESSION['cdiBg'],     $_SESSION['ssoEmail']) ? ".not('.accessCdi')" : null;
 $isAdmin  = employee_in_group($_SESSION['adminBg'],   $_SESSION['ssoEmail']) ? ".not('.accessAdmin')" : null;
-$isDemand = employee_in_group($_SESSION['demandBg'],  $_SESSION['ssoEmail']) || strstr($_SERVER['environment'], 'dev')   ? ".not('.accessDemand')" : null;
-$isSupply = employee_in_group($_SESSION['supplyBg'],  $_SESSION['ssoEmail']) || strstr($_SERVER['environment'], 'dev')  ? ".not('.accessSupply')" : null;
+$isDemand = employee_in_group($_SESSION['demandBg'],  $_SESSION['ssoEmail']) ? ".not('.accessDemand')" : null;
+$isSupply = employee_in_group($_SESSION['supplyBg'],  $_SESSION['ssoEmail']) ? ".not('.accessSupply')" : null;
 $isRfs    = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail']) ? ".not('.accessRfs')" : null;
+$isReports= employee_in_group($_SESSION['reportsBg'], $_SESSION['ssoEmail']) || strstr($_SERVER['environment'], 'dev')  ? ".not('.accessReports')" : null;
 
-
-$isReports= employee_in_group($_SESSION['reportsBg'],     $_SESSION['ssoEmail']) ? ".not('.accessReports')" : null;
-
-$isUser = (!empty($isCdi) || !empty($isAdmin) || !empty($isDemand) || !empty($isSupply)  || !empty($isRfs)) ? ".not('.accessUser')" : null;
-
-$isReports = employee_in_group($_SESSION['reportsBg'],  $_SESSION['ssoEmail']) ? ".not('.accessReports')" : null;
+$isUser = (!empty($isCdi) || !empty($isAdmin) || !empty($isDemand) || !empty($isSupply)  || !empty($isRfs) || !empty($isReports) ) ? ".not('.accessUser')" : null;
 
 $_SESSION['isCdi']     = !empty($isCdi);
 $_SESSION['isAdmin']   = !empty($isAdmin);
@@ -87,8 +83,6 @@ $_SESSION['isSupply']  = !empty($isSupply);
 $_SESSION['isUser']    = !empty($isUser);
 $_SESSION['isRfs']     = !empty($isRfs);
 $_SESSION['isReports'] = !empty($isReports);
-
-
 
 $plannedOutagesId = str_replace(" ","_",$plannedOutagesLabel);
 ?>
@@ -162,7 +156,7 @@ restrictButtonAccess = function(){
 
 $(document).on('draw.dt',function(){
 	restrictButtonAccess();
-	});
+});
 
 
 $(document).ready(function () {
