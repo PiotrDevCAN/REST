@@ -260,21 +260,22 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 	    	</div>
   		</div>
 		<div class="form-group">
-		    <label for="statusChangePlatform" class='col-sm-2' >Platform</label>
+		    <label for="statusChangeService" class='col-sm-2' >CTB Service</label>
 		    <div class='col-sm-8'>
-	    	<input type="text" class="form-control" id="statusChangePlatform" name="statusChangePlatform" disabled>
+	    	<input type="text" class="form-control" id="statusChangeService" name="statusChangeService" disabled>
 	    	</div>
   		</div>
+  		<div class="form-group">
+		    <label for="statusChangeSub" class='col-sm-2' >Sub Service</label>
+		    <div class='col-sm-8'>
+	    	<input type="text" class="form-control" id="statusChangeSub" name="statusChangeSub" disabled>
+	    	</div>
+  		</div>
+
 		<div class="form-group">
 		    <label for="statusChangeStart" class='col-sm-2' >Start</label>
 		    <div class='col-sm-8'>
 	    	<input type="text" class="form-control" id="statusChangeStart" name="statusChangeStart" disabled>
-	    	</div>
-  		</div>
-  		<div class="form-group">
-		    <label for="statusChangeType" class='col-sm-2' >Type</label>
-		    <div class='col-sm-8'>
-	    	<input type="text" class="form-control" id="statusChangeType" name="statusChangeType" disabled>
 	    	</div>
   		</div>
 

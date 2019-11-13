@@ -147,6 +147,7 @@ class resourceRequestTable extends DbTable
         $hrsPerWeek = $row['HRS_PER_WEEK'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
         $ctbService = $row['CTB_SERVICE'];
+        $subService = $row['CTB_SUB_SERVICE'];
         $row['STATUS'] =
         "<button type='button' class='btn btn-xs changeStatus accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
                     data-rfs='" .$rfsId . "'
@@ -160,6 +161,7 @@ class resourceRequestTable extends DbTable
                     data-resourcename='" . $resourceName . "'
                     data-start='" . $startDate4Picka . "'
                     data-end='" . $endDate4Picka . "'
+                    data-sub='" . $subService . "'
 
          >
          <span data-toggle='tooltip' title='Change Status' class='glyphicon glyphicon-tags ' aria-hidden='true' ></span>

@@ -523,13 +523,13 @@ function ResourceRequest() {
 		$(document).on('click','.changeStatus', function(e){
 			$(this).addClass('spinning').attr('disabled',true);
 			console.log($(this));
-			var resourceReference = $(this).data('reference');
-			$('#statusChangeRR').val($.trim($(this).data('reference')));
+			var resourceReference = $(this).data('resourcereference');
+			$('#statusChangeRR').val($.trim($(this).data('resourcereference')));
 			$('#statusChangeRfs').val($.trim($(this).data('rfs')));
 			$('#statusChangePhase').val($.trim($(this).data('phase')));
-			$('#statusChangePlatform').val($.trim($(this).data('platform')));
+			$('#statusChangeService').val($.trim($(this).data('service')));
 			$('#statusChangeStart').val($.trim($(this).data('start')));
-			$('#statusChangeType').val($.trim($(this).data('type')));
+			$('#statusChangeSub').val($.trim($(this).data('sub')));
 			$('#statusModal').modal('show');
 
 			var status = $(this).data('status') ;
