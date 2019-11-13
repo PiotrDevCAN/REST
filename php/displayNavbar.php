@@ -12,7 +12,7 @@ $plannedOutages = new PlannedOutages();
 include ('UserComms/responsiveOutages_V2.php');
 
 $navBarImage = ""; //a small image to displayed at the top left of the nav bar
-$navBarBrand = array(strtoupper($_SERVER['environment']),"index.php");
+$navBarBrand = array(strtoupper($_SERVER['environment']) . "&nbsp;V2.1","index.php");
 $navBarSearch = false;
 
 $pageDetails = explode("/", $_SERVER['PHP_SELF']);
