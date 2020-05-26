@@ -3,6 +3,6 @@ applications:
   memory: 512M
   instances: 1
   domain: w3ibm.mybluemix.net
-  name: REST-v2
-  host: REST-v2
+  name: REST-v21
+  host: REST-v21
   disk_quota: 1024M
