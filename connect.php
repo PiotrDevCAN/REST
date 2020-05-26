@@ -12,7 +12,8 @@ if( getenv( "VCAP_SERVICES" ) )
 
     print_r($details);
 
-    die('here');
+    print_r($details['dashDB For Transactions']);
+
 
 
     $dsn      = $details [ "dashDB For Transactions" ][0][ "credentials" ][ "dsn" ];
