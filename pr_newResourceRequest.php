@@ -56,7 +56,10 @@ $(document).ready(function() {
 console.log('ready');
 
 	$(".select").select2({
-		  tags: true
+		  tags: true,
+		  createTag: function(params) {
+              return undefined;
+         }
 	});
 
 
