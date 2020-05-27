@@ -53,7 +53,10 @@ $resourceRecord->displayForm($mode);
 <script>
 $(document).ready(function() {
 	$(".select").select2({
-		tags: false;
+		tags: false,
+		createTag: function(params) {
+            return undefined;
+       }
 	});
 
 	$('#CTB_SERVICE').on('select2:select', function(e){
