@@ -12,11 +12,6 @@ if( getenv( "VCAP_SERVICES" ) )
     $dsn      = $details [ "dashDB For Transactions" ][0][ "credentials" ][ "dsn" ];
     $ssl_dsn  = $details [ "dashDB For Transactions" ][0][ "credentials" ][ "ssldsn" ];
 
-
-    print_r($details);
-
-
-
     # Build the connection string
     #
     $driver = "DRIVER={IBM DB2 ODBC DRIVER};";
