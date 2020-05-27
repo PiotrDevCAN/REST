@@ -12,6 +12,11 @@ if( getenv( "VCAP_SERVICES" ) )
     $dsn      = $details [ "dashDB For Transactions" ][0][ "credentials" ][ "dsn" ];
     $ssl_dsn  = $details [ "dashDB For Transactions" ][0][ "credentials" ][ "ssldsn" ];
 
+
+    print_r($details);
+
+
+
     # Build the connection string
     #
     $driver = "DRIVER={IBM DB2 ODBC DRIVER};";
@@ -21,6 +26,13 @@ if( getenv( "VCAP_SERVICES" ) )
     $conn_string = str_replace('poCXUiBIC0Pl','poCXUiBIC0Pl!ab',$conn_string);
 
     $conn = db2_connect( $conn_string, "", "" );
+
+    var_dump($conn_string);
+    var_dump($conn);
+
+    die('here');
+
+
     if( $conn )
     {
         $_SESSION['conn'] = $conn;
