@@ -175,7 +175,7 @@ class resourceRequestRecord extends DbRecord
 
             <label for='STATUS' class='col-md-2 control-label ceta-label-left'>Status</label>
         	<div class='col-md-3'>
-              	<select class='form-control select' id='PHASE'
+              	<select class='form-control select' id='STATUS'
                   	          name='STATUS'
                   	          required='required'
                   	          data-tags="true" data-placeholder="Select Status" data-allow-clear="true"
