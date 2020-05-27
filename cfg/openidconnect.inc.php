@@ -12,14 +12,14 @@ $config_openidconnect->client_id['rest_dev'] = "ZGE0NDYzMTctYmZhNS00";
 $config_openidconnect->client_secret['rest_dev'] = "ZWFhM2U5MTktNDk4NS00";
 $config_openidconnect->redirect_url['rest_dev'] = "https://restdev.w3ibm.mybluemix.net/auth/index.php";
 
-$config_openidconnect->client_id['rest_xt'] = "NjRiYmY1NjYtZjhlYi00";
-$config_openidconnect->client_secret['rest_xt'] = "YjZkMmUyMmMtNmViMS00";
-$config_openidconnect->redirect_url['rest_xt'] = "https://rest-dev-x.w3ibm.mybluemix.net/auth/index.php";
+// $config_openidconnect->client_id['rest_xt'] = "NjRiYmY1NjYtZjhlYi00";
+// $config_openidconnect->client_secret['rest_xt'] = "YjZkMmUyMmMtNmViMS00";
+// $config_openidconnect->redirect_url['rest_xt'] = "https://rest-dev-x.w3ibm.mybluemix.net/auth/index.php";
 
 
-$config_openidconnect->client_id['rest_v2'] = "ZTFkNzkzODktM2M3Ni00";
-$config_openidconnect->client_secret['rest_v2'] = "NDFmYTY1OWItYTFkMy00";
-$config_openidconnect->redirect_url['rest_v2'] = "https://rest-v21.w3ibm.mybluemix.net/auth/index.php";
+$config_openidconnect->client_id['rest_xt'] = "ZTFkNzkzODktM2M3Ni00";
+$config_openidconnect->client_secret['rest_xt'] = "NDFmYTY1OWItYTFkMy00";
+$config_openidconnect->redirect_url['rest_xt'] = "https://rest-v21.w3ibm.mybluemix.net/auth/index.php";
 
 
 ?>
