@@ -52,9 +52,16 @@ $resourceRecord->displayForm($mode);
 
 <script>
 $(document).ready(function() {
+
+console.log('ready');
+
 	$(".select").select2({
 		  tags: true
 	});
+
+
+console.log($(".select"));
+
 
 	$('#CTB_SERVICE').on('select2:select', function(e){
 		var serviceSelected= $(e.params.data)[0].text;
