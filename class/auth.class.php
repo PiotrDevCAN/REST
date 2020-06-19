@@ -20,9 +20,7 @@
 		//returns boolean
 		public function ensureAuthorized()
 		{
-		    if(isset($_SESSION['uid']) && isset($_SESSION['exp']) && ($_SESSION['exp']-300) > time()) {
-		        return true;
-		    }
+			if(isset($_SESSION['uid']) && isset($_SESSION['exp']) && ($_SESSION['exp']-300) > time()) return true;
 
 			switch ($this->technology) {
 				case "openidconnect":
@@ -48,13 +46,13 @@
 		//verifies openID response
 		private function verifyCodeOpenIDConnect($code)
 		{
-		    $url = $this->config->token_url;
+		    $url = $this->config->token_url[strtolower($_ENV['SSO_environment'])];
 
 		    $fields = array(
 				'code' => $code,
-				'client_id' => $this->config->client_id[strtolower($_SERVER['environment'])],
-				'client_secret' => $this->config->client_secret[strtolower($_SERVER['environment'])],
-				'redirect_uri' => $this->config->redirect_url[strtolower($_SERVER['environment'])],
+				'client_id' => $this->config->client_id[strtolower($_ENV['SSO_environment'])],
+				'client_secret' => $this->config->client_secret[strtolower($_ENV['SSO_environment'])],
+				'redirect_uri' => $this->config->redirect_url,
 				'grant_type' => 'authorization_code'
 			);
 
@@ -156,7 +154,9 @@
 		//returns exit();
 		private function authenticateOpenIDConnect()
 		{
-			header("Location: ".$this->generateOpenIDConnectAuthorizeURL());
+		    $authorizedUrL = $this->generateOpenIDConnectAuthorizeURL();
+		    error_log(__CLASS__ . __FUNCTION__ . __LINE__. " About to pass to  : " . $authorizedUrL);
+			header("Location: ".$authorizedUrL);
 			exit();
 		}
 
@@ -164,8 +164,9 @@
 		//returns string
 		private function generateOpenIDConnectAuthorizeURL()
 		{
-			$current_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-			return $this->config->authorize_url . "?scope=openid&response_type=code&client_id=".$this->config->client_id[strtolower($_SERVER['environment'])]."&state=".urlencode($current_link)."&redirect_uri=".$this->config->redirect_url[strtolower($_SERVER['environment'])];
+			$current_link = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+			$authorizeString = $this->config->authorize_url[strtolower($_ENV['SSO_environment'])] . "?scope=openid&response_type=code&client_id=".$this->config->client_id[strtolower($_ENV['SSO_environment'])]."&state=".urlencode($current_link)."&redirect_uri=".$this->config->redirect_url;
+            return $authorizeString;
 		}
 
 		//loads openidconnect
@@ -190,12 +191,12 @@
 		private function verifyOpenIDConnectConfig($config)
 		{
 			if(isset($config) && !empty($config)
-				&& isset($config->authorize_url) && !empty($config->authorize_url)
-				&& isset($config->token_url) && !empty($config->token_url)
-				&& isset($config->introspect_url) && !empty($config->introspect_url)
-				&& isset($config->client_id[strtolower($_SERVER['environment'])]) && !empty($config->client_id[strtolower($_SERVER['environment'])])
-				&& isset($config->client_secret[strtolower($_SERVER['environment'])]) && !empty($config->client_secret[strtolower($_SERVER['environment'])])
-				&& isset($config->redirect_url[strtolower($_SERVER['environment'])]) && !empty($config->redirect_url[strtolower($_SERVER['environment'])])
+			    && isset($config->authorize_url[strtolower($_ENV['SSO_environment'])]) && !empty($config->authorize_url[strtolower($_ENV['SSO_environment'])])
+			    && isset($config->token_url[strtolower($_ENV['SSO_environment'])]) && !empty($config->token_url[strtolower($_ENV['SSO_environment'])])
+			    && isset($config->introspect_url[strtolower($_ENV['SSO_environment'])]) && !empty($config->introspect_url[strtolower($_ENV['SSO_environment'])])
+				&& isset($config->client_id[strtolower($_ENV['SSO_environment'])]) && !empty($config->client_id[strtolower($_ENV['SSO_environment'])])
+				&& isset($config->client_secret[strtolower($_ENV['SSO_environment'])]) && !empty($config->client_secret[strtolower($_ENV['SSO_environment'])])
+				&& isset($config->redirect_url) && !empty($config->redirect_url)
 				)
 			{
 				return true;
