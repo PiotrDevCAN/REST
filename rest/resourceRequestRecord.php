@@ -271,7 +271,7 @@ class resourceRequestRecord extends DbRecord
     }
 
 
-    static function htmlHeaderCells($startDate=null){
+    function htmlHeaderCells($startDate=null){
         $headerCells = "";
         foreach (resourceRequestRecord::$columnHeadings as $key => $value )
         {

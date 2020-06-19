@@ -211,7 +211,7 @@ class rfsRecord extends DbRecord
         return $headerRow;
     }
 
-    static function htmlHeaderCells(){
+    function htmlHeaderCells(){
         $headerCells = "";
         foreach (rfsRecord::$columnHeadings as $key => $value )
         {
