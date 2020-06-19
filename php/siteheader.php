@@ -318,7 +318,7 @@ do_auth();
 include ('php/ldap.php');
 include ('php/templates/interior.header.html');
 include ('itdq/java/scripts.html');
-include ('vbac/java/scripts.html');
+include ('rest/java/scripts.html');
 include ('connect.php');
 //include ('php/templates/navbar.php');
 include('displayNavbar.php');
