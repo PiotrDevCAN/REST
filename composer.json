@@ -1,12 +1,14 @@
 {
-  "name" : "REST_bm",
-  "require" : {
-    "phpoffice/phpexcel" : "1.8.1",
-    "php": "7.1.2",
-    "ext-ldap": "*"
-  },
-  "repositories" : [ {
-    "type" : "composer",
-    "url" : "https://packagist.org/"
-  } ]
+	"name" : "rest/rest",
+	"require" : {
+		"phpoffice/phpspreadsheet" : "~1.12",
+		"ext-gd" : "*",
+		"phpmailer/phpmailer" : "~6.1",
+		"byjg/jwt-session" : "~2.0"
+	},
+	"repositories" : [{
+			"type" : "composer",
+			"url" : "https://packagist.org/"
+		}
+	]
 }
