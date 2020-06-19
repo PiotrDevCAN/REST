@@ -7,7 +7,7 @@ set_time_limit(0);
 ob_start();
 
 $tempFilename = $_FILES ['uploadingFile'] ['tmp_name'];
-$newFilename = $_SERVER['DOCUMENT_ROOT'] .   "/" . $_SERVER['environment'] . "/uploads/" . $_FILES ['uploadingFile'] ['name'];
+$newFilename = $_SERVER['DOCUMENT_ROOT'] .   "/" . $_ENV['environment'] . "/uploads/" . $_FILES ['uploadingFile'] ['name'];
 
 $uploadLog = new uploadLogRecord();
 $uploadLog->logUploadStart($_SESSION['ltcuser']['mail'], $_FILES ['uploadingFile'] ['name'], allTables::$INFLIGHT_PROJECTS);

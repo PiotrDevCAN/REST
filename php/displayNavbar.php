@@ -12,10 +12,10 @@ $plannedOutages = new PlannedOutages();
 include ('UserComms/responsiveOutages_V2.php');
 
 $navBarImage = ""; //a small image to displayed at the top left of the nav bar
-$navBarBrand = array(strtoupper($_SERVER['environment']) . "&nbsp;V2.1","index.php");
+$navBarBrand = array(strtoupper($_ENV['environment']) . "&nbsp;V2.1","index.php");
 $navBarSearch = false;
 
-$pageDetails = explode("/", $_SERVER['PHP_SELF']);
+$pageDetails = explode("/", $_ENV['PHP_SELF']);
 $page = isset($pageDetails[2]) ? $pageDetails[2] : $pageDetails[1];
 
 $navbar = new Navbar($navBarImage, $navBarBrand,$navBarSearch);
@@ -72,7 +72,7 @@ $isAdmin  = employee_in_group($_SESSION['adminBg'],   $_SESSION['ssoEmail']) ? "
 $isDemand = employee_in_group($_SESSION['demandBg'],  $_SESSION['ssoEmail']) ? ".not('.accessDemand')" : null;
 $isSupply = employee_in_group($_SESSION['supplyBg'],  $_SESSION['ssoEmail']) ? ".not('.accessSupply')" : null;
 $isRfs    = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail']) ? ".not('.accessRfs')" : null;
-$isReports= employee_in_group($_SESSION['reportsBg'], $_SESSION['ssoEmail']) || strstr($_SERVER['environment'], 'dev')  ? ".not('.accessReports')" : null;
+$isReports= employee_in_group($_SESSION['reportsBg'], $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessReports')" : null;
 
 $isUser = (!empty($isCdi) || !empty($isAdmin) || !empty($isDemand) || !empty($isSupply)  || !empty($isRfs) || !empty($isReports) ) ? ".not('.accessUser')" : null;
 

@@ -7,9 +7,9 @@
 $_SESSION['SITE_NAME'] = 'rest';
 $_SESSION['country'] = 'E4'; // Used in Connect.php
 
-if(!isset($_SERVER['environment'])){
+if(!isset($_ENV['environment'])){
     echo "<pre>";
-    var_dump($_SERVER);
+    var_dump($_ENV);
     die('environment not set');
 }
 
@@ -28,10 +28,10 @@ $site = array(
     'dateFormat' => 'yyyy-mm-dd', // Determines the date format for Date Picker
     'dateStart' => '2017-01-01',
 
-    'Db2Schema' => strtoupper($_SERVER['environment']),  // DB2 Schema name for the app
-    'prefix' => $_SERVER['environment'], // DB2 Schema name for the app
-    'dirPrefix' => $_SERVER['environment'],
-    'csvPrefix' => $_SERVER['environment'],
+    'Db2Schema' => strtoupper($_ENV['environment']),  // DB2 Schema name for the app
+    'prefix' => $_ENV['environment'], // DB2 Schema name for the app
+    'dirPrefix' => $_ENV['environment'],
+    'csvPrefix' => $_ENV['environment'],
 
     'cdiBg'     => 'ventus_cdi',
     'adminBg'   => 'ventus_rest_admin',
@@ -45,7 +45,7 @@ $site = array(
     'email' => false,
     'emailId' => 'DoNotReply_rest@uk.ibm.com',
 
-    'SITE_NAME' => $_SERVER['environment'],
+    'SITE_NAME' => $_ENV['environment'],
     'iconDirectory' => 'ICON'
 
 
