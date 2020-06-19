@@ -203,6 +203,9 @@
 			}
 			else
 			{
+			    echo "<pre>";
+			    var_dump($config);
+			    echo "</pre>";
 				return false;
 			}
 		}
