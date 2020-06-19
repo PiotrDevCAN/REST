@@ -230,7 +230,9 @@ class FormClass
         foreach ($this as $key => $value) {
             if (! $dbFieldsOnly and is_array($value)) {
                 echo "<b>$key =></b>";
+                echo "<span style='color:red'>";
                 print_r($value);
+                echo "</span>";
             } elseif (! $dbFieldsOnly and is_object($value)) {
                 echo "<br/><b> OBJECT (" . get_class($value) . "): $key</b>";
                 $value->iterateVisible($length);
@@ -239,8 +241,9 @@ class FormClass
                 echo $value->format('y-m-d h:i:s');
             } else {
                 if ($dbFieldsOnly and $key == strtoupper($key))
-                    print "<b>$key =></b> $value\n";
+                    print "<b>$key =></b><span style='color:red'>$value</span>\n";
             }
+
             if ($length != 'short') {
                 echo "<br>";
             }
@@ -348,7 +351,7 @@ function formTextArea($label, $fieldName, $state = null, $textAreaclass = null, 
             ?>
             <div class='form-group' id='<?=$fieldName;?>" . "FormGroup' >
             <label for='<?=$fieldName;?>' class='col-md-2 control-label' data-toggle='tooltip' data-placement='<?=$dataPlacement;?>' title='<?=$help;?>' ><?=$label;?></label>
-            <div class='col-md-9'>
+            <div class='col-md-10'>
             <div id='spaceForGlyphicon' style='display: none;'></div>
             <div class='<?=$textAreaDivClass;?>'>
             <textarea rows='<?=$rows;?>' class='form-control <?=$textAreaclass;?>' id='<?=$fieldName;?>' name='<?=$fieldName;?>' <?=$state;?> maxLength='<?=$maxlength;?>' placeholder='<?=$placeholder;?>'><?=trim($this->$fieldName);?></textarea>
@@ -359,8 +362,8 @@ function formTextArea($label, $fieldName, $state = null, $textAreaclass = null, 
             <script>
             $(document).ready(function() {
                 var text_max = <?=$maxlength?>;
-
                 $('#textarea_feedback<?=$fieldName?>').html(text_max + ' characters remaining');
+
                 $('#<?=$fieldName?>').keyup(function() {
                     var text_length = $('#<?=$fieldName?>').val().length;
                     var text_remaining = text_max - text_length;
@@ -966,345 +969,8 @@ function formTextArea($label, $fieldName, $state = null, $textAreaclass = null, 
     }
 
 
-    function formUserid($fieldName, $title, $state = null, $help = null, $tooltipPosition = "top")
-    {
-        if ($state == "READONLY") {
-            $notesid = $fieldName . "_NOTES_ID";
-            $name = $fieldName . "_NAME";
-            $intranet = $fieldName . "_INTRANET_ID";
-            $phone = $fieldName . "_PHONE";
-            $uid = $fieldName . "_UID";
-            $valueToDisplay = trim($this->$notesid);
-            ?>
-            <p class="ibm-form-elem-grp" id='<?php echo $fieldName. "FormGroup"?>'>
-            <label for='<?=$fieldName?>'><?=$title?></label>
-           	<span>
-            <input type='text' value='<?=$valueToDisplay?>' readonly />
-            </span>
-            </p>
-            <?php
-        } else {
-            $notesid = $fieldName . "_NOTES_ID";
-            $name = $fieldName . "_NAME";
-            $intranet = $fieldName . "_INTRANET_ID";
-            $phone = $fieldName . "_PHONE";
-            $uid = $fieldName . "_UID";
-
-            $displayValue = trim(addslashes($this->$notesid));
-            $intranetValue = trim($this->$intranet);
-
-            ?>
-            <p class="ibm-form-elem-grp" id='<?php echo $fieldName. "FormGroup"?>'>
-            <label for='<?=$notesid?>' data-toggle='tooltip' data-placement='<?=$tooltipPosition?>' title='<?=$help?>'><?=$title?></label>
-            <span>
-            <span class='glyphicon glyphicon-book' data-toggle='tooltip' data-placement='right' title='Start typing a name and then select the person you want to select from the list that appears'></span>
-            <input type='text' name='<?=$notesid?>' class='typeahead' id='<?=$fieldName?>' value='<?=$displayValue?>' <?=$state?> autocomplete='off' size='64' maxlength='64' placeholder='Start typing a name to perform a lookup' required   />
-<?php
-            // if the values eg $intranet, $name etc are set in the class proprties then create them, else don't.
-            echo property_exists($this, $intranet) ? "<input name='$intranet'  id='$intranet' value='$intranetValue' type='hidden' />" : null;
-            echo property_exists($this, $name) ? "<input name='$name'      id='$name'  type='hidden' />" : null;
-            echo property_exists($this, $uid) ? "<input name='$uid'       id='$uid'  type='hidden' />" : null;
-            echo property_exists($this, $phone) ? "<input name='$phone'     id='$phone'  type='hidden' />" : null;
-            ?>
-            </span>
-            </p>
-            <?php
-?>
-           <script>
-	           var config = {
-	               //API Key [REQUIRED]
-	               key: 'mcab;tim.j.minter@uk.ibm.com',
-	               faces: {
-	                   //The handler for clicking a person in the drop-down.
-	                   onclick: function(person) {
-
-                        var intranet = document.forms.<?php echo $this->fcFormName;?>.elements['<?=$intranet?>'];
-                            if(typeof(intranet) !== 'undefined'){ intranet.value = person['email'];};
-
-                            var name =  document.forms.<?php echo $this->fcFormName;?>.elements['<?=$name?>'];
-                            if(typeof(name) !== 'undefined'){ name.value = person['name'];};
-
-                            var uid = document.forms.<?php echo $this->fcFormName;?>.elements['<?=$uid?>'];
-                            if(typeof(uid) !== 'undefined'){ uid.value = person['uid'];};
-
-                            var phone = document.forms.<?php echo $this->fcFormName;?>.elements['<?=$phone?>'];
-                            if(typeof(phone) !== 'undefined'){ phone.value = person['phone'];};
-
-                            return person['notes-id'];
-        }
-        }
-        };
-        FacesTypeAhead.init(
-        	document.forms.<?php echo $this->fcFormName;?>.elements['<?=$notesid?>'],
-        	config
-        );
-        </script>
-        <?php
-        }
-    }
-
-    function formUseridMultiSelect($title, $fieldName, $placeHolder=null, $tooltip = null, $tooltipPosition = 'top', $state = null, $lookupTable, $lookupKey, $lookupValue, $intranetReturnColumn, $nameReturnColumn, $emailField, $buttonField){
-        if ($state=="READONLY"){
-            $loader = new Loader();
-
-            $listOfIntranetValues = $loader->load($intranetReturnColumn,$lookupTable, " $lookupKey='$lookupValue'");
-            ?>
-            <div class='form-group'>
-            <label for='accounts' class='col-md-3 control-label' ><?=$title?></label>
-            <div class='col-md-9'>
-            <?php
-            echo "<ul>";
-            foreach ($listOfIntranetValues as $value) {
-                $this->formInsertCharacters("<li>$value</li>");
-
-            }
-            echo "</ul>";
-            ?>
-            </div>
-            </div>
-            <?php
-	    } else {
-            // when displaying in edit mode we need to populate these variables with comma separated strings and then build the buttons
-
-            // SME_NAME
-            // SME_INTRANET_ID
-	        $buttonHTML = "";
-            $namesValuesString = "";
-            $intranetValuesString = "";
-
-            if ($this->mode == "edit") {
-                $loader = new Loader();
-                $listOfIntranetValues = $loader->load($intranetReturnColumn, $lookupTable, " $lookupKey='$lookupValue'");
-                $loader = new Loader();
-                $listOfNameValues = $loader->load($nameReturnColumn, $lookupTable, " $lookupKey='$lookupValue'");
-                ?>
-                            <!--<pre>-->
-                            <?php
-                            $listOfIntranetValues = array_keys($listOfIntranetValues);
-                            //print_r($listOfIntranetValues)?>
-                            <!--</pre>-->
-                            <!--<pre>-->
-                            <?php
-                            //print_r($listOfNameValues)?>
-                            <!--  </pre> -->
-                            <?php
-                $index=0;
-                if ($listOfIntranetValues && $listOfNameValues) {
 
 
-
-
-                    $intranetValuesString = implode(',', $listOfIntranetValues);
-                    //echo $intranetValuesString . ":";
-                    $namesValuesString = implode(',', $listOfNameValues);
-                    //echo $namesValuesString;
-
-
-                    foreach($listOfNameValues as $x_key => $x_value){
-
-                        $intranetAddress = $listOfIntranetValues[$index];
-
-
-                        //removeName function(nameToRemove, fieldToRemoveNameFrom, emailToRemove, fieldToRemoveEmailFrom, fieldToRemoveButtonFrom, onclickJsFunction)
-                        $fieldToRemoveNameFrom = $fieldName."_NAME";
-                        $buttonHTML .= "<button type='button' class='btn btn-default btn-sm' data-toggle='tooltip' data-placement='right' title='Remove Name' onclick='FormClass.removeName(\"$x_value\",\"$fieldToRemoveNameFrom\",\"$intranetAddress\",\"$emailField\",\"$buttonField\", \"FormClass.removeName\");'><span class='glyphicon glyphicon-remove-circle' aria-hidden='true'></span> $x_value</button>";
-                                      //<button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="right" title="Remove Name" onclick="FormClass.removeName('Tim J Minter/UK/IBM','SME_NAME','tim.j.minter@uk.ibm.com','SME_INTRANET_ID','SME_display','FormClass.removeName');"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Tim J Minter/UK/IBM</button>
-
-                       $index++;
-
-
-                    }
-                }
-
-            }
-
-            $notesid = $fieldName . "_NOTES_ID";
-            $name = $fieldName . "_NAME";
-            $intranet = $fieldName . "_INTRANET_ID";
-            $phone = $fieldName . "_PHONE";
-            $uid = $fieldName . "_UID";
-            $inputField = $fieldName . "_input";
-            $buttonsDisplay = $fieldName . "_display";
-            $nameTemp = $fieldName . "_name_temp";
-            $intranetTemp = $fieldName . "_intranet_id_temp";
-            ?>
-<script>
-    	    if (!document.getElementById('<?=$fieldName?>')) {
-        	    //create the FieldName field if it doesn't exist
-    	       var x = document.createElement('INPUT');
-    	       x.setAttribute('type', 'hidden');
-    	       x.setAttribute('id', '<?=$fieldName?>');
-    	       document.body.appendChild(x);
-    	    }
-    	    </script>
-
-
-<div class='panel panel-default'><div class='panel-body'>
-    	    <div class='form-group' id='<?=$fieldName."FormGroup"; ?>'>
-    	    <label for='<?=$notesid?>' class='col-md-3 control-label' data-toggle='tooltip' data-placement='<?=$tooltipPosition?>' title='<?=$tooltip?>'><?=$title?></label>
-    	    <span style='padding-left:16px; padding-right:16px' class='glyphicon glyphicon-book' data-toggle='tooltip' data-placement='right' title='Start typing a name, select the person you want to select from the list that appears and then click the plus (+) button. Multiple names can be added.'></span>
-    	    <div class='input-group col-md-9' style='padding-left:16px; padding-right:16px'>
-
-    	    <input type='text' class='form-control typeahead' name='<?=$inputField?>' id='<?=$inputField?>' autocomplete='off' placeholder='<?=$placeHolder?>' size='64' maxlength='64'>
-    	    <span class='input-group-btn'>
-    	    <button class='btn btn-default' type='button' onclick="FormClass.addName('<?=$nameTemp?>', '<?=$name?>', '<?=$intranetTemp?>', '<?=$intranet?>', '<?=$buttonsDisplay?>', 'FormClass.removeName', '<?=$inputField?>');"><span class='glyphicon glyphicon-plus' aria-hidden='true'></span></button>
-    	   	</span>
-
-    	    </div>
-
-    	    </div>
-
-    	    <div class='form-group'>
-    	   <label class='col-sm-3 control-label'></label>
-    	    <div class='input-group col-sm-9' style='padding-left:16px; padding-right:16px'>
-    	    <?php
-            $collapseName = $name."collapseNameButtons";
-            $labelID = $name."labelID";
-            $labelHTML = "<span data-toggle='tooltip' data-placement='right' title='Expand or collapse the buttons view'><a style='font-size: 15px;' data-toggle='collapse' href='#' $collapseName aria-expanded='false' aria-controls='CollapsableNameButtons'><span class='glyphicon glyphicon-collapse-up'></span></a></span>";
-            ?>
-
-    	    <div id='<?=$labelID?>'></div>
-    	    <div class='collapse in spaced' id='<?=$collapseName?>'>
-    	    <div  id='<?=$buttonsDisplay?>'><?=$buttonHTML?></div>
-    	    </div>
-    	    </div>
-    	    </div>
-    	    </div></div>
-
-
-    	    <input type='hidden' id='<?=$fieldName?>'/>
-    	    <input type='hidden' id='<?=$name?>' value='<?=$namesValuesString?>'/>
-    	    <input type='hidden' id='<?=$intranet?>' value='<?=$intranetValuesString?>'/>
-    	    <input type='hidden' id='<?=$nameTemp?>'/>
-    	    <input type='hidden' id='<?=$intranetTemp?>'/>
-
-    	    <script>
-    	    $( document ).ready(function() {
-        	    console.log('ready again');
-    	           $('body').on('focus',"#<?=$inputField?>", function(){
-    	           console.log('Focus');
-
-        	           var config = {
-            	               //API Key [REQUIRED]
-            	               key: 'mcab;tim.j.minter@uk.ibm.com',
-            	               faces: {
-            	                   //The handler for clicking a person in the drop-down.
-            	                   onclick: function(person) {
-
-            	                   //var intranet = document.forms." . $this->fcFormName . ".elements['$intranet'];
-            	    	           //        if(typeof(intranet) !== 'undefined'){ intranet.value = person['email'];};
-
-            	    	           var intranetTemp = document.forms.<?=$this->fcFormName;?>.elements['<?=$intranetTemp?>'];
-            	    	                   if(typeof(intranetTemp) !== 'undefined'){intranetTemp.value = person['email'];};
-
-            	    	           var nameTemp = document.forms.<?=$this->fcFormName;?>.elements['<?=$nameTemp?>'];
-            	    	                   if(typeof(nameTemp) !== 'undefined'){ nameTemp.value = person['notes-id'];};
-
-            	    	           //var name =  document.forms." . $this->fcFormName . ".elements['$name'];
-            	    	           //      if(typeof(name) !== 'undefined'){ name.value = person['name'];};
-
-
-            	    	           var uid = document.forms.<?=$this->fcFormName;?>.elements['<?=$uid?>'];
-            	    	                   if(typeof(uid) !== 'undefined'){ uid.value = person['uid'];};
-
-
-            	    	           var phone = document.forms.<?=$this->fcFormName;?>.elements['<?=$phone?>'];
-            	    	                   if(typeof(phone) !== 'undefined'){ phone.value = person['phone'];};
-
-
-            	    	                   return person['notes-id'];
-            	    }
-            	    }
-            	    };
-    	    FacesTypeAhead.init(
-    	    document.forms.<?=$this->fcFormName;?>.elements['<?=$inputField?>'],
-    	    config
-    	    );
-
-    	    });
-    	    })
-    	    </script>
-    	    <?php
-
-	    }
-
-	}
-    function formUseridMk1($mode, $title, $fieldName, $state = null, $help = null, $fieldsRequired = 'Intranet')
-    {
-        echo "<div class='form-group'>";
-        echo "<label for='$fieldName' class='col-sm-3 control-label' >$title</label>";
-        echo "<div class='col-sm-7'>";
-
-        $name = $fieldName . "_NAME";
-        $notesid = $fieldName . "_NOTESID";
-        $intranet = $fieldName . "_INTRANET";
-        $phone = $fieldName . "_PHONE";
-        $uid = $fieldName . "_UID";
-
-        if (isset($this->$name)) {
-            $nameValue = $this->$name;
-        } elseif (isset($this->$notesid)) {
-            $nameValue = $this->$notesid;
-        } elseif (isset($this->$intranet)) {
-            $nameValue = $this->$intranet;
-        } else {
-            $nameValue = null;
-        }
-
-        echo "<label for='$name' class='col-sm-2 control-label' >Name :</label>";
-        if ($mode != self::$modeDISPLAY) {
-            echo "<div class='" . $fieldName . "Details'>";
-            echo "<input id='faces-input$fieldName' name='$name' class='typeahead' size='30'  $state value='" . htmlspecialchars(trim($nameValue), ENT_QUOTES) . "' />";
-            echo "      <script>";
-            echo "		var config = { key: 'esoft;rob.daniel@uk.ibm.com',";
-            echo "			           faces: {";
-            echo "			              onclick: function(person) {";
-            echo "			     		  document.getElementById('callback-target$fieldName').innerHTML = person['bio'];";
-            switch ($fieldsRequired) {
-                case self::$bpFieldIntranet:
-                    echo "document.getElementById('$intranet').value = person['email'];";
-                    break;
-                case self::$bpFieldNotesid:
-                    echo "document.getElementById('$notesid').value = person['notes-id'];";
-                    break;
-                case self::$bpFieldBothUid:
-                    echo "var uid = document.getElementById('$uid');";
-                    echo "if(typeof(uid)==='object'){ uid.value = person['uid'];};";
-                case self::$bpFieldBoth:
-                    echo "document.getElementById('$intranet').value = person['email'];";
-                    echo "document.getElementById('$notesid').value = person['notes-id'];";
-
-                    break;
-                default:
-                    echo "alert('default');";
-                    ;
-                    break;
-            }
-            echo "			 	                	return person['name'];";
-            echo "		 	                   }";
-            echo "	 	               },";
-            echo "					   topsearch: {";
-            echo "						   enabled: false";
-            echo "	 	               }";
-            echo "				 };";
-            echo "	        FacesTypeAhead.init(";
-            echo "				document.getElementById('faces-input$fieldName'),";
-            echo " 				config";
-            echo "	         );";
-            echo "    </script> ";
-            echo "</div>";
-            echo "<div id='callback-target$fieldName'><B>$help</B>Allow <a href='http://ciolab.ibm.com/misc/typeahead/' target='_blank'>Faces Type-ahead</a> time to work.</div> ";
-
-
-        } else {
-            echo "<INPUT size='40' name='$notesid' id='$notesid' READONLY value=' " . trim($this->$notesid) . "' /></TD></TR>";
-            echo "<TR>";
-            echo "<th style='background-color:#bd6' width=120><B>Email</B></th>";
-            echo "<td><INPUT size='40' name='$intranet' id='$intranet' READONLY value='" . trim($this->$intranet) . "' /></td>";
-            echo "</TR>";
-            echo "<INPUT TYPE='hidden' id='original$intranet' value='" . trim($this->$intranet) . "' />";
-        }
-    }
 
     /**
      * Used to place an "Input type='hidden'" in the form.
@@ -1401,12 +1067,22 @@ function formTextArea($label, $fieldName, $state = null, $textAreaclass = null, 
 
     static function formBlueButtons($buttonDetails = null)
     {
-        echo "<scan class='button-blue' style='font-size:1.4em'>";
+        echo "<span class='button-blue' style='font-size:1.4em'>";
         foreach ($buttonDetails as $button) {
-            echo "<input class='btn " . $button['class'] . "' type='" . $button['type'] . "' name='" . $button['name'] . "' id='" . $button['id'] . "' " . $button['state'] . " value='" . $button['value'] . "'  >";
+
+            if(is_array($button)){
+                echo "<input class='btn "
+                     . $button['class']
+                     . "' type='"
+                     . $button['type'] . "' name='"
+                     . $button['name'] . "' id='"
+                     . $button['id'] . "' "
+                     . $button['state'] . " value='"
+                     . $button['value'] . "'  >&nbsp;";
+            }
         }
         // echo "<input type='submit' name='btnNewProduct' id='btnNewProduct' enabled value='Define New Product' >";
-        echo "</scan>";
+        echo "</span>";
     }
 
     static function formButton($type = null, $name = null, $id = null, $state = null, $value = null,$class='btn-primary')

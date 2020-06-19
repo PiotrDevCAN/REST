@@ -10,7 +10,9 @@ namespace itdq;
  *
  */
 class DbTable
+
 {
+    use xls;
 
     protected $tableName;
 
@@ -133,6 +135,9 @@ class DbTable
         'NOV' => '11',
         'DEC' => '12'
     );
+
+    const ROLLBACK_YES = true;
+    const ROLLBACK_NO  = false;
 
     function __construct($table, $pwd = null, $log = true)
     {
@@ -952,19 +957,17 @@ class DbTable
         $insertArray = $record->getColumns($populated, $key, $null, $db2);
         Trace::traceVariable($insertArray, __METHOD__, __LINE__);
         $preparedInsert = $this->prepareInsert($insertArray);
-        $rs = db2_execute($preparedInsert, $insertArray);
+
+        $rs = @db2_execute($preparedInsert, $insertArray);
 
         if (! $rs) {
             $this->lastDb2StmtError = db2_stmt_error();
             $this->lastDb2StmtErrorMsg = db2_stmt_errormsg();
-            echo "<br/>Last Insert SQL:<br/>";
-            print_r($this->preparedInsertSQL);
-            echo "<BR/>Insert Array<pre>";
+
+            echo "<BR/>Insert Array@<pre>" . __METHOD__ . __LINE__ ;
             print_r($insertArray);
             echo "</pre>";
             self::displayErrorMessage($rs, __CLASS__, __METHOD__, $this->preparedInsertSQL, $this->pwd, $this->lastDb2StmtError, $this->lastDb2StmtErrorMsg, $insertArray);
-            debug_print_backtrace();
-            echo "</pre>";
         } else {
             $this->lastId = db2_last_insert_id($_SESSION['conn']);
         }
@@ -973,6 +976,33 @@ class DbTable
             Log::logEntry("DBTABLE Data:" . serialize($insertArray), $this->pwd);
         }
         return $rs;
+    }
+
+    function InsertFromArray(array $insertArray, $withTimings = false, $rollbackIfError = true)
+    {
+        $preparedInsert = $this->prepareInsert($insertArray);
+
+
+        $insert = -microtime(true);
+        $rs = @db2_execute($preparedInsert, $insertArray);
+        $insert += microtime(true);
+        echo $withTimings ?  "Db2 Insert Time:" . sprintf('%f', $insert) . PHP_EOL : null;
+
+        if (! $rs) {
+            $this->lastDb2StmtError = db2_stmt_error();
+            $this->lastDb2StmtErrorMsg = db2_stmt_errormsg();
+
+            echo "<br/>Method:" . __METHOD__ . " Line:" .  __LINE__ ;
+            echo "<br/>Insert Array:";
+            echo "<pre>";
+            print_r($insertArray);
+            echo "</pre>";
+            self::displayErrorMessage($rs, __CLASS__, __METHOD__, $this->preparedInsertSQL, $this->pwd, $this->lastDb2StmtError, $this->lastDb2StmtErrorMsg, $insertArray, $rollbackIfError);
+            return false;
+        } else {
+            $this->lastId = db2_last_insert_id($_SESSION['conn']);
+            return true;
+        }
     }
 
     /**
@@ -1065,7 +1095,7 @@ class DbTable
             if (! $rs) {
                 DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             }
-            return $rs;
+            return $rs==true;
         } else {
             return false;
         }
@@ -1867,14 +1897,14 @@ class DbTable
         }
     }
 
-    static function displayErrorMessage($rs, $class, $method, $sql, $pwd = null, $db2Error = null, $db2ErrorMsg = null, $data = null)
+    static function displayErrorMessage($rs, $class, $method, $sql, $pwd = null, $db2Error = null, $db2ErrorMsg = null, $data = null, $rollback = true)
     {
         $db2Error = empty($db2Error) ? db2_stmt_error() : $db2Error;
         $db2ErrorMsg = empty($db2ErrorMsg) ? db2_stmt_errormsg() : $db2ErrorMsg;
-        db2_rollback($_SESSION['conn']); // Roll back to last commit point.
+        $rollback ? db2_rollback($_SESSION['conn']) : null; // Roll back to last commit point.
 
         if (isset(AllItdqTables::$DB2_ERRORS)) {
-            echo "<BR/>" . __METHOD__ . "<B>DB2 Error:</B><span style='color:red'>" . $db2Error . "</span><B>Message:</B><span style='color:red'>" . $db2ErrorMsg . "</span>$sql";
+            echo "<BR/>" . $method . "<B>DB2 Error:</B><span style='color:red'>" . $db2Error . "</span><B>Message:</B><span style='color:red'>" . $db2ErrorMsg . "</span>$sql";
             DbTable::logDb2Error($data);
             return array(
                 'Db2Error' => $db2Error,
@@ -1899,7 +1929,7 @@ class DbTable
                     ;
                     break;
             }
-            throw new Exception("Error in: '$method' running: $printableSql", $db2Error);
+            throw new \Exception("Error in: '$method' running: $printableSql", $db2Error);
         }
     }
 
@@ -1909,6 +1939,7 @@ class DbTable
         $elapsed = isset($_SESSION['tracePageOpenTime']) ? microtime(true) - $_SESSION['tracePageOpenTime'] : null;
 
         $sql = " INSERT INTO " . $_SESSION['Db2Schema'] . "." . AllItdqTables::$DB2_ERRORS . " ( USERID, PAGE, DB2_ERROR, DB2_MESSAGE, BACKTRACE, REQUEST ) ";
+
         ob_start();
         echo "<pre>";
         debug_print_backtrace();
@@ -1916,7 +1947,7 @@ class DbTable
         $backtrace = ob_get_contents();
         @ob_end_clean();
 
-        $backtrace = strlen($backtrace) > 1024 ? substr($backtrace, 0, 1024) : $backtrace;
+        $backtrace = strlen(db2_escape_string($backtrace)) > 1024 ? substr(db2_escape_string($backtrace), 0, 1000) : db2_escape_string($backtrace);
 
         ob_start();
         print_r($_REQUEST);
@@ -1929,9 +1960,8 @@ class DbTable
             $request .= ":data:" . ob_get_contents();
             @ob_end_clean();
         }
-
-        $request = strlen($request) > 1024 ? substr($request, 0, 1024) : $request;
-        $sql .= " VALUES ('" . $userid . "','" . $_SERVER['PHP_SELF'] . "','" . db2_stmt_error() . "','" . db2_stmt_errormsg() . "','" . db2_escape_string($backtrace) . "','" . db2_escape_string($request) . "')";
+        $request = strlen(db2_escape_string($request)) > 1024 ? substr(db2_escape_string($request), 0, 1000) : db2_escape_string($request);
+        $sql .= " VALUES ('" . $userid . "','" . $_SERVER['PHP_SELF'] . "','" . db2_stmt_error() . "','" . db2_stmt_errormsg() . "','" . $backtrace . "','" . $request . "')";
 
         if (isset($_SESSION['phoneHome']) && class_exists('Email')) {
             $to = $_SESSION['phoneHome'];
@@ -1942,11 +1972,11 @@ class DbTable
             echo "<h4>An email has been sent to: $to informing them of this problem</h4>";
         }
 
-        $rs = DB2_EXEC($_SESSION['conn'], $sql);
+        $rs = @db2_exec($_SESSION['conn'], $sql);
         if (! $rs) {
             echo "<BR>Error: " . db2_stmt_error();
             echo "<BR>Msg: " . db2_stmt_errormsg() . "<BR>";
-            exit("Error in: " . __METHOD__ . __LINE__ . "<BR>running: $sql");
+            throw new \Exception("Error in: " . __METHOD__ . __LINE__ . "<BR>running: $sql");
         }
     }
 
@@ -2134,38 +2164,26 @@ class DbTable
         return $this->tableName;
     }
 
-    function findBadData(){
-        $sql = " SELECT * FROM " . $_SESSION['Db2Schema'] . "." . $this->tableName;
-
-        $rs = db2_exec($_SESSION['conn'], $sql);
-
-        while(($row=db2_fetch_assoc($rs))==true){
-            $testRow = json_encode($row);
-            if(!$testRow){
-                echo "<br/>Record with bad chars found :";
-                echo "<pre>";
-                print_r($row);
-                echo "</pre>";
-                foreach ($row as $key => $value){
-                    $testData = json_encode($value);
-                    if(!$testData){
-                        echo "<BR/>Bad Data in :  <b>$key:</b>$value";
-                        for($c=0;$c<strlen($value);$c++){
-                            $char = substr($value, $c,1);
-                            if(ord($char)> 127){
-                                echo "<br/> ---> " .  $c . "  : =====> " . $char . ":=====> " . ord($char) ;
-                            }
-
-                        }
-
-
-                    }
-                }
-            }
-        }
-
-
+    static function db2ErrorModal(){
+        ?>
+       <!-- Modal -->
+    <div id="db2ErrorModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+          <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Db2 Error </h4>
+            </div>
+             <div class="modal-body" >
+             </div>
+             <div class='modal-footer'>
+             <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+             </div>
+             </div>
+            </div>
+        </div>
+        <?php
     }
 
+
 }
-?>

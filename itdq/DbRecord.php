@@ -2,7 +2,6 @@
 namespace itdq;
 use DateTime;
 use itdq\FormClass;
-use itdq\DbTable;
 /**
  * Class to deal manipulate data that has come from a DB2 Records.
  *
@@ -770,6 +769,19 @@ class DbRecord extends FormClass {
 	    foreach ($drivingObject as $key =>  $value) {
 	        $this->$key = isset($object->$key) ? $object->$key : null;
 	    }
+	}
+
+	function htmlHeaderCells(){
+	    ob_start();
+	    $headerCells = null;
+	    foreach ($this  as $property => $value) {
+	        if($property == strtoupper($property)){
+	            $headerCells .= "<th>";
+	            $headerCells .= isset($this->headerTitles[$property]) ? $this->headerTitles[$property] : str_replace("_", " ", $property);
+	            $headerCells .= "</th>";
+	        }
+	    }
+	    return $headerCells;
 	}
 
 
