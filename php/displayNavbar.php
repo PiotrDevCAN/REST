@@ -15,7 +15,7 @@ $navBarImage = ""; //a small image to displayed at the top left of the nav bar
 $navBarBrand = array(strtoupper($_ENV['environment']) . "&nbsp;V2.1","index.php");
 $navBarSearch = false;
 
-$pageDetails = explode("/", $_ENV['PHP_SELF']);
+$pageDetails = explode("/", $_SERVER['PHP_SELF']);
 $page = isset($pageDetails[2]) ? $pageDetails[2] : $pageDetails[1];
 
 $navbar = new Navbar($navBarImage, $navBarBrand,$navBarSearch);
