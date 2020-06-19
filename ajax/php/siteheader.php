@@ -11,6 +11,12 @@ set_include_path("./" . PATH_SEPARATOR . "../" . PATH_SEPARATOR . "../../" . PAT
 include ('vendor/autoload.php');
 include ('splClassLoader.php');
 
+
+var_dump($_ENV);
+die('here');
+
+
+
 $sessionConfig = (new \ByJG\Session\SessionConfig($_SERVER['SERVER_NAME']))
 ->withSecret($_ENV['jwt_token']);
 

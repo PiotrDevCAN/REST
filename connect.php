@@ -52,10 +52,8 @@ if( isset($_ENV['ssldsn']) )
 }
 else
 {
-    echo "<pre>";
-    print_r($_ENV);
-    echo "</pre>";
-    echo "<p>No credentials.</p>";
+    error_log(print_r($_ENV,true));
+    echo "<p>No credentials.Check Log.</p>";
 }
 
 
