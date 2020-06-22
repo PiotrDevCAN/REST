@@ -19,6 +19,7 @@ if(!$toggleResult){
 }
 
 $messages = ob_get_flush();
+ob_start();
 $success = empty($messages);
 
 $response = array('success'=>$success,'messages'=>$messages,'parms'=>print_r($_POST,true));

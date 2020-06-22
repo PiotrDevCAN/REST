@@ -40,6 +40,7 @@ foreach ($_POST as $key => $value){
 }
 
 $messages = ob_get_clean();
+ob_start();
 
 $response = array('Messages'=>$messages);
 

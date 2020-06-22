@@ -30,6 +30,7 @@ if(isset($_REQUEST['resourceReference'])){
 $resourceRequestRecord->displayForm($mode);
 
 $form = ob_get_clean();
+ob_start();
 
 $response = array('form'=>$form);
 

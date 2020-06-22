@@ -12,6 +12,7 @@ $staticCtbService = new StaticCtbServiceTable(allTables::$STATIC_CTB_SERVICE);
 $data = $staticCtbService->returnForDataTables();
 
 $messages = ob_get_clean();
+ob_start();
 
 $response = array("data"=>$data,'messages'=>$messages);
 

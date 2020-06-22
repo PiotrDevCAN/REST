@@ -10,6 +10,7 @@ $RRheaderCells = resourceRequestRecord::htmlHeaderCells($_POST['START_DATE']);
 $RFSheaderCells = rfsRecord::htmlHeaderCells();
 
 ob_clean();
+ob_start();
 ?>
 <table id='resourceRequestsTable_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%'>
 <thead>

@@ -8,6 +8,7 @@ ob_start();
 $activeResources = resourceRequestTable::getVbacActiveResourcesForSelect2();
 
 $messages = ob_get_clean();
+ob_start();
 
 $success = empty($messages);
 

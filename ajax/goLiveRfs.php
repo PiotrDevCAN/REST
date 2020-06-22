@@ -22,6 +22,7 @@ if(!$rs){
 }
 
 $messages = ob_get_clean();
+ob_start();
 $success = empty($messages) && $rs;
 
 $response = array('success'=>$success,'rfsId' => $_POST['rfsid'], 'Messages'=>$messages);

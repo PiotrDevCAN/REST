@@ -54,6 +54,7 @@ if($saveResponse){
 db2_autocommit($_SESSION['conn'],$autoCommit);
 
 $messages = ob_get_clean();
+ob_start();
 
 $response = array('resourceReference'=>$resourceReference, 'saveResponse' => $saveResponse, 'hoursResponse'=>$hoursResponse,
                   'Messages'=>$messages, 'POST'=>print_r($_POST,true),'resourceNamePrefix',$resourceNamePrefix);

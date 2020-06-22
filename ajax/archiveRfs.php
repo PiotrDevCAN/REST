@@ -9,6 +9,7 @@ $rfsTable = new rfsTable(allTables::$RFS);
 $rfsTable->archiveRfs($_POST['RFS_ID']);
 
 $messages = ob_get_clean();
+ob_start();
 
 $response = array('rfsId' => $_POST['RFS_ID'], 'Messages'=>$messages);
 

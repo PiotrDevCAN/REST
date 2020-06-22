@@ -8,6 +8,7 @@ $rrTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 $rrTable->deleteData(" RESOURCE_REFERENCE='" . db2_escape_string($_POST['RESOURCE_REFERENCE']) . "'",true );
 
 $messages = ob_get_clean();
+ob_start();
 
 $response = array('rrId' => $_POST['RESOURCE_REFERENCE'], 'Messages'=>$messages);
 

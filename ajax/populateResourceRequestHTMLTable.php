@@ -51,6 +51,7 @@ echo "Bad Records removed:$badRecords";
 
 
 $messages = ob_get_clean();
+ob_start();
 
 $response = array('messages'=>$messages,'badrecords'=>$badRecords,"data"=>$data);
 

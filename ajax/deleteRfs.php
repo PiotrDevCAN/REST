@@ -12,6 +12,7 @@ $rfsTable = new rfsTable(allTables::$RFS);
 $rfsTable->deleteData(" RFS_ID='" . db2_escape_string($_POST['RFS_ID']) . "'",true );
 
 $messages = ob_get_clean();
+ob_start();
 
 $response = array('rfsId' => $_POST['RFS_ID'], 'Messages'=>$messages);
 

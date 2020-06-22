@@ -9,7 +9,7 @@ set_time_limit(0);
 ob_start();
 
 $rfsRecord = new rfsRecord();
-$parmsTrimmed = array_map('trim', $_POST); 
+$parmsTrimmed = array_map('trim', $_POST);
 
 $rfsRecord->setFromArray($parmsTrimmed);
 $rfsTable = new rfsTable(allTables::$RFS);
@@ -26,6 +26,7 @@ if(trim($_POST['mode'])==FormClass::$modeEDIT){
     $update = false;
 }
 $messages = ob_get_clean();
+ob_start();
 
 $response = array('rfsId' => $parmsTrimmed['RFS_ID'], 'saveResponse' => $saveResponse, 'Messages'=>$messages,'Update'=>$update,'new'=>true);
 

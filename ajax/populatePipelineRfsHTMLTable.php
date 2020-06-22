@@ -12,6 +12,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 $rfsTable = new rfsPipelineView(allTables::$RFS_PIPELINE);
 $data = $rfsTable->returnAsArray();
 $message = ob_get_clean();
+ob_start();
 $response = array("data"=>$data,'message'=>$message);
 ob_clean();
 echo json_encode($response);

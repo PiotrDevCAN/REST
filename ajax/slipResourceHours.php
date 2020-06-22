@@ -69,6 +69,7 @@ $resourceHoursTable->commitUpdates();
 db2_autocommit($_SESSION['conn'],$autoCommit);
 
 $messages = ob_get_clean();
+ob_start();
 
 $response = array( 'WeeksSaved'=> $weeksSaved, 'Messages'=>$messages);
 

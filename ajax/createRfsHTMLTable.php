@@ -10,6 +10,7 @@ ob_start();
 $RFSheaderCells = rfsRecord::htmlHeaderCells();
 
 ob_clean();
+ob_start();
 ?>
 <table id='rfsTable_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%'>
 <thead>

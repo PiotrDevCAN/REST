@@ -140,12 +140,14 @@ while (($row = db2_fetch_assoc($resourceHoursRs))==true){
 <?php
 
 $modalBody = ob_get_clean();
+ob_start();
 
 ?><button type="button" class="btn btn-warning" id='saveAdjustedHoursWithDelta' data-toggle='tooltip' data-placement='top' title='Will save this request with the adjusted hours BUT also create a new request for the hours that have been removed from this request'>Auto-Delta</button><?php
 ?><button type="button" class="btn btn-primary" id='saveAdjustedHours' data-toggle='tooltip' data-placement='top' title='Will save the adjusted hours/week, without changing the Start or End Dates.'>Adjust Hrs Profile</button><?php
 ?><button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 <?php
 $modalFooter = ob_get_clean();
+ob_start();
 
 $end = microtime(true);
 $elapsed = ($end-$start);

@@ -59,6 +59,7 @@ foreach ($adjustedHours as $key => $value){
 db2_commit($_SESSION['conn']);
 
 $messages = ob_get_clean();
+ob_start();
 
 $response = array('Messages'=>$messages);
 

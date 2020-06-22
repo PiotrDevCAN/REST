@@ -65,6 +65,7 @@ if($valid){
 db2_autocommit($_SESSION['conn'],$autoCommit);
 
 $messages = ob_get_clean();
+ob_start();
 $response = array( 'hoursResponse'=>$hoursResponse, 'Messages'=>$messages);
 
 ob_clean();

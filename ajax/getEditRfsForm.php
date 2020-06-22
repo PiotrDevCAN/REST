@@ -28,6 +28,7 @@ if(isset($_REQUEST['rfsId'])){
 $rfsRecord->displayForm($mode);
 
 $form = ob_get_clean();
+ob_start();
 
 $response = array('form'=>$form);
 

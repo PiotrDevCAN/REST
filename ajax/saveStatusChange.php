@@ -20,6 +20,7 @@ if(!$statusUpdate){
 }
 
 $messages = ob_get_clean();
+ob_start();
 
 $response = array('success'=>$statusUpdate,'Messages'=>$messages);
 
