@@ -6,20 +6,12 @@ use itdq\TraceControlRecord;
 use dpulse\AllTables;
 use dpulse\accountManagementList;
 
-$csv = null;
-$excel = null;
-
-$country = 'E4';
-include_once 'connect.php';
-
-
-do_auth($_SESSION['itdqBg']);
+do_auth($_SESSION['cdiBg']);
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
 echo "<div class='container'>";
 
-$pivot = FALSE;
 $full = TRUE;
 $dontSubTotal = false;
 

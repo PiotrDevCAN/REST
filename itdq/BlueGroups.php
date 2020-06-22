@@ -156,9 +156,7 @@ class BlueGroups {
 
 	private static function getBgResponseXML($url){
 	    $ch = self::createCurl();
-
-	    curl_setopt($ch, CURLOPT_URL, $url);
-
+        curl_setopt($ch, CURLOPT_URL, $url);
         $ret = curl_exec($ch);
         if (empty($ret)) {
             //     some kind of an error happened

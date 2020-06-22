@@ -10,20 +10,14 @@ namespace rest;
  */
 class allTables
 {
-
-    public static $INFLIGHT_BASELINE = 'INFLIGHT_BASELINE';
-    public static $INFLIGHT_PROJECTS = 'INFLIGHT_PROJECTS';
-
-
-    public static $RESOURCE_REQUESTS = 'RESOURCE_REQUESTS';
+    public static $RESOURCE_REQUESTS      = 'RESOURCE_REQUESTS';
     public static $RESOURCE_REQUEST_HOURS = 'RESOURCE_REQUEST_HOURS';
 
-    public static $RFS = 'RFS';
-    public static $RFS_PIPELINE = 'RFS_PIPELINE';
+    public static $RFS                    = 'RFS';
+    public static $RFS_PIPELINE           = 'RFS_PIPELINE';  // View
 
-    public static $STATIC_CIO = 'STATIC_CIO';
-    public static $STATIC_CTB_SERVICE = 'STATIC_CTB_SERVICE';
+    public static $STATIC_CIO             = 'STATIC_CIO';
+    public static $STATIC_CTB_SERVICE     = 'STATIC_CTB_SERVICE';
 
-    public static $UPLOAD_LOG = 'UPLOAD_LOG';
 
 }

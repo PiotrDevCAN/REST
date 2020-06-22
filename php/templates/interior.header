@@ -54,7 +54,7 @@
 <!--	<link rel="stylesheet" href="//ciolab.ibm.com/misc/typeahead/builds/facestypeahead-0.4.4.min.css"/>  -->
 <!--	<script src="//ciolab.ibm.com/misc/typeahead/builds/facestypeahead-0.4.4.min.js"></script>  -->
 
-	<link rel="stylesheet" type="text/css" href="./css/localStyle_<?=$_SERVER['environment'];?>.css" class="init">
+	<link rel="stylesheet" type="text/css" href="./css/localStyle_<?=$_ENV['environment'];?>.css" class="init">
 
 	<script type="text/javascript" charset="utf-8">
 		Date.format = '<%dateFormat%>';
