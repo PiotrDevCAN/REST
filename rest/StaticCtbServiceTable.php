@@ -68,7 +68,7 @@ class StaticCtbServiceTable extends DbTable
         return true;
     }
 
-    function returnForDataTableS(){
+    function returnForDataTables(){
         $sql = " SELECT * ";
         $sql.= " FROM " . $_SESSION['Db2Schema'] . "." . $this->tableName;
 
