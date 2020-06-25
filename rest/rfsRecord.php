@@ -28,6 +28,8 @@ class rfsRecord extends DbRecord
     protected $ILC_WORK_ITEM;
     protected $RFS_STATUS;
 
+    protected $rfsTable;
+
     const RFS_TYPE_TANDM = 'T&M';
     const RFS_TYPE_FIXED_PRICE = 'Fixed Price';
     static public $rfsType        = array(self::RFS_TYPE_TANDM,self::RFS_TYPE_FIXED_PRICE);
@@ -38,6 +40,11 @@ class rfsRecord extends DbRecord
 
 
     static public $columnHeadings = array("RFS ID", "PRN", "Project Title", "Project Code", "Requestor Name", "Requestor Email", "CIO", "Link to PGMP", "RFS Creator", "RFS Created",'Archived','RFS Type','ILC Work Item','RFS Status');
+
+    function __construct($pwd=null){
+        parent::__construct($pwd);
+        $this->rfsTable = new rfsTable(allTables::$RFS);
+    }
 
     function get($field){
         return empty($this->$field) ? null : $this->$field;
@@ -68,7 +75,7 @@ class rfsRecord extends DbRecord
 			<div class='required'>
         		<label for="RFS_ID" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">RFS ID</label>
         		<div class="col-md-2">
-        		<input class="form-control" id="RFS_ID" name="RFS_ID" value="<?=$this->RFS_ID?>" placeholder="Enter RFS Id" required="required" type="text" <?=$notEditable?>>
+        		<input class="form-control" id="RFS_ID" name="RFS_ID" value="<?=$this->RFS_ID?>" placeholder="Enter RFS Id" required="required" type="text" <?=$notEditable?>  maxlength="<?=$this->rfsTable->getColumnLength('RFS_ID');?>">
         		<input id="originalRFS_ID" name="originalRFS_ID" value="<?=$this->RFS_ID?>" type="hidden">
         		</div>
         	</div>
@@ -77,7 +84,7 @@ class rfsRecord extends DbRecord
 
         	<label for="PRN" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">PRN</label>
             <div class="col-md-2">
-            <input class="form-control" id="PRN" name="PRN" value="<?=$this->PRN?>" placeholder="PRN" type="text">
+            <input class="form-control" id="PRN" name="PRN" value="<?=$this->PRN?>" placeholder="PRN" type="text"  maxlength="24">
             <input id="originalPRN" name="originalPRN" value="<?=$this->PRN?>" type="hidden">
             </div>
 
@@ -86,14 +93,14 @@ class rfsRecord extends DbRecord
    		<div class="form-group"  id="PROJECT_TITLEFormGroup" >
               <label for="PROJECT_CODE" class="col-md-2	 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Project Code<br/><span style="font-size:0.8em">(WBS Number)</span> </label>
               <div class="col-md-3">
-                  <input class="form-control " id="PROJECT_CODE" name="PROJECT_CODE" value="<?=$this->PROJECT_CODE?>" placeholder="Enter Code" type="text">
+                  <input class="form-control " id="PROJECT_CODE" name="PROJECT_CODE" value="<?=$this->PROJECT_CODE?>" placeholder="Enter Code" type="text"  maxlength="<?=$this->rfsTable->getColumnLength('PROJECT_CODE');?>" data-toggle="tooltip" title="Project Code - max length <?=$this->rfsTable->getColumnLength('PROJECT_CODE');?>" >
                   <input id="originalPROJECT_CODE" name="originalPROJECT_CODE" value="<?=$this->PROJECT_CODE?>" type="hidden">
               </div>
 
 			<div class='required'>
             <label for="PROJECT_TITLE" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Project Title</label>
             <div class="col-md-5">
-                <input class="form-control required" id="PROJECT_TITLE" name="PROJECT_TITLE" value="<?=$this->PROJECT_TITLE?>" placeholder="Enter Title" required="required" type="text">
+                <input class="form-control required" id="PROJECT_TITLE" name="PROJECT_TITLE" value="<?=$this->PROJECT_TITLE?>" placeholder="Enter Title" required="required" type="text"  maxlength="<?=$this->rfsTable->getColumnLength('PROJECT_TITLE');?>">
               	<input id="originalPROJECT_TITLE" name="originalPROJECT_TITLE" value="<?=$this->PROJECT_TITLE?>" type="hidden">
             </div>
             </div>
@@ -104,12 +111,12 @@ class rfsRecord extends DbRecord
    		<div class="form-group required " id="REQUESTOR_NAMEFormGroup">
    			<label for="REQUESTOR_NAME" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Requestor Name</label>
    			<div class="col-md-3">
-   			<input class="form-control" id="REQUESTOR_NAME" name="REQUESTOR_NAME" value="<?=$this->REQUESTOR_NAME?>" placeholder="Enter Requestor Name" required="required" type="text">
+   			<input class="form-control" id="REQUESTOR_NAME" name="REQUESTOR_NAME" value="<?=$this->REQUESTOR_NAME?>" placeholder="Enter Requestor Name" required="required" type="text" maxlength="<?=$this->rfsTable->getColumnLength('REQUESTOR_NAME');?>">
    			<input id="originalREQUESTOR_NAME" name="originalREQUESTOR_NAME" value="<?=$this->REQUESTOR_NAME?>" type="hidden">
    			</div>
    			<label for="REQUESTOR_EMAIL" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Requestor Email</label>
    			<div class="col-md-5">
-   			<input class="form-control" id="REQUESTOR_EMAIL" name="REQUESTOR_EMAIL" value="<?=$this->REQUESTOR_EMAIL;?>" placeholder="Enter Requestor Email" required="required" type="email">
+   			<input class="form-control" id="REQUESTOR_EMAIL" name="REQUESTOR_EMAIL" value="<?=$this->REQUESTOR_EMAIL;?>" placeholder="Enter Requestor Email" required="required" type="email" maxlength="<?=$this->rfsTable->getColumnLength('REQUESTOR_EMAIL');?>">
    			<input id="originalREQUESTOR_EMAIL" name="originalREQUESTOR_EMAIL" value="<?=$this->REQUESTOR_EMAIL;?>" type="hidden">
    			</div>
    		</div>
@@ -157,7 +164,7 @@ class rfsRecord extends DbRecord
 			<div class='required'>
         	<label for="ILC_WORK_ITEM" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">ILC Work Item</label>
             <div class="col-md-3">
-            <input class="form-control" id="ILC_WORK_ITEM" name="ILC_WORK_ITEM" value="<?=$this->ILC_WORK_ITEM?>" placeholder="ILC_WORK_ITEM" type="text">
+            <input class="form-control" id="ILC_WORK_ITEM" name="ILC_WORK_ITEM" value="<?=$this->ILC_WORK_ITEM?>" placeholder="ILC_WORK_ITEM" type="text" maxlength="<?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>" data-toggle="tooltip" title="Claim Code - max length <?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>" >
             </div>
         	</div>
 
@@ -178,7 +185,7 @@ class rfsRecord extends DbRecord
         <div class="form-group" id='LinkToPgmpFormGroup' >
             <label for="LINK_TO_PGMP" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Paste URL Link to PGMP Document" >Link to PGMP</label>
             <div class="col-md-7">
-                <input class="form-control" id="LINK_TO_PGMP" name="LINK_TO_PGMP" value="<?=$this->LINK_TO_PGMP?>" placeholder="URL Link to PGMP" type="text">
+                <input class="form-control" id="LINK_TO_PGMP" name="LINK_TO_PGMP" value="<?=$this->LINK_TO_PGMP?>" placeholder="URL Link to PGMP" type="text" maxlength="<?=$this->rfsTable->getColumnLength('LINK_TO_PGMP');?>">
               	<input id="originalLINK_TO_PGMP" name="originalLINK_TO_PGMP" value="<?=$this->LINK_TO_PGMP?>" type="hidden">
             </div>
         </div>
