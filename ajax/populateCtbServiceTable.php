@@ -8,8 +8,8 @@ set_time_limit(0);
 ob_start();
 
 
-$staticCtbService = new StaticCtbServiceTable(allTables::$STATIC_CTB_SERVICE);
-$data = $staticCtbService->returnForDataTables();
+$staticOrganisation = new StaticOrganisationTable(allTables::$STATIC_ORGANISATION);
+$data = $staticOrganisation->returnForDataTables();
 
 $messages = ob_get_clean();
 ob_start();

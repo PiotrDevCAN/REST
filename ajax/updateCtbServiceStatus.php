@@ -11,7 +11,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 
 ob_start();
 
-$toggleResult = $_POST['currentStatus']==StaticCtbServiceTable::ENABLED ? StaticCtbServiceTable::disableService($_POST['ORGANISATION'],$_POST['CTB_SUB_SERVICE']) : StaticCtbServiceTable::enableService($_POST['CTB_SERVICE'],$_POST['CTB_SUB_SERVICE']);
+$toggleResult = $_POST['currentStatus']==StaticCtbServiceTable::ENABLED ? StaticCtbServiceTable::disableService($_POST['ORGANISATION'],$_POST['CTB_SUB_SERVICE']) : StaticCtbServiceTable::enableService($_POST['ORGANISATION'],$_POST['CTB_SUB_SERVICE']);
 
 if(!$toggleResult){
     echo db2_stmt_error();
