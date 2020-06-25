@@ -17,7 +17,7 @@ class allTables
     public static $RFS_PIPELINE           = 'RFS_PIPELINE';  // View
 
     public static $STATIC_CIO             = 'STATIC_CIO';
-    public static $STATIC_CTB_SERVICE     = 'STATIC_CTB_SERVICE';
+    public static $STATIC_ORGANISATION    = 'STATIC_ORGANISATION';
 
 
 }

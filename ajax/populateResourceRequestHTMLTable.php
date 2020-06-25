@@ -26,7 +26,7 @@ PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
 
 $predicate = rfsTable::rfsPredicateFilterOnPipeline($piplineLive);
 $predicate.= !empty($rfsId) ? " AND RFS='" . db2_escape_string($rfsId) . "' " : null;
-$predicate.= !empty($ctbservice) ? " AND CTB_SERVICE='" . db2_escape_string($ctbservice) . "' " : null;
+$predicate.= !empty($ctbservice) ? " AND ORGANISATION='" . db2_escape_string($ctbservice) . "' " : null;
 
 $data = $resourceRequestTable->returnAsArray($startDate,$endDate,$predicate);
 

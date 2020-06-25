@@ -13,7 +13,7 @@ use itdq\FormClass;
 class StaticCtbServiceRecord extends DbRecord
 {
 
-    public $CTB_SERVICE;
+    public $ORGANISATION;
     public $CTB_SUB_SERVICE;
     public $STATUS;
 
@@ -24,9 +24,9 @@ class StaticCtbServiceRecord extends DbRecord
         <form id='ctbServiceForm' class="form-horizontal"  method='post'>
         <div class="form-group ">
 			<div class='required'>
-        		<label for="CTB_SERVICE" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Country">CTB Service</label>
+        		<label for="ORGANISATION" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Country">CTB Service</label>
         		<div class="col-md-6">
-        		<input class="form-control" id="CTB_SERVICE" name="CTB_SERVICE" value="<?=$this->CTB_SERVICE?>" placeholder="Enter CTB Service" required="required" type="text" >
+        		<input class="form-control" id="ORGANISATION" name="ORGANISATION" value="<?=$this->ORGANISATION?>" placeholder="Enter Organisation" required="required" type="text" >
         		</div>
         	</div>
         </div>

@@ -615,7 +615,7 @@ function ResourceRequest() {
 	            { data: "RESOURCE_REFERENCE",defaultContent: "", visible:false },
 	            { data: "RFS"              ,defaultContent: "", visible:true, render: { _:'display', sort:'sort' }, },	           
 	            { data: "PHASE"            ,defaultContent: "", visible:true },
-	            { data: "CTB_SERVICE"      ,defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
+	            { data: "ORGANISATION"     ,defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
 	            { data: "CTB_SUB_SERVICE"  ,defaultContent: "", visible:false },
 	            { data: "DESCRIPTION"      ,defaultContent: "", visible:true },
 	            { data: "START_DATE"       ,defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },

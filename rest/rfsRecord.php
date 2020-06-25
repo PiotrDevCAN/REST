@@ -91,9 +91,9 @@ class rfsRecord extends DbRecord
 
         </div>
    		<div class="form-group"  id="PROJECT_TITLEFormGroup" >
-              <label for="PROJECT_CODE" class="col-md-2	 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Project Code<br/><span style="font-size:0.8em">(WBS Number)</span> </label>
+              <label for="PROJECT_CODE" class="col-md-2	 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" data-original-title=""  title="Project Code - max length <?=$this->rfsTable->getColumnLength('PROJECT_CODE');?>">Project Code<br/><span style="font-size:0.8em">(WBS Number)</span> </label>
               <div class="col-md-3">
-                  <input class="form-control " id="PROJECT_CODE" name="PROJECT_CODE" value="<?=$this->PROJECT_CODE?>" placeholder="Enter Code" type="text"  maxlength="<?=$this->rfsTable->getColumnLength('PROJECT_CODE');?>" data-toggle="tooltip" title="Project Code - max length <?=$this->rfsTable->getColumnLength('PROJECT_CODE');?>" >
+                  <input class="form-control " id="PROJECT_CODE" name="PROJECT_CODE" value="<?=$this->PROJECT_CODE?>" placeholder="Enter Code" type="text"  maxlength="<?=$this->rfsTable->getColumnLength('PROJECT_CODE');?>" >
                   <input id="originalPROJECT_CODE" name="originalPROJECT_CODE" value="<?=$this->PROJECT_CODE?>" type="hidden">
               </div>
 
@@ -162,9 +162,9 @@ class rfsRecord extends DbRecord
 
         <div class="form-group " id="RFS_TypeIlcFormGroup">
 			<div class='required'>
-        	<label for="ILC_WORK_ITEM" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">ILC Work Item</label>
+        	<label for="ILC_WORK_ITEM" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Claim Code - max length <?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>" data-original-title="">ILC Work Item</label>
             <div class="col-md-3">
-            <input class="form-control" id="ILC_WORK_ITEM" name="ILC_WORK_ITEM" value="<?=$this->ILC_WORK_ITEM?>" placeholder="ILC_WORK_ITEM" type="text" maxlength="<?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>" data-toggle="tooltip" title="Claim Code - max length <?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>" >
+            <input class="form-control" id="ILC_WORK_ITEM" name="ILC_WORK_ITEM" value="<?=$this->ILC_WORK_ITEM?>" placeholder="ILC_WORK_ITEM" type="text" maxlength="<?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>">
             </div>
         	</div>
 

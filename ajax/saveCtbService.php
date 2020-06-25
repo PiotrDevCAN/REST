@@ -12,9 +12,9 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 
 ob_start();
 
-$ctbServiceTable  = new StaticCtbServiceTable(allTables::$STATIC_CTB_SERVICE);
+$ctbServiceTable  = new StaticCtbServiceTable(allTables::$STATIC_ORGANISATION);
 $ctbServiceRecord = new StaticCtbServiceRecord();
-$ctbServiceRecord->setFromArray(array('CTB_SERVICE'=>$_POST['CTB_SERVICE'],'CTB_SUB_SERVICE'=>$_POST['CTB_SUB_SERVICE'],'STATUS'=>$_POST['statusRadio']));
+$ctbServiceRecord->setFromArray(array('ORGANISATION'=>$_POST['ORGANISATION'],'CTB_SUB_SERVICE'=>$_POST['CTB_SUB_SERVICE'],'STATUS'=>$_POST['statusRadio']));
 
 if($_POST['mode']==FormClass::$modeDEFINE){
    $db2result = $ctbServiceTable->insert($ctbServiceRecord);

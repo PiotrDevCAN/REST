@@ -14,7 +14,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 $loader = new Loader();
 $rfsPredicate = rfsTable::rfsPredicateFilterOnPipeline();
 $allRfs = $loader->load('RFS_ID',allTables::$RFS,$rfsPredicate);
-$allCtbService =  $loader->load('CTB_SERVICE',allTables::$RESOURCE_REQUESTS);
+$allCtbService =  $loader->load('ORGANISATION',allTables::$RESOURCE_REQUESTS);
 
 
 $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';

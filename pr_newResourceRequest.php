@@ -66,7 +66,7 @@ console.log('ready');
 console.log($(".select"));
 
 
-	$('#CTB_SERVICE').on('select2:select', function(e){
+	$('#ORGANISATION').on('select2:select', function(e){
 		var serviceSelected= $(e.params.data)[0].text;
     	var entry = ctbService[0].indexOf(serviceSelected);
     	var data = ctbService[entry];

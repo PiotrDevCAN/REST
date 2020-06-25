@@ -140,12 +140,12 @@ class resourceRequestTable extends DbTable
         $endDate4Picka = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Y-m-d') : null;
         $startDate = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
         $endDate   = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
-        $service = $row['CTB_SERVICE'];
+        $service = $row['ORGANISATION'];
         $subService = $row['CTB_SUB_SERVICE'];
         $description = $row['DESCRIPTION'];
         $hrsPerWeek = $row['HRS_PER_WEEK'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
-        $ctbService = $row['CTB_SERVICE'];
+        $ctbService = $row['ORGANISATION'];
         $subService = $row['CTB_SUB_SERVICE'];
         $row['STATUS'] =
         "<button type='button' class='btn btn-xs changeStatus accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
@@ -169,7 +169,7 @@ class resourceRequestTable extends DbTable
 
 
         $row['DESCRIPTION'] =
-        "<button type='button' class='btn btn-default btn-xs deleteRecord accessRestrict accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['CTB_SERVICE']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $subService . "' >
+        "<button type='button' class='btn btn-default btn-xs deleteRecord accessRestrict accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $subService . "' >
             <span data-toggle='tooltip' title='Delete Resource' class='glyphicon glyphicon-trash ' aria-hidden='true' ></span>
             </button>&nbsp;" . $description;
 
@@ -233,7 +233,7 @@ class resourceRequestTable extends DbTable
 
         $row['RFS']        = array('display'=> $displayRfsId, 'sort'=>$rfsId);
         $row['START_DATE'] = array('display'=> $startDate . " to " . $endDate . "<br/>Avg Hrs/Week:" . $row['HRS_PER_WEEK'], 'sort'=>$startDate);
-        $row['CTB_SERVICE']=array('display'=>$row['CTB_SERVICE'] . "<br/><small>" . $row['CTB_SUB_SERVICE'] . "</small>", 'sort'=>$ctbService);
+        $row['ORGANISATION']=array('display'=>$row['ORGANISATION'] . "<br/><small>" . $row['CTB_SUB_SERVICE'] . "</small>", 'sort'=>$ctbService);
 
     }
 

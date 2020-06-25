@@ -88,7 +88,7 @@ function listenForSaveCtbService(){
 	    			$('#saveResultModal .modal-body').html('Save successful');
 		    		$('#saveResultModal').modal('show');
 	    		}
-	    		$('#CTB_SERVICE').val('');
+	    		$('#ORGANISATION').val('');
 	    		$('#CTB_SUB_SERVICE').val('');
 	    		$('#statusRadioDisabled').prop('checked',false);
 	    		$('#statusRadioEnabled').prop('checked',true);
@@ -102,13 +102,13 @@ function listenForSaveCtbService(){
 function listenForToggleStatus(){
 	$(document).on('change','input.toggle',function(e) {
 		var status = $(this).data('status');
-		var ctbService = $(this).data('ctbservice');
+		var organisation = $(this).data('organisation');
 		var ctbSubService = $(this).data('ctbsubservice');
 		$.ajax({
 			url: "ajax/updateCtbServiceStatus.php",
 		    type: 'POST',
 		    data: {currentStatus:status,
-		    	   CTB_SERVICE:ctbService,
+		    	ORGANISATION:organisation,
 		    	   CTB_SUB_SERVICE:ctbSubService},
 		    success: function(result){
 		    	var resultObj = JSON.parse(result);
@@ -133,7 +133,7 @@ function listenForResetForm(){
 	$(document).on('click','#resetCtbService',function(){
 		$("input[name=statusRadio][value=<?=StaticCtbServiceTable::ENABLED;?>]").prop('checked', true)
 		$("input[name=statusRadio]").attr('disabled',false);
-		$('#CTB_SERVICE').val('');
+		$('#ORGANISATION').val('');
 		$('#CTB_SUB_SERVICE').val('');
 		$('#saveCtbService').val('Submit');
 		$('#mode').val('<?=FormClass::$modeDEFINE;?>');
@@ -199,7 +199,7 @@ function initialiseTable(){
       	});
         },
         columns: [
-            { data: "CTB_SERVICE" , "defaultContent": "" },
+            { data: "ORGANISATION" , "defaultContent": "" },
             { data: "CTB_SUB_SERVICE","defaultContent": "" },
             { data: "STATUS",
            	  render: { _:'display', sort:'sort' },
