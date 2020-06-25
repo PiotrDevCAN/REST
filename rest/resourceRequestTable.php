@@ -259,7 +259,7 @@ class resourceRequestTable extends DbTable
 
     static function getVbacActiveResourcesForSelect2(){
         $vbacEmployees = array();
-        $url = $_SERVER['vbac_url'] . '/api/employeePlus.php?token=soEkCfj8zGNDLZ8yXH2YJjpehd8ijzlS&plus=email_address,role_on_the_account,work_stream';
+        $url = $_ENV['vbac_url'] . '/api/employeePlus.php?token=soEkCfj8zGNDLZ8yXH2YJjpehd8ijzlS&plus=email_address,role_on_the_account,work_stream';
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HEADER,         1);
