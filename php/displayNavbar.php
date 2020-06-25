@@ -71,7 +71,7 @@ $isCdi    = employee_in_group($_SESSION['cdiBg'],     $_SESSION['ssoEmail']) || 
 $isAdmin  = employee_in_group($_SESSION['adminBg'],   $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessAdmin')" : null;
 $isDemand = employee_in_group($_SESSION['demandBg'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessDemand')" : null;
 $isSupply = employee_in_group($_SESSION['supplyBg'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessSupply')" : null;
-$isRfs    = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessRfs')" : null;
+$isRfs    = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail'])  ? ".not('.accessRfs')" : null;
 $isReports= employee_in_group($_SESSION['reportsBg'], $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessReports')" : null;
 
 $isUser = (!empty($isCdi) || !empty($isAdmin) || !empty($isDemand) || !empty($isSupply)  || !empty($isRfs) || !empty($isReports) ) ? ".not('.accessUser')" : null;

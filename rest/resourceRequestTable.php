@@ -114,10 +114,6 @@ class resourceRequestTable extends DbTable
 
         $allData = array();
 
-        echo $sql;
-
-
-
         while(($row = db2_fetch_assoc($resultSet))==true){
             PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
             $testJson = json_encode($row);
@@ -128,12 +124,6 @@ class resourceRequestTable extends DbTable
             $this->addGlyphicons($row);
             $allData[]  = $row;
         }
-
-
-        var_dump($allData);
-        die('here');
-
-
         return $allData ;
     }
 
