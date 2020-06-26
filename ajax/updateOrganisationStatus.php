@@ -5,13 +5,13 @@ use rest\StaticCountryMarketTable;
 use rest\allTables;
 use itdq\FormClass;
 use itdq\DbTable;
-use rest\StaticCtbServiceTable;
+use rest\StaticOrganisationTable;
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
 ob_start();
 
-$toggleResult = $_POST['currentStatus']==StaticCtbServiceTable::ENABLED ? StaticCtbServiceTable::disableService($_POST['ORGANISATION'],$_POST['CTB_SUB_SERVICE']) : StaticCtbServiceTable::enableService($_POST['ORGANISATION'],$_POST['CTB_SUB_SERVICE']);
+$toggleResult = $_POST['currentStatus']==StaticOrganisationTable::ENABLED ? StaticOrganisationTable::disableService($_POST['ORGANISATION'],$_POST['SERVICE']) : StaticOrganisationTable::enableService($_POST['ORGANISATION'],$_POST['SERVICE']);
 
 if(!$toggleResult){
     echo db2_stmt_error();

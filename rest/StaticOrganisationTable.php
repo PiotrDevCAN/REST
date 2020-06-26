@@ -11,36 +11,36 @@ use itdq\DbTable;
  * ALTER TABLE "REST_XT"."STATIC_ORGANISATION" ADD COLUMN "STATUS" CHAR(10) NOT NULL WITH DEFAULT 'enabled';
  *
  */
-class StaticCtbServiceTable extends DbTable
+class StaticOrganisationTable extends DbTable
 {
     const ENABLED = 'enabled';
     const DISABLED = 'disabled';
 
-    static function getAllCtbSubService($predicate){
+    static function getAllOrganisationsAndServices($predicate){
         $sql = " SELECT * FROM " . $_SESSION['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
         $sql.= " WHERE 1=1 ";
         $sql.= empty($predicate) ? null : " AND " . $predicate;
-        $sql .= " ORDER BY ORGANISATION, CTB_SUB_SERVICE  ";
+        $sql .= " ORDER BY ORGANISATION, SERVICE  ";
         $resultSet = db2_exec($_SESSION['conn'], $sql);
 
-        $allCtbServices = array();
+        $allOrganisations = array();
         if($resultSet){
             while (($row=db2_fetch_assoc($resultSet))==true) {
-                $allCtbServices[trim($row['ORGANISATION'])][] = trim($row['CTB_SUB_SERVICE']);
+                $allOrganisations[trim($row['ORGANISATION'])][] = trim($row['SERVICE']);
             }
         } else {
             DbTable::displayErrorMessage($resultSet,__CLASS__, __METHOD__, $sql);
             return false;
         }
-        return $allCtbServices;
+        return $allOrganisations;
     }
 
-    static function disableService($ctbService,$ctbSubService){
+    static function disableService($organisation,$service){
         $sql = 'UPDATE ';
         $sql.= $_SESSION['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
         $sql.= " SET STATUS='" . self::DISABLED . "' ";
-        $sql.= " WHERE ORGANISATION='" . db2_escape_string($ctbService) . "'  ";
-        $sql.= "   AND CTB_SUB_SERVICE='" . db2_escape_string($ctbSubService) . "'  ";
+        $sql.= " WHERE ORGANISATION='" . db2_escape_string($organisation) . "'  ";
+        $sql.= "   AND SERVICE='" . db2_escape_string($service) . "'  ";
 
         $rs = db2_exec($_SESSION['conn'], $sql);
 
@@ -52,12 +52,12 @@ class StaticCtbServiceTable extends DbTable
     }
 
 
-    static function enableService($ctbService,$ctbSubService){
+    static function enableService($organisation,$service){
         $sql = 'UPDATE ';
         $sql.= $_SESSION['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
         $sql.= " SET STATUS='" . self::ENABLED . "' ";
-        $sql.= " WHERE ORGANISATION='" . db2_escape_string($ctbService) . "'  ";
-        $sql.= "   AND CTB_SUB_SERVICE='" . db2_escape_string($ctbSubService) . "'  ";
+        $sql.= " WHERE ORGANISATION='" . db2_escape_string($organisation) . "'  ";
+        $sql.= "   AND SERVICE='" . db2_escape_string($service) . "'  ";
 
         $rs = db2_exec($_SESSION['conn'], $sql);
 
@@ -86,17 +86,17 @@ class StaticCtbServiceTable extends DbTable
             $display = array();
             $row = array_map('trim', $row);
             $display['ORGANISATION'] = $row['ORGANISATION'];
-            $display['CTB_SUB_SERVICE'] = $row['CTB_SUB_SERVICE'];
-            $display['STATUS'] = self::getStatusCellWithButton($row['STATUS'], $row['ORGANISATION'], $row['CTB_SUB_SERVICE']);
+            $display['SERVICE'] = $row['SERVICE'];
+            $display['STATUS'] = self::getStatusCellWithButton($row['STATUS'], $row['ORGANISATION'], $row['SERVICE']);
             //           $data[] = array($display['COUNTRY'],$display['MARKET'],$display['STATUS']);
             $displayAble[] = $display;
         }
         return $displayAble;
     }
 
-    static function getStatusCellWithButton($status, $service, $subService){
+    static function getStatusCellWithButton($status, $organisation, $service){
         $checked = $status==self::ENABLED ? 'checked' : null;
-        $buttons = "<input class='toggle' type='checkbox'  $checked data-toggle='toggle' data-status='" . $status . "' data-ctbservice='" . $service . "'  data-ctbsubservice='" . $subService . "' data-size='mini' >&nbsp;";
+        $buttons = "<input class='toggle' type='checkbox'  $checked data-toggle='toggle' data-status='" . $status . "' data-organisation='" . $organisation . "'  data-service='" . $service . "' data-size='mini' >&nbsp;";
         return array('display'=>$buttons,'sort'=>$status);
 
     }

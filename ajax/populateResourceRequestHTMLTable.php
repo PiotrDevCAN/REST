@@ -20,13 +20,13 @@ $startDate = !empty($_POST['startDate']) ? $_POST['startDate'] : null;
 $endDate = !empty($_POST['endDate']) ? $_POST['endDate'] : null;
 $piplineLive = $_POST['pipelineLive']=='true' ? rfsRecord::RFS_STATUS_LIVE : rfsRecord::RFS_STATUS_PIPELINE;
 $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
-$ctbservice = !empty($_POST['ctbservice']) ? $_POST['ctbservice'] : null;
+$organisation = !empty($_POST['organisation']) ? $_POST['organisation'] : null;
 
 PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
 
 $predicate = rfsTable::rfsPredicateFilterOnPipeline($piplineLive);
 $predicate.= !empty($rfsId) ? " AND RFS='" . db2_escape_string($rfsId) . "' " : null;
-$predicate.= !empty($ctbservice) ? " AND ORGANISATION='" . db2_escape_string($ctbservice) . "' " : null;
+$predicate.= !empty($organisation) ? " AND ORGANISATION='" . db2_escape_string($organisation) . "' " : null;
 
 $data = $resourceRequestTable->returnAsArray($startDate,$endDate,$predicate);
 

@@ -10,21 +10,21 @@ use itdq\FormClass;
  * @author gb001399
  *
  */
-class StaticCtbServiceRecord extends DbRecord
+class StaticOrganisationRecord extends DbRecord
 {
 
     public $ORGANISATION;
-    public $CTB_SUB_SERVICE;
+    public $SERVICE;
     public $STATUS;
 
 
     function displayForm($mode=FormClass::modeDEFINE){
         $allButtons = array();
         ?>
-        <form id='ctbServiceForm' class="form-horizontal"  method='post'>
+        <form id='organisationForm' class="form-horizontal"  method='post'>
         <div class="form-group ">
 			<div class='required'>
-        		<label for="ORGANISATION" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Country">CTB Service</label>
+        		<label for="ORGANISATION" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Country">Organisation</label>
         		<div class="col-md-6">
         		<input class="form-control" id="ORGANISATION" name="ORGANISATION" value="<?=$this->ORGANISATION?>" placeholder="Enter Organisation" required="required" type="text" >
         		</div>
@@ -32,9 +32,9 @@ class StaticCtbServiceRecord extends DbRecord
         </div>
         <div class="form-group ">
 			<div class='required'>
-        		<label for="CTB_SUB_SERVICE" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Market">CTB Sub Service</label>
+        		<label for="SERVICE" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Market">Service</label>
         		<div class="col-md-6">
-        		<input class="form-control" id="CTB_SUB_SERVICE" name="CTB_SUB_SERVICE" value="<?=$this->CTB_SUB_SERVICE?>" placeholder="Enter CTB Sub Service" required="required" type="text" >
+        		<input class="form-control" id="SERVICE" name="SERVICE" value="<?=$this->SERVICE?>" placeholder="Enter Service" required="required" type="text" >
         		</div>
         	</div>
         </div>
@@ -49,8 +49,8 @@ class StaticCtbServiceRecord extends DbRecord
         <?php
    		$this->formHiddenInput('mode',$mode,'mode');
 
-   		$submitButton = $mode==FormClass::$modeEDIT ?  $this->formButton('submit','Submit','updateCtbService',null,'Update') :  $this->formButton('submit','Submit','saveCtbService',null,'Submit');
-   		$resetButton  = $this->formButton('reset','Reset','resetCtbervice',null,'Reset','btn-warning');
+   		$submitButton = $mode==FormClass::$modeEDIT ?  $this->formButton('submit','Submit','updateOrganisation',null,'Update') :  $this->formButton('submit','Submit','saveOrganisation',null,'Submit');
+   		$resetButton  = $this->formButton('reset','Reset','resetOrganisation',null,'Reset','btn-warning');
    		$allButtons[] = $submitButton;
    		$allButtons[] = $resetButton;
    		?>

@@ -59,13 +59,13 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
                </select>
             </div>
 
-        <label for='selectService' class='col-md-1 control-label text-right'>CTB Service</label>
+        <label for='selectService' class='col-md-1 control-label text-right'>Organisation</label>
         	<div class='col-md-3 text-left'>
-              	<select class='form-control select' id='ctbservice'
-                  	          name='ctbservice'
-                  	          data-placeholder="Select CTB Service" data-allow-clear="true"
+              	<select class='form-control select' id='$organisation'
+                  	          name='$organisation'
+                  	          data-placeholder="Select Organisation" data-allow-clear="true"
                   	          >
-            	<option value=''>Select CTB Service<option>
+            	<option value=''>Select Organisation<option>
                 <?php
                     foreach ($allCtbService as $value) {
                          $displayValue = trim($value);
@@ -166,7 +166,7 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
       </div>
       <div class="modal-body" id='confirmDuplication'>
       <p><b>RFS :</b><span id='confirmDuplicateRFS'></span></p>
-      <p><b>CTB SubService :</b><span id='confirmDuplicateType'></span></p>
+      <p><b>Service :</b><span id='confirmDuplicateType'></span></p>
       <p><b>Start Date :</b><span id='confirmDuplicateStart'></span></p>
       <p><b>Resource Reference :</b><span id='confirmDuplicateRR'></span></p>
 
@@ -260,13 +260,13 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 	    	</div>
   		</div>
 		<div class="form-group">
-		    <label for="statusChangeService" class='col-sm-2' >CTB Service</label>
+		    <label for="statusChangeService" class='col-sm-2' >Organisation</label>
 		    <div class='col-sm-8'>
 	    	<input type="text" class="form-control" id="statusChangeService" name="statusChangeService" disabled>
 	    	</div>
   		</div>
   		<div class="form-group">
-		    <label for="statusChangeSub" class='col-sm-2' >Sub Service</label>
+		    <label for="statusChangeSub" class='col-sm-2' >Service</label>
 		    <div class='col-sm-8'>
 	    	<input type="text" class="form-control" id="statusChangeSub" name="statusChangeSub" disabled>
 	    	</div>

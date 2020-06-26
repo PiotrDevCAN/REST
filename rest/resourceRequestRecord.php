@@ -18,7 +18,7 @@ class resourceRequestRecord extends DbRecord
     protected $RFS;
     protected $PHASE;
     protected $ORGANISATION; // was known as CURRENT_PLATFORM
-    protected $CTB_SUB_SERVICE;
+    protected $SERVICE;
     protected $DESCRIPTION;
     protected $START_DATE;
     protected $END_DATE;
@@ -29,7 +29,7 @@ class resourceRequestRecord extends DbRecord
     protected $CLONED_FROM;
     protected $STATUS;
 
-    static public $columnHeadings = array("Resource Ref", "RFS", "Phase", "CTB Service", "CTB Sub Service",
+    static public $columnHeadings = array("Resource Ref", "RFS", "Phase", "Organisation", "Service",
                                           "Description", "Start Date", "End Date", "Hrs Per Week", "Resource Name",
                                           "Request Creator", "Request Created","Cloned From", "Status"    );
 
@@ -70,10 +70,10 @@ class resourceRequestRecord extends DbRecord
 
         $allPhase = array('Design','Build','Develop','Deploy','Deliver');
 
-        $predicate = " STATUS='" . StaticCtbServiceTable::ENABLED . "' ";
-        $allCtbService = $loader->load('ORGANISATION',allTables::$STATIC_ORGANISATION,$predicate);
-        $allSubService = StaticCtbServiceTable::getAllCtbSubService($predicate);
-        JavaScript::buildSelectArray($allSubService, 'ctbService');
+        $predicate = " STATUS='" . StaticOrganisationTable::ENABLED . "' ";
+        $allOrganisation = $loader->load('ORGANISATION',allTables::$STATIC_ORGANISATION,$predicate);
+        $allService = StaticOrganisationTable::getAllOrganisationsAndServices($predicate);
+        JavaScript::buildSelectArray($allService, 'organisation');
 
         $startDate = empty($this->START_DATE) ? null : new \DateTime($this->START_DATE);
         $startDateStr = empty($startDate) ? null : $startDate->format('dMy');
@@ -202,9 +202,9 @@ class resourceRequestRecord extends DbRecord
                 		id='ORGANISATION'
                         name='ORGANISATION'
                         data-tags="true" data-placeholder="Select Organisation" data-allow-clear="true">
-                <option value=''>Select CTB Service<option>
+                <option value=''>Select Organisation<option>
                 <?php
-                    foreach ($allCtbService as $key => $value) {
+                    foreach ($allOrganisation as $key => $value) {
                         $displayValue = trim($value);
                         $returnValue  = trim($value);
                 ?>
@@ -213,27 +213,27 @@ class resourceRequestRecord extends DbRecord
                 </select>
                 </div>
 			<?php
-			$disabledSubService = isset($this->ORGANISATION) && isset($this->CTB_SUB_SERVICE) ? null : 'disabled';
+			$disabledSubService = isset($this->ORGANISATION) && isset($this->SERVICE) ? null : 'disabled';
 			?>
 
-          <label for='CTB_SUB_SERVICE' class='col-md-2 control-label ceta-label-left'>Service</label>
+          <label for='SERVICE' class='col-md-2 control-label ceta-label-left'>Service</label>
                <div class='col-md-4'>
-               <select class='form-control select' id='CTB_SUB_SERVICE'
-                       name='CTB_SUB_SERVICE'
+               <select class='form-control select' id='SERVICE'
+                       name='SERVICE'
                        required='required'
                        data-tags="true"
-                       data-placeholder="Select CTB SubService"
+                       data-placeholder="Select Service"
                        data-allow-clear="true"
                        <?=$disabledSubService;?> >
-              <option value=''>Select CTB Service First<option>
+              <option value=''>Select Service<option>
               <?php
-              if(!empty($this->ORGANISATION) && !empty($this->CTB_SUB_SERVICE) ){
-                  $subService = $allSubService[$this->ORGANISATION];
-                  foreach ($subService as $key => $value) {
+              if(!empty($this->ORGANISATION) && !empty($this->SERVICE) ){
+                  $services = $allService[$this->ORGANISATION];
+                  foreach ($services as $key => $value) {
                         $displayValue = trim($value);
                         $returnValue  = trim($value);
                         ?>
-        		        <option value='<?=$returnValue?>' <?=trim($this->CTB_SUB_SERVICE) == $returnValue ? 'selected ' : null;?> ><?=$displayValue?></option>
+        		        <option value='<?=$returnValue?>' <?=trim($this->SERVICE) == $returnValue ? 'selected ' : null;?> ><?=$displayValue?></option>
                 		<?php
                   }
                 }

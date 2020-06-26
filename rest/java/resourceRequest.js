@@ -478,7 +478,7 @@ function ResourceRequest() {
 	},
 
 	this.listenForSelectSpecificCtbService = function(){
-		$(document).on('change','#ctbservice',function(){	
+		$(document).on('change','#organisation',function(){	
 			ResourceRequest.table.ajax.reload();
 		});		
 	},
@@ -555,7 +555,7 @@ function ResourceRequest() {
 	                d.endDate = $('#END_DATE').val();
 	                d.pipelineLive  = $('#pipelineLive').prop('checked');
 	                d.rfsid = $('#selectRfs option:selected').val();
-	                d.ctbservice = $('#ctbservice option:selected').val();
+	                d.organisation = $('#organisation option:selected').val();
 	            },
 	            type: 'POST',
 	        }	,
@@ -616,7 +616,7 @@ function ResourceRequest() {
 	            { data: "RFS"              ,defaultContent: "", visible:true, render: { _:'display', sort:'sort' }, },	           
 	            { data: "PHASE"            ,defaultContent: "", visible:true },
 	            { data: "ORGANISATION"     ,defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
-	            { data: "CTB_SUB_SERVICE"  ,defaultContent: "", visible:false },
+	            { data: "SERVICE"          ,defaultContent: "", visible:false },
 	            { data: "DESCRIPTION"      ,defaultContent: "", visible:true },
 	            { data: "START_DATE"       ,defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
 	            { data: "END_DATE"         ,defaultContent: "", visible:false },

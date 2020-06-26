@@ -1,7 +1,7 @@
 <?php
 
 
-use rest\StaticCtbServiceTable;
+use rest\StaticOrganisationTable;
 use rest\allTables;
 
 set_time_limit(0);

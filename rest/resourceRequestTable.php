@@ -140,13 +140,11 @@ class resourceRequestTable extends DbTable
         $endDate4Picka = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Y-m-d') : null;
         $startDate = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
         $endDate   = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
-        $service = $row['ORGANISATION'];
-        $subService = $row['CTB_SUB_SERVICE'];
         $description = $row['DESCRIPTION'];
         $hrsPerWeek = $row['HRS_PER_WEEK'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
-        $ctbService = $row['ORGANISATION'];
-        $subService = $row['CTB_SUB_SERVICE'];
+        $organisation = $row['ORGANISATION'];
+        $service = $row['SERVICE'];
         $row['STATUS'] =
         "<button type='button' class='btn btn-xs changeStatus accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
                     data-rfs='" .$rfsId . "'
@@ -155,12 +153,12 @@ class resourceRequestTable extends DbTable
                     data-cio='" .$cio . "'
                     data-phase='" . $phase. "'
                     data-status='" . $status . "'
-                    data-service='" .$service .  "'
-                    data-subservice='" . $subService . "'
+                    data-organisation='" .$organisation .  "'
+                    data-service='" . $service . "'
                     data-resourcename='" . $resourceName . "'
                     data-start='" . $startDate4Picka . "'
                     data-end='" . $endDate4Picka . "'
-                    data-sub='" . $subService . "'
+
 
          >
          <span data-toggle='tooltip' title='Change Status' class='glyphicon glyphicon-tags ' aria-hidden='true' ></span>
@@ -169,7 +167,7 @@ class resourceRequestTable extends DbTable
 
 
         $row['DESCRIPTION'] =
-        "<button type='button' class='btn btn-default btn-xs deleteRecord accessRestrict accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $subService . "' >
+        "<button type='button' class='btn btn-default btn-xs deleteRecord accessRestrict accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $service . "' >
             <span data-toggle='tooltip' title='Delete Resource' class='glyphicon glyphicon-trash ' aria-hidden='true' ></span>
             </button>&nbsp;" . $description;
 
@@ -194,7 +192,7 @@ class resourceRequestTable extends DbTable
         $row['RESOURCE_NAME'].= "  data-phase='" . $phase. "' ";
         $row['RESOURCE_NAME'].= "  data-status='" . $status . "' ";
         $row['RESOURCE_NAME'].= "  data-service='" .$service .  "' ";
-        $row['RESOURCE_NAME'].= "  data-subservice='" . $subService . "' ";
+        $row['RESOURCE_NAME'].= "  data-subservice='" . $service . "' ";
         $row['RESOURCE_NAME'].= "  data-resourcename='" . $resourceName . "' ";
         $row['RESOURCE_NAME'].= "  data-start='" . $startDate . "' ";
         $row['RESOURCE_NAME'].= "  data-end='" . $endDate . "' ";
@@ -202,11 +200,11 @@ class resourceRequestTable extends DbTable
         $row['RESOURCE_NAME'].= "  >";
 
         $row['RESOURCE_NAME'].=
-            "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' >
+            "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' >
             <span class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Name'></span>
             </button>";
         $row['RESOURCE_NAME'].=
-             "<button type='button' class='btn btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$subService . "' data-resource-name='" . $resourceName . "' >
+             "<button type='button' class='btn btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' data-resource-name='" . $resourceName . "' >
               <span class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true'></span>
               </button>";
         $row['RESOURCE_NAME'] .=
@@ -217,7 +215,7 @@ class resourceRequestTable extends DbTable
               "<button type='button' class='btn btn-xs requestDuplication accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam' aria-label='Left Align'
                     data-reference='" . $resourceReference . "'
                     data-rfs='" . $row['RFS_ID'] . "'
-                    data-type='" . $row['CTB_SUB_SERVICE'] . "'
+                    data-type='" . $row['SERVICE'] . "'
                     data-start='" . $row['START_DATE'] . "'
                   >
               <span class='glyphicon glyphicon-duplicate text-primary' aria-hidden='true'></span>
@@ -233,7 +231,7 @@ class resourceRequestTable extends DbTable
 
         $row['RFS']        = array('display'=> $displayRfsId, 'sort'=>$rfsId);
         $row['START_DATE'] = array('display'=> $startDate . " to " . $endDate . "<br/>Avg Hrs/Week:" . $row['HRS_PER_WEEK'], 'sort'=>$startDate);
-        $row['ORGANISATION']=array('display'=>$row['ORGANISATION'] . "<br/><small>" . $row['CTB_SUB_SERVICE'] . "</small>", 'sort'=>$ctbService);
+        $row['ORGANISATION']=array('display'=>$row['ORGANISATION'] . "<br/><small>" . $row['SERVICE'] . "</small>", 'sort'=>$organisation);
 
     }
 

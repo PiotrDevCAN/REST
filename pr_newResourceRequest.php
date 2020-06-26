@@ -68,21 +68,21 @@ console.log($(".select"));
 
 	$('#ORGANISATION').on('select2:select', function(e){
 		var serviceSelected= $(e.params.data)[0].text;
-    	var entry = ctbService[0].indexOf(serviceSelected);
-    	var data = ctbService[entry];
+    	var entry = organisation[0].indexOf(serviceSelected);
+    	var data = organisation[entry];
 
-    	if ($('#CTB_SUB_SERVICE').hasClass("select2-hidden-accessible")) {
+    	if ($('#SERVICE').hasClass("select2-hidden-accessible")) {
     	    // Select2 has been initialized
-    	    $('#CTB_SUB_SERVICE').val("").trigger("change");
-    		$('#CTB_SUB_SERVICE').empty().select2('destroy').attr('disabled',true);
+    	    $('#SERVICE').val("").trigger("change");
+    		$('#SERVICE').empty().select2('destroy').attr('disabled',true);
     	}
-    	$("#CTB_SUB_SERVICE").select2({
+    	$("#SERVICE").select2({
     		  data: data
     	}).attr('disabled',false).val('').trigger('change');
 
 
     	if(data.length==2){
-    		$("#CTB_SUB_SERVICE").val(data[1].text).trigger('change');
+    		$("#SERVICE").val(data[1].text).trigger('change');
         }
 
 	});

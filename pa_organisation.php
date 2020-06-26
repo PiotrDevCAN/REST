@@ -4,33 +4,33 @@ use rest\StaticOperatingCompanyRecord;
 use itdq\FormClass;
 use rest\StaticCountryMarketRecord;
 use rest\StaticCountryMarketTable;
-use rest\StaticCtbServiceRecord;
-use rest\StaticCtbServiceTable;
+use rest\StaticOrganisationRecord;
+use rest\StaticOrganisationTable;
 
 ?>
 <div class='container'>
-<h2>Define CTB Service/Sub Service</h2>
+<h2>Define Organisation/Service</h2>
 <?php
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
-$ctbServiceRecord = new StaticCtbServiceRecord();
-$ctbServiceRecord->displayForm(itdq\FormClass::$modeDEFINE);
+$organisationRecord = new StaticOrganisationRecord();
+$organisationRecord->displayForm(itdq\FormClass::$modeDEFINE);
 
 ?>
 
 <div class='container'>
-<h2>Manage CTB Services</h2>
+<h2>Manage Organisation</h2>
 
 <div style='width: 75%'>
-<table id='ctbServiceTable' >
+<table id='organisationTable' >
 <thead>
-<tr><th>Service</th><th>Sub Service</th><th>Status</th></tr>
+<tr><th>Organisation</th><th>Service</th><th>Status</th></tr>
 </thead>
 <tbody>
 </tbody>
 <tfoot>
-<tr><th>Service</th><th>Sub Service</th><th>Status</th></tr>
+<tr><th>Organisation</th><th>Service</th><th>Status</th></tr>
 </tfoot>
 </table>
 </div>
@@ -44,7 +44,7 @@ $ctbServiceRecord->displayForm(itdq\FormClass::$modeDEFINE);
 <div class="modal-content">
 <div class="modal-header">
 <button type="button" class="close" data-dismiss="modal">&times;</button>
-<h4 class="modal-title">Service Save Result</h4>
+<h4 class="modal-title">Organistion Save Result</h4>
 </div>
 <div class="modal-body" >
 </div>
@@ -59,20 +59,20 @@ $ctbServiceRecord->displayForm(itdq\FormClass::$modeDEFINE);
 
 <script>
 
-var ctbServiceTable;
+var organisationTable;
 
-function listenForSaveCtbService(){
+function listenForSaveOrganisation(){
 	$(document).on('click','#saveService', function(e){
 		e.preventDefault();
 		$('#saveService').addClass('spinning').attr('disabled',true);
 		console.log($('#saveService'));
 		var disabledFields = $(':disabled');
 		$(disabledFields).removeAttr('disabled');
-		var formData = $('#ctbServiceForm').serialize();
+		var formData = $('#organisationForm').serialize();
 		$(disabledFields).attr('disabled',true);
 		console.log(formData);
 	    $.ajax({
-	    	url: "ajax/saveCtbService.php",
+	    	url: "ajax/saveOrganisation.php",
 	        type: 'POST',
 	    	data: formData,
 	    	success: function(result){
@@ -89,11 +89,11 @@ function listenForSaveCtbService(){
 		    		$('#saveResultModal').modal('show');
 	    		}
 	    		$('#ORGANISATION').val('');
-	    		$('#CTB_SUB_SERVICE').val('');
+	    		$('#SERVICE').val('');
 	    		$('#statusRadioDisabled').prop('checked',false);
 	    		$('#statusRadioEnabled').prop('checked',true);
          		$('.spinning').removeClass('spinning').attr('disabled',false);
-         		ctbServiceTable.ajax.reload();
+         		organisationTable.ajax.reload();
 	    	}
 	    });
 	});
@@ -103,13 +103,13 @@ function listenForToggleStatus(){
 	$(document).on('change','input.toggle',function(e) {
 		var status = $(this).data('status');
 		var organisation = $(this).data('organisation');
-		var ctbSubService = $(this).data('ctbsubservice');
+		var service = $(this).data('service');
 		$.ajax({
-			url: "ajax/updateCtbServiceStatus.php",
+			url: "ajax/updateOrganisationStatus.php",
 		    type: 'POST',
 		    data: {currentStatus:status,
 		    	ORGANISATION:organisation,
-		    	   CTB_SUB_SERVICE:ctbSubService},
+		    	     SERVICE:service},
 		    success: function(result){
 		    	var resultObj = JSON.parse(result);
 		    	var success   = resultObj.success;
@@ -130,11 +130,11 @@ function listenForToggleStatus(){
 }
 
 function listenForResetForm(){
-	$(document).on('click','#resetCtbService',function(){
-		$("input[name=statusRadio][value=<?=StaticCtbServiceTable::ENABLED;?>]").prop('checked', true)
+	$(document).on('click','#resetOrganisation',function(){
+		$("input[name=statusRadio][value=<?=StaticOrganisationTable::ENABLED;?>]").prop('checked', true)
 		$("input[name=statusRadio]").attr('disabled',false);
 		$('#ORGANISATION').val('');
-		$('#CTB_SUB_SERVICE').val('');
+		$('#SERVICE').val('');
 		$('#saveCtbService').val('Submit');
 		$('#mode').val('<?=FormClass::$modeDEFINE;?>');
 	});
@@ -152,7 +152,7 @@ var buttonCommon = {
 
 
 function initialiseTable(){
-	countryMarketTable = $('#ctbServiceTable').DataTable({
+	countryMarketTable = $('#organisationTable').DataTable({
 		autoWidth: false,
 		processing: true,
 		responsive: false,
@@ -188,7 +188,7 @@ function initialiseTable(){
         })
           ],
         ajax: {
-        	    "url":"/ajax/populateCtbServiceTable.php",
+        	    "url":"/ajax/populateOrganisationTable.php",
         	    "type": "GET",
         },
         drawCallback: function( row, data ) {
@@ -200,7 +200,7 @@ function initialiseTable(){
         },
         columns: [
             { data: "ORGANISATION" , "defaultContent": "" },
-            { data: "CTB_SUB_SERVICE","defaultContent": "" },
+            { data: "SERVICE","defaultContent": "" },
             { data: "STATUS",
            	  render: { _:'display', sort:'sort' },
             }
@@ -212,7 +212,7 @@ function initialiseTable(){
 $(document).ready(function(){
 	listenForResetForm();
 	listenForToggleStatus();
-	listenForSaveCtbService();
+	listenForSaveOrganisation();
 	initialiseTable();
 });
 </script>

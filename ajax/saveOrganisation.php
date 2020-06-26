@@ -5,21 +5,21 @@ use itdq\FormClass;
 use itdq\DbTable;
 use rest\StaticCountryMarketRecord;
 use rest\StaticCountryMarketTable;
-use rest\StaticCtbServiceTable;
-use rest\StaticCtbServiceRecord;
+use rest\StaticOrganisationTable;
+use rest\StaticOrganisationRecord;
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
 ob_start();
 
-$ctbServiceTable  = new StaticCtbServiceTable(allTables::$STATIC_ORGANISATION);
-$ctbServiceRecord = new StaticCtbServiceRecord();
-$ctbServiceRecord->setFromArray(array('ORGANISATION'=>$_POST['ORGANISATION'],'CTB_SUB_SERVICE'=>$_POST['CTB_SUB_SERVICE'],'STATUS'=>$_POST['statusRadio']));
+$organisationTable  = new StaticOrganisationTable(allTables::$STATIC_ORGANISATION);
+$organisationTableRecord = new StaticOrganisationRecord();
+$organisationTableRecord->setFromArray(array('ORGANISATION'=>$_POST['ORGANISATION'],'SERVICE'=>$_POST['SERVICE'],'STATUS'=>$_POST['statusRadio']));
 
 if($_POST['mode']==FormClass::$modeDEFINE){
-   $db2result = $ctbServiceTable->insert($ctbServiceRecord);
+   $db2result = $organisationTable->insert($organisationTableRecord);
 } else {
-   $db2result = $ctbServiceTable->update($ctbServiceRecord);
+   $db2result = $organisationTable->update($organisationTableRecord);
 }
 
 if(!$db2result){
