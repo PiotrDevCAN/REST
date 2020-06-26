@@ -69,8 +69,7 @@ console.log($(".select"));
 	$('#ORGANISATION').on('select2:select', function(e){
 		var serviceSelected= $(e.params.data)[0].text;
     	var entry = organisation[0].indexOf(serviceSelected);
-    	var data = organisation[entry];
-
+    	var data = organisation[entry+1];
     	if ($('#SERVICE').hasClass("select2-hidden-accessible")) {
     	    // Select2 has been initialized
     	    $('#SERVICE').val("").trigger("change");
