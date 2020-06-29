@@ -113,6 +113,7 @@ class resourceRequestTable extends DbTable
         $resultSet ? null : die("SQL Failed");
 
         $allData = array();
+        $allData['data'] = array();
 
         while(($row = db2_fetch_assoc($resultSet))==true){
             PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
@@ -122,8 +123,13 @@ class resourceRequestTable extends DbTable
             }
             $row = array_map('trim',$row);
             $this->addGlyphicons($row);
-            $allData[]  = $row;
+            $allData['data'][]  = $row;
         }
+        $allData['sql'] = $sql;
+
+
+
+
         return $allData ;
     }
 

@@ -13,7 +13,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $loader = new Loader();
 $rfsPredicate = rfsTable::rfsPredicateFilterOnPipeline();
-$allRfs = $loader->load('RFS_ID',allTables::$RFS,$rfsPredicate);
+$allRfs = $loader->load('RFS',allTables::$RESOURCE_REQUESTS,$rfsPredicate);
 $allCtbService =  $loader->load('ORGANISATION',allTables::$RESOURCE_REQUESTS);
 
 
@@ -24,6 +24,7 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 <div class='container'>
 
 <h3>Report Selection </h3>
+
 <form id='reportDates'>
 	<div class='form-group text-right' >
        <div id='START_DATE" . "FormGroup' >
@@ -49,28 +50,32 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
                   	          data-placeholder="Select RFS" data-allow-clear="true"
                   	          >
             	<option value=''>Select RFS<option>
+            	<option value='All'>All<option>
                 <?php
                     foreach ($allRfs as $value) {
                          $displayValue = trim($value);
                          $returnValue  = trim($value);
-                         ?><option value='<?=$returnValue?>'><?=$displayValue?></option><?php
+                         $selected = $returnValue==$_COOKIE['selectedRfs'] ? 'selected' : null;
+                         ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
                     }
                ?>
                </select>
             </div>
 
-        <label for='selectService' class='col-md-1 control-label text-right'>Organisation</label>
+        <label for='selectOrganisation' class='col-md-1 control-label text-right'>Organisation</label>
         	<div class='col-md-3 text-left'>
-              	<select class='form-control select' id='$organisation'
-                  	          name='$organisation'
+              	<select class='form-control select' id='selectOrganisation'
+                  	          name='organisation'
                   	          data-placeholder="Select Organisation" data-allow-clear="true"
                   	          >
             	<option value=''>Select Organisation<option>
+            	<option value='All'>All<option>
                 <?php
                     foreach ($allCtbService as $value) {
                          $displayValue = trim($value);
                          $returnValue  = trim($value);
-                         ?><option value='<?=$returnValue?>'><?=$displayValue?></option><?php
+                         $selected = $returnValue==$_COOKIE['selectedOrganisation'] ? 'selected' : null;
+                         ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
                     }
                ?>
                </select>
@@ -93,6 +98,9 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 <div id='resourceTableDiv'>
 </div>
 </div>
+
+
+
 
 <!-- Modal -->
 <div id="resourceNameModal" class="modal fade" role="dialog">
@@ -335,6 +343,13 @@ Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 .dataTables_wrapper .dataTables_processing {
 background-color:red;
 }
+td.dataTables_empty {
+	text-align: center;
+	font-size: 20px;
+	background-color:red;
+}
+
+
 </style>
 
 
@@ -352,10 +367,11 @@ var startPicker;
 
 
 $(document).ready(function() {
+	var allowPast = true;
 	$(".select").select2();
 	console.log('setup all the listeners');
 	var resourceRequest = new ResourceRequest();
-	resourceRequest.initialiseDateSelect();
+	resourceRequest.initialiseDateSelect(allowPast);
 	resourceRequest.buildResourceReport();
 	resourceRequest.populateResourceDropDownWhenModalShown();
 	resourceRequest.listenForEditResourceName();
@@ -379,7 +395,7 @@ $(document).ready(function() {
 	resourceRequest.listenForChangeStatus();
 	resourceRequest.listenForChangePipelineLive();
 	resourceRequest.listenForSelectSpecificRfs();
-	resourceRequest.listenForSelectSpecificCtbService();
+	resourceRequest.listenForSelectOrganisation();
 	$('[data-toggle="tooltip"]').tooltip();
 
 });

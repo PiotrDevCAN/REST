@@ -22,38 +22,57 @@ $piplineLive = $_POST['pipelineLive']=='true' ? rfsRecord::RFS_STATUS_LIVE : rfs
 $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
 $organisation = !empty($_POST['organisation']) ? $_POST['organisation'] : null;
 
-PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
 
-$predicate = rfsTable::rfsPredicateFilterOnPipeline($piplineLive);
-$predicate.= !empty($rfsId) ? " AND RFS='" . db2_escape_string($rfsId) . "' " : null;
-$predicate.= !empty($organisation) ? " AND ORGANISATION='" . db2_escape_string($organisation) . "' " : null;
+if (empty($rfsId) && empty($organisation)) {
+    $response = array(
+        'messages' => 'Nothing Selected',
+        'badrecords' => 0,
+        "data" => array()
+    );
+} else {
 
-$data = $resourceRequestTable->returnAsArray($startDate,$endDate,$predicate);
+    $rfsId = $rfsId=='All' ? null : $rfsId;
+    $organisation = $organisation=='All' ? null : $organisation;
 
-PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
 
+    PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
 
-$testJson = json_encode($data);
-$badRecords = 0;
-if (!$testJson){
-    foreach ($data as $ref => $record){
-        $testRecord = json_encode($record);
-        if(!$testRecord){
-            $badRecords++;
-            unset($data[$ref]);
+    $predicate = rfsTable::rfsPredicateFilterOnPipeline($piplineLive);
+    $predicate .= ! empty($rfsId) ? " AND RFS='" . db2_escape_string($rfsId) . "' " : null;
+    $predicate .= ! empty($organisation) ? " AND ORGANISATION='" . db2_escape_string($organisation) . "' " : null;
+
+    $dataAndSql = $resourceRequestTable->returnAsArray($startDate, $endDate, $predicate);
+    $data = $dataAndSql['data'];
+    $sql = $dataAndSql['sql'];
+
+    PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
+
+    $testJson = json_encode($data);
+    $badRecords = 0;
+    if (! $testJson) {
+        foreach ($data as $ref => $record) {
+            $testRecord = json_encode($record);
+            if (! $testRecord) {
+                $badRecords ++;
+                unset($data[$ref]);
+            }
         }
     }
+
+    PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
+
+    echo "Bad Records removed:$badRecords";
+
+    $messages = ob_get_clean();
+    ob_start();
+
+    $response = array(
+        'messages' => $messages,
+        'badrecords' => $badRecords,
+        "data" => $data,
+        "sql" => $sql
+    );
 }
-
-PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
-
-echo "Bad Records removed:$badRecords";
-
-
-$messages = ob_get_clean();
-ob_start();
-
-$response = array('messages'=>$messages,'badrecords'=>$badRecords,"data"=>$data);
 
 $json = json_encode($response);
 

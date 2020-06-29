@@ -473,12 +473,16 @@ function ResourceRequest() {
 	
 	this.listenForSelectSpecificRfs = function(){
 		$(document).on('change','#selectRfs',function(){
+			var rfs = $('#selectRfs option:selected').val();			
+			document.cookie = "selectedRfs=" + rfs + ";" + "path=/;max-age=604800;samesite=lax;"; 					
 			ResourceRequest.table.ajax.reload();
 		});		
 	},
 
-	this.listenForSelectSpecificCtbService = function(){
-		$(document).on('change','#organisation',function(){	
+	this.listenForSelectOrganisation = function(){
+		$(document).on('change','#selectOrganisation',function(){	
+			var org = $('#selectOrganisation option:selected').val();			
+			document.cookie = "selectedOrganisation=" + org + ";" + "path=/;max-age=604800;samesite=lax;"; 			
 			ResourceRequest.table.ajax.reload();
 		});		
 	},
@@ -548,6 +552,10 @@ function ResourceRequest() {
 	    } );
 		// DataTable
 	    ResourceRequest.table = $('#resourceRequestsTable_id').DataTable({
+	    	
+	    	language: {
+	    	      emptyTable: "Please select RFS and/or Organisation from above"
+	    	},
 	    	ajax: {
 	            url: 'ajax/populateResourceRequestHTMLTable.php',
 	            data: function ( d ) {
@@ -555,7 +563,7 @@ function ResourceRequest() {
 	                d.endDate = $('#END_DATE').val();
 	                d.pipelineLive  = $('#pipelineLive').prop('checked');
 	                d.rfsid = $('#selectRfs option:selected').val();
-	                d.organisation = $('#organisation option:selected').val();
+	                d.organisation = $('#selectOrganisation option:selected').val();
 	            },
 	            type: 'POST',
 	        }	,
@@ -664,6 +672,7 @@ function ResourceRequest() {
 	    $.ajax({
 	    	url: "ajax/createResourceReportHTMLTable.php",
 	        type: 'POST',
+	        serverside: true,
 	    	data: formData,
 	        before: function(){
 	        	$('#resourceTableDiv').html('<h2>Table being built</h2>');
@@ -677,22 +686,18 @@ function ResourceRequest() {
 	},
 
 
-	this.initialiseDateSelect = function(){
+	this.initialiseDateSelect = function(allowPast = false){
 		var endDate;
+				
+		var minDate = allowPast ? new Date(2000,1,1) : new Date();
 
-		startPicker = new Pikaday({
+		var startPicker = new Pikaday({
 			firstDay:1,
-//			disableDayFn: function(date){
-//			    // Disable all but Monday
-//			    return date.getDay() === 0 || date.getDay() === 2 || date.getDay() === 3 || date.getDay() === 4 || date.getDay() === 5 || date.getDay() === 6;
-//			},
 			field: document.getElementById('InputSTART_DATE'),
 			format: 'D MMM YYYY',
 			showTime: false,
-			minDate: new Date(),
+			minDate: minDate,
 			onSelect: function(date) {
-				console.log(date);
-				console.log(this.getMoment().format('Do MMMM YYYY'));
 				var db2Value = this.getMoment().format('YYYY-MM-DD')
 				console.log(db2Value);
 				console.log($('#START_DATE'));
@@ -702,7 +707,7 @@ function ResourceRequest() {
 				updateStartDate();
 			}
 		});
-		endPicker = new Pikaday({
+		var endPicker = new Pikaday({
 			firstDay:1,
 			field: document.getElementById('InputEND_DATE'),
 			format: 'D MMM YYYY',
