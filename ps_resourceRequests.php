@@ -16,7 +16,6 @@ $rfsPredicate = rfsTable::rfsPredicateFilterOnPipeline();
 $allRfs = $loader->load('RFS',allTables::$RESOURCE_REQUESTS,$rfsPredicate);
 $allCtbService =  $loader->load('ORGANISATION',allTables::$RESOURCE_REQUESTS);
 
-
 $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
 $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 
@@ -49,8 +48,8 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
                   	          name='selectRfs'
                   	          data-placeholder="Select RFS" data-allow-clear="true"
                   	          >
-            	<option value=''>Select RFS<option>
-            	<option value='All'>All<option>
+            	<option value=''>Select RFS</option>
+            	<option value='All'>All</option>
                 <?php
                     foreach ($allRfs as $value) {
                          $displayValue = trim($value);
@@ -69,8 +68,8 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
                   	          name='organisation'
                   	          data-placeholder="Select Organisation" data-allow-clear="true"
                   	          >
-            	<option value=''>Select Organisation<option>
-            	<option value='All'>All<option>
+            	<option value=''>Select Organisation</option>
+            	<option value='All'>All</option>
                 <?php
                     foreach ($allCtbService as $value) {
                          $displayValue = trim($value);
@@ -343,12 +342,12 @@ Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 
 <style>
 .dataTables_wrapper .dataTables_processing {
-background-color:red;
+background-color:#006699;
 }
 td.dataTables_empty {
 	text-align: center;
 	font-size: 20px;
-	background-color:red;
+	background-color:#006699;
 }
 
 

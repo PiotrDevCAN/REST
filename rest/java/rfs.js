@@ -117,6 +117,32 @@ function Rfs() {
 		    });
 		});
 	},
+	
+	this.listenForSelectRfs = function(){
+		$(document).on('change','#selectRfs',function(){
+			var rfs = $('#selectRfs option:selected').val();			
+			document.cookie = "selectedRfs=" + rfs + ";" + "path=/;max-age=604800;samesite=lax;"; 					
+			Rfs.table.ajax.reload();
+		});		
+	},
+
+	this.listenForSelectCio = function(){
+		$(document).on('change','#selectCio',function(){	
+			var cio = $('#selectCio option:selected').val();			
+			document.cookie = "selectedCio=" + cio + ";" + "path=/;max-age=604800;samesite=lax;"; 			
+			Rfs.table.ajax.reload();
+		});		
+	},
+
+	this.listenForSelectRequestor = function(){
+		$(document).on('change','#selectRequestor',function(){	
+			var requestor = $('#selectRequestor option:selected').val();			
+			document.cookie = "selectedRequestor=" + requestor + ";" + "path=/;max-age=604800;samesite=lax;"; 			
+			Rfs.table.ajax.reload();
+		});		
+	},
+	
+	
 
 	this.initialiseDataTable = function(){
 	    // Setup - add a text input to each footer cell
@@ -126,9 +152,17 @@ function Rfs() {
 	    } );
 		// DataTable
 	    Rfs.table = $('#rfsTable_id').DataTable({
+	    	language: {
+	    	      emptyTable: "Please select RFS, CIO and/or Requestor from above"
+	    	},
 	    	ajax: {
 	            url: 'ajax/populateRfsHTMLTable.php',
 	            type: 'POST',
+	            data: function ( d ) {
+	                d.rfsid = $('#selectRfs option:selected').val();
+	                d.cio = $('#selectCio option:selected').val();
+	                d.requestor = $('#selectRequestor option:selected').val();
+	            },
 	        }	,
 	    	autoWidth: true,
 	    	deferRender: true,

@@ -69,12 +69,7 @@ class rfsTable extends DbTable
         $sql .= !empty($predicate) ? " AND  $predicate " : null ;
 
         $resultSet = $this->execute($sql);
-
-
-        echo $sql;
-
         $resultSet ? null : die("SQL Failed");
-
         $allData = null;
 
         while(($row = db2_fetch_assoc($resultSet))==true){
