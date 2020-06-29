@@ -55,7 +55,8 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
                     foreach ($allRfs as $value) {
                          $displayValue = trim($value);
                          $returnValue  = trim($value);
-                         $selected = $returnValue==$_COOKIE['selectedRfs'] ? 'selected' : null;
+                         $selectedRFs = isset($_COOKIE['selectedRfs']) ? $_COOKIE['selectedRfs'] : null;
+                         $selected = $returnValue==$selectedRFs ? 'selected' : null;
                          ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
                     }
                ?>
@@ -74,7 +75,8 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
                     foreach ($allCtbService as $value) {
                          $displayValue = trim($value);
                          $returnValue  = trim($value);
-                         $selected = $returnValue==$_COOKIE['selectedOrganisation'] ? 'selected' : null;
+                         $selectedOrg = isset($_COOKIE['selectedOrganisation']) ? $_COOKIE['selectedOrganisation'] : null;
+                         $selected = $returnValue==$selectedOrg ? 'selected' : null;
                          ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
                     }
                ?>
