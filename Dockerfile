@@ -2,6 +2,9 @@ FROM jbauson/ibm:phpdb2-dsdv11.5
 
 ADD . /var/www/html/
 
+ADD ca.crt /usr/local/share/ca-certificates/ca.crt
+RUN update-ca-certificates
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
   autoconf \
   build-essential \
@@ -24,7 +27,6 @@ RUN docker-php-ext-configure gd \
 RUN docker-php-ext-configure zip
 
 RUN docker-php-ext-install gd zip
-
 
 RUN curl -sS https://getcomposer.org/installer | tac | tac | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install --no-interaction
