@@ -160,6 +160,7 @@ function ResourceRequest() {
 			    		}
 			    });	
 			} else {
+				$('.spinning').removeClass('spinning');
 				$('#RESOURCE_NAME').val(currentResourceName).trigger('change');
 				$('#RESOURCE_NAME').attr('disabled',false);
 			}
