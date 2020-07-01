@@ -15,6 +15,7 @@ $loader = new Loader();
 $rfsPredicate = rfsTable::rfsPredicateFilterOnPipeline();
 $allRfs = $loader->load('RFS',allTables::$RESOURCE_REQUESTS,$rfsPredicate);
 $allCtbService =  $loader->load('ORGANISATION',allTables::$RESOURCE_REQUESTS);
+// $vbacEmployees = resourceRequestTable::getVbacActiveResourcesForSelect2();
 
 $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
 $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
@@ -122,10 +123,13 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
               	<select class='form-control select' id='RESOURCE_NAME'
                   	          name='RESOURCE_NAME'
                   	          required='required'
-                  	          data-tags="true" data-placeholder="Select Resource" data-allow-clear="true"
+                  	          data-placeholder="Select Resource"
+                  	          data-allow-clear="true"
+                  	          disabled="true"
                   	           >
             	<option value=''>Select Resource<option>
                	</select>
+               	<p id='pleaseWaitMessage'></p>
                   <input type='hidden' id="RESOURCE_REFERENCE" name="RESOURCE_REFERENCE" value="" >
                   <input type='hidden' id="parent" name="parent" value="" >
                   <input type='hidden' id="currentResourceName"  value="" >
@@ -368,6 +372,7 @@ var startPicker;
 
 
 $(document).ready(function() {
+	$('#pleaseWaitMessage').html('Please wait while resource list is fetched');
 	var allowPast = true;
 	$(".select").select2();
 	console.log('setup all the listeners');

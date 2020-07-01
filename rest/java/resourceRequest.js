@@ -18,6 +18,12 @@ var buttonCommon = {
         }
 };
 
+function formatResourceName(resource){
+	var color = resource.distance=='local' ? 'green' : '#ffc200'
+	var text = $("<span style='color:" + color + "'>" + resource.text + "&nbsp;<small>" + resource.role + "</small>" +  "</span>");	
+	return text;
+}
+
 
 function ResourceRequest() {
 
@@ -132,6 +138,8 @@ function ResourceRequest() {
 
 	this.populateResourceDropDownWhenModalShown = function(){
 		$('#resourceNameModal').on('shown.bs.modal', function(){
+			$('#RESOURCE_NAME').attr('disabled',true);
+			$('#saveResourceName').addClass('spinning');
 			var currentResourceName = $('#currentResourceName').val();	
 			if (!resourceNamesForSelect2.length){
 				console.log('first time');
@@ -142,12 +150,18 @@ function ResourceRequest() {
 			    		console.log(result);
 			    		var resultObj = JSON.parse(result);
 			    		resourceNamesForSelect2 = resultObj.data;
-						$('#RESOURCE_NAME').select2({data : resourceNamesForSelect2}).val(currentResourceName).trigger('change');
+						$('#RESOURCE_NAME').select2({
+							data          : resourceNamesForSelect2,
+						    templateResult: formatResourceName
+							}).val(currentResourceName).trigger('change');
 						$('.spinning').removeClass('spinning');
+						$('#RESOURCE_NAME').attr('disabled',false);
+						$('#pleaseWaitMessage').html('');
 			    		}
 			    });	
 			} else {
 				$('#RESOURCE_NAME').val(currentResourceName).trigger('change');
+				$('#RESOURCE_NAME').attr('disabled',false);
 			}
 		});
 	},

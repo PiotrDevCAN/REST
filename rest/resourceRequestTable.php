@@ -262,23 +262,44 @@ class resourceRequestTable extends DbTable
 
 
     static function getVbacActiveResourcesForSelect2(){
-        $vbacEmployees = array();
-        $url = $_ENV['vbac_url'] . '/api/employeePlus.php?token=soEkCfj8zGNDLZ8yXH2YJjpehd8ijzlS&plus=email_address,role_on_the_account,work_stream';
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HEADER,         1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HEADER,        FALSE);
-        curl_setopt($ch, CURLOPT_URL, $url);
+        if(isset($_SESSION['vbacEmployees'])){
+            return $_SESSION['vbacEmployees'];
+        } else {
+             $vbacEmployees = array();
+             $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=soEkCfj8zGNDLZ8yXH2YJjpehd8ijzlS&plus=P.ROLE_ON_THE_ACCOUNT,P.EMAIL_ADDRESS';
 
-        $allEmployeesJson = curl_exec($ch);
-        $allEmployees = json_decode($allEmployeesJson);
+             $ch = curl_init();
+             curl_setopt($ch, CURLOPT_HEADER,         1);
+             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+             curl_setopt($ch, CURLOPT_HEADER,        FALSE);
+             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);  // it doesn't like the self signed certs on Cirrus
+             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+             curl_setopt($ch, CURLOPT_URL, $url);
 
-        foreach ($allEmployees as $employeeDetails) {
-            $vbacEmployees[] = array('id'=>trim($employeeDetails->EMAIL_ADDRESS), 'text'=>trim($employeeDetails->NOTES_ID) . " (" . trim($employeeDetails->WORK_STREAM) . ") ");
+             $allEmployeesJson = curl_exec($ch);
+             $allEmployees = json_decode($allEmployeesJson);
+
+             $tribeMembers = array();
+             $vbacEmployees = array();
+
+             foreach ($allEmployees as $employeeDetails) {
+                 $vbacEmployees[] = array('id'=>trim($employeeDetails->NOTES_ID), 'text'=>trim($employeeDetails->NOTES_ID), 'role'=>trim($employeeDetails->ROLE_ON_THE_ACCOUNT),'tribe'=>trim($employeeDetails->TRIBE_NUMBER),'distance'=>'remote');
+//                  $tribeMembers[trim($employeeDetails->EMAIL_ADDRESS)] = trim($employeeDetails->TRIBE_NUMBER);
+             }
+
+             $localTribe = $tribeMembers[$_SESSION['ssoEmail']];
+
+             foreach ($vbacEmployees as $key=>$value) {
+                 if($value['tribe']==$localTribe){
+                     $vbacEmployees[$key]['distance']='local';
+                 }
+             }
+
+             $_SESSION['vbacEmployees'] = $vbacEmployees;
+//              $_SESSION['tribeMembers'] = $tribeMembers;
         }
-
-        return $vbacEmployees;
+        return $_SESSION['vbacEmployees'];
     }
 
 
