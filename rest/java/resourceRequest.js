@@ -19,7 +19,7 @@ var buttonCommon = {
 };
 
 function formatResourceName(resource){
-	var color = resource.distance=='local' ? 'green' : '#ffc200'
+	var color = resource.distance=='local' ? 'green' : '#d67600'
 	var text = $("<span style='color:" + color + "'>" + resource.text + "&nbsp;<small>" + resource.role + "</small>" +  "</span>");	
 	return text;
 }
