@@ -27,13 +27,16 @@ class resourceRequestTable extends DbTable
 
     function updateResourceName($resourceReference,$resourceName, $clear=null){
 
+        $status = resourceRequestRecord::STATUS_ASSIGNED;
         if(!empty($clear)){
             $resourceName = '';
+            $status=resourceRequestRecord::STATUS_NEW;
         } else if(empty($resourceReference) or empty($resourceName)){
                 throw new \Exception('Paramaters Missing in call to ' . __FUNCTION__);
         }
         $sql  = " UPDATE " . $_SESSION['Db2Schema'] . "." . $this->tableName;
         $sql .= " SET RESOURCE_NAME='" . db2_escape_string($resourceName) . "' ";
+        $sql .= " , STATUS='" . $status . "' ";
         $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference);
 
         $result = $this->execute($sql);
