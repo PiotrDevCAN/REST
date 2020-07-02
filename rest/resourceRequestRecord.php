@@ -34,14 +34,13 @@ class resourceRequestRecord extends DbRecord
                                           "Request Creator", "Request Created","Cloned From", "Status"    );
 
     CONST STATUS_NEW        = 'New';
-    CONST STATUS_REDIRECTED = 'Re-Directed';
-    CONST STATUS_PLATFORM   = 'With Platform Team';
-    CONST STATUS_REQUESTOR  = 'With Requestor';
+//     CONST STATUS_REDIRECTED = 'Re-Directed';
+//     CONST STATUS_PLATFORM   = 'With Platform Team';
+//     CONST STATUS_REQUESTOR  = 'With Requestor';
     CONST STATUS_ASSIGNED   = 'Assigned';
     CONST STATUS_COMPLETED  = 'Completed';
 
-    static public $allStatus = array(self::STATUS_NEW,self::STATUS_REDIRECTED,self::STATUS_PLATFORM,
-                                      self::STATUS_REQUESTOR,self::STATUS_ASSIGNED,self::STATUS_COMPLETED);
+    static public $allStatus = array(self::STATUS_NEW,self::STATUS_ASSIGNED,self::STATUS_COMPLETED);
 
     function get($field){
         return empty($this->$field) ? null : trim($this->$field);
