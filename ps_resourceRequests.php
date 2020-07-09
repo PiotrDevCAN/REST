@@ -18,6 +18,7 @@ $allCtbService =  $loader->load('ORGANISATION',allTables::$RESOURCE_REQUESTS);
 // $vbacEmployees = resourceRequestTable::getVbacActiveResourcesForSelect2();
 
 $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
+$defaultForArchiveLive = 'checked' ;
 $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 
 ?>
@@ -38,9 +39,27 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
        </div>
        </div>
 
-       <label for='pipelineLive' class='col-md-1 control-label text-right' data-toggle='tooltip' data-placement='top' title='Toggle between viewing the LIVE records or the Internal Pipline'>Database:</label>
-       <div class='col-md-1'>
-       <input id='pipelineLive' class='toggle pipelineLive' type='checkbox' <?=$defaultForPipelineLive;?>  <?=$canSeeLive;?>data-toggle='toggle' >
+		<div class='col-md-2'>
+		<div class='row'>
+
+       	<label for='pipelineLive' class='col-md-9 control-label text-right'
+                                 data-toggle='tooltip'
+                                 data-placement='top'
+                                 title='Toggle between viewing the LIVE records or the Internal Pipline'>Pipeline/Live</label>
+
+       	<div class='col-md-1'>
+       		<input id='pipelineLive' class='toggle pipelineLive' type='checkbox' <?=$defaultForPipelineLive;?>  <?=$canSeeLive;?>data-toggle='toggle' data-onstyle="success" data-offstyle="danger"  data-size="mini" >
+       	</div>
+       	</div>
+       	<div class='row'>
+       	<label for='archiveLive' class='col-md-9 control-label text-right'
+                                 data-toggle='tooltip'
+                                 data-placement='top'
+                                 title='Toggle between viewing the LIVE records or Archived Records'>Archive/Live</label>
+       	<div class='col-md-1'>
+       		<input id='archiveLive' class='toggle archiveLive' type='checkbox' <?=$defaultForArchiveLive;?>  data-toggle='toggle' data-onstyle="success" data-offstyle="danger"  data-size="mini" >
+        </div>
+       </div>
        </div>
 
        <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>
@@ -299,13 +318,6 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_COMPLETED ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_COMPLETED)?>'><?=resourceRequestRecord::STATUS_COMPLETED ?></label>
 		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_NEW ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_NEW)?>'><?=resourceRequestRecord::STATUS_NEW ?></label>
 		</div>
-
-		<div class="form-group">
-		 <label class='col-sm-2'></label>
-		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_PLATFORM ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_PLATFORM)?>'><?=resourceRequestRecord::STATUS_PLATFORM ?></label>
-		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_REDIRECTED ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_REDIRECTED)?>'><?=resourceRequestRecord::STATUS_REDIRECTED ?></label>
-		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_REQUESTOR ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_REQUESTOR)?>'><?=resourceRequestRecord::STATUS_REQUESTOR ?></label>
-		 </div>
         </form>
 
 	</div>
@@ -367,11 +379,17 @@ $(".pipelineLive").bootstrapToggle({
   off: 'Pipeline'
 });
 
+$(".archiveLive").bootstrapToggle({
+    on: 'Live',
+  off: 'Archived'
+});
+
 
 var startPicker;
 
 
 $(document).ready(function() {
+	console.log('ready now');
 	$('#pleaseWaitMessage').html('Please wait while resource list is fetched');
 	var allowPast = true;
 	$(".select").select2();
@@ -400,6 +418,7 @@ $(document).ready(function() {
 	resourceRequest.listenForConfirmedDelete();
 	resourceRequest.listenForChangeStatus();
 	resourceRequest.listenForChangePipelineLive();
+	resourceRequest.listenForChangeArchiveLive();
 	resourceRequest.listenForSelectSpecificRfs();
 	resourceRequest.listenForSelectOrganisation();
 	$('[data-toggle="tooltip"]').tooltip();

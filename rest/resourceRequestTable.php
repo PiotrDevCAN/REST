@@ -111,6 +111,8 @@ class resourceRequestTable extends DbTable
 
         $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";
 
+        error_log($sql);
+
         $resultSet = $this->execute($sql);
 
         $resultSet ? null : die("SQL Failed");
@@ -253,7 +255,7 @@ class resourceRequestTable extends DbTable
         echo $sql;
 
 
-        $rs = db2_exec($_SESSION['conn'], $sql);
+        $rs = db2_exec($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);

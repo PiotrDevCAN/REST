@@ -35,6 +35,8 @@ if( isset($_ENV['ssldsn']) )
             error_log("Msg:" . db2_conn_errormsg());
             error_log("Err:" . db2_conn_error());
             sleep(3);
+        } else {
+            error_log("Connection successful on : $attempts Attempt");
         }
     }
     
