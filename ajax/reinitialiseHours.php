@@ -8,7 +8,7 @@ use rest\resourceRequestHoursTable;
 
 set_time_limit(0);
 ob_start();
-$autoCommit = db2_autocommit($_SESSION['conn'],DB2_AUTOCOMMIT_OFF);
+$autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
 switch (true) {
     case empty($_POST['ModalSTART_DATE']):
@@ -53,16 +53,16 @@ if($valid){
         $resourceRecord->set('END_DATE', $_POST['ModalEND_DATE']);
         $resourceRecord->set('HRS_PER_WEEK', $_POST['ModalHRS_PER_WEEK']);
         $rs = $resourceTable->update($resourceRecord);
-        db2_commit($_SESSION['conn']);
+        db2_commit($GLOBALS['conn']);
     } catch (Exception $e) {
-        db2_rollback($_SESSION['conn']);
+        db2_rollback($GLOBALS['conn']);
         $hoursResponse = $e->getMessage();
     }
 
     $resourceHoursTable->commitUpdates();
 }
 
-db2_autocommit($_SESSION['conn'],$autoCommit);
+db2_autocommit($GLOBALS['conn'],$autoCommit);
 
 $messages = ob_get_clean();
 ob_start();

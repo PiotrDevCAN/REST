@@ -22,7 +22,7 @@ ob_start();
  */
 
 
-$autoCommit = db2_autocommit($_SESSION['conn'],DB2_AUTOCOMMIT_OFF);
+$autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
 if(empty($_POST['ModalSTART_DATE'])){
     throw new Exception('No Start Date provided for Slipping Start Date function');
@@ -66,7 +66,7 @@ $resourceRequestTable->update($resourceRequest);
 
 $resourceHoursTable->commitUpdates();
 
-db2_autocommit($_SESSION['conn'],$autoCommit);
+db2_autocommit($GLOBALS['conn'],$autoCommit);
 
 $messages = ob_get_clean();
 ob_start();

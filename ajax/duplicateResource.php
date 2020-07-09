@@ -9,7 +9,7 @@ use rest\resourceRequestHoursTable;
 set_time_limit(0);
 ob_start();
 
-$autoCommit = db2_autocommit($_SESSION['conn'],DB2_AUTOCOMMIT_OFF);
+$autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
 
 $resourceRecord = new resourceRequestRecord();
@@ -43,15 +43,15 @@ if($saveResponse){
     try {
         $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference,$startDate,$endDate,$hours );
         $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
-        db2_commit($_SESSION['conn']);
+        db2_commit($GLOBALS['conn']);
     } catch (Exception $e) {
         $hoursResponse = $e->getMessage();
-        db2_rollback($_SESSION['conn']);
+        db2_rollback($GLOBALS['conn']);
     }
 
 }
 
-db2_autocommit($_SESSION['conn'],$autoCommit);
+db2_autocommit($GLOBALS['conn'],$autoCommit);
 
 $messages = ob_get_clean();
 ob_start();

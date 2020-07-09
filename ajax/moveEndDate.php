@@ -23,7 +23,7 @@ $endDateWasObj = new DateTime($_POST['endDateWas']);
 
 $rrHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
 
-$autoCommit = db2_autocommit($_SESSION['conn'],DB2_AUTOCOMMIT_OFF);
+$autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
 echo $endDateObj->format('Y-m-d');
 echo $endDateWasObj->format('Y-m-d');
@@ -46,7 +46,7 @@ resourceRequestTable::setEndDate($_POST['resourceReference'], $endDateObj->forma
 
 $rrHoursTable->commitUpdates();
 
-db2_autocommit($_SESSION['conn'],$autoCommit);
+db2_autocommit($GLOBALS['conn'],$autoCommit);
 
 $messages = ob_get_clean();
 ob_start();

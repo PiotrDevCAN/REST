@@ -88,7 +88,7 @@ class rfsPipelineView extends DbTable
         $sql .= " SET ARCHIVE = CURRENT TIMESTAMP ";
         $sql .= " WHERE RFS_ID ='" . db2_escape_string($rfsid) . "' " ;
 
-        $rs = db2_exec($_SESSION['conn'], $sql);
+        $rs = db2_exec($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);

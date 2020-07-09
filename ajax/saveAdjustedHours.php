@@ -18,7 +18,7 @@ $sql = " UPDATE " . $_SESSION['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_
 $sql .= " SET HOURS=? " ;
 $sql .= " WHERE RESOURCE_REFERENCE=? and DATE=? ";
 
-$hoursUpdate = db2_prepare($_SESSION['conn'], $sql);
+$hoursUpdate = db2_prepare($GLOBALS['conn'], $sql);
 
 if(!$hoursUpdate){
     echo db2_stmt_error();

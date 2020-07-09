@@ -41,7 +41,7 @@ class rfsTable extends DbTable
     static function loadKnownRfsToJs($predicate=null){
         $sql = " SELECT RFS_ID FROM " . $_SESSION['Db2Schema'] . "." .  allTables::$RFS;
 
-        $rs = db2_exec($_SESSION['conn'], $sql);
+        $rs = db2_exec($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -118,7 +118,7 @@ class rfsTable extends DbTable
             $sql = " SELECT RFS, MAX(END_DATE) as END_DATE FROM " . $_SESSION['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS ;
             $sql .= " GROUP BY RFS ";
 
-            $rs = db2_exec($_SESSION['conn'], $sql);
+            $rs = db2_exec($GLOBALS['conn'], $sql);
 
             if(!$rs) {
                 DbTable::displayErrorMessage($rs,__CLASS__, __METHOD__, $sql);
@@ -141,7 +141,7 @@ class rfsTable extends DbTable
         $sql .= " SET ARCHIVE = CURRENT TIMESTAMP ";
         $sql .= " WHERE RFS_ID ='" . db2_escape_string($rfsid) . "' " ;
 
-        $rs = db2_exec($_SESSION['conn'], $sql);
+        $rs = db2_exec($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);

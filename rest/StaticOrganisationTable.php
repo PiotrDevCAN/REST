@@ -21,7 +21,7 @@ class StaticOrganisationTable extends DbTable
         $sql.= " WHERE 1=1 ";
         $sql.= empty($predicate) ? null : " AND " . $predicate;
         $sql .= " ORDER BY ORGANISATION, SERVICE  ";
-        $resultSet = db2_exec($_SESSION['conn'], $sql);
+        $resultSet = db2_exec($GLOBALS['conn'], $sql);
 
         $allOrganisations = array();
         if($resultSet){
@@ -42,7 +42,7 @@ class StaticOrganisationTable extends DbTable
         $sql.= " WHERE ORGANISATION='" . db2_escape_string($organisation) . "'  ";
         $sql.= "   AND SERVICE='" . db2_escape_string($service) . "'  ";
 
-        $rs = db2_exec($_SESSION['conn'], $sql);
+        $rs = db2_exec($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -59,7 +59,7 @@ class StaticOrganisationTable extends DbTable
         $sql.= " WHERE ORGANISATION='" . db2_escape_string($organisation) . "'  ";
         $sql.= "   AND SERVICE='" . db2_escape_string($service) . "'  ";
 
-        $rs = db2_exec($_SESSION['conn'], $sql);
+        $rs = db2_exec($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -72,7 +72,7 @@ class StaticOrganisationTable extends DbTable
         $sql = " SELECT * ";
         $sql.= " FROM " . $_SESSION['Db2Schema'] . "." . $this->tableName;
 
-        $rs = db2_exec($_SESSION['conn'], $sql);
+        $rs = db2_exec($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);

@@ -486,6 +486,12 @@ function ResourceRequest() {
 		});
 	},
 	
+	this.listenForChangeArchiveLive = function(){
+		$(document).on('change','#archiveLive',function(){
+			ResourceRequest.table.ajax.reload();
+		});
+	},
+	
 	this.listenForSelectSpecificRfs = function(){
 		$(document).on('change','#selectRfs',function(){
 			var rfs = $('#selectRfs option:selected').val();			
@@ -577,6 +583,7 @@ function ResourceRequest() {
 	                d.startDate = $('#START_DATE').val();
 	                d.endDate = $('#END_DATE').val();
 	                d.pipelineLive  = $('#pipelineLive').prop('checked');
+	                d.archiveLive  = $('#archiveLive').prop('checked');
 	                d.rfsid = $('#selectRfs option:selected').val();
 	                d.organisation = $('#selectOrganisation option:selected').val();
 	            },

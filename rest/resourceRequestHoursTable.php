@@ -108,7 +108,7 @@ class resourceRequestHoursTable extends DbTable
             $sql .= " FROM " . $_SESSION['Db2Schema'] . "." .  $this->tableName;
             $sql .= " WHERE RESOURCE_REFERENCE=?";
             $this->preparedSelectSQL = $sql;
-            $this->preparedGetTotalHrsStatement = db2_prepare($_SESSION['conn'], $sql);
+            $this->preparedGetTotalHrsStatement = db2_prepare($GLOBALS['conn'], $sql);
 
         }
         return $this->preparedGetTotalHrsStatement;

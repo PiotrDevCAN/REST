@@ -7,7 +7,7 @@ ini_set('display_errors',1);
 error_reporting(-1);
 
 // $sql = " SELECT * From REST.INFLIGHT_PROJECTS ";
-// $rs = db2_exec($_SESSION['conn'],$sql);
+// $rs = db2_exec($GLOBALS['conn'],$sql);
 // var_dump($rs);
 
 // if($rs){
@@ -17,7 +17,7 @@ error_reporting(-1);
 // }
 echo "<hr/>";
 
-$rs2 = db2_columns($_SESSION['conn'], null, $_SESSION['Db2Schema'], 'INFLIGHT_PROJECTS', '%');
+$rs2 = db2_columns($GLOBALS['conn'], null, $_SESSION['Db2Schema'], 'INFLIGHT_PROJECTS', '%');
 var_dump($rs2);
 
 if($rs2){
@@ -38,14 +38,14 @@ var_dump($cols);
 echo "<hr/>";
 
 
-$rs4 = db2_server_info($_SESSION['conn']);
+$rs4 = db2_server_info($GLOBALS['conn']);
 var_dump($rs4);
 
 
 echo "<hr/>";
 
 
-// $rs3 = db2_tables($_SESSION['conn'], null, $_SESSION['Db2Schema']);
+// $rs3 = db2_tables($GLOBALS['conn'], null, $_SESSION['Db2Schema']);
 
 // var_dump($rs3);
 

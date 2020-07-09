@@ -14,7 +14,7 @@ $sql.=   $_SESSION['Db2Schema'] . "." . allTables::$RFS;
 $sql.= " SET RFS_STATUS='" . rfsRecord::RFS_STATUS_LIVE . "' ";
 $sql.= " WHERE RFS_ID='" . db2_escape_string(trim($_POST['rfsid'])) . "' ";
 
-$rs = db2_exec($_SESSION['conn'], $sql);
+$rs = db2_exec($GLOBALS['conn'], $sql);
 
 if(!$rs){
     echo db2_stmt_error();

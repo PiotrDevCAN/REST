@@ -11,7 +11,7 @@ use itdq\Loader;
 set_time_limit(0);
 ob_start();
 
-db2_commit($_SESSION['conn']);
+db2_commit($GLOBALS['conn']);
 
 parse_str($_POST['formData'],$adjustedHours);
 $originalResourceReference = $adjustedHours['ModalResourceReference'];
@@ -24,7 +24,7 @@ $sql = " UPDATE " . $_SESSION['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_
 $sql .= " SET HOURS=? " ;
 $sql .= " WHERE RESOURCE_REFERENCE=? and DATE=? ";
 
-$hoursUpdate = db2_prepare($_SESSION['conn'], $sql);
+$hoursUpdate = db2_prepare($GLOBALS['conn'], $sql);
 
 if(!$hoursUpdate){
     echo db2_stmt_error();
@@ -52,11 +52,11 @@ foreach ($adjustedHours as $key => $value){
         echo "<hr/>";
 
 
-        db2_commit($_SESSION['conn']);
+        db2_commit($GLOBALS['conn']);
     }
 }
 
-db2_commit($_SESSION['conn']);
+db2_commit($GLOBALS['conn']);
 
 $messages = ob_get_clean();
 ob_start();

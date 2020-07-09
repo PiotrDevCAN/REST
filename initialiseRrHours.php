@@ -14,7 +14,7 @@ echo $sql;
 
 $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
 
-$resultSet = db2_exec($_SESSION['conn'],$sql);
+$resultSet = db2_exec($GLOBALS['conn'],$sql);
 
 if($resultSet){
     while (($row=db2_fetch_assoc($resultSet))==true){
