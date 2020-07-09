@@ -18,7 +18,9 @@ $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 
 $startDate = !empty($_POST['startDate']) ? $_POST['startDate'] : null;
 $endDate = !empty($_POST['endDate']) ? $_POST['endDate'] : null;
-$piplineLiveArchive = $_POST['pipelineLiveArchive'];
+$pipelineLiveArchive = $_POST['pipelineLiveArchive'];
+$pipelineLive = $pipelineLiveArchive=='live' ? rfsRecord::RFS_STATUS_LIVE : rfsRecord::RFS_STATUS_PIPELINE;
+$pipelineLive = $pipelineLiveArchive=='archive' ? null : $pipelineLive;
 $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
 $organisation = !empty($_POST['organisation']) ? $_POST['organisation'] : null;
 
@@ -37,13 +39,14 @@ if (empty($rfsId) && empty($organisation)) {
 
     PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
 
-    $predicate = rfsTable::rfsPredicateFilterOnPipeline($piplineLive);
+    $predicate  =   empty($rfsId)  ? rfsTable::rfsPredicateFilterOnPipeline($pipelineLive) : null;
     $predicate .= ! empty($rfsId) ? " AND RFS='" . db2_escape_string($rfsId) . "' " : null;
     $predicate .= ! empty($organisation) ? " AND ORGANISATION='" . db2_escape_string($organisation) . "' " : null;
 
-    $dataAndSql = $resourceRequestTable->returnAsArray($startDate, $endDate, $predicate, $piplineLiveArchive);
+    $dataAndSql = $resourceRequestTable->returnAsArray($startDate, $endDate, $predicate, $pipelineLiveArchive);
     $data = $dataAndSql['data'];
     $sql = $dataAndSql['sql'];
+   
 
     PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
 

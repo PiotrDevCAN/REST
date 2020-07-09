@@ -12,6 +12,7 @@ include ('vendor/autoload.php');
 include ('splClassLoader.php');
 
 $sessionConfig = (new \ByJG\Session\SessionConfig($_SERVER['SERVER_NAME']))
+->withTimeoutMinutes(120)
 ->withSecret($_ENV['jwt_token']);
 
 $handler = new JwtSecureSession($sessionConfig);
@@ -19,5 +20,7 @@ session_set_save_handler($handler, true);
 
 session_start();
 error_log(__FILE__ . "session:" . session_id());
+
+$GLOBALS['Db2Schema'] = strtoupper($_ENV['environment']);
 
 include "connect.php";

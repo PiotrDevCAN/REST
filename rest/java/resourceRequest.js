@@ -481,7 +481,10 @@ function ResourceRequest() {
 	},
 	
 	this.listenForChangePipelineLiveArchive = function(){
-		$(document).on('change','input:radio[name=pipelineLiveArchive]',function(){
+		$(document).on('change','input:radio[name=pipelineLiveArchive]',function(){			
+			var rr = new ResourceRequest();
+			$('#selectRfs').select2('destroy');			
+			rr.prepareRfsSelect();
 			ResourceRequest.table.ajax.reload();
 		});
 	},
@@ -779,6 +782,20 @@ function ResourceRequest() {
 	this.destroyResourceReport = function(){
 		$('#resourceRequestsTable_id').DataTable().destroy();
 	}
+	
+	this.prepareRfsSelect = function(){
+		$('#selectRfs').select2({
+			  ajax: {
+				url: 'ajax/populateSelectRfsForRR.php',
+				dataType: 'json',
+				data: function (params) {
+					pipelineLiveArchive  = $("input:radio[name=pipelineLiveArchive]:checked").val();
+      				return { pipelineLiveArchive : pipelineLiveArchive 	};
+    			},	
+		 	},	  
+		})
+	}
+	
 
 
 
@@ -789,6 +806,3 @@ $( document ).ready(function() {
 	var resourceRequest = new ResourceRequest();
     resourceRequest.init();
 });
-
-
-

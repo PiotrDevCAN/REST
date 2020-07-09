@@ -106,9 +106,9 @@ class resourceRequestTable extends DbTable
         $sql .= " ON RR.RESOURCE_REFERENCE = RH.RR ";
 
         $sql .=  " WHERE RR.RFS is not null ";
-        $sql .= $piplineLiveArchive=='archive'  ? " AND ARCHIVE is null " : " AND ARCHIVE is not null ";
-        $sql .= $piplineLiveArchive=='pipeline' ? " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " : " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_LIVE . "' ";
-        $sql .= !empty($predicate) ? " AND $predicate " : null ;
+        $sql .= $piplineLiveArchive=='archive'  ? " AND ARCHIVE is not null " : " AND ARCHIVE is null ";
+        $sql .= $piplineLiveArchive=='pipeline' ? " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " : " AND RFS_STATUS!='" . rfsRecord::RFS_STATUS_PIPELINE . "' ";
+        $sql .= !empty($predicate) ? " $predicate " : null ;
 
         $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";
 

@@ -13,7 +13,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $loader = new Loader();
 $rfsPredicate = rfsTable::rfsPredicateFilterOnPipeline();
-$allRfs = $loader->load('RFS',allTables::$RESOURCE_REQUESTS,$rfsPredicate);
+// $allRfs = $loader->load('RFS',allTables::$RESOURCE_REQUESTS,$rfsPredicate);
 $allCtbService =  $loader->load('ORGANISATION',allTables::$RESOURCE_REQUESTS);
 // $vbacEmployees = resourceRequestTable::getVbacActiveResourcesForSelect2();
 
@@ -47,22 +47,12 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 
        <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>
         	<div class='col-md-2 text-left'>
-              	<select class='form-control select' id='selectRfs'
-                  	          name='selectRfs'
-                  	          data-placeholder="Select RFS" data-allow-clear="true"
-                  	          >
-            	<option value=''>Select RFS</option>
-            	<option value='All'>All</option>
-                <?php
-                    foreach ($allRfs as $value) {
-                         $displayValue = trim($value);
-                         $returnValue  = trim($value);
-                         $selectedRFs = isset($_COOKIE['selectedRfs']) ? $_COOKIE['selectedRfs'] : null;
-                         $selected = $returnValue==$selectedRFs ? 'selected' : null;
-                         ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
-                    }
-               ?>
-               </select>
+              	<select class='form-control select' 
+              			id='selectRfs'
+                  	    name='selectRfs'
+                  	    data-placeholder="Select RFS" 
+                  	    data-allow-clear="true"
+                ></select>
             </div>
 
         <label for='selectOrganisation' class='col-md-1 control-label text-right'>Organisation</label>
@@ -356,18 +346,6 @@ td.dataTables_empty {
 
 <script>
 
-$("[data-toggle='toggle']").bootstrapToggle('destroy')
-$(".pipelineLive").bootstrapToggle({
-    on: 'Live',
-  off: 'Pipeline'
-});
-
-$(".archiveLive").bootstrapToggle({
-    on: 'Live',
-  off: 'Archived'
-});
-
-
 var startPicker;
 
 
@@ -375,9 +353,11 @@ $(document).ready(function() {
 	console.log('ready now');
 	$('#pleaseWaitMessage').html('Please wait while resource list is fetched');
 	var allowPast = true;
-	$(".select").select2();
+	$(".select").not('#selectRfs').select2();
+	
 	console.log('setup all the listeners');
 	var resourceRequest = new ResourceRequest();
+	resourceRequest.prepareRfsSelect();
 	resourceRequest.initialiseDateSelect(allowPast);
 	resourceRequest.buildResourceReport();
 	resourceRequest.populateResourceDropDownWhenModalShown();
