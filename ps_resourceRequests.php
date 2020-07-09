@@ -18,7 +18,7 @@ $allCtbService =  $loader->load('ORGANISATION',allTables::$RESOURCE_REQUESTS);
 // $vbacEmployees = resourceRequestTable::getVbacActiveResourcesForSelect2();
 
 $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
-$defaultForArchiveLive = 'checked' ;
+$defaultForWithoutArchive = 'checked' ;
 $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 
 ?>
@@ -39,28 +39,11 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
        </div>
        </div>
 
-		<div class='col-md-2'>
-		<div class='row'>
-
-       	<label for='pipelineLive' class='col-md-9 control-label text-right'
-                                 data-toggle='tooltip'
-                                 data-placement='top'
-                                 title='Toggle between viewing the LIVE records or the Internal Pipline'>Pipeline/Live</label>
-
-       	<div class='col-md-1'>
-       		<input id='pipelineLive' class='toggle pipelineLive' type='checkbox' <?=$defaultForPipelineLive;?>  <?=$canSeeLive;?>data-toggle='toggle' data-onstyle="success" data-offstyle="danger"  data-size="mini" >
-       	</div>
-       	</div>
-       	<div class='row'>
-       	<label for='archiveLive' class='col-md-9 control-label text-right'
-                                 data-toggle='tooltip'
-                                 data-placement='top'
-                                 title='Toggle between viewing the LIVE records or Archived Records'>Archive/Live</label>
-       	<div class='col-md-1'>
-       		<input id='archiveLive' class='toggle archiveLive' type='checkbox' <?=$defaultForArchiveLive;?>  data-toggle='toggle' data-onstyle="success" data-offstyle="danger"  data-size="mini" >
-        </div>
-       </div>
-       </div>
+      	<div class='col-md-1 col-md-offset-1 text-left' >
+ 			<label class='radio control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='pipeline'>Pipeline</label>
+  			<label class='radio control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='live' checked >Live</label>
+  			<label class='radio control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='archive' >Archive</label>
+	    </div>
 
        <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>
         	<div class='col-md-2 text-left'>
@@ -417,8 +400,7 @@ $(document).ready(function() {
 	resourceRequest.listenForDeleteRecord();
 	resourceRequest.listenForConfirmedDelete();
 	resourceRequest.listenForChangeStatus();
-	resourceRequest.listenForChangePipelineLive();
-	resourceRequest.listenForChangeArchiveLive();
+	resourceRequest.listenForChangePipelineLiveArchive();
 	resourceRequest.listenForSelectSpecificRfs();
 	resourceRequest.listenForSelectOrganisation();
 	$('[data-toggle="tooltip"]').tooltip();

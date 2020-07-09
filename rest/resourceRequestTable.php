@@ -44,7 +44,7 @@ class resourceRequestTable extends DbTable
         return $result;
     }
 
-    function returnAsArray($startDate,$endDate, $predicate=null, $withoutArchive = true){
+    function returnAsArray($startDate,$endDate, $predicate=null, $piplineLiveArchive = 'live'){
         $monthNumber = 0;
         $startDateObj = new \DateTime($startDate);
         $endDateObj = new \DateTime($endDate);
@@ -106,7 +106,8 @@ class resourceRequestTable extends DbTable
         $sql .= " ON RR.RESOURCE_REFERENCE = RH.RR ";
 
         $sql .=  " WHERE RR.RFS is not null ";
-        $sql .= $withoutArchive ? " AND ARCHIVE is null " : " AND ARCHIVE is not null ";
+        $sql .= $piplineLiveArchive=='archive'  ? " AND ARCHIVE is null " : " AND ARCHIVE is not null ";
+        $sql .= $piplineLiveArchive=='pipeline' ? " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " : " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_LIVE . "' ";
         $sql .= !empty($predicate) ? " AND $predicate " : null ;
 
         $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";

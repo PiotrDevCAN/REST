@@ -480,14 +480,8 @@ function ResourceRequest() {
 		});
 	},
 	
-	this.listenForChangePipelineLive = function(){
-		$(document).on('change','#pipelineLive',function(){
-			ResourceRequest.table.ajax.reload();
-		});
-	},
-	
-	this.listenForChangeArchiveLive = function(){
-		$(document).on('change','#archiveLive',function(){
+	this.listenForChangePipelineLiveArchive = function(){
+		$(document).on('change','input:radio[name=pipelineLiveArchive]',function(){
 			ResourceRequest.table.ajax.reload();
 		});
 	},
@@ -582,7 +576,7 @@ function ResourceRequest() {
 	            data: function ( d ) {
 	                d.startDate = $('#START_DATE').val();
 	                d.endDate = $('#END_DATE').val();
-	                d.pipelineLive  = $('#pipelineLive').prop('checked');
+	                d.pipelineLiveArchive  = $("input:radio[name=pipelineLiveArchive]:checked").val();
 	                d.archiveLive  = $('#archiveLive').prop('checked');
 	                d.rfsid = $('#selectRfs option:selected').val();
 	                d.organisation = $('#selectOrganisation option:selected').val();
