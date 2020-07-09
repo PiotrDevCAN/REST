@@ -3,8 +3,7 @@ use itdq\Trace;
 use itdq\TraceList;
 use itdq\AllItdqTables;
 use itdq\TraceControlRecord;
-use dpulse\AllTables;
-use dpulse\accountManagementList;
+
 
 do_auth($_SESSION['cdiBg']);
 
