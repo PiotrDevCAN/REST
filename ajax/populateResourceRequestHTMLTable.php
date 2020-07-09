@@ -19,7 +19,7 @@ $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 $startDate = !empty($_POST['startDate']) ? $_POST['startDate'] : null;
 $endDate = !empty($_POST['endDate']) ? $_POST['endDate'] : null;
 $piplineLive = $_POST['pipelineLive']=='true' ? rfsRecord::RFS_STATUS_LIVE : rfsRecord::RFS_STATUS_PIPELINE;
-$archiveLive = $_POST['archiveLive']=='true' ? true : false;
+$withoutArchive = $_POST['archiveLive']=='true' ? true : false;
 $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
 $organisation = !empty($_POST['organisation']) ? $_POST['organisation'] : null;
 
@@ -42,7 +42,7 @@ if (empty($rfsId) && empty($organisation)) {
     $predicate .= ! empty($rfsId) ? " AND RFS='" . db2_escape_string($rfsId) . "' " : null;
     $predicate .= ! empty($organisation) ? " AND ORGANISATION='" . db2_escape_string($organisation) . "' " : null;
 
-    $dataAndSql = $resourceRequestTable->returnAsArray($startDate, $endDate, $predicate, $archiveLive);
+    $dataAndSql = $resourceRequestTable->returnAsArray($startDate, $endDate, $predicate, $withoutArchive);
     $data = $dataAndSql['data'];
     $sql = $dataAndSql['sql'];
 
