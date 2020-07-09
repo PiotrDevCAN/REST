@@ -1,5 +1,11 @@
 <?php
 
+function tryConnect($conn_string){
+    error_log("Attempting connect to DB2");
+    return db2_connect( $conn_string, "", "" );
+}
+
+
 if( isset($_ENV['ssldsn']) )
 {
     # Get database details from the VCAP_SERVICES environment variable
@@ -17,12 +23,26 @@ if( isset($_ENV['ssldsn']) )
     $driver = "DRIVER={IBM DB2 ODBC DRIVER};";
     //    $conn_string = $driver . $dsn;     # Non-SSL
     $conn_string = $driver . $ssl_dsn; # SSL
+    
+    $conn=false;
+    $attempts = 0;
 
-    $conn = db2_connect( $conn_string, "", "" );
+    while(!$conn && ++$attempts < 3){
+        // since Cirrus - we have the occasional problem connecting, so sleep and try again a couple of times 
+        $conn = tryConnect($conn_string);
+        if(!$conn){
+            error_log("Failed attempt $attempts to connect to DB2");
+            error_log("Msg:" . db2_conn_errormsg());
+            error_log("Err:" . db2_conn_error());
+            sleep(3);
+        }
+    }
+    
+
     if( $conn )
     {
-        $_SESSION['conn'] = $conn;
-        $schema = isset($_SESSION['Db2Schema']) ? $_SESSION['Db2Schema'] : 'REST';
+        $GLOBALS['conn'] = $conn;
+        $schema = isset($GLOBALS['Db2Schema']) ? $GLOBALS['Db2Schema'] : 'REST';
         $Statement = "SET CURRENT SCHEMA='$schema';";
         $rs = db2_exec($conn, $Statement);
 
@@ -46,16 +66,16 @@ if( isset($_ENV['ssldsn']) )
         error_log(__FILE__ . __LINE__ . $conn_string);
         error_log(__FILE__ . __LINE__ . db2_conn_errormsg());
         error_log(__FILE__ . __LINE__ . db2_conn_error());
-
-        echo "<p>Connection failed.</p>";
+        throw new Exception('Failed to connect to DB2');
     }
 }
 else
 {
-    error_log(print_r($_ENV,true));
-    echo "<p>No credentials.Check Log.</p>";
+    echo "<pre>";
+    print_r($_ENV);
+    echo "</pre>";
+    echo "<p>No credentials.</p>";
 }
-
 
 
 
