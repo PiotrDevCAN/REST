@@ -790,7 +790,7 @@ function ResourceRequest() {
 				dataType: 'json',
 				data: function (params) {
 					pipelineLiveArchive  = $("input:radio[name=pipelineLiveArchive]:checked").val();
-      				return { pipelineLiveArchive : pipelineLiveArchive 	};
+      				return { pipelineLiveArchive : pipelineLiveArchive, term: params.term 	};
     			},	
 		 	},	  
 		})
