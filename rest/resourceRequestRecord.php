@@ -281,27 +281,27 @@ class resourceRequestRecord extends DbRecord
         $headerCells .= "<th>RR</th>";  // allow for the RR field that will come from DB2 from the join
 
 
-        $startDateObj = new \DateTime($startDate);
-        $day =  $startDateObj->format('d');
-        if($day > 28){
-            // We can't step through adding months if we start on 29th,30th or 31st.
-            $year = $startDateObj->format('Y');
-            $month = $startDateObj->format('m');
-            $startDateObj->setDate($year, $month, '28');
-        }
+//         $startDateObj = new \DateTime($startDate);
+//         $day =  $startDateObj->format('d');
+//         if($day > 28){
+//             // We can't step through adding months if we start on 29th,30th or 31st.
+//             $year = $startDateObj->format('Y');
+//             $month = $startDateObj->format('m');
+//             $startDateObj->setDate($year, $month, '28');
+//         }
 
-        $endDate = null;
-        $endDateObj = new \DateTime($endDate);
+//         $endDate = null;
+//         $endDateObj = new \DateTime($endDate);
 
-        if(empty($endDate)){
-            $endDateObj = \DateTime::createFromFormat('Y-m-d',$startDateObj->format('Y-m-d'));
-            $endDateObj->modify("+5 months");
-        }
+//         if(empty($endDate)){
+//             $endDateObj = \DateTime::createFromFormat('Y-m-d',$startDateObj->format('Y-m-d'));
+//             $endDateObj->modify("+5 months");
+//         }
 
-        while($startDateObj->format('Ym') <= $endDateObj->format('Ym')){
-            $headerCells .= "<th>" . $startDateObj->format('M-y') . "</th>";
-            $startDateObj->modify('+1 month');
-        }
+//         while($startDateObj->format('Ym') <= $endDateObj->format('Ym')){
+//             $headerCells .= "<th>" . $startDateObj->format('M-y') . "</th>";
+//             $startDateObj->modify('+1 month');
+//         }
 
         return $headerCells;
     }

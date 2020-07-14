@@ -105,8 +105,8 @@ class resourceRequestTable extends DbTable
         $sql .= " FROM  " . $_SESSION['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql .= " LEFT JOIN  " . $_SESSION['Db2Schema'] . "." . $resourceRequestTable. " as RR ";
         $sql .= " ON RR.RFS = RFS.RFS_ID ";
-        $sql .= " left join resource_hours as RH ";
-        $sql .= " ON RR.RESOURCE_REFERENCE = RH.RR ";
+//         $sql .= " left join resource_hours as RH ";
+//         $sql .= " ON RR.RESOURCE_REFERENCE = RH.RR ";
 
         $sql .=  " WHERE RR.RFS is not null ";
         $sql .= $pipelineLiveArchive=='archive'  ? " AND ARCHIVE is not null " : " AND ARCHIVE is null ";

@@ -656,12 +656,12 @@ function ResourceRequest() {
 	            { data: "CLONED_FROM"      ,defaultContent: "", visible:false },
 	            { data: "STATUS"           ,defaultContent: "", visible:true },
 	            { data: "RR"               ,defaultContent: "", visible:false },
-	            { data: "MONTH_01"         ,defaultContent: "",visible:true},
-	            { data: "MONTH_02"         ,defaultContent: "",visible:true},
-	            { data: "MONTH_03"         ,defaultContent: "",visible:true},
-	            { data: "MONTH_04"         ,defaultContent: "",visible:true},
-	            { data: "MONTH_05"         ,defaultContent: "",visible:true},
-	            { data: "MONTH_06"         ,defaultContent: "",visible:true},
+//	            { data: "MONTH_01"         ,defaultContent: "",visible:true},
+//	            { data: "MONTH_02"         ,defaultContent: "",visible:true},
+//	            { data: "MONTH_03"         ,defaultContent: "",visible:true},
+//	            { data: "MONTH_04"         ,defaultContent: "",visible:true},
+//	            { data: "MONTH_05"         ,defaultContent: "",visible:true},
+//	            { data: "MONTH_06"         ,defaultContent: "",visible:true},
 	        	
 	        ],
 	    });

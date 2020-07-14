@@ -37,25 +37,19 @@ td.dataTables_empty{
 
 <form id='reportDates'>
 	<div class='form-group text-right' >
-       <div id='START_DATE" . "FormGroup' >
-       <label for='START_DATE' class='col-md-1 control-label  ' data-toggle='tooltip' data-placement='top' title=''>6 mths from</label>
-       <div class='col-md-2'>
-       <div id='calendarFormGroupSTART_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='START_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
-       <input id='InputSTART_DATE' class='form-control' type='text' readonly value='' placeholder='Select From' required />
-       <input type='hidden' id='START_DATE' name='START_DATE' value='' />
-       <span class='input-group-addon'><span id='calendarIconSTART_DATE' class='glyphicon glyphicon-calendar'></span></span>
-       </div>
-       </div>
-       </div>
-
-      	<div class='col-md-1 col-md-offset-1 text-left' >
- 			<label class='radio control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='pipeline'>Pipeline</label>
-  			<label class='radio control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='live' checked >Live</label>
-  			<label class='radio control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='archive' >Archive</label>
+	    <div class='col-md-7'>
+		<div class='row''>
+      	<div class='col-md-9 col-md-offset-3 text-left' >
+ 			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='pipeline'>Pipeline</label>
+  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='live' checked >Live</label>
+  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='archive' >Archive</label>
 	    </div>
+	    </div>
+	    
 
-        <label for='selectOrganisation' class='col-md-1 control-label text-right'>Organisation</label>
-        	<div class='col-md-3 text-left'>
+	    <div class='row'>
+        <label for='selectOrganisation' class='col-md-3 control-label text-right'>Organisation</label>
+        	<div class='col-md-9 text-left'>
               	<select class='form-control select' id='selectOrganisation'
                   	          name='organisation'
                   	          data-placeholder="Select Organisation" data-allow-clear="true"
@@ -74,11 +68,14 @@ td.dataTables_empty{
                </select>
             </div>
 
+	    
+	    
+	    </div>
 
-
-
-       <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>
-        	<div class='col-md-2 text-left'>
+	    <div class='row'>
+	    
+	    <label for='selectRfs' class='col-md-3 control-label text-right'>RFS</label>
+        	<div class='col-md-9 text-left'>
               	<select class='form-control select' 
               			id='selectRfs'
                   	    name='selectRfs'
@@ -86,6 +83,19 @@ td.dataTables_empty{
                   	    data-allow-clear="true"
                 ></select>
             </div>
+	    
+	    
+	    </div>
+	    
+	    
+	    </div>
+
+
+
+
+
+
+
 
     </div>
 </form>
