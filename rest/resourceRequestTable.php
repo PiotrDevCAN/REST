@@ -44,7 +44,7 @@ class resourceRequestTable extends DbTable
         return $result;
     }
 
-    function returnAsArray($startDate,$endDate, $predicate=null, $piplineLiveArchive = 'live'){
+    function returnAsArray($startDate,$endDate, $predicate=null, $pipelineLiveArchive = 'live'){
         $monthNumber = 0;
         $startDateObj = new \DateTime($startDate);
         $endDateObj = new \DateTime($endDate);
@@ -90,8 +90,11 @@ class resourceRequestTable extends DbTable
         }
 
         $startDateObj = new \DateTime($startDate);
+        
+        $resourceRequestTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUESTS : allTables::$RESOURCE_REQUESTS;
+        $resourceRequestHoursTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUEST_HOURS : allTables::$RESOURCE_REQUEST_HOURS;
 
-        $sql .=  " FROM " . $_SESSION['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS;
+        $sql .=  " FROM " . $_SESSION['Db2Schema'] . "." . $resourceRequestHoursTable;
         $sql .= "   WHERE  ( claim_month >= " . $startDateObj->format('m') . " and claim_year = " . $startDateObj->format('Y') . ")  " ;
         $sql .= $startDateObj->format('Y') !==  $endDateObj->format('Y') ?  "    AND (claim_year > " . $startDateObj->format('Y') . " and claim_year < " . $endDateObj->format('Y') . " ) " : null;
         $sql .= "         AND (claim_month <= " . $endDateObj->format('m') . " and claim_year = " . $endDateObj->format('Y') . ")  " ;
@@ -100,14 +103,14 @@ class resourceRequestTable extends DbTable
         $sql .= " ) ";
         $sql .= " SELECT * ";
         $sql .= " FROM  " . $_SESSION['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
-        $sql .= " LEFT JOIN  " . $_SESSION['Db2Schema'] . "." . $this->tableName . " as RR ";
+        $sql .= " LEFT JOIN  " . $_SESSION['Db2Schema'] . "." . $resourceRequestTable. " as RR ";
         $sql .= " ON RR.RFS = RFS.RFS_ID ";
         $sql .= " left join resource_hours as RH ";
         $sql .= " ON RR.RESOURCE_REFERENCE = RH.RR ";
 
         $sql .=  " WHERE RR.RFS is not null ";
-        $sql .= $piplineLiveArchive=='archive'  ? " AND ARCHIVE is not null " : " AND ARCHIVE is null ";
-        $sql .= $piplineLiveArchive=='pipeline' ? " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " : " AND RFS_STATUS!='" . rfsRecord::RFS_STATUS_PIPELINE . "' ";
+        $sql .= $pipelineLiveArchive=='archive'  ? " AND ARCHIVE is not null " : " AND ARCHIVE is null ";
+        $sql .= $pipelineLiveArchive=='pipeline' ? " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " : " AND RFS_STATUS!='" . rfsRecord::RFS_STATUS_PIPELINE . "' ";
         $sql .= !empty($predicate) ? " $predicate " : null ;
 
         $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";

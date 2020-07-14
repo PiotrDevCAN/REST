@@ -4,9 +4,11 @@ use rest\rfsRecord;
 
 $pipelineLiveArchive = trim($_GET['pipelineLiveArchive']);
 
+$resourceRequestTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUESTS : allTables::$RESOURCE_REQUESTS;
+
 
 $sql = " Select distinct RFS ";
-$sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS R ";
+$sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTable . " AS R ";
 $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
 $sql.= " ON R.RFS = RFS.RFS_ID ";
 $sql.= " WHERE 1=1 and RFS.RFS_ID is not null and R.RFS is not null ";

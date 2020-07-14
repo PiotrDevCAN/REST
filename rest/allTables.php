@@ -10,6 +10,10 @@ namespace rest;
  */
 class allTables
 {
+    
+    public static $ARCHIVED_RESOURCE_REQUESTS      = 'ARCHIVED_RESOURCE_REQUESTS';
+    public static $ARCHIVED_RESOURCE_REQUEST_HOURS = 'ARCHIVED_RESOURCE_REQUEST_HOURS';
+    
     public static $RESOURCE_REQUESTS      = 'RESOURCE_REQUESTS';
     public static $RESOURCE_REQUEST_HOURS = 'RESOURCE_REQUEST_HOURS';
 
