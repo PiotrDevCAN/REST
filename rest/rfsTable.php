@@ -21,19 +21,19 @@ class rfsTable extends DbTable
                     break;
                 case $_SESSION['isRfs']:
                     // Can only see pipeline
-                   $predicate =  " RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " ;
+                   $predicate =  " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " ;
                     break;
                 case $_SESSION['isSupply']:
                 case $_SESSION['isDemand']:
                     // Can only see Live
-                      $predicate =  " RFS_STATUS='" . rfsRecord::RFS_STATUS_LIVE . "' " ;
+                      $predicate =  " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_LIVE . "' " ;
                     break;
                 default:
                     $predicate =  null;
                     break;
             }
         } else {
-             $predicate = " RFS_STATUS='" . trim($option) . "' " ;
+             $predicate = " AND RFS_STATUS='" . trim($option) . "' " ;
         }
         return $predicate;
     }

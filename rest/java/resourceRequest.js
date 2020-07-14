@@ -483,14 +483,15 @@ function ResourceRequest() {
 	this.listenForChangePipelineLiveArchive = function(){
 		$(document).on('change','input:radio[name=pipelineLiveArchive]',function(){			
 			var rr = new ResourceRequest();
-			$('#selectRfs').select2('destroy');			
+			
+			$('#selectRfs').val('').trigger('change').select2('destroy');			
 			rr.prepareRfsSelect();
 			ResourceRequest.table.ajax.reload();
 		});
 	},
 	
 	this.listenForSelectSpecificRfs = function(){
-		$(document).on('change','#selectRfs',function(){
+		$(document).on('change','#selectRfs',function(){			
 			var rfs = $('#selectRfs option:selected').val();			
 			document.cookie = "selectedRfs=" + rfs + ";" + "path=/;max-age=604800;samesite=lax;"; 					
 			ResourceRequest.table.ajax.reload();
@@ -498,7 +499,8 @@ function ResourceRequest() {
 	},
 
 	this.listenForSelectOrganisation = function(){
-		$(document).on('change','#selectOrganisation',function(){	
+		$(document).on('change','#selectOrganisation',function(){
+			$('#selectRfs').val('').trigger('change');	
 			var org = $('#selectOrganisation option:selected').val();			
 			document.cookie = "selectedOrganisation=" + org + ";" + "path=/;max-age=604800;samesite=lax;"; 			
 			ResourceRequest.table.ajax.reload();
@@ -572,7 +574,7 @@ function ResourceRequest() {
 	    ResourceRequest.table = $('#resourceRequestsTable_id').DataTable({
 	    	
 	    	language: {
-	    	      emptyTable: "Please select RFS and/or Organisation from above"
+	    	      emptyTable: "Please select Organisation and/or RFS from dropdowns above"
 	    	},
 	    	ajax: {
 	            url: 'ajax/populateResourceRequestHTMLTable.php',
@@ -789,8 +791,9 @@ function ResourceRequest() {
 				url: 'ajax/populateSelectRfsForRR.php',
 				dataType: 'json',
 				data: function (params) {
-					pipelineLiveArchive  = $("input:radio[name=pipelineLiveArchive]:checked").val();
-      				return { pipelineLiveArchive : pipelineLiveArchive, term: params.term 	};
+					var pipelineLiveArchive  = $("input:radio[name=pipelineLiveArchive]:checked").val();
+					var organisation = $('#selectOrganisation option:selected').val();
+      				return { pipelineLiveArchive : pipelineLiveArchive, term: params.term, organisation: organisation 	};
     			},	
 		 	},	  
 		})

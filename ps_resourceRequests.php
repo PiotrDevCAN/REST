@@ -22,6 +22,15 @@ $defaultForWithoutArchive = 'checked' ;
 $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 
 ?>
+<style>
+
+td.dataTables_empty{
+    color:white;
+}
+
+</style>
+
+
 <div class='container'>
 
 <h3>Report Selection </h3>
@@ -45,16 +54,6 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
   			<label class='radio control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='archive' >Archive</label>
 	    </div>
 
-       <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>
-        	<div class='col-md-2 text-left'>
-              	<select class='form-control select' 
-              			id='selectRfs'
-                  	    name='selectRfs'
-                  	    data-placeholder="Select RFS" 
-                  	    data-allow-clear="true"
-                ></select>
-            </div>
-
         <label for='selectOrganisation' class='col-md-1 control-label text-right'>Organisation</label>
         	<div class='col-md-3 text-left'>
               	<select class='form-control select' id='selectOrganisation'
@@ -76,6 +75,17 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
             </div>
 
 
+
+
+       <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>
+        	<div class='col-md-2 text-left'>
+              	<select class='form-control select' 
+              			id='selectRfs'
+                  	    name='selectRfs'
+                  	    data-placeholder="Select RFS" 
+                  	    data-allow-clear="true"
+                ></select>
+            </div>
 
     </div>
 </form>

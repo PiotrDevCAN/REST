@@ -3,6 +3,7 @@ use rest\allTables;
 use rest\rfsRecord;
 
 $pipelineLiveArchive = trim($_GET['pipelineLiveArchive']);
+$organisation = trim($_GET['organisation']);
 
 $resourceRequestTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUESTS : allTables::$RESOURCE_REQUESTS;
 
@@ -16,6 +17,7 @@ $sql.= !empty($_GET['term']) ? " AND UPPER(R.RFS) like '%" . db2_escape_string(s
 $sql.= $pipelineLiveArchive == 'live' ? " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_LIVE . "' " : null;
 $sql.= $pipelineLiveArchive == 'pipeline' ? " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " : null;
 $sql.= $pipelineLiveArchive == 'archive' ? " AND ARCHIVE is not null " : " AND ARCHIVE is null " ;
+$sql.= (!empty($organisation) && ($organisation!='All' )) ? " AND ORGANISATION='" . db2_escape_string(trim($organisation)) . "' " : null;
 $sql.= " ORDER BY 1 " ;
 $rs = db2_exec($GLOBALS['conn'], $sql);
 $data = array();
