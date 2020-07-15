@@ -105,7 +105,7 @@ td.dataTables_empty{
 
 <div class='container-fluid'>
 <h3>Resource Request Report</h3>
-<button id='ddDetails' class='btn btn-primary btn-sm'>DD Details</button>
+<button id='unallocated' class='btn btn-primary btn-sm'>Unallocated</button>
 <button id='resetReport' class='btn btn-primary btn-sm'>Reset</button>
 <input type='hidden' id='bwo' value='' />
 <div id='messageArea'></div>
@@ -395,7 +395,7 @@ $(document).ready(function() {
  	resourceRequest.listenForSaveAdjustedHoursWithDelta();
  	resourceRequest.listenForSaveStatusChange();
 	resourceRequest.listenForResetReport();
-	resourceRequest.listenForDdDetails();
+	resourceRequest.listenForUnallocated();
 	resourceRequest.listenForEditRecord();
 	resourceRequest.listenForDeleteRecord();
 	resourceRequest.listenForConfirmedDelete();
