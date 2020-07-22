@@ -19,7 +19,7 @@ class rfsRecord extends DbRecord
     protected $PROJECT_CODE;
     protected $REQUESTOR_NAME;
     protected $REQUESTOR_EMAIL;
-    protected $CIO;
+    protected $VALUE_STREAM;// was CIO
     protected $LINK_TO_PGMP;
     protected $RFS_CREATOR;
     protected $RFS_CREATED_TIMESTAMP;
@@ -39,7 +39,7 @@ class rfsRecord extends DbRecord
     static public $rfsStatus  = array(self::RFS_STATUS_PIPELINE,self::RFS_STATUS_LIVE);
 
 
-    static public $columnHeadings = array("RFS ID", "PRN", "Project Title", "Project Code", "Requestor Name", "Requestor Email", "CIO", "Link to PGMP", "RFS Creator", "RFS Created",'Archived','RFS Type','ILC Work Item','RFS Status');
+    static public $columnHeadings = array("RFS ID", "PRN", "Project Title", "Project Code", "Requestor Name", "Requestor Email", "Value Stream", "Link to PGMP", "RFS Creator", "RFS Created",'Archived','RFS Type','ILC Work Item','RFS Status');
 
     function __construct($pwd=null){
         parent::__construct($pwd);
@@ -67,7 +67,7 @@ class rfsRecord extends DbRecord
         $this->additional_comments = null;
 
         $loader = new Loader();
-        $allCio = $loader->load('CIO',allTables::$STATIC_CIO);
+        $allValueStream = $loader->load('VALUE_STREAM',allTables::$STATIC_VALUE_STREAM);
         $notEditable = $mode == FormClass::$modeEDIT ? ' disabled ' : '';
 
         ?>
@@ -122,19 +122,19 @@ class rfsRecord extends DbRecord
    		</div>
 
    		<div class='form-group required'>
-        	<label for='CIO' class='col-md-2 control-label ceta-label-left'>CIO</label>
+        	<label for='VALUE_STREAM' class='col-md-2 control-label ceta-label-left'>Value Stream</label>
         	<div class='col-md-3'>
-              	<select class='form-control select' id='CIO'
-                  	          name='CIO'
+              	<select class='form-control select' id='VALUE_STREAM'
+                  	          name='VALUE_STREAM'
                   	          required='required'
-                  	          data-tags="true" data-placeholder="Select CIO" data-allow-clear="true"
+                  	          data-tags="true" data-placeholder="Select Value Stream" data-allow-clear="true"
                   	           >
-            	<option value=''>Select CIO<option>
+            	<option value=''>Select Value Stream<option>
                 <?php
-                    foreach ($allCio as $key => $value) {
+                foreach ($allValueStream as $key => $value) {
                          $displayValue = trim($value);
                          $returnValue  = trim($value);
-                         ?><option value='<?=$returnValue?>' <?=trim($this->CIO)==$returnValue ? 'selected' : null;?>><?=$displayValue?></option><?php
+                         ?><option value='<?=$returnValue?>' <?=trim($this->VALUE_STREAM)==$returnValue ? 'selected' : null;?>><?=$displayValue?></option><?php
                     }
                 ?>
                	</select>

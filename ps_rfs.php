@@ -10,7 +10,7 @@ $loader = new Loader();
 
 
 $allRfs = $loader->load('RFS',allTables::$RESOURCE_REQUESTS);
-$allCio = $loader->load('CIO',allTables::$RFS);
+$allValueStream = $loader->load('VALUE_STREAM',allTables::$RFS);
 $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS);
 
 // $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
@@ -42,20 +42,20 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS);
                 ?>
                </select>
             </div>
-         <label for='selectCio' class='col-md-1 control-label text-right'>CIO</label>
+         <label for='selectValueStream' class='col-md-1 control-label text-right'>Value Stream</label>
         	<div class='col-md-2 text-left'>
-              	<select class='form-control select' id='selectCio'
-                  	          name='selectCio'
-                  	          data-placeholder="Select Cio" data-allow-clear="true"
+              	<select class='form-control select' id='selectValueStream'
+                  	          name='selectValueStream'
+                  	          data-placeholder="select Value Stream" data-allow-clear="true"
                   	          >
-            	<option value=''>Select CIO</option>
+            	<option value=''>Select Value Stream</option>
             	<option value='All'>All</option>
                 <?php
-                    foreach ($allCio as $value) {
+                    foreach ($allValueStream as $value) {
                          $displayValue = trim($value);
                          $returnValue  = trim($value);
-                         $selectedCio = isset($_COOKIE['selectedCio']) ? $_COOKIE['selectedCio'] : null;
-                         $selected = $returnValue==$selectedCio ? 'selected' : null;
+                         $selectedValueStream = isset($_COOKIE['selectedValueStream']) ? $_COOKIE['selectedValueStream'] : null;
+                         $selected = $returnValue==$selectedValueStream ? 'selected' : null;
                          ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
                     }
                 ?>
@@ -194,7 +194,7 @@ $(document).ready(function() {
 	rfs.listenForArchiveRfs();
 	rfs.listenForConfirmArchiveRfs();
 	rfs.listenForSelectRequestor();
-	rfs.listenForSelectCio();
+	rfs.listenForSelectValueStream();
 	rfs.listenForSelectRfs();
 });
 

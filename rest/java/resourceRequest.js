@@ -257,7 +257,7 @@ function ResourceRequest() {
     			$('#editHoursRfs').text($(dataDetails).data('rfs'));	
     			$('#editHoursPrn').text($(dataDetails).data('prn'));
     			$('#editHoursPhase').text($(dataDetails).data('phase'));
-    			$('#editHoursCio').text($(dataDetails).data('cio'));
+    			$('#editHoursValueStream').text($(dataDetails).data('valuestream'));
     			$('#editHoursService').text($(dataDetails).data('service'));
     			$('#editHoursSubService').text($(dataDetails).data('subservice'));
     			$('#editHoursResourceName').text($(dataDetails).data('resourcename'));
@@ -625,7 +625,7 @@ function ResourceRequest() {
 	            { data: "PROJECT_CODE"     ,defaultContent: "", visible:false },
 	            { data: "REQUESTOR_NAME"   ,defaultContent: "", visible:false },
 	            { data: "REQUESTOR_EMAIL"  ,defaultContent: "", visible:false },
-	            { data: "CIO"              ,defaultContent: "", visible:false },
+	            { data: "VALUE_STREAM"     ,defaultContent: "", visible:false },
 	            { data: "LINK_TO_PGMP"     ,defaultContent: "", visible:false },
 	            { data: "RFS_CREATOR"      ,defaultContent: "", visible:false },
 	            { data: "RFS_CREATED_TIMESTAMP",defaultContent: "", visible:false },

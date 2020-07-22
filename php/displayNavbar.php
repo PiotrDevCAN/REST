@@ -35,18 +35,23 @@ $adminMenu->addOption($organisation);
 
 $request        = new NavbarMenu(  'Request'                                          ,'accessCdi accessAdmin accessDemand accessRfs');
 $newRfs         = new NavbarOption('New RFS','pr_newRfs.php'                          ,'accessCdi accessAdmin accessDemand accessRfs');
+
 $newResReq      = new NavbarOption('New Resource Request', 'pr_newResourceRequest.php','accessCdi accessAdmin accessDemand accessRfs');
-$managePipeline = new NavbarOption('Manage Pipeline', 'pr_managePipeline.php','accessCdi accessAdmin accessDemand ');;
+$listRfs            = new NavbarOption('List RFS', 'ps_rfs.php'                           ,'accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
+$managePipeline = new NavbarOption('Manage Pipeline', 'pr_managePipeline.php','accessCdi accessAdmin accessDemand ');
+
 $request->addOption($newRfs);
 $request->addOption($newResReq);
+$request->addOption(new NavbarDivider('accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports'));
+$request->addOption($listRfs);
+$request->addOption(new NavbarDivider('accessCdi accessAdmin accessDemand'));
 $request->addOption($managePipeline);
 
 
 $supply         = new NavbarMenu(  'Supply');
-$rfs            = new NavbarOption('RFS', 'ps_rfs.php'                           ,'accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
+
 $resRequest     = new NavbarOption('Resource Requests', 'ps_resourceRequests.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
 // $info           = new NavbarOption('PHP Info', 'phpinfo.php','accessCdi accessAdmin accessDemand accessSupply accessRfs');
-$supply->addOption($rfs);
 $supply->addOption($resRequest);
 // $supply->addOption($info);
 
@@ -71,8 +76,19 @@ $isCdi    = employee_in_group($_SESSION['cdiBg'],     $_SESSION['ssoEmail']) || 
 $isAdmin  = employee_in_group($_SESSION['adminBg'],   $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessAdmin')" : null;
 $isDemand = employee_in_group($_SESSION['demandBg'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessDemand')" : null;
 $isSupply = employee_in_group($_SESSION['supplyBg'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessSupply')" : null;
-$isRfs    = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail'])  ? ".not('.accessRfs')" : null;
+$isRfs    = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessRfs')" : null;
 $isReports= employee_in_group($_SESSION['reportsBg'], $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessReports')" : null;
+
+
+// For Testing only
+$isCdi = null;
+$isAdmin = null;
+$isDemand = null;
+$isSupply = null;
+$isRfs = ".not('.accessRfs')";
+$isReports = null;
+
+
 
 $isUser = (!empty($isCdi) || !empty($isAdmin) || !empty($isDemand) || !empty($isSupply)  || !empty($isRfs) || !empty($isReports) ) ? ".not('.accessUser')" : null;
 

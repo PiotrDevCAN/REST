@@ -8,7 +8,7 @@ use itdq\DbRecord;
  * @author gb001399
  *
  */
-class staticCioRecord extends DbRecord
+class staticValueStreamRecord extends DbRecord
 {
-    protected $CIO;
+    protected $VALUE_STREAM;
 }

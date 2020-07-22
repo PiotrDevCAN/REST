@@ -126,10 +126,10 @@ function Rfs() {
 		});		
 	},
 
-	this.listenForSelectCio = function(){
-		$(document).on('change','#selectCio',function(){	
-			var cio = $('#selectCio option:selected').val();			
-			document.cookie = "selectedCio=" + cio + ";" + "path=/;max-age=604800;samesite=lax;"; 			
+	this.listenForSelectValueStream = function(){
+		$(document).on('change','#selectValueStream',function(){	
+			var valuestream = $('#selectValueStream option:selected').val();			
+			document.cookie = "selectValueStream=" + valuestream + ";" + "path=/;max-age=604800;samesite=lax;"; 			
 			Rfs.table.ajax.reload();
 		});		
 	},
@@ -153,14 +153,14 @@ function Rfs() {
 		// DataTable
 	    Rfs.table = $('#rfsTable_id').DataTable({
 	    	language: {
-	    	      emptyTable: "Please select RFS, CIO and/or Requestor from above"
+	    	      emptyTable: "Please select RFS, Value Stream and/or Requestor from above"
 	    	},
 	    	ajax: {
 	            url: 'ajax/populateRfsHTMLTable.php',
 	            type: 'POST',
 	            data: function ( d ) {
 	                d.rfsid = $('#selectRfs option:selected').val();
-	                d.cio = $('#selectCio option:selected').val();
+	                d.valuestream = $('#selectValueStream option:selected').val();
 	                d.requestor = $('#selectRequestor option:selected').val();
 	            },
 	        }	,

@@ -21,6 +21,11 @@ $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
 $defaultForWithoutArchive = 'checked' ;
 $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 
+$pipelineChecked     =  $_SESSION['isRfs'] ? ' checked ' : null;
+$nonPipelineDisabled =  $_SESSION['isRfs'] ? ' disabled ' : null;
+$defaultToLive       =  empty($pipelineChecked) ? 'checked' : null;
+
+
 ?>
 <style>
 
@@ -38,11 +43,11 @@ td.dataTables_empty{
 <form id='reportDates'>
 	<div class='form-group text-right' >
 	    <div class='col-md-7'>
-		<div class='row''>
+		<div class='row'>
       	<div class='col-md-9 col-md-offset-3 text-left' >
- 			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='pipeline'>Pipeline</label>
-  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='live' checked >Live</label>
-  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='archive' >Archive</label>
+ 			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$pipelineChecked;?>     data-toggle="button" value='pipeline'>Pipeline</label>
+  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$nonPipelineDisabled;?><?=$defaultToLive?> data-toggle="button" value='live'  >Live</label>
+  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$nonPipelineDisabled;?> data-toggle="button" value='archive' >Archive</label>
 	    </div>
 	    </div>
 	    

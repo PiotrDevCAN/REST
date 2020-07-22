@@ -11,15 +11,15 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 $rfsTable = new rfsTable(allTables::$RFS);
 
 $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
-$cio = !empty($_POST['cio']) ? $_POST['cio'] : null;
+$valueStream = !empty($_POST['valuestream']) ? $_POST['valuestream'] : null;
 $requestor = !empty($_POST['requestor']) ? $_POST['requestor'] : null;
 
 $predicate = " 1=1 ";
 $predicate .= ! empty($rfsId) ? " AND RFS_ID='" . db2_escape_string($rfsId) . "' " : null;
 $predicate .= ! empty($requestor) ? " AND lower(REQUESTOR_EMAIL)='" . db2_escape_string(strtolower($requestor)) . "' " : null;
-$predicate .= ! empty($cio) ? " AND CIO='" . db2_escape_string($cio) . "' " : null;
+$predicate .= ! empty($valueStream) ? " AND VALUE_STREAM='" . db2_escape_string($valueStream) . "' " : null;
 
-if (empty($rfsId) && empty($cio) && empty($requestor)) {
+if (empty($rfsId) && empty($valueStream) && empty($requestor)) {
     $response = array(
         'messages' => 'Nothing Selected',
         "data" => array()

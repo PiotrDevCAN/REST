@@ -150,7 +150,7 @@ class resourceRequestTable extends DbTable
         $resourceName = $row['RESOURCE_NAME'];
         $phase = $row['PHASE'];
         $prn = $row['PRN'];
-        $cio = $row['CIO'];
+        $valuestream = $row['VALUE_STREAM'];
         $startDate4Picka = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Y-m-d') : null;
         $endDate4Picka = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Y-m-d') : null;
         $startDate = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
@@ -165,7 +165,7 @@ class resourceRequestTable extends DbTable
                     data-rfs='" .$rfsId . "'
                     data-resourcereference='" .$resourceReference . "'
                     data-prn='" .$prn . "'
-                    data-cio='" .$cio . "'
+                    data-valuestream='" .$valuestream . "'
                     data-phase='" . $phase. "'
                     data-status='" . $status . "'
                     data-organisation='" .$organisation .  "'
@@ -203,7 +203,7 @@ class resourceRequestTable extends DbTable
         $row['RESOURCE_NAME'].= "  data-rfs='" .$rfsId . "' ";
         $row['RESOURCE_NAME'].= "  data-resourcereference='" .$resourceReference . "' ";
         $row['RESOURCE_NAME'].= "  data-prn='" .$prn . "' ";
-        $row['RESOURCE_NAME'].= "  data-cio='" . $cio. "' ";
+        $row['RESOURCE_NAME'].= "  data-valuestream='" . $valuestream. "' ";
         $row['RESOURCE_NAME'].= "  data-phase='" . $phase. "' ";
         $row['RESOURCE_NAME'].= "  data-status='" . $status . "' ";
         $row['RESOURCE_NAME'].= "  data-service='" .$service .  "' ";
