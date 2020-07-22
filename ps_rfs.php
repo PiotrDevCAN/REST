@@ -186,7 +186,8 @@ $(".pipelineLive").bootstrapToggle({
 
 
 $(document).ready(function() {
-	var rfs = new Rfs();
+
+    var rfs = new Rfs();
 	rfs.buildRfsReport();
 	rfs.listenForDeleteRfs();
 	rfs.listenForConfirmDeleteRfs();

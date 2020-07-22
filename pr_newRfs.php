@@ -89,6 +89,9 @@ $('#RFS_ID').on('focusout',function(e){
 
 $(document).ready(function(){
 
+	$('#VALUE_STREAM').select2();
+	$('#BUSINESS_UNIT').select2();
+
 	$( "#rfsForm" ).submit(function( event ) {
 		$(':submit').addClass('spinning').attr('disabled',true);
 		var url = 'ajax/saveRfsRecord.php';
