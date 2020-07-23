@@ -35,34 +35,35 @@ $adminMenu->addOption($organisation);
 
 $request        = new NavbarMenu(  'Request'                                          ,'accessCdi accessAdmin accessDemand accessRfs');
 $newRfs         = new NavbarOption('New RFS','pr_newRfs.php'                          ,'accessCdi accessAdmin accessDemand accessRfs');
-
 $newResReq      = new NavbarOption('New Resource Request', 'pr_newResourceRequest.php','accessCdi accessAdmin accessDemand accessRfs');
-$listRfs            = new NavbarOption('List RFS', 'ps_rfs.php'                           ,'accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
-$managePipeline = new NavbarOption('Manage Pipeline', 'pr_managePipeline.php','accessCdi accessAdmin accessDemand ');
+// $managePipeline = new NavbarOption('Manage Pipeline', 'pr_managePipeline.php','accessCdi accessAdmin accessDemand ');
 
 $request->addOption($newRfs);
 $request->addOption($newResReq);
-$request->addOption(new NavbarDivider('accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports'));
-$request->addOption($listRfs);
-$request->addOption(new NavbarDivider('accessCdi accessAdmin accessDemand'));
-$request->addOption($managePipeline);
+// $request->addOption(new NavbarDivider('accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports'));
+
+// $request->addOption(new NavbarDivider('accessCdi accessAdmin accessDemand'));
+// $request->addOption($managePipeline);
 
 
-$supply         = new NavbarMenu(  'Supply');
+$assign         = new NavbarMenu(  'Assign');
 
 $resRequest     = new NavbarOption('Resource Requests', 'ps_resourceRequests.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
 // $info           = new NavbarOption('PHP Info', 'phpinfo.php','accessCdi accessAdmin accessDemand accessSupply accessRfs');
-$supply->addOption($resRequest);
+$assign->addOption($resRequest);
 // $supply->addOption($info);
 
-// $reports        = new NavbarMenu('Reports');
+$reports        = new NavbarMenu('Reports');
+$listRfs            = new NavbarOption('List RFS', 'ps_rfs.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
+
+$request->addOption($listRfs);
 // $dummy          = new NavbarOption('Dummy entry', 'pr_dummyReport.php','accessUser accessReports');
 
 $navbar->addMenu($cdiAdmin);
 $navbar->addMenu($adminMenu);
 $navbar->addMenu($request);
-$navbar->addMenu($supply);
-// $navbar->addMenu($reports);
+$navbar->addMenu($assign);
+$navbar->addMenu($reports);
 
 $outages = new NavbarOption($plannedOutagesLabel, 'ppo_PlannedOutages.php','accessCdi accessPmo accessFm accessUser accessReports');
 $navbar->addOption($outages);
