@@ -14,7 +14,8 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 $loader = new Loader();
 $rfsPredicate = rfsTable::rfsPredicateFilterOnPipeline();
 // $allRfs = $loader->load('RFS',allTables::$RESOURCE_REQUESTS,$rfsPredicate);
-$allCtbService =  $loader->load('ORGANISATION',allTables::$RESOURCE_REQUESTS);
+$allCtbService    =  $loader->load('ORGANISATION',allTables::$RESOURCE_REQUESTS);
+$allBusinessUnits =  $loader->load('BUSINESS_UNIT',allTables::$RFS);
 // $vbacEmployees = resourceRequestTable::getVbacActiveResourcesForSelect2();
 
 $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
@@ -37,21 +38,18 @@ td.dataTables_empty{
 
 <div class='container'>
 
-<h3>Report Selection </h3>
+<h3>Resource Request Report Selection </h3>
 
 <form id='reportDates'>
 	<div class='form-group text-right' >
-	    <div class='col-md-7'>
-		<div class='row'>
-      	<div class='col-md-9 col-md-offset-3 text-left' >
- 			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" disabled  data-toggle="button" value='pipeline'>Pipeline</label>
-  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$defaultToLive?> data-toggle="button" value='live'  >Live</label>
-  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive"  data-toggle="button" value='archive' >Archive</label>
+      	<div class='col-md-2  text-left' >
+ 			<label class='radio control-label '><input type="radio" name="pipelineLiveArchive" disabled  data-toggle="button" value='pipeline'>Pipeline</label>
+  			<label class='radio control-label '><input type="radio" name="pipelineLiveArchive" <?=$defaultToLive?> data-toggle="button" value='live'  >Live</label>
+  			<label class='radio control-label '><input type="radio" name="pipelineLiveArchive"  data-toggle="button" value='archive' >Archive</label>
 	    </div>
-	    </div>
-	    
-
-	    <div class='row'>
+	    </div>	   
+	   <div class='col-md-6'>  
+       <div class='form-group'>
         <label for='selectOrganisation' class='col-md-3 control-label text-right'>Organisation</label>
         	<div class='col-md-9 text-left'>
               	<select class='form-control select' id='selectOrganisation'
@@ -71,15 +69,35 @@ td.dataTables_empty{
                ?>
                </select>
             </div>
-
+	    </div>
 	    
+	    <div class='form-group'>
+        <label for='selectBusinessUnit' class='col-md-3 control-label text-right'>Business Unit</label>
+        	<div class='col-md-9 text-left'>
+              	<select class='form-control select' id='selectBusinessUnit'
+                  	          name='businessUnit'
+                  	          data-placeholder="Select Business Unit" data-allow-clear="true"
+                  	          >
+            	<option value=''>Select Business Unit</option>
+            	<option value='All'>All</option>
+                <?php
+                foreach ($allBusinessUnits as $value) {
+                         $displayValue = trim($value);
+                         $returnValue  = trim($value);
+                         $selectedBusinessUnit = isset($_COOKIE['selectBusinessUnit']) ? $_COOKIE['selectBusinessUnit'] : null;
+                         $selected = $returnValue==$selectedBusinessUnit ? 'selected' : null;
+                         ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
+                    }
+               ?>
+               </select>
+            </div>
+	    </div>
 	    
 	    </div>
 
-	    <div class='row'>
-	    
-	    <label for='selectRfs' class='col-md-3 control-label text-right'>RFS</label>
-        	<div class='col-md-9 text-left'>
+	    <div class='form-group'>	    
+	    <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>
+        	<div class='col-md-3 text-left'>
               	<select class='form-control select' 
               			id='selectRfs'
                   	    name='selectRfs'
@@ -407,6 +425,7 @@ $(document).ready(function() {
 	resourceRequest.listenForChangePipelineLiveArchive();
 	resourceRequest.listenForSelectSpecificRfs();
 	resourceRequest.listenForSelectOrganisation();
+	resourceRequest.listenForSelectBusinessUnit();
 	$('[data-toggle="tooltip"]').tooltip();
 
 });

@@ -499,13 +499,21 @@ function ResourceRequest() {
 	},
 
 	this.listenForSelectOrganisation = function(){
-		$(document).on('change','#selectOrganisation',function(){
-			$('#selectRfs').val('').trigger('change');	
+		$(document).on('change','#selectOrganisation',function(){		
 			var org = $('#selectOrganisation option:selected').val();			
-			document.cookie = "selectedOrganisation=" + org + ";" + "path=/;max-age=604800;samesite=lax;"; 			
-			ResourceRequest.table.ajax.reload();
+			document.cookie = "selectedOrganisation=" + org + ";" + "path=/;max-age=604800;samesite=lax;"; 	
+			$('#selectRfs').val('').trigger('change');		
 		});		
 	},
+	
+		this.listenForSelectBusinessUnit = function(){
+		$(document).on('change','#selectBusinessUnit',function(){
+			var org = $('#selectBusinessUnit option:selected').val();			
+			document.cookie = "selectBusinessUnit=" + org + ";" + "path=/;max-age=604800;samesite=lax;";
+			$('#selectRfs').val('').trigger('change');	 // This will trigger the report to reload, so we don't have to. 	
+		});		
+	},
+
 
 
 
@@ -566,7 +574,7 @@ function ResourceRequest() {
 	    ResourceRequest.table = $('#resourceRequestsTable_id').DataTable({
 	    	
 	    	language: {
-	    	      emptyTable: "Please select Organisation and/or RFS from dropdowns above"
+	    	      emptyTable: "Please select Organisation, Business Unit and/or RFS from dropdowns above"
 	    	},
 	    	ajax: {
 	            url: 'ajax/populateResourceRequestHTMLTable.php',
@@ -575,6 +583,7 @@ function ResourceRequest() {
 	                d.archiveLive  = $('#archiveLive').prop('checked');
 	                d.rfsid = $('#selectRfs option:selected').val();
 	                d.organisation = $('#selectOrganisation option:selected').val();
+	                d.businessunit = $('#selectBusinessUnit option:selected').val();
 	            },
 	            type: 'POST',
 	        }	,

@@ -135,10 +135,6 @@ class resourceRequestTable extends DbTable
             $allData['data'][]  = $row;
         }
         $allData['sql'] = $sql;
-
-
-
-
         return $allData ;
     }
 

@@ -23,11 +23,12 @@ $pipelineLive = $pipelineLiveArchive=='live' ? rfsRecord::RFS_STATUS_LIVE : rfsR
 $pipelineLive = $pipelineLiveArchive=='archive' ? null : $pipelineLive;
 $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
 $organisation = !empty($_POST['organisation']) ? $_POST['organisation'] : null;
+$businessUnit = !empty($_POST['businessunit']) ? $_POST['businessunit'] : null;
 
 
-if (empty($rfsId) && empty($organisation)) {
+if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     $response = array(
-        'messages' => 'Nothing Selected',
+        'messages' => 'User hasnt selected from the drop downs.',
         'badrecords' => 0,
         "data" => array()
     );
@@ -42,7 +43,8 @@ if (empty($rfsId) && empty($organisation)) {
     $predicate  =   empty($rfsId)  ? rfsTable::rfsPredicateFilterOnPipeline($pipelineLive) : null;
     $predicate .= ! empty($rfsId) ? " AND RFS='" . db2_escape_string($rfsId) . "' " : null;
     $predicate .= ! empty($organisation) ? " AND ORGANISATION='" . db2_escape_string($organisation) . "' " : null;
-
+    $predicate .= ! empty($businessUnit) ? " AND BUSINESS_UNIT='" . db2_escape_string($businessUnit) . "' " : null;
+    
     $dataAndSql = $resourceRequestTable->returnAsArray($startDate, $endDate, $predicate, $pipelineLiveArchive);
     $data = $dataAndSql['data'];
     $sql = $dataAndSql['sql'];
