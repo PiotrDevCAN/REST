@@ -107,18 +107,9 @@ td.dataTables_empty{
             </div>
 	    
 	    
-	    </div>
+	    </div>	    
 	    
-	    
 	    </div>
-
-
-
-
-
-
-
-
     </div>
 </form>
 </div>
@@ -216,9 +207,9 @@ td.dataTables_empty{
       <p><b>Service :</b><span id='confirmDuplicateType'></span></p>
       <p><b>Start Date :</b><span id='confirmDuplicateStart'></span></p>
       <p><b>Resource Reference :</b><span id='confirmDuplicateRR'></span></p>
-
       </div>
       <div class="modal-footer">
+        
         <button type="button" class="btn btn-primary" id='duplicationConfirmed'>Confirm</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
@@ -267,6 +258,7 @@ td.dataTables_empty{
       <input type='hidden' id='deleteResourceRef' name='RESOURCE_REFERENCE' val=''>
       </form>
       <div class="modal-footer">
+        <p style='color:red;text-align:center'>Please be 100% sure this record should be <b>deleted</b><br/>as it's a time consuming process to recover it should later prove to be required.<br/>Consider Archiving if you just want the record removed.</p>
         <button type="button" class="btn btn-primary" id='confirmDeleteResource'>Confirm</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
@@ -419,6 +411,7 @@ $(document).ready(function() {
 	resourceRequest.listenForResetReport();
 	resourceRequest.listenForUnallocated();
 	resourceRequest.listenForEditRecord();
+	resourceRequest.listenForResourceRequestEditShown();
 	resourceRequest.listenForDeleteRecord();
 	resourceRequest.listenForConfirmedDelete();
 	resourceRequest.listenForChangeStatus();
@@ -429,6 +422,16 @@ $(document).ready(function() {
 	$('[data-toggle="tooltip"]').tooltip();
 
 });
+
+$(document).ready(function(){
+
+
+});
+
+
+
+
+
 
 </script>
 

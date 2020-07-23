@@ -799,6 +799,72 @@ function ResourceRequest() {
 		})
 	}
 	
+	this.listenForResourceRequestEditShown = function(){
+		$(document).on('shown.bs.modal',function(e){
+		$( "#resourceRequestForm" ).submit(function( event ) {
+			$(this).addClass('spinning').attr('disabled',true);
+			var url = 'ajax/saveResourceRecord.php';
+			var disabledFields = $(':disabled');
+			$(disabledFields).removeAttr('disabled');
+			var formData = $("#resourceRequestForm").serialize();
+			$(disabledFields).attr('disabled',true);
+			
+			$.ajax({
+				type:'post',
+		  		url: url,
+		  		data:formData,
+		  		context: document.body,
+ 	      	beforeSend: function(data) {
+	        	//	do the following before the save is started
+	        	},
+	      	success: function(response) {
+	            // 	do what ever you want with the server response if that response is "success"
+	            	console.log(response);
+	            	console.log(JSON.parse(response));
+	               // $('.modal-body').html(JSON.parse(response));
+	               var responseObj = JSON.parse(response);
+	               var resourceRef =  "<p>Resource Ref:" + responseObj.resourceReference + "</p>";
+	               var savedResponse =  "<p>Saved:" + responseObj.saveResponse +  "</p>";
+	               var hoursResponse =  "<p>" + responseObj.hoursResponse +  "</p>";
+	               var messages =  "<p>" + responseObj.Messages +  "</p>";
+
+					$('.spinning').removeClass('spinning').attr('disabled',false);
+					ResourceRequest.table.ajax.reload();
+
+	                $('.modal-body').html(resourceRef + savedResponse + hoursResponse + messages);
+	                $('#myModal').modal('show');
+	                $('#myModal').on('hidden.bs.modal', function () {		
+	                	  // do something…
+		                
+              		})
+          		},
+	      	fail: function(response){
+					console.log('Failed');
+					console.log(response);
+	                $('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
+	                $('#myModal').modal('show');
+				},
+	      	error: function(error){
+	            //	handle errors here. What errors	            :-)!
+	        		console.log('Ajax error' );
+	        		console.log(error.statusText);
+	        		FormClass.displayAjaxError('<p>Ajax call has errored.</p><p>URL:"' + url + '"</p><p>Error Status:"' + error.statusText + '"</p>');
+	        		jQuery('.slaSave').html('Save').prop('disable',true );
+	        	},
+	      	always: function(){
+	        		console.log('--- saved resource request ---');
+
+	      	}
+		});
+	event.preventDefault();
+	});		
+		});
+	}
+	
+	this.listenForSaveModifiedResourceRequest = function(){
+
+	}
+	
 
 
 

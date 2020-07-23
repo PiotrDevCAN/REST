@@ -104,6 +104,8 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS);
 </form>
 </div>
 
+<hr/>
+
 <div id='rfsTableDiv'>
 </div>
 </div>
@@ -198,14 +200,9 @@ td.dataTables_empty {
 
 <script>
 
-$("[data-toggle='toggle']").bootstrapToggle('destroy')
-$(".pipelineLive").bootstrapToggle({
-    on: 'Live',
-  off: 'Pipeline'
-});
-
-
 $(document).ready(function() {
+	
+	$(".select").select2();
 
     var rfs = new Rfs();
 	rfs.buildRfsReport();
