@@ -81,12 +81,12 @@ $isReports= employee_in_group($_SESSION['reportsBg'], $_SESSION['ssoEmail']) || 
 
 
 // For Testing only
-$isCdi = null;
-$isAdmin = null;
-$isDemand = null;
-$isSupply = null;
-$isRfs = ".not('.accessRfs')";
-$isReports = null;
+// $isCdi = null;
+// $isAdmin = null;
+// $isDemand = null;
+// $isSupply = null;
+// $isRfs = ".not('.accessRfs')";
+// $isReports = null;
 
 
 

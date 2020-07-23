@@ -208,6 +208,21 @@ class rfsRecord extends DbRecord
 						type="text"
 						maxlength="<?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>">
 				</div>
+				
+								<label for='RFS_TYPE'
+					class='col-md-2 control-label ceta-label-left'>RFS Type</label>
+				<div class="col-md-1">
+        			<?php
+        		      foreach (self::$rfsType as $rfsType) {
+        		          $checked = trim($this->RFS_TYPE)== $rfsType ? ' checked ' : null;
+        		      ?><label class="radio"><input type="radio"
+						name="RFS_TYPE" <?=$checked?> value='<?=$rfsType?>'
+						required='required'><small><?=str_replace(' ', '&nbsp;', $rfsType)?></small></label>
+        		    	<?php
+        	   	       }
+        		?>
+				</div>
+				
 
 				<label for='RFS_STATUS'
 					class='col-md-2 control-label ceta-label-left'>RFS Status</label>
@@ -225,26 +240,6 @@ class rfsRecord extends DbRecord
         		      }
         		?>
 				</div>
-
-				<label for='rfsStatus2'
-					class='col-md-2 control-label ceta-label-left'>RFS Type</label>
-				<div class="col-md-1">
-        			<?php
-        		      foreach (self::$rfsType as $rfsType) {
-        		          $checked = trim($this->RFS_TYPE)== $rfsType ? ' checked ' : null;
-        		      ?><label class="radio"><input type="radio"
-						name="RFS_TYPE" <?=$checked?> value='<?=$rfsType?>'
-						required='required'><small><?=str_replace(' ', '&nbsp;', $rfsType)?></small></label>
-        		    	<?php
-        	   	       }
-        		?>
-				</div>
-
-
-
-
-
-
 			</div>
 		</div>
 
