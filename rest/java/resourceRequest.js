@@ -802,7 +802,7 @@ function ResourceRequest() {
 	this.listenForResourceRequestEditShown = function(){
 		$(document).on('shown.bs.modal',function(e){
 		$( "#resourceRequestForm" ).submit(function( event ) {
-			$(this).addClass('spinning').attr('disabled',true);
+			$('#resourceRequestForm :submit').addClass('spinning').attr('disabled',true);
 			var url = 'ajax/saveResourceRecord.php';
 			var disabledFields = $(':disabled');
 			$(disabledFields).removeAttr('disabled');
@@ -822,6 +822,7 @@ function ResourceRequest() {
 	            	console.log(response);
 	            	console.log(JSON.parse(response));
 	               // $('.modal-body').html(JSON.parse(response));
+				   $('#editRequestModal').modal('hide');	
 	               var responseObj = JSON.parse(response);
 	               var resourceRef =  "<p>Resource Ref:" + responseObj.resourceReference + "</p>";
 	               var savedResponse =  "<p>Saved:" + responseObj.saveResponse +  "</p>";
@@ -831,12 +832,8 @@ function ResourceRequest() {
 					$('.spinning').removeClass('spinning').attr('disabled',false);
 					ResourceRequest.table.ajax.reload();
 
-	                $('.modal-body').html(resourceRef + savedResponse + hoursResponse + messages);
-	                $('#myModal').modal('show');
-	                $('#myModal').on('hidden.bs.modal', function () {		
-	                	  // do something…
-		                
-              		})
+	                $('#recordSaveDiv').html(resourceRef + savedResponse + hoursResponse + messages);
+	                $('#recordSavedModal').modal('show');
           		},
 	      	fail: function(response){
 					console.log('Failed');
@@ -860,13 +857,6 @@ function ResourceRequest() {
 	});		
 		});
 	}
-	
-	this.listenForSaveModifiedResourceRequest = function(){
-
-	}
-	
-
-
 
 }
 
