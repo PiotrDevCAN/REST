@@ -129,7 +129,7 @@ function Rfs() {
 	this.listenForSelectValueStream = function(){
 		$(document).on('change','#selectValueStream',function(){	
 			var valuestream = $('#selectValueStream option:selected').val();			
-			document.cookie = "selectValueStream=" + valuestream + ";" + "path=/;max-age=604800;samesite=lax;"; 			
+			document.cookie = "selectedValueStream=" + valuestream + ";" + "path=/;max-age=604800;samesite=lax;"; 			
 			Rfs.table.ajax.reload();
 		});		
 	},
@@ -137,7 +137,7 @@ function Rfs() {
 	this.listenForSelectBusinessUnit = function(){
 		$(document).on('change','#selectBusinessUnit',function(){	
 			var businessunit = $('#selectBusinessUnit option:selected').val();			
-			document.cookie = "selectBusinessUnit=" + businessunit + ";" + "path=/;max-age=604800;samesite=lax;"; 			
+			document.cookie = "selectedBusinessUnit=" + businessunit + ";" + "path=/;max-age=604800;samesite=lax;"; 			
 			Rfs.table.ajax.reload();
 		});		
 	},

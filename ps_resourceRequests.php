@@ -8,7 +8,6 @@ use itdq\DateClass;
 use rest\rfsTable;
 
 set_time_limit(0);
-
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $loader = new Loader();
@@ -63,7 +62,7 @@ td.dataTables_empty{
                          $displayValue = trim($value);
                          $returnValue  = trim($value);
                          $selectedOrg = isset($_COOKIE['selectedOrganisation']) ? $_COOKIE['selectedOrganisation'] : null;
-                         $selected = $returnValue==$selectedOrg ? 'selected' : null;
+                         $selected = htmlspecialchars_decode($returnValue)==htmlspecialchars_decode($selectedOrg) ? 'selected' : null;
                          ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
                     }
                ?>
@@ -84,8 +83,8 @@ td.dataTables_empty{
                 foreach ($allBusinessUnits as $value) {
                          $displayValue = trim($value);
                          $returnValue  = trim($value);
-                         $selectedBusinessUnit = isset($_COOKIE['selectBusinessUnit']) ? $_COOKIE['selectBusinessUnit'] : null;
-                         $selected = $returnValue==$selectedBusinessUnit ? 'selected' : null;
+                         $selectedBusinessUnit = isset($_COOKIE['selectedBusinessUnit']) ? $_COOKIE['selectedBusinessUnit'] : null;
+                         $selected = htmlspecialchars_decode($returnValue)==htmlspecialchars_decode($selectedBusinessUnit) ? 'selected' : null;
                          ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
                     }
                ?>

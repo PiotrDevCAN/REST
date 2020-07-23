@@ -7,8 +7,6 @@ set_time_limit(0);
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 $loader = new Loader();
-
-
 $allRfs = $loader->load('RFS',allTables::$RESOURCE_REQUESTS);
 $allValueStream = $loader->load('VALUE_STREAM',allTables::$RFS);
 $allBusinessUnits = $loader->load('BUSINESS_UNIT',allTables::$RFS);
@@ -56,7 +54,7 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS);
                          $displayValue = trim($value);
                          $returnValue  = trim($value);
                          $selectedValueStream = isset($_COOKIE['selectedValueStream']) ? $_COOKIE['selectedValueStream'] : null;
-                         $selected = $returnValue==$selectedValueStream ? 'selected' : null;
+                         $selected = htmlspecialchars_decode($returnValue)==htmlspecialchars_decode($selectedValueStream) ? 'selected' : null;
                          ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
                     }
                 ?>
@@ -75,7 +73,7 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS);
                          $displayValue = trim($value);
                          $returnValue  = trim($value);
                          $selectedBusinessUnit = isset($_COOKIE['selectedBusinessUnit']) ? $_COOKIE['selectedBusinessUnit'] : null;
-                         $selected = $returnValue==$selectedBusinessUnit ? 'selected' : null;
+                         $selected = htmlspecialchars_decode($returnValue)==htmlspecialchars_decode($selectedBusinessUnit) ? 'selected' : null;
                          ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
                     }
                 ?>

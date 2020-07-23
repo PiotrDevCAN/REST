@@ -491,9 +491,9 @@ function ResourceRequest() {
 	},
 	
 	this.listenForSelectSpecificRfs = function(){
-		$(document).on('change','#selectRfs',function(){			
+		$(document).on('change','#selectRfs',function(){	
 			var rfs = $('#selectRfs option:selected').val();			
-			document.cookie = "selectedRfs=" + rfs + ";" + "path=/;max-age=604800;samesite=lax;"; 					
+			document.cookie = "selectedRfs=" + rfs + ";" + "path=/;max-age=604800;samesite=lax;"; 										
 			ResourceRequest.table.ajax.reload();
 		});		
 	},
@@ -507,10 +507,12 @@ function ResourceRequest() {
 	},
 	
 		this.listenForSelectBusinessUnit = function(){
-		$(document).on('change','#selectBusinessUnit',function(){
+		$(document).on('change','#selectBusinessUnit',function(){			
 			var org = $('#selectBusinessUnit option:selected').val();			
-			document.cookie = "selectBusinessUnit=" + org + ";" + "path=/;max-age=604800;samesite=lax;";
-			$('#selectRfs').val('').trigger('change');	 // This will trigger the report to reload, so we don't have to. 	
+			document.cookie = "selectedBusinessUnit=" + org + ";" + "path=/;max-age=604800;samesite=lax;";
+			$('#selectRfs').val('').trigger('change');	 // This will trigger the report to reload, so we don't have to. 
+			
+			console.log(document.cookie);
 		});		
 	},
 
