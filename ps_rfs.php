@@ -11,6 +11,7 @@ $loader = new Loader();
 
 $allRfs = $loader->load('RFS',allTables::$RESOURCE_REQUESTS);
 $allValueStream = $loader->load('VALUE_STREAM',allTables::$RFS);
+$allBusinessUnits = $loader->load('BUSINESS_UNIT',allTables::$RFS);
 $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS);
 
 // $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
@@ -61,8 +62,27 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS);
                 ?>
                </select>
             </div>
+         <label for='selectBusinessUnit' class='col-md-1 control-label text-right'>Business Unit</label>
+        	<div class='col-md-2 text-left'>
+              	<select class='form-control select' id='selectBusinessUnit'
+                  	          name='selectValueStream'
+                  	          data-placeholder="select Business Unit" data-allow-clear="true"
+                  	          >
+            	<option value=''>Select Business Unit</option>
+            	<option value='All'>All</option>
+                <?php
+                    foreach ($allBusinessUnits as $value) {
+                         $displayValue = trim($value);
+                         $returnValue  = trim($value);
+                         $selectedBusinessUnit = isset($_COOKIE['selectedBusinessUnit']) ? $_COOKIE['selectedBusinessUnit'] : null;
+                         $selected = $returnValue==$selectedBusinessUnit ? 'selected' : null;
+                         ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
+                    }
+                ?>
+               </select>
+            </div>  
          <label for='selectRequestor' class='col-md-1 control-label text-right'>Requestor</label>
-        	<div class='col-md-3 text-left'>
+        	<div class='col-md-2 text-left'>
               	<select class='form-control select' id='selectRequestor'
                   	          name='selectRequestor'
                   	          data-placeholder="Select Requestor" data-allow-clear="true"
@@ -196,6 +216,7 @@ $(document).ready(function() {
 	rfs.listenForConfirmArchiveRfs();
 	rfs.listenForSelectRequestor();
 	rfs.listenForSelectValueStream();
+	rfs.listenForSelectBusinessUnit();
 	rfs.listenForSelectRfs();
 });
 
