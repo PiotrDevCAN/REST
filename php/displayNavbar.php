@@ -86,7 +86,7 @@ $isReports= employee_in_group($_SESSION['reportsBg'], $_SESSION['ssoEmail']) || 
 // $isAdmin = null;
 // $isDemand = null;
 // $isSupply = null;
-// $isRfs = ".not('.accessRfs')";
+$isRfs = null;
 // $isReports = null;
 
 

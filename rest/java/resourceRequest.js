@@ -571,8 +571,6 @@ function ResourceRequest() {
 	    	ajax: {
 	            url: 'ajax/populateResourceRequestHTMLTable.php',
 	            data: function ( d ) {
-	                d.startDate = $('#START_DATE').val();
-	                d.endDate = $('#END_DATE').val();
 	                d.pipelineLiveArchive  = $("input:radio[name=pipelineLiveArchive]:checked").val();
 	                d.archiveLive  = $('#archiveLive').prop('checked');
 	                d.rfsid = $('#selectRfs option:selected').val();
@@ -633,6 +631,7 @@ function ResourceRequest() {
 	            { data: "RFS_TYPE"         ,defaultContent: "", visible:false },
 	            { data: "ILC_WORK_ITEM"    ,defaultContent: "", visible:false },
 	            { data: "RFS_STATUS"       ,defaultContent: "", visible:false },
+	            { data: "BUSINESS_UNIT"    ,defaultContent: "", visible:false },
 	            { data: "RESOURCE_REFERENCE",defaultContent: "", visible:false },
 	            { data: "RFS"              ,defaultContent: "", visible:true, render: { _:'display', sort:'sort' }, },	           
 	            { data: "PHASE"            ,defaultContent: "", visible:true },

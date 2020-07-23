@@ -18,7 +18,7 @@ $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 
 $startDate = !empty($_POST['startDate']) ? $_POST['startDate'] : null;
 $endDate = !empty($_POST['endDate']) ? $_POST['endDate'] : null;
-$pipelineLiveArchive = $_POST['pipelineLiveArchive'];
+$pipelineLiveArchive = !empty($_POST['pipelineLiveArchive']) ? $_POST['pipelineLiveArchive'] : 'live' ;
 $pipelineLive = $pipelineLiveArchive=='live' ? rfsRecord::RFS_STATUS_LIVE : rfsRecord::RFS_STATUS_PIPELINE;
 $pipelineLive = $pipelineLiveArchive=='archive' ? null : $pipelineLive;
 $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;

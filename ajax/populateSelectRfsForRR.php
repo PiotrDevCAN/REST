@@ -2,7 +2,7 @@
 use rest\allTables;
 use rest\rfsRecord;
 
-$pipelineLiveArchive = trim($_GET['pipelineLiveArchive']);
+$pipelineLiveArchive = !empty($_GET['pipelineLiveArchive']) ? trim($_GET['pipelineLiveArchive']) : 'live';
 $organisation = trim($_GET['organisation']);
 
 $resourceRequestTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUESTS : allTables::$RESOURCE_REQUESTS;
