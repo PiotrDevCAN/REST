@@ -53,10 +53,10 @@ $resRequest     = new NavbarOption('Resource Requests', 'ps_resourceRequests.php
 $assign->addOption($resRequest);
 // $supply->addOption($info);
 
-$reports        = new NavbarMenu('Reports');
-$listRfs            = new NavbarOption('List RFS', 'ps_rfs.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
+$reports        = new NavbarMenu('Report');
+$listRfs        = new NavbarOption('List RFS', 'ps_rfs.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
 
-$request->addOption($listRfs);
+$reports->addOption($listRfs);
 // $dummy          = new NavbarOption('Dummy entry', 'pr_dummyReport.php','accessUser accessReports');
 
 $navbar->addMenu($cdiAdmin);
