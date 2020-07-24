@@ -64,8 +64,6 @@ console.log('ready');
 
 
 console.log($(".select"));
-
-
 	$('#ORGANISATION').on('select2:select', function(e){
 		var serviceSelected= $(e.params.data)[0].text;
     	var entry = organisation[0].indexOf(serviceSelected);
@@ -85,11 +83,6 @@ console.log($(".select"));
         }
 
 	});
-
-
-
-
-
 });
 
 

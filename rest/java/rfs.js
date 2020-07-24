@@ -65,6 +65,32 @@ function Rfs() {
 			
 		});
 	},
+	
+	this.listenForSlipRfs = function(){
+		console.log('set slip listener');
+		$(document).on('click','.slipRfs', function(e){			
+			$(this).addClass('spinning').attr('disabled',true);			
+			$(this).prev('td.details-control').trigger('click');	
+			
+			console.log($(this));
+			console.log($(this).prev('td.details-control'));
+			
+			var rfsId = $(this).data('rfsid');
+	
+		    $.ajax({
+		    	url: "ajax/getSlipRfsForm.php",
+		        type: 'POST',
+		    	data: {rfsId:rfsId},
+		    	success: function(result){
+		    		$('.spinning').removeClass('spinning').attr('disabled',false);
+		    		var resultObj = JSON.parse(result);		    		
+		    		$('#slipRfsModalBody').html(resultObj.form);
+		    		$('#slipRfsModal').modal('show');
+		    	}
+		    });			
+			
+		});
+	},
 
 
 	this.listenForDeleteRfs = function(){
@@ -375,5 +401,62 @@ function Rfs() {
 		$(document).on('hide.bs.modal',function(e){		
 			Rfs.table.ajax.reload();
 		});
+	}
+	
+	this.prepareStartDateOnModal = function(element){
+		var reference = $(element).data('reference');
+		var id = element.id;
+		var db2DateElementId = '#END_DATE' + reference; 
+		
+		startPicker = new Pikaday({
+    			firstDay:1,
+        		field: element,
+        		format: 'D MMM YYYY',
+        		showTime: false,
+        		minDate: new Date(),
+        		onSelect: function() {            	
+            		var db2Value = this.getMoment().format('YYYY-MM-DD')
+            		$(db2DateElementId).val(db2Value);
+            		$(startPickers).each(function(index,element){
+						var sDate = element.getDate();
+						startPickers[index].setStartRange(sDate);
+        				endPickers[index].setStartRange(sDate);
+        				endPickers[index].setMinDate(sDate);		
+					})	
+					console.log(endPickers);	
+				    console.log(startPickers);	
+				}
+    	});	
+		return startPicker;
+	}	
+	
+	
+	this.prepareEndDateOnModal = function(element, startPicker){
+		
+		var reference = $(element).data('reference');		
+		var db2DateElementId = '#END_DATE' + reference; 
+	
+		var endPicker = new Pikaday({
+    		firstDay:1,
+        	field: element,
+        	format: 'D MMM YYYY',
+	        showTime: false,
+    	    minDate: new Date(),
+        	onSelect: function() {
+	            console.log(this.getMoment().format('Do MMMM YYYY'));
+            	var db2Value = this.getMoment().format('YYYY-MM-DD')
+            	console.log(db2Value);
+            	$(db2DateElementId).val(db2Value);
+           		$(endPickers).each(function(index,element){
+					var eDate = element.getDate();
+					startPickers[index].setEndRange(eDate);
+        			startPickers[index].setMaxDate(eDate);
+        			endPickers[index].setEndRange(eDate);							
+				})
+				console.log(endPickers);	
+				console.log(startPickers);
+			}
+    	})
+		return endPicker;
 	}
 }

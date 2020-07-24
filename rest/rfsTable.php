@@ -103,7 +103,9 @@ class rfsTable extends DbTable
               </button>";
         } else {
             $row['RFS_ID'] = ""; /// NEed something so next statement can be an append.
-        }        $row['RFS_ID'] .= "<button type='button' class='btn btn-success btn-xs editRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
+        }        $row['RFS_ID'] .="<button type='button' class='btn btn-success btn-xs slipRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
+              <span class='glyphicon glyphicon-calendar' aria-hidden='true'  data-toggle='tooltip' title='Slip RFS' ></span></button>        
+              <button type='button' class='btn btn-success btn-xs editRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>              
               <span class='glyphicon glyphicon-edit' aria-hidden='true'  data-toggle='tooltip' title='Edit RFS' ></span>
               </button>"  . "&nbsp;" .  "<button type='button' class='btn btn-danger btn-xs deleteRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
               <span class='glyphicon glyphicon-trash' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Delete RFS<br/><em>Can not be recovered</em>' ></span>

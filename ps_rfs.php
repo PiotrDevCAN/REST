@@ -177,6 +177,27 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS);
 </div>
 
 
+<!-- Modal -->
+<div id="slipRfsModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Amend Dates for RFS</h4>
+      </div>
+      <div class="modal-body" id='slipRfsModalBody'>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
 <?php
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 ?>
@@ -193,10 +214,8 @@ td.dataTables_empty {
 
 
 </style>
+<script type='text/javascript'>
 
-
-
-<script>
 
 $(document).ready(function() {
 	
@@ -207,6 +226,7 @@ $(document).ready(function() {
 	rfs.listenForDeleteRfs();
 	rfs.listenForConfirmDeleteRfs();
 	rfs.listenForEditRfs();
+	rfs.listenForSlipRfs();
 	rfs.listenForArchiveRfs();
 	rfs.listenForConfirmArchiveRfs();
 	rfs.listenForSelectRequestor();
@@ -216,13 +236,33 @@ $(document).ready(function() {
 });
 
 
-$(document).on('shown.bs.modal',function(e){
+$(document).on('shown.bs.modal','#editRfsModal',function(e){
+    console.log('edit rfs modal showing');
 	var rfs = new Rfs();
 	rfs.preventDuplicateRfsEntry();
 	rfs.listenForSaveRfs();
 	rfs.refreshReportOnRfsUpdate();
 });
 
+var startPickers = [];
+var endPickers = [];
 
+
+$(document).on('shown.bs.modal','#slipRfsModal',function(e){
+    console.log('slip rfs modal showing');    
+    $('.startDate').each(function(index,element){
+    	var reference = $(element).data('reference');
+    	var rfs = new Rfs();
+    	startPickers[index] = rfs.prepareStartDateOnModal(element);    	    
+    });
+    
+    $('.endDate').each(function(index,element){
+    	var reference = $(element).data('reference');
+    	var rfs = new Rfs();
+    	endPickers[index] = rfs.prepareEndDateOnModal(element);    	    
+    });       
+
+});
 
 </script>
+

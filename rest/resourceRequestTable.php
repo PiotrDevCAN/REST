@@ -306,6 +306,28 @@ class resourceRequestTable extends DbTable
         }
         return $_SESSION['vbacEmployees'];
     }
+    
+    
+    static function getDetailsforRfsDateSlip($rfsId=null){
+       
+        $sql = " SELECT RESOURCE_REFERENCE, START_DATE, END_DATE, ORGANISATION, SERVICE, DESCRIPTION ";
+        $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
+        $sql.= " WHERE RFS = '" . db2_escape_string($rfsId) . "' ";
+        
+        $rs = db2_exec($GLOBALS['conn'], $sql);
+        
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+        }
+     
+        $data = array();
+        while (($row=db2_fetch_assoc($rs))==true) {
+            $data[$row['RESOURCE_REFERENCE']] = $row;
+        }
+        
+        return !empty($data) ? $data : false;
+        
+    }
 
 
 
