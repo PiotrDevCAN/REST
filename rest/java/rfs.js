@@ -423,9 +423,7 @@ function Rfs() {
         				endPickers[index].setStartRange(sDate);
         				endPickers[index].setMinDate(sDate);		
 					})	
-					console.log(endPickers);	
-				    console.log(startPickers);	
-				}
+			}
     	});	
 		return startPicker;
 	}	
@@ -443,18 +441,14 @@ function Rfs() {
 	        showTime: false,
     	    minDate: new Date(),
         	onSelect: function() {
-	            console.log(this.getMoment().format('Do MMMM YYYY'));
             	var db2Value = this.getMoment().format('YYYY-MM-DD')
-            	console.log(db2Value);
-            	$(db2DateElementId).val(db2Value);
+               	$(db2DateElementId).val(db2Value);
            		$(endPickers).each(function(index,element){
 					var eDate = element.getDate();
 					startPickers[index].setEndRange(eDate);
         			startPickers[index].setMaxDate(eDate);
         			endPickers[index].setEndRange(eDate);							
 				})
-				console.log(endPickers);	
-				console.log(startPickers);
 			}
     	})
 		return endPicker;

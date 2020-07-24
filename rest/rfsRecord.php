@@ -283,7 +283,8 @@ class rfsRecord extends DbRecord
     function displaySlipRfs()
     {
         $details = resourceRequestTable::getDetailsforRfsDateSlip($this->RFS_ID);
- 
+        
+        $today = new \DateTime
     ?>
 		<form id='rfsSlipRfs' class="form-horizontal" method='post'>
 		
@@ -302,24 +303,35 @@ class rfsRecord extends DbRecord
 		    $rr = $requestDetails['RESOURCE_REFERENCE'];
 		    
 		    ?>
-		    <div class='form-group' >
-
-		    
+		    <div class='form-group' >		    
 		    <div class='col-md-12' style='background:#eeeeee;border='#cccccc'>
 		    <small>
 		    <?="Ref:" . $requestDetails['RESOURCE_REFERENCE']. "<br/>" . $requestDetails['ORGANISATION'] . ":" . $requestDetails['SERVICE'] . "<br/>" . $requestDetails['DESCRIPTION']?>
 		    </small>
 		    </div>
 		    </div>
+		    <?php 
+		    if( $startDate < $today){
+		        ?>
+        	    <div class='form-group' >
+        	    <div class='col-md-8 col-md-offset-2' >
+		        <div class="alert alert-warning" role="alert">The Start Date(<?=$startDateStr?>) for this request has past. Please set new Dates</div>
+			    </div>
+			    </div>
+		        <?php    
+		    }
+		    ?>
+		    
+		    
 		    
 		    <div class='form-group required' >
 
     	    <label for='START_DATE<?=$rr?>' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>Start Date</label>
 	        <div class='col-md-3'>
-        	<div id='calendarFormGroupSTART_DATE<?=$rr?>' class='input-group date form_datetime ' data-date-format='dd MM yyyy - HH:ii p' data-link-field='START_DATEclass='form-group required'' data-link-format='yyyy-mm-dd-hh.ii.00'>
-        	<input id='InputSTART_DATE<?=$rr?>' class='form-control startDate' type='text' readonly value='<?=$startDateStr?>' placeholder='Select Start Date' required data-reference='<?=$rr?>' />
+        	<div class='input-group date form_datetime ' data-date-format='dd MM yyyy - HH:ii p' data-link-field='START_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
+        	<input class='form-control startDate' type='text' readonly value='<?=$startDateStr?>' placeholder='Select Start Date' required data-reference='<?=$rr?>' />
         	<input type='hidden' id='START_DATE<?=$rr?>' class='startDate2' name='START_DATE<?=$rr?>' value='<?=$startDateStr2?>' data-reference='<?=$rr?>' />
-        	<span class='input-group-addon'><span id='calendarIconSTART_DATE<?=$rr?>' class='glyphicon glyphicon-calendar'></span></span>
+        	<span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span></span>
         	</div>
         	</div>
 
