@@ -2,6 +2,7 @@
  *
  */
 
+var slippingCounter = 0;	
 
 function Rfs() {
 
@@ -406,7 +407,8 @@ function Rfs() {
 	this.prepareStartDateOnModal = function(element){
 		var reference = $(element).data('reference');
 		var id = element.id;
-		var db2DateElementId = '#END_DATE' + reference; 
+		var db2DateElementId = '#START_DATE_' + reference; 
+				console.log($(db2DateElementId));
 		
 		startPicker = new Pikaday({
     			firstDay:1,
@@ -417,6 +419,10 @@ function Rfs() {
         		onSelect: function() {            	
             		var db2Value = this.getMoment().format('YYYY-MM-DD')
             		$(db2DateElementId).val(db2Value);
+					console.log($(db2DateElementId));
+					console.log($(db2DateElementId).val());
+					console.log(db2Value);
+
             		$(startPickers).each(function(index,element){
 						var sDate = element.getDate();
 						startPickers[index].setStartRange(sDate);
@@ -429,10 +435,10 @@ function Rfs() {
 	}	
 	
 	
-	this.prepareEndDateOnModal = function(element, startPicker){
+	this.prepareEndDateOnModal = function(element){
 		
 		var reference = $(element).data('reference');		
-		var db2DateElementId = '#END_DATE' + reference; 
+		var db2DateElementId = '#END_DATE_' + reference; 
 	
 		var endPicker = new Pikaday({
     		firstDay:1,
@@ -452,5 +458,40 @@ function Rfs() {
 			}
     	})
 		return endPicker;
+	}
+
+	
+
+	this.listenForSaveSlippedRfsDates = function(){
+		$( "#saveSlippedRfsDates" ).on('click',function( event ) {
+			$(this).addClass('spinning').attr('disabled',true);			
+			console.log($('.startDate2'));		
+			$('.startDate2').each(function(index, element){
+				console.log(element);
+				var reference = $(element).data('reference');
+				var startDate = $(element).val();				
+			    $.ajax({
+			    	url: "ajax/slipResourceHours.php",
+		        	type: 'POST',
+		    		data: {ModalSTART_DATE       :startDate,
+ 					   	   ModalResourceReference:reference},
+					beforeSend: function(){
+						slippingCounter++;
+						console.log(slippingCounter);		
+						},		
+		    		success: function(result){		
+						console.log(slippingCounter);	  
+						if(--slippingCounter<=0){
+				    		$('#editResourceHours').html('');
+							$('#resourceHoursModal').modal('hide');
+    						$('.spinning').removeClass('spinning').attr('disabled',false);
+							$('#slipRfsModal').modal('hide');
+							Rfs.table.ajax.reload();				
+						} 
+					}
+		    	});
+			});	
+
+		});
 	}
 }

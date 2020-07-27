@@ -286,7 +286,7 @@ class rfsRecord extends DbRecord
         
         $today = new \DateTime
     ?>
-		<form id='rfsSlipRfs' class="form-horizontal" method='post'>
+		<form id='rfsSlipDates' class="form-horizontal" method='post'>
 		
 		<?php 
 		foreach ($details as $rr => $requestDetails) {
@@ -312,6 +312,9 @@ class rfsRecord extends DbRecord
 		    </div>
 		    <?php 
 		    if( $startDate < $today){
+		        $startDateStr = null;
+		        $startDateStr2 = null;
+		        $endDateStr = null;
 		        ?>
         	    <div class='form-group' >
         	    <div class='col-md-8 col-md-offset-2' >
@@ -321,27 +324,24 @@ class rfsRecord extends DbRecord
 		        <?php    
 		    }
 		    ?>
-		    
-		    
-		    
 		    <div class='form-group required' >
 
-    	    <label for='START_DATE<?=$rr?>' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>Start Date</label>
+    	    <label for='START_DATE_<?=$rr?>' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>Start Date</label>
 	        <div class='col-md-3'>
         	<div class='input-group date form_datetime ' data-date-format='dd MM yyyy - HH:ii p' data-link-field='START_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
         	<input class='form-control startDate' type='text' readonly value='<?=$startDateStr?>' placeholder='Select Start Date' required data-reference='<?=$rr?>' />
-        	<input type='hidden' id='START_DATE<?=$rr?>' class='startDate2' name='START_DATE<?=$rr?>' value='<?=$startDateStr2?>' data-reference='<?=$rr?>' />
+        	<input type='hidden' class='startDate2' id='START_DATE_<?=$rr?>' name='START_DATE_<?=$rr?>' value='<?=$startDateStr2?>' data-reference='<?=$rr?>' />
         	<span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span></span>
         	</div>
         	</div>
 
         	<div class='form-group required'>
-        	<label for='END_DATE<?=$rr?>' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>End Date</label>
+        	<label for='END_DATE_<?=$rr?>' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>End Date</label>
         	<div class='col-md-3'>
-        	<div id='calendarFormGroupEND_DATE<?=$rr?>' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE<?=$rr?>' data-link-format='yyyy-mm-dd-hh.ii.00'>
-        	<input id='InputEND_DATE<?=$rr?>' class='form-control endDate' type='text' readonly value='<?=$endDateStr?>' placeholder='Select End Date' required  data-reference='<?=$rr?>' />
-        	<input type='hidden' id='END_DATE<?=$rr?>' class='endDate2' name='END_DATE<?=$rr?>' value='<?=$endDateStr2?>'  data-reference='<?=$rr?>' />
-        	<span class='input-group-addon'><span id='calendarIconEND_DATE<?=$rr?>' class='glyphicon glyphicon-calendar'></span></span>
+        	<div class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE<?=$rr?>' data-link-format='yyyy-mm-dd-hh.ii.00'>
+        	<input class='form-control endDate' type='text' readonly value='<?=$endDateStr?>' placeholder='Select End Date' disabled  data-reference='<?=$rr?>' />
+        	<input type='hidden' class='endDate2' id='END_DATE_<?=$rr?>' name='END_DATE_<?=$rr?>' value='<?=$endDateStr2?>'  data-reference='<?=$rr?>' disabled />
+        	<span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span></span>
         	</div>
         	</div>
         	</div>

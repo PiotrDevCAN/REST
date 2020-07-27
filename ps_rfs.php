@@ -190,6 +190,7 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS);
       <div class="modal-body" id='slipRfsModalBody'>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id='saveSlippedRfsDates'>Save</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -227,6 +228,7 @@ $(document).ready(function() {
 	rfs.listenForConfirmDeleteRfs();
 	rfs.listenForEditRfs();
 	rfs.listenForSlipRfs();
+	rfs.listenForSaveSlippedRfsDates();
 	rfs.listenForArchiveRfs();
 	rfs.listenForConfirmArchiveRfs();
 	rfs.listenForSelectRequestor();
