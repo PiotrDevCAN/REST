@@ -8,6 +8,8 @@ use rest\resourceRequestHoursRecord;
 use rest\resourceRequestHourseTable;
 use rest\resourceRequestHoursTable;
 use itdq\Trace;
+use itdq\AuditTable;
+
 
 set_time_limit(0);
 ob_start();
@@ -28,6 +30,9 @@ ob_start();
 $success = empty($messages);
 
 $response = array('success'=>$success,'resourceReference'=>$_POST['RESOURCE_REFERENCE'], 'resourceName' => $_POST['RESOURCE_NAME'], 'Messages'=>$messages, 'Exception'=> $exception) ;
+
+AuditTable::audit(__FILE__ . "called by:" . $_SESSION['ssoEmail'] . " Response:" . print_r($response,true),AuditTable::RECORD_TYPE_AUDIT);
+
 
 ob_clean();
 echo json_encode($response);
