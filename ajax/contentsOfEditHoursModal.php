@@ -34,8 +34,6 @@ ob_start();
 <div class='col-md-3'><div class="pull-right"><p><b>Value Stream:</b></p></div></div>
 <div class='col-md-3'><p><span id='editHoursValueStream'></span></p></div>
 
-<div class='col-md-3'><div class="pull-right"><p><b>Phase:</b></p></div></div>
-<div class='col-md-3'><p><span id='editHoursPhase'></span></p></div>
 </div>
 <div class='row'>
 <div class='col-md-3'><div class="pull-right"><p><b>Service:</b></p></div></div>

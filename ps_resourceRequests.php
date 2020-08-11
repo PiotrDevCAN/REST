@@ -311,12 +311,6 @@ td.dataTables_empty{
 	    	<input type="text" class="form-control" id="statusChangeRfs" name="statusChangeRfs" disabled>
 	    	</div>
   		</div>
-  		<div class="form-group" >
-		    <label for="statusChangePhase" class='col-sm-2'>Phase</label>
-		    <div class='col-sm-8'>
-	    	<input type="text" class="form-control" id="statusChangePhase" name="statusChangePhase" disabled>
-	    	</div>
-  		</div>
 		<div class="form-group">
 		    <label for="statusChangeService" class='col-sm-2' >Organisation</label>
 		    <div class='col-sm-8'>

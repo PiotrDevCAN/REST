@@ -16,7 +16,6 @@ class resourceRequestRecord extends DbRecord
 
     protected $RESOURCE_REFERENCE;
     protected $RFS;
-    protected $PHASE;
     protected $ORGANISATION; // was known as CURRENT_PLATFORM
     protected $SERVICE;
     protected $DESCRIPTION;
@@ -29,7 +28,7 @@ class resourceRequestRecord extends DbRecord
     protected $CLONED_FROM;
     protected $STATUS;
 
-    static public $columnHeadings = array("Resource Ref", "RFS", "Phase", "Organisation", "Service",
+    static public $columnHeadings = array("Resource Ref", "RFS", "Organisation", "Service",
                                           "Description", "Start Date", "End Date", "Hrs Per Week", "Resource Name",
                                           "Request Creator", "Request Created","Cloned From", "Status"    );
 
@@ -66,8 +65,6 @@ class resourceRequestRecord extends DbRecord
         $loader = new Loader();
         $rfsPredicate = rfsTable::rfsPredicateFilterOnPipeline();
         $allRfs = $loader->load('RFS_ID',allTables::$RFS,$rfsPredicate);
-
-        $allPhase = array('Design','Build','Develop','Deploy','Deliver');
 
         $predicate = " STATUS='" . StaticOrganisationTable::ENABLED . "' ";
         $allOrganisation = $loader->load('ORGANISATION',allTables::$STATIC_ORGANISATION,$predicate);
@@ -154,37 +151,20 @@ class resourceRequestRecord extends DbRecord
 
    		<div class='form-group required'>
 
-            <label for='PHASE' class='col-md-2 control-label ceta-label-left'>Phase</label>
-        	<div class='col-md-3'>
-              	<select class='form-control select' id='PHASE'
-                  	          name='PHASE'
-                  	          required='required'
-                  	          data-tags="true" data-placeholder="Select Phase" data-allow-clear="true"
-                  	           >
-            	<option value=''>Select Phase<option>
-                <?php
-                    foreach ($allPhase as $key => $value) {
-                         $displayValue = trim($value);
-                         $returnValue  = trim($value);
-                         ?><option value='<?=$returnValue?>' <?=trim($this->PHASE) == $returnValue ? 'selected' : null;?>  ><?=$displayValue?></option><?php
-                    }
-               ?>
-               </select>
-            </div>
-
             <label for='STATUS' class='col-md-2 control-label ceta-label-left'>Status</label>
         	<div class='col-md-3'>
               	<select class='form-control select' id='STATUS'
                   	          name='STATUS'
                   	          required='required'
                   	          data-tags="true" data-placeholder="Select Status" data-allow-clear="true"
+                  	          disabled
                   	           >
             	<option value=''>Select Status<option>
                 <?php
                     foreach (self::$allStatus as $key => $value) {
                          $displayValue = trim($value);
                          $returnValue  = trim($value);
-                         ?><option value='<?=$returnValue?>' <?=(trim($this->STATUS) == $returnValue) || (empty($this->STATUS) && $returnValue==self::STATUS_NEW) ? ' selected ' : null;?>  ><?=$displayValue?></option><?php
+                         ?><option value='<?=$returnValue?>' <?=(trim($this->STATUS) == $returnValue) || (empty($this->STATUS) && $returnValue==self::STATUS_NEW) ? ' selected  ' : null;?>  ><?=$displayValue?></option><?php
                     }
                ?>
                </select>

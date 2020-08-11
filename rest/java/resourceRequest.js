@@ -265,7 +265,6 @@ function ResourceRequest() {
     		$('#resourceHoursModal').on('shown.bs.modal',function(){
     			$('#editHoursRfs').text($(dataDetails).data('rfs'));	
     			$('#editHoursPrn').text($(dataDetails).data('prn'));
-    			$('#editHoursPhase').text($(dataDetails).data('phase'));
     			$('#editHoursValueStream').text($(dataDetails).data('valuestream'));
     			$('#editHoursService').text($(dataDetails).data('service'));
     			$('#editHoursSubService').text($(dataDetails).data('subservice'));
@@ -561,7 +560,6 @@ function ResourceRequest() {
 			var resourceReference = $(this).data('resourcereference');
 			$('#statusChangeRR').val($.trim($(this).data('resourcereference')));
 			$('#statusChangeRfs').val($.trim($(this).data('rfs')));
-			$('#statusChangePhase').val($.trim($(this).data('phase')));
 			$('#statusChangeService').val($.trim($(this).data('service')));
 			$('#statusChangeStart').val($.trim($(this).data('start')));
 			$('#statusChangeSub').val($.trim($(this).data('sub')));
@@ -654,7 +652,6 @@ function ResourceRequest() {
 	            { data: "BUSINESS_UNIT"    ,defaultContent: "", visible:false },
 	            { data: "RESOURCE_REFERENCE",defaultContent: "", visible:false },
 	            { data: "RFS"              ,defaultContent: "", visible:true, render: { _:'display', sort:'sort' }, },	           
-	            { data: "PHASE"            ,defaultContent: "", visible:true },
 	            { data: "ORGANISATION"     ,defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
 	            { data: "SERVICE"          ,defaultContent: "", visible:false },
 	            { data: "DESCRIPTION"      ,defaultContent: "", visible:true },

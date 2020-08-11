@@ -366,7 +366,6 @@ function checkAssignToRpoForm(){
 
 function checkResourceForm(){
 	var jrssName = document.getElementById('jrss_name');
-	var phase = document.getElementById('PHASE');
 	var band = document.getElementById('BAND');
 	var cost = document.getElementById('RESOURCE_COST');
 	var pool = document.getElementById('POOL_NAME');
@@ -391,12 +390,6 @@ function checkResourceForm(){
 		jrssName.focus();
 		return false;
 	}
-	if(phase.value == ''){
-		alert("Please select Business Type");
-		phase.focus();
-		return false;
-	}
-
 	if(band.value == ''){
 		alert("Please select Band");
 		band.focus();

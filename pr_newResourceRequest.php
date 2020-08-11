@@ -88,6 +88,7 @@ console.log($(".select"));
 
 $("form").on("reset", function () {
 	$(".select").val('').trigger('change');
+	$("#STATUS").val('New').trigger('change');
 	console.log($('.select'));
 
 });
