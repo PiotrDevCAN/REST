@@ -34,9 +34,9 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     );
 } else {
 
-    $rfsId = $rfsId=='All' ? null : $rfsId;
+    $rfsId        = $rfsId=='All'        ? null : $rfsId;
     $organisation = $organisation=='All' ? null : $organisation;
-
+    $businessUnit = $businessUnit=='All' ? null : $businessUnit;
 
     PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
 

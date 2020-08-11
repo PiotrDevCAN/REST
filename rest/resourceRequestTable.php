@@ -156,7 +156,8 @@ class resourceRequestTable extends DbTable
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
         $organisation = $row['ORGANISATION'];
         $service = $row['SERVICE'];
-        $row['STATUS'] =
+        
+        $row['STATUS']=
         "<button type='button' class='btn btn-xs changeStatus accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
                     data-rfs='" .$rfsId . "'
                     data-resourcereference='" .$resourceReference . "'
@@ -173,14 +174,21 @@ class resourceRequestTable extends DbTable
 
          >
          <span data-toggle='tooltip' title='Change Status' class='glyphicon glyphicon-tags ' aria-hidden='true' ></span>
-            </button>&nbsp;" . $status;
+            </button>&nbsp;";
+                        
+          $deletable = $status == 'New' ? true : false;
+                        
+          $row['STATUS'].= $deletable ? "<button type='button' class='btn btn-xs deleteRecord accessRestrict accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $service . "' >
+             <span data-toggle='tooltip' title='Delete Resource Request' class='glyphicon glyphicon-trash text-warning ' aria-hidden='true' ></span>
+             </button>&nbsp;".$status  : $status;
+        
 
 
 
-        $row['DESCRIPTION'] =
-        "<button type='button' class='btn btn-default btn-xs deleteRecord accessRestrict accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $service . "' >
-            <span data-toggle='tooltip' title='Delete Resource' class='glyphicon glyphicon-trash ' aria-hidden='true' ></span>
-            </button>&nbsp;" . $description;
+//         $row['DESCRIPTION'] =
+//         "<button type='button' class='btn btn-default btn-xs deleteRecord accessRestrict accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $service . "' >
+//             <span data-toggle='tooltip' title='Delete Resource' class='glyphicon glyphicon-trash ' aria-hidden='true' ></span>
+//             </button>&nbsp;" . $description;
 
 
 
@@ -212,15 +220,15 @@ class resourceRequestTable extends DbTable
 
         $row['RESOURCE_NAME'].=
             "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' >
-            <span class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Name'></span>
+            <span class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Request'></span>
             </button>";
         $row['RESOURCE_NAME'].=
              "<button type='button' class='btn btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' data-resource-name='" . $resourceName . "' >
-              <span class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true'></span>
+              <span class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true' title='Edit Assigned Resource'></span>
               </button>";
         $row['RESOURCE_NAME'] .=
             "<button type='button' class='btn btn-xs editHours accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-startDate='" . $startDate . "' >
-             <span class=' glyphicon glyphicon-time text-primary' aria-hidden='true'></span>
+             <span class=' glyphicon glyphicon-time text-primary' aria-hidden='true' title='Edit Dates/Hours'></span>
              </button>";
         $row['RESOURCE_NAME'] .= $duplicatable ?
               "<button type='button' class='btn btn-xs requestDuplication accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam' aria-label='Left Align'
@@ -229,7 +237,7 @@ class resourceRequestTable extends DbTable
                     data-type='" . $row['SERVICE'] . "'
                     data-start='" . $row['START_DATE'] . "'
                   >
-              <span class='glyphicon glyphicon-duplicate text-primary' aria-hidden='true'></span>
+              <span class='glyphicon glyphicon-duplicate text-primary' aria-hidden='true' title='Clone Resource Request'></span>
               </button>" : null;
         $displayedResourceName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $displayedResourceName;
 

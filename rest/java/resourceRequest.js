@@ -80,10 +80,19 @@ function ResourceRequest() {
 
 			$('#deleteResourceRef').val(resourceReference);
 
-			var message = "<p>Please confirm you wish to delete Resource Reference : " + resourceReference + "</p>";
-			message += "<br/><b>RFS:</b>" + rfs;
-			message += "<br/><b>Platform:</b>" + platform;
-			message += "<br/><b>Type:</b>"  +type;
+			var message = "<p>Please confirm you wish to delete Resource Reference :<b>" + resourceReference + "</b></p>";
+			message += "<div class='container'>";
+			message += "<div class='row'>";
+			message += "<div class='col-sm-1'><b>RFS</b></div><div class='col-sm-11'>" + rfs + "</div>";			
+			message += "</div>";
+			message += "<div class='row'>";
+			message += "<div class='col-sm-1'><b>Platform</b></div><div class='col-sm-11'>" + platform + "</div>";			
+			message += "</div>";			
+			message += "<div class='row'>";
+			message += "<div class='col-sm-1'><b>Type</b></div><div class='col-sm-11'>" + type + "</div>";			
+			message += "</div>";			
+			message += "</div>";
+
 			$('#deleteMessageBody').html(message);
 			$('#confirmDeleteResource').attr('disabled',false);
 			$('#confirmDeleteModal').modal('show');
