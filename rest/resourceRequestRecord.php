@@ -77,6 +77,8 @@ class resourceRequestRecord extends DbRecord
         $endDate = empty($this->END_DATE) ? null : new \DateTime($this->END_DATE);
         $endDateStr = empty($endDate) ? null : $endDate->format('dMy');
         $endDateStr2 = empty($endDate) ? null : $endDate->format('Y-m-d');
+        
+        $this->STATUS = empty($this->STATUS) ? 'New' : $this->STATUS;
 
         ?>
 <!--         <div class="form-group required" id="RFS_IDFormGroup"> -->
@@ -149,31 +151,6 @@ class resourceRequestRecord extends DbRecord
 
    		</div>
 
-   		<div class='form-group required'>
-
-            <label for='STATUS' class='col-md-2 control-label ceta-label-left'>Status</label>
-        	<div class='col-md-3'>
-              	<select class='form-control select' id='STATUS'
-                  	          name='STATUS'
-                  	          required='required'
-                  	          data-tags="true" data-placeholder="Select Status" data-allow-clear="true"
-                  	          disabled
-                  	           >
-            	<option value=''>Select Status<option>
-                <?php
-                    foreach (self::$allStatus as $key => $value) {
-                         $displayValue = trim($value);
-                         $returnValue  = trim($value);
-                         ?><option value='<?=$returnValue?>' <?=(trim($this->STATUS) == $returnValue) || (empty($this->STATUS) && $returnValue==self::STATUS_NEW) ? ' selected  ' : null;?>  ><?=$displayValue?></option><?php
-                    }
-               ?>
-               </select>
-            </div>
-
-
-
-
-        </div>
         <div class='form-group required'>
 	       	<label for='ORGANISATION' class='col-md-2 control-label ceta-label-left'>Organisation</label>
     	       	<div class='col-md-3'>
@@ -224,6 +201,7 @@ class resourceRequestRecord extends DbRecord
    		$this->formTextArea('Description', 'DESCRIPTION', null, null, null,2000, 'top',null, 1, "High level description of work required");
    		$this->formHiddenInput('mode',$mode,'mode');
    		$this->formHiddenInput('RESOURCE_REFERENCE',$this->RESOURCE_REFERENCE,'RESOURCE_REFERENCE');
+   		$this->formHiddenInput('STATUS',$this->STATUS,'STATUS');
    		$this->formHiddenInput('RR_CREATOR',$_SESSION['ssoEmail'],'RR_CREATOR');
 
    		$submitButton = $mode==FormClass::$modeEDIT ?  $this->formButton('submit','Submit','updateResourceRequest',null,'Update') :  $this->formButton('submit','Submit','saveResourceRequest',null,'Submit');
