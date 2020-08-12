@@ -140,6 +140,7 @@ class resourceRequestTable extends DbTable
 
 
     function addGlyphicons(&$row){
+        $today = new \DateTime();
         PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
         $rfsId = $row['RFS_ID'];
         $resourceReference = $row['RESOURCE_REFERENCE'];
@@ -150,14 +151,16 @@ class resourceRequestTable extends DbTable
         $endDate4Picka = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Y-m-d') : null;
         $startDate = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
         $endDate   = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
-        $description = $row['DESCRIPTION'];
+        $endDateObj = !empty($row['END_DATE'])   ? Datetime::createFromFormat('Y-m-d', $row['END_DATE']) : null;
         $hrsPerWeek = $row['HRS_PER_WEEK'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
         $organisation = $row['ORGANISATION'];
         $service = $row['SERVICE'];
         
-        $row['STATUS']=
-        "<button type='button' class='btn btn-xs changeStatus accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
+        $completeable = (($status == 'Assigned') && ($endDateObj < $today)) ? true : false; // Someone has been assigned and the End Date has passed.
+        
+        $row['STATUS']= $completeable ? 
+        "<button type='button' class='btn btn-xs changeStatusCompleted accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
                     data-rfs='" .$rfsId . "'
                     data-resourcereference='" .$resourceReference . "'
                     data-prn='" .$prn . "'
@@ -171,25 +174,9 @@ class resourceRequestTable extends DbTable
 
 
          >
-         <span data-toggle='tooltip' title='Change Status' class='glyphicon glyphicon-tags ' aria-hidden='true' ></span>
-            </button>&nbsp;";
-                        
-          $deletable = $status == 'New' ? true : false;
-                        
-          $row['STATUS'].= $deletable ? "<button type='button' class='btn btn-xs deleteRecord accessRestrict accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $service . "' >
-             <span data-toggle='tooltip' title='Delete Resource Request' class='glyphicon glyphicon-trash text-warning ' aria-hidden='true' ></span>
-             </button>&nbsp;".$status  : $status;
-        
-
-
-
-//         $row['DESCRIPTION'] =
-//         "<button type='button' class='btn btn-default btn-xs deleteRecord accessRestrict accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $service . "' >
-//             <span data-toggle='tooltip' title='Delete Resource' class='glyphicon glyphicon-trash ' aria-hidden='true' ></span>
-//             </button>&nbsp;" . $description;
-
-
-
+         <span data-toggle='tooltip' title='Change Status to Completed' class='glyphicon glyphicon-check ' aria-hidden='true' ></span>
+            </button>&nbsp;$status." : $status;
+                       
 
         $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';
         $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::DUPLICATE))==resourceRequestTable::DUPLICATE ? 'text-success' : $editButtonColor;
@@ -236,6 +223,15 @@ class resourceRequestTable extends DbTable
                   >
               <span class='glyphicon glyphicon-duplicate text-primary' aria-hidden='true' title='Clone Resource Request'></span>
               </button>" : null;
+        
+        $deletable = $status == 'New' ? true : false;
+        
+        $row['RESOURCE_NAME'].= $deletable ? "<button type='button' class='btn btn-xs deleteRecord accessRestrict accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $service . "' >
+             <span data-toggle='tooltip' title='Delete Resource Request' class='glyphicon glyphicon-trash text-warning ' aria-hidden='true' ></span>
+             </button>": null;
+        
+        
+        
         $displayedResourceName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $displayedResourceName;
 
         $row['RESOURCE_NAME'].= "&nbsp;" . $displayedResourceName ;

@@ -117,7 +117,8 @@ td.dataTables_empty{
 
 <div class='container-fluid'>
 <h3>Resource Request Report</h3>
-<button id='unallocated' class='btn btn-primary btn-sm'>Unallocated</button>
+<button id='unallocated' class='btn btn-primary btn-sm'>Unallocated/New</button>
+<button id='completeable' class='btn btn-primary btn-sm'>Assigned & passed end date</button>
 <button id='resetReport' class='btn btn-primary btn-sm'>Reset</button>
 <input type='hidden' id='bwo' value='' />
 <div id='messageArea'></div>
@@ -420,14 +421,15 @@ $(document).ready(function() {
  	resourceRequest.listenForChangingHours();
  	resourceRequest.listenForSaveAdjustedHours();
  	resourceRequest.listenForSaveAdjustedHoursWithDelta();
- 	resourceRequest.listenForSaveStatusChange();
+// 	resourceRequest.listenForSaveStatusChange();
 	resourceRequest.listenForResetReport();
 	resourceRequest.listenForUnallocated();
+	resourceRequest.listenForCompleteable();
 	resourceRequest.listenForEditRecord();
 	resourceRequest.listenForResourceRequestEditShown();
 	resourceRequest.listenForDeleteRecord();
 	resourceRequest.listenForConfirmedDelete();
-	resourceRequest.listenForChangeStatus();
+	resourceRequest.listenForChangeStatusCompleted();
 	resourceRequest.listenForChangePipelineLiveArchive();
 	resourceRequest.listenForSelectSpecificRfs();
 	resourceRequest.listenForSelectOrganisation();

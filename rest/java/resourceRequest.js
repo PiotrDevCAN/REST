@@ -538,10 +538,15 @@ function ResourceRequest() {
 	
 	this.listenForUnallocated = function(){
 		$(document).on('click','#unallocated', function(e){		
-		    ResourceRequest.table.column(23).search('Unallocated').draw();
+		    ResourceRequest.table.column(27).search('New').draw();
 			});
 	},
 	
+	this.listenForCompleteable = function(){
+		$(document).on('click','#completeable', function(e){		
+		    ResourceRequest.table.column(27).search('Assigned.').draw();
+			});
+	},
 	
 
 	this.listenForResetReport = function(){
@@ -569,6 +574,25 @@ function ResourceRequest() {
 			var statusId = '#statusRadio' + status.replace(' ','_');
 
 			$(statusId).prop("checked", true).trigger("click");
+		});
+	},
+	
+	this.listenForChangeStatusCompleted = function(){
+		$(document).on('click','.changeStatusCompleted', function(e){
+			$(this).addClass('spinning').attr('disabled',true);
+			var statusChangeRR = $(this).data('resourcereference');
+			var statusRadio = 'Completed';
+		    $.ajax({
+		    	url: "ajax/saveStatusChange.php",
+		        type: 'POST',
+		    	data: {statusChangeRR:statusChangeRR,
+					   statusRadio:statusRadio},
+		    	success: function(result){
+		    		console.log(result);
+		    		$('.spinning').removeClass('spinning').attr('disabled',false);
+		    		ResourceRequest.table.ajax.reload();
+		    		}
+		    	});
 		});
 	},
 
