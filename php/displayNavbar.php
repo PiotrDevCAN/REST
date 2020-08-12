@@ -83,10 +83,10 @@ $isReports= employee_in_group($_SESSION['reportsBg'], $_SESSION['ssoEmail']) || 
 
 // For Testing only
 // $isCdi = null;
-// $isAdmin = null;
+// // $isAdmin = null;
 // $isDemand = null;
 // $isSupply = null;
-$isRfs = null;
+// $isRfs = null;
 // $isReports = null;
 
 
