@@ -548,13 +548,44 @@ function ResourceRequest() {
 			});
 	},
 	
+	this.listenForPlannedOnly = function(){
+		$(document).on('click','#plannedOnly', function(e){		
+		    ResourceRequest.table.column(20).search('Planned').draw();
+			});
+	},
+	
+	this.listenForActiveOnly = function(){
+		$(document).on('click','#activeOnly', function(e){		
+		    ResourceRequest.table.column(20).search('Active').draw();
+			});
+	},
+
+	this.listenForRemovePassed = function(){
+		$(document).on('click','#removePassed', function(e){
+			 ResourceRequest.table.column(20).search("").column(23).search("").column(27).search("");
+			$.fn.dataTable.ext.search.push(
+    			function( settings, data, dataIndex ) {
+					console.log('pushing 1');
+			        if (data[20].includes('Completed')  ){
+            			return false;
+        			}
+        			return true;
+    			}
+			);
+		   ResourceRequest.table.draw();
+			$.fn.dataTable.ext.search.pop();
+		});
+	},
+	
+	
+	// $('#example').DataTable({"iDisplayLength": 100, "search": {regex: true}}).column(1).search("backlog|Stretch|Solid|NIR", true, false ).draw(); 
 
 	this.listenForResetReport = function(){
 		$(document).on('click','#resetReport', function(e){
 			ResourceRequest.table.columns().visible(true,false);
 		    ResourceRequest.table.columns([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,18,21,24,25,26,28]).visible(false,false);
-		    ResourceRequest.table.columns.adjust().column(23).search("").draw(false);
-			});
+		    ResourceRequest.table.columns.adjust().column(20).search("").column(23).search("").column(27).search("").draw(false);
+		})			
 	},
 
 

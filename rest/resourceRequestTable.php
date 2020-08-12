@@ -150,6 +150,7 @@ class resourceRequestTable extends DbTable
         $startDate4Picka = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Y-m-d') : null;
         $endDate4Picka = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Y-m-d') : null;
         $startDate = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
+        $startDateObj = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE']) : null;
         $endDate   = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
         $endDateObj = !empty($row['END_DATE'])   ? Datetime::createFromFormat('Y-m-d', $row['END_DATE']) : null;
         $hrsPerWeek = $row['HRS_PER_WEEK'];
@@ -158,6 +159,26 @@ class resourceRequestTable extends DbTable
         $service = $row['SERVICE'];
         
         $completeable = (($status == 'Assigned') && ($endDateObj < $today)) ? true : false; // Someone has been assigned and the End Date has passed.
+        
+        switch (true) {
+            case $today < $startDateObj:
+                $assignColor = 'text-success';
+                $started     = '<br/>Planned';
+                break;
+            case $today <= $endDateObj:
+                $assignColor = 'text-warning';
+                $started     = '<br/>Active';
+                break;
+            case $today > $endDateObj:
+                $assignColor = 'text-danger';
+                $started     = '<br/>Completed';
+                break;           
+            default:
+                $assignColor = 'text-primary';
+                $started     = '<br/>Unclear';
+            break;
+        }
+        
         
         $row['STATUS']= $completeable ? 
         "<button type='button' class='btn btn-xs changeStatusCompleted accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
@@ -175,7 +196,7 @@ class resourceRequestTable extends DbTable
 
          >
          <span data-toggle='tooltip' title='Change Status to Completed' class='glyphicon glyphicon-check ' aria-hidden='true' ></span>
-            </button>&nbsp;$status." : $status;
+            </button>&nbsp;<span class='$assignColor'>$status.</span>" : "<span class='$assignColor'>$status</span>";
                        
 
         $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';
@@ -204,15 +225,15 @@ class resourceRequestTable extends DbTable
 
         $row['RESOURCE_NAME'].=
             "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' >
-            <span class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Request'></span>
+            <span data-toggle='tooltip' class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Request'></span>
             </button>";
         $row['RESOURCE_NAME'].=
              "<button type='button' class='btn btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' data-resource-name='" . $resourceName . "' >
-              <span class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true' title='Edit Assigned Resource'></span>
+              <span data-toggle='tooltip' class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true' title='Edit Assigned Resource'></span>
               </button>";
         $row['RESOURCE_NAME'] .=
             "<button type='button' class='btn btn-xs editHours accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-startDate='" . $startDate . "' >
-             <span class=' glyphicon glyphicon-time text-primary' aria-hidden='true' title='Edit Dates/Hours'></span>
+             <span data-toggle='tooltip' class=' glyphicon glyphicon-time text-primary' aria-hidden='true' title='Edit Dates/Hours'></span>
              </button>";
         $row['RESOURCE_NAME'] .= $duplicatable ?
               "<button type='button' class='btn btn-xs requestDuplication accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam' aria-label='Left Align'
@@ -221,7 +242,7 @@ class resourceRequestTable extends DbTable
                     data-type='" . $row['SERVICE'] . "'
                     data-start='" . $row['START_DATE'] . "'
                   >
-              <span class='glyphicon glyphicon-duplicate text-primary' aria-hidden='true' title='Clone Resource Request'></span>
+              <span data-toggle='tooltip' class='glyphicon glyphicon-duplicate text-primary' aria-hidden='true' title='Clone Resource Request'></span>
               </button>" : null;
         
         $deletable = $status == 'New' ? true : false;
@@ -242,7 +263,7 @@ class resourceRequestTable extends DbTable
         $displayRfsId.= $row['CLONED_FROM']> 0 ? "&nbsp;<i>(" . $row['CLONED_FROM'] . ")</i>" : null;
 
         $row['RFS']        = array('display'=> $displayRfsId, 'sort'=>$rfsId);
-        $row['START_DATE'] = array('display'=> $startDate . " to " . $endDate . "<br/>Avg Hrs/Week:" . $row['HRS_PER_WEEK'], 'sort'=>$startDate);
+        $row['START_DATE'] = array('display'=> "<span class='$assignColor'>$startDate  to  $endDate <br/>Avg Hrs/Week: " . $row['HRS_PER_WEEK'] ."$started", 'sort'=>$startDate);
         $row['ORGANISATION']=array('display'=>$row['ORGANISATION'] . "<br/><small>" . $row['SERVICE'] . "</small>", 'sort'=>$organisation);
 
     }
