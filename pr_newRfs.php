@@ -80,6 +80,25 @@ $('#RFS_ID').on('focusout',function(e){
 		$(this).css("background-color","LightPink");
 		alert('RFS already defined');
 	} else {
+		var selectOptionVal = '';	
+		var valueStreamObj = $('#VALUE_STREAM');
+		var rfsId = $('#RFS_ID').val().trim().toUpperCase().substr(0,4);
+		
+		$('#VALUE_STREAM > option').each(function() {			
+			if ( rfsId == $(this).text().substr(0,4)){
+				if(selectOptionVal==''){
+					selectOptionVal = $(this).val(); // we've found a match, lets save it and check it's unique.
+				} else {
+					selectOptionVal = '';  // We found a 2nd match, so can't pre-select
+					return false;
+				}
+			};
+		});
+		
+		if(selectOptionVal!=''){
+			$('#VALUE_STREAM').val(selectOptionVal).trigger('change');
+		}	
+			
 		$(this).css("background-color","LightGreen");
 		$('#saveRfs').attr('disabled',false);
 	};
