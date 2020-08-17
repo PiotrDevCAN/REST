@@ -11,4 +11,5 @@ use itdq\DbRecord;
 class staticValueStreamRecord extends DbRecord
 {
     protected $VALUE_STREAM;
+    protected $BUSINESS_UNIT;
 }

@@ -69,7 +69,7 @@ class rfsRecord extends DbRecord
 
         $loader = new Loader();
         $allValueStream = $loader->load('VALUE_STREAM', allTables::$STATIC_VALUE_STREAM);
-        $allBusinessUnit = $loader->load('BUSINESS_UNIT', allTables::$STATIC_BUSINESS_UNIT);
+       
         $notEditable = $mode == FormClass::$modeEDIT ? ' disabled ' : '';
 
         ?>
@@ -175,22 +175,6 @@ class rfsRecord extends DbRecord
 				<option value='<?=$returnValue?>' <?=trim($this->VALUE_STREAM)==$returnValue ? 'selected' : null;?>><?=$displayValue?></option>
 				<?php } ?>
            	</select>
-		</div>
-		<label for='BUSINESS_UNIT' class='col-md-2 control-label ceta-label-left'>Business Unit</label>
-		<div class='col-md-3'>
-			<select class='form-control select' id='BUSINESS_UNIT'
-					name='BUSINESS_UNIT' required='required'
-					data-placeholder="Select Business Unit" data-allow-clear="true">
-					<option value=''>Select Business Unit</option>
-                	<?php
-                    foreach ($allBusinessUnit as $key => $value) {
-                        $displayValue = trim($value);
-                        $returnValue = trim($value);
-                    ?>
-					<option value='<?=$returnValue?>'<?=trim($this->BUSINESS_UNIT)==$returnValue ? 'selected' : null;?>><?=$displayValue?></option><?php
-                    }
-                    ?>
-          	</select>
 		</div>
 	</div>
 

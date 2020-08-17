@@ -20,7 +20,7 @@ class allTables
     public static $RFS                    = 'RFS';
     public static $RFS_PIPELINE           = 'RFS_PIPELINE';  // View
 
-    public static $STATIC_BUSINESS_UNIT   = 'STATIC_BUSINESS_UNIT';
+ //   public static $STATIC_BUSINESS_UNIT   = 'STATIC_BUSINESS_UNIT'; Now a field in Value Stream.
     public static $STATIC_VALUE_STREAM    = 'STATIC_VALUE_STREAM';
     public static $STATIC_ORGANISATION    = 'STATIC_ORGANISATION';
 

@@ -8,6 +8,10 @@ use itdq\FormClass;
 set_time_limit(0);
 ob_start();
 
+$loader = new Loader();
+$allBusinessUnit = $loader->loadIndexed('BUSINESS_UNIT','VALUE_STREAM', allTables::$STATIC_VALUE_STREAM);
+$businessUnit = isset($_POST['VALUE_STREAM']) ? $allBusinessUnit[$_POST['VALUE_STREAM']]: null;
+
 $rfsRecord = new rfsRecord();
 $parmsTrimmed = array_map('trim', $_POST);
 
@@ -18,6 +22,7 @@ if(trim($_POST['mode'])==FormClass::$modeEDIT){
     $rfsData = $rfsTable->getRecord($rfsRecord);
     $rfsRecord->setFromArray($rfsData);
     $rfsRecord->setFromArray($_POST);
+    $rfsRecord->setFromArray(array('BUSINESS_UNIT',$businessUnit));
     $saveResponse  = $rfsTable->update($rfsRecord);
     $saveResponse = $saveResponse ? true : false;
     $update = true;
