@@ -1,10 +1,5 @@
 <?php
 use itdq\Trace;
-use rest\StaticCountryMarketRecord;
-use rest\StaticCountryMarketTable;
-use rest\allTables;
-use itdq\FormClass;
-use itdq\DbTable;
 use rest\StaticOrganisationTable;
 
 Trace::pageOpening($_SERVER['PHP_SELF']);

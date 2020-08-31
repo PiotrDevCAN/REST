@@ -1,11 +1,8 @@
 <?php
 
-use itdq\DbTable;
 use rest\allTables;
 use rest\resourceRequestRecord;
 use rest\resourceRequestTable;
-use rest\resourceRequestHoursRecord;
-use rest\resourceRequestHourseTable;
 use rest\resourceRequestHoursTable;
 use itdq\FormClass;
 use itdq\Trace;

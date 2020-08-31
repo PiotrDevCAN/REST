@@ -3,8 +3,6 @@ use itdq\PlannedOutages;
 use itdq\Navbar;
 use itdq\NavbarMenu;
 use itdq\NavbarOption;
-use vbac\personTable;
-use itdq\NavbarDivider;
 include ('itdq/PlannedOutages.php');
 include ('itdq/DbTable.php');
 $plannedOutagesLabel = "Planned Outages";
