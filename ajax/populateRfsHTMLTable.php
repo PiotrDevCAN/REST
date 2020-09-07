@@ -27,7 +27,7 @@ if (empty($rfsId) && empty($valueStream) && empty($requestor) && empty($business
         "data" => array()
     );
 } else {
-    $data = $rfsTable->returnAsArray($predicate);
+    $data = $rfsTable->returnAsArray($predicate, FALSE);
     $message = ob_get_clean();
     ob_start();
     $response = array("data"=>$data['data'],'message'=>$message,'sql'=>$data['sql']);
