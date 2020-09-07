@@ -82,9 +82,9 @@ class rfsTable extends DbTable
                 $row[] = trim($row[$key]);
                 unset($row[$key]);
             }
-            $allData[]  = $row;
+            $allData[]  = $row;            
         }
-        return $allData ;
+        return array('data'=>$allData,'sql'=>$sql);
     }
 
 
