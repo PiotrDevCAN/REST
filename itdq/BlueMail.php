@@ -153,7 +153,7 @@ class BlueMail
 
         AuditTable::audit($auditString,AuditTable::RECORD_TYPE_DETAILS);
 
-        $sql = " INSERT INTO " . $_SESSION['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
+        $sql = " INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
         $sql.= " (TO, SUBJECT, MESSAGE, DATA_JSON ";
         $sql.= !empty($cc) ? " ,CC " : null ;
         $sql.= !empty($bcc) ? " ,BCC " : null ;
@@ -171,7 +171,7 @@ class BlueMail
         $rs = db2_execute($preparedStatement,$data);
 
 
-//         $sql  = " INSERT INTO " . $_SESSION['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
+//         $sql  = " INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
 //         $sql .= " (TO, SUBJECT, MESSAGE, DATA_JSON ) VALUES ( '" . db2_escape_string(serialize($to)) ."','" . db2_escape_string($subject) . "'";
 //         $sql .= " ,'" . db2_escape_string($message) . "','" . db2_escape_string($data_json) . "'); ";
 
@@ -192,7 +192,7 @@ class BlueMail
 
     static function updatelog($recordId, $result)
     {
-        $sql  = " UPDATE " . $_SESSION['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
+        $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
         $sql .= " SET RESPONSE = '" . db2_escape_string($result) . "'" ;
         $sql .= " WHERE RECORD_ID= " . db2_escape_string($recordId) . "; ";
 
@@ -208,7 +208,7 @@ class BlueMail
 
     static function logStatus($recordId, $status)
     {
-        $sql  = " UPDATE " . $_SESSION['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
+        $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
         $sql .= " SET LAST_STATUS = '" . db2_escape_string($status) . "', STATUS_TIMESTAMP = CURRENT TIMESTAMP " ;
         $sql .= " WHERE RECORD_ID= " . db2_escape_string($recordId) . "; ";
 
@@ -225,13 +225,13 @@ class BlueMail
 
     static function clearLog($retainPeriod = ' 3 months')
     {
-       $sql  = " DELETE FROM " . $_SESSION['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
+       $sql  = " DELETE FROM " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
        $sql .= ' WHERE SENT_TIMESTAMP < (CURRENT TIMESTAMP - ' . $retainPeriod . "); ";
        db2_exec($GLOBALS['conn'], $sql);
     }
 
     static function getEmailDetails($recordID){
-        $sql  = " SELECT * FROM " . $_SESSION['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
+        $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
         $sql .= ' WHERE RECORD_ID = ' . db2_escape_string($recordID);
         $rs = db2_exec($GLOBALS['conn'], $sql);
 

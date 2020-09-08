@@ -80,7 +80,7 @@ class Email
         if (isset(AllItdqTables::$EMAIL_LOG)) {
             $safeMessage = trim(substr(db2_escape_string($message), 0, 15900));
             $ena = $_SESSION['email'] ? 'TRUE' : 'FALSE';
-            $sql = " INSERT INTO " . $_SESSION['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
+            $sql = " INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
             $sql .= " (TO,CC,SUBJECT,MESSAGE,REPLYTO,ENABLED, CREATOR ) ";
             $sql .= " VALUES ";
             $sql .= "('" . db2_escape_string($to) . "','" . db2_escape_string($cc) . "','" . db2_escape_string($subject) . "','" . $safeMessage . "','" . db2_escape_string($replyto) . "','" . db2_escape_string($ena) . "','" . db2_escape_string($_SESSION['ltcuser']['mail']) . "') ";
@@ -103,7 +103,7 @@ class Email
     {
         if (isset(AllItdqTables::$EMAIL_LOG)) {
             $res = $result ? 'TRUE' : 'FALSE';
-            $sql = " UPDATE " . $_SESSION['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
+            $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
             $sql .= " SET RESULT='" . db2_escape_string($res) . "' ";
             $sql .= " WHERE RECORD_ID='" . trim($recordId) . "' ";
             $rs = DB2_EXEC($GLOBALS['conn'], $sql);
@@ -131,7 +131,7 @@ class Email
             } else {
                 $keepEmailsFor = " 7 DAYS ";
             }
-            $sql = 'DELETE FROM ' . $_SESSION['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
+            $sql = 'DELETE FROM ' . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
             $sql .= " WHERE CREATED < (CURRENT TIMESTAMP - $keepEmailsFor );";
             $rs = DB2_EXEC($GLOBALS['conn'], $sql);
             if (! $rs) {
@@ -146,7 +146,7 @@ class Email
     static function resend($recordId)
     {
         if (isset(AllItdqTables::$EMAIL_LOG)) {
-            $sql = " SELECT * FROM " . $_SESSION['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
+            $sql = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
             $sql .= " WHERE RECORD_ID='" . trim($recordId) . "' ";
             $rs = db2_exec($GLOBALS['conn'], $sql);
             if (! $rs) {

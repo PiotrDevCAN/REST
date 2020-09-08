@@ -17,7 +17,7 @@ error_reporting(-1);
 // }
 echo "<hr/>";
 
-$rs2 = db2_columns($GLOBALS['conn'], null, $_SESSION['Db2Schema'], 'INFLIGHT_PROJECTS', '%');
+$rs2 = db2_columns($GLOBALS['conn'], null, $GLOBALS['Db2Schema'], 'INFLIGHT_PROJECTS', '%');
 var_dump($rs2);
 
 if($rs2){
@@ -45,7 +45,7 @@ var_dump($rs4);
 echo "<hr/>";
 
 
-// $rs3 = db2_tables($GLOBALS['conn'], null, $_SESSION['Db2Schema']);
+// $rs3 = db2_tables($GLOBALS['conn'], null, $GLOBALS['Db2Schema']);
 
 // var_dump($rs3);
 

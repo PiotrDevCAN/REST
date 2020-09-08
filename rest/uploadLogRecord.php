@@ -41,7 +41,7 @@ class uploadLogRecord extends DbRecord
     }
 
     function logUploadCompleted(){
-        $sql = " UPDATE " . $_SESSION['Db2Schema'] . "." .  $this->uploadLogTable->getTableName();
+        $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." .  $this->uploadLogTable->getTableName();
         $sql .= " SET UPLOAD_STATUS='Completed' ";
         $sql .= " WHERE UPLOAD_ID='" . $this->UPLOAD_ID . "' ";
 

@@ -23,7 +23,7 @@ class rfsPipelineView extends DbTable
 {
     function returnAsArray($predicate=null){
         $sql  = " SELECT * ";
-        $sql .= " FROM  " . $_SESSION['Db2Schema'] . "." . allTables::$RFS_PIPELINE . " as RFS ";
+        $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS_PIPELINE . " as RFS ";
         $sql .= " WHERE 1=1 " ;
         $sql .= !empty($predicate) ? " AND  $predicate " : null ;
 
@@ -84,7 +84,7 @@ class rfsPipelineView extends DbTable
             return false;
         }
 
-        $sql  = " UPDATE " . $_SESSION['Db2Schema'] . "." . allTables::$RFS;
+        $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS;
         $sql .= " SET ARCHIVE = CURRENT TIMESTAMP ";
         $sql .= " WHERE RFS_ID ='" . db2_escape_string($rfsid) . "' " ;
 

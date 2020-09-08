@@ -10,7 +10,7 @@ class uploadLogTable extends DbTable
 
         $uploadTable = empty($uploadTable)? allTables::$INFLIGHT_PROJECTS : $uploadTable;
 
-        $sql = " SELECT * FROM " . $_SESSION['Db2Schema'] . "." . $this->tableName;
+        $sql = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " WHERE UPLOAD_STATUS='Completed' AND UPLOAD_TABLENAME='" . $uploadTable . "' ";
         $sql .= " ORDER BY UPLOAD_ID DESC ";
         $sql .= " OPTIMIZE FOR 1 ROW ";
@@ -30,7 +30,7 @@ class uploadLogTable extends DbTable
     function lastLoad($uploadTable= null){
         $uploadTable = empty($uploadTable)? allTables::$INFLIGHT_PROJECTS : $uploadTable;
 
-        $sql = " SELECT * FROM " . $_SESSION['Db2Schema'] . "." . $this->tableName;
+        $sql = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " WHERE UPLOAD_TABLENAME='" . $uploadTable . "' ";
         $sql .= " ORDER BY UPLOAD_ID DESC ";
         $sql .= " OPTIMIZE FOR 1 ROW    ";

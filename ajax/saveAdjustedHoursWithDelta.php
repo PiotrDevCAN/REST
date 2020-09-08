@@ -20,7 +20,7 @@ $deltaResourceReference = $_POST['deltaResourceRef'];
 $loader = new Loader();
 $originalWeeklyProfile = $loader->loadIndexed('HOURS','DATE',allTables::$RESOURCE_REQUEST_HOURS," RESOURCE_REFERENCE='$originalResourceReference' ");
 
-$sql = " UPDATE " . $_SESSION['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS;
+$sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS;
 $sql .= " SET HOURS=? " ;
 $sql .= " WHERE RESOURCE_REFERENCE=? and DATE=? ";
 

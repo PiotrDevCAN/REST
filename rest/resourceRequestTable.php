@@ -34,7 +34,7 @@ class resourceRequestTable extends DbTable
         } else if(empty($resourceReference) or empty($resourceName)){
                 throw new \Exception('Paramaters Missing in call to ' . __FUNCTION__);
         }
-        $sql  = " UPDATE " . $_SESSION['Db2Schema'] . "." . $this->tableName;
+        $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " SET RESOURCE_NAME='" . db2_escape_string($resourceName) . "' ";
         $sql .= " , STATUS='" . $status . "' ";
         $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference);
@@ -94,7 +94,7 @@ class resourceRequestTable extends DbTable
         $resourceRequestTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUESTS : allTables::$RESOURCE_REQUESTS;
         $resourceRequestHoursTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUEST_HOURS : allTables::$RESOURCE_REQUEST_HOURS;
 
-        $sql .=  " FROM " . $_SESSION['Db2Schema'] . "." . $resourceRequestHoursTable;
+        $sql .=  " FROM " . $GLOBALS['Db2Schema'] . "." . $resourceRequestHoursTable;
         $sql .= "   WHERE  ( claim_month >= " . $startDateObj->format('m') . " and claim_year = " . $startDateObj->format('Y') . ")  " ;
         $sql .= $startDateObj->format('Y') !==  $endDateObj->format('Y') ?  "    AND (claim_year > " . $startDateObj->format('Y') . " and claim_year < " . $endDateObj->format('Y') . " ) " : null;
         $sql .= "         AND (claim_month <= " . $endDateObj->format('m') . " and claim_year = " . $endDateObj->format('Y') . ")  " ;
@@ -102,8 +102,8 @@ class resourceRequestTable extends DbTable
         $sql .= " GROUP BY RESOURCE_REFERENCE ";
         $sql .= " ) ";
         $sql .= " SELECT * ";
-        $sql .= " FROM  " . $_SESSION['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
-        $sql .= " LEFT JOIN  " . $_SESSION['Db2Schema'] . "." . $resourceRequestTable. " as RR ";
+        $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
+        $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTable. " as RR ";
         $sql .= " ON RR.RFS = RFS.RFS_ID ";
 //         $sql .= " left join resource_hours as RH ";
 //         $sql .= " ON RR.RESOURCE_REFERENCE = RH.RR ";
@@ -270,7 +270,7 @@ class resourceRequestTable extends DbTable
 
 
     static function setEndDate($resourceReference, $endDate){
-        $sql  = " UPDATE " . $_SESSION['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
+        $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
         $sql .= "  SET END_DATE = DATE('" . db2_escape_string($endDate) ."') ";
         $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference) ." ";
 

@@ -17,7 +17,7 @@ class StaticOrganisationTable extends DbTable
     const DISABLED = 'disabled';
 
     static function getAllOrganisationsAndServices($predicate){
-        $sql = " SELECT * FROM " . $_SESSION['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
+        $sql = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
         $sql.= " WHERE 1=1 ";
         $sql.= empty($predicate) ? null : " AND " . $predicate;
         $sql .= " ORDER BY ORGANISATION, SERVICE  ";
@@ -37,7 +37,7 @@ class StaticOrganisationTable extends DbTable
 
     static function disableService($organisation,$service){
         $sql = 'UPDATE ';
-        $sql.= $_SESSION['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
+        $sql.= $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
         $sql.= " SET STATUS='" . self::DISABLED . "' ";
         $sql.= " WHERE ORGANISATION='" . db2_escape_string($organisation) . "'  ";
         $sql.= "   AND SERVICE='" . db2_escape_string($service) . "'  ";
@@ -54,7 +54,7 @@ class StaticOrganisationTable extends DbTable
 
     static function enableService($organisation,$service){
         $sql = 'UPDATE ';
-        $sql.= $_SESSION['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
+        $sql.= $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
         $sql.= " SET STATUS='" . self::ENABLED . "' ";
         $sql.= " WHERE ORGANISATION='" . db2_escape_string($organisation) . "'  ";
         $sql.= "   AND SERVICE='" . db2_escape_string($service) . "'  ";
@@ -70,7 +70,7 @@ class StaticOrganisationTable extends DbTable
 
     function returnForDataTables(){
         $sql = " SELECT * ";
-        $sql.= " FROM " . $_SESSION['Db2Schema'] . "." . $this->tableName;
+        $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 

@@ -10,7 +10,7 @@ set_time_limit(0);
 ob_start();
 
 $sql = " UPDATE ";
-$sql.=   $_SESSION['Db2Schema'] . "." . allTables::$RFS;
+$sql.=   $GLOBALS['Db2Schema'] . "." . allTables::$RFS;
 $sql.= " SET RFS_STATUS='" . rfsRecord::RFS_STATUS_LIVE . "' ";
 $sql.= " WHERE RFS_ID='" . db2_escape_string(trim($_POST['rfsid'])) . "' ";
 

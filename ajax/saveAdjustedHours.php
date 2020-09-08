@@ -14,7 +14,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $resourceReference = $_POST['ModalResourceReference'];
 
-$sql = " UPDATE " . $_SESSION['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS;
+$sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS;
 $sql .= " SET HOURS=? " ;
 $sql .= " WHERE RESOURCE_REFERENCE=? and DATE=? ";
 

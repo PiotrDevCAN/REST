@@ -71,7 +71,7 @@ class resourceRequestHoursTable extends DbTable
 
     function clearResourceReference($resourceReference=null){
         if($resourceReference){
-            $sql = " DELETE FROM " . $_SESSION['Db2Schema'] . "." . $this->tableName ;
+            $sql = " DELETE FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName ;
             $sql .= " WHERE RESOURCE_REFERENCE='" . db2_escape_string($resourceReference) . "' ";
 
             $rs = $this->execute($sql);
@@ -81,7 +81,7 @@ class resourceRequestHoursTable extends DbTable
 
     function returnAsArray($predicate=null,$selectableColumns='*', $assoc=false){
         $sql = " SELECT " . $selectableColumns;
-        $sql .= " FROM " . $_SESSION['Db2Schema'] . "." . $this->tableName;
+        $sql .= " FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= !empty($predicate) ? " WHERE $predicate " : null;
 
         $resultSet = $this->execute($sql);
@@ -105,7 +105,7 @@ class resourceRequestHoursTable extends DbTable
     function prepareGetTotalHoursStatement(){
         if(!isset($this->preparedGetTotalHrsStatement)){
             $sql = " SELECT SUM(HOURS) as TOTAL_HRS ";
-            $sql .= " FROM " . $_SESSION['Db2Schema'] . "." .  $this->tableName;
+            $sql .= " FROM " . $GLOBALS['Db2Schema'] . "." .  $this->tableName;
             $sql .= " WHERE RESOURCE_REFERENCE=?";
             $this->preparedSelectSQL = $sql;
             $this->preparedGetTotalHrsStatement = db2_prepare($GLOBALS['conn'], $sql);

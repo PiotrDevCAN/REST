@@ -8,7 +8,7 @@ set_time_limit(0);
 do_auth();
 
 
-$sql = " SELECT RESOURCE_REFERENCE, START_DATE, END_DATE, HRS_PER_WEEK FROM " . $_SESSION['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
+$sql = " SELECT RESOURCE_REFERENCE, START_DATE, END_DATE, HRS_PER_WEEK FROM " . $GLOBALS['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
 
 echo $sql;
 

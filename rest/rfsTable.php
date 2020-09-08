@@ -39,7 +39,7 @@ class rfsTable extends DbTable
     }
 
     static function loadKnownRfsToJs($predicate=null){
-        $sql = " SELECT RFS_ID FROM " . $_SESSION['Db2Schema'] . "." .  allTables::$RFS;
+        $sql = " SELECT RFS_ID FROM " . $GLOBALS['Db2Schema'] . "." .  allTables::$RFS;
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 
@@ -63,7 +63,7 @@ class rfsTable extends DbTable
 
     function returnAsArray($predicate=null, $withArchive=false){
         $sql  = " SELECT * ";
-        $sql .= " FROM  " . $_SESSION['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
+        $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql .= " WHERE 1=1 " ;
         $sql .= $withArchive ? " AND ARCHIVE is not null " : " AND ARCHIVE is null ";
         $sql .= !empty($predicate) ? " AND  $predicate " : null ;
@@ -117,7 +117,7 @@ class rfsTable extends DbTable
     function  rfsMaxEndDate($rfsid){
         if(empty($this->rfsMaxEndDate)){
             // We've not populated the array of RFS & END_DATES, so do that now.
-            $sql = " SELECT RFS, MAX(END_DATE) as END_DATE FROM " . $_SESSION['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS ;
+            $sql = " SELECT RFS, MAX(END_DATE) as END_DATE FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS ;
             $sql .= " GROUP BY RFS ";
 
             $rs = db2_exec($GLOBALS['conn'], $sql);
@@ -139,7 +139,7 @@ class rfsTable extends DbTable
             return false;
         }
 
-        $sql  = " UPDATE " . $_SESSION['Db2Schema'] . "." . allTables::$RFS;
+        $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS;
         $sql .= " SET ARCHIVE = CURRENT TIMESTAMP ";
         $sql .= " WHERE RFS_ID ='" . db2_escape_string($rfsid) . "' " ;
 
