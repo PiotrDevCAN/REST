@@ -705,6 +705,8 @@ function ResourceRequest() {
 	            { data: "ILC_WORK_ITEM"    ,defaultContent: "", visible:false },
 	            { data: "RFS_STATUS"       ,defaultContent: "", visible:false },
 	            { data: "BUSINESS_UNIT"    ,defaultContent: "", visible:false },
+	            { data: "RATE_TYPE"        ,defaultContent: "", visible:false },
+	            { data: "HOURS_TYPE"        ,defaultContent: "", visible:false },
 	            { data: "RESOURCE_REFERENCE",defaultContent: "", visible:false },
 	            { data: "RFS"              ,defaultContent: "", visible:true, render: { _:'display', sort:'sort' }, },	           
 	            { data: "ORGANISATION"     ,defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
