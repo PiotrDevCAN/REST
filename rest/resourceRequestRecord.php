@@ -27,6 +27,8 @@ class resourceRequestRecord extends DbRecord
     protected $RR_CREATED_TIMESTAMP;
     protected $CLONED_FROM;
     protected $STATUS;
+    protected $RATE_TYPE;
+    protected $HOURS_TYPE;
 
     static public $columnHeadings = array("Resource Ref", "RFS", "Organisation", "Service",
                                           "Description", "Start Date", "End Date", "Hrs Per Week", "Resource Name",
@@ -40,6 +42,15 @@ class resourceRequestRecord extends DbRecord
     CONST STATUS_COMPLETED  = 'Completed';
 
     static public $allStatus = array(self::STATUS_NEW,self::STATUS_ASSIGNED,self::STATUS_COMPLETED);
+    
+    CONST RATE_TYPE_BLENDED      = 'Blended';
+    CONST RATE_TYPE_PROFESSIONAL = 'Professional';
+    static public $allRateTypes = array(self::RATE_TYPE_BLENDED,self::RATE_TYPE_PROFESSIONAL);
+    
+    CONST HOURS_TYPE_REGULAR      = 'Regular';
+    CONST HOURS_TYPE_OT_WEEK_DAY  = 'Weekday Overtime';
+    CONST HOURS_TYPE_OT_WEEK_END  = 'Weekend Overtime';
+    static public $allHourTypes   = array(self::HOURS_TYPE_REGULAR,self::HOURS_TYPE_OT_WEEK_DAY,self::HOURS_TYPE_OT_WEEK_END);
 
     function get($field){
         return empty($this->$field) ? null : trim($this->$field);
@@ -142,14 +153,45 @@ class resourceRequestRecord extends DbRecord
         </div>
         </div>
 
-   		<div class='form-group'>
+   		<div class='form-group required'>
+   		
+   		<div id='HrsPerWeekFormGroup'>
    		<label for="HRS_PER_WEEK" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Hrs per Week</label>
    		<div class="col-md-2">
-   		<input type='number' step='0.1' min=0 max=60 class="form-control" id="HRS_PER_WEEK" name="HRS_PER_WEEK" value="<?=$this->HRS_PER_WEEK?>" placeholder="Avg hrs/Week" <?=$notEditable?> >
+   		<input type='number' step='0.1' min=0 max=60 class="form-control" id="HRS_PER_WEEK" name="HRS_PER_WEEK" value="<?=$this->HRS_PER_WEEK?>" placeholder="Avg hrs/Week" <?=$notEditable?> required >
    		<input id="originalHRS_PER_WEEK" name="originalHRS_PER_WEEK" value="<?=$this->HRS_PER_WEEK?>" type="hidden">
+   		</div>
+   		</div>
+   		
+   		<div id='HrsRateFormGroup'>
+   			<label class="col-md-offset-1 col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Rate Type</label>
+   			<div class="col-md-4">
+   			<?php 
+   			foreach (self::$allRateTypes as $rateType) {
+   			    ?><label class="radio-inline"><input type="radio" name="RATE_TYPE" value='<?=$rateType?>' required ><?=$rateType?></label><?php 
+   			}   			
+   			?>
+ 			</div>						 
    		</div>
 
    		</div>
+   		
+   		 <div class='form-group required'>
+   		
+   		<div id='HrsTypeFormGroup'>
+   			<label class="col-md-offset-5 col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Hours Type</label>
+   			<div class="col-md-5">
+   			<?php 
+   			foreach (self::$allHourTypes as $hoursType) {
+   			    ?><label class="radio-inline"><input type="radio" name="HOURS_TYPE" value='<?=$hoursType?>' required ><?=$hoursType?></label><?php 
+   			}   			
+   			?>
+ 			</div>						 
+   		</div>
+
+   		</div>
+   		
+   		
 
         <div class='form-group required'>
 	       	<label for='ORGANISATION' class='col-md-2 control-label ceta-label-left'>Organisation</label>
