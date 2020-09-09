@@ -294,7 +294,7 @@ class resourceRequestTable extends DbTable
             return $_SESSION['vbacEmployees'];
         } else {
              $vbacEmployees = array();
-             $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=soEkCfj8zGNDLZ8yXH2YJjpehd8ijzlS&plus=P.ROLE_ON_THE_ACCOUNT,P.EMAIL_ADDRESS';
+             $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=soEkCfj8zGNDLZ8yXH2YJjpehd8ijzlS&withProvClear=true&plus=SQUAD_NAME,P.EMAIL_ADDRESS';
 
              $ch = curl_init();
              curl_setopt($ch, CURLOPT_HEADER,         1);
@@ -311,7 +311,7 @@ class resourceRequestTable extends DbTable
              $vbacEmployees = array();
 
              foreach ($allEmployees as $employeeDetails) {
-                 $vbacEmployees[] = array('id'=>trim($employeeDetails->NOTES_ID), 'text'=>trim($employeeDetails->NOTES_ID), 'role'=>trim($employeeDetails->ROLE_ON_THE_ACCOUNT),'tribe'=>trim($employeeDetails->TRIBE_NUMBER),'distance'=>'remote');
+                 $vbacEmployees[] = array('id'=>trim($employeeDetails->NOTES_ID), 'text'=>trim($employeeDetails->NOTES_ID), 'role'=>trim($employeeDetails->SQUAD_NAME),'tribe'=>trim($employeeDetails->TRIBE_NUMBER),'distance'=>'remote');
 //                  $tribeMembers[trim($employeeDetails->EMAIL_ADDRESS)] = trim($employeeDetails->TRIBE_NUMBER);
              }
 
