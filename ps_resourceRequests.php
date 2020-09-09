@@ -118,10 +118,10 @@ td.dataTables_empty{
 <div class='container-fluid'>
 <h3>Resource Request Report</h3>
 <button id='unallocated' class='btn btn-primary btn-sm'>Unallocated/New</button>
-<button id='completeable' class='btn btn-primary btn-sm'>Assigned & passed end date</button>
+<button id='completeable' class='btn btn-primary btn-sm'>Assigned & past end date</button>
 <button id='plannedOnly' class='btn btn-primary btn-sm'>Planned Only</button>
 <button id='activeOnly' class='btn btn-primary btn-sm'>Active Only</button>
-<button id='removePassed' class='btn btn-primary btn-sm'>Remove passed end date</button>
+<button id='removePassed' class='btn btn-primary btn-sm'>Remove past end date</button>
 <button id='resetReport' class='btn btn-primary btn-sm'>Reset</button>
 <input type='hidden' id='bwo' value='' />
 <div id='messageArea'></div>

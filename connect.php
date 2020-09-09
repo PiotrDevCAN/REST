@@ -1,8 +1,12 @@
 <?php
 
 function tryConnect($conn_string){
+
     error_log("Attempting connect to DB2 : " . $conn_string);
-    $conn = db2_connect( $conn_string, "", "" );    
+    $start = microtime(true);
+    $conn = db2_connect( $conn_string, "", "" );
+    $end = microtime(true);
+    error_log("Connect took : " . ($end-$start));
     error_log(print_r($conn,true));
     return $conn;
 }
