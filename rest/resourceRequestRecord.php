@@ -32,7 +32,7 @@ class resourceRequestRecord extends DbRecord
 
     static public $columnHeadings = array("Resource Ref", "RFS", "Organisation", "Service",
                                           "Description", "Start Date", "End Date", "Hrs Per Week", "Resource Name",
-                                          "Request Creator", "Request Created","Cloned From", "Status"    );
+        "Request Creator", "Request Created","Cloned From", "Status",'Rate_Type','Hours_type'    );
 
     CONST STATUS_NEW        = 'New';
 //     CONST STATUS_REDIRECTED = 'Re-Directed';
