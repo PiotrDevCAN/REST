@@ -1,8 +1,10 @@
 <?php
 
 function tryConnect($conn_string){
-    error_log("Attempting connect to DB2");
-    return db2_connect( $conn_string, "", "" );
+    error_log("Attempting connect to DB2 : " . $conn_string);
+    $conn = db2_connect( $conn_string, "", "" );    
+    error_log(print_r($conn,true));
+    return $conn;
 }
 
 
@@ -34,7 +36,7 @@ if( isset($_ENV['ssldsn']) )
             error_log("Failed attempt $attempts to connect to DB2");
             error_log("Msg:" . db2_conn_errormsg());
             error_log("Err:" . db2_conn_error());
-            sleep(3);
+            sleep(1);
         } else {
             error_log("Connection successful on : $attempts Attempt");
         }
