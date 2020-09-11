@@ -6,6 +6,8 @@ use itdq\Loader;
 use rest\resourceRequestTable;
 use itdq\DateClass;
 use rest\rfsTable;
+use rest\StaticOrganisationTable;
+use itdq\JavaScript;
 
 set_time_limit(0);
 Trace::pageOpening($_SERVER['PHP_SELF']);
@@ -24,6 +26,10 @@ $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 $pipelineChecked     =  $_SESSION['isRfs'] ? ' checked ' : null;
 $nonPipelineDisabled =  $_SESSION['isRfs'] ? ' disabled ' : null;
 $defaultToLive       =  empty($pipelineChecked) ? 'checked' : null;
+
+$predicate = " STATUS='" . StaticOrganisationTable::ENABLED . "' ";
+$allService = StaticOrganisationTable::getAllOrganisationsAndServices($predicate);
+JavaScript::buildSelectArray($allService, 'organisation');
 
 ?>
 <style>
@@ -445,10 +451,35 @@ $(document).ready(function() {
 });
 
 $(document).ready(function(){
+	
 
 
 });
 
+$('#editRequestModal').on('shown.bs.modal', function (e) {
+	$("#ORGANISATION").select2();
+	$("#SERVICE").select2();
+	})
+
+
+$(document).on('select2:select', '#ORGANISATION',  function(e){
+	var serviceSelected= $(e.params.data)[0].text;
+	var entry = organisation[0].indexOf(serviceSelected);
+	var data = organisation[entry+1];
+	if ($('#SERVICE').hasClass("select2-hidden-accessible")) {
+	    // Select2 has been initialized
+	    $('#SERVICE').val("").trigger("change");
+		$('#SERVICE').empty().select2('destroy').attr('disabled',true);
+	}
+	$("#SERVICE").select2({
+		  data: data
+	}).attr('disabled',false).val('').trigger('change');
+
+
+	if(data.length==2){
+		$("#SERVICE").val(data[1].text).trigger('change');
+    }
+});
 
 
 
