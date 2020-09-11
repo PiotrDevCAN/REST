@@ -180,20 +180,20 @@ class rfsRecord extends DbRecord
 
 
 	<div class="form-group " id="RFS_TypeIlcFormGroup">
-			<div class='required'>
+			<div class='required_not_yet'>
 				<label for="ILC_WORK_ITEM"
 					class="col-md-2 control-label ceta-label-left"
 					data-toggle="tooltip" data-placement="top"
-					title="Claim Code - max length <?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>"
+					title="Claim Code - max length <?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?> (Not required at this time) "
 					data-original-title="">ILC Work Item</label>
 				<div class="col-md-3">
 					<input class="form-control" id="ILC_WORK_ITEM" name="ILC_WORK_ITEM"
 						value="<?=$this->ILC_WORK_ITEM?>" placeholder="ILC_WORK_ITEM"
 						type="text"
-						maxlength="<?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>">
+						maxlength="<?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>" disabled >
 				</div>
 				
-								<label for='RFS_TYPE'
+				<label for='RFS_TYPE'
 					class='col-md-2 control-label ceta-label-left'>RFS Type</label>
 				<div class="col-md-1">
         			<?php
