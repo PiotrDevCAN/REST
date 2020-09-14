@@ -27,7 +27,9 @@ class BlueGroups {
 		$memberUID = self::getUID($memberEmail);
 		$url = array();
 		$url['Add_Member'] = "https://bluepages.ibm.com/tools/groups/protect/groups.wss?gName=" . urlencode($groupName) . "&task=Members&mebox=" . urlencode($memberUID) . "&Select=Add+Members&API=1";
-		self::processURL($url);
+		//self::processURL($url);
+		self::printUrl($url);
+		
 	}
 
 	public static function addAdministrator($groupName,$memberEmail){
@@ -66,7 +68,7 @@ class BlueGroups {
 
 	public static function getUID($email){
 	    $details = BluePages::getDetailsFromIntranetId($email);
-	    return $details['CNUM'];
+	    return trim($details['CNUM']);
 // 		$record = array();
 // 		$attr = array();
 // 		$groups = array();
@@ -100,28 +102,36 @@ class BlueGroups {
 //		curl_setopt($ch, CURLOPT_CAINFO,        '/usr/local/zendsvr6/share/curl/cacert.pem');
 //		curl_setopt($ch, CURLOPT_HTTPAUTH,        CURLAUTH_BASIC);
 		curl_setopt($ch, CURLOPT_HEADER,        FALSE);
-// 		$userpwd = $_SERVER['PHP_AUTH_USER'] . ':' . $_SERVER['PHP_AUTH_PW'];
-// 		$ret = curl_setopt($ch, CURLOPT_USERPWD,        $userpwd);
+//		curl_setopt($ch, CURLOPT_USERPWD,'userid:password');
+// 		curl_setopt($ch, CURLOPT_USERPWD, "$username:$password");
+ 		curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+ 		
+ 		
 		return $ch;
 	}
+	
+	private static function printUrl($url){
+	    foreach($url as $function => $BGurl){
+	        $curlCmd = 'curl -D- -u user:password -X GET -H "Content-Type: application/json"';
+	        $curlCmd.= '"' . $BGurl . '"';
+	        echo $curlCmd;	        
+	    }	    
+	}
+	
 
 	private static function processURL($url){
 		$ch = self::createCurl();
 		foreach($url as $function => $BGurl){
 			echo "<BR>Processing $function.";
-			echo "URL:" . $BGurl;
-			$ret = curl_setopt($ch, CURLOPT_URL, $BGurl);
-
-			var_dump($ret);
-
-
+			echo "\nURL:" . $BGurl;
+			curl_setopt($ch, CURLOPT_URL, $BGurl);
 			$ret = curl_exec($ch);
-
+			
+			
 			var_dump($ret);
-
-
-
-
+			$info = curl_getinfo($ch);			
+			print_r($info);
+			
 
 			if (empty($ret)) {
 				//     some kind of an error happened
@@ -129,6 +139,10 @@ class BlueGroups {
    		 		curl_close($ch); // close cURL handler
 			} else {
    				$info = curl_getinfo($ch);
+   				
+   				print_r($info);
+   				
+   				
    			 	if (empty($info['http_code'])) {
    		     	    die("No HTTP code was returned");
    		 		} else {
