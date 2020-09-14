@@ -204,6 +204,10 @@ Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 ?>
 
 <style>
+td.dataTables_empty{
+    color:white;
+}
+
 .dataTables_wrapper .dataTables_processing {
 background-color:#006699;
 }
