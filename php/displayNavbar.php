@@ -53,8 +53,10 @@ $assign->addOption($resRequest);
 
 $reports        = new NavbarMenu('Report');
 $listRfs        = new NavbarOption('List RFS', 'ps_rfs.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
+$claim          = new NavbarOption('Claim', 'ps_ClaimMonthly.php','accessCdi accessAdmin');
 
 $reports->addOption($listRfs);
+$reports->addOption($claim);
 // $dummy          = new NavbarOption('Dummy entry', 'pr_dummyReport.php','accessUser accessReports');
 
 $navbar->addMenu($cdiAdmin);
