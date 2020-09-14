@@ -151,7 +151,9 @@ class resourceRequestTable extends DbTable
         $endDate4Picka = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Y-m-d') : null;
         $startDate = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
         $startDateObj = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE']) : null;
-        $endDate   = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
+        $startDateSortable = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Ymd') : null;
+        $endDate         = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
+        $endDateSortable = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
         $endDateObj = !empty($row['END_DATE'])   ? Datetime::createFromFormat('Y-m-d', $row['END_DATE']) : null;
         $hrsPerWeek = $row['HRS_PER_WEEK'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
@@ -263,7 +265,8 @@ class resourceRequestTable extends DbTable
         $displayRfsId.= $row['CLONED_FROM']> 0 ? "&nbsp;<i>(" . $row['CLONED_FROM'] . ")</i>" : null;
 
         $row['RFS']        = array('display'=> $displayRfsId, 'sort'=>$rfsId);
-        $row['START_DATE'] = array('display'=> "<span class='$assignColor'>$startDate  to  $endDate <br/>Avg Hrs/Week: " . $row['HRS_PER_WEEK'] ."$started", 'sort'=>$startDate);
+        $row['START_DATE'] = array('display'=> "<span class='$assignColor'>$startDate  to  $endDate <br/>Avg Hrs/Week: " . $row['HRS_PER_WEEK'] ."$started", 'sort'=>$startDateSortable);
+        $row['END_DATE'] = array('display'=> $endDate, 'sort'=>$endDateSortable);
         $row['ORGANISATION']=array('display'=>$row['ORGANISATION'] . "<br/><small>" . $row['SERVICE'] . "</small>", 'sort'=>$organisation);
 
     }

@@ -711,7 +711,7 @@ function ResourceRequest() {
 	            { data: "SERVICE"          ,defaultContent: "", visible:false },
 	            { data: "DESCRIPTION"      ,defaultContent: "", visible:true },
 	            { data: "START_DATE"       ,defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
-	            { data: "END_DATE"         ,defaultContent: "", visible:false },
+	            { data: "END_DATE"         ,defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
 	            { data: "HRS_PER_WEEK"     ,defaultContent: "", visible:true },
 	            { data: "RESOURCE_NAME"    ,defaultContent: "", visible:true },
 	            { data: "RR_CREATOR"       ,defaultContent: "", visible:false },
