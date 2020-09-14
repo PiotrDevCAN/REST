@@ -53,7 +53,7 @@ $assign->addOption($resRequest);
 
 $reports        = new NavbarMenu('Report');
 $listRfs        = new NavbarOption('List RFS', 'ps_rfs.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
-$claim          = new NavbarOption('Claim', 'ps_ClaimMonthly.php','accessCdi accessAdmin');
+$claim          = new NavbarOption('Claim', 'ps_ClaimMonthly.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
 
 $reports->addOption($listRfs);
 $reports->addOption($claim);
