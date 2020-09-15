@@ -89,67 +89,76 @@ class rfsTable extends DbTable
 
     
     function returnClaimReportAsArray($predicate=null, $withArchive=false){
+        
+        $startMonthObj = new \DateTime();
+        $startMonthDb2 = $startMonthObj->format('Y-m-01');
+                 
+        $nextMonthObj = new \DateTime();
+        $oneMonth = new \DateInterval('P1M');
+        $monthLabels = array();
+        $monthDetails = array();
+        
+        for ($i = 0; $i < 6; $i++) {
+            $monthLabels[] = $nextMonthObj->format('M_y');
+            $monthDetails[$i]['year'] = $nextMonthObj->format('Y');
+            $monthDetails[$i]['month'] = $nextMonthObj->format('m');
+            $nextMonthObj->add($oneMonth);
+        }
+           
         $sql = "";
         $sql.=" WITH ";
-        $sql.= " CLAIM(RESOURCE_REFERENCE, JAN_20,FEB_20,MAR_20,APR_20,MAY_20,JUN_20,JUL_20,AUG_20,SEP_20,OCT_20,NOV_20,DEC_20,";
-        $sql.= "                           JAN_21,FEB_21,MAR_21,APR_21,MAY_21,JUN_21,JUL_21,AUG_21,SEP_21,OCT_21,NOV_21,DEC_21";
+        $sql.= " CLAIM(RESOURCE_REFERENCE ";
+
+        foreach ($monthLabels as $label) {
+            $sql.=",  $label ";
+        }
+
         $sql.= " ) AS ( ";
-        $sql.=" select RESOURCE_REFERENCE RESOURCE_NAME, ";
-        $sql.=" sum(JAN_20) as JAN_20, ";
-        $sql.=" sum(FEB_20) as FEB_20, ";
-        $sql.=" sum(MAR_20) as MAR_20, ";
-        $sql.=" sum(APR_20) as APR_20, ";
-        $sql.=" sum(MAY_20) as MAY_20, ";
-        $sql.=" sum(JUN_20) as JUN_20, ";
-        $sql.=" sum(JUL_20) as JUL_20, ";
-        $sql.=" sum(AUG_20) as AUG_20, ";
-        $sql.=" sum(SEP_20) as SEP_20, ";
-        $sql.=" sum(OCT_20) as OCT_20, ";
-        $sql.=" sum(NOV_20) as NOV_20, ";
-        $sql.=" sum(DEC_20) as DEC_20, "; 
-        $sql.=" sum(JAN_21) as JAN_21, ";
-        $sql.=" sum(FEB_21) as FEB_21, ";
-        $sql.=" sum(MAR_21) as MAR_21, ";
-        $sql.=" sum(APR_21) as APR_21, ";
-        $sql.=" sum(MAY_21) as MAY_21, "; 
-        $sql.=" sum(JUN_21) as JUN_21, ";
-        $sql.=" sum(JUL_21) as JUL_21, ";
-        $sql.=" sum(AUG_21) as AUG_21, ";
-        $sql.=" sum(SEP_21) as SEP_21, ";
-        $sql.=" sum(OCT_21) as OCT_21, ";
-        $sql.=" sum(NOV_21) as NOV_21, ";
-        $sql.=" sum(DEC_21) as DEC_21 ";
+        $sql.=" select RESOURCE_REFERENCE RESOURCE_NAME ";
+        
+        foreach ($monthLabels as $label) {
+            $sql.=", sum($label) as $label ";
+        }
+
         $sql.=" from ( ";
-        $sql.="     select RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME, ";
-        $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 1) then sum(hours) else null end as JAN_20, ";
-        $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 2) then sum(hours) else null end as FEB_20, ";
-        $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 3) then sum(hours) else null end as MAR_20, ";
-        $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 4) then sum(hours) else null end as APR_20, ";
-        $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 5) then sum(hours) else null end as MAY_20, ";
-        $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 6) then sum(hours) else null end as JUN_20, ";
-        $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 7) then sum(hours) else null end as JUL_20, ";
-        $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 8) then sum(hours) else null end as AUG_20, ";
-        $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 9) then sum(hours) else null end as SEP_20, ";
-        $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 10) then sum(hours) else null end as OCT_20, ";
-        $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 11) then sum(hours) else null end as NOV_20, ";
-        $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 12) then sum(hours) else null end as DEC_20, ";
-        $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 1) then sum(hours) else null end as JAN_21, ";
-        $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 2) then sum(hours) else null end as FEB_21, ";
-        $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 3) then sum(hours) else null end as MAR_21, ";
-        $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 4) then sum(hours) else null end as APR_21, ";
-        $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 5) then sum(hours) else null end as MAY_21, ";
-        $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 6) then sum(hours) else null end as JUN_21, ";
-        $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 7) then sum(hours) else null end as JUL_21, ";
-        $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 8) then sum(hours) else null end as AUG_21, ";
-        $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 9) then sum(hours) else null end as SEP_21, ";
-        $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 10) then sum(hours) else null end as OCT_21, ";
-        $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 11) then sum(hours) else null end as NOV_21, ";
-        $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 12) then sum(hours) else null end as DEC_21 ";
+        $sql.="     select RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME ";
+        
+        foreach ($monthDetails as $key => $detail) {
+            $sql.=", case when (CLAIM_YEAR = " . $detail['year'] . " and CLAIM_MONTH = " . $detail['month'] . ") then sum(hours) else null end as " . $monthLabels[$key];
+        }
+        
+        
+        
+        
+//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 1) then sum(hours) else null end as JAN_20, ";
+//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 2) then sum(hours) else null end as FEB_20, ";
+//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 3) then sum(hours) else null end as MAR_20, ";
+//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 4) then sum(hours) else null end as APR_20, ";
+//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 5) then sum(hours) else null end as MAY_20, ";
+//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 6) then sum(hours) else null end as JUN_20, ";
+//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 7) then sum(hours) else null end as JUL_20, ";
+//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 8) then sum(hours) else null end as AUG_20, ";
+//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 9) then sum(hours) else null end as SEP_20, ";
+//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 10) then sum(hours) else null end as OCT_20, ";
+//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 11) then sum(hours) else null end as NOV_20, ";
+//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 12) then sum(hours) else null end as DEC_20, ";
+//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 1) then sum(hours) else null end as JAN_21, ";
+//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 2) then sum(hours) else null end as FEB_21, ";
+//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 3) then sum(hours) else null end as MAR_21, ";
+//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 4) then sum(hours) else null end as APR_21, ";
+//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 5) then sum(hours) else null end as MAY_21, ";
+//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 6) then sum(hours) else null end as JUN_21, ";
+//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 7) then sum(hours) else null end as JUL_21, ";
+//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 8) then sum(hours) else null end as AUG_21, ";
+//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 9) then sum(hours) else null end as SEP_21, ";
+//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 10) then sum(hours) else null end as OCT_21, ";
+//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 11) then sum(hours) else null end as NOV_21, ";
+//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 12) then sum(hours) else null end as DEC_21 ";
         $sql.="      from REST_UT.RESOURCE_REQUESTS as RR ";
         $sql.="      left join REST_UT.RESOURCE_REQUEST_HOURS as RH ";
         $sql.="      on RR.RESOURCE_REFERENCE = RH.RESOURCE_REFERENCE ";
         $sql.=" WHERE 1=1 " ;
-        $sql.=" AND CLAIM_YEAR in (2020,2021) ";
+        $sql.=" AND ( RH.DATE >= DATE('" . $startMonthDb2 . "') AND RH.DATE <= (DATE('$startMonthDb2') + 6 MONTHS)) ";
         $sql.="      group by RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME, CLAIM_YEAR, CLAIM_MONTH ";
         $sql.="      ) as data ";
         $sql.="      group by RESOURCE_REFERENCE, RESOURCE_NAME ";
