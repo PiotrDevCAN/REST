@@ -92,6 +92,14 @@ class rfsTable extends DbTable
         
         $startMonthObj = new \DateTime();
         $startMonthDb2 = $startMonthObj->format('Y-m-01');
+        $startYear  = $startMonthObj->format('Y');
+        $startMonth = $startMonthObj->format('m');
+        
+        $lastMonthObj = new \DateTime();
+        $sixMonths = new \DateInterval('P6M');
+        $lastMonthObj->add($sixMonths);
+        $lastYear = $lastMonthObj->format('Y');
+        $lastMonth = $lastMonthObj->format('m');
                  
         $nextMonthObj = new \DateTime();
         $oneMonth = new \DateInterval('P1M');
@@ -154,11 +162,16 @@ class rfsTable extends DbTable
 //         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 10) then sum(hours) else null end as OCT_21, ";
 //         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 11) then sum(hours) else null end as NOV_21, ";
 //         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 12) then sum(hours) else null end as DEC_21 ";
-        $sql.="      from REST_UT.RESOURCE_REQUESTS as RR ";
-        $sql.="      left join REST_UT.RESOURCE_REQUEST_HOURS as RH ";
+        $sql.="      from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR ";
+        $sql.="      left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " as RH ";
         $sql.="      on RR.RESOURCE_REFERENCE = RH.RESOURCE_REFERENCE ";
         $sql.=" WHERE 1=1 " ;
-        $sql.=" AND ( RH.DATE >= DATE('" . $startMonthDb2 . "') AND RH.DATE <= (DATE('$startMonthDb2') + 6 MONTHS)) ";
+ //       $sql.=" AND ( RH.DATE >= DATE('" . $startMonthDb2 . "') AND RH.DATE < (DATE('$startMonthDb2') + 7 MONTHS)) ";
+        $sql.=" AND ( ";
+        $sql.="        ( CLAIM_YEAR = $startYear AND ( CLAIM_MONTH >= $startMonth and CLAIM_MONTH <= " .  ($startMonth+6) . " )) ";
+        $sql.="      or " ;
+        $sql.="        (CLAIM_YEAR = $lastYear  AND ( CLAIM_MONTH <= $lastMonth  and CLAIM_MONTH >= " . ($lastMonth-6) . "  )) ";
+        $sql.="    ) ";
         $sql.="      group by RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME, CLAIM_YEAR, CLAIM_MONTH ";
         $sql.="      ) as data ";
         $sql.="      group by RESOURCE_REFERENCE, RESOURCE_NAME ";
