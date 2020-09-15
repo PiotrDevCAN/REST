@@ -16,7 +16,7 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is nu
 // $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 ?>
 <div class='container-fluid'>
-<h3>Monthly Claim Report</h3>
+<h3>Rest Requests Report (Hrs/Mth)</h3>
 
 <div class='container'>
 
