@@ -168,7 +168,8 @@ class resourceRequestRecord extends DbRecord
    			<div class="col-md-4">
    			<?php 
    			foreach (self::$allRateTypes as $rateType) {
-   			    ?><label class="radio-inline"><input type="radio" name="RATE_TYPE" value='<?=$rateType?>' required ><?=$rateType?></label><?php 
+   			    $checked = $rateType == $this->RATE_TYPE ? ' checked ' : null;
+   			    ?><label class="radio-inline"><input type="radio" name="RATE_TYPE" value='<?=$rateType?>' required <?=$checked;?> ><?=$rateType?></label><?php 
    			}   			
    			?>
  			</div>						 
@@ -183,7 +184,8 @@ class resourceRequestRecord extends DbRecord
    			<div class="col-md-5">
    			<?php 
    			foreach (self::$allHourTypes as $hoursType) {
-   			    ?><label class="radio-inline"><input type="radio" name="HOURS_TYPE" value='<?=$hoursType?>' required ><?=$hoursType?></label><?php 
+   			    $checked = $hoursType == $this->HOURS_TYPE ? ' checked ' : null;
+   			    ?><label class="radio-inline"><input type="radio" name="HOURS_TYPE" value='<?=$hoursType?>' required <?=$checked?> ><?=$hoursType?></label><?php 
    			}   			
    			?>
  			</div>						 
