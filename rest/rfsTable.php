@@ -134,39 +134,10 @@ class rfsTable extends DbTable
         foreach ($monthDetails as $key => $detail) {
             $sql.=", case when (CLAIM_YEAR = " . $detail['year'] . " and CLAIM_MONTH = " . $detail['month'] . ") then sum(hours) else null end as " . $monthLabels[$key];
         }
-        
-        
-        
-        
-//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 1) then sum(hours) else null end as JAN_20, ";
-//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 2) then sum(hours) else null end as FEB_20, ";
-//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 3) then sum(hours) else null end as MAR_20, ";
-//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 4) then sum(hours) else null end as APR_20, ";
-//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 5) then sum(hours) else null end as MAY_20, ";
-//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 6) then sum(hours) else null end as JUN_20, ";
-//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 7) then sum(hours) else null end as JUL_20, ";
-//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 8) then sum(hours) else null end as AUG_20, ";
-//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 9) then sum(hours) else null end as SEP_20, ";
-//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 10) then sum(hours) else null end as OCT_20, ";
-//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 11) then sum(hours) else null end as NOV_20, ";
-//         $sql.=" case when (CLAIM_YEAR = 2020 and CLAIM_MONTH = 12) then sum(hours) else null end as DEC_20, ";
-//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 1) then sum(hours) else null end as JAN_21, ";
-//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 2) then sum(hours) else null end as FEB_21, ";
-//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 3) then sum(hours) else null end as MAR_21, ";
-//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 4) then sum(hours) else null end as APR_21, ";
-//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 5) then sum(hours) else null end as MAY_21, ";
-//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 6) then sum(hours) else null end as JUN_21, ";
-//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 7) then sum(hours) else null end as JUL_21, ";
-//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 8) then sum(hours) else null end as AUG_21, ";
-//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 9) then sum(hours) else null end as SEP_21, ";
-//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 10) then sum(hours) else null end as OCT_21, ";
-//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 11) then sum(hours) else null end as NOV_21, ";
-//         $sql.=" case when (CLAIM_YEAR = 2021 and CLAIM_MONTH = 12) then sum(hours) else null end as DEC_21 ";
         $sql.="      from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR ";
         $sql.="      left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " as RH ";
         $sql.="      on RR.RESOURCE_REFERENCE = RH.RESOURCE_REFERENCE ";
         $sql.=" WHERE 1=1 " ;
- //       $sql.=" AND ( RH.DATE >= DATE('" . $startMonthDb2 . "') AND RH.DATE < (DATE('$startMonthDb2') + 7 MONTHS)) ";
         $sql.=" AND ( ";
         $sql.="        ( CLAIM_YEAR = $startYear AND ( CLAIM_MONTH >= $startMonth and CLAIM_MONTH <= " .  ($startMonth+6) . " )) ";
         $sql.="      or " ;
@@ -202,9 +173,21 @@ class rfsTable extends DbTable
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
-            }          
-            foreach ($row as $key=>$data){
-                $row[] = trim($row[$key]);
+            }     
+            
+            $startDate = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
+            $startDateSortable = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Ymd') : null;
+            $endDate         = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
+            $endDateSortable = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
+            
+            
+            $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
+            $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
+            
+            
+            
+            foreach ($row as $key=>$data){ 
+                $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
                 unset($row[$key]);
             }
             $allData[]  = $row;

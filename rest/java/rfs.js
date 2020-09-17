@@ -282,6 +282,42 @@ function Rfs() {
 	                  'csvHtml5',
 	                  'print'
 	              ],
+
+	        columns: [ 
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+	            { defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
+	            { defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+	        ],
+
+
+
+
 	    });
 	    Rfs.table.columns([1,2,3,4,5,8,9,10,19,20,21]).visible(false,false);
 	    Rfs.table.columns.adjust().draw(false);
