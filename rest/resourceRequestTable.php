@@ -200,7 +200,7 @@ class resourceRequestTable extends DbTable
 
          >
          <span data-toggle='tooltip' title='Change Status to Completed' class='glyphicon glyphicon-check ' aria-hidden='true' ></span>
-            </button>&nbsp;<span class='$assignColor'>$status.</span>" : "<span class='$assignColor'>$status</span>";
+            </button>&nbsp;<span class='$assignColor'>$status</span>" : "<span class='$assignColor'>$status</span>";
                        
 
         $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';
