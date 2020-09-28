@@ -21,7 +21,6 @@ class resourceRequestRecord extends DbRecord
     protected $DESCRIPTION;
     protected $START_DATE;
     protected $END_DATE;
-    protected $HRS_PER_WEEK;
     protected $RESOURCE_NAME;
     protected $RR_CREATOR;
     protected $RR_CREATED_TIMESTAMP;
@@ -29,6 +28,7 @@ class resourceRequestRecord extends DbRecord
     protected $STATUS;
     protected $RATE_TYPE;
     protected $HOURS_TYPE;
+    protected $HRS_PER_WEEK;
 
     static public $columnHeadings = array("Resource Ref", "RFS", "Organisation", "Service",
                                           "Description", "Start Date", "End Date", "Hrs Per Week", "Resource Name",
