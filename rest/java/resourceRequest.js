@@ -20,7 +20,7 @@ var buttonCommon = {
 
 function formatResourceName(resource){
 	var color = resource.distance=='local' ? 'green' : '#d67600'
-	var symbol = resource.distance=='local' ? 'glyphicon-ok' : 'glyphicon-remove';
+	var symbol = resource.distance=='local' ? 'glyphicon-ok' : '';
 	var text = $("<span class='glyphicon " + symbol + "'>&nbsp;" + resource.text + "&nbsp;<small>" + resource.role + "</small>" +  "</span>");	
 	return text;
 }
