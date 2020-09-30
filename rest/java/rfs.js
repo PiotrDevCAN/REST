@@ -109,15 +109,17 @@ function Rfs() {
 
 	this.listenForConfirmDeleteRfs = function(){
 		$(document).on('click','#deleteConmfirmedRfs', function(e){
+			$(this).addClass('spinning').attr('disabled');
 			var formData = $('#rfsForm').serialize();
 		    $.ajax({
 		    	url: "ajax/deleteRfs.php",
 		        type: 'POST',
 		    	data: formData,
 		    	success: function(result){
+					$('.spinning').removeClass('spinning').attr('enabled');
 		    		console.log(result);
 		    		var resultObj = JSON.parse(result);
-					$('#deleteRfsModalBody').html(resultObj.messages);
+					$('#deleteRfsModalBody').html(resultObj.Messages);
 					Rfs.table.ajax.reload();
 					setTimeout(function(){ $('#deleteRfsModal').modal('hide'); }, 3000);
 
