@@ -38,10 +38,11 @@ class resourceRequestDiaryTable extends DbTable
         if (! $rs) {
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
         }
-        $comment = '';
+        $comment = '<table class="table table-striped" ><tbody>';
         while(($row=db2_fetch_assoc($rs))==true){            
-            $comment.= $row['ENTRY'] . "<br/><small><b>" . $row['CREATOR'] . "</b><br>" . $row['CREATED'] . "</small><br/>";
+            $comment.= "<tr><td class='diaryEntryCell'>" . $row['ENTRY'] . "</td><td class='diaryCreatorCell'><b>" . $row['CREATOR'] . "</b><br>" . $row['CREATED'] . "</small></td><tr>";
         }
+        $comment.= '</tbody></table>';
         
         return $comment;
         

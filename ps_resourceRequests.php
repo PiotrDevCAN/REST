@@ -395,8 +395,7 @@ td.dataTables_empty{
               <div class="col-md-8 diaryEntry" contenteditable='true' id='newDiaryEntry'></div>
        </div>
        <div class='row'>       
-            <label for="calendar" class="col-md-3	control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Diary</label>
-              <div class="col-md-8 diary" id='diary'></div>
+             <div class="col-md-10 col-md-offset-1	 diary" id='diary'></div>
        </div>
               <input type='hidden' id="RESOURCE_REFERENCE" name="RESOURCE_REFERENCE" value="" >
         </div>
@@ -435,9 +434,9 @@ div.diaryEntry {
 }
 
 div.diary {
-  padding-top: 2em;
+  padding-top: 1em;
   background-color: whitesmoke;  
-  height: 100px;
+  height: 200px;
   overflow-y: scroll;
   border: 2px solid lightgray;
 }
@@ -464,6 +463,7 @@ $(document).ready(function() {
 	resourceRequest.prepareRfsSelect();
 //	resourceRequest.initialiseDateSelect(allowPast); This was causing the use of up and down arrows to change the Date Field on the form which we didn't want.
 	resourceRequest.buildResourceReport();
+	resourceRequest.populateDiaryWhenModalShown();
 	resourceRequest.populateResourceDropDownWhenModalShown();
 	resourceRequest.listenForEditResourceName();
 	resourceRequest.listenForSaveResourceName();

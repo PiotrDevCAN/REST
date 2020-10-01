@@ -145,6 +145,21 @@ function ResourceRequest() {
 		});
 	},
 	
+	this.populateDiaryWhenModalShown = function(){
+		$('#diaryModal').on('shown.bs.modal', function(){
+			$('#diary').html('');
+			var resourceReference = $('#RESOURCE_REFERENCE').val();
+				$.ajax({
+			    	url: "ajax/getDiaryForResourceReference.php",
+			        type: 'POST',	
+					data: {resourceReference : resourceReference },		
+			    	success: function(result){
+				   		var resultObj = JSON.parse(result);	
+						$('#diary').html(resultObj.diary);
+				}
+			});		
+		});	
+	},
 
 	this.populateResourceDropDownWhenModalShown = function(){
 		$('#resourceNameModal').on('shown.bs.modal', function(){
