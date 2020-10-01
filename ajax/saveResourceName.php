@@ -5,6 +5,7 @@ use rest\resourceRequestTable;
 use rest\resourceRequestHoursTable;
 use itdq\Trace;
 use itdq\AuditTable;
+use rest\resourceRequestDiaryTable;
 
 
 set_time_limit(0);
@@ -15,7 +16,10 @@ $clear = isset($_POST['clear']) ? $_POST['clear'] : null;
 
 try {
     $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
-    $resourceTable->updateResourceName($_POST['RESOURCE_REFERENCE'], $_POST['RESOURCE_NAME'], $clear);
+    $resourceTable->updateResourceName($_POST['RESOURCE_REFERENCE'], $_POST['RESOURCE_NAME'], $clear);    
+    $diaryEntry = empty($clear) ?  $_POST['RESOURCE_NAME'] . " allocated to request" : " Resource name cleared";
+    resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['RESOURCE_REFERENCE']);
+    
     $exception = false;
 } catch (Exception $e) {
     $exception = $e->getMessage();

@@ -7,9 +7,10 @@ set_time_limit(0);
 ob_start();
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
-$lastId = resourceRequestDiaryTable::insertEntry($_POST['newDiaryEntry'], $_POST['resourceReference']);
 
-$success = (!$lastId==false);
+$lastId = !empty($_POST['newDiaryEntry']) ? resourceRequestDiaryTable::insertEntry($_POST['newDiaryEntry'], $_POST['resourceReference']) : null; 
+
+$success = ($lastId!==false);
 
 $response = array('success'=>$success, 'diaryEntry'=>$_POST['newDiaryEntry'],'ref'=>$_POST['resourceReference']);
 

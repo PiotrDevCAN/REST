@@ -387,24 +387,45 @@ td.dataTables_empty{
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Diary</h4>
       </div>
-      <form id='diaryForm'>
       <div class="modal-body">
+      <form id='diaryForm'>
+  		<div class="form-group " >
+  		<div class='row'>
+            <label for="rfs" class="col-md-3 control-label ceta-label-left required" data-toggle="tooltip" data-placement="top" title="" data-original-title="">RFS</label>
+           <div class='col-md-8'>
+           <input class="form-control" id="rfs" value="" placeholder="RFS Id"  type="text" maxlength="20" disabled>
+           </div>
+        </div>
+  		<div class='row'>
+            <label for="request" class="col-md-3 control-label ceta-label-left required" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Request</label>
+           <div class='col-md-8'>
+           <input class="form-control" id="request" value="" placeholder="Request"  type="text" maxlength="20" disabled>
+           </div>
+        </div>
+        <div class='row'>
+            <label for="organisation" class="col-md-3 control-label ceta-label-left required" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Organisation</label>
+           <div class='col-md-8'>
+           <input class="form-control" id="organisation" value="" placeholder="Organisation"  type="text" maxlength="20" disabled>
+           </div>
+        </div>
+        </div>   
   		<div class="form-group " >
   		<div class='row'>
             <label for="newDiaryEntry" class="col-md-3	control-label ceta-label-left required" data-toggle="tooltip" data-placement="top" title="" data-original-title="">New Entry</label>
-              <div class="col-md-8 diaryEntry" contenteditable='true' id='newDiaryEntry'></div>
-       </div>
-       <div class='row'>       
+            <div class="col-md-8 diaryEntry" contenteditable='true' id='newDiaryEntry' data-placeholder='type new diary entry here'></div>
+        </div>
+        <div class='row'>       
              <div class="col-md-10 col-md-offset-1	 diary" id='diary'></div>
-       </div>
-              <input type='hidden' id="RESOURCE_REFERENCE" name="RESOURCE_REFERENCE" value="" >
         </div>
-        </div>
+        </div>    
+        <input type='hidden' id='RESOURCE_REQUEST' value=''/>    
+      </form>
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" id='saveDiaryEntry'>Save</button>       
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
-     </form>
+    
     </div>
 
   </div>
@@ -441,6 +462,10 @@ div.diary {
   border: 2px solid lightgray;
 }
 
+[contentEditable=true]:empty:not(:focus):before{
+    content:attr(data-placeholder);
+    color:#aea79f;
+}
 
 
 </style>

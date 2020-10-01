@@ -908,6 +908,9 @@ function ResourceRequest() {
 		$(document).on('click','.btnOpenDiary', function(e){	
 			
 			$('#RESOURCE_REFERENCE').val($(this).data('reference'));
+			$('#organisation').val($(this).data('organisation'));
+			$('#request').val($(this).data('reference'));
+			$('#rfs').val($(this).data('rfs'));
 			$('#newDiaryEntry').html('');		
 			
 			$('#diaryModal').modal('show');	

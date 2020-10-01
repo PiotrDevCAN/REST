@@ -278,9 +278,14 @@ class resourceRequestTable extends DbTable
         
         $calendarEntry = !empty($row['LATEST_ENTRY']) ?  $row['LATEST_ENTRY'] . "<small>" . $row['ENTRY_CREATOR'] . '&nbsp;' . $row['ENTRY_CREATED'] . "</small>" : null;
         
-        $row['DESCRIPTION'].= "<br/><button type='button' class='btn btn-xs btnOpenDiary accessRestrict accessAdmin accessCdi accessSupply accessDemand ' aria-label='Left Align' data-reference='" .$resourceReference . "' >
-             <span data-toggle='tooltip' title='Open Diary' class='glyphicon glyphicon-book ' aria-hidden='true' ></span>
-             </button><div class='latestDiary'>" . $calendarEntry . "</div>";
+        $row['DESCRIPTION'].= "<br/><button type='button' class='btn btn-xs btnOpenDiary accessRestrict accessAdmin accessCdi accessSupply accessDemand ' "; 
+        $row['DESCRIPTION'].= "     aria-label='Left Align'  ";
+        $row['DESCRIPTION'].= " data-reference='" .$resourceReference . "' ";
+        $row['DESCRIPTION'].= " data-rfs='" .$rfsId . "'  ";
+        $row['DESCRIPTION'].= " data-organisation='" .$organisation . "'  ";
+        $row['DESCRIPTION'].= " > ";
+        $row['DESCRIPTION'].= "<span data-toggle='tooltip' title='Open Diary' class='glyphicon glyphicon-book ' aria-hidden='true' ></span>";
+        $row['DESCRIPTION'].= "</button><div class='latestDiary'>" . $calendarEntry . "</div>";
     }
     
     
