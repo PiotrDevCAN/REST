@@ -380,6 +380,41 @@ td.dataTables_empty{
 </div>
 
 
+<!-- Modal -->
+<div id="diaryModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Diary</h4>
+      </div>
+      <form id='diaryForm'>
+      <div class="modal-body">
+  		<div class="form-group " >
+  		<div class='row'>
+            <label for="newDiaryEntry" class="col-md-3	control-label ceta-label-left required" data-toggle="tooltip" data-placement="top" title="" data-original-title="">New Entry</label>
+              <div class="col-md-8 diaryEntry" contenteditable='true' id='newDiaryEntry'></div>
+       </div>
+       <div class='row'>       
+            <label for="calendar" class="col-md-3	control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Diary</label>
+              <div class="col-md-8 diary" id='diary'></div>
+       </div>
+              <input type='hidden' id="RESOURCE_REFERENCE" name="RESOURCE_REFERENCE" value="" >
+        </div>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id='saveDiaryEntry'>Save</button>       
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+     </form>
+    </div>
+
+  </div>
+</div>
+
+
 
 
 <?php
@@ -395,6 +430,21 @@ td.dataTables_empty {
 	font-size: 20px;
 	background-color:#006699;
 }
+
+div.diaryEntry { 
+  height: 55px;
+  overflow-y: scroll;
+  border: 2px solid lightgray;
+}
+
+div.diary {
+  padding-top: 2em;
+  background-color: whitesmoke;  
+  height: 100px;
+  overflow-y: scroll;
+  border: 2px solid lightgray;
+}
+
 
 
 </style>
@@ -446,6 +496,7 @@ $(document).ready(function() {
 	resourceRequest.listenForSelectSpecificRfs();
 	resourceRequest.listenForSelectOrganisation();
 	resourceRequest.listenForSelectBusinessUnit();
+	resourceRequest.listenForBtnDiaryEntry();
 	$('[data-toggle="tooltip"]').tooltip();
 
 });
@@ -455,6 +506,7 @@ $(document).ready(function(){
 
 
 });
+
 
 $('#editRequestModal').on('shown.bs.modal', function (e) {
 	$("#ORGANISATION").select2();

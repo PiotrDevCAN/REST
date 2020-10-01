@@ -863,6 +863,16 @@ function ResourceRequest() {
 		})
 	}
 	
+	this.listenForBtnDiaryEntry = function(){
+		$(document).on('click','.btnOpenDiary', function(e){	
+			$('#diaryModal').modal('show');	
+		    
+		});
+	},
+	
+	
+	
+	
 	this.listenForResourceRequestEditShown = function(){
 		$(document).on('shown.bs.modal',function(e){
 		$( "#resourceRequestForm" ).submit(function( event ) {

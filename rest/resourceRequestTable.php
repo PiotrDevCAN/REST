@@ -270,7 +270,10 @@ class resourceRequestTable extends DbTable
         $row['START_DATE'] = array('display'=> "<span class='$assignColor'>$startDate  to  $endDate <br/>Avg Hrs/Week: " . $row['HRS_PER_WEEK'] ."$started", 'sort'=>$startDateSortable);
         $row['END_DATE'] = array('display'=> $endDate, 'sort'=>$endDateSortable);
         $row['ORGANISATION']=array('display'=>$row['ORGANISATION'] . "<br/><small>" . $row['SERVICE'] . "</small>", 'sort'=>$organisation);
-
+        
+        $row['DESCRIPTION'].= "<br/><button type='button' class='btn btn-xs btnOpenDiary accessRestrict accessAdmin accessCdi accessSupply accessDemand ' aria-label='Left Align' data-reference='" .$resourceReference . "' >
+             <span data-toggle='tooltip' title='Open Diary' class='glyphicon glyphicon-book ' aria-hidden='true' ></span>
+             </button>";
     }
 
 
