@@ -113,9 +113,6 @@ td.dataTables_empty{
 	    
 	    
 	    </div>	    
-	    
-	    </div>
-    </div>
 </form>
 </div>
 
@@ -478,6 +475,7 @@ $(document).ready(function() {
 	resourceRequest.listenForDuplicateResource();
  	resourceRequest.listenForConfirmedDuplication();
  	resourceRequest.listenForChangingHours();
+ 	resourceRequest.listenForSaveDiaryEntry();
  	resourceRequest.listenForSaveAdjustedHours();
  	resourceRequest.listenForSaveAdjustedHoursWithDelta();
 // 	resourceRequest.listenForSaveStatusChange();

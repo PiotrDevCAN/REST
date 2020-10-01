@@ -402,6 +402,32 @@ function ResourceRequest() {
 		    	});
 		});
 	},
+	
+	this.listenForSaveDiaryEntry = function(){
+		$(document).on('click','#saveDiaryEntry', function(e){
+			$(this).addClass('spinning').attr('disabled',true);
+			console.log('save diaryEntry triggered');
+			var newDiaryEntry = $('#newDiaryEntry').html();
+			var resourceReference = $('#RESOURCE_REFERENCE').val();
+		    $.ajax({
+		    	url: "ajax/saveDiaryEntry.php",
+		        type: 'POST',
+		    	data: {newDiaryEntry : newDiaryEntry,
+ 					   resourceReference : resourceReference },
+		    	success: function(result){
+		    		console.log(result);
+		    		$('.spinning').removeClass('spinning').attr('disabled',false);
+		    		ResourceRequest.table.ajax.reload();
+					$('#RESOURCE_REFERENCE').val('');
+					$('#newDiaryEntry').html('');
+					$('#diaryModal').modal('hide');
+		    		}
+		    	});
+		});
+	},
+	
+	
+	
 
 	this.listenForSaveAdjustedHours = function(){
 		$(document).on('click','#saveAdjustedHours', function(e){
@@ -727,7 +753,7 @@ function ResourceRequest() {
 //	            { data: "MONTH_05"         ,defaultContent: "",visible:true},
 //	            { data: "MONTH_06"         ,defaultContent: "",visible:true},
 	        	
-	        ],
+	        ]
 	    });
 	    // Apply the search
 	    ResourceRequest.table.columns().every( function () {
@@ -865,6 +891,10 @@ function ResourceRequest() {
 	
 	this.listenForBtnDiaryEntry = function(){
 		$(document).on('click','.btnOpenDiary', function(e){	
+			
+			$('#RESOURCE_REFERENCE').val($(this).data('reference'));
+			$('#newDiaryEntry').html('');		
+			
 			$('#diaryModal').modal('show');	
 		    
 		});

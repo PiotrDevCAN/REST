@@ -101,10 +101,13 @@ class resourceRequestTable extends DbTable
         $sql .= " ) as resource_hours ";
         $sql .= " GROUP BY RESOURCE_REFERENCE ";
         $sql .= " ) ";
-        $sql .= " SELECT * ";
+        $sql .= " SELECT RFS.*, RR.*,  LD.LATEST_ENTRY, LD.CREATOR as ENTRY_CREATOR, LD.CREATED as ENTRY_CREATED ";
         $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTable. " as RR ";
         $sql .= " ON RR.RFS = RFS.RFS_ID ";
+        $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$LATEST_DIARY_ENTRIES. " as LD ";
+        $sql .= " ON RR.RESOURCE_REFERENCE = LD.RESOURCE_REFERENCE ";
+        
 //         $sql .= " left join resource_hours as RH ";
 //         $sql .= " ON RR.RESOURCE_REFERENCE = RH.RR ";
 
@@ -123,9 +126,9 @@ class resourceRequestTable extends DbTable
 
         $allData = array();
         $allData['data'] = array();
-
+ 
         while(($row = db2_fetch_assoc($resultSet))==true){
-            PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
+             PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
@@ -134,7 +137,9 @@ class resourceRequestTable extends DbTable
             $this->addGlyphicons($row);
             $allData['data'][]  = $row;
         }
+
         $allData['sql'] = $sql;
+        
         return $allData ;
     }
 
@@ -144,6 +149,7 @@ class resourceRequestTable extends DbTable
         PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
         $rfsId = $row['RFS_ID'];
         $resourceReference = $row['RESOURCE_REFERENCE'];
+        
         $resourceName = $row['RESOURCE_NAME'];
         $prn = $row['PRN'];
         $valuestream = $row['VALUE_STREAM'];
@@ -255,8 +261,6 @@ class resourceRequestTable extends DbTable
              <span data-toggle='tooltip' title='Delete Resource Request' class='glyphicon glyphicon-trash text-warning ' aria-hidden='true' ></span>
              </button>": null;
         
-        
-        
         $displayedResourceName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $displayedResourceName;
 
         $row['RESOURCE_NAME'].= "&nbsp;" . $displayedResourceName ;
@@ -271,12 +275,15 @@ class resourceRequestTable extends DbTable
         $row['END_DATE'] = array('display'=> $endDate, 'sort'=>$endDateSortable);
         $row['ORGANISATION']=array('display'=>$row['ORGANISATION'] . "<br/><small>" . $row['SERVICE'] . "</small>", 'sort'=>$organisation);
         
+        
+        $calendarEntry = !empty($row['LATEST_ENTRY']) ?  $row['LATEST_ENTRY'] . "<small>" . $row['ENTRY_CREATOR'] . '&nbsp;' . $row['ENTRY_CREATED'] . "</small>" : null;
+        
         $row['DESCRIPTION'].= "<br/><button type='button' class='btn btn-xs btnOpenDiary accessRestrict accessAdmin accessCdi accessSupply accessDemand ' aria-label='Left Align' data-reference='" .$resourceReference . "' >
              <span data-toggle='tooltip' title='Open Diary' class='glyphicon glyphicon-book ' aria-hidden='true' ></span>
-             </button>";
+             </button><div class='latestDiary'>" . $calendarEntry . "</div>";
     }
-
-
+    
+    
     static function setEndDate($resourceReference, $endDate){
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
         $sql .= "  SET END_DATE = DATE('" . db2_escape_string($endDate) ."') ";
