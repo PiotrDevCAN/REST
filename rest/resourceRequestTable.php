@@ -251,7 +251,7 @@ class resourceRequestTable extends DbTable
         
         $deletable = $status == 'New' ? true : false;
         
-        $row['RESOURCE_NAME'].= $deletable && $editable ? "<button type='button' class='btn btn-xs deleteRecord accessRestrict accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $service . "' >
+        $row['RESOURCE_NAME'].= $editable ? "<button type='button' class='btn btn-xs deleteRecord accessRestrict $canBeAmendedByDemandTeam accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $service . "' >
              <span data-toggle='tooltip' title='Delete Resource Request' class='glyphicon glyphicon-trash text-warning ' aria-hidden='true' ></span>
              </button>": null;
         
