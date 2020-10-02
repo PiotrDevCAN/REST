@@ -3,12 +3,15 @@ namespace rest;
 
 use itdq\DbTable;
 use itdq\PhpMemoryTrace;
+use itdq\Loader;
 use \DateTime;
 
 class resourceRequestTable extends DbTable
 {
     const DUPLICATE = 'Dup of';
     const DELTA     = 'Delta from';
+    
+    private $hrsThisWeekByResourceReference;
 
     function buildHTMLTable($startDate,$endDate){
         ?>
@@ -45,6 +48,8 @@ class resourceRequestTable extends DbTable
     }
 
     function returnAsArray($startDate,$endDate, $predicate=null, $pipelineLiveArchive = 'live'){
+        $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
+        $hoursRemainingByReference = $resourceRequestHoursTable->getHoursRemainingByReference();
         $monthNumber = 0;
         $startDateObj = new \DateTime($startDate);
         $endDateObj = new \DateTime($endDate);
@@ -134,6 +139,8 @@ class resourceRequestTable extends DbTable
                 break; // It's got invalid chars in it that will be a problem later.
             }
             $row = array_map('trim',$row);
+            $row['hours_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] : null;
+            $row['weeks_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] : null;
             $this->addGlyphicons($row);
             $allData['data'][]  = $row;
         }
@@ -146,6 +153,14 @@ class resourceRequestTable extends DbTable
 
     function addGlyphicons(&$row){
         $today = new \DateTime();
+       // $complimentaryDateFields = resourceRequestHoursTable::getDateComplimentaryFields($today);
+        
+        if($this->hrsThisWeekByResourceReference==null){
+            $loader = new Loader();            
+            $predicate = " WEEK_NUMBER='" . db2_escape_string($today->format('W')) . "' ";
+            $this->hrsThisWeekByResourceReference = $loader->loadIndexed('HOURS','RESOURCE_REFERENCE',allTables::$RESOURCE_REQUEST_HOURS, $predicate);            
+        }
+
         PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
         $rfsId = $row['RFS_ID'];
         $resourceReference = $row['RESOURCE_REFERENCE'];
@@ -176,16 +191,16 @@ class resourceRequestTable extends DbTable
                 break;
             case $today <= $endDateObj:
                 $assignColor = 'text-warning';
-                $started     = '<br/>Active';
+                $started     = 'Active';
                 break;
             case $today > $endDateObj:
                 $assignColor = 'text-danger';
-                $started     = '<br/>Completed';
+                $started     = 'Completed';
                 $editable = false;
                 break;           
             default:
                 $assignColor = 'text-primary';
-                $started     = '<br/>Unclear';
+                $started     = 'Unclear';
             break;
         }
         
@@ -307,17 +322,36 @@ class resourceRequestTable extends DbTable
         
         $row['RFS']        = array('display'=> $displayRfsId, 'sort'=>$rfsId);
         
+        $hrsThisWeek =   $displayHrsPerWeek.= isset($this->hrsThisWeekByResourceReference[$resourceReference]) ?  $this->hrsThisWeekByResourceReference[$resourceReference] : "N/A";
         
         
+        $displayStartDate = '';
+        $displayStartDate.= "<span class='$assignColor'>$startDate  to  $endDate <br/>";
+        $displayStartDate.= "Avg Hrs/Week: " . $row['HRS_PER_WEEK'] . "<br/>";
+        $displayStartDate.= ($started == 'Active') ? "Hrs This Week: " . $hrsThisWeek . "<br/>" : null;
+        $displayStartDate.= (isset($row['hours_to_go'])) ? "Hrs remaining:" . $row['hours_to_go'] . "<br/>" : null;
+        $displayStartDate.= (isset($row['weeks_to_go'])) ? "Weeks remaining:" . $row['weeks_to_go'] . "<br/>" : null;
+        $displayStartDate.= "$started";
         
-        
-        
-        
-        $row['START_DATE'] = array('display'=> "<span class='$assignColor'>$startDate  to  $endDate <br/>Avg Hrs/Week: " . $row['HRS_PER_WEEK'] ."$started", 'sort'=>$startDateSortable);
+        $row['START_DATE'] = array('display'=> $displayStartDate, 'sort'=>$startDateSortable);
         $row['END_DATE'] = array('display'=> $endDate, 'sort'=>$endDateSortable);
+        
+        $avgHrsPerWeek = $row['HRS_PER_WEEK'];
+        
+        $displayHrsPerWeek = "";
+        
+        $displayHrsPerWeek = "Average:" . $avgHrsPerWeek . "<br/>";
+        $displayHrsPerWeek.= ($started == 'Active') ? "This Week:" . $hrsThisWeek : null;
+        
+        
+        $row['HRS_PER_WEEK'] = array('display'=>$displayHrsPerWeek,'sort'=>$avgHrsPerWeek);
+        
         $row['ORGANISATION']=array('display'=>$row['ORGANISATION'] . "<br/><small>" . $row['SERVICE'] . "</small>", 'sort'=>$organisation);
   
       
+        
+        
+        
 
     }
     

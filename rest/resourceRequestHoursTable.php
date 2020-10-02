@@ -8,6 +8,7 @@ use itdq\DateClass;
 class resourceRequestHoursTable extends DbTable
 {
     private $preparedGetTotalHrsStatement;
+    private $hoursRemainingByReference;
 
     function createResourceRequestHours($resourceReference, $startDate,$endDate,$hours,$additionOnly=false){
         $sdate = new \DateTime($startDate);
@@ -132,6 +133,29 @@ class resourceRequestHoursTable extends DbTable
             $this->displayErrorMessage($preparedStmt, __CLASS__, __METHOD__, $this->preparedSelectSQL);
             return false;
         }
+    }
+    
+    function getHoursRemainingByReference(){
+        if($this->hoursRemainingByReference==null){
+            $date = new \DateTime();
+            $complimentaryFields = $this->getDateComplimentaryFields($date);
+            $sql = "select RESOURCE_REFERENCE, SUM(HOURS) as HOURS_TO_GO, count(*) as WEEKS_TO_GO ";
+            $sql.= "from REST_DEV.RESOURcE_REQUEST_HOURS ";
+            $sql.= "where WEEK_ENDING_FRIDAY > DATE('" . $complimentaryFields['WEEK_ENDING_FRIDAY'] ."') ";
+            $sql.= "group by RESOURCE_REFERENCE; ";
+            
+            $rs = db2_exec($GLOBALS['conn'], $sql);
+            
+            if(!$rs){
+                DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+            }
+            
+            while(($row = db2_fetch_assoc($rs))==true){
+                $this->hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] = $row['HOURS_TO_GO'];
+                $this->hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] = $row['WEEKS_TO_GO'];
+             }
+        }        
+        return $this->hoursRemainingByReference;
     }
 
 
