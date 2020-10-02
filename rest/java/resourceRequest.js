@@ -155,6 +155,8 @@ function ResourceRequest() {
 					data: {resourceReference : resourceReference },		
 			    	success: function(result){
 				   		var resultObj = JSON.parse(result);	
+						$('#saveDiaryEntry').attr('disabled',false);
+						$('#newDiaryEntry').html('').attr('contenteditable',true);
 						$('#diary').html(resultObj.diary);
 				}
 			});		
@@ -746,7 +748,7 @@ function ResourceRequest() {
 	            { data: "RFS_STATUS"       ,defaultContent: "", visible:false },
 	            { data: "BUSINESS_UNIT"    ,defaultContent: "", visible:false },
 	            { data: "RESOURCE_REFERENCE",defaultContent: "", visible:false },
-	            { data: "RFS"              ,defaultContent: "", visible:true, render: { _:'display', sort:'sort' }, },	           
+	            { data: "RFS"              ,defaultContent: "", visible:true, render: { _:'display', sort:'sort' }},	           
 	            { data: "ORGANISATION"     ,defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
 	            { data: "SERVICE"          ,defaultContent: "", visible:false },
 	            { data: "DESCRIPTION"      ,defaultContent: "", visible:true },
@@ -769,9 +771,12 @@ function ResourceRequest() {
 //	            { data: "MONTH_06"         ,defaultContent: "",visible:true},
 	        	
 	        ]
-	    });
+	    });       
+
 	    // Apply the search
-	    ResourceRequest.table.columns().every( function () {
+	    $(ResourceRequest.table.column(16).header()).text('RFS:RR');
+
+	    ResourceRequest.table.column().every( function () {
 	        var that = this;
 
 	        $( 'input', this.footer() ).on( 'keyup change', function () {
@@ -911,7 +916,8 @@ function ResourceRequest() {
 			$('#organisation').val($(this).data('organisation'));
 			$('#request').val($(this).data('reference'));
 			$('#rfs').val($(this).data('rfs'));
-			$('#newDiaryEntry').html('');		
+			$('#newDiaryEntry').html('').attr('contenteditable',false);	
+			$('#saveDiaryEntry').attr('disabled',true);	
 			
 			$('#diaryModal').modal('show');	
 		    

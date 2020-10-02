@@ -233,10 +233,10 @@ class resourceRequestTable extends DbTable
         $row['RESOURCE_NAME'].= "  data-hrs='" . $hrsPerWeek . "' ";
         $row['RESOURCE_NAME'].= "  >";
 
-        $row['RESOURCE_NAME'].= $editable ? 
-            "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' >
-            <span data-toggle='tooltip' class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Request'></span>
-            </button>" : null;
+//         $row['RESOURCE_NAME'].= $editable ? 
+//             "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' >
+//             <span data-toggle='tooltip' class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Request'></span>
+//             </button>" : null;
         $row['RESOURCE_NAME'].= $editable ? 
              "<button type='button' class='btn btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' data-resource-name='" . $resourceName . "' >
               <span data-toggle='tooltip' class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true' title='Edit Assigned Resource'></span>
@@ -245,8 +245,53 @@ class resourceRequestTable extends DbTable
             "<button type='button' class='btn btn-xs editHours accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-startDate='" . $startDate . "' >
              <span data-toggle='tooltip' class=' glyphicon glyphicon-time text-primary' aria-hidden='true' title='Edit Dates/Hours'></span>
              </button>" : null;
-        $row['RESOURCE_NAME'] .= $duplicatable && $editable ?
-              "<button type='button' class='btn btn-xs requestDuplication accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam' aria-label='Left Align'
+ 
+        
+        $displayedResourceName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $displayedResourceName;
+
+        $row['RESOURCE_NAME'].= "&nbsp;" . $displayedResourceName ;
+        $row['RESOURCE_NAME']." </span>";
+        
+        
+        $calendarEntry = !empty($row['LATEST_ENTRY']) ?  $row['LATEST_ENTRY'] . " <small>" . $row['ENTRY_CREATOR'] . ' ' . $row['ENTRY_CREATED'] . "</small>" : null;
+        
+        $row['RESOURCE_NAME'].= "<br/><button type='button' class='btn btn-xs btnOpenDiary accessRestrict accessAdmin accessCdi accessSupply accessDemand ' ";
+        $row['RESOURCE_NAME'].= "     aria-label='Left Align'  ";
+        $row['RESOURCE_NAME'].= " data-reference='" .$resourceReference . "' ";
+        $row['RESOURCE_NAME'].= " data-rfs='" .$rfsId . "'  ";
+        $row['RESOURCE_NAME'].= " data-organisation='" .$organisation . "'  ";
+        $row['RESOURCE_NAME'].= " > ";
+        $row['RESOURCE_NAME'].= "<span data-toggle='tooltip' title='Open Diary' class='glyphicon glyphicon-book ' aria-hidden='true' ></span>";
+        $row['RESOURCE_NAME'].= "</button><div class='latestDiary'>" . $calendarEntry . "</div>";
+        
+        
+
+
+                  
+        $displayRfsId = $rfsId . " : " . $row['RESOURCE_REFERENCE'];
+        $displayRfsId.= $row['CLONED_FROM']> 0 ? "&nbsp;<i>(" . $row['CLONED_FROM'] . ")</i>" : null;
+        
+        $displayRfsId.= "<br/><span class='dataOwner' ";
+        $displayRfsId.= "  data-rfs='" .$rfsId . "' ";
+        $displayRfsId.= "  data-resourcereference='" .$resourceReference . "' ";
+        $displayRfsId.= "  data-prn='" .$prn . "' ";
+        $displayRfsId.= "  data-valuestream='" . $valuestream. "' ";
+        $displayRfsId.= "  data-status='" . $status . "' ";
+        $displayRfsId.= "  data-service='" .$service .  "' ";
+        $displayRfsId.= "  data-subservice='" . $service . "' ";
+        $displayRfsId.= "  data-resourcename='" . $resourceName . "' ";
+        $displayRfsId.= "  data-start='" . $startDate . "' ";
+        $displayRfsId.= "  data-end='" . $endDate . "' ";
+        $displayRfsId.= "  data-hrs='" . $hrsPerWeek . "' ";
+        $displayRfsId.= "  >";
+        
+        $displayRfsId.= $editable ?
+        "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' >
+            <span data-toggle='tooltip' class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Request'></span>
+            </button>" : null;
+        
+        $displayRfsId.= $duplicatable && $editable ?
+        "<button type='button' class='btn btn-xs requestDuplication accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam' aria-label='Left Align'
                     data-reference='" . $resourceReference . "'
                     data-rfs='" . $row['RFS_ID'] . "'
                     data-type='" . $row['SERVICE'] . "'
@@ -255,37 +300,25 @@ class resourceRequestTable extends DbTable
               <span data-toggle='tooltip' class='glyphicon glyphicon-duplicate text-primary' aria-hidden='true' title='Clone Resource Request'></span>
               </button>" : null;
         
-        $deletable = $status == 'New' ? true : false;
-        
-        $row['RESOURCE_NAME'].= $editable ? "<button type='button' class='btn btn-xs deleteRecord accessRestrict $canBeAmendedByDemandTeam accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $service . "' >
+        $displayRfsId.= $editable ? "<button type='button' class='btn btn-xs deleteRecord accessRestrict $canBeAmendedByDemandTeam accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $service . "' >
              <span data-toggle='tooltip' title='Delete Resource Request' class='glyphicon glyphicon-trash text-warning ' aria-hidden='true' ></span>
              </button>": null;
         
-        $displayedResourceName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $displayedResourceName;
-
-        $row['RESOURCE_NAME'].= "&nbsp;" . $displayedResourceName ;
-        $row['RESOURCE_NAME']." </span>";
-
-
-        $displayRfsId =  $rfsId . " : " . $row['RESOURCE_REFERENCE'];
-        $displayRfsId.= $row['CLONED_FROM']> 0 ? "&nbsp;<i>(" . $row['CLONED_FROM'] . ")</i>" : null;
-
+        
         $row['RFS']        = array('display'=> $displayRfsId, 'sort'=>$rfsId);
+        
+        
+        
+        
+        
+        
+        
         $row['START_DATE'] = array('display'=> "<span class='$assignColor'>$startDate  to  $endDate <br/>Avg Hrs/Week: " . $row['HRS_PER_WEEK'] ."$started", 'sort'=>$startDateSortable);
         $row['END_DATE'] = array('display'=> $endDate, 'sort'=>$endDateSortable);
         $row['ORGANISATION']=array('display'=>$row['ORGANISATION'] . "<br/><small>" . $row['SERVICE'] . "</small>", 'sort'=>$organisation);
-        
-        
-        $calendarEntry = !empty($row['LATEST_ENTRY']) ?  $row['LATEST_ENTRY'] . "<small>" . $row['ENTRY_CREATOR'] . '&nbsp;' . $row['ENTRY_CREATED'] . "</small>" : null;
-        
-        $row['DESCRIPTION'].= "<br/><button type='button' class='btn btn-xs btnOpenDiary accessRestrict accessAdmin accessCdi accessSupply accessDemand ' "; 
-        $row['DESCRIPTION'].= "     aria-label='Left Align'  ";
-        $row['DESCRIPTION'].= " data-reference='" .$resourceReference . "' ";
-        $row['DESCRIPTION'].= " data-rfs='" .$rfsId . "'  ";
-        $row['DESCRIPTION'].= " data-organisation='" .$organisation . "'  ";
-        $row['DESCRIPTION'].= " > ";
-        $row['DESCRIPTION'].= "<span data-toggle='tooltip' title='Open Diary' class='glyphicon glyphicon-book ' aria-hidden='true' ></span>";
-        $row['DESCRIPTION'].= "</button><div class='latestDiary'>" . $calendarEntry . "</div>";
+  
+      
+
     }
     
     
