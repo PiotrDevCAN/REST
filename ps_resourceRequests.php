@@ -147,6 +147,11 @@ td.dataTables_empty{
       </div>
       <form id='resourceNameForm'>
       <div class="modal-body">
+      <div class="form-group"  >
+      <label for="businessUnit" class="col-md-3	control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Business Unit</label>
+      <div class='col-md-9'><input type='text' class='form-control' id="businessUnit"  value="" disabled ></div>
+      </div>
+      
   		<div class="form-group required" id="PROJECT_TITLEFormGroup" >
   		<div class='row'>
             <label for="RESOURCE_NAME" class="col-md-3	control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Resource Name</label>
@@ -164,6 +169,7 @@ td.dataTables_empty{
                   <input type='hidden' id="RESOURCE_REFERENCE" name="RESOURCE_REFERENCE" value="" >
                   <input type='hidden' id="parent" name="parent" value="" >
                   <input type='hidden' id="currentResourceName"  value="" >
+                  
               </div>
         </div>
         </div>
@@ -465,6 +471,16 @@ div.diary {
 [contentEditable=true]:empty:not(:focus):before{
     content:attr(data-placeholder);
     color:#aea79f;
+}
+
+
+ul.select2-results li:nth-child(even){
+	background-color: #ddd;
+	color: black;
+}
+ul.select2-results li:nth-child(even):hover{
+	background-color: #333;
+	color: white;
 }
 
 

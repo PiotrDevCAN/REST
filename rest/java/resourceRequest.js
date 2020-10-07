@@ -18,10 +18,9 @@ var buttonCommon = {
         }
 };
 
-function formatResourceName(resource){
-	var color = resource.distance=='local' ? 'green' : '#d67600'
-	var symbol = resource.distance=='local' ? 'glyphicon-ok' : '';
-	var text = $("<span class='glyphicon " + symbol + "'>&nbsp;" + resource.text + "&nbsp;<small>" + resource.role + "</small>" +  "</span>");	
+function formatResourceName(resource){	
+	var symbol = resource.distance=='local' ? '' : '';
+	var text = $("<span style='color:black' >&nbsp;<em>" + resource.text + "</em></span><br/>&nbsp;&nbsp;<i>" + resource.role + "</i><br/>&nbsp;&nbsp;<i><span style='color:silver'>" + resource.tribe + "<span>" +  "</i>");	
 	return text;
 }
 
@@ -167,15 +166,15 @@ function ResourceRequest() {
 		$('#resourceNameModal').on('shown.bs.modal', function(){
 			$('#RESOURCE_NAME').attr('disabled',true);
 			$('#saveResourceName').addClass('spinning');
+			var businessUnit = $('#businessUnit').val();
 			var currentResourceName = $('#currentResourceName').val();	
-			if (!resourceNamesForSelect2.length){
-				console.log('first time');
+			if (!resourceNamesForSelect2.length){	
 				$.ajax({
 			    	url: "ajax/getVbacActiveResourcesForSelect2.php",
 			        type: 'POST',
+                    data: {businessUnit : businessUnit},
 			    	success: function(result){
-			    		console.log(result);
-			    		var resultObj = JSON.parse(result);
+					    		var resultObj = JSON.parse(result);
 			    		resourceNamesForSelect2 = resultObj.data;
 						$('#RESOURCE_NAME').select2({
 							data          : resourceNamesForSelect2,
@@ -197,12 +196,16 @@ function ResourceRequest() {
 
 	this.listenForEditResourceName = function(){
 		$(document).on('click','.editResource', function(e){
+			var dataOwner = $(this).parent('.dataOwner');
 			$(this).addClass('spinning');
-			var resourceReference = $(this).data('reference');
-			var resourceName      = $(this).data('resourceName');
-			var parent            = $(this).data('parent');
+			var resourceReference = dataOwner.data('resourcereference');
+			var resourceName      = dataOwner.data('resourceName');
+			var parent            = dataOwner.data('parent');
+			var businessUnit      = dataOwner.data('businessunit');
+			
 			$('#RESOURCE_REFERENCE').val(resourceReference);	
-			$('#currentResourceName').val(resourceName);	
+			$('#currentResourceName').val(resourceName);
+			$('#businessUnit').val(businessUnit);
     		$('#resourceNameModal').modal('show');
 			$('.spinning').removeClass('spinning');	
 		});
@@ -216,8 +219,7 @@ function ResourceRequest() {
 		    	url: "ajax/saveResourceName.php",
 		        type: 'POST',
 		    	data: formData,
-		    	success: function(result){
-		    		console.log(result);
+		    	success: function(result){		  
 		    		var resultObj = JSON.parse(result);
 		    		if(resultObj.success==true){
 						$('#resourceNameForm').find('#RESOURCE_REFERENCE').val("");

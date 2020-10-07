@@ -5,6 +5,7 @@ use itdq\DbTable;
 use itdq\PhpMemoryTrace;
 use itdq\Loader;
 use \DateTime;
+use Complex\Exception;
 
 class resourceRequestTable extends DbTable
 {
@@ -168,6 +169,7 @@ class resourceRequestTable extends DbTable
         $resourceName = $row['RESOURCE_NAME'];
         $prn = $row['PRN'];
         $valuestream = $row['VALUE_STREAM'];
+        $businessunit = $row['BUSINESS_UNIT'];
         $startDate4Picka = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Y-m-d') : null;
         $endDate4Picka = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Y-m-d') : null;
         $startDate = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
@@ -239,6 +241,7 @@ class resourceRequestTable extends DbTable
         $row['RESOURCE_NAME'].= "  data-resourcereference='" .$resourceReference . "' ";
         $row['RESOURCE_NAME'].= "  data-prn='" .$prn . "' ";
         $row['RESOURCE_NAME'].= "  data-valuestream='" . $valuestream. "' ";
+        $row['RESOURCE_NAME'].= "  data-businessunit='" . $businessunit. "' ";
         $row['RESOURCE_NAME'].= "  data-status='" . $status . "' ";
         $row['RESOURCE_NAME'].= "  data-service='" .$service .  "' ";
         $row['RESOURCE_NAME'].= "  data-subservice='" . $service . "' ";
@@ -376,12 +379,10 @@ class resourceRequestTable extends DbTable
 
 
     static function getVbacActiveResourcesForSelect2(){
-
-        if(isset($_SESSION['vbacEmployees'])){
-            return $_SESSION['vbacEmployees'];
-        } else {
-             $vbacEmployees = array();
-             $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=soEkCfj8zGNDLZ8yXH2YJjpehd8ijzlS&withProvClear=true&plus=SQUAD_NAME,P.EMAIL_ADDRESS';
+        if(!isset($_SESSION['vbacEmployees']) || !isset($_SESSION['myTribe'])){
+            $_SESSION['vbacEmployees'] = array();
+            
+             $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=SQUAD_NAME,P.EMAIL_ADDRESS,TRIBE_NAME';
 
              $ch = curl_init();
              curl_setopt($ch, CURLOPT_HEADER,         1);
@@ -393,27 +394,50 @@ class resourceRequestTable extends DbTable
 
              $allEmployeesJson = curl_exec($ch);
              $allEmployees = json_decode($allEmployeesJson);
-
-             $tribeMembers = array();
-             $vbacEmployees = array();
-
+             
              foreach ($allEmployees as $employeeDetails) {
-                 $vbacEmployees[] = array('id'=>trim($employeeDetails->NOTES_ID), 'text'=>trim($employeeDetails->NOTES_ID), 'role'=>trim($employeeDetails->SQUAD_NAME),'tribe'=>trim($employeeDetails->TRIBE_NUMBER),'distance'=>'remote');
-//                  $tribeMembers[trim($employeeDetails->EMAIL_ADDRESS)] = trim($employeeDetails->TRIBE_NUMBER);
-             }
-
-             $localTribe = $tribeMembers[$_SESSION['ssoEmail']];
-
-             foreach ($vbacEmployees as $key=>$value) {
-                 if($value['tribe']==$localTribe){
-                     $vbacEmployees[$key]['distance']='local';
+                 $_SESSION['vbacEmployees'][] = array('id'=>trim($employeeDetails->NOTES_ID), 'text'=>trim($employeeDetails->NOTES_ID), 'role'=>trim($employeeDetails->SQUAD_NAME),'tribe'=>trim($employeeDetails->TRIBE_NAME),'distance'=>'remote');
+                 !empty($employeeDetails->TRIBE_NAME) ?  $_SESSION['allTribes'][trim($employeeDetails->TRIBE_NAME)] = trim($employeeDetails->TRIBE_NAME)  : null ;
+                 if(strtolower($employeeDetails->EMAIL_ADDRESS)==strtolower($_SESSION['ssoEmail'])){
+                     $_SESSION['myTribe'] = $employeeDetails->TRIBE_NAME;
                  }
              }
+        }     
+        
+        $vbacEmployees = $_SESSION['vbacEmployees'];
+        $myTribe       = $_SESSION['myTribe'];
+         // Find business unit for this tribe.     
+//         $bestMatchScore = 0;
+//         $bestMatch = '';
+//         if(!empty($myTribe)){
+//             foreach ($_SESSION['allTribes'] as $tribe) {
+//                 $matchScore = similar_text($myTribe, $tribe);
+//                 if($matchScore > $bestMatchScore){
+//                     $bestMatchScore = $matchScore;
+//                     $bestMatch = $tribe;
+//                 }
+//             }
+//         } else {
+//             throw new Exception("No tribe found for : " . $_SESSION['ssoEmail']);
+//         }
+            
 
-             $_SESSION['vbacEmployees'] = $vbacEmployees;
-//              $_SESSION['tribeMembers'] = $tribeMembers;
+         
+        // process the employees, flagging as 'local' those in the "myTribe" tribe     
+         
+        foreach ($vbacEmployees as $value) {
+//             error_log('notesId:' . $value['id'] . ' tribe:' . $value['tribe'] . " bestmatch:" . $bestMatch . " bu:" . $businessUnit);            $
+            if($value['tribe']==$myTribe){
+                $value['distance']='local';
+                $tribeEmployees[] = $value;               
+            } else {
+                if($_SESSION['isAdmin']){
+                    $tribeEmployees[] = $value;                                      
+                }
+            }
         }
-        return $_SESSION['vbacEmployees'];
+
+        return $tribeEmployees;
     }
     
     
