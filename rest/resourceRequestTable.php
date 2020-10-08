@@ -329,6 +329,7 @@ class resourceRequestTable extends DbTable
         
         $row['RFS']        = array('display'=> $displayRfsId, 'sort'=>$rfsId);
         
+        $displayHrsPerWeek = "";
         $hrsThisWeek =   $displayHrsPerWeek.= isset($this->hrsThisWeekByResourceReference[$resourceReference]) ?  $this->hrsThisWeekByResourceReference[$resourceReference] : "N/A";
         
         
