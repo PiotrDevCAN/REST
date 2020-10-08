@@ -778,9 +778,11 @@ function ResourceRequest() {
 	    // Apply the search
 	    $(ResourceRequest.table.column(16).header()).text('RFS:RR');
 
-	    ResourceRequest.table.column().every( function () {
-	        var that = this;
 
+		console.log(ResourceRequest.table.column());
+
+	    ResourceRequest.table.columns().every( function () {
+			var that = this;
 	        $( 'input', this.footer() ).on( 'keyup change', function () {
 	            if ( that.search() !== this.value ) {
 	                that
