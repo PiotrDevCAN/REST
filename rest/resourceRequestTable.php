@@ -49,6 +49,11 @@ class resourceRequestTable extends DbTable
     }
 
     function returnAsArray($startDate,$endDate, $predicate=null, $pipelineLiveArchive = 'live'){
+        
+        $autoCommit = db2_autocommit($GLOBALS['conn']);
+        db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+        
+        
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
         $hoursRemainingByReference = $resourceRequestHoursTable->getHoursRemainingByReference();
         $monthNumber = 0;
@@ -134,7 +139,7 @@ class resourceRequestTable extends DbTable
         $allData['data'] = array();
  
         while(($row = db2_fetch_assoc($resultSet))==true){
-             PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
+            PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
             $testJson = json_encode($row);
             if(!$testJson){
                 error_log("Invalid character found");
@@ -151,6 +156,8 @@ class resourceRequestTable extends DbTable
         }
 
         $allData['sql'] = $sql;
+        
+        db2_autocommit($GLOBALS['conn'],$autoCommit);
         
         return $allData ;
     }
