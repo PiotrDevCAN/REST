@@ -45,6 +45,10 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     $predicate .= ! empty($organisation) ? " AND ORGANISATION='" . db2_escape_string($organisation) . "' " : null;
     $predicate .= ! empty($businessUnit) ? " AND BUSINESS_UNIT='" . db2_escape_string($businessUnit) . "' " : null;
     
+    
+    error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
+    
+    
     $dataAndSql = $resourceRequestTable->returnAsArray($startDate, $endDate, $predicate, $pipelineLiveArchive);
     $data = $dataAndSql['data'];
     $sql = $dataAndSql['sql'];

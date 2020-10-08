@@ -96,7 +96,7 @@ class resourceRequestTable extends DbTable
 
         $sql .=  " FROM " . $GLOBALS['Db2Schema'] . "." . $resourceRequestHoursTable;
         $sql .= "   WHERE  ( claim_month >= " . $startDateObj->format('m') . " and claim_year = " . $startDateObj->format('Y') . ")  " ;
-        $sql .= $startDateObj->format('Y') !==  $endDateObj->format('Y') ?  "    AND (claim_year > " . $startDateObj->format('Y') . " and claim_year < " . $endDateObj->format('Y') . " ) " : null;
+        $sql .= $startDateObj->format('Y') !==  $endDateObj->format('Y') ?  "    AND (claim_year >= " . $startDateObj->format('Y') . " and claim_year =< " . $endDateObj->format('Y') . " ) " : null;
         $sql .= "         AND (claim_month <= " . $endDateObj->format('m') . " and claim_year = " . $endDateObj->format('Y') . ")  " ;
         $sql .= " ) as resource_hours ";
         $sql .= " GROUP BY RESOURCE_REFERENCE ";
@@ -115,7 +115,7 @@ class resourceRequestTable extends DbTable
 
         $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";
 
-        error_log($sql);
+        error_log(__FILE__ . ":" . __LINE__ . ":" . $sql);
 
         $resultSet = $this->execute($sql);
 
