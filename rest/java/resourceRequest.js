@@ -520,8 +520,6 @@ function ResourceRequest() {
 			var org = $('#selectBusinessUnit option:selected').val();			
 			document.cookie = "selectedBusinessUnit=" + org + ";" + "path=/;max-age=604800;samesite=lax;";
 			$('#selectRfs').val('').trigger('change');	 // This will trigger the report to reload, so we don't have to. 
-			
-			console.log(document.cookie);
 		});		
 	},
 
