@@ -478,7 +478,7 @@ class resourceRequestTable extends DbTable
     static function setRequestStatus($resourceRequest=null, $status=null){
         $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
         $sql.= !empty($status) && !empty($resourceRequest) ? " SET STATUS='" . db2_escape_string(trim($status)) . "' " : null ;
-        $sql.= !empty($status) && !empty($resourceRequest) ? " WHERE RESOURCE_REFERENCE=" . db2_escape_string(trim($_POST['statusChangeRR'])) . "  " : null;
+        $sql.= !empty($status) && !empty($resourceRequest) ? " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceRequest) . "  " : null;
         
         $rs = db2_exec($GLOBALS['conn'], $sql);
         
