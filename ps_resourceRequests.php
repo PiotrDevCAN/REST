@@ -45,28 +45,15 @@ td.dataTables_empty{
 
 <h3>Resource Request Report Selection </h3>
 
-<?php $pipelineChecked = isset($_COOKIE['pipelineChecked']) ? $_COOKIE['pipelineChecked'] : null;?>
-<?php $liveChecked     = isset($_COOKIE['liveChecked']) ? $_COOKIE['liveChecked'] : null;?>
-<?php $archiveChecked  = isset($_COOKIE['archiveChecked']) ? $_COOKIE['archiveChecked'] : null;?>
-<?php $defaultToLive   = (empty($pipelineChecked) && empty($liveChecked) && empty($archiveChecked)) ? ' checked ' : null?>
-
-<?php $pipelineDisabled = (!($_SESSION['isAdmin'])) && !$_SESSION['isRfs'] ? 'disabled' : null;?>
-<?php $liveDisabled     = (!($_SESSION['isAdmin'])) &&  $_SESSION['isRfs'] ?'disabled' : null;?>
-<?php $archiveDisabled  = 'disabled' ?>
-
-
-
-
-
 <form id='reportDates'>
 	<div class='row'>
 	<div class='col-md-5'> 
 	<div class='form-group' >
 	 <label for='pipelineLiveArchive' class='col-md-3 control-label text-right'>RFS Status</label>
       	<div class='col-md-9  text-left' >
- 			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$pipelineChecked?>  data-toggle="button" value='pipeline' <?=$pipelineDisabled?>>Pipeline</label>
-  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$liveChecked?> <?=$defaultToLive?> data-toggle="button" value='live' <?=$liveDisabled?> >Live</label>
-  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$archiveChecked?> data-toggle="button" value='archive' <?=$archiveDisabled?>>Archive</label>
+ 			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive"   data-toggle="button" value='pipeline' disabled >Pipeline</label>
+  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" checked  data-toggle="button" value='live'  >Live</label>
+  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive"  data-toggle="button" value='archive' disabled >Archive</label>
 	    </div>
 	</div>
 	</div>
