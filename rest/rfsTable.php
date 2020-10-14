@@ -62,8 +62,10 @@ class rfsTable extends DbTable
     }
 
     function returnAsArray($predicate=null, $withArchive=false){
-        $sql  = " SELECT * ";
+        $sql  = " SELECT RFS.*, RDR.* ";
         $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
+        $sql .= " LEFT JOIN ". $GLOBALS['Db2Schema'] . "." . allTables::$RFS_DATE_RANGE . " as RDR ";
+        $sql .= " ON RFS.RFS_ID = RDR.RFS_ID ";
         $sql .= " WHERE 1=1 " ;
         $sql .= $withArchive ? " AND ARCHIVE is not null " : " AND ARCHIVE is null ";
         $sql .= !empty($predicate) ? " AND  $predicate " : null ;
@@ -204,20 +206,29 @@ class rfsTable extends DbTable
         if($rfsEndDate){
             $archiveable = $rfsEndDate < $today ? true : false;
         }
+        
+        $pipelineRfs  =  trim($row['RFS_STATUS'])==rfsRecord::RFS_STATUS_PIPELINE  ?  true : false;
 
         if($archiveable) {
-            $row['RFS_ID'] = "<button type='button' class='btn btn-warning btn-xs archiveRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
+            $row['RFS_ID'] = "<button type='button' class='btn btn-warning btn-xs archiveRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "' >
               <span class='glyphicon glyphicon-floppy-remove' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Archive RFS<br/>Safer than deleting' ></span>
               </button>";
         } else {
             $row['RFS_ID'] = ""; /// NEed something so next statement can be an append.
-        }        $row['RFS_ID'] .="<button type='button' class='btn btn-success btn-xs slipRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
+        }
+        
+        $row['RFS_ID'] .= $pipelineRfs  ? "<button type='button' class='btn btn-success btn-xs goLiveRfs accessRestrict accessAdmin accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "' >
+              <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Release to Live' ></span>
+              </button>&nbsp;" : null;    
+        $row['RFS_ID'] .="<button type='button' class='btn btn-success btn-xs slipRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
               <span class='glyphicon glyphicon-calendar' aria-hidden='true'  data-toggle='tooltip' title='Slip RFS' ></span></button>        
               <button type='button' class='btn btn-success btn-xs editRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>              
               <span class='glyphicon glyphicon-edit' aria-hidden='true'  data-toggle='tooltip' title='Edit RFS' ></span>
               </button>"  . "&nbsp;" .  "<button type='button' class='btn btn-danger btn-xs deleteRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
               <span class='glyphicon glyphicon-trash' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Delete RFS<br/>Can not be recovered' ></span>
-              </button>" . "&nbsp;" . $rfsId;
+              </button>" . "&nbsp;";
+
+        $row['RFS_ID'] .= $rfsId;
         $linkToPgmp = trim($row['LINK_TO_PGMP']);
         $row['LINK_TO_PGMP'] = empty($linkToPgmp) ? null : "<a href='$linkToPgmp' target='_blank' >$linkToPgmp</a>";
     }

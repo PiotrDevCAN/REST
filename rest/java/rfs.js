@@ -201,6 +201,7 @@ function Rfs() {
 	                d.valuestream = $('#selectValueStream option:selected').val();
 	                d.businessunit = $('#selectBusinessUnit option:selected').val();
 	                d.requestor = $('#selectRequestor option:selected').val();
+	                d.pipelineLiveArchive = $('input[name="pipelineLiveArchive"]:checked').val();
 	            },
 	        }	,
 	    	autoWidth: true,

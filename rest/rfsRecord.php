@@ -38,6 +38,7 @@ class rfsRecord extends DbRecord
     const RFS_STATUS_LIVE     = 'Live';
     const RFS_STATUS_PIPELINE = 'Internal Pipeline';
     static public $rfsStatus  = array(self::RFS_STATUS_PIPELINE,self::RFS_STATUS_LIVE);
+    static public $rfsStatusMapping  = array('pipeline'=>self::RFS_STATUS_PIPELINE,'live'=>self::RFS_STATUS_LIVE);
 
 
     static public $columnHeadings = array("RFS ID", "PRN", "Project Title", "Project Code", "Requestor Name", "Requestor Email", "Value Stream", "Link to PGMP", "RFS Creator", "RFS Created",'Archived','RFS Type','ILC Work Item','RFS Status','Business Unit');
@@ -214,9 +215,9 @@ class rfsRecord extends DbRecord
 					<?php
         		      foreach (self::$rfsStatus as $rfsState) {
         		          $checked = trim($this->RFS_STATUS)== $rfsState ? ' checked ' : null;
-        		          $checked =  $_SESSION['isRfs'] && $rfsState==self::RFS_STATUS_PIPELINE? ' checked ' : $checked;
-        		          $checked =  $_SESSION['isDemand'] && $rfsState==self::RFS_STATUS_LIVE? ' checked ' : $checked;
-        		          $disabled = $_SESSION['isRfs'] || $_SESSION['isDemand']  ? ' disabled ' : null ;
+        		          $checked = !$_SESSION['isAdmin'] &&  $_SESSION['isRfs']     && $rfsState==self::RFS_STATUS_PIPELINE? ' checked ' : $checked;
+        		          $checked = !$_SESSION['isAdmin'] &&   $_SESSION['isDemand'] && $rfsState==self::RFS_STATUS_LIVE? ' checked ' : $checked;
+        		          $disabled =!$_SESSION['isAdmin'] && ($_SESSION['isRfs'] || $_SESSION['isDemand'])  ? ' disabled ' : null ;
         		      ?><label class="radio"><input type="radio"
 						name="RFS_STATUS" <?=$checked?> value='<?=$rfsState?>'
 						required='required' <?=$disabled;?>><small><?=str_replace(' ', '&nbsp;', $rfsState)?></small></label>
@@ -323,7 +324,7 @@ class rfsRecord extends DbRecord
         	<label for='END_DATE_<?=$rr?>' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>End Date</label>
         	<div class='col-md-3'>
         	<div class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE<?=$rr?>' data-link-format='yyyy-mm-dd-hh.ii.00'>
-        	<input class='form-control endDate' type='text' readonly value='<?=$endDateStr?>' placeholder='Select End Date' disabled  data-reference='<?=$rr?>' />
+        	<input class='form-control endDate' type='text' readonly value='<?=$endDateStr?>' placeholder='Select End Date' required  data-reference='<?=$rr?>' />
         	<input type='hidden' class='endDate2' id='END_DATE_<?=$rr?>' name='END_DATE_<?=$rr?>' value='<?=$endDateStr2?>'  data-reference='<?=$rr?>' disabled />
         	<span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span></span>
         	</div>

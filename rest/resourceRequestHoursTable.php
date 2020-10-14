@@ -139,10 +139,10 @@ class resourceRequestHoursTable extends DbTable
         if($this->hoursRemainingByReference==null){
             $date = new \DateTime();
             $complimentaryFields = $this->getDateComplimentaryFields($date);
-            $sql = "select RESOURCE_REFERENCE, SUM(HOURS) as HOURS_TO_GO, count(*) as WEEKS_TO_GO ";
-            $sql.= "from REST_DEV.RESOURcE_REQUEST_HOURS ";
-            $sql.= "where WEEK_ENDING_FRIDAY > DATE('" . $complimentaryFields['WEEK_ENDING_FRIDAY'] ."') ";
-            $sql.= "group by RESOURCE_REFERENCE; ";
+            $sql = " select RESOURCE_REFERENCE, SUM(HOURS) as HOURS_TO_GO, count(*) as WEEKS_TO_GO ";
+            $sql.= " from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS;
+            $sql.= " where WEEK_ENDING_FRIDAY > DATE('" . $complimentaryFields['WEEK_ENDING_FRIDAY'] ."') ";
+            $sql.= " group by RESOURCE_REFERENCE; ";
             
             $rs = db2_exec($GLOBALS['conn'], $sql);
             
@@ -158,6 +158,26 @@ class resourceRequestHoursTable extends DbTable
         return $this->hoursRemainingByReference;
     }
 
+    static function removeHoursRecordsForRfsPriorToday($rfsId){
+        
+        $sql = " DELETE ";
+        $sql.= " from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS;
+        $sql.= " WHERE RESOURCE_REFERENCE IN ( ";
+        $sql.= "      SELECT RESOURCE_REFERENCE ";
+        $sql.= "      from " .  $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
+        $sql.= "      left join " .  $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
+        $sql.= "      on RFS.RFS_ID = RR.RFS ";
+        $sql.= "      ) ";
+        $sql.= " AND DATE(WEEK_ENDING_FRIDAY) < CURRENT_DATE ";
+        
+        $rs = db2_exec($GLOBALS['conn'], $sql);
+        
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+        }
+        
+        return $rs;
+    }
 
 
 

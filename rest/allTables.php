@@ -20,7 +20,8 @@ class allTables
     public static $RESOURCE_REQUEST_DIARY = 'RESOURCE_REQUEST_DIARY';
     public static $RESOURCE_REQUEST_HOURS = 'RESOURCE_REQUEST_HOURS';
 
-    public static $RFS                    = 'RFS';
+    public static $RFS                    = 'RFS';    
+    public static $RFS_DATE_RANGE         = 'RFS_DATE_RANGE'; // View
     public static $RFS_PIPELINE           = 'RFS_PIPELINE';  // View
 
  //   public static $STATIC_BUSINESS_UNIT   = 'STATIC_BUSINESS_UNIT'; Now a field in Value Stream.
@@ -29,3 +30,14 @@ class allTables
 
 
 }
+
+/*
+ *  CREATE VIEW "REST".RFS_DATE_RANGE
+		   ( RFS_ID, START_DATE, END_DATE, READY_FOR_LIVE)
+		AS SELECT RFS as RFS_ID, MIN(START_DATE) as START_DATE, MAX(END_DATE) as END_DATE,
+		    case when MIN(START_DATE) >= CURRENT DATE then 'Yes' else 'No' end as READY_FOR_LIVE
+		   FROM REST.RESOURCE_REQUESTS
+		   GROUP BY RFS
+	       WITH NO ROW MOVEMENT;
+ * 
+ */

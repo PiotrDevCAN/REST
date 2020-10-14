@@ -45,15 +45,34 @@ td.dataTables_empty{
 
 <h3>Resource Request Report Selection </h3>
 
+<?php $pipelineChecked = isset($_COOKIE['pipelineChecked']) ? $_COOKIE['pipelineChecked'] : null;?>
+<?php $liveChecked     = isset($_COOKIE['liveChecked']) ? $_COOKIE['liveChecked'] : null;?>
+<?php $archiveChecked  = isset($_COOKIE['archiveChecked']) ? $_COOKIE['archiveChecked'] : null;?>
+<?php $defaultToLive   = (empty($pipelineChecked) && empty($liveChecked) && empty($archiveChecked)) ? ' checked ' : null?>
+
+<?php $pipelineDisabled = (!($_SESSION['isAdmin'])) && !$_SESSION['isRfs'] ? 'disabled' : null;?>
+<?php $liveDisabled     = (!($_SESSION['isAdmin'])) &&  $_SESSION['isRfs'] ?'disabled' : null;?>
+<?php $archiveDisabled  = 'disabled' ?>
+
+
+
+
+
 <form id='reportDates'>
-	<div class='form-group text-right' >
-      	<div class='col-md-2  text-left' >
- 			<label class='radio control-label '><input type="radio" name="pipelineLiveArchive" disabled  data-toggle="button" value='pipeline'>Pipeline</label>
-  			<label class='radio control-label '><input type="radio" name="pipelineLiveArchive" <?=$defaultToLive?> data-toggle="button" value='live'  >Live</label>
-  			<label class='radio control-label '><input type="radio" name="pipelineLiveArchive"  data-toggle="button" value='archive' >Archive</label>
+	<div class='row'>
+	<div class='col-md-5'> 
+	<div class='form-group' >
+	 <label for='pipelineLiveArchive' class='col-md-3 control-label text-right'>RFS Status</label>
+      	<div class='col-md-9  text-left' >
+ 			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$pipelineChecked?>  data-toggle="button" value='pipeline' <?=$pipelineDisabled?>>Pipeline</label>
+  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$liveChecked?> <?=$defaultToLive?> data-toggle="button" value='live' <?=$liveDisabled?> >Live</label>
+  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$archiveChecked?> data-toggle="button" value='archive' <?=$archiveDisabled?>>Archive</label>
 	    </div>
-	    </div>	   
-	   <div class='col-md-6'>  
+	</div>
+	</div>
+	</div>
+	<div class='row'>
+	   <div class='col-md-5'>  
        <div class='form-group'>
         <label for='selectOrganisation' class='col-md-3 control-label text-right'>Organisation</label>
         	<div class='col-md-9 text-left'>
@@ -112,7 +131,9 @@ td.dataTables_empty{
             </div>
 	    
 	    
-	    </div>	    
+	    </div>
+	    </div>
+	    	    
 </form>
 </div>
 

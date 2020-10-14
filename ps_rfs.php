@@ -1,6 +1,7 @@
 <?php
 use itdq\Trace;
 use itdq\Loader;
+use itdq\DateClass;
 use rest\allTables;
 
 set_time_limit(0);
@@ -15,12 +16,35 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is nu
 // $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
 // $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 ?>
+<?php $pipelineChecked = isset($_COOKIE['pipelineChecked']) ? $_COOKIE['pipelineChecked'] : null;?>
+<?php $liveChecked     = isset($_COOKIE['liveChecked']) ? $_COOKIE['liveChecked'] : null;?>
+<?php $archiveChecked  = isset($_COOKIE['archiveChecked']) ? $_COOKIE['archiveChecked'] : null;?>
+<?php $defaultToLive   = (empty($pipelineChecked) && empty($liveChecked) && empty($archiveChecked)) ? ' checked ' : null?>
+
+<?php $pipelineDisabled = (!($_SESSION['isAdmin'])) && !$_SESSION['isRfs'] ? 'disabled' : null;?>
+<?php $liveDisabled     = (!($_SESSION['isAdmin'])) &&  $_SESSION['isRfs'] ?'disabled' : null;?>
+<?php $archiveDisabled  = 'disabled' ?>
+
+
 <div class='container-fluid'>
 <h3>RFS Report</h3>
 
 <div class='container'>
 
 <form id='reportDates'>
+	<div class='row'>
+	<div class='form-group text-right' >
+	 <label for='pipelineLiveArchive' class='col-md-2 control-label text-right'>RFS Status</label>
+      	<div class='col-md-10  text-left' >
+ 			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$pipelineChecked?>  data-toggle="button" value='pipeline' <?=$pipelineDisabled?>>Pipeline</label>
+  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$liveChecked?> <?=$defaultToLive?> data-toggle="button" value='live' <?=$liveDisabled?> >Live</label>
+  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$archiveChecked?> data-toggle="button" value='archive'  <?=$archiveDisabled?>>Archive</label>
+	    </div>
+	</div>
+	</div>
+
+
+
 	<div class='form-group text-right' >
     <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>
         	<div class='col-md-2 text-left'>
@@ -228,6 +252,7 @@ $(document).ready(function() {
 
     var rfs = new Rfs();
 	rfs.buildRfsReport();
+	rfs.listenForGoLiveRfs();
 	rfs.listenForDeleteRfs();
 	rfs.listenForConfirmDeleteRfs();
 	rfs.listenForEditRfs();
@@ -271,4 +296,23 @@ $(document).on('shown.bs.modal','#slipRfsModal',function(e){
 });
 
 </script>
+
+
+<style>
+
+<?php
+$date = new DateTime();
+$currentYear = $date->format('Y');
+echo $currentYear;
+
+for($year=$currentYear-1;$year<=$currentYear+1;$year++){
+    for($month=1;$month<=12;$month++){
+        $date = '01-' . substr('00' . $month,2) . "-" . $year;
+        $claimCutoff = DateClass::claimMonth($date);
+         ?>[data-pika-year="<?=$year;?>"][data-pika-month="<?=$month-1;?>"][data-pika-day="<?=$claimCutoff->format('d');?>"] {background-color: white; color:red; outline:solid; outline-color:grey;outline-width:thin; content='claim'}<?php
+    }
+}
+?>
+</style>
+
 

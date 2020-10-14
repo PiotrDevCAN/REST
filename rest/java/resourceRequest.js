@@ -536,10 +536,12 @@ function ResourceRequest() {
 	
 	this.listenForChangePipelineLiveArchive = function(){
 		$(document).on('change','input:radio[name=pipelineLiveArchive]',function(){			
-			var rr = new ResourceRequest();
-			
-			$('#selectRfs').val('').trigger('change').select2('destroy');			
-			rr.prepareRfsSelect();
+			var cookieName = this.dataset.cookie;
+			$('input:radio[name=pipelineLiveArchive]').each(function(index, element){
+				var cookieName = element.dataset.cookie;
+				document.cookie = cookieName + "=;" + "path=/;max-age=604800;samesite=lax;"; 
+				});
+			document.cookie = cookieName + "=checked;path=/;max-age=604800;samesite=lax;"; 
 			ResourceRequest.table.ajax.reload();
 		});
 	},
