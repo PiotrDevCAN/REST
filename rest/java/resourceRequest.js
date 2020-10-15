@@ -20,7 +20,7 @@ var buttonCommon = {
 
 function formatResourceName(resource){	
 	var symbol = resource.distance=='local' ? '' : '';
-	var text = $("<span style='color:black' >&nbsp;" + resource.text + "</span><br/>&nbsp;&nbsp;<i>" + resource.role + "</i><br/>&nbsp;&nbsp;<i><span style='color:silver'>" + resource.tribe + "<span>" +  "</i>");	
+	var text = $("<span style='color:black' >&nbsp;" + resource.text + "</span><br/>&nbsp;&nbsp;" + resource.role + "<br/>&nbsp;&nbsp;<span style='color:silver'>" + resource.tribe + "<span>");	
 	return text;
 }
 
