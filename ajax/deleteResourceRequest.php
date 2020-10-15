@@ -1,6 +1,7 @@
 <?php
 use rest\allTables;
 use rest\resourceRequestTable;
+use rest\resourceRequestDiaryTable;
 ob_start();
 set_time_limit(0);
 
@@ -9,7 +10,6 @@ $rrTable->deleteData(" RESOURCE_REFERENCE='" . db2_escape_string($_POST['RESOURC
 
 $diaryEntry = !empty($_POST['RESOURCE_NAME']) ? $_POST['RESOURCE_NAME'] . " deleted " : "Unallocated request " . $_POST['RESOURCE_REFERENCE'] . " deleted";
 resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['RESOURCE_REFERENCE']);
-
 
 $messages = ob_get_clean();
 ob_start();
