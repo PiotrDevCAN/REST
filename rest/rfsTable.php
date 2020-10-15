@@ -69,28 +69,18 @@ class rfsTable extends DbTable
         $sql .= " WHERE 1=1 " ;
         $sql .= $withArchive ? " AND ARCHIVE is not null " : " AND ARCHIVE is null ";
         $sql .= !empty($predicate) ? " AND  $predicate " : null ;
-
-        echo $sql;
-        
-        
         
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
         while(($row = db2_fetch_assoc($resultSet))==true){
-            
-            print_r($row);
-            
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
             }
             $this->addGlyphicons($row);
-            
-            print_r($row);
-            die('here');
-            
+         
             
             foreach ($row as $key=>$data){
                 $row[] = trim($row[$key]);
