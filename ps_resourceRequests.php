@@ -43,7 +43,7 @@ td.dataTables_empty{
 
 <div class='container'>
 
-<h3>Resource Request Report Selection </h3>
+<h3>Assign Resource to Requests - Selection</h3>
 
 <form id='reportDates'>
 	<div class='row'>
@@ -127,7 +127,7 @@ td.dataTables_empty{
 <hr/>
 
 <div class='container-fluid'>
-<h3>Resource Request Report</h3>
+<h3>Assign Resource to Request - Report</h3>
 <button id='unallocated' class='btn btn-primary btn-sm'>Unallocated/New</button>
 <button id='completeable' class='btn btn-primary btn-sm'>Assigned & past end date</button>
 <button id='plannedOnly' class='btn btn-primary btn-sm'>Planned Only</button>
