@@ -269,6 +269,7 @@ $(document).ready(function() {
 
 $(document).on('shown.bs.modal','#editRfsModal',function(e){
     console.log('edit rfs modal showing');
+    $("input[type='radio'][name='RFS_STATUS']").attr('disabled',true);   
 	var rfs = new Rfs();
 	rfs.preventDuplicateRfsEntry();
 	rfs.listenForSaveRfs();
