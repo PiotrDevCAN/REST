@@ -13,15 +13,8 @@ $date = new DateTime();
 
 $allOpenTicketsPassedEndDate = $loader->load('RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS,$predicate);
 
-var_dump($allOpenTicketsPassedEndDate);
-
-
-
 if($allOpenTicketsPassedEndDate){
     foreach ($allOpenTicketsPassedEndDate as $resourceReference) {
-        
-        var_dump($resourceReference);
-        
         resourceRequestDiaryTable::insertEntry("Auto-Closed " . $date->format('d-M-Y'), $resourceReference);
         resourceRequestTable::setRequestStatus($resourceReference,resourceRequestRecord::STATUS_COMPLETED);
         
