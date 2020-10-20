@@ -158,7 +158,7 @@ class rfsTable extends DbTable
         $sql.= " RFS.RFS_Creator,RFS.RFS_Created_timestamp as RFS_CREATED , ";
         $sql.= " RR.Resource_Reference,RR.Organisation,RR.Service,RR.Description,RR.Start_Date,RR.End_Date, ";
         $sql.= " RR.Hrs_Per_Week,RR.Resource_Name,RR.RR_CREATOR as REQUEST_CREATOR,RR.RR_CREATED_TIMESTAMP as Request_Created, ";
-        $sql.= " RR.CLONED_FROM, RR.Status, CLAIM.* ";
+        $sql.= " RR.CLONED_FROM, RR.Status, RR.Rate_Type, RR.Hours_Type,  CLAIM.* ";
         $sql.= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR ";
         $sql.= " ON RR.RFS =  RFS.RFS_ID ";

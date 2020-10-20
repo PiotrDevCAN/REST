@@ -24,7 +24,7 @@ for ($i = 0; $i < 6; $i++) {
 <th>Link to PGMP</th><th>RFS Creator</th><th>RFS Created</th>
 <th>Resource Ref</th><th>Organisation</th><th>Service</th><th>Description</th><th>Start Date</th><th>End Date</th>
 <th>Hrs Per Week</th><th>Resource Name</th><th>Request Creator</th><th>Request Created</th>
-<th>Cloned From</th><th>Status</th>
+<th>Cloned From</th><th>Status</th><th>Rate Type</th><th>Hours Type</th>
 <?php 
 foreach ($monthLabels as $label) {
     ?><th><?=$label?></th><?php 
@@ -38,7 +38,7 @@ foreach ($monthLabels as $label) {
 <th>RFS Creator</th><th>RFS Created</th>
 <th>Link to PGMP</th><th>Resource Ref</th><th>Organisation</th><th>Service</th><th>Description</th><th>Start Date</th><th>End Date</th>
 <th>Hrs Per Week</th><th>Resource Name</th><th>Request Creator</th><th>Request Created</th>
-<th>Cloned From</th><th>Status</th>
+<th>Cloned From</th><th>Status</th><th>Rate Type</th><th>Hours Type</th>
 <?php 
 foreach ($monthLabels as $label) {
     ?><th><?=$label?></th><?php 
