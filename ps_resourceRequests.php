@@ -233,6 +233,48 @@ td.dataTables_empty{
 </div>
 
 <!-- Modal -->
+<div id="endEarlyModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Indicate Task Completed</h4>
+      </div>
+      <div class="modal-body" id='endEarlyDateDiv'>
+      
+      	<p><b>RFS :</b><span id='endEarlyRFS'></span></p>
+      	<p><b>Resource Reference :</b><span id='endEarlyRR'></span></p>
+      	<p><b>Service :</b><span id='endEarlyType'></span></p>      
+           
+        <div id='endEarlyEND_DATE" . "FormGroup'>
+        <label for='endEarlyEND_DATE' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>End Date</label>
+        <div class='col-md-3'>
+        <div id='endEarlyFormGroupEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
+        <input id='endEarlyInputEND_DATE' class='form-control' type='text' readonly value='' placeholder='Early End Date' required  />
+        <input type='hidden' id='endEarlyEND_DATE' name='endEarlyEND_DATE' value='' />
+        <span class='input-group-addon'><span id='endEarlyIconEND_DATE' class='glyphicon glyphicon-calendar'></span></span>
+        </div>
+        </div>
+        </div>
+        </div>
+      
+      
+      
+      </div>
+      <div class="modal-footer" > 
+        <button type="button" class="btn btn-primary" id='endEarlyConfirmed'>Confirm</button>      
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<!-- Modal -->
 <div id="confirmDuplicationModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -535,6 +577,7 @@ $(document).ready(function() {
 	resourceRequest.listenForActiveOnly();
 	resourceRequest.listenForRemovePassed();
 	resourceRequest.listenForEditRecord();
+	resourceRequest.listenForEndEarly();
 	resourceRequest.listenForResourceRequestEditShown();
 	resourceRequest.listenForDeleteRecord();
 	resourceRequest.listenForConfirmedDelete();

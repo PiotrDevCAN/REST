@@ -144,6 +144,22 @@ function ResourceRequest() {
 		});
 	},
 	
+		this.listenForEndEarly = function(){
+		$(document).on('click','.endEarly', function(e){			
+			$(this).addClass('spinning').attr('disabled',true);			
+		
+			
+			var resourceReference = $(this).data('reference');
+			var endDate = Date();
+			console.log(endDate);
+			
+	
+			
+		});
+	},
+	
+	
+	
 	this.populateDiaryWhenModalShown = function(){
 		$('#diaryModal').on('shown.bs.modal', function(){
 			$('#diary').html('');
