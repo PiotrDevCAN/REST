@@ -201,7 +201,8 @@ class resourceRequestRecord extends DbRecord
                 <select class='form-control select'
                 		id='ORGANISATION'
                         name='ORGANISATION'
-                        data-tags="true" data-placeholder="Select Organisation" data-allow-clear="true">
+                        data-placeholder="Select Organisation" 
+                        data-allow-clear="true">
                 <option value=''>Select Organisation<option>
                 <?php
                     foreach ($allOrganisation as $key => $value) {
@@ -221,7 +222,6 @@ class resourceRequestRecord extends DbRecord
                <select class='form-control select' id='SERVICE'
                        name='SERVICE'
                        required='required'
-                       data-tags="true"
                        data-placeholder="Select Service"
                        data-allow-clear="true"
                        <?=$disabledSubService;?> >
