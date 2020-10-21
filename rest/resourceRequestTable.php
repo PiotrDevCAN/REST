@@ -112,12 +112,13 @@ class resourceRequestTable extends DbTable
         $sql .= " ) as resource_hours ";
         $sql .= " GROUP BY RESOURCE_REFERENCE ";
         $sql .= " ) ";
-        $sql .= " SELECT RFS.*, RR.*,  LD.LATEST_ENTRY, LD.CREATOR as ENTRY_CREATOR, LD.CREATED as ENTRY_CREATED ";
+        $sql .= " SELECT RFS.*, RR.* ";
+//        $sql .= " ,  LD.LATEST_ENTRY, LD.CREATOR as ENTRY_CREATOR, LD.CREATED as ENTRY_CREATED ";
         $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTable. " as RR ";
         $sql .= " ON RR.RFS = RFS.RFS_ID ";
-        $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$LATEST_DIARY_ENTRIES. " as LD ";
-        $sql .= " ON RR.RESOURCE_REFERENCE = LD.RESOURCE_REFERENCE ";
+//         $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$LATEST_DIARY_ENTRIES. " as LD ";
+//         $sql .= " ON RR.RESOURCE_REFERENCE = LD.RESOURCE_REFERENCE ";
         
 //         $sql .= " left join resource_hours as RH ";
 //         $sql .= " ON RR.RESOURCE_REFERENCE = RH.RR ";
@@ -282,7 +283,8 @@ class resourceRequestTable extends DbTable
         $row['RESOURCE_NAME']." </span>";
         
         
-        $calendarEntry = !empty($row['LATEST_ENTRY']) ?  $row['LATEST_ENTRY'] . " <small>" . $row['ENTRY_CREATOR'] . ' ' . $row['ENTRY_CREATED'] . "</small>" : null;
+//        $calendarEntry = !empty($row['LATEST_ENTRY']) ?  $row['LATEST_ENTRY'] . " <small>" . $row['ENTRY_CREATOR'] . ' ' . $row['ENTRY_CREATED'] . "</small>" : null;
+        $calendarEntry = "<small>Latest diary entry not currently available</small>";      
         
         $row['RESOURCE_NAME'].= "<br/><button type='button' class='btn btn-xs btnOpenDiary accessRestrict accessAdmin accessCdi accessSupply accessDemand ' ";
         $row['RESOURCE_NAME'].= "     aria-label='Left Align'  ";
