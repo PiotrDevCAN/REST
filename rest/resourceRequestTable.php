@@ -13,6 +13,7 @@ class resourceRequestTable extends DbTable
     const DELTA     = 'Delta from';
     
     private $hrsThisWeekByResourceReference;
+    private $lastDiaryEntriesByResourceReference;
 
     function buildHTMLTable($startDate,$endDate){
         ?>
@@ -47,8 +48,37 @@ class resourceRequestTable extends DbTable
 
         return $result;
     }
+    
+    function populateLastDiaryEntriesArray(){
+        $sql = " SELECT * ";
+        $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$LATEST_DIARY_ENTRIES;
+        
+        error_log(__FILE__ . ":" . __LINE__ . ":" . $sql);
+   
+        $preExec = microtime(true);
+        $rs = db2_exec($GLOBALS['conn'], $sql);
+        
+        $postExec = microtime(true);
+        error_log(__FILE__ . ":" . __LINE__ . "Db2 exec:" . ($postExec-$preExec));
+        
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__,__METHOD__, $sql);
+            return false;
+        }
+        
+        while(($row= db2_fetch_assoc($rs))==true){
+            $this->lastDiaryEntriesByResourceReference[$row['RESOURCE_REFERENCE']] = $row;        
+        }
+        
+        error_log(__FILE__ . ":" . __LINE__ . "Elapsed:" . (microtime(true)-$postExec));
+        
+     }
+    
 
     function returnAsArray($startDate,$endDate, $predicate=null, $pipelineLiveArchive = 'live'){
+        
+        $this->populateLastDiaryEntriesArray();
+        
         
         $autoCommit = db2_autocommit($GLOBALS['conn']);
         db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
@@ -74,6 +104,7 @@ class resourceRequestTable extends DbTable
 
         $sql =  " WITH resource_hours as (";
         $sql .= "  SELECT RESOURCE_REFERENCE as RR ";
+              
 
         while($startDateObj->format('Ym') <= $endDateObj->format('Ym')){
             $dataTableColName = "MONTH_" . substr("00" . ++$monthNumber,-2);
@@ -190,6 +221,7 @@ class resourceRequestTable extends DbTable
         $endDate         = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
         $endDateSortable = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
         $endDateObj = !empty($row['END_DATE'])   ? Datetime::createFromFormat('Y-m-d', $row['END_DATE']) : null;
+        is_object($endDateObj) ?  $endDateObj->setTime(23, 59, 59) : null; // When setting completed, compare against midnight on END_DATE
         $hrsPerWeek = $row['HRS_PER_WEEK'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
         $organisation = $row['ORGANISATION'];
