@@ -6,6 +6,7 @@ use itdq\Trace;
 use rest\rfsTable;
 use itdq\PhpMemoryTrace;
 use rest\rfsRecord;
+use itdq\DbTable;
 
 set_time_limit(0);
 ini_set('memory_limit','300M');
@@ -47,6 +48,10 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     
     
     error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
+    
+    $mqt = new DbTable(allTables::$MQT_MAX_REF);
+    $mqt->refresh();
+    
     
     
     $dataAndSql = $resourceRequestTable->returnAsArray($startDate, $endDate, $predicate, $pipelineLiveArchive);
