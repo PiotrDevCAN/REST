@@ -243,26 +243,57 @@ td.dataTables_empty{
         <h4 class="modal-title">Indicate Task Completed</h4>
       </div>
       <div class="modal-body" id='endEarlyDateDiv'>
-      
-      	<p><b>RFS :</b><span id='endEarlyRFS'></span></p>
-      	<p><b>Resource Reference :</b><span id='endEarlyRR'></span></p>
-      	<p><b>Service :</b><span id='endEarlyType'></span></p>      
+     
+      <form class='form-horizontal'>
+        <div class='form-group'>
+   		<label for="endEarlyRFS" class="col-sm-3 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="RFS">RFS</label>
+   		<div class='col-sm-5'>
+   		<input class="form-control" id="endEarlyRFS" name="endEarlyRFS" value="" placeholder="RFS" disabled />
+   		</div>
+		</div>
+
+        <div class='form-group'>
+  		<label for="endEarlyRR" class="col-sm-3 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Resource Reference">Resource Reference</label>
+   		<div class='col-sm-5'>
+   		<input class="form-control" id="endEarlyRR" name="endEarlyRR" value="" placeholder="Resource Reference" disabled />
+   		</div>
+   		</div>
+   		
+        <div class='form-group'>
+  		<label for="endEarlyOrganisation" class="col-sm-3 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Organisation">Organisation</label>
+   		<div class='col-sm-5'>
+   		<input class="form-control" id="endEarlyOrganisation" name="endEarlyOrganisation" value="" placeholder="Organisation" disabled>
+   		</div>
+   		</div>
+
+        <div class='form-group'>   		
+   		<label for="endEarlyService" class="col-sm-3 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Service">Service</label>
+   		<div class='col-sm-5'>
+   		<input class="form-control" id="endEarlyService" name="endEarlyService" value="" placeholder="Service" disabled>
+   		</div>
+   		</div>
+
+        <div class='form-group'>   		
+   		<label for="endEarlyResource" class="col-md-3 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Resource">Resource</label>
+   		<div class='col-sm-5'>
+   		<input class="form-control" id="endEarlyResource" name="endEarlyResource" value="" placeholder="Resource" disabled>
+		</div>
+		</div>
            
-        <div id='endEarlyEND_DATE" . "FormGroup'>
-        <label for='endEarlyEND_DATE' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>End Date</label>
-        <div class='col-md-3'>
-        <div id='endEarlyFormGroupEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
-        <input id='endEarlyInputEND_DATE' class='form-control' type='text' readonly value='' placeholder='Early End Date' required  />
-        <input type='hidden' id='endEarlyEND_DATE' name='endEarlyEND_DATE' value='' />
-        <span class='input-group-addon'><span id='endEarlyIconEND_DATE' class='glyphicon glyphicon-calendar'></span></span>
+        <div id='endEarlyEND_DATEFormGroup' class='form-group'>
+        	<label for='endEarlyEND_DATE' class='col-sm-3 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>End Date</label>
+        	<div class='col-sm-5'>
+        		<div id='endEarlyFormGroupEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
+        		<input id='endEarlyInputEND_DATE' class='form-control' type='text' readonly value='' placeholder='Early End Date' required  />
+        		<input type='hidden' id='endEarlyEND_DATE' name='endEarlyEND_DATE' value='' />
+        		<span class='input-group-addon'><span id='endEarlyIconEND_DATE' class='glyphicon glyphicon-calendar'></span></span>
+        		</div>
+        	</div>
         </div>
+        
+        </form>
         </div>
-        </div>
-        </div>
-      
-      
-      
-      </div>
+
       <div class="modal-footer" > 
         <button type="button" class="btn btn-primary" id='endEarlyConfirmed'>Confirm</button>      
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -578,6 +609,9 @@ $(document).ready(function() {
 	resourceRequest.listenForRemovePassed();
 	resourceRequest.listenForEditRecord();
 	resourceRequest.listenForEndEarly();
+	resourceRequest.endEarlyModalShown();
+	resourceRequest.endEarlyModalHidden();
+	resourceRequest.listenForSaveEndEarly();
 	resourceRequest.listenForResourceRequestEditShown();
 	resourceRequest.listenForDeleteRecord();
 	resourceRequest.listenForConfirmedDelete();

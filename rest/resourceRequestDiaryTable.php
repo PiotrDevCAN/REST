@@ -22,6 +22,10 @@ class resourceRequestDiaryTable extends DbTable
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);     
             return false;
         }
+        
+//         $mqt = new DbTable(allTables::$MQT_MAX_REF);
+//         $mqt->refresh();       
+        
         return	db2_last_insert_id($GLOBALS['conn']);        
     }
     

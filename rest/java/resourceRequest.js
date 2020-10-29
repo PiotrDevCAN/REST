@@ -29,6 +29,7 @@ function ResourceRequest() {
 
 	var table;
 	var resourceNamesForSelect2 = [];
+	var ModalendEarlyPicker;
 	
 	this.initialiseEditHoursModalStartEndDates = function(){
 		console.log('initialiseEditHoursModalStartEndDates');
@@ -144,20 +145,81 @@ function ResourceRequest() {
 		});
 	},
 	
-		this.listenForEndEarly = function(){
+	this.listenForEndEarly = function(){
 		$(document).on('click','.endEarly', function(e){			
 			$(this).addClass('spinning').attr('disabled',true);			
-		
-			
-			var resourceReference = $(this).data('reference');
-			var endDate = Date();
-			console.log(endDate);
-			
-	
-			
+			var dataOwner = $(this).parent('.dataOwner');			$('#endEarlyRFS').val(dataOwner.data('rfs'));
+			$('#endEarlyRR').val(dataOwner.data('resourcereference'));
+			$('#endEarlyOrganisation').val(dataOwner.data('organisation'));
+			$('#endEarlyService').val(dataOwner.data('service'));
+			$('#endEarlyResource').val(dataOwner.data('resourcename'));
+			$('#endEarlyInputEND_DATE').val(moment().format('D MMM YYYY'));
+			$('#endEarlyEND_DATE').val(moment().format('YYYY-MM-DD'));
+			$('#endEarlyModal').modal('show');
 		});
 	},
 	
+	this.endEarlyModalShown = function(){
+		$('#endEarlyModal').on('shown.bs.modal', function(){
+			console.log($('#endEarlyInputEND_DATE'));
+			ResourceRequest.ModalendEarlyPicker = new Pikaday({
+			firstDay:1,
+			field: document.getElementById('endEarlyInputEND_DATE'),
+			format: 'D MMM YYYY',
+			showTime: false,
+			maxDate: new Date(),
+			onSelect: function() {
+				var db2Value = this.getMoment().format('YYYY-MM-DD')
+				$('#endEarlyEND_DATE').val(db2Value);	
+
+				}
+			});
+			console.log(ResourceRequest.ModalendEarlyPicker);
+		});
+	},
+	
+		this.endEarlyModalHidden = function(){
+		$('#endEarlyModal').on('hidden.bs.modal', function(){
+		    $('.spinning').removeClass('spinning').attr('disabled',false);
+			$('#endEarlyRR').val('');
+			$('#endEarlyOrganisation').val('');
+			$('#endEarlyService').val('');
+			$('#endEarlyResource').val('');
+			$('#endEarlyInputEND_DATE').val('');
+			$('#endEarlyEND_DATE').val('');			
+			console.log(ResourceRequest.ModalendEarlyPicker);
+			ResourceRequest.ModalendEarlyPicker.destroy();
+		});
+	},
+	
+	
+	this.listenForSaveEndEarly = function(){
+		$(document).on('click','#endEarlyConfirmed', function(e){
+			$(this).addClass('spinning').attr('disabled',true);
+			var resourceReference = $('#endEarlyRR').val();
+			var endEarlyDate      = $('#endEarlyEND_DATE').val();
+			console.log(ResourceRequest.ModalendEarlyPicker);
+			ResourceRequest.ModalendEarlyPicker.destroy(); 
+
+		    $.ajax({
+		    	url: "ajax/saveEarlyEndDate.php",
+		        type: 'POST',
+		    	data: {resourceReference:resourceReference,
+					   endEarlyDate:endEarlyDate },
+		    	success: function(result){
+		    		$('.spinning').removeClass('spinning').attr('disabled',false);
+					$('#endEarlyRR').val('');
+					$('#endEarlyOrganisation').val('');
+					$('#endEarlyService').val('');
+					$('#endEarlyResource').val('');
+					$('#endEarlyInputEND_DATE').val('');
+					$('#endEarlyEND_DATE').val('');
+					$('#endEarlyModal').modal('hide');
+					ResourceRequest.table.ajax.reload();
+			    	}
+			    });		
+			});
+	},
 	
 	
 	this.populateDiaryWhenModalShown = function(){

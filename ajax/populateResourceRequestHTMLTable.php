@@ -49,8 +49,8 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     
     error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
     
-    $mqt = new DbTable(allTables::$MQT_MAX_REF);
-    $mqt->refresh();
+//     $mqt = new DbTable(allTables::$MQT_MAX_REF);
+//     $mqt->refresh();
     
     
     

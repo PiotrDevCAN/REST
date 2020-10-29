@@ -288,7 +288,8 @@ class resourceRequestTable extends DbTable
         $row['RESOURCE_NAME'].= "  data-businessunit='" . $businessunit. "' ";
         $row['RESOURCE_NAME'].= "  data-status='" . $status . "' ";
         $row['RESOURCE_NAME'].= "  data-service='" .$service .  "' ";
-        $row['RESOURCE_NAME'].= "  data-subservice='" . $service . "' ";
+        $row['RESOURCE_NAME'].= "  data-organisation='" .$organisation .  "' ";
+//        $row['RESOURCE_NAME'].= "  data-subservice='" . $service . "' ";
         $row['RESOURCE_NAME'].= "  data-resourcename='" . $resourceName . "' ";
         $row['RESOURCE_NAME'].= "  data-start='" . $startDate . "' ";
         $row['RESOURCE_NAME'].= "  data-end='" . $endDate . "' ";
