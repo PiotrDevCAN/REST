@@ -155,6 +155,8 @@ function ResourceRequest() {
 			$('#endEarlyResource').val(dataOwner.data('resourcename'));
 			$('#endEarlyInputEND_DATE').val(moment().format('D MMM YYYY'));
 			$('#endEarlyEND_DATE').val(moment().format('YYYY-MM-DD'));
+			$('#endEarlyEndWas').val(dataOwner.data('end'));
+			endEarlyEndWas
 			$('#endEarlyModal').modal('show');
 		});
 	},
@@ -186,7 +188,8 @@ function ResourceRequest() {
 			$('#endEarlyService').val('');
 			$('#endEarlyResource').val('');
 			$('#endEarlyInputEND_DATE').val('');
-			$('#endEarlyEND_DATE').val('');			
+			$('#endEarlyEND_DATE').val('');		
+			$('#endEarlyEndWas').val('');	
 			console.log(ResourceRequest.ModalendEarlyPicker);
 			ResourceRequest.ModalendEarlyPicker.destroy();
 		});
@@ -197,15 +200,17 @@ function ResourceRequest() {
 		$(document).on('click','#endEarlyConfirmed', function(e){
 			$(this).addClass('spinning').attr('disabled',true);
 			var resourceReference = $('#endEarlyRR').val();
-			var endEarlyDate      = $('#endEarlyEND_DATE').val();
+			var endDate           = $('#endEarlyEND_DATE').val();
+			var endDateWas        = $('#endEarlyEndWas').val();
 			console.log(ResourceRequest.ModalendEarlyPicker);
 			ResourceRequest.ModalendEarlyPicker.destroy(); 
 
 		    $.ajax({
-		    	url: "ajax/saveEarlyEndDate.php",
+		    	url: "ajax/moveEndDate.php",
 		        type: 'POST',
 		    	data: {resourceReference:resourceReference,
-					   endEarlyDate:endEarlyDate },
+					             endDate:endDate,
+				              endDateWas:endDateWas },
 		    	success: function(result){
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 					$('#endEarlyRR').val('');
@@ -214,6 +219,7 @@ function ResourceRequest() {
 					$('#endEarlyResource').val('');
 					$('#endEarlyInputEND_DATE').val('');
 					$('#endEarlyEND_DATE').val('');
+					$('#endEarlyEndWas').val('');
 					$('#endEarlyModal').modal('hide');
 					ResourceRequest.table.ajax.reload();
 			    	}

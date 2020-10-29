@@ -290,6 +290,7 @@ td.dataTables_empty{
         		</div>
         	</div>
         </div>
+        <input class="form-control" id="endEarlyEndWas" name="endEarlyEndWas" value="" type='hidden' disabled>
         
         </form>
         </div>

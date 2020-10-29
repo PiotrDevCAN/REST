@@ -2,6 +2,7 @@
 namespace rest;
 
 use itdq\DbTable;
+use itdq\DateClass;
 
 class rfsTable extends DbTable
 {
@@ -94,18 +95,25 @@ class rfsTable extends DbTable
     
     function returnClaimReportAsArray($predicate=null, $withArchive=false){
         
+        // The first month we need to show them is the CLAIM month they are currently in. 
+        // So start with today, and get the next Claim Cut off - th
+        
         $startMonthObj = new \DateTime();
-        $startMonthDb2 = $startMonthObj->format('Y-m-01');
+        $thisMonthObj = new \DateTime();
+        $thisMonthObj->setDate($thisMonthObj->format('Y'), $thisMonthObj->format('m'), 01);
+        $thisMonthsClaimCutoff = DateClass::claimMonth($thisMonthObj->format('d-m-Y'));
+      
+        $startMonthObj > $thisMonthsClaimCutoff ? $startMonthObj->add(new \DateInterval('P1M')) : null;
         $startYear  = $startMonthObj->format('Y');
         $startMonth = $startMonthObj->format('m');
         
-        $lastMonthObj = new \DateTime();
+        $lastMonthObj = clone $startMonthObj;
         $sixMonths = new \DateInterval('P6M');
         $lastMonthObj->add($sixMonths);
         $lastYear = $lastMonthObj->format('Y');
         $lastMonth = $lastMonthObj->format('m');
                  
-        $nextMonthObj = new \DateTime();
+        $nextMonthObj = clone $startMonthObj;
         $oneMonth = new \DateInterval('P1M');
         $monthLabels = array();
         $monthDetails = array();

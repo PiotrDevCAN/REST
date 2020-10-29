@@ -2,10 +2,9 @@
 
 
 use rest\allTables;
-use rest\resourceRequestRecord;
 use rest\resourceRequestTable;
-use rest\resourceRequestHoursRecord;
 use rest\resourceRequestHoursTable;
+use rest\resourceRequestDiaryTable;
 
 set_time_limit(0);
 ob_start();
@@ -46,12 +45,16 @@ resourceRequestTable::setEndDate($_POST['resourceReference'], $endDateObj->forma
 
 $rrHoursTable->commitUpdates();
 
+
+$diaryEntry = "End Date set to " . $_POST['endDate'];
+$diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['resourceReference']);
+
 db2_autocommit($GLOBALS['conn'],$autoCommit);
 
 $messages = ob_get_clean();
 ob_start();
 
-$response = array( 'WeeksSaved'=> $weeksSaved, 'Messages'=>$messages);
+$response = array( 'WeeksSaved'=> $weeksSaved, 'Messages'=>$messages, 'DiaryRef'=>$diaryRef);
 
 ob_clean();
 echo json_encode($response);

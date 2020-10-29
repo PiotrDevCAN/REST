@@ -1,14 +1,16 @@
 <?php
-use rest\allTables;
-use rest\resourceRequestTable;
-use rest\resourceRequestRecord;
-use rest\rfsRecord;
+
+use itdq\DateClass;
 
 set_time_limit(0);
 ob_start();
 
+$nextMonthObj = new \DateTime();
+$thisMonthObj = new \DateTime();
+$thisMonthObj->setDate($thisMonthObj->format('Y'), $thisMonthObj->format('m'), 01);
+$thisMonthsClaimCutoff = DateClass::claimMonth($thisMonthObj->format('d-m-Y'));
 
-$nextMonthObj = new DateTime();
+$nextMonthObj > $thisMonthsClaimCutoff ? $nextMonthObj->add(new \DateInterval('P1M')) : null;
 $oneMonth = new DateInterval('P1M');
 $monthLabels = array();
 
