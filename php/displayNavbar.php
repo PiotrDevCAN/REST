@@ -54,9 +54,11 @@ $assign->addOption($resRequest);
 $reports        = new NavbarMenu('Report');
 $listRfs        = new NavbarOption('RFS', 'ps_rfs.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
 $claim          = new NavbarOption('Requests', 'ps_ClaimMonthly.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
+$hrsPerWeek     = new NavbarOption('HrsPerWeek', 'ps_HoursPerWeekPerResource.php','accessCdi accessAdmin');
 
 $reports->addOption($listRfs);
 $reports->addOption($claim);
+$reports->addOption($hrsPerWeek);
 // $dummy          = new NavbarOption('Dummy entry', 'pr_dummyReport.php','accessUser accessReports');
 
 $navbar->addMenu($cdiAdmin);
