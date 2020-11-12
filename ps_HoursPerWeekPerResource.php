@@ -6,7 +6,7 @@ use itdq\DbTable;
 use rest\allTables;
 
 
-ini_set('memory_limit', '1024M');
+ini_set('memory_limit', '4096M');
 
 // require_once __DIR__ . '/../../src/Bootstrap.php';
 $helper = new Sample();
@@ -36,6 +36,9 @@ try {
     $sql.= " on RRH.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE  ";
     $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
     $sql.= " on RR.RFS = RFS.RFS_ID ";
+    
+ //   $sql.= " WHERE RR.RFS = 'LBOP-PCR-000088' ";
+    
     $sql.= " ) ";
     $sql.= " order by 1,2";  // dont show boarded pre-boarders
 
