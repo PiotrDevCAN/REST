@@ -79,6 +79,36 @@ class resourceRequestHoursTable extends DbTable
             $this->commitUpdates();
         }
     }
+    
+    function returnHrsPerWeek($predicate= null){
+        $sql = " select * ";
+        $sql.= " from ( ";
+        $sql.= " select RRH.RESOURCE_REFERENCE, RRH.WEEK_ENDING_FRIDAY, RRH.HOURS, RR.*, RFS.* ";
+        $sql.= " from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " AS RRH ";
+        $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR  ";
+        $sql.= " on RRH.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE  ";
+        $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
+        $sql.= " on RR.RFS = RFS.RFS_ID ";
+        $sql.= " ) ";
+        $sql.= " order by 1,2"; 
+        
+        $resultSet = $this->execute($sql);
+        
+        if ($resultSet){
+            
+            $allData = null;
+            while(($row = db2_fetch_assoc($resultSet))==true){
+                $allData[]  = array_map('trim',$row);
+            }
+            
+            return $allData;
+        } else {
+            return false;
+        }
+        
+        
+    }
+    
 
     function returnAsArray($predicate=null,$selectableColumns='*', $assoc=false){
         $sql = " SELECT " . $selectableColumns;
