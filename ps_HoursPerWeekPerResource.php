@@ -4,6 +4,8 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use itdq\DbTable;
 use rest\allTables;
+use rest\resourceRequestTable;
+use rest\resourceRequestHoursTable;
 
 
 ini_set('memory_limit', '4096M');
@@ -28,22 +30,26 @@ $spreadsheet->getProperties()->setCreator('vBAC')
 
 
 try {
-    $sql = " select * ";
-    $sql.= " from ( ";
-    $sql.= " select RRH.RESOURCE_REFERENCE, RRH.WEEK_ENDING_FRIDAY, RRH.HOURS, RR.*, RFS.* ";
-    $sql.= " from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " AS RRH ";
-    $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR  ";
-    $sql.= " on RRH.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE  ";
-    $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
-    $sql.= " on RR.RFS = RFS.RFS_ID ";
+//     $sql = " select * ";
+//     $sql.= " from ( ";
+//     $sql.= " select RRH.RESOURCE_REFERENCE, RRH.WEEK_ENDING_FRIDAY, RRH.HOURS, RR.*, RFS.* ";
+//     $sql.= " from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " AS RRH ";
+//     $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR  ";
+//     $sql.= " on RRH.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE  ";
+//     $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
+//     $sql.= " on RR.RFS = RFS.RFS_ID ";
     
- //   $sql.= " WHERE RR.RFS = 'LBOP-PCR-000088' ";
+//  //   $sql.= " WHERE RR.RFS = 'LBOP-PCR-000088' ";
     
-    $sql.= " ) ";
-    $sql.= " order by 1,2";  // dont show boarded pre-boarders
-
+//     $sql.= " ) ";
+//     $sql.= " order by 1,2";  // dont show boarded pre-boarders
     set_time_limit(0);
-    $rs = db2_exec($GLOBALS['conn'], $sql);
+    $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
+    $rsOnly = true;
+    $rs = $resourceRequestHoursTable->returnHrsPerWeek(null, $rsOnly);
+
+//     set_time_limit(0);
+//     $rs = db2_exec($GLOBALS['conn'], $sql);
  
     if($rs){
         $recordsFound = DbTable::writeResultSetToXls($rs, $spreadsheet);

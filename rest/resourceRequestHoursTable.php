@@ -80,10 +80,10 @@ class resourceRequestHoursTable extends DbTable
         }
     }
     
-    function returnHrsPerWeek($predicate= null){
+    function returnHrsPerWeek($predicate= null, $rsOnly = false) {
         $sql = " select * ";
         $sql.= " from ( ";
-        $sql.= " select RRH.RESOURCE_REFERENCE, RRH.WEEK_ENDING_FRIDAY, RRH.HOURS, RR.*, RFS.* ";
+        $sql.= " select RRH.RESOURCE_REFERENCE as RR, WEEK_ENDING_FRIDAY as WEF, HOURS, RFS, SERVICE, RESOURCE_NAME,  HOURS_TYPE ";
         $sql.= " from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " AS RRH ";
         $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR  ";
         $sql.= " on RRH.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE  ";
@@ -94,19 +94,20 @@ class resourceRequestHoursTable extends DbTable
         
         $resultSet = $this->execute($sql);
         
-        if ($resultSet){
-            
-            $allData = null;
-            while(($row = db2_fetch_assoc($resultSet))==true){
-                $allData[]  = array_map('trim',$row);
-            }
-            
-            return $allData;
-        } else {
-            return false;
+        switch (true) {
+            case $rsOnly:
+                return $resultSet;
+                break;
+            case $resultSet:
+                $allData = array();
+                while(($row = db2_fetch_assoc($resultSet))==true){
+                    $allData[]  = array_map('trim',$row);
+                }
+                return $allData;                
+            default:
+                return false;     ;
+                break;
         }
-        
-        
     }
     
 
