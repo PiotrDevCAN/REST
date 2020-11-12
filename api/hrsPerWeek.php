@@ -10,5 +10,6 @@ $messages = ob_get_clean();
 
 $success = empty($messages);
 
+header('Content-Type: application/json');
 echo json_encode(array('success'=>$success,'data'=>$data,'messages'=>$messages));
 
