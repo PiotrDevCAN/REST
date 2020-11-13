@@ -156,7 +156,7 @@ function ResourceRequest() {
 			$('#endEarlyInputEND_DATE').val(moment().format('D MMM YYYY'));
 			$('#endEarlyEND_DATE').val(moment().format('YYYY-MM-DD'));
 			$('#endEarlyEndWas').val(dataOwner.data('end'));
-			endEarlyEndWas
+			$('#endEarlyStart_Date').val(dataOwner.data('startpika'));
 			$('#endEarlyModal').modal('show');
 		});
 	},
@@ -164,12 +164,23 @@ function ResourceRequest() {
 	this.endEarlyModalShown = function(){
 		$('#endEarlyModal').on('shown.bs.modal', function(){
 			console.log($('#endEarlyInputEND_DATE'));
+			console.log($('#endEarlyStart_Date').val());
+			
+			var startDateStr = $('#endEarlyStart_Date').val()
+			
+			var startDatePika = new Date(startDateStr);
+			startDatePika.setDate(startDatePika.getDate() + 7); // The earliest End Date is 1 week after the Start Date.
+			
+			console.log(startDatePika);
+			
+			
 			ResourceRequest.ModalendEarlyPicker = new Pikaday({
 			firstDay:1,
 			field: document.getElementById('endEarlyInputEND_DATE'),
 			format: 'D MMM YYYY',
 			showTime: false,
 			maxDate: new Date(),
+			minDate: startDatePika,
 			onSelect: function() {
 				var db2Value = this.getMoment().format('YYYY-MM-DD')
 				$('#endEarlyEND_DATE').val(db2Value);	

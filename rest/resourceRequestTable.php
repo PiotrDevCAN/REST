@@ -292,6 +292,7 @@ class resourceRequestTable extends DbTable
 //        $row['RESOURCE_NAME'].= "  data-subservice='" . $service . "' ";
         $row['RESOURCE_NAME'].= "  data-resourcename='" . $resourceName . "' ";
         $row['RESOURCE_NAME'].= "  data-start='" . $startDate . "' ";
+        $row['RESOURCE_NAME'].= "  data-startpika='" . $startDate4Picka . "' ";
         $row['RESOURCE_NAME'].= "  data-end='" . $endDate . "' ";
         $row['RESOURCE_NAME'].= "  data-hrs='" . $hrsPerWeek . "' ";
         $row['RESOURCE_NAME'].= "  >";

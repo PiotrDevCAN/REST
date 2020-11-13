@@ -289,9 +289,10 @@ td.dataTables_empty{
         		<span class='input-group-addon'><span id='endEarlyIconEND_DATE' class='glyphicon glyphicon-calendar'></span></span>
         		</div>
         	</div>
+        	
         </div>
-        <input class="form-control" id="endEarlyEndWas" name="endEarlyEndWas" value="" type='hidden' disabled>
-        
+        <input id="endEarlyEndWas" name="endEarlyEndWas" value="" type='hidden' disabled>
+        <input id='endEarlyStart_Date' value='' type='hidden'  />
         </form>
         </div>
 
