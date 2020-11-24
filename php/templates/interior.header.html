@@ -67,8 +67,15 @@
 		//enable all tooltips on this page (including dynamically generated ones!!!)
 		$("body").tooltip({ selector: '[data-toggle="tooltip"]' });
 	});
+	
+	window.setTimeout(function() {
+	    window.location.href = "<?=$_SERVER['PHP_SELF'];?>";
+	}, 3600 );
+	
+	
 
 	</script>
 
 	</head>
+
 <body>
