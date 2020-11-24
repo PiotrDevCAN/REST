@@ -180,6 +180,20 @@ $(document).ready(function(){
 });
 
 
+$(document).ready(function(){
+	$('#REQUESTOR_EMAIL').keyup(function(){
+		var regex = RegExp('ibm.com$');
+		var email = $('#REQUESTOR_EMAIL').val().trim().toLowerCase();
+		console.log(email);
+
+		var ibmEmailAddress = regex.test(email);
+		ibmEmailAddress ? $("input[name='Submit']").attr('disabled',false) : $('input[name="Submit"]').attr('disabled',true);
+		ibmEmailAddress ? $("#REQUESTOR_EMAIL").css('color','DARKGREEN') : $('#REQUESTOR_EMAIL').css('color','CRIMSON');
+		});
+});
+
+
+
 </script>
 
 

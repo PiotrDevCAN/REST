@@ -154,8 +154,9 @@ class rfsRecord extends DbRecord
 		<div class="col-md-5">
 			<input class="form-control" id="REQUESTOR_EMAIL"
 				name="REQUESTOR_EMAIL" value="<?=$this->REQUESTOR_EMAIL;?>"
-				placeholder="Enter Requestor Email" required="required" type="email"
-				maxlength="<?=$this->rfsTable->getColumnLength('REQUESTOR_EMAIL');?>">
+				placeholder="Enter Requestor IBM Email" required="required" type="email"
+				maxlength="<?=$this->rfsTable->getColumnLength('REQUESTOR_EMAIL');?>"
+				data-toggle="tooltip" data-placement="top" title="IBM Email Address">
 			<input id="originalREQUESTOR_EMAIL" name="originalREQUESTOR_EMAIL"
 				value="<?=$this->REQUESTOR_EMAIL;?>" type="hidden">
 		</div>
