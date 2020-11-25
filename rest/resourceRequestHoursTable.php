@@ -34,6 +34,8 @@ class resourceRequestHoursTable extends DbTable
             $resourceRequestHours->WEEK_NUMBER = $nextDate->format('W');
 
             self::populateComplimentaryDateFields($nextDate, $resourceRequestHours);
+            
+            $resourceRequestHours->DATE = $resourceRequestHours->WEEK_ENDING_FRIDAY;
 
             $this->saveRecord($resourceRequestHours);
             $nextDate->add($oneWeek);
