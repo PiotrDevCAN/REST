@@ -10,7 +10,7 @@ class resourceRequestHoursTable extends DbTable
     private $preparedGetTotalHrsStatement;
     private $hoursRemainingByReference;
 
-    function createResourceRequestHours($resourceReference, $startDate,$endDate,$hours,$additionOnly=false){
+    function createResourceRequestHours($resourceReference, $startDate,$endDate,$hours,$deleteExisting=true){
         $sdate = new \DateTime($startDate);
         $edate = new \DateTime($endDate);
         $nextDate = $sdate;
@@ -20,7 +20,7 @@ class resourceRequestHoursTable extends DbTable
 
         $weeksCreated = 0;
 
-        $additionOnly ? $this->clearResourceReference($resourceReference) : null;
+        $deleteExisting ? $this->clearResourceReference($resourceReference) : null;
 
         $temp = 3;
         $oneWeek = new \DateInterval('P1W');
@@ -76,7 +76,6 @@ class resourceRequestHoursTable extends DbTable
         if($resourceReference){
             $sql = " DELETE FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName ;
             $sql .= " WHERE RESOURCE_REFERENCE='" . db2_escape_string($resourceReference) . "' ";
-
             $rs = $this->execute($sql);
             $this->commitUpdates();
         }

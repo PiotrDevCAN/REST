@@ -388,11 +388,14 @@ function ResourceRequest() {
     			$('#editHoursSubService').text($(dataDetails).data('subservice'));
     			$('#editHoursResourceName').text($(dataDetails).data('resourcename'));
     			$('#ModalHRS_PER_WEEK').val($(dataDetails).data('hrs'));
+				
 
     			var resourceRequest = new ResourceRequest();
 				resourceRequest.initialiseEditHoursModalStartEndDates();    			
     			ModalstartPicker.setDate($(dataDetails).data('start'));
     			ModalendPicker.setDate($(dataDetails).data('end'));
+
+				$('#endDateWas').val($('#ModalEND_DATE').val());
 
 				$('#slipStartDate').attr('disabled',true);				
 				$('#moveEndDate').attr('disabled',true);			
