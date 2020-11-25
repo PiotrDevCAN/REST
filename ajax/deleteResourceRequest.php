@@ -2,11 +2,15 @@
 use rest\allTables;
 use rest\resourceRequestTable;
 use rest\resourceRequestDiaryTable;
+use rest\resourceRequestHoursTable;
 ob_start();
 set_time_limit(0);
 
 $rrTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 $rrTable->deleteData(" RESOURCE_REFERENCE='" . db2_escape_string($_POST['RESOURCE_REFERENCE']) . "'",true );
+
+$rrhTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
+$rrhTable->deleteData(" RESOURCE_REFERENCE='" . db2_escape_string($_POST['RESOURCE_REFERENCE']) . "'",true);
 
 $diaryEntry = !empty($_POST['RESOURCE_NAME']) ? $_POST['RESOURCE_NAME'] . " deleted " : "Unallocated request " . $_POST['RESOURCE_REFERENCE'] . " deleted";
 resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['RESOURCE_REFERENCE']);

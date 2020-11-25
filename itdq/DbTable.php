@@ -787,7 +787,7 @@ class DbTable
             $comment = "Record where " . $safePredicate . " in ";
         }
         if ($announce) {
-            echo "<BR/><B>$comment " . $GLOBALS['Db2Schema'] . "." . $this->tableName . " about to be deleted.</B>";
+            echo "<BR/><small>$comment " . $GLOBALS['Db2Schema'] . "." . $this->tableName . " about to be deleted.</small>";
         }
         Trace::traceVariable($sql, __METHOD__);
         $rs = $this->execute($sql);
@@ -796,7 +796,7 @@ class DbTable
             echo "<BR/>SQLError:" . $this->lastDb2StmtErrorMsg . "<BR/>";
             exit("Error in: " . __METHOD__ . " running: " . str_replace($this->pwd, "******", $sql));
         } elseif ($announce) {
-            echo "<BR/><B>$comment " . $GLOBALS['Db2Schema'] . "." . $this->tableName . " deleted.</B>";
+            echo "<BR/><small>$comment " . $GLOBALS['Db2Schema'] . "." . $this->tableName . " deleted.</small>";
         }
     }
 

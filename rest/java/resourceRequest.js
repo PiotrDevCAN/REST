@@ -74,6 +74,7 @@ function ResourceRequest() {
 
 	this.listenForDeleteRecord = function(){
 		$(document).on('click','.deleteRecord', function(e){
+			$(this).attr('disabled',true).addClass('spinning');
 			var resourceReference = $(this).data('reference');
 			var platform = $(this).data('platform');
 			var type = $(this).data('type');
@@ -101,7 +102,8 @@ function ResourceRequest() {
 	},
 
 	this.listenForConfirmedDelete = function(){
-		$(document).on('click','#confirmDeleteResource', function(e){
+		$(document).on('click','#confirmDeleteResource', function(e){	
+			$(this).attr('disabled',true).addClass('spinning');		
 			var formData = $('#confirmDeleteModalForm').serialize();
 		    $.ajax({
 		    	url: "ajax/deleteResourceRequest.php",
@@ -110,10 +112,11 @@ function ResourceRequest() {
 		    	success: function(result){
 		    		console.log(result);
 		    		resultObj = JSON.parse(result);
-		    		var message = "Record deleted, you may now close this window";
-		    		message += "<br/>Feedback from Delete : " +resultObj.Messages
+		    		var message = "<h3>Record(s) deleted, you may now close this window</h3>";
+		    		message += "<br/>Feedback from Delete : <small>" +resultObj.Messages + "</small>"
 		    		$('#deleteMessageBody').html(message);
 		    		$('#confirmDeleteResource').attr('disabled',true);
+					$('.spinning').attr('disabled',false).removeClass('spinning');
 		    		ResourceRequest.table.ajax.reload();
 		    		}
 		    });
