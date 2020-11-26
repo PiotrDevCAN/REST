@@ -158,7 +158,7 @@ class resourceRequestRecord extends DbRecord
    		<div id='HrsPerWeekFormGroup'>
    		<label for="HRS_PER_WEEK" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Hrs per Week</label>
    		<div class="col-md-2">
-   		<input type='number' step='0.1' min=0 max=60 class="form-control" id="HRS_PER_WEEK" name="HRS_PER_WEEK" value="<?=$this->HRS_PER_WEEK?>" placeholder="Avg hrs/Week" <?=$notEditable?> required >
+   		<input type='number' step='0.01' min=0 max=60 class="form-control" id="HRS_PER_WEEK" name="HRS_PER_WEEK" value="<?=$this->HRS_PER_WEEK?>" placeholder="Avg hrs/Week" <?=$notEditable?> required >
    		<input id="originalHRS_PER_WEEK" name="originalHRS_PER_WEEK" value="<?=$this->HRS_PER_WEEK?>" type="hidden">
    		</div>
    		</div>
