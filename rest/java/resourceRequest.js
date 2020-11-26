@@ -46,6 +46,7 @@ function ResourceRequest() {
 				$('#saveAdjustedHoursWithDelta').attr('disabled',true);	
 				$('#saveAdjustedHours').attr('disabled',true);
 				$('#moveStartDate').attr('disabled',false);
+				$('#reinitialise').attr('disabled',true);
 				this.setMaxDate(ModalendPicker.getMoment().toDate());
 				
 			}
@@ -64,6 +65,7 @@ function ResourceRequest() {
 				$('#saveAdjustedHoursWithDelta').attr('disabled',true);	
 				$('#saveAdjustedHours').attr('disabled',true);
 				$('#moveEndDate').attr('disabled',false);
+				$('#reinitialise').attr('disabled',true);
 			}
 		});
 	},
@@ -407,8 +409,9 @@ function ResourceRequest() {
 				$('#endDateWas').val($('#ModalEND_DATE').val());				
 				$('#startDateWas').val($('#ModalSTART_DATE').val());
 
-				$('#moveStartDate').attr('disabled',true);				
-				$('#moveEndDate').attr('disabled',true);			
+				$('#moveStartDate').attr('disabled',true);	// Not available until they change Start_Date value			
+				$('#moveEndDate').attr('disabled',true);	// Not available until they change end_date value	
+				$('#reinitialise').attr('disabled',false);  // Available by default.	
 				$('#resourceHoursModal').off('shown.bs.modal');				
     		});
 

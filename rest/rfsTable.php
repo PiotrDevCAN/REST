@@ -230,9 +230,9 @@ class rfsTable extends DbTable
         $row['RFS_ID'] .= $pipelineRfs  ? "<button type='button' class='btn btn-success btn-xs goLiveRfs accessRestrict accessAdmin accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "' >
               <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Release to Live' ></span>
               </button>&nbsp;" : null;    
-        $row['RFS_ID'] .="<button type='button' class='btn btn-success btn-xs slipRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
-              <span class='glyphicon glyphicon-calendar' aria-hidden='true'  data-toggle='tooltip' title='Slip RFS' ></span></button>        
-              <button type='button' class='btn btn-success btn-xs editRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>              
+        $row['RFS_ID'] .="<button disabled  type='button' class='btn btn-success btn-xs slipRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
+              <span class='glyphicon glyphicon-calendar' aria-hidden='true'  data-toggle='tooltip' title='This function has been depricated' ></span></button>";        
+        $row['RFS_ID'] .="<button type='button' class='btn btn-success btn-xs editRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>              
               <span class='glyphicon glyphicon-edit' aria-hidden='true'  data-toggle='tooltip' title='Edit RFS' ></span>
               </button>"  . "&nbsp;" .  "<button type='button' class='btn btn-danger btn-xs deleteRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
               <span class='glyphicon glyphicon-trash' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Delete RFS<br/>Can not be recovered' ></span>

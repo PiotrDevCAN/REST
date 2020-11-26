@@ -83,7 +83,7 @@ ob_start();
        <div class='form-group'>
        <label for="ModalHRS_PER_WEEK" class="col-md-2 control-label" data-toggle="tooltip" data-placement="top" title="">Hrs per Week</label>
        <div class="col-md-4">
-       <input type='number' step='0.1' min=0 max=50 class="form-control" id="ModalHRS_PER_WEEK" name="ModalHRS_PER_WEEK" value="" placeholder="Avg hrs/Week" >
+       <input type='number' step='0.01' min=0 max=50 class="form-control" id="ModalHRS_PER_WEEK" name="ModalHRS_PER_WEEK" value="" placeholder="Avg hrs/Week" >
        </div>
 
        <label for="ModalTOTAL_HRS" class="col-md-2 control-label" data-toggle="tooltip" data-placement="top" title="">Total Hours</label>
@@ -98,7 +98,7 @@ ob_start();
        <div class='col-sm-8'>
 
        <button type="button" class="btn btn-sm btn-warning  " id='moveStartDate' disabled data-toggle='tooltip' data-placement='top' title='Will simply change the Start Date of the Request, It will either delete unrequired weeks, or add additional as required.' >Move Start Date</button>
-       <button type="button" class="btn btn-sm btn-warning  " id='reinitialise' data-toggle='tooltip' data-placement='top' title='Using the supplied Start Date, End Date and Avg Hrs per Week, will reset the hours profile for the request' >Re-Initialise</button>
+       <button type="button" class="btn btn-sm btn-warning  " id='reinitialise' data-toggle='tooltip' data-placement='top' title='Using the existing Start Date & End Date with the Avg Hrs per Week from this form, will reset the hours profile for the request' >Re-Initialise</button>
        <button type="button" class="btn btn-sm btn-warning  " id='moveEndDate' disabled data-toggle='tooltip' data-placement='top' title='Will amend the End Date of the Request, either deleting weeks or adding weeks as appropriate' >Change End Date</button>
        </div>
     <div class='col-sm-2'></div>

@@ -444,6 +444,25 @@ class resourceRequestTable extends DbTable
         return true;
     }
     
+    static function setHrsPerWeek($resourceReference, $hrsPerWeek){
+        $hrsPerWeekInt = intval($hrsPerWeek);
+        $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
+        $sql .= "  SET HRS_PER_WEEK     = " . db2_escape_string($hrsPerWeek) ;
+        $sql .= "  ,   HRS_PER_WEEK_INT = " . db2_escape_string($hrsPerWeekInt) ;
+        $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference) ." ";
+        
+        echo $sql;
+        
+        $rs = db2_exec($GLOBALS['conn'], $sql);
+        
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+            return false;
+        }
+        
+        return true;
+    }
+    
 
 
     static function getVbacActiveResourcesForSelect2(){
