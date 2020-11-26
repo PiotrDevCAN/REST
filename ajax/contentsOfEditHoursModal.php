@@ -59,6 +59,7 @@ ob_start();
          <div id='calendarFormGroupModalSTART_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='ModalSTART_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
            <input id='InputModalSTART_DATE' class='form-control' type='text' readonly value='' placeholder='Select From' required />
            <input type='hidden' id='ModalSTART_DATE' name='ModalSTART_DATE' value='' />
+           <input type='hidden' id='startDateWas' name='startDateWas' value='' />
            <span class='input-group-addon'><span id='calendarIconModalSTART_DATE' class='glyphicon glyphicon-calendar'></span></span>
            </div>
        </div>
@@ -96,7 +97,7 @@ ob_start();
     <div class='col-sm-2'></div>
        <div class='col-sm-8'>
 
-       <button type="button" class="btn btn-sm btn-warning  " id='slipStartDate' disabled data-toggle='tooltip' data-placement='top' title='Will amend the Start Date of the Request, keeping the "profile" of the hours/week the same. Used to slip a request to a new start date, whilst maintaining the hours profile.' >Move Start Date</button>
+       <button type="button" class="btn btn-sm btn-warning  " id='moveStartDate' disabled data-toggle='tooltip' data-placement='top' title='Will simply change the Start Date of the Request, It will either delete unrequired weeks, or add additional as required.' >Move Start Date</button>
        <button type="button" class="btn btn-sm btn-warning  " id='reinitialise' data-toggle='tooltip' data-placement='top' title='Using the supplied Start Date, End Date and Avg Hrs per Week, will reset the hours profile for the request' >Re-Initialise</button>
        <button type="button" class="btn btn-sm btn-warning  " id='moveEndDate' disabled data-toggle='tooltip' data-placement='top' title='Will amend the End Date of the Request, either deleting weeks or adding weeks as appropriate' >Change End Date</button>
        </div>

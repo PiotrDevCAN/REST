@@ -596,6 +596,7 @@ $(document).ready(function() {
 	resourceRequest.listenForSlipStartDate();
 	resourceRequest.listenForReinitialise();
 	resourceRequest.listenForMoveEndDate();
+	resourceRequest.listenForMoveStartDate();
 	resourceRequest.listenForDuplicateResource();
  	resourceRequest.listenForConfirmedDuplication();
  	resourceRequest.listenForChangingHours();

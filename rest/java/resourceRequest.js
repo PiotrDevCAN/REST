@@ -45,7 +45,9 @@ function ResourceRequest() {
 				$('#ModalSTART_DATE').val(db2Value);	
 				$('#saveAdjustedHoursWithDelta').attr('disabled',true);	
 				$('#saveAdjustedHours').attr('disabled',true);
-				$('#slipStartDate').attr('disabled',false);
+				$('#moveStartDate').attr('disabled',false);
+				this.setMaxDate(ModalendPicker.getMoment().toDate());
+				
 			}
 		});
 		
@@ -393,11 +395,18 @@ function ResourceRequest() {
     			var resourceRequest = new ResourceRequest();
 				resourceRequest.initialiseEditHoursModalStartEndDates();    			
     			ModalstartPicker.setDate($(dataDetails).data('start'));
-    			ModalendPicker.setDate($(dataDetails).data('end'));
+ 				var edate = new Date($(dataDetails).data('end'));
+				ModalstartPicker.setMaxDate(edate);
+				ModalendPicker.setDate($(dataDetails).data('end'));
 
 				$('#endDateWas').val($('#ModalEND_DATE').val());
+				
+				console.log($('#endDateWas').val());
+				
+				
+				$('#startDateWas').val($('#ModalSTART_DATE').val());
 
-				$('#slipStartDate').attr('disabled',true);				
+				$('#moveStartDate').attr('disabled',true);				
 				$('#moveEndDate').attr('disabled',true);			
 				$('#resourceHoursModal').off('shown.bs.modal');				
     		});
@@ -454,6 +463,33 @@ function ResourceRequest() {
 		        type: 'POST',
 		    	data: {endDate: endDate,
 		    		   endDateWas : endDateWas,
+		    		   hrsPerWeek : hrsPerWeek,
+		    		   resourceReference : resourceReference },
+		    	success: function(result){
+		    		console.log(result);
+		    		$('.spinning').removeClass('spinning').attr('disabled',false);					
+				    $('#editResourceHours').html('');
+					$('#resourceHoursModal').modal('hide');
+		    		ResourceRequest.table.ajax.reload();
+		    		}
+		    });
+		});
+	},
+	
+	this.listenForMoveStartDate = function(){
+		$(document).on('click','#moveStartDate', function(e){
+			$(this).addClass('spinning').attr('disabled',true);
+			console.log('move start date listener fired');
+			var startDate = $('#ModalSTART_DATE').val();
+			var startDateWas = $('#startDateWas').val();
+			var hrsPerWeek = $('#ModalHRS_PER_WEEK').val();
+			var resourceReference = $('#ModalResourceReference').val();			
+			console.log(startDate + ":" + hrsPerWeek + ":" + startDateWas + ":" + resourceReference);
+		    $.ajax({
+		    	url: "ajax/moveStartDate.php",
+		        type: 'POST',
+		    	data: {startDate: startDate,
+		    		   startDateWas : startDateWas,
 		    		   hrsPerWeek : hrsPerWeek,
 		    		   resourceReference : resourceReference },
 		    	success: function(result){

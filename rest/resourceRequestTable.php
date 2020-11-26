@@ -294,6 +294,7 @@ class resourceRequestTable extends DbTable
         $row['RESOURCE_NAME'].= "  data-start='" . $startDate . "' ";
         $row['RESOURCE_NAME'].= "  data-startpika='" . $startDate4Picka . "' ";
         $row['RESOURCE_NAME'].= "  data-end='" . $endDate . "' ";
+        $row['RESOURCE_NAME'].= "  data-endpika='" . $endDate4Picka . "' ";
         $row['RESOURCE_NAME'].= "  data-hrs='" . $hrsPerWeek . "' ";
         $row['RESOURCE_NAME'].= "  >";
 
@@ -417,9 +418,6 @@ class resourceRequestTable extends DbTable
         $sql .= "  SET END_DATE = DATE('" . db2_escape_string($endDate) ."') ";
         $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference) ." ";
 
-        echo $sql;
-
-
         $rs = db2_exec($GLOBALS['conn'], $sql);
 
         if(!$rs){
@@ -429,6 +427,23 @@ class resourceRequestTable extends DbTable
 
         return true;
     }
+    
+    
+    static function setStartDate($resourceReference, $startDate){
+        $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
+        $sql .= "  SET START_DATE = DATE('" . db2_escape_string($startDate) ."') ";
+        $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference) ." ";
+        
+        $rs = db2_exec($GLOBALS['conn'], $sql);
+        
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+            return false;
+        }
+        
+        return true;
+    }
+    
 
 
     static function getVbacActiveResourcesForSelect2(){

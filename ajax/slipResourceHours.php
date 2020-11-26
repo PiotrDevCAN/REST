@@ -46,7 +46,8 @@ foreach ($currentHours as $oldRecord){
     $resourceHoursRecord = new resourceRequestHoursRecord();
     $resourceHoursRecord->setFromArray($oldRecord);
     $resourceHoursRecord->DATE = $nextDate->format(('Y-m-d'));
-//     $complimentaryData = resourceRequestHoursTable::getDateComplimentaryFields($nextDate);
+    $complimentaryData = resourceRequestHoursTable::getDateComplimentaryFields($nextDate);
+    $hoursStartDate = $complimentaryData->WEEK_ENDING_FRIDAY;
     resourceRequestHoursTable::populateComplimentaryDateFields($nextDate, $resourceHoursRecord);
     echo "<pre>";
     $resourceHoursRecord->iterateVisible();
@@ -57,7 +58,7 @@ foreach ($currentHours as $oldRecord){
     $weeksSaved++;
 }
 
-$startDate = new DateTime($_POST['ModalSTART_DATE']);
+$startDate = new DateTime($hoursStartDate);
 $endDate = $nextDate;
 $endDate->modify('-1 week');
 
@@ -66,12 +67,15 @@ $resourceRequestTable->update($resourceRequest);
 
 $resourceHoursTable->commitUpdates();
 
+$diaryEntry = "Start Date set to " . $_POST['ModalSTART_DATE'];
+$diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['ModalResourceReference']);
+
 db2_autocommit($GLOBALS['conn'],$autoCommit);
 
 $messages = ob_get_clean();
 ob_start();
 
-$response = array( 'WeeksSaved'=> $weeksSaved, 'Messages'=>$messages);
+$response = array( 'WeeksSaved'=> $weeksSaved, 'Messages'=>$messages,'Diary'=>$diaryRef);
 
 ob_clean();
 echo json_encode($response);

@@ -17,38 +17,38 @@ ob_start();
  *
  */
 
-$endDateObj = new DateTime($_POST['endDate']);
-$endDateWasObj = new DateTime($_POST['endDateWas']);
+$startDateObj = new DateTime($_POST['startDate']);       // New Start Date
+$startDateWasObj = new DateTime($_POST['startDateWas']); // Original Start Date
 
 $rrHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
 
 $autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
-echo $endDateObj->format('Y-m-d');
-echo $endDateWasObj->format('Y-m-d');
+echo $startDateObj->format('Y-m-d');
+echo $startDateWasObj->format('Y-m-d');
 
-echo $endDateWasObj > $endDateObj;
+echo $startDateWasObj > $startDateObj;
 
 
-if($endDateWasObj > $endDateObj){
-    echo "Move date IN";
-    $movement = " pulled back to ";
+if($startDateWasObj < $startDateObj){
+    echo "Push Start Date Out";
+    $movement = " pushed out to ";
     // They've moved the date in - so just delete dates.
-    $predicate = " RESOURCE_REFERENCE=" . db2_escape_string($_POST['resourceReference']) . " and \"DATE\" > DATE('". db2_escape_string($endDateObj->format('Y-m-d')) ."') ";
+    $predicate = " RESOURCE_REFERENCE=" . db2_escape_string($_POST['resourceReference']) . " and \"WEEK_ENDING_FRIDAY\" < DATE('". db2_escape_string($startDateObj->format('Y-m-d')) ."') ";
     $rrHoursTable->deleteData($predicate);
     $weeksSaved = 0;
-} elseif($endDateWasObj < $endDateObj) {
-    echo "Moved Out";
-    $movement = " pushed out to ";
+} else {
+    echo "Bring Start Forward";
+    $movement = " brought forward to ";
     // they are adding weeks.
-    $weeksSaved = $rrHoursTable->createResourceRequestHours($_POST['resourceReference'], $endDateWasObj->format('Y-m-d'),$endDateObj->format(('Y-m-d')), $_POST['hrsPerWeek'],false);
+    $weeksSaved = $rrHoursTable->createResourceRequestHours($_POST['resourceReference'], $startDateObj->format('Y-m-d'),$startDateWasObj->format(('Y-m-d')), $_POST['hrsPerWeek'],false);
 }
-resourceRequestTable::setEndDate($_POST['resourceReference'], $endDateObj->format('Y-m-d'));
+resourceRequestTable::setStartDate($_POST['resourceReference'], $startDateObj->format('Y-m-d'));
 
 $rrHoursTable->commitUpdates();
 
 
-$diaryEntry = "End Date was " . $movement . $_POST['endDate'] . " from " . $_POST['endDateWas'];
+$diaryEntry = "Start Date was " . $movement . $_POST['startDate'] . " from " . $_POST['startDateWas'];
 $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['resourceReference']);
 
 db2_autocommit($GLOBALS['conn'],$autoCommit);
