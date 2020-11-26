@@ -394,16 +394,17 @@ function ResourceRequest() {
 
     			var resourceRequest = new ResourceRequest();
 				resourceRequest.initialiseEditHoursModalStartEndDates();    			
-    			ModalstartPicker.setDate($(dataDetails).data('start'));
+    			
  				var edate = new Date($(dataDetails).data('end'));
+				var sdate = new Date($(dataDetails).data('start'));
+				
+				ModalstartPicker.setDate($(dataDetails).data('start'));
 				ModalstartPicker.setMaxDate(edate);
+				
 				ModalendPicker.setDate($(dataDetails).data('end'));
+				ModalendPicker.setMinDate(sdate);
 
-				$('#endDateWas').val($('#ModalEND_DATE').val());
-				
-				console.log($('#endDateWas').val());
-				
-				
+				$('#endDateWas').val($('#ModalEND_DATE').val());				
 				$('#startDateWas').val($('#ModalSTART_DATE').val());
 
 				$('#moveStartDate').attr('disabled',true);				
