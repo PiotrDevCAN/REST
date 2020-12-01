@@ -28,6 +28,7 @@ class rfsRecord extends DbRecord
     protected $ILC_WORK_ITEM;
     protected $RFS_STATUS;
     protected $BUSINESS_UNIT;
+    protected $RFS_END_DATE;
 
     protected $rfsTable;
 
@@ -67,6 +68,7 @@ class rfsRecord extends DbRecord
 		<form id='rfsForm' class="form-horizontal" method='post'>
         <?php
         $this->additional_comments = null;
+        $today = new \DateTime();
 
         $loader = new Loader();
         $allValueStream = $loader->load('VALUE_STREAM', allTables::$STATIC_VALUE_STREAM);
@@ -178,6 +180,20 @@ class rfsRecord extends DbRecord
 				<?php } ?>
            	</select>
 		</div>
+		<label for="RFS_END_DATE"
+			class="col-md-2 control-label ceta-label-left" data-toggle="tooltip"
+			data-placement="top" title="">RFS End Date</label>
+		<div class="col-md-5">
+			<input class="form-control" id="RFS_END_DATE"
+				name="RFS_END_DATE" value="<?=$this->RFS_END_DATE;?>"
+				placeholder="Enter RFS End Date" required="required" 
+				type="date" min="<?=$today->format('Y-m-d')?>" pattern="\d{2}-\d{2}-\d{4}"
+				data-toggle="tooltip" data-placement="top" title="Immutable End Date"
+				<?=$notEditable?> >				
+			<input id="originalRFS_END_DATE" name="originalRFS_END_DATE"
+				value="<?=$this->RFS_END_DATE;?>" type="hidden">
+		</div>	
+		
 	</div>
 
 
@@ -194,9 +210,10 @@ class rfsRecord extends DbRecord
 						type="text"
 						maxlength="<?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>" disabled >
 				</div>
-				
+							
+				<div class='required' >
 				<label for='RFS_TYPE'
-					class='col-md-2 control-label ceta-label-left'>RFS Type</label>
+					class='col-md-2 control-label ceta-label-left '>RFS Type</label>
 				<div class="col-md-1">
         			<?php
         		      foreach (self::$rfsType as $rfsType) {
@@ -208,8 +225,9 @@ class rfsRecord extends DbRecord
         	   	       }
         		?>
 				</div>
+				</div>
 				
-
+				<div class='required' >
 				<label for='RFS_STATUS'
 					class='col-md-2 control-label ceta-label-left'>RFS Status</label>
 				<div class="col-md-1">
@@ -225,6 +243,7 @@ class rfsRecord extends DbRecord
         		    	<?php
         		      }
         		?>
+				</div>
 				</div>
 			</div>
 		</div>
