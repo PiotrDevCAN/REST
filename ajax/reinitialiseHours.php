@@ -39,7 +39,7 @@ if($valid){
         resourceRequestTable::setHrsPerWeek($_POST['ModalResourceReference'],$_POST['ModalHRS_PER_WEEK'] );
         
         
-        $diaryEntry = "Request was reinitialised at  " . $_POST['ModalHRS_PER_WEEK'] . " Hours per week";
+        $diaryEntry = "Request was re-initialised at  " . $_POST['ModalHRS_PER_WEEK'] . " Hours per week";
         $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
         
         
