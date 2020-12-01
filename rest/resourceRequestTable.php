@@ -75,7 +75,7 @@ class resourceRequestTable extends DbTable
      }
     
 
-    function returnAsArray($startDate,$endDate, $predicate=null, $pipelineLiveArchive = 'live'){
+    function returnAsArray($startDate,$endDate, $predicate=null, $pipelineLiveArchive = 'live', $withButtons=true){
         
  //       $this->populateLastDiaryEntriesArray();
         
@@ -183,7 +183,8 @@ class resourceRequestTable extends DbTable
             $row = array_map('trim',$row);
             $row['hours_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] : null;
             $row['weeks_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] : null;
-            $this->addGlyphicons($row);
+           
+            $withButtons ? $this->addGlyphicons($row) : null;
             $allData['data'][]  = $row;
         }
 
