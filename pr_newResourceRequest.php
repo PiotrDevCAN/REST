@@ -95,22 +95,28 @@ $("form").on("reset", function () {
 
 
 $(document).ready(function(){
+	pickers = initPickers();
+});
 
-	var startDate,
-    	endDate,
-    updateStartDate = function() {
+function initPickers() {
+	var startDate;
+    var endDate;
+
+    console.log('in initpickers');
+   	
+    this.updateStartDate = function() {
 		console.log('updatedStartDate');
         startPicker.setStartRange(startDate);
         endPicker.setStartRange(startDate);
         endPicker.setMinDate(startDate);
-    },
-    updateEndDate = function() {
+    };
+    this.updateEndDate = function() {
 		console.log('updatedEndDate');
         startPicker.setEndRange(endDate);
         startPicker.setMaxDate(endDate);
         endPicker.setEndRange(endDate);
-    },
-    startPicker = new Pikaday({
+    };
+    this.startPicker = new Pikaday({
     	firstDay:1,
         field: document.getElementById('InputSTART_DATE'),
         format: 'D MMM YYYY',
@@ -125,13 +131,9 @@ $(document).ready(function(){
             console.log(startDate);
             updateStartDate();
         }
-    }),
-    endPicker = new Pikaday({
+    });
+    this.endPicker = new Pikaday({
     	firstDay:1,
-// 		disableDayFn: function(date){
-// 		    // Disable weekend
-// 		    return date.getDay() === 0 || date.getDay() === 6;
-// 		},
         field: document.getElementById('InputEND_DATE'),
         format: 'D MMM YYYY',
         showTime: false,
@@ -144,40 +146,21 @@ $(document).ready(function(){
             endDate = this.getDate();
             updateEndDate();
         }
-    }),
-    _startDate = startPicker.getDate(),
-    _endDate = endPicker.getDate();
+    });
 
-    if (_startDate) {
-        startDate = _startDate;
-        updateStartDate();
-    }
+    var _startDate = this.startPicker.getDate();
+    var _endDate = this.endPicker.getDate();
 
-    if (_endDate) {
-        endDate = _endDate;
-        updateEndDate();
-    }
-});
+    if (this._startDate) {
+        this.startDate = this._startDate;
+        this.updateStartDate();
+    };
 
-// $(document).ready(function() {
-//     var text_max = 1500;
-//     $('#textarea_feedbackadditional_comments').html(text_max + ' characters remaining');
-
-//     $('#additional_comments').keyup(function() {
-//         var text_length = $('#additional_comments').val().length;
-//         var text_remaining = text_max - text_length;
-
-//         $('#textarea_feedbackadditional_comments').html(text_remaining + ' characters remaining');
-//         if(text_remaining<=0){
-//             $("#additional_commentsFormGroup").addClass("has-error");
-//             $("#textarea_feedbackadditional_comments").addClass("textarea-full");
-//         } else {
-//             $("#additional_commentsFormGroup").removeClass("has-error");
-//             $("#textarea_feedbackadditional_comments").removeClass("textarea-full");
-//         }
-//     });
-// });
-
+    if (this._endDate) {
+        this.endDate = this._endDate;
+        this.updateEndDate();
+    };
+};
 
 $(document).ready(function(){
 
@@ -243,6 +226,34 @@ $(document).ready(function(){
 	event.preventDefault();
 	});
 });
+
+
+$('#RFS').on('select2:select', function(e){
+	console.log('rfs selected');
+	console.log(endPicker);
+	var rfsSelected= $(e.params.data)[0].text;
+	console.log(rfsSelected);
+	var maxEndDate = null;
+
+    $.ajax({
+        url: "ajax/endDateForRfs.php",
+        type: 'POST',
+        data: { rfs:rfsSelected },	                
+        success: function(result){
+	    	var resultObj = JSON.parse(result);
+	    	console.log(resultObj);
+	    	if(resultObj.rfsEndDate!==null){
+		    	maxEndDate = new Date(resultObj.rfsEndDate);
+		    	endPicker.setDate(maxEndDate);
+				endPicker.setMaxDate(maxEndDate);
+				startPicker.setMaxDate(maxEndDate);
+	    	}	
+        }
+  });
+
+});
+
+
 
 
 </script>

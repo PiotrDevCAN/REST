@@ -114,8 +114,8 @@ class resourceRequestRecord extends DbRecord
             	<option value=''>Select RFS<option>
                 <?php
                     foreach ($allRfs as $key => $value) {
-                         $displayValue = trim($value);
-                         $returnValue  = trim($value);
+                         $displayValue = trim($key);
+                         $returnValue  = trim($key);
                          ?><option value='<?=$returnValue?>' <?=trim($this->RFS)==$returnValue ? 'selected' : null?>><?=$displayValue?></option><?php
                     }
                ?>
