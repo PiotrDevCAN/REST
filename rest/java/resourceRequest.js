@@ -405,6 +405,7 @@ function ResourceRequest() {
 				
 				ModalendPicker.setDate($(dataDetails).data('end'));
 				ModalendPicker.setMinDate(sdate);
+				ModalendPicker.setMaxDate(edate);
 
 				$('#endDateWas').val($('#ModalEND_DATE').val());				
 				$('#startDateWas').val($('#ModalSTART_DATE').val());
