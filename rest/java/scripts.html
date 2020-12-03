@@ -1,2 +1,8 @@
-<script type="text/javascript" src="rest/java/resourceRequest.js"></script>
-<script type="text/javascript" src="rest/java/rfs.js"></script>
+<?php
+
+$hash = `git log -1 --pretty=%h`;
+?>
+
+
+<script type="text/javascript" src="rest/java/resourceRequest.js?<?=$hash;?>"></script>
+<script type="text/javascript" src="rest/java/rfs.js?<?=$hash;?>"></script>
