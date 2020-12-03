@@ -219,6 +219,7 @@ class resourceRequestTable extends DbTable
         $startDate = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
         $startDateObj = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE']) : null;
         $startDateSortable = !empty($row['START_DATE']) ? Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Ymd') : null;
+        $rfsEndDate      = !empty($row['RFS_END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['RFS_END_DATE'])->format('d M Y') : null;
         $endDate         = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
         $endDateSortable = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
         $endDateObj = !empty($row['END_DATE'])   ? Datetime::createFromFormat('Y-m-d', $row['END_DATE']) : null;
@@ -296,6 +297,7 @@ class resourceRequestTable extends DbTable
         $row['RESOURCE_NAME'].= "  data-startpika='" . $startDate4Picka . "' ";
         $row['RESOURCE_NAME'].= "  data-end='" . $endDate . "' ";
         $row['RESOURCE_NAME'].= "  data-endpika='" . $endDate4Picka . "' ";
+        $row['RESOURCE_NAME'].= "  data-rfsenddate='" . $rfsEndDate . "' ";
         $row['RESOURCE_NAME'].= "  data-hrs='" . $hrsPerWeek . "' ";
         $row['RESOURCE_NAME'].= "  >";
 

@@ -390,22 +390,25 @@ function ResourceRequest() {
     			$('#editHoursValueStream').text($(dataDetails).data('valuestream'));
     			$('#editHoursService').text($(dataDetails).data('service'));
     			$('#editHoursSubService').text($(dataDetails).data('subservice'));
-    			$('#editHoursResourceName').text($(dataDetails).data('resourcename'));
-    			$('#ModalHRS_PER_WEEK').val($(dataDetails).data('hrs'));
-				
-
+    			$('#editHoursResourceName').text($(dataDetails).data('resourcename'));			    			
+				$('#ModalHRS_PER_WEEK').val($(dataDetails).data('hrs'));			
+					
     			var resourceRequest = new ResourceRequest();
 				resourceRequest.initialiseEditHoursModalStartEndDates();    			
     			
  				var edate = new Date($(dataDetails).data('end'));
 				var sdate = new Date($(dataDetails).data('start'));
+				var rfsEndDate = new Date($(dataDetails).data('rfsenddate'));
+				
+				
+				console.log()
 				
 				ModalstartPicker.setDate($(dataDetails).data('start'));
 				ModalstartPicker.setMaxDate(edate);
 				
 				ModalendPicker.setDate($(dataDetails).data('end'));
 				ModalendPicker.setMinDate(sdate);
-				ModalendPicker.setMaxDate(edate);
+				ModalendPicker.setMaxDate(rfsEndDate);
 
 				$('#endDateWas').val($('#ModalEND_DATE').val());				
 				$('#startDateWas').val($('#ModalSTART_DATE').val());
