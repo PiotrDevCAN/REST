@@ -267,8 +267,7 @@ $(document).ready(function() {
 });
 
 
-$(document).on('shown.bs.modal','#editRfsModal',function(e){
-    console.log('edit rfs modal showing');
+$(document).on('shown.bs.modal','#editRfsModal',function(e){   
     $("input[type='radio'][name='RFS_STATUS']").attr('disabled',true);   
 	var rfs = new Rfs();
 	rfs.preventDuplicateRfsEntry();
@@ -280,8 +279,7 @@ var startPickers = [];
 var endPickers = [];
 
 
-$(document).on('shown.bs.modal','#slipRfsModal',function(e){
-    console.log('slip rfs modal showing');    
+$(document).on('shown.bs.modal','#slipRfsModal',function(e){        
     $('.startDate').each(function(index,element){
     	var reference = $(element).data('reference');
     	var rfs = new Rfs();

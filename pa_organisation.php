@@ -62,12 +62,10 @@ function listenForSaveOrganisation(){
 	$(document).on('click','#saveService', function(e){
 		e.preventDefault();
 		$('#saveService').addClass('spinning').attr('disabled',true);
-		console.log($('#saveService'));
 		var disabledFields = $(':disabled');
 		$(disabledFields).removeAttr('disabled');
 		var formData = $('#organisationForm').serialize();
 		$(disabledFields).attr('disabled',true);
-		console.log(formData);
 	    $.ajax({
 	    	url: "ajax/saveOrganisation.php",
 	        type: 'POST',
@@ -76,9 +74,7 @@ function listenForSaveOrganisation(){
 	    		var resultObj = JSON.parse(result);
 	    		var success   = resultObj.success;
 	    		var messages  = resultObj.messages;
-	    		console.log(resultObj);
 	    		if(!success){
-		    		console.log(messages);
 		    		$('#saveResultModal .modal-body').html(messages);
 		    		$('#saveResultModal').modal('show');
 	    		} else {
@@ -111,9 +107,7 @@ function listenForToggleStatus(){
 		    	var resultObj = JSON.parse(result);
 		    	var success   = resultObj.success;
 		    	var messages  = resultObj.messages;
-		    	console.log(resultObj);
 		    	if(!success){
-					console.log(messages);
 			    	$('#saveResultModal .modal-body').html(messages);
 			    	$('#saveResultModal').modal('show');
 			    	operatingCompaniesTable.ajax.reload();

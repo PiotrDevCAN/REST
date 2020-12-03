@@ -57,7 +57,6 @@ class rfsTable extends DbTable
             ?>knownRfs.push("<?=trim($row['RFS_ID']);?>");
             <?php
         }
-        ?>console.log(knownRfs);<?php
         ?></script><?php
 
     }

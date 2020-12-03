@@ -63,18 +63,12 @@ $(document).ready(function() {
 
 $("form").on("reset", function () {
 	$(".select").val('').trigger('change');
-	console.log($('.select'));
-
 });
 
 
 $('#RFS_ID').on('focusout',function(e){
 	var newRfsId = $(this).val().trim();
-	console.log(newRfsId);
-
-
 	var allreadyExists = ($.inArray(newRfsId, knownRfs) >= 0 );
-	console.log(allreadyExists);
 	if(allreadyExists){ // comes back with Position in array(true) or false is it's NOT in the array.
 		$('#saveRfs').attr('disabled',true);
 		$(this).css("background-color","LightPink");
@@ -128,8 +122,6 @@ $(document).ready(function(){
 	        	},
 	      	success: function(response) {
 	            // 	do what ever you want with the server response if that response is "success"
-	            	console.log(response);
-	            	console.log(JSON.parse(response));
 	               // $('.modal-body').html(JSON.parse(response));
 	               var responseObj = JSON.parse(response);
 	               var rfsIdTxt =  "<p><b>RFS ID:</b>" + responseObj.rfsId + "</p>";
@@ -159,20 +151,14 @@ $(document).ready(function(){
 	               $('#RFS_ID').css("background-color","#ffffff");
           	},
 	      	fail: function(response){
-					console.log('Failed');
-					console.log(response);
 	                $('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
 	                $('#myModal').modal('show');
 				},
 	      	error: function(error){
 	            //	handle errors here. What errors	            :-)!
-	        		console.log('Ajax error' );
-	        		console.log(error.statusText);
 	                $('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Rob</h2>");
 	        	},
 	      	always: function(){
-	        		console.log('--- saved resource request ---');
-
 	      	}
 		});
 	event.preventDefault();
@@ -184,8 +170,6 @@ $(document).ready(function(){
 	$('#REQUESTOR_EMAIL').keyup(function(){
 		var regex = RegExp('ibm.com$');
 		var email = $('#REQUESTOR_EMAIL').val().trim().toLowerCase();
-		console.log(email);
-
 		var ibmEmailAddress = regex.test(email);
 		ibmEmailAddress ? $("input[name='Submit']").attr('disabled',false) : $('input[name="Submit"]').attr('disabled',true);
 		ibmEmailAddress ? $("#REQUESTOR_EMAIL").css('color','DARKGREEN') : $('#REQUESTOR_EMAIL').css('color','CRIMSON');

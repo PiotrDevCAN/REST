@@ -53,8 +53,6 @@ $resourceRecord->displayForm($mode);
 <script>
 $(document).ready(function() {
 
-console.log('ready');
-
 	$(".select").select2({
 		  tags: true,
 		  createTag: function(params) {
@@ -62,8 +60,6 @@ console.log('ready');
          }
 	});
 
-
-console.log($(".select"));
 	$('#ORGANISATION').on('select2:select', function(e){
 		var serviceSelected= $(e.params.data)[0].text;
     	var entry = organisation[0].indexOf(serviceSelected);
@@ -89,8 +85,6 @@ console.log($(".select"));
 $("form").on("reset", function () {
 	$(".select").val('').trigger('change');
 	$("#STATUS").val('New').trigger('change');
-	console.log($('.select'));
-
 });
 
 
@@ -101,17 +95,13 @@ $(document).ready(function(){
 function initPickers() {
 	var startDate;
     var endDate;
-
-    console.log('in initpickers');
    	
     this.updateStartDate = function() {
-		console.log('updatedStartDate');
         startPicker.setStartRange(startDate);
         endPicker.setStartRange(startDate);
         endPicker.setMinDate(startDate);
     };
     this.updateEndDate = function() {
-		console.log('updatedEndDate');
         startPicker.setEndRange(endDate);
         startPicker.setMaxDate(endDate);
         endPicker.setEndRange(endDate);
@@ -123,13 +113,10 @@ function initPickers() {
         showTime: false,
         minDate: new Date(),
         onSelect: function() {
-            console.log(this.getMoment().format('Do MMMM YYYY'));
-            var db2Value = this.getMoment().format('YYYY-MM-DD')
-            console.log(db2Value);
-            jQuery('#START_DATE').val(db2Value);
+             var db2Value = this.getMoment().format('YYYY-MM-DD')
+             jQuery('#START_DATE').val(db2Value);
             startDate = this.getDate();
-            console.log(startDate);
-            updateStartDate();
+             updateStartDate();
         }
     });
     this.endPicker = new Pikaday({
@@ -139,9 +126,7 @@ function initPickers() {
         showTime: false,
         minDate: new Date(),
         onSelect: function() {
-            console.log(this.getMoment().format('Do MMMM YYYY'));
             var db2Value = this.getMoment().format('YYYY-MM-DD')
-            console.log(db2Value);
             jQuery('#END_DATE').val(db2Value);
             endDate = this.getDate();
             updateEndDate();
@@ -181,8 +166,6 @@ $(document).ready(function(){
 	        	},
 	      	success: function(response) {
 	            // 	do what ever you want with the server response if that response is "success"
-	            	console.log(response);
-	            	console.log(JSON.parse(response));
 	               // $('.modal-body').html(JSON.parse(response));
 	               var responseObj = JSON.parse(response);
 	               var resourceRef =  "<p>Resource Ref:" + responseObj.resourceReference + "</p>";
@@ -202,24 +185,15 @@ $(document).ready(function(){
               	})
           		},
 	      	fail: function(response){
-					console.log('Failed');
-					console.log(response);
-// 					FormClass.displayAjaxError('<p>ActionPlanRecord.initialiseForm</p><p>Ajax call has failed.<br/>HTTP Code ' + xmlDoc.status + '<br/>HTTP Text:' +xmlDoc.statusText + '<br/>Response:' + xmlDoc.responseText + '</p>');
-// 					console.log(xmlDoc.responseXML);
-// 					console.log(xmlDoc.responseText);
-// 					jQuery('.slaSave').prop('disable',true );
 	                $('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
 	                $('#myModal').modal('show');
 				},
 	      	error: function(error){
 	            //	handle errors here. What errors	            :-)!
-	        		console.log('Ajax error' );
-	        		console.log(error.statusText);
 	        		FormClass.displayAjaxError('<p>Ajax call has errored.</p><p>URL:"' + url + '"</p><p>Error Status:"' + error.statusText + '"</p>');
 	        		jQuery('.slaSave').html('Save').prop('disable',true );
 	        	},
 	      	always: function(){
-	        		console.log('--- saved resource request ---');
 
 	      	}
 		});
@@ -229,10 +203,7 @@ $(document).ready(function(){
 
 
 $('#RFS').on('select2:select', function(e){
-	console.log('rfs selected');
-	console.log(endPicker);
 	var rfsSelected= $(e.params.data)[0].text;
-	console.log(rfsSelected);
 	var maxEndDate = null;
 
     $.ajax({
@@ -241,7 +212,6 @@ $('#RFS').on('select2:select', function(e){
         data: { rfs:rfsSelected },	                
         success: function(result){
 	    	var resultObj = JSON.parse(result);
-	    	console.log(resultObj);
 	    	if(resultObj.rfsEndDate!==null){
 		    	maxEndDate = new Date(resultObj.rfsEndDate);
 		    	endPicker.setDate(maxEndDate);

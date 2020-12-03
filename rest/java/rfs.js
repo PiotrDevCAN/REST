@@ -14,7 +14,6 @@ function Rfs() {
 			$('#archiveRfsModalBody').html("<h5>Please confirm you wish to ARCHIVE RFS:" + rfsId + " and all it's associated Resource</h5>" +
 					"<form id='rfsForm'><input type='hidden' name='RFS_ID' value='" + rfsId + "' /></form>");
 			$('#archiveRfsModal').modal('show');
-			console.log(rfsId);
 			});
 	},
 
@@ -27,7 +26,6 @@ function Rfs() {
 		        type: 'POST',
 		    	data: formData,
 		    	success: function(result){
-		    		console.log(result);
 					Rfs.table.ajax.reload();
 		    		var resultObj = JSON.parse(result);
 					$('#archiveRfsModalBody').html(resultObj.messages);
@@ -42,10 +40,7 @@ function Rfs() {
 		$(document).on('click','.editRfs', function(e){			
 			$(this).addClass('spinning').attr('disabled',true);			
 			$(this).prev('td.details-control').trigger('click');	
-			
-			console.log($(this));
-			console.log($(this).prev('td.details-control'));
-			
+		
 			var rfsId = $(this).data('rfsid');
 //			var URL = "pd_newRfs.php?rfs=" + rfsId;
 //			var child = window.open(URL, "_blank");
@@ -57,7 +52,6 @@ function Rfs() {
 		    	data: {rfsId:rfsId},
 		    	success: function(result){
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
-		    		console.log(result);
 		    		var resultObj = JSON.parse(result);		    		
 		    		$('#editRfsModalBody').html(resultObj.form);
 		    		$('#editRfsModal').modal('show');
@@ -68,14 +62,10 @@ function Rfs() {
 	},
 	
 	this.listenForSlipRfs = function(){
-		console.log('set slip listener');
 		$(document).on('click','.slipRfs', function(e){			
 			$(this).addClass('spinning').attr('disabled',true);			
 			$(this).prev('td.details-control').trigger('click');	
-			
-			console.log($(this));
-			console.log($(this).prev('td.details-control'));
-			
+	
 			var rfsId = $(this).data('rfsid');
 	
 		    $.ajax({
@@ -100,7 +90,6 @@ function Rfs() {
 			$('#deleteRfsModalBody').html("<h5>Please confirm you wish to delete RFS:" + rfsId + " and all it's associated Resource</h5>" +
 					"<form id='rfsForm'><input type='hidden' name='RFS_ID' value='" + rfsId + "' /></form>");
 			$('#deleteRfsModal').modal('show');
-			console.log(rfsId);
 			});
 	},
 
@@ -117,7 +106,6 @@ function Rfs() {
 		    	data: formData,
 		    	success: function(result){
 					$('.spinning').removeClass('spinning').attr('enabled');
-		    		console.log(result);
 		    		var resultObj = JSON.parse(result);
 					$('#deleteRfsModalBody').html(resultObj.Messages);
 					Rfs.table.ajax.reload();
@@ -131,7 +119,6 @@ function Rfs() {
 	
 	this.listenForGoLiveRfs = function(){
 		$(document).on('click','.goLiveRfs', function(e){
-			console.log('go live');
 			$(this).addClass('spinning').attr('disabled');
 			var rfsid = $(this).data('rfsid');
 		    $.ajax({
@@ -139,7 +126,6 @@ function Rfs() {
 		        type: 'POST',
 		    	data: {rfsid:rfsid},
 		    	success: function(result){
-		    		console.log(result);
 		    		var resultObj = JSON.parse(result);
 					Rfs.table.ajax.reload();
 	    		}
@@ -449,9 +435,6 @@ function Rfs() {
 		        	},
 		      	success: function(response) {
 		            // 	do what ever you want with the server response if that response is "success"
-		            	console.log(response);
-		            	console.log(JSON.parse(response));
-		               // $('.modal-body').html(JSON.parse(response));
 		               var responseObj = JSON.parse(response);
 		               var rfsIdTxt =  "<p><b>RFS ID:</b>" + responseObj.rfsId + "</p>";
 		               var savedResponse =  responseObj.saveResponse;
@@ -478,9 +461,7 @@ function Rfs() {
 		                	}
 	                	});
 	          	},
-		      	fail: function(response){
-						console.log('Failed');
-						console.log(response);
+		      	fail: function(response){						
 		                $('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
 		                $('#myModal').modal('show');
 					},
@@ -489,11 +470,7 @@ function Rfs() {
 		        		console.log('Ajax error' );
 		        		console.log(error.statusText);
 		                $('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Rob</h2>");
-		        	},
-		      	always: function(){
-		        		console.log('--- saved resource request ---');
-
-		      	}
+		        	}
 			});
 		event.preventDefault();
 		});
@@ -525,7 +502,6 @@ function Rfs() {
 		var reference = $(element).data('reference');
 		var id = element.id;
 		var db2DateElementId = '#START_DATE_' + reference; 
-				console.log($(db2DateElementId));
 		
 		startPicker = new Pikaday({
     			firstDay:1,
@@ -536,10 +512,6 @@ function Rfs() {
         		onSelect: function() {            	
             		var db2Value = this.getMoment().format('YYYY-MM-DD')
             		$(db2DateElementId).val(db2Value);
-					console.log($(db2DateElementId));
-					console.log($(db2DateElementId).val());
-					console.log(db2Value);
-
             		$(startPickers).each(function(index,element){
 						var sDate = element.getDate();
 						startPickers[index].setStartRange(sDate);
@@ -582,9 +554,7 @@ function Rfs() {
 	this.listenForSaveSlippedRfsDates = function(){
 		$( "#saveSlippedRfsDates" ).on('click',function( event ) {
 			$(this).addClass('spinning').attr('disabled',true);			
-			console.log($('.startDate2'));		
 			$('.startDate2').each(function(index, element){
-				console.log(element);
 				var reference = $(element).data('reference');
 				var startDate = $(element).val();				
 			    $.ajax({
@@ -594,10 +564,8 @@ function Rfs() {
  					   	   ModalResourceReference:reference},
 					beforeSend: function(){
 						slippingCounter++;
-						console.log(slippingCounter);		
 						},		
 		    		success: function(result){		
-						console.log(slippingCounter);	  
 						if(--slippingCounter<=0){
 				    		$('#editResourceHours').html('');
 							$('#resourceHoursModal').modal('hide');

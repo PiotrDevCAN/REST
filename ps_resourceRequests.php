@@ -577,12 +577,10 @@ var startPicker;
 
 
 $(document).ready(function() {
-	console.log('ready now');
 	$('#pleaseWaitMessage').html('Please wait while resource list is fetched');
 	var allowPast = true;
 	$(".select").not('#selectRfs').select2();
 	
-	console.log('setup all the listeners');
 	var resourceRequest = new ResourceRequest();
 	resourceRequest.prepareRfsSelect();
 //	resourceRequest.initialiseDateSelect(allowPast); This was causing the use of up and down arrows to change the Date Field on the form which we didn't want.

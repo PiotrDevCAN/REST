@@ -9,7 +9,6 @@ var buttonCommon = {
 		 exportOptions: {
             format: {
                body: function ( data, row, column, node ) {
-               	console.log(data);
                //   return data ?  data.replace( /<br\s*\/?>/ig, "\n") : data ;
                return data ? data.replace( /<br\s*\/?>/ig, "\n").replace(/(&nbsp;|<([^>]+)>)/ig, "") : data ;
                //    data.replace( /[$,.]/g, '' ) : data.replace(/(&nbsp;|<([^>]+)>)/ig, "");
@@ -32,7 +31,6 @@ function ResourceRequest() {
 	var ModalendEarlyPicker;
 	
 	this.initialiseEditHoursModalStartEndDates = function(){
-		console.log('initialiseEditHoursModalStartEndDates');
 		ModalstartPicker = new Pikaday({
 			firstDay:1,
 			field: document.getElementById('InputModalSTART_DATE'),		
@@ -40,7 +38,6 @@ function ResourceRequest() {
 			showTime: false,
 			minDate: new Date(),
 			onSelect: function() {
-				console.log('selected start date');
 				var db2Value = this.getMoment().format('YYYY-MM-DD')
 				$('#ModalSTART_DATE').val(db2Value);	
 				$('#saveAdjustedHoursWithDelta').attr('disabled',true);	
@@ -59,7 +56,6 @@ function ResourceRequest() {
 			showTime: false,
 			minDate: new Date(),
 			onSelect: function() {
-				console.log('selected end date');
 				var db2Value = this.getMoment().format('YYYY-MM-DD')
 				$('#ModalEND_DATE').val(db2Value);	
 				$('#saveAdjustedHoursWithDelta').attr('disabled',true);	
@@ -72,8 +68,6 @@ function ResourceRequest() {
 	
 
 	this.init = function(){
-		console.log('+++ Function +++ ResourceRequest.init');
-		console.log('--- Function --- ResourceRequest.init');
 	},
 
 	this.listenForDeleteRecord = function(){
@@ -114,7 +108,6 @@ function ResourceRequest() {
 		        type: 'POST',
 		    	data: formData,
 		    	success: function(result){
-		    		console.log(result);
 		    		resultObj = JSON.parse(result);
 		    		var message = "<h3>Record(s) deleted, you may now close this window</h3>";
 		    		message += "<br/>Feedback from Delete : <small>" +resultObj.Messages + "</small>"
@@ -142,7 +135,6 @@ function ResourceRequest() {
 		    	data: {resourceReference:resourceReference},
 		    	success: function(result){
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
-		    		console.log(result);
 		    		var resultObj = JSON.parse(result);		    		
 		    		$('#editRequestModalBody').html(resultObj.form);
 		    		$('#editRequestModal').modal('show');
@@ -170,16 +162,11 @@ function ResourceRequest() {
 	
 	this.endEarlyModalShown = function(){
 		$('#endEarlyModal').on('shown.bs.modal', function(){
-			console.log($('#endEarlyInputEND_DATE'));
-			console.log($('#endEarlyStart_Date').val());
-			
+		
 			var startDateStr = $('#endEarlyStart_Date').val()
 			
 			var startDatePika = new Date(startDateStr);
 			startDatePika.setDate(startDatePika.getDate() + 7); // The earliest End Date is 1 week after the Start Date.
-			
-			console.log(startDatePika);
-			
 			
 			ResourceRequest.ModalendEarlyPicker = new Pikaday({
 			firstDay:1,
@@ -194,7 +181,6 @@ function ResourceRequest() {
 
 				}
 			});
-			console.log(ResourceRequest.ModalendEarlyPicker);
 		});
 	},
 	
@@ -208,7 +194,6 @@ function ResourceRequest() {
 			$('#endEarlyInputEND_DATE').val('');
 			$('#endEarlyEND_DATE').val('');		
 			$('#endEarlyEndWas').val('');	
-			console.log(ResourceRequest.ModalendEarlyPicker);
 			ResourceRequest.ModalendEarlyPicker.destroy();
 		});
 	},
@@ -220,7 +205,6 @@ function ResourceRequest() {
 			var resourceReference = $('#endEarlyRR').val();
 			var endDate           = $('#endEarlyEND_DATE').val();
 			var endDateWas        = $('#endEarlyEndWas').val();
-			console.log(ResourceRequest.ModalendEarlyPicker);
 			ResourceRequest.ModalendEarlyPicker.destroy(); 
 
 		    $.ajax({
@@ -349,15 +333,11 @@ function ResourceRequest() {
 			
 			formData += "&clear=clear";
 			
-			console.log(formData);
-			
-			
 		    $.ajax({
 		    	url: "ajax/saveResourceName.php",
 		        type: 'POST',
 		    	data: formData, 
 		    	success: function(result){
-		    		console.log(result);
 		    		var resultObj = JSON.parse(result);
 		    		if(resultObj.success==true){
 						$('#resourceNameForm').find('#RESOURCE_REFERENCE').val("");
@@ -400,9 +380,6 @@ function ResourceRequest() {
 				var sdate = new Date($(dataDetails).data('start'));
 				var rfsEndDate = new Date($(dataDetails).data('rfsenddate'));
 				
-				
-				console.log()
-				
 				ModalstartPicker.setDate($(dataDetails).data('start'));
 				ModalstartPicker.setMaxDate(edate);
 				
@@ -438,17 +415,14 @@ function ResourceRequest() {
 	},
 
 	this.listenForSlipStartDate = function(){
-		console.log('listener being set');
 		$(document).on('click','#slipStartDate', function(e){
 			$(this).addClass('spinning').attr('disabled',true);
-			console.log('listener fired');
 			var formData = $('#resourceHoursForm').serialize();
 		    $.ajax({
 		    	url: "ajax/slipResourceHours.php",
 		        type: 'POST',
 		    	data: formData,
 		    	success: function(result){
-		    		console.log(result);
 				    $('#editResourceHours').html('');
 					$('#resourceHoursModal').modal('hide');
 		    		ResourceRequest.table.ajax.reload();
@@ -460,12 +434,10 @@ function ResourceRequest() {
 	this.listenForMoveEndDate = function(){
 		$(document).on('click','#moveEndDate', function(e){
 			$(this).addClass('spinning').attr('disabled',true);
-			console.log('move end date listener fired');
 			var endDate = $('#ModalEND_DATE').val();
 			var endDateWas = $('#endDateWas').val();
 			var hrsPerWeek = $('#ModalHRS_PER_WEEK').val();
 			var resourceReference = $('#ModalResourceReference').val();			
-			console.log(endDate + ":" + hrsPerWeek + ":" + endDateWas + ":" + resourceReference);
 		    $.ajax({
 		    	url: "ajax/moveEndDate.php",
 		        type: 'POST',
@@ -474,7 +446,6 @@ function ResourceRequest() {
 		    		   hrsPerWeek : hrsPerWeek,
 		    		   resourceReference : resourceReference },
 		    	success: function(result){
-		    		console.log(result);
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);					
 				    $('#editResourceHours').html('');
 					$('#resourceHoursModal').modal('hide');
@@ -487,12 +458,10 @@ function ResourceRequest() {
 	this.listenForMoveStartDate = function(){
 		$(document).on('click','#moveStartDate', function(e){
 			$(this).addClass('spinning').attr('disabled',true);
-			console.log('move start date listener fired');
 			var startDate = $('#ModalSTART_DATE').val();
 			var startDateWas = $('#startDateWas').val();
 			var hrsPerWeek = $('#ModalHRS_PER_WEEK').val();
 			var resourceReference = $('#ModalResourceReference').val();			
-			console.log(startDate + ":" + hrsPerWeek + ":" + startDateWas + ":" + resourceReference);
 		    $.ajax({
 		    	url: "ajax/moveStartDate.php",
 		        type: 'POST',
@@ -501,7 +470,6 @@ function ResourceRequest() {
 		    		   hrsPerWeek : hrsPerWeek,
 		    		   resourceReference : resourceReference },
 		    	success: function(result){
-		    		console.log(result);
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);					
 				    $('#editResourceHours').html('');
 					$('#resourceHoursModal').modal('hide');
@@ -514,17 +482,14 @@ function ResourceRequest() {
 
 
 	this.listenForReinitialise = function(){
-		console.log('listener being set');
 		$(document).on('click','#reinitialise', function(e){
 			$(this).addClass('spinning').attr('disabled',true);
-			console.log('listener fired');
 			var formData = $('#resourceHoursForm').serialize();
 		    $.ajax({
 		    	url: "ajax/reinitialiseHours.php",
 		        type: 'POST',
 		    	data: formData,
 		    	success: function(result){
-		    		console.log(result);
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		ResourceRequest.table.ajax.reload();
 		    		$('#editResourceHours').html('<p></p>');
@@ -561,7 +526,6 @@ function ResourceRequest() {
 					$('#confirmDuplicationModal').modal('hide');
 					
 		    		ResourceRequest.table.ajax.reload();
-		    		console.log(result);
 		    		}
 		    	});
 		});
@@ -570,7 +534,6 @@ function ResourceRequest() {
 	this.listenForSaveDiaryEntry = function(){
 		$(document).on('click','#saveDiaryEntry', function(e){
 			$(this).addClass('spinning').attr('disabled',true);
-			console.log('save diaryEntry triggered');
 			var newDiaryEntry = $('#newDiaryEntry').html();
 			var resourceReference = $('#RESOURCE_REFERENCE').val();
 		    $.ajax({
@@ -579,7 +542,6 @@ function ResourceRequest() {
 		    	data: {newDiaryEntry : newDiaryEntry,
  					   resourceReference : resourceReference },
 		    	success: function(result){
-		    		console.log(result);
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		ResourceRequest.table.ajax.reload();
 					$('#RESOURCE_REFERENCE').val('');
@@ -596,14 +558,12 @@ function ResourceRequest() {
 	this.listenForSaveAdjustedHours = function(){
 		$(document).on('click','#saveAdjustedHours', function(e){
 			$(this).addClass('spinning').attr('disabled',true);
-			console.log('save adjusted triggered');
 			var formData = $('#resourceHoursForm').serialize();
 		    $.ajax({
 		    	url: "ajax/saveAdjustedHours.php",
 		        type: 'POST',
 		    	data: formData,
 		    	success: function(result){
-		    		console.log(result);
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		ResourceRequest.table.ajax.reload();
 					$('#resourceHoursModal').modal('hide');
@@ -618,7 +578,6 @@ function ResourceRequest() {
 			// First create a duplicate Record.
 			var resourceReference = $('#ModalResourceReference').val();
 			var formData = $('#resourceHoursForm').serialize();
-			console.log(resourceReference);
 		    $.ajax({
 		    	url: "ajax/duplicateResource.php",
 		        type: 'POST',
@@ -629,16 +588,12 @@ function ResourceRequest() {
 					$('#confirmDuplicationModal').modal('hide');
 					var resultObj = JSON.parse(result);
 		    		var deltaResourceReference = resultObj.resourceReference;
-		    		console.log(resultObj);
-					console.log('Delta is' + deltaResourceReference);
-
 				    $.ajax({
 				    	url: "ajax/saveAdjustedHoursWithDelta.php",
 				        type: 'POST',
 				    	data: {deltaResourceRef  : deltaResourceReference,
                                formData          : formData },
 				    	success: function(result){
-				    		console.log(result);
 				    		$('.spinning').removeClass('spinning').attr('disabled',false);
 				    		ResourceRequest.table.ajax.reload();
 							$('#resourceHoursModal').modal('hide');
@@ -661,7 +616,6 @@ function ResourceRequest() {
 		        type: 'POST',
 		    	data: formData,
 		    	success: function(result){
-		    		console.log(result);
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		ResourceRequest.table.ajax.reload();
 					$('#statusModal').modal('hide');
@@ -720,7 +674,6 @@ function ResourceRequest() {
 
 	this.listenForDdDetails = function(){
 		$(document).on('click','#ddDetails', function(e){
-			console.log('triggered ddDetails');
 			ResourceRequest.table.columns([17,18]).visible(false,false);
 		    ResourceRequest.table.columns([22,24,25]).visible(true,false);
 		    ResourceRequest.table.columns.adjust().draw(false);
@@ -756,7 +709,6 @@ function ResourceRequest() {
 			 ResourceRequest.table.column(21).search("").column(24).search("").column(28).search("");
 			$.fn.dataTable.ext.search.push(
     			function( settings, data, dataIndex ) {
-					console.log('pushing 1');
 			        if (data[21].includes('Completed')  ){
             			return false;
         			}
@@ -783,7 +735,6 @@ function ResourceRequest() {
 	this.listenForChangeStatus = function(){
 		$(document).on('click','.changeStatus', function(e){
 			$(this).addClass('spinning').attr('disabled',true);
-			console.log($(this));
 			var resourceReference = $(this).data('resourcereference');
 			$('#statusChangeRR').val($.trim($(this).data('resourcereference')));
 			$('#statusChangeRfs').val($.trim($(this).data('rfs')));
@@ -810,7 +761,6 @@ function ResourceRequest() {
 		    	data: {statusChangeRR:statusChangeRR,
 					   statusRadio:statusRadio},
 		    	success: function(result){
-		    		console.log(result);
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		ResourceRequest.table.ajax.reload();
 		    		}
@@ -927,8 +877,6 @@ function ResourceRequest() {
 	    $(ResourceRequest.table.column(16).header()).text('RFS:RR');
 
 
-		console.log(ResourceRequest.table.column());
-
 	    ResourceRequest.table.columns().every( function () {
 			var that = this;
 	        $( 'input', this.footer() ).on( 'keyup change', function () {
@@ -941,14 +889,12 @@ function ResourceRequest() {
 	    } );
 	    
 	    ResourceRequest.table.on( 'responsive-display', function () {
-	    	console.log('responsive display');
 	    	restrictButtonAccess();
 	    });
 
 	},
 
 	this.buildResourceReport =  function(){
-		console.log('build Resource Report');
 		var formData = $('form').serialize();
 		var resourceRequest = new ResourceRequest();
 
@@ -982,11 +928,8 @@ function ResourceRequest() {
 			minDate: minDate,
 			onSelect: function(date) {
 				var db2Value = this.getMoment().format('YYYY-MM-DD')
-				console.log(db2Value);
-				console.log($('#START_DATE'));
 				jQuery('#START_DATE').val(db2Value);
 				startDate = this.getDate();
-				console.log(startDate);
 				updateStartDate();
 			}
 		});
@@ -1006,18 +949,15 @@ function ResourceRequest() {
 
 		updateStartDate = function() {
 			var resourceRequest = new ResourceRequest();
-			console.log('updatedStartDate');
 		    startPicker.setStartRange(startDate);
 		    endPicker.setStartRange(startDate);
 		    endPicker.setMinDate(startDate);
-		    console.log($('#START_DATE').val());
 		    resourceRequest.destroyResourceReport();
 		    resourceRequest.buildResourceReport();
 		};
 
 		updateEndDate = function() {
 			var resourceRequest = new ResourceRequest();
-			console.log('updatedEndDate');
 		    startPicker.setEndRange(endDate);
 		    startPicker.setMaxDate(endDate);
 		    endPicker.setEndRange(endDate);
@@ -1099,8 +1039,6 @@ function ResourceRequest() {
 	        	},
 	      	success: function(response) {
 	            // 	do what ever you want with the server response if that response is "success"
-	            	console.log(response);
-	            	console.log(JSON.parse(response));
 	               // $('.modal-body').html(JSON.parse(response));
 				   $('#editRequestModal').modal('hide');	
 	               var responseObj = JSON.parse(response);
@@ -1116,20 +1054,15 @@ function ResourceRequest() {
 	                $('#recordSavedModal').modal('show');
           		},
 	      	fail: function(response){
-					console.log('Failed');
-					console.log(response);
 	                $('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
 	                $('#myModal').modal('show');
 				},
 	      	error: function(error){
 	            //	handle errors here. What errors	            :-)!
-	        		console.log('Ajax error' );
-	        		console.log(error.statusText);
 	        		FormClass.displayAjaxError('<p>Ajax call has errored.</p><p>URL:"' + url + '"</p><p>Error Status:"' + error.statusText + '"</p>');
 	        		jQuery('.slaSave').html('Save').prop('disable',true );
 	        	},
 	      	always: function(){
-	        		console.log('--- saved resource request ---');
 
 	      	}
 		});
