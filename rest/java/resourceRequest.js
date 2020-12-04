@@ -729,35 +729,35 @@ function ResourceRequest() {
 	
 	this.listenForUnallocated = function(){
 		$(document).on('click','#unallocated', function(e){		
-		    ResourceRequest.table.column(27).search('New').draw();
+		    ResourceRequest.table.column(28).search('New').draw();
 			});
 	},
 	
 	this.listenForCompleteable = function(){
 		$(document).on('click','#completeable', function(e){		
-		    ResourceRequest.table.column(27).search('Assigned.').draw();
+		    ResourceRequest.table.column(28).search('Assigned.').draw();
 			});
 	},
 	
 	this.listenForPlannedOnly = function(){
 		$(document).on('click','#plannedOnly', function(e){		
-		    ResourceRequest.table.column(20).search('Planned').draw();
+		    ResourceRequest.table.column(21).search('Planned').draw();
 			});
 	},
 	
 	this.listenForActiveOnly = function(){
 		$(document).on('click','#activeOnly', function(e){		
-		    ResourceRequest.table.column(20).search('Active').draw();
+		    ResourceRequest.table.column(21).search('Active').draw();
 			});
 	},
 
 	this.listenForRemovePassed = function(){
 		$(document).on('click','#removePassed', function(e){
-			 ResourceRequest.table.column(20).search("").column(23).search("").column(27).search("");
+			 ResourceRequest.table.column(21).search("").column(24).search("").column(28).search("");
 			$.fn.dataTable.ext.search.push(
     			function( settings, data, dataIndex ) {
 					console.log('pushing 1');
-			        if (data[20].includes('Completed')  ){
+			        if (data[21].includes('Completed')  ){
             			return false;
         			}
         			return true;
@@ -774,8 +774,8 @@ function ResourceRequest() {
 	this.listenForResetReport = function(){
 		$(document).on('click','#resetReport', function(e){
 			ResourceRequest.table.columns().visible(true,false);
-		    ResourceRequest.table.columns([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,18,21,24,25,26,28]).visible(false,false);
-		    ResourceRequest.table.columns.adjust().column(20).search("").column(23).search("").column(27).search("").draw(false);
+		    ResourceRequest.table.columns([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,19,22,23,25,26,27,29,30,31]).visible(false,false);
+		    ResourceRequest.table.columns.adjust().column(21).search("").column(24).search("").column(28).search("").draw(false);
 		})			
 	},
 
