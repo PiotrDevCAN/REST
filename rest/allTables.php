@@ -14,6 +14,8 @@ class allTables
     public static $ARCHIVED_RESOURCE_REQUESTS      = 'ARCHIVED_RESOURCE_REQUESTS';
     public static $ARCHIVED_RESOURCE_REQUEST_HOURS = 'ARCHIVED_RESOURCE_REQUEST_HOURS';
     
+    public static $BANK_HOLIDAYS                   = 'BANK_HOLIDAYS';
+    
 //    public static $MQT_MAX_REF                     = 'MQT_MAX_REF';
     public static $LATEST_DIARY_ENTRIES            = 'LATEST_DIARY_ENTRIES';
     
