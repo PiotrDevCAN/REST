@@ -280,6 +280,21 @@ class rfsTable extends DbTable
 
         return true;
     }
+    
+    
+    static function getRequestorEmail($rfsId){
+        $sql = " SELECT REQUESTOR_EMAIL ";
+        $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . \rest\allTables::$RFS;
+        $sql.= " WHERE RFS_ID='" . db2_escape_string($rfsId) . "' ";
+        $rs = db2_exec($GLOBALS['conn'], $sql);
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);            
+        }
+        
+        $row = db2_fetch_assoc($rs);
+        
+        return $row['REQUESTOR_EMAIL'];
+    }
 
 
 

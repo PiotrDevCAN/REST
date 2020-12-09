@@ -275,7 +275,7 @@ class BluePages {
 			$amendIbm2 = str_replace("xxxxx","/O=IBM",$amendCC);
 			$amendIbm2 = "CN%3D" . urlencode($amendIbm2);
 		}
-        echo "<BR/>URL:" . str_replace('NOTES_ID_HERE',$amendIbm2,$url);
+//        echo "<BR/>URL:" . str_replace('NOTES_ID_HERE',$amendIbm2,$url);
 		$ch = curl_init ( str_replace('NOTES_ID_HERE',$amendIbm2,$url) );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
 		$m = curl_exec ( $ch );

@@ -6,6 +6,8 @@ use rest\resourceRequestHoursTable;
 use itdq\Trace;
 use itdq\AuditTable;
 use rest\resourceRequestDiaryTable;
+use itdq\BluePages;
+use rest\emailNotifications;
 
 
 set_time_limit(0);
@@ -15,11 +17,24 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 $clear = isset($_POST['clear']) ? $_POST['clear'] : null;
 
 try {
-    $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
+    $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);   
+    $allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
+    
+    if(!empty($clear)){
+        $emailEntry = "You have been <b>unallocated</b> from RFS &&rfs&& by $allocatorNotesid ";
+        $emailPattern = array('RFS'=>'/&&rfs&&/');
+        emailNotifications::sendNotification($_POST['RESOURCE_REFERENCE'],$emailEntry, $emailPattern);         
+    }
+    
     $resourceTable->updateResourceName($_POST['RESOURCE_REFERENCE'], $_POST['RESOURCE_NAME'], $clear);    
     $diaryEntry = empty($clear) ?  $_POST['RESOURCE_NAME'] . " allocated to request" : " Resource name cleared";
     resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['RESOURCE_REFERENCE']);
     
+    if(empty($clear)){
+        $emailEntry = "You have been allocated to RFS &&rfs&& by $allocatorNotesid ";
+        $emailPattern = array('RFS'=>'/&&rfs&&/');
+        emailNotifications::sendNotification($_POST['RESOURCE_REFERENCE'],$emailEntry, $emailPattern); 
+    }    
     $exception = false;
 } catch (Exception $e) {
     $exception = $e->getMessage();

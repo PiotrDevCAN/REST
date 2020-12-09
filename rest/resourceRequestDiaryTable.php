@@ -9,6 +9,13 @@ use itdq\AllItdqTables;
 
 class resourceRequestDiaryTable extends DbTable
 {
+    const SEND_EMAIL_NOTIFICATION = true;
+    const DONT_SEND_EMAIL_NOTIFICATION = false;
+    
+    const DIARY_ENTRY_ASSIGNMENT = 'assignment';
+        
+    protected $diaryWording = array(self::DIARY_ENTRY_ASSIGNMENT=>'');
+    
     
     static function insertEntry( $entry,$resourceRef) {
         
@@ -22,10 +29,6 @@ class resourceRequestDiaryTable extends DbTable
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);     
             return false;
         }
-        
-//         $mqt = new DbTable(allTables::$MQT_MAX_REF);
-//         $mqt->refresh();       
-        
         return	db2_last_insert_id($GLOBALS['conn']);        
     }
     

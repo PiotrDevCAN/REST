@@ -71,10 +71,15 @@ class BlueMail
                     } else {
                         $localEmail = ! empty($_ENV['devemailid']) ? $_ENV['devemailid'] : 'daniero@uk.ibm.com';
                     }
-
+   
                     $recipient = $_ENV['email'] == 'user' ? $localEmail : $_ENV['devemailid'];
                     $mail->clearAllRecipients();
-                    $mail->addAddress($recipient);
+                    $added = $mail->addAddress($recipient);
+                    
+                    if(!$added){
+                        echo "Error adding address $recipient";
+                        throw new \Exception("Error adding address $recipient");
+                    }                    
                     $mail->clearCCs();
                     $mail->clearBCCs();
                     $mail->Subject = "**" . $_ENV['environment'] . "**" . $subject;
@@ -96,18 +101,24 @@ class BlueMail
                     $mail->isHTML(true);
 
                     $mail->Body = $message;
-
-                    if (! $mail->send()) {
+                    
+                    try {
+                        $result = $mail->send();
+                        $res = $result ? 'true' : 'false';
+                        $response = array(
+                            'response' => 'Message has been sent.',
+                            'recipient'=>$recipient,
+                            'result' => $res,
+                            'errorinfo' =>$mail->ErrorInfo
+                        );
+                        $status = 'sent';
+                    } catch (Exception $e) {
+                        echo "Mailer Error: " . $mail->ErrorInfo;
                         $response = array(
                             'response' => 'Mailer error: ' . $mail->ErrorInfo
                         );
                         $status = 'error sending';
-                        throw new \Exception('Error trying to send email :' . $subject);
-                    } else {
-                        $response = array(
-                            'response' => 'Message has been sent.'
-                        );
-                        $status = 'sent';
+                        throw new \Exception('Error trying to send email :' . $subject . "Error:" .  $mail->ErrorInfo);
                     }
 
                     $responseObject = json_encode($response);
@@ -158,9 +169,9 @@ class BlueMail
         $sql.= !empty($cc) ? " ,CC " : null ;
         $sql.= !empty($bcc) ? " ,BCC " : null ;
         $sql.= " ) VALUES ( ";
-        $sql.= " ?,?,?,? ";
-        $sql.= !empty($cc) ? " ,? " : null ;
-        $sql.= !empty($bcc) ? " ,? " : null ;
+        $sql.= " ?,?,?,?";
+        $sql.= !empty($cc) ? ",? " : null ;
+        $sql.= !empty($bcc) ? ",? " : null ;
         $sql.= " ); ";
 
         $preparedStatement = db2_prepare($GLOBALS['conn'], $sql);
@@ -168,14 +179,8 @@ class BlueMail
 
         !empty($cc)  ? $data[] = serialize($cc) : null;
         !empty($bcc) ? $data[] = serialize($bcc) : null;
+        
         $rs = db2_execute($preparedStatement,$data);
-
-
-//         $sql  = " INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
-//         $sql .= " (TO, SUBJECT, MESSAGE, DATA_JSON ) VALUES ( '" . db2_escape_string(serialize($to)) ."','" . db2_escape_string($subject) . "'";
-//         $sql .= " ,'" . db2_escape_string($message) . "','" . db2_escape_string($data_json) . "'); ";
-
-//         $rs = db2_exec($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs,__CLASS__,__METHOD__,$sql);
