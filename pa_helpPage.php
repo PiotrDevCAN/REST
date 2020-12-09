@@ -80,7 +80,7 @@ body {
 </div>
 </form>
 </div>
-<li>For technical issues please contact application support in the slack Channel :<a href='https://ventusdelivery.slack.com/messages/C8DLE1DFH/' target='_blank' >#sm-cognitive-delivery</a></li>
+<li>For technical issues please contact application support in the slack Channel :<a href='https://ventusdelivery.slack.com/messages/C8DLE1DFH/' target='_blank' >#sre-internal-applications</a></li>
 </ul>
 </div>
 </div>

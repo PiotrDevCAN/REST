@@ -67,7 +67,8 @@ class Navbar
         <ul class="nav navbar-nav navbar-right">
         <li class='accessCdi accessPmo accessFm accessUser'
                id='Help_Page'
-               data-pagename='pa_helpPage.php'><a href="pa_helpPage.php">Help/Feedback</a></li>
+               data-pagename='pa_helpPage.php'><a href="pa_helpPage.php">Feedback</a></li>
+        <li class='accessCdi accessPmo accessFm accessUser'><a href="https://w3.ibm.com/w3publisher/lbg-agile-accelerate/meet-the-agile-team/project-services/project-delivery"  target='_blank'>REST Blog</a></li>       
 	    </ul>
 
         </div><!-- /.navbar-collapse -->
