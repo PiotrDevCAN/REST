@@ -50,7 +50,8 @@ class emailNotifications
 	mso-pattern:auto;
 	mso-protection:locked visible;
 	white-space:nowrap;
-	mso-rotate:0;';
+	mso-rotate:0;
+    padding:5px';
         
         $pStyle  = 'font-size:9.0pt;font-family:Tahoma, sans-serif;';
         
