@@ -21,7 +21,7 @@ try {
     $currentResource = $resourceTable->getResourceName($_POST['RESOURCE_REFERENCE']);
     $allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
     
-    if(empty($clear) && strtolower($currentResource) != strtolower($_POST['RESOURCE_NAME'])){
+    if(empty($clear) && strtolower($currentResource) != strtolower(trim($_POST['RESOURCE_NAME'])) && substr($currentResource,0,5)!=='Delta'){
         $emailEntry = "You have been <b>removed from</b> RFS &&rfs&& by $allocatorNotesid ";
         $emailPattern = array('RFS'=>'/&&rfs&&/');
         emailNotifications::sendNotification($_POST['RESOURCE_REFERENCE'],$emailEntry, $emailPattern);
