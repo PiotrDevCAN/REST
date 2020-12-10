@@ -337,6 +337,7 @@ class resourceRequestTable extends DbTable
  
         
         $displayedResourceName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $displayedResourceName;
+        $displayedResourceName = substr($resourceName,0,strlen(resourceRequestTable::DELTA))==resourceRequestTable::DELTA ? "<i>Unallocated</i><br/>" . trim($resourceName) : $displayedResourceName;
 
         $row['RESOURCE_NAME'].= "&nbsp;" . $displayedResourceName ;
         $row['RESOURCE_NAME']." </span>";
