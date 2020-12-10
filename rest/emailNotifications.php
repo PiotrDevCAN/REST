@@ -18,6 +18,8 @@ class emailNotifications
         $resourceNotesid = isset($resourceRequestData['RESOURCE_NAME']) ? $resourceRequestData['RESOURCE_NAME']  : null ;
         $requestorEmail = rfsTable::getRequestorEmail($resourceRequestData['RFS']);
         
+        var_dump($requestorEmail);
+        
         $resourceEmail = !empty($resourceNotesid) ? BluePages::getIntranetIdFromNotesId($resourceNotesid) : null ;
         
         $to = !empty($requestorEmail) ? array($resourceEmail) : array($requestorEmail); // If we have a RESOURCE_NAME send it to them, else just to the REQUESTOR
@@ -57,7 +59,7 @@ class emailNotifications
         
         $emailBody = "<p style='$pStyle'>" . preg_replace($emailPattern, $replacements, $emailEntry) . "</p>";
         $emailBody.= "<br/>";
-        $emailBody.= "<p style='$pStyle'>Details of the specific Resource Request : " . $resourceRequestData['RESOURCE_REFERENCE'] . "</p>";
+        $emailBody.= "<p style='$pStyle'>Resource Request Details:</p>";
         $emailBody.= "<table>";
         $emailBody.= "<tbody>";
         $emailBody.= "<tr ><th style='$thStyle'>RFS</th><td style='$tdStyle'>" . $resourceRequestData['RFS'] . "</td></tr>";
