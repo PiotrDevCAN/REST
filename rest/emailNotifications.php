@@ -28,17 +28,43 @@ class emailNotifications
             $replacements[] = $resourceRequestData[$field];
         }
         
+        
+        $thStyle = 'font-size:10.0pt;font-weight:700;text-decoration:none;font-family:Tahoma, sans-serif;padding:5px;text-align:right;background-color: #4eb1ea;';
+        $tdStyle = 'mso-style-parent:style0;
+	padding-top:1px;
+	padding-right:1px;
+	padding-left:1px;
+	mso-ignore:padding;
+	color:black;
+	font-size:10.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Tahoma, sans-serif;
+	mso-font-charset:0;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	border:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	mso-protection:locked visible;
+	white-space:nowrap;
+	mso-rotate:0;';
+        
+        $pStyle  = 'font-size:9.0pt;font-family:Tahoma, sans-serif;';
+        
         $emailBody = preg_replace($emailPattern, $replacements, $emailEntry);
         $emailBody.= "<br/>";
-        $emailBody.= "<p>Details of the specific Resource Request : " . $resourceRequestData['RESOURCE_REFERENCE'] . "</p>";
+        $emailBody.= "<p style='$pStyle'>Details of the specific Resource Request : " . $resourceRequestData['RESOURCE_REFERENCE'] . "</p>";
         $emailBody.= "<table>";
         $emailBody.= "<tbody>";
-        $emailBody.= "<tr style='background-color: #4eb1ea;'><th style='text-align:right;padding:5px;'>RFS</th><td>" . $resourceRequestData['RFS'] . "</td></tr>";
-        $emailBody.= "<tr style='background-color: #fff;'><th style='text-align:right;padding:5px;'>Request</th><td>" . $resourceRequestData['RESOURCE_REFERENCE'] . "</td></tr>";
-        $emailBody.= "<tr style='background-color: #4eb1ea;'><th style='text-align:right;padding:5px;'>Service</th><td>" . $resourceRequestData['SERVICE'] . "</td></tr>";
-        $emailBody.= "<tr style='background-color: #fff;'><th style='text-align:right;padding:5px;'>Hours</th><td>" . $resourceRequestData['HRS_PER_WEEK'] . "</td></tr>";
-        $emailBody.= "<tr style='background-color: #4eb1ea;'><th style='text-align:right;padding:5px;'>Starting</th><td>" . $startDate->format('d M Y') . "</td></tr>";
-        $emailBody.= "<tr style='background-color: #fff;'><th style='text-align:right;padding:5px;'>Ending</th><td>" . $endDate->format('d M Y') . "</td></tr>";
+        $emailBody.= "<tr ><th style='$thStyle'>RFS</th><td style='$tdStyle'>" . $resourceRequestData['RFS'] . "</td></tr>";
+        $emailBody.= "<tr ><th style='$thStyle'>Request</th><td style='$tdStyle''>" . $resourceRequestData['RESOURCE_REFERENCE'] . "</td></tr>";
+        $emailBody.= "<tr ><th style='$thStyle'>Service</th><td style='$tdStyle'>" . $resourceRequestData['SERVICE'] . "</td></tr>";
+        $emailBody.= "<tr ><th style='$thStyle'>Hours</th><td style='$tdStyle'>" . $resourceRequestData['HRS_PER_WEEK'] . "</td></tr>";
+        $emailBody.= "<tr ><th style='$thStyle'>Starting</th><td style='$tdStyle'>" . $startDate->format('d M Y') . "</td></tr>";
+        $emailBody.= "<tr ><th style='$thStyle'>Ending</th><td style='$tdStyle'>" . $endDate->format('d M Y') . "</td></tr>";
         $emailBody.= "</tbody>";
         $emailBody.= "</table>";
         
