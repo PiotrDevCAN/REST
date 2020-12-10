@@ -55,7 +55,7 @@ class emailNotifications
         
         $pStyle  = 'font-size:9.0pt;font-family:Tahoma, sans-serif;';
         
-        $emailBody = preg_replace($emailPattern, $replacements, $emailEntry);
+        $emailBody = "<p style='$pStyle'>" . preg_replace($emailPattern, $replacements, $emailEntry) . "</p>";
         $emailBody.= "<br/>";
         $emailBody.= "<p style='$pStyle'>Details of the specific Resource Request : " . $resourceRequestData['RESOURCE_REFERENCE'] . "</p>";
         $emailBody.= "<table>";
