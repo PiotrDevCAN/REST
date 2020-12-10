@@ -18,8 +18,15 @@ $clear = isset($_POST['clear']) ? $_POST['clear'] : null;
 
 try {
     $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);   
+    $currentResource = $resourceTable->getResourceName($_POST['RESOURCE_REFERENCE']);
     $allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
     
+    if(empty($clear) && strtolower($currentResource) != strtolower($_POST['RESOURCE_NAME'])){
+        $emailEntry = "You have been <b>removed from</b> RFS &&rfs&& by $allocatorNotesid ";
+        $emailPattern = array('RFS'=>'/&&rfs&&/');
+        emailNotifications::sendNotification($_POST['RESOURCE_REFERENCE'],$emailEntry, $emailPattern);
+    }
+        
     if(!empty($clear)){
         $emailEntry = "You have been <b>unallocated</b> from RFS &&rfs&& by $allocatorNotesid ";
         $emailPattern = array('RFS'=>'/&&rfs&&/');
@@ -31,10 +38,11 @@ try {
     resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['RESOURCE_REFERENCE']);
     
     if(empty($clear)){
-        $emailEntry = "You have been allocated to RFS &&rfs&& by $allocatorNotesid ";
+        $emailEntry = "You have been <b>allocated to</b> RFS &&rfs&& by $allocatorNotesid ";
         $emailPattern = array('RFS'=>'/&&rfs&&/');
         emailNotifications::sendNotification($_POST['RESOURCE_REFERENCE'],$emailEntry, $emailPattern); 
-    }    
+    }  
+    
     $exception = false;
 } catch (Exception $e) {
     $exception = $e->getMessage();

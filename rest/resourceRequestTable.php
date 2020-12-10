@@ -30,22 +30,38 @@ class resourceRequestTable extends DbTable
         <?php
     }
 
-    function updateResourceName($resourceReference,$resourceName, $clear=null){
+    function getResourceName($resourceReference){
+        $sql  = " SELECT RESOURCE_NAME FROM  " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
+        $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference);
 
+        $rs = $this->execute($sql);
+        
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+        }
+
+        $row = db2_fetch_assoc($rs);
+        
+        return $row ? trim($row['RESOURCE_NAME']) : false;
+    }
+    
+    
+    function updateResourceName($resourceReference,$resourceName, $clear=null){
+        
         $status = resourceRequestRecord::STATUS_ASSIGNED;
         if(!empty($clear)){
             $resourceName = '';
             $status=resourceRequestRecord::STATUS_NEW;
         } else if(empty($resourceReference) or empty($resourceName)){
-                throw new \Exception('Paramaters Missing in call to ' . __FUNCTION__);
+            throw new \Exception('Paramaters Missing in call to ' . __FUNCTION__);
         }
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " SET RESOURCE_NAME='" . db2_escape_string($resourceName) . "' ";
         $sql .= " , STATUS='" . $status . "' ";
         $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference);
-
+        
         $result = $this->execute($sql);
-
+        
         return $result;
     }
     

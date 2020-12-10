@@ -5,6 +5,8 @@ use rest\allTables;
 use rest\resourceRequestTable;
 use rest\resourceRequestHoursTable;
 use rest\resourceRequestDiaryTable;
+use itdq\BluePages;
+use rest\emailNotifications;
 
 set_time_limit(0);
 ob_start();
@@ -50,6 +52,15 @@ $rrHoursTable->commitUpdates();
 
 $diaryEntry = "End Date was " . $movement . $_POST['endDate'] . " from " . $_POST['endDateWas'];
 $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['resourceReference']);
+
+
+$modifierNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
+
+$emailEntry = "The end date for your allocation to RFS &&rfs&& under Resource Request &&ref&& has been modified by $modifierNotesid";
+$emailEntry.= "<br/>From: " .  $endDateWasObj->format('d M Y');
+$emailEntry.= "<br/><b>To: " . $endDateObj->format('d M Y') . "</b>";
+$emailPattern = array('RFS'=>'/&&rfs&&/','RESOURCE_REFERENCE'=>'/&&ref&&/');
+emailNotifications::sendNotification($_POST['resourceReference'],$emailEntry, $emailPattern); 
 
 db2_autocommit($GLOBALS['conn'],$autoCommit);
 
