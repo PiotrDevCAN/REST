@@ -3,8 +3,17 @@ use rest\allTables;
 use rest\resourceRequestTable;
 use rest\resourceRequestDiaryTable;
 use rest\resourceRequestHoursTable;
+use itdq\BluePages;
+use rest\emailNotifications;
+
+
 ob_start();
 set_time_limit(0);
+
+$allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
+$emailEntry = "A Resource Request linked to  RFS &&rfs&& has been deleted by $allocatorNotesid ";
+$emailPattern = array('RFS'=>'/&&rfs&&/');
+emailNotifications::sendNotification($_POST['RESOURCE_REFERENCE'],$emailEntry, $emailPattern);
 
 $rrTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 $rrTable->deleteData(" RESOURCE_REFERENCE='" . db2_escape_string($_POST['RESOURCE_REFERENCE']) . "'",true );
