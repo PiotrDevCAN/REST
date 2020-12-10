@@ -30,7 +30,6 @@ try {
         
     if(!empty($clear)){
         $emailEntry = "You have been <b>unallocated</b> from RFS &&rfs&& by $allocatorNotesid ";
-        $emailEntry.= print_r($clear,true);
         $emailPattern = array('RFS'=>'/&&rfs&&/');
         emailNotifications::sendNotification($_POST['RESOURCE_REFERENCE'],$emailEntry, $emailPattern);         
     }

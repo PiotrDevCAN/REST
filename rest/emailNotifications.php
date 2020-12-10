@@ -18,7 +18,10 @@ class emailNotifications
         $resourceNotesid = isset($resourceRequestData['RESOURCE_NAME']) ? $resourceRequestData['RESOURCE_NAME']  : null ;
         $requestorEmail = rfsTable::getRequestorEmail($resourceRequestData['RFS']);
         
-        var_dump($requestorEmail);
+        if(empty($resourceNotesid)){
+            // No one to notify, so don't send to anyone.
+            return false;            
+        }
         
         $resourceEmail = !empty($resourceNotesid) ? BluePages::getIntranetIdFromNotesId($resourceNotesid) : null ;
         
