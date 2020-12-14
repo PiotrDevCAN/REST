@@ -20,6 +20,7 @@ class BlueMail
         , array $attachments=array())
     {
         $emailLogRecordID = null;
+        $response = array();
 
         $cleanedTo = $to;
         $cleanedCc = $cc;
