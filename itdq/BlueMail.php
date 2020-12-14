@@ -106,8 +106,7 @@ class BlueMail
                         $result = $mail->send();
                         $res = $result ? 'true' : 'false';
                         $response = array(
-                            'response' => 'Message has been sent.',
-                            'recipient'=>$recipient,
+                            'response' => 'Message has been sent.',                            
                             'result' => $res,
                             'errorinfo' =>$mail->ErrorInfo
                         );
