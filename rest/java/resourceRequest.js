@@ -254,9 +254,13 @@ function ResourceRequest() {
 	this.populateResourceDropDownWhenModalShown = function(){
 		$('#resourceNameModal').on('shown.bs.modal', function(){
 			$('#RESOURCE_NAME').attr('disabled',true);
-			$('#saveResourceName').addClass('spinning');
+			$('#saveResourceName').addClass('spinning').attr('disabled',true);
+			$('#clearResourceName').attr('disabled',true);
 			var businessUnit = $('#businessUnit').val();
 			var currentResourceName = $('#currentResourceName').val();	
+			
+			console.log(currentResourceName);
+			
 			if (!resourceNamesForSelect2.length){	
 				$.ajax({
 			    	url: "ajax/getVbacActiveResourcesForSelect2.php",
@@ -269,15 +273,17 @@ function ResourceRequest() {
 							data          : resourceNamesForSelect2,
 						    templateResult: formatResourceName
 							}).val(currentResourceName).trigger('change');
-						$('.spinning').removeClass('spinning');
+						$('.spinning').removeClass('spinning').attr('disabled',false);
+						$('#clearResourceName').attr('disabled',false);
 						$('#RESOURCE_NAME').attr('disabled',false);
 						$('#pleaseWaitMessage').html('');
 			    		}
 			    });	
 			} else {
-				$('.spinning').removeClass('spinning');
+				$('.spinning').removeClass('spinning').attr('disabled',false);
 				$('#RESOURCE_NAME').val(currentResourceName).trigger('change');
 				$('#RESOURCE_NAME').attr('disabled',false);
+					$('#clearResourceName').attr('disabled',false);
 			}
 		});
 	},
@@ -286,23 +292,23 @@ function ResourceRequest() {
 	this.listenForEditResourceName = function(){
 		$(document).on('click','.editResource', function(e){
 			var dataOwner = $(this).parent('.dataOwner');
-			$(this).addClass('spinning');
+			$(this).addClass('spinning').attr('disabled',true);
 			var resourceReference = dataOwner.data('resourcereference');
-			var resourceName      = dataOwner.data('resourceName');
+			var resourceName      = dataOwner.data('resourcename');
 			var parent            = dataOwner.data('parent');
 			var businessUnit      = dataOwner.data('businessunit');
-			
 			$('#RESOURCE_REFERENCE').val(resourceReference);	
 			$('#currentResourceName').val(resourceName);
 			$('#businessUnit').val(businessUnit);
     		$('#resourceNameModal').modal('show');
-			$('.spinning').removeClass('spinning');	
+			$('.spinning').removeClass('spinning').attr('disabled',false);	
 		});
 	},
 
 	this.listenForSaveResourceName = function(){
 		$(document).on('click','#saveResourceName', function(e){
-			$(this).addClass('spinning');
+			$(this).addClass('spinning').attr('disabled',true);
+			$('#clearResourceName').attr('disabled',true);
 			var formData = $('#resourceNameForm').serialize();
 		    $.ajax({
 		    	url: "ajax/saveResourceName.php",
@@ -319,7 +325,8 @@ function ResourceRequest() {
 		    		} else {
 		    			$('#errorMessageBody').html(resultObj.Messages);
 		    			$('#resourceNameModal').modal('hide');
-						$('.spinning').removeClass('spinning');
+						$('.spinning').removeClass('spinning').attr('disabled',false);
+						$('#clearResourceName').attr('disabled',false);
 						ResourceRequest.table.ajax.reload();
 		    			$('#errorMessageModal').modal('show');
 		    		}
@@ -331,7 +338,8 @@ function ResourceRequest() {
 	
 	this.listenForClearResourceName = function(){
 		$(document).on('click','#clearResourceName', function(e){
-			$(this).addClass('spinning');
+			$(this).addClass('spinning').attr('disabled',true);
+			$('#saveResourceName').attr('disabled',true);
 			var formData = $('#resourceNameForm').serialize();
 			
 			formData += "&clear=clear";
@@ -351,7 +359,8 @@ function ResourceRequest() {
 		    		} else {
 		    			$('#errorMessageBody').html(resultObj.Messages);
 		    			$('#resourceNameModal').modal('hide');
-						$('.spinning').removeClass('spinning');
+						$('.spinning').removeClass('spinning').attr('disabled',false);
+						$('#saveResourceName').attr('disabled',false);
 						ResourceRequest.table.ajax.reload();
 		    			$('#errorMessageModal').modal('show');
 		    		}
