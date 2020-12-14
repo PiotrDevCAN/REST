@@ -96,6 +96,7 @@ function ResourceRequest() {
 			$('#deleteMessageBody').html(message);
 			$('#confirmDeleteResource').attr('disabled',false);
 			$('#confirmDeleteModal').modal('show');
+			$('#confirmDeleteResource').attr('disabled',false);
 		});
 	},
 
@@ -113,7 +114,9 @@ function ResourceRequest() {
 		    		message += "<br/>Feedback from Delete : <small>" +resultObj.Messages + "</small>"
 		    		$('#deleteMessageBody').html(message);
 		    		$('#confirmDeleteResource').attr('disabled',true);
-					$('.spinning').attr('disabled',false).removeClass('spinning');
+					var clickedButtons = $('.spinning');
+					clickedButtons.removeClass('spinning');
+					clickedButtons.not('#confirmDeleteResource').attr('disabled',false);					
 		    		ResourceRequest.table.ajax.reload();
 		    		}
 		    });

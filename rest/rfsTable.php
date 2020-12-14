@@ -292,7 +292,7 @@ class rfsTable extends DbTable
         }
         
         $row = db2_fetch_assoc($rs);
-        return trim(row['REQUESTOR_EMAIL']);
+        return trim($row['REQUESTOR_EMAIL']);
     }
 
 
