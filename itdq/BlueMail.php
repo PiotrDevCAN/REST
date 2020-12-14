@@ -142,6 +142,9 @@ class BlueMail
                     }
                     break;
             }
+        }  else {
+            $status = "Errored";
+            $response = array('response'=>"Message has not been sent.  Unable to add all the addresses." . $mail->ErrorInfo);
         }
         return array('sendResponse' => $response, 'Status'=>$status);
     }
