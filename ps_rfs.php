@@ -3,6 +3,7 @@ use itdq\Trace;
 use itdq\Loader;
 use itdq\DateClass;
 use rest\allTables;
+use rest\rfsTable;
 
 set_time_limit(0);
 
@@ -12,6 +13,7 @@ $allRfs = $loader->load('RFS_ID',allTables::$RFS, " ARCHIVE is null ");
 $allValueStream = $loader->load('VALUE_STREAM',allTables::$RFS, " ARCHIVE is null ");
 $allBusinessUnits = $loader->load('BUSINESS_UNIT',allTables::$RFS, " ARCHIVE is null ");
 $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is null ");
+$rfsTable = new rfsTable(allTables::$RFS);
 
 // $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
 // $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
@@ -222,6 +224,64 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is nu
   </div>
 </div>
 
+<!-- Modal -->
+<div id="goLiveRfsModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Pipeline to Live</h4>
+      </div>
+      <div class="modal-body" id='goLiveRfsModalBody'>    
+      <form id='goLiveRfsForm' onsubmit='return false'>
+        <div class='row' style='padding-top: 5px;'>
+      		<div class="form-group required " id="REQUESTOR_NAMEFormGroup">
+				<label for="REQUESTOR_NAME"
+					class="col-md-3 control-label ceta-label-left" data-toggle="tooltip"
+					data-placement="top" title="">Requestor Name</label>
+				<div class="col-md-5">
+					<input class="form-control" id="REQUESTOR_NAME" name="REQUESTOR_NAME"
+						value=""
+						placeholder="Enter Project Mgr Name" required="required" type="text"
+					maxlength="<?=$rfsTable->getColumnLength('REQUESTOR_NAME');?>">
+			
+				</div>
+			</div>		
+		</div>
+		<div class='row' style='padding-top: 5px;'>
+			<div class="form-group required " id="REQUESTOR_NAMEFormGroup">
+				<label for="REQUESTOR_EMAIL"
+					class="col-md-3 control-label ceta-label-left" data-toggle="tooltip"
+					data-placement="top" title="">Requestor Email</label>
+				<div class="col-md-5">
+					<input class="form-control" id="REQUESTOR_EMAIL"
+						name="REQUESTOR_EMAIL" value=""
+						placeholder="Enter Project Mgr IBM Email" required="required" type="email"
+						maxlength="<?=$rfsTable->getColumnLength('REQUESTOR_EMAIL');?>"
+						>
+			
+				</div>
+			</div>
+		</div>	
+		<div class='row' style='padding-top: 5px; padding-left: 17px;'>	
+			<input name='RfsId' id='goLiveRfsId' type='hidden' >		
+			<input type='submit' class="btn btn-primary col-md-1 col-md-offset-3" name='confirmGoLiveRfs' id='confirmGoLiveRfs' enabled value='Confirm' >			
+		</div>
+		</form>
+		
+	</div> 
+
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
 
 <?php
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);
@@ -253,6 +313,7 @@ $(document).ready(function() {
     var rfs = new Rfs();
 	rfs.buildRfsReport();
 	rfs.listenForGoLiveRfs();
+	rfs.listenForConfirmGoLiveRfs();
 	rfs.listenForDeleteRfs();
 	rfs.listenForConfirmDeleteRfs();
 	rfs.listenForEditRfs();
