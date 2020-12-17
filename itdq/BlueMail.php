@@ -25,6 +25,13 @@ class BlueMail
         $cleanedCc  = array_unique(array_map('trim',array_diff($cc,$cleanedTo, $bcc))); // We can't CC/BCC someone already in the TO list.
         $cleanedBcc = array_unique(array_map('trim',array_diff($bcc,$cleanedTo,$cleanedCc)));
         
+       
+        error_log('Subject:' . print_r($subject,true));
+        error_log('To:' . print_r($cleanedTo,true));
+        error_log('Cc:' . print_r($cleanedCc,true));
+        error_log('BCc:' . print_r($cleanedBcc,true));
+        
+        
         $status = '';
         $resp = true;
 
@@ -35,18 +42,21 @@ class BlueMail
         foreach ($cleanedTo as $emailAddress){
             if(!empty($emailAddress)){
                 $resp = $resp ? $mail->addAddress($emailAddress) : $resp;     
+                error_log('Resp(to):' . print_r($resp,true));
                 error_log("ErrorInfo:" . $mail->ErrorInfo);
             }
         }
         foreach ($cleanedCc as $emailAddress){
             if(!empty(trim($emailAddress))){
                 $resp = $resp ? $mail->addCC($emailAddress) : $resp;
+                error_log('Resp(Cc):' . print_r($resp,true));
                 error_log("ErrorInfo:" . $mail->ErrorInfo);
             }
         }
         foreach ($cleanedBcc as $emailAddress){
             if(!empty(trim($emailAddress))){
                 $resp = $resp ? $mail->addBCC($emailAddress) : $resp;
+                error_log('Resp(Bcc):' . print_r($resp,true));
                 error_log("ErrorInfo:" . $mail->ErrorInfo);
             }
         }
