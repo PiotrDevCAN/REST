@@ -19,9 +19,6 @@ class BlueMail
         , $asynchronous = true
         , array $attachments=array())
     {
-        
-        debug_print_backtrace();
-     
         $emailLogRecordID = null;
 
         $cleanedTo  = array_unique(array_map('trim',$to));
@@ -31,6 +28,8 @@ class BlueMail
         $status = '';
         $resp = true;
 
+        $response = array();
+        
         $mail = new PHPMailer();
         
         foreach ($cleanedTo as $emailAddress){
@@ -69,6 +68,7 @@ class BlueMail
                 }
             }
         }
+        
         if ($resp) {
             switch (trim($_ENV['email'])) {
                 case 'dev':
@@ -118,7 +118,6 @@ class BlueMail
                         );
                         $status = 'sent';
                     }
-
                     $responseObject = json_encode($response);
                     if ($emailLogRecordID) {
                         self::updatelog($emailLogRecordID, $responseObject);
@@ -141,6 +140,7 @@ class BlueMail
                     break;
             }
         }
+       
         return array('sendResponse' => $response, 'Status'=>$status);
     }
 
