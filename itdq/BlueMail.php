@@ -37,15 +37,11 @@ class BlueMail
                 $resp = $resp ? $mail->addAddress($emailAddress) : $resp;               
             }
         }
-        
-
-
         foreach ($cleanedCc as $emailAddress){
             if(!empty(trim($emailAddress))){
                 $resp = $resp ? $mail->addCC($emailAddress) : $resp;
             }
         }
-        
         foreach ($cleanedBcc as $emailAddress){
             if(!empty(trim($emailAddress))){
                 $resp = $resp ? $mail->addBCC($emailAddress) : $resp;
@@ -53,6 +49,7 @@ class BlueMail
         }
         $mail->Subject= $subject;
         $mail->body= $message;
+        
         
         if($resp && $attachments){
             foreach ($attachments as $attachment){
@@ -139,6 +136,14 @@ class BlueMail
                     }
                     break;
             }
+        } else {
+            
+            $response = array(
+                'response' => "Problems adding addresses/attachements to the email",
+                 'errorInfor'=> $mail->ErrorInfo
+            );
+            error_log("resp:" . $resp);
+            error_log("ErrorInfo:" . $mail->ErrorInfo);
         }
        
         return array('sendResponse' => $response, 'Status'=>$status);
