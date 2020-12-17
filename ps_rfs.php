@@ -376,6 +376,11 @@ $(document).on('shown.bs.modal','#slipRfsModal',function(e){
 
 });
 
+$(document).on('hide.bs.modal','#goLiveRfsModal',function(e){	
+	$('.spinning').removeClass('spinning').attr('disabled',false);
+});
+
+
 </script>
 
 
