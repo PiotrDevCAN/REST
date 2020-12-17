@@ -19,41 +19,49 @@ class BlueMail
         , $asynchronous = true
         , array $attachments=array())
     {
+        
+        debug_print_backtrace();
+     
         $emailLogRecordID = null;
-        $response = array();
 
-        $cleanedTo = $to;
-        $cleanedCc = $cc;
-        $cleanedBcc = $bcc;
-
+        $cleanedTo  = array_unique(array_map('trim',$to));
+        $cleanedCc  = array_unique(array_map('trim',array_diff($cc,$cleanedTo, $bcc))); // We can't CC/BCC someone already in the TO list.
+        $cleanedBcc = array_unique(array_map('trim',array_diff($bcc,$cleanedTo,$cleanedCc)));
+        
         $status = '';
         $resp = true;
 
         $mail = new PHPMailer();
-
+        
         foreach ($cleanedTo as $emailAddress){
-            if(!empty(trim($emailAddress))){
-                $resp = $resp ? $mail->addAddress($emailAddress) : $resp;
+            if(!empty($emailAddress)){
+                $resp = $resp ? $mail->addAddress($emailAddress) : $resp;               
             }
         }
+        
+
 
         foreach ($cleanedCc as $emailAddress){
             if(!empty(trim($emailAddress))){
                 $resp = $resp ? $mail->addCC($emailAddress) : $resp;
             }
         }
-
+        
         foreach ($cleanedBcc as $emailAddress){
             if(!empty(trim($emailAddress))){
                 $resp = $resp ? $mail->addBCC($emailAddress) : $resp;
             }
         }
-
         $mail->Subject= $subject;
         $mail->body= $message;
-
+        
         if($resp && $attachments){
             foreach ($attachments as $attachment){
+                
+                $exists = (file_exists($attachment)) ? "Yes" : "No" ;
+                error_log("Attachment $attachment exists:" . print_r($exists,true) );
+                error_log(print_r(scandir("../emailAttachments"),true));
+                
                 $resp = $resp ? $mail->addAttachment($attachment) : $resp;
                 if(!$resp){
                     $status = "Errored";
@@ -72,15 +80,10 @@ class BlueMail
                     } else {
                         $localEmail = ! empty($_ENV['devemailid']) ? $_ENV['devemailid'] : 'daniero@uk.ibm.com';
                     }
-   
+
                     $recipient = $_ENV['email'] == 'user' ? $localEmail : $_ENV['devemailid'];
                     $mail->clearAllRecipients();
-                    $added = $mail->addAddress($recipient);
-                    
-                    if(!$added){
-                        echo "Error adding address $recipient";
-                        throw new \Exception("Error adding address $recipient");
-                    }                    
+                    $mail->addAddress($recipient);
                     $mail->clearCCs();
                     $mail->clearBCCs();
                     $mail->Subject = "**" . $_ENV['environment'] . "**" . $subject;
@@ -102,23 +105,18 @@ class BlueMail
                     $mail->isHTML(true);
 
                     $mail->Body = $message;
-                    
-                    try {
-                        $result = $mail->send();
-                        $res = $result ? 'true' : 'false';
-                        $response = array(
-                            'response' => 'Message has been sent.',                            
-                            'result' => $res,
-                            'errorinfo' =>$mail->ErrorInfo
-                        );
-                        $status = 'sent';
-                    } catch (Exception $e) {
-                        echo "Mailer Error: " . $mail->ErrorInfo;
+
+                    if (! $mail->send()) {
                         $response = array(
                             'response' => 'Mailer error: ' . $mail->ErrorInfo
                         );
                         $status = 'error sending';
-                        throw new \Exception('Error trying to send email :' . $subject . "Error:" .  $mail->ErrorInfo);
+                        throw new \Exception('Error trying to send email :' . $subject);
+                    } else {
+                        $response = array(
+                            'response' => 'Message has been sent.'
+                        );
+                        $status = 'sent';
                     }
 
                     $responseObject = json_encode($response);
@@ -142,9 +140,6 @@ class BlueMail
                     }
                     break;
             }
-        }  else {
-            $status = "Errored";
-            $response = array('response'=>"Message has not been sent.  Unable to add all the addresses." . $mail->ErrorInfo);
         }
         return array('sendResponse' => $response, 'Status'=>$status);
     }
@@ -172,9 +167,9 @@ class BlueMail
         $sql.= !empty($cc) ? " ,CC " : null ;
         $sql.= !empty($bcc) ? " ,BCC " : null ;
         $sql.= " ) VALUES ( ";
-        $sql.= " ?,?,?,?";
-        $sql.= !empty($cc) ? ",? " : null ;
-        $sql.= !empty($bcc) ? ",? " : null ;
+        $sql.= " ?,?,?,? ";
+        $sql.= !empty($cc) ? " ,? " : null ;
+        $sql.= !empty($bcc) ? " ,? " : null ;
         $sql.= " ); ";
 
         $preparedStatement = db2_prepare($GLOBALS['conn'], $sql);
@@ -182,8 +177,14 @@ class BlueMail
 
         !empty($cc)  ? $data[] = serialize($cc) : null;
         !empty($bcc) ? $data[] = serialize($bcc) : null;
-        
         $rs = db2_execute($preparedStatement,$data);
+
+
+//         $sql  = " INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
+//         $sql .= " (TO, SUBJECT, MESSAGE, DATA_JSON ) VALUES ( '" . db2_escape_string(serialize($to)) ."','" . db2_escape_string($subject) . "'";
+//         $sql .= " ,'" . db2_escape_string($message) . "','" . db2_escape_string($data_json) . "'); ";
+
+//         $rs = db2_exec($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs,__CLASS__,__METHOD__,$sql);
