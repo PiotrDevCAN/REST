@@ -34,17 +34,20 @@ class BlueMail
         
         foreach ($cleanedTo as $emailAddress){
             if(!empty($emailAddress)){
-                $resp = $resp ? $mail->addAddress($emailAddress) : $resp;               
+                $resp = $resp ? $mail->addAddress($emailAddress) : $resp;     
+                error_log("ErrorInfo:" . $mail->ErrorInfo);
             }
         }
         foreach ($cleanedCc as $emailAddress){
             if(!empty(trim($emailAddress))){
                 $resp = $resp ? $mail->addCC($emailAddress) : $resp;
+                error_log("ErrorInfo:" . $mail->ErrorInfo);
             }
         }
         foreach ($cleanedBcc as $emailAddress){
             if(!empty(trim($emailAddress))){
                 $resp = $resp ? $mail->addBCC($emailAddress) : $resp;
+                error_log("ErrorInfo:" . $mail->ErrorInfo);
             }
         }
         $mail->Subject= $subject;
@@ -65,6 +68,9 @@ class BlueMail
                 }
             }
         }
+        
+        error_log('Resp:' . print_r($resp,true));
+        error_log("ErrorInfo:" . $mail->ErrorInfo);
         
         if ($resp) {
             switch (trim($_ENV['email'])) {
@@ -115,6 +121,10 @@ class BlueMail
                         );
                         $status = 'sent';
                     }
+                    
+                    error_log('Response:' . print_r($response,true));
+                    error_log('ErrorInfo' . $mail->ErrorInfo);                    
+                    
                     $responseObject = json_encode($response);
                     if ($emailLogRecordID) {
                         self::updatelog($emailLogRecordID, $responseObject);
@@ -145,6 +155,11 @@ class BlueMail
             error_log("resp:" . $resp);
             error_log("ErrorInfo:" . $mail->ErrorInfo);
         }
+        
+        error_log("respone:" . $response);
+        error_log("status:" . $status);
+        error_log("ErrorInfo:" . $mail->ErrorInfo);
+        
        
         return array('sendResponse' => $response, 'Status'=>$status);
     }
