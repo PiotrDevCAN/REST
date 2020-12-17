@@ -156,7 +156,7 @@ class BlueMail
             error_log("ErrorInfo:" . $mail->ErrorInfo);
         }
         
-        error_log("respone:" . $response);
+        error_log("respone:" . print_r($response,true));
         error_log("status:" . $status);
         error_log("ErrorInfo:" . $mail->ErrorInfo);
         
