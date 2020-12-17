@@ -145,7 +145,8 @@ function Rfs() {
 	
 	this.listenForGoLiveRfs = function(){
 		$(document).on('click','.goLiveRfs', function(e){
-			$(this).addClass('spinning').attr('disabled');
+			$(this).addClass('spinning').attr('disabled',true);
+			$('#confirmGoLiveRfs').attr('disabled',false)
 			$('#goLiveRfsId').val($(this).data('rfsid'));
 			$('#REQUESTOR_NAME').val('');
 			$('#REQUESTOR_EMAIL').val('');
@@ -455,6 +456,8 @@ function Rfs() {
 		        	},
 		      	success: function(response) {
 		            // 	do what ever you want with the server response if that response is "success"
+					   $('.spinning').removeClass('spinning');
+					   $('#editRfsModal').modal('hide');
 		               var responseObj = JSON.parse(response);
 		               var rfsIdTxt =  "<p><b>RFS ID:</b>" + responseObj.rfsId + "</p>";
 		               var savedResponse =  responseObj.saveResponse;
@@ -468,7 +471,8 @@ function Rfs() {
 		            	   var messages =  "<p>" + responseObj.Messages +  "</p>";
 		               }
 		               var messages =  "<p>" + responseObj.Messages +  "</p>";
-		               $('.modal-body').html(rfsIdTxt + savedResponseTxt + messages);
+		               $('#myModal .modal-body').html(rfsIdTxt + savedResponseTxt + messages);
+					   	
 		               $('#myModal').modal('show');
 		               $('#myModal').on('hidden.bs.modal', function () {
 		                	  // do something…
@@ -476,13 +480,13 @@ function Rfs() {
 		    	            	window.close();
 		        	        } else {
 		            	    	$('#resetRfs').click();
-		            	    	$(':submit').removeClass('spinning');
+		            	    	$('.spinning').removeClass('spinning');
 		            	    	$('#RFS_ID').css("background-color","#ffffff");
 		                	}
 	                	});
 	          	},
 		      	fail: function(response){						
-		                $('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
+		                $('#myModal .modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
 		                $('#myModal').modal('show');
 					},
 		      	error: function(error){
