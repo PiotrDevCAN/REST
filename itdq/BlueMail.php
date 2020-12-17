@@ -21,9 +21,13 @@ class BlueMail
     {
         $emailLogRecordID = null;
 
-        $cleanedTo  = array_unique(array_map('trim',$to));
-        $cleanedCc  = array_unique(array_map('trim',array_diff($cc,$cleanedTo, $bcc))); // We can't CC/BCC someone already in the TO list.
-        $cleanedBcc = array_unique(array_map('trim',array_diff($bcc,$cleanedTo,$cleanedCc)));
+        $to =  array_map('strtolower',array_map('strtolower',$to));
+        $cc =  array_map('strtolower',array_map('strtolower',$cc));
+        $bcc =  array_map('strtolower',array_map('strtolower',$bcc));
+        
+        $cleanedTo  = array_unique($to);
+        $cleanedCc  = array_unique(array_diff($cc,$cleanedTo, $bcc)); // We can't CC/BCC someone already in the TO list.
+        $cleanedBcc = array_unique(array_diff($bcc,$cleanedTo,$cleanedCc));
         
        
         error_log('Subject:' . print_r($subject,true));
