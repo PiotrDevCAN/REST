@@ -259,11 +259,11 @@ $rfsTable = new rfsTable(allTables::$RFS);
       <form id='goLiveRfsForm' onsubmit='return false'>
         <div class='row' style='padding-top: 5px;'>
       		<div class="form-group required " id="REQUESTOR_NAMEFormGroup">
-				<label for="REQUESTOR_NAME"
+				<label for="plREQUESTOR_NAME"
 					class="col-md-3 control-label ceta-label-left" data-toggle="tooltip"
 					data-placement="top" title="">Requestor Name</label>
 				<div class="col-md-5">
-					<input class="form-control" id="REQUESTOR_NAME" name="REQUESTOR_NAME"
+					<input class="form-control" id="plREQUESTOR_NAME" name="plREQUESTOR_NAME"
 						value=""
 						placeholder="Enter Project Mgr Name" required="required" type="text"
 					maxlength="<?=$rfsTable->getColumnLength('REQUESTOR_NAME');?>">
@@ -273,12 +273,12 @@ $rfsTable = new rfsTable(allTables::$RFS);
 		</div>
 		<div class='row' style='padding-top: 5px;'>
 			<div class="form-group required " id="REQUESTOR_NAMEFormGroup">
-				<label for="REQUESTOR_EMAIL"
+				<label for="plREQUESTOR_EMAIL"
 					class="col-md-3 control-label ceta-label-left" data-toggle="tooltip"
 					data-placement="top" title="">Requestor Email</label>
 				<div class="col-md-5">
-					<input class="form-control" id="REQUESTOR_EMAIL"
-						name="REQUESTOR_EMAIL" value=""
+					<input class="form-control" id="plREQUESTOR_EMAIL"
+						name="plREQUESTOR_EMAIL" value=""
 						placeholder="Enter Project Mgr IBM Email" required="required" type="email"
 						maxlength="<?=$rfsTable->getColumnLength('REQUESTOR_EMAIL');?>"
 						>

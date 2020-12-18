@@ -121,8 +121,8 @@ function Rfs() {
 		$(document).on('submit','#goLiveRfsForm', function(e){
 			$('#confirmGoLiveRfs').addClass('spinning').attr('disabled',true);
 			var rfsid          = $('#goLiveRfsId').val();
-			var requestorName  = $('#REQUESTOR_NAME').val();
-			var requestorEmail = $('#REQUESTOR_EMAIL').val();
+			var requestorName  = $('#plREQUESTOR_NAME').val();
+			var requestorEmail = $('#plREQUESTOR_EMAIL').val();
 		    $.ajax({
 		    	url: "ajax/goLiveRfs.php",
 		        type: 'POST',
@@ -133,8 +133,8 @@ function Rfs() {
 		    		var resultObj = JSON.parse(result);
 					Rfs.table.ajax.reload();
 					$('#goLiveRfsId').val('');
-					$('#REQUESTOR_NAME').val('');
-					$('#REQUESTOR_EMAIL').val('');
+					$('#plREQUESTOR_NAME').val('');
+					$('#plREQUESTOR_EMAIL').val('');
 					$('.spinning').removeClass('spinning').attr('disabled',false);
 					$('#goLiveRfsModal').modal('hide');
 					
