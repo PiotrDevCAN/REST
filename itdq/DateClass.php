@@ -85,6 +85,27 @@ class DateClass {
         return (($weeks*5)+$firstWeekDays-2+$lastWeekDays);
         
     }
+    
+    static function workingDaysForWef(\DateTime $wefDate, array $bankHolidays){
+        // Given a Week Ending Friday Date, and an Array of the bankholidays that can be for a much longer period.
+        // This function will work out if any of the bank holidays fall in the 7-days leading to WEF and return th
+        $adjustedStartDate = clone $startDate;
+        $adjustedStartDate->modify('next Monday');
+        
+        $adjustedEndDate = clone $endDate;
+        $adjustedEndDate->modify('previous Sunday');
+        
+        $dateDiff = $adjustedEndDate->diff($adjustedStartDate);
+        $totalDays = ($dateDiff->days)+1;  /// 2nd to the 4th is 3 days, 2nd, 3rd, and 4th but 4-2 = 2 we're really doing 4-(2-1)
+        
+        $firstWeekDays = $adjustedStartDate->diff($startDate)->days;
+        $lastWeekDays  = $endDate->diff($adjustedEndDate)->days;
+        
+        $weeks = (int)($totalDays / 7);
+        
+        return (($weeks*5)+$firstWeekDays-2+$lastWeekDays);
+        
+    }
 
     static function bankHolidaysFromStartToEnd(\DateTime $startDate, \DateTime $endDate){       
         
