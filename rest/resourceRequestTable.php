@@ -531,13 +531,18 @@ class resourceRequestTable extends DbTable
         // process the employees, flagging as 'local' those in the "myTribe" tribe     
          
         foreach ($vbacEmployees as $value) {
-//             error_log('notesId:' . $value['id'] . ' tribe:' . $value['tribe'] . " bestmatch:" . $bestMatch . " bu:" . $businessUnit);            $
-            if($value['tribe']==$myTribe){
-                $value['distance']='local';
-                $tribeEmployees[] = $value;               
-            } else {
-                if($_SESSION['isAdmin']){
-                    $tribeEmployees[] = $value;                                      
+//          error_log('notesId:' . $value['id'] . ' tribe:' . $value['tribe'] . " bestmatch:" . $bestMatch . " bu:" . $businessUnit);            $
+
+            var_dump($value['id']);
+            var_dump(strtolower(substr(trim($value['id']),-4)));
+            if(strtolower(substr(trim($value['id']), -4))=='/ibm'){  // Filter out invalid Notes Ids
+                if($value['tribe']==$myTribe){
+                    $value['distance']='local';
+                    $tribeEmployees[] = $value;
+                } else {
+                    if($_SESSION['isAdmin']){
+                        $tribeEmployees[] = $value;
+                    }
                 }
             }
         }
