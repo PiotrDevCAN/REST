@@ -292,71 +292,69 @@ class resourceRequestTable extends DbTable
         $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::DUPLICATE))==resourceRequestTable::DUPLICATE ? 'text-success' : $editButtonColor;
         $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::DELTA))==resourceRequestTable::DELTA ? 'text-success' : $editButtonColor;
 
-        $displayedResourceName = $editButtonColor == 'text-success' ? "<i>$resourceName</i>" : $resourceName;
+        $resName = $editButtonColor == 'text-success' ? "<i>$resourceName</i>" : $resourceName;
 
         $duplicatable = true; //Can clone any record.
 
         $canBeAmendedByDemandTeam = empty(trim($resourceName)) ? 'accessDemand' : null; // Demand can amend any Request that is yet to have resource allocated to it.
 
-        $row['RESOURCE_NAME'] = "<span class='dataOwner' ";
-        $row['RESOURCE_NAME'].= "  data-rfs='" .$rfsId . "' ";
-        $row['RESOURCE_NAME'].= "  data-resourcereference='" .$resourceReference . "' ";
-        $row['RESOURCE_NAME'].= "  data-prn='" .$prn . "' ";
-        $row['RESOURCE_NAME'].= "  data-valuestream='" . $valuestream. "' ";
-        $row['RESOURCE_NAME'].= "  data-businessunit='" . $businessunit. "' ";
-        $row['RESOURCE_NAME'].= "  data-status='" . $status . "' ";
-        $row['RESOURCE_NAME'].= "  data-service='" .$service .  "' ";
-        $row['RESOURCE_NAME'].= "  data-organisation='" .$organisation .  "' ";
+        $displayedResourceName = "<span class='dataOwner' ";
+        $displayedResourceName.= "  data-rfs='" .$rfsId . "' ";
+        $displayedResourceName.= "  data-resourcereference='" .$resourceReference . "' ";
+        $displayedResourceName.= "  data-prn='" .$prn . "' ";
+        $displayedResourceName.= "  data-valuestream='" . $valuestream. "' ";
+        $displayedResourceName.= "  data-businessunit='" . $businessunit. "' ";
+        $displayedResourceName.= "  data-status='" . $status . "' ";
+        $displayedResourceName.= "  data-service='" .$service .  "' ";
+        $displayedResourceName.= "  data-organisation='" .$organisation .  "' ";
 //        $row['RESOURCE_NAME'].= "  data-subservice='" . $service . "' ";
-        $row['RESOURCE_NAME'].= "  data-resourcename='" . $resourceName . "' ";
-        $row['RESOURCE_NAME'].= "  data-start='" . $startDate . "' ";
-        $row['RESOURCE_NAME'].= "  data-startpika='" . $startDate4Picka . "' ";
-        $row['RESOURCE_NAME'].= "  data-end='" . $endDate . "' ";
-        $row['RESOURCE_NAME'].= "  data-endpika='" . $endDate4Picka . "' ";
-        $row['RESOURCE_NAME'].= "  data-rfsenddate='" . $rfsEndDate . "' ";
-        $row['RESOURCE_NAME'].= "  data-hrs='" . $hrsPerWeek . "' ";
-        $row['RESOURCE_NAME'].= "  >";
+        $displayedResourceName.= "  data-resourcename='" . $resourceName . "' ";
+        $displayedResourceName.= "  data-start='" . $startDate . "' ";
+        $displayedResourceName.= "  data-startpika='" . $startDate4Picka . "' ";
+        $displayedResourceName.= "  data-end='" . $endDate . "' ";
+        $displayedResourceName.= "  data-endpika='" . $endDate4Picka . "' ";
+        $displayedResourceName.= "  data-rfsenddate='" . $rfsEndDate . "' ";
+        $displayedResourceName.= "  data-hrs='" . $hrsPerWeek . "' ";
+        $displayedResourceName.= "  >";
 
 //         $row['RESOURCE_NAME'].= $editable ? 
 //             "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' >
 //             <span data-toggle='tooltip' class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Request'></span>
 //             </button>" : null;
-        $row['RESOURCE_NAME'].= $editable ? 
+        $displayedResourceName.= $editable ? 
              "<button type='button' class='btn btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' data-resource-name='" . $resourceName . "' >
               <span data-toggle='tooltip' class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true' title='Edit Assigned Resource'></span>
               </button>" : null;
-        $row['RESOURCE_NAME'] .= $editable ? 
+        $displayedResourceName.= $editable ? 
             "<button type='button' class='btn btn-xs editHours accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-startDate='" . $startDate . "' >
              <span data-toggle='tooltip' class=' glyphicon glyphicon-time text-primary' aria-hidden='true' title='Edit Dates/Hours'></span>
              </button>" : null;
-        $row['RESOURCE_NAME'] .= $editable ?
+        $displayedResourceName.= $editable ?
             "<button type='button' class='btn btn-xs endEarly accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-endDate='" . $endDate . "' >
              <span data-toggle='tooltip' class=' glyphicon glyphicon-flash text-primary' aria-hidden='true' title='Indicate Completed'></span>
              </button>" : null;
         
- 
-        
-        $displayedResourceName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $displayedResourceName;
-        $displayedResourceName = substr($resourceName,0,strlen(resourceRequestTable::DELTA))==resourceRequestTable::DELTA ? "<i>Unallocated</i><br/>" . trim($resourceName) : $displayedResourceName;
+        $resName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $resName;
+        $resName = substr($resourceName,0,strlen(resourceRequestTable::DELTA))==resourceRequestTable::DELTA ? "<i>Unallocated</i><br/>" . trim($resourceName) : $resName;
 
-        $row['RESOURCE_NAME'].= "&nbsp;" . $displayedResourceName ;
-        $row['RESOURCE_NAME']." </span>";
+        $displayedResourceName.= "&nbsp;" . $resName ;
+        $displayedResourceName.= "</span>";
         
         
         $calendarEntry = !empty($row['LATEST_ENTRY']) ?  $row['LATEST_ENTRY'] . " <small>" . $row['ENTRY_CREATOR'] . ' ' . $row['ENTRY_CREATED'] . "</small>" : null;
 //        $calendarEntry = "<small>Latest diary entry not currently available</small>";      
         
-        $row['RESOURCE_NAME'].= "<br/><button type='button' class='btn btn-xs btnOpenDiary accessRestrict accessAdmin accessCdi accessSupply accessDemand ' ";
-        $row['RESOURCE_NAME'].= "     aria-label='Left Align'  ";
-        $row['RESOURCE_NAME'].= " data-reference='" .$resourceReference . "' ";
-        $row['RESOURCE_NAME'].= " data-rfs='" .$rfsId . "'  ";
-        $row['RESOURCE_NAME'].= " data-organisation='" .$organisation . "'  ";
-        $row['RESOURCE_NAME'].= " > ";
-        $row['RESOURCE_NAME'].= "<span data-toggle='tooltip' title='Open Diary' class='glyphicon glyphicon-book ' aria-hidden='true' ></span>";
-        $row['RESOURCE_NAME'].= "</button><div class='latestDiary'>" . $calendarEntry . "</div>";
+        $displayedResourceName.= "<br/><button type='button' class='btn btn-xs btnOpenDiary accessRestrict accessAdmin accessCdi accessSupply accessDemand ' ";
+        $displayedResourceName.= "     aria-label='Left Align'  ";
+        $displayedResourceName.= " data-reference='" .$resourceReference . "' ";
+        $displayedResourceName.= " data-rfs='" .$rfsId . "'  ";
+        $displayedResourceName.= " data-organisation='" .$organisation . "'  ";
+        $displayedResourceName.= " > ";
+        $displayedResourceName.= "<span data-toggle='tooltip' title='Open Diary' class='glyphicon glyphicon-book ' aria-hidden='true' ></span>";
+        $displayedResourceName.= "</button><div class='latestDiary'>" . $calendarEntry . "</div>";
         
         
-
+        $row['RESOURCE_NAME']   = array('display'=> $displayedResourceName, 'sort'=>$resourceName);
 
                   
         $displayRfsId = $rfsId . " : " . $row['RESOURCE_REFERENCE'];
