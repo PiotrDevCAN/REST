@@ -68,6 +68,11 @@ class DateClass {
     
     static function workingDaysFromStartToEnd(\DateTime $startDate, \DateTime $endDate){
         // Calculates the number of Mon to Fri days between 2 dates.
+        $startDate->setTime(0,0);
+        $endDate->setTime(0,0);
+        
+        
+        
         $adjustedStartDate = clone $startDate;
         $adjustedStartDate->modify('next Monday');
         
@@ -86,26 +91,47 @@ class DateClass {
         
     }
     
-    static function workingDaysForWef(\DateTime $wefDate, array $bankHolidays){
-        // Given a Week Ending Friday Date, and an Array of the bankholidays that can be for a much longer period.
-        // This function will work out if any of the bank holidays fall in the 7-days leading to WEF and return th
-        $adjustedStartDate = clone $startDate;
-        $adjustedStartDate->modify('next Monday');
+    static function weekendDaysFromStartToEnd(\DateTime $startDate, \DateTime $endDate){
+        // Calculates the number of Sat & Sun days between 2 dates.
+        
+        $startDate->setTime(0,0);
+        $endDate->setTime(0,0);        
+        
+        $adjustedStartDate = clone $startDate;  
+        $firstWeekDays = 0;
+        if($adjustedStartDate->format('N')!=1){
+            // If it's not a Monday, roll back to the previous Monday
+            $adjustedStartDate->modify('previous Monday');
+            //  
+            $firstWeekDays = $startDate->format('N')==7 ? -1 : 0;
+        }
         
         $adjustedEndDate = clone $endDate;
-        $adjustedEndDate->modify('previous Sunday');
-        
+        $lastWeekDays = 0; // default
+        if($endDate->format('N')!=7){
+            // If it's not a Sunday, roll back to the previous Sunday  
+            $adjustedEndDate->modify('previous Sunday');
+            // 
+            $lastWeekDays = $endDate->format('N')>5 ?  ($endDate->format('N')-5) : 0;
+        }
         $dateDiff = $adjustedEndDate->diff($adjustedStartDate);
         $totalDays = ($dateDiff->days)+1;  /// 2nd to the 4th is 3 days, 2nd, 3rd, and 4th but 4-2 = 2 we're really doing 4-(2-1)
         
-        $firstWeekDays = $adjustedStartDate->diff($startDate)->days;
-        $lastWeekDays  = $endDate->diff($adjustedEndDate)->days;
-        
+      
         $weeks = (int)($totalDays / 7);
         
-        return (($weeks*5)+$firstWeekDays-2+$lastWeekDays);
+//         echo "<br/>Start " . $startDate->format('d-m-Y') . " Adjusted Start" . $adjustedStartDate->format('d-m-Y') . "<br/>End " . $endDate->format('d-m-Y') . " Adjusted End" . $adjustedEndDate->format('d-m-Y');
+ 
         
+//         echo "<br/>Weeks " . $weeks;
+//         echo "<br/>FirstweekDays " . $firstWeekDays;
+//         echo "<br/>LastweekDays " . $lastWeekDays;
+        
+        
+         return ($weeks*2) + $lastWeekDays + $firstWeekDays; //
     }
+    
+    
 
     static function bankHolidaysFromStartToEnd(\DateTime $startDate, \DateTime $endDate){       
         
