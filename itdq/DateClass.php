@@ -5,6 +5,9 @@ namespace itdq;
 use rest\allTables;
 
 class DateClass {
+    const FRIDAY = 5;
+    const SATURDAY = 6;
+    const SUNDAY = 7;
 
     static function weekEnding($date){
         $dateObj = new \DateTime($date);
@@ -66,28 +69,57 @@ class DateClass {
         return array('businessDays' => $businessDays, 'workingDays'=> $workingDays, 'bankHolidays' => $bankHolidays);        
     }
     
+    /*
+     * 
+     * The basic premis is : 
+     *  Get an exact number of weeks between the two dates, by rolling forward to a Monday (If it's not already a Monday) and back to a Sunday ( If it's not already a Sunday)
+     *  Each Week contains 5 Mon-Fri days.
+     *  But, because we "rolled FORWARD to a Monday" - we've potentially not counted a number of working days prior to the Monday.
+     *      To allow for this..... Work out how many days between The "Monday" and the actual Start Date. THis could include a Sat and/or a Sunday, so we have to remove 1 or 2 days if it does
+     *                             this gives us the "excess" days to add on from the "first Week"
+     *      We have a similar issues caused by rolling back to a Sunday, we've potentially missed some working days in the last week, so work them out too.
+     *      
+     *      Our final calculation is : 
+     *        Number of Weeks multiplied by 5 MINUS the "excess" days in the first week picked up by rolling forward to Monday PLUS the "missing" days from the last week caused by rolling back to Sunday
+     * 
+     */
+    
     static function workingDaysFromStartToEnd(\DateTime $startDate, \DateTime $endDate){
+  
         // Calculates the number of Mon to Fri days between 2 dates.
         $startDate->setTime(0,0);
         $endDate->setTime(0,0);
         
-        
-        
         $adjustedStartDate = clone $startDate;
-        $adjustedStartDate->modify('next Monday');
+        if($adjustedStartDate->format('N')!=1){
+            // If it's not a Monday, roll back to the previous Monday
+            $adjustedStartDate->modify('previous Monday');
+        };        
         
         $adjustedEndDate = clone $endDate;
-        $adjustedEndDate->modify('previous Sunday');
+        if($endDate->format('N')!=7){
+            // If it's not a Sunday, roll back to the previous Sunday
+            $adjustedEndDate->modify('previous Sunday');
+        };
         
         $dateDiff = $adjustedEndDate->diff($adjustedStartDate);
-        $totalDays = ($dateDiff->days)+1;  /// 2nd to the 4th is 3 days, 2nd, 3rd, and 4th but 4-2 = 2 we're really doing 4-(2-1)
+        $totalDays = ($dateDiff->days)+1;  /// 2nd to the 4th is 3 days, 2nd, 3rd, and 4th but 4-2 = 2 we're really doing 4-(2-1) or (4-2)+1;
         
-        $firstWeekDays = $adjustedStartDate->diff($startDate)->days;
-        $lastWeekDays  = $endDate->diff($adjustedEndDate)->days;
+        $excessFirstWeekDays = ($adjustedStartDate->diff($startDate)->days); 
+        $excessFirstWeekDays = $startDate->format('N')== 7 ? ($excessFirstWeekDays - 1)  : $excessFirstWeekDays; // If the start date was a Sat or Sun we need to reduce the diff by 1 or 2 as appropriate.
+        
+        $missingLastWeekDays  = ($endDate->diff($adjustedEndDate)->days);
+        $missingLastWeekDays  = $endDate->format('N')== 6 ? $missingLastWeekDays-1 : $missingLastWeekDays; // If they'd chosen to end on a Sat, we'll have allowed 1 too many business days, so remove it.
         
         $weeks = (int)($totalDays / 7);
         
-        return (($weeks*5)+$firstWeekDays-2+$lastWeekDays);
+        
+//         echo "<br/>Start:" . $startDate->format('d-M-Y') . " Adjusted:" . $adjustedStartDate->format('d-M-Y');
+//         echo "<br/>End:" . $endDate->format('d-M-Y') . " Adjusted:" . $adjustedEndDate->format('d-M-Y');
+//         echo "<br/>Total:$totalDays Weeks:$weeks Pre:$excessFirstWeekDays Post:$missingLastWeekDays";
+        
+        
+        return (($weeks*5)-$excessFirstWeekDays+$missingLastWeekDays);
         
     }
     
@@ -149,7 +181,6 @@ class DateClass {
         $data = array();
 
         while (($row = db2_fetch_assoc($rs))==true) {
-            print_r($row);
             $data[] = $row['BH_DATE'];
         }
         
