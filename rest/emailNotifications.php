@@ -26,7 +26,7 @@ class emailNotifications
         $resourceEmail = !empty($resourceNotesid) ? BluePages::getIntranetIdFromNotesId($resourceNotesid) : null ;
         
         $to = !empty($requestorEmail) ? array($resourceEmail) : array($requestorEmail); // If we have a RESOURCE_NAME send it to them, else just to the REQUESTOR
-        $cc = substr(trim(strtolower($requestorEmail)),-7 ) === 'ibm.com' ?  array($requestorEmail) : null; // CC the requestor, if we have an IBM email address for them.
+        $cc = substr(trim(strtolower($requestorEmail)),-7 ) === 'ibm.com' ?  array($requestorEmail) : array(); // CC the requestor, if we have an IBM email address for them.
         
         $replacements = array();
         foreach ($emailPattern as $field => $pattern) {
