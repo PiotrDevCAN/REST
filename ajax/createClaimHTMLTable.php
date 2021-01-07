@@ -25,7 +25,7 @@ for ($i = 0; $i < 6; $i++) {
 <th>RFS ID</th><th>PRN</th><th>Project Title</th><th>Project Code</th><th>Requestor Name</th><th>Requestor Email</th><th>Value Stream</th><th>Business Unit</th>
 <th>Link to PGMP</th><th>RFS Creator</th><th>RFS Created</th>
 <th>Resource Ref</th><th>Organisation</th><th>Service</th><th>Description</th><th>Start Date</th><th>End Date</th>
-<th>Hrs Per Week</th><th>Resource Name</th><th>Request Creator</th><th>Request Created</th>
+<th>Total Hours</th><th>Resource Name</th><th>Request Creator</th><th>Request Created</th>
 <th>Cloned From</th><th>Status</th><th>Rate Type</th><th>Hours Type</th><th>RFS Status</th>
 <?php 
 foreach ($monthLabels as $label) {
@@ -39,7 +39,7 @@ foreach ($monthLabels as $label) {
 <th>RFS ID</th><th>PRN</th><th>Project Title</th><th>Project Code</th><th>Requestor Name</th><th>Requestor Email</th><th>Value Stream</th><th>Business Unit</th>
 <th>RFS Creator</th><th>RFS Created</th>
 <th>Link to PGMP</th><th>Resource Ref</th><th>Organisation</th><th>Service</th><th>Description</th><th>Start Date</th><th>End Date</th>
-<th>Hrs Per Week</th><th>Resource Name</th><th>Request Creator</th><th>Request Created</th>
+<th>Total Hours</th><th>Resource Name</th><th>Request Creator</th><th>Request Created</th>
 <th>Cloned From</th><th>Status</th><th>Rate Type</th><th>Hours Type</th><th>RFS Status</th>
 <?php 
 foreach ($monthLabels as $label) {
