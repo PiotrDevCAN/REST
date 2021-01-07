@@ -240,7 +240,7 @@ class resourceRequestTable extends DbTable
         $endDateSortable = !empty($row['END_DATE'])     ? Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
         $endDateObj = !empty($row['END_DATE'])   ? Datetime::createFromFormat('Y-m-d', $row['END_DATE']) : null;
         is_object($endDateObj) ?  $endDateObj->setTime(23, 59, 59) : null; // When setting completed, compare against midnight on END_DATE
-        $hrsPerWeek = $row['HRS_PER_WEEK'];
+        $totalHours = $row['TOTAL_HOURS'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
         $organisation = $row['ORGANISATION'];
         $service = $row['SERVICE'];
@@ -314,7 +314,7 @@ class resourceRequestTable extends DbTable
         $displayedResourceName.= "  data-end='" . $endDate . "' ";
         $displayedResourceName.= "  data-endpika='" . $endDate4Picka . "' ";
         $displayedResourceName.= "  data-rfsenddate='" . $rfsEndDate . "' ";
-        $displayedResourceName.= "  data-hrs='" . $hrsPerWeek . "' ";
+        $displayedResourceName.= "  data-hrs='" . $totalHours . "' ";
         $displayedResourceName.= "  >";
 
 //         $row['RESOURCE_NAME'].= $editable ? 
@@ -371,7 +371,7 @@ class resourceRequestTable extends DbTable
         $displayRfsId.= "  data-resourcename='" . $resourceName . "' ";
         $displayRfsId.= "  data-start='" . $startDate . "' ";
         $displayRfsId.= "  data-end='" . $endDate . "' ";
-        $displayRfsId.= "  data-hrs='" . $hrsPerWeek . "' ";
+        $displayRfsId.= "  data-hrs='" . $totalHours . "' ";
         $displayRfsId.= "  >";
         
         $displayRfsId.= $editable ?
@@ -402,7 +402,7 @@ class resourceRequestTable extends DbTable
         
         $displayStartDate = '';
         $displayStartDate.= "<span class='$assignColor'>$startDate  to  $endDate <br/>";
-        $displayStartDate.= "Avg Hrs/Week: " . $row['HRS_PER_WEEK'] . "<br/>";
+        $displayStartDate.= "Total Hours: " . $row['TOTAL_HOURS'] . "<br/>";
         $displayStartDate.= ($started == 'Active') ? "Hrs This Week: " . $hrsThisWeek . "<br/>" : null;
         $displayStartDate.= (isset($row['hours_to_go'])) ? "Hrs remaining:" . $row['hours_to_go'] . "<br/>" : null;
         $displayStartDate.= (isset($row['weeks_to_go'])) ? "Weeks remaining:" . $row['weeks_to_go'] . "<br/>" : null;
@@ -411,15 +411,15 @@ class resourceRequestTable extends DbTable
         $row['START_DATE'] = array('display'=> $displayStartDate, 'sort'=>$startDateSortable);
         $row['END_DATE'] = array('display'=> $endDate, 'sort'=>$endDateSortable);
         
-        $avgHrsPerWeek = $row['HRS_PER_WEEK'];
+        $totalHours = $row['TOTAL_HOURS'];
         
         $displayHrsPerWeek = "";
         
-        $displayHrsPerWeek = "Average:" . $avgHrsPerWeek . "<br/>";
+        $displayHrsPerWeek = "Total Hrs:" . $totalHours . "<br/>";
         $displayHrsPerWeek.= ($started == 'Active') ? "This Week:" . $hrsThisWeek : null;
         
         
-        $row['HRS_PER_WEEK'] = array('display'=>$displayHrsPerWeek,'sort'=>$avgHrsPerWeek);
+        $row['TOTAL_HOURS'] = array('display'=>$displayHrsPerWeek,'sort'=>$totalHours);
         
         $row['ORGANISATION']=array('display'=>$row['ORGANISATION'] . "<br/><small>" . $row['SERVICE'] . "</small>", 'sort'=>$organisation);
   

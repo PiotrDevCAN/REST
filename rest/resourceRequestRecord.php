@@ -32,7 +32,7 @@ class resourceRequestRecord extends DbRecord
     protected $TOTAL_HOURS; // ALTER TABLE "REST_DEV"."RESOURCE_REQUESTS" ADD COLUMN "TOTAL_HOURS" DECIMAL(8,2);
 
     static public $columnHeadings = array("Resource Ref", "RFS", "Organisation", "Service",
-                                          "Description", "Start Date", "End Date", "Hrs Per Week", "Resource Name",
+                                          "Description", "Start Date", "End Date", "Total Hours", "Resource Name",
         "Request Creator", "Request Created","Cloned From", "Status",'Rate_Type','Hours_type'    );
 
     CONST STATUS_NEW        = 'New';
