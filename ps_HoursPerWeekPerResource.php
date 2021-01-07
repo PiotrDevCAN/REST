@@ -19,8 +19,8 @@ if ($helper->isCli()) {
 // Create new Spreadsheet object
 $spreadsheet = new Spreadsheet();
 // Set document properties
-$spreadsheet->getProperties()->setCreator('vBAC')
-->setLastModifiedBy('vBAC')
+$spreadsheet->getProperties()->setCreator('REST')
+->setLastModifiedBy('REST')
 ->setTitle('REST - Hours Per Week Per Resource')
 ->setSubject('Full Person Table')
 ->setDescription('Hours Per Week Per Resource - REST')
