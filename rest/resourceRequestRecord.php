@@ -29,6 +29,7 @@ class resourceRequestRecord extends DbRecord
     protected $RATE_TYPE;
     protected $HOURS_TYPE;
     protected $HRS_PER_WEEK;
+    protected $TOTAL_HOURS; // ALTER TABLE "REST_DEV"."RESOURCE_REQUESTS" ADD COLUMN "TOTAL_HOURS" DECIMAL(8,2);
 
     static public $columnHeadings = array("Resource Ref", "RFS", "Organisation", "Service",
                                           "Description", "Start Date", "End Date", "Hrs Per Week", "Resource Name",
@@ -156,10 +157,10 @@ class resourceRequestRecord extends DbRecord
    		<div class='form-group required'>
    		
    		<div id='HrsPerWeekFormGroup'>
-   		<label for="HRS_PER_WEEK" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Hrs per Week</label>
+   		<label for="TOTAL_HOURS" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Total Hours<br/><small>For RFS</small></label>
    		<div class="col-md-2">
-   		<input type='number' step='0.01' min=0 max=60 class="form-control" id="HRS_PER_WEEK" name="HRS_PER_WEEK" value="<?=$this->HRS_PER_WEEK?>" placeholder="Avg hrs/Week" <?=$notEditable?> required >
-   		<input id="originalHRS_PER_WEEK" name="originalHRS_PER_WEEK" value="<?=$this->HRS_PER_WEEK?>" type="hidden">
+   		<input type='number' step='0.01' min=0 max=60 class="form-control" id="TOTAL_HOURS" name="TOTAL_HOURS" value="<?=$this->TOTAL_HOURS?>" placeholder="Total Hrs For RFS" <?=$notEditable?> required >
+   		<input id="originalTotal_Hours" name="originalTotal_Hours" value="<?=$this->TOTAL_HOURS?>" type="hidden">
    		</div>
    		</div>
    		

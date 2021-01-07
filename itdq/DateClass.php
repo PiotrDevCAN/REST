@@ -69,6 +69,33 @@ class DateClass {
         return array('businessDays' => $businessDays, 'workingDays'=> $workingDays, 'bankHolidays' => $bankHolidays);        
     }
     
+
+    static function businessDaysForWeekEndingFriday(string $weekEndingFriday,array $bankHolidays, \DateTime $startDate,\DateTime $endDate ){
+        $wef = \DateTime::createFromFormat('Y-m-d', $weekEndingFriday);
+        $monday = clone $wef;
+        $monday->modify('-5 days');
+        $day = clone $monday;
+        $day->setTime(0,0);
+        $endDate->setTime(0, 0);
+        $startDate->setTime(0, 0);
+        $wef->setTime(0, 0);
+        
+        $weekDays = array();
+        
+        while($day < $startDate ){
+            $day->modify('+1 day'); // Roll forward if needs be to the Start Date which could have been between Monday and Friday
+        }
+        while($day <= $endDate && $day <= $wef){            
+            $weekDays[] = $day->format('Y-m-d');
+            $day->modify('+1 day');
+        }
+        
+        $workingDaysArray = array_diff($weekDays, $bankHolidays); // now remove any bankholidays
+    
+        return count($workingDaysArray);
+    }
+    
+    
     /*
      * 
      * The basic premis is : 
@@ -184,7 +211,7 @@ class DateClass {
             $data[] = $row['BH_DATE'];
         }
         
-        return $data != null ? $data : false;       
+        return $data;       
         
     }
 

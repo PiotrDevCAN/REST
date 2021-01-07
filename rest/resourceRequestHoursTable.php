@@ -9,10 +9,22 @@ class resourceRequestHoursTable extends DbTable
 {
     private $preparedGetTotalHrsStatement;
     private $hoursRemainingByReference;
-
-    function createResourceRequestHours($resourceReference, $startDate,$endDate,$hours,$deleteExisting=true){
+    
+    function createResourceRequestHours($resourceReference, $startDate,$endDate,$hours,$deleteExisting=true, $hrsType=resourceRequestRecord::HOURS_TYPE_REGULAR){
         $sdate = new \DateTime($startDate);
-        $edate = new \DateTime($endDate);
+        $edate = new \DateTime($endDate);        
+       
+        if($hrsType == resourceRequestRecord::HOURS_TYPE_OT_WEEK_END){
+            $effortDays = DateClass::weekendDaysFromStartToEnd($sdate, $edate);
+            $bankHolidays = array();
+            $hrsPerEffortDay = $hours / $effortDays;
+        } else {
+            $response = DateClass::businessDaysFromStartToEnd($sdate, $edate);
+            $effortDays = $response['businessDays'];
+            $bankHolidays = $response['bankHolidays'];
+            $hrsPerEffortDay = $hours / $effortDays;
+        }
+      
         $nextDate = $sdate;
         $startPeriod = $sdate->format('oW');
         $endPeriod = $edate->format('oW');
@@ -29,18 +41,48 @@ class resourceRequestHoursTable extends DbTable
             $resourceRequestHours = new resourceRequestHoursRecord();
             $resourceRequestHours->RESOURCE_REFERENCE = $resourceReference;
             $resourceRequestHours->DATE = $nextDate->format('Y-m-d');
-            $resourceRequestHours->HOURS = $hours;
+            // $resourceRequestHours->HOURS = $hours;
             $resourceRequestHours->YEAR = $nextDate->format('o');
             $resourceRequestHours->WEEK_NUMBER = $nextDate->format('W');
 
             self::populateComplimentaryDateFields($nextDate, $resourceRequestHours);
             
             $resourceRequestHours->DATE = $resourceRequestHours->WEEK_ENDING_FRIDAY;
-
-            $this->saveRecord($resourceRequestHours);
+            $wefDate = new \DateTime($resourceRequestHours->WEEK_ENDING_FRIDAY);
+            
+            if($hrsType == resourceRequestRecord::HOURS_TYPE_OT_WEEK_END){
+                if($edate > $wefDate){
+                    $businessDaysInWeek = 2; // Includes whole weekend
+                } else {
+                    switch ($edate->format('N')) {
+                        case 6: // Ends on a Saturday
+                            $businessDaysInWeek = 1;
+                            break; 
+                        case 7: // Ends on a Sunday
+                            $businessDaysInWeek = 2;
+                            break; 
+                        default:
+                            // Ends before the weekend starts
+                            $businessDaysInWeek = 0;                             
+                            break;
+                    }
+                }                
+            } else {
+                $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($resourceRequestHours->WEEK_ENDING_FRIDAY, $bankHolidays,$sdate, $edate);
+            }
+            
+            if($businessDaysInWeek>0){
+                $businessHoursInWeek = $businessDaysInWeek * $hrsPerEffortDay;
+                $resourceRequestHours->HOURS = $businessHoursInWeek;
+                
+                $this->saveRecord($resourceRequestHours);
+                $weeksCreated++;
+            }
+            
             $nextDate->add($oneWeek);
             $nextPeriod = $nextDate->format('oW');
-            $weeksCreated++;
+            
+
         }
 
         return $weeksCreated;

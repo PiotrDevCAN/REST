@@ -34,7 +34,7 @@ if(trim($_POST['mode'])==FormClass::$modeEDIT){
 // $resourceReference = $resourceTable->lastId();
 
 $endDate = !empty($_POST['END_DATE']) ? $_POST['END_DATE'] : $_POST['START_DATE'];
-$hours   = !empty($_POST['TOTAL_HOURS']) ? $_POST['TOTAL_HOURS'] : 0;
+$hours   = !empty($_POST['HRS_PER_WEEK']) ? $_POST['HRS_PER_WEEK'] : 0;
 
 $hoursResponse = '';
 
@@ -42,7 +42,7 @@ if($saveResponse && trim($_POST['mode'])!=FormClass::$modeEDIT ){ // if they wer
     $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
     $resourceHoursSaved = false;
     try {
-        $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference,$_POST['START_DATE'],$endDate,$hours, true, $resourceRecord->getValue('HOURS_TYPE') );
+        $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference,$_POST['START_DATE'],$endDate,$hours );
         $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
     } catch (Exception $e) {
         $hoursResponse = $e->getMessage();
