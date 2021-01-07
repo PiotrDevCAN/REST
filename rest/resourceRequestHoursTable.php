@@ -177,37 +177,37 @@ class resourceRequestHoursTable extends DbTable
         return $allData;
     }
 
-    function prepareGetTotalHoursStatement(){
-        if(!isset($this->preparedGetTotalHrsStatement)){
-            $sql = " SELECT SUM(HOURS) as TOTAL_HRS ";
-            $sql .= " FROM " . $GLOBALS['Db2Schema'] . "." .  $this->tableName;
-            $sql .= " WHERE RESOURCE_REFERENCE=?";
-            $this->preparedSelectSQL = $sql;
-            $this->preparedGetTotalHrsStatement = db2_prepare($GLOBALS['conn'], $sql);
+//     function prepareGetTotalHoursStatement(){
+//         if(!isset($this->preparedGetTotalHrsStatement)){
+//             $sql = " SELECT SUM(HOURS) as TOTAL_HRS ";
+//             $sql .= " FROM " . $GLOBALS['Db2Schema'] . "." .  $this->tableName;
+//             $sql .= " WHERE RESOURCE_REFERENCE=?";
+//             $this->preparedSelectSQL = $sql;
+//             $this->preparedGetTotalHrsStatement = db2_prepare($GLOBALS['conn'], $sql);
 
-        }
-        return $this->preparedGetTotalHrsStatement;
-    }
+//         }
+//         return $this->preparedGetTotalHrsStatement;
+//     }
 
 
 
-    function getTotalHoursForRequest($resourceReference=null){
-        if(empty($resourceReference)){
-            return false;
-        }
+//     function getTotalHoursForRequest($resourceReference=null){
+//         if(empty($resourceReference)){
+//             return false;
+//         }
 
-        $preparedStmt = $this->prepareGetTotalHoursStatement();
-        $data = array($resourceReference);
-        $result = db2_execute($preparedStmt,$data);
+//         $preparedStmt = $this->prepareGetTotalHoursStatement();
+//         $data = array($resourceReference);
+//         $result = db2_execute($preparedStmt,$data);
 
-        if($result){
-            $row = db2_fetch_assoc($preparedStmt);
-            return $row['TOTAL_HRS'];
-        } else {
-            $this->displayErrorMessage($preparedStmt, __CLASS__, __METHOD__, $this->preparedSelectSQL);
-            return false;
-        }
-    }
+//         if($result){
+//             $row = db2_fetch_assoc($preparedStmt);
+//             return $row['TOTAL_HRS'];
+//         } else {
+//             $this->displayErrorMessage($preparedStmt, __CLASS__, __METHOD__, $this->preparedSelectSQL);
+//             return false;
+//         }
+//     }
     
     function getHoursRemainingByReference(){
         if($this->hoursRemainingByReference==null){

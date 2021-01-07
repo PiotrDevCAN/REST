@@ -25,8 +25,6 @@ if(!$hoursUpdate){
     echo db2_stmt_errormsg();
 }
 
-var_dump($hoursUpdate);
-
 foreach ($_POST as $key => $value){
     if(substr($key,0,15)== "ModalHRSForWeek"){
         $week = substr($key,15,10);
@@ -38,6 +36,8 @@ foreach ($_POST as $key => $value){
         var_dump($result);
     }
 }
+
+resourceRequestTable::setTotalHours($resourceReference, $_POST['ModalTOTAL_HOURS']);
 
 $messages = ob_get_clean();
 ob_start();

@@ -14,7 +14,8 @@ $start = microtime(True);
 $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
 
 $resourceHoursRs  = $resourceHoursTable->getRsWithPredicate(" RESOURCE_REFERENCE='" . trim($_POST['resourceReference']) . "' ");
-$resourceTotalHrs = $resourceHoursTable->getTotalHoursForRequest($_POST['resourceReference']);
+// $resourceTotalHrs = $resourceHoursTable->getTotalHoursForRequest($_POST['resourceReference']);
+
 
 ob_start();
 ?>
@@ -81,14 +82,9 @@ ob_start();
 
    <div class='row'>
        <div class='form-group'>
-       <label for="ModalHRS_PER_WEEK" class="col-md-2 control-label" data-toggle="tooltip" data-placement="top" title="">Hrs per Week</label>
+       <label for="ModalTOTAL_HOURS" class="col-md-2 control-label" data-toggle="tooltip" data-placement="top" title="">Total Hours</label>
        <div class="col-md-4">
-       <input type='number' step='0.01' min=0 max=50 class="form-control" id="ModalHRS_PER_WEEK" name="ModalHRS_PER_WEEK" value="" placeholder="Avg hrs/Week" >
-       </div>
-
-       <label for="ModalTOTAL_HRS" class="col-md-2 control-label" data-toggle="tooltip" data-placement="top" title="">Total Hours</label>
-       <div class="col-md-4">
-       <input type='text' class="form-control" id="ModalTOTAL_HRS" name="ModalTOTAL_HRS" value="<?=$resourceTotalHrs;?>" placeholder="Total Hours" disabled >
+       <input type='number' step='0.01' min=0 max=50 class="form-control" id="ModalTOTAL_HOURS" name="ModalTOTAL_HOURS" value="" placeholder="Total Hours" >
        </div>
        </div>
 	</div>
@@ -118,13 +114,13 @@ while (($row = db2_fetch_assoc($resourceHoursRs))==true){
     $hours = $row['HOURS'];
 
     $stripe = $monthColours[$row['CLAIM_MONTH']];
-    $weekObj = new DateTime($week);
+    $weekObj = new DateTime($week);    
     ?>
 
     <div id='ModalHrsForWeekFormGroup<?=$week?>' class='form-group' style='background:<?=$stripe?>'>
      <label for='ModalHRSForWeek<?=$week?>' class='col-md-6 control-label ' data-toggle='tooltip' data-placement='top' title='Hours for week <?=$week?>'><?=$weekObj->format('\W\e\e\k W - dS M y')?></label>
        <div class='col-md-3'>
-      <input type='number' step='0.1' min=0 max=50 class="form-control" id="ModalHRSForWeek<?=$week?>" name="ModalHRSForWeek<?=$week?>" value="<?=$hours;?>" placeholder="Hrs/Week" >
+      <input type='number' step='0.1' min=0 max=50 class="form-control hrsForWeek" id="ModalHRSForWeek<?=$week?>" name="ModalHRSForWeek<?=$week?>" value="<?=$hours;?>" placeholder="Hrs/Week" >
       </div>
       <div class='col-md-3'>
       <p>Claim: <?=$claimMonths[$row['CLAIM_MONTH']]?></p>

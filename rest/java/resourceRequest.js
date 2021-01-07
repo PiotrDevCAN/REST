@@ -383,7 +383,7 @@ function ResourceRequest() {
     			$('#editHoursService').text($(dataDetails).data('service'));
     			$('#editHoursSubService').text($(dataDetails).data('subservice'));
     			$('#editHoursResourceName').text($(dataDetails).data('resourcename'));			    			
-				$('#ModalHRS_PER_WEEK').val($(dataDetails).data('hrs'));			
+				$('#ModalTOTAL_HOURS').val($(dataDetails).data('hrs'));			
 					
     			var resourceRequest = new ResourceRequest();
 				resourceRequest.initialiseEditHoursModalStartEndDates();    			
@@ -570,6 +570,7 @@ function ResourceRequest() {
 	this.listenForSaveAdjustedHours = function(){
 		$(document).on('click','#saveAdjustedHours', function(e){
 			$(this).addClass('spinning').attr('disabled',true);
+			$('#ModalTOTAL_HOURS').prop('disabled',false);
 			var formData = $('#resourceHoursForm').serialize();
 		    $.ajax({
 		    	url: "ajax/saveAdjustedHours.php",

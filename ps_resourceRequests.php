@@ -627,9 +627,18 @@ $(document).ready(function() {
 });
 
 $(document).ready(function(){
-	
 
-
+	$(document).on('keyup mouseup','.hrsForWeek',function(e){
+		$('#ModalTOTAL_HOURS').prop('disabled',true);
+		$('#reinitialise').attr('disabled',true);
+		$('#saveAdjustedHours').attr('disabled',false);
+		
+		var totalHours = 0;		
+		$.each($('.hrsForWeek'),function(key, element){
+			totalHours = parseFloat(totalHours) + parseFloat(element.value);
+		});
+		$('#ModalTOTAL_HOURS').val(totalHours);
+	});
 });
 
 
