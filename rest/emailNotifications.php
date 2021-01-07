@@ -68,7 +68,7 @@ class emailNotifications
         $emailBody.= "<tr ><th style='$thStyle'>RFS</th><td style='$tdStyle'>" . $resourceRequestData['RFS'] . "</td></tr>";
         $emailBody.= "<tr ><th style='$thStyle'>Request</th><td style='$tdStyle''>" . $resourceRequestData['RESOURCE_REFERENCE'] . "</td></tr>";
         $emailBody.= "<tr ><th style='$thStyle'>Service</th><td style='$tdStyle'>" . $resourceRequestData['SERVICE'] . "</td></tr>";
-        $emailBody.= "<tr ><th style='$thStyle'>Hours/Week</th><td style='$tdStyle'>" . $resourceRequestData['HRS_PER_WEEK'] . "</td></tr>";
+        $emailBody.= "<tr ><th style='$thStyle'>Total Hours</th><td style='$tdStyle'>" . $resourceRequestData['TOTAL_HOURS'] . "</td></tr>";
         $emailBody.= "<tr ><th style='$thStyle'>Starting</th><td style='$tdStyle'>" . $startDate->format('d M Y') . "</td></tr>";
         $emailBody.= "<tr ><th style='$thStyle'>Ending</th><td style='$tdStyle'>" . $endDate->format('d M Y') . "</td></tr>";
         $emailBody.= "</tbody>";
