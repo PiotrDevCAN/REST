@@ -593,8 +593,8 @@ $(document).ready(function() {
 	resourceRequest.listenForEditHours();
 	resourceRequest.listenForSlipStartDate();
 	resourceRequest.listenForReinitialise();
-	resourceRequest.listenForMoveEndDate();
-	resourceRequest.listenForMoveStartDate();
+// 	resourceRequest.listenForMoveEndDate();
+// 	resourceRequest.listenForMoveStartDate();
 	resourceRequest.listenForDuplicateResource();
  	resourceRequest.listenForConfirmedDuplication();
  	resourceRequest.listenForChangingHours();
@@ -628,16 +628,53 @@ $(document).ready(function() {
 
 $(document).ready(function(){
 
+	$(document).on('keyup mouseup','#ModalTOTAL_HOURS',function(e){
+		$('.hrsForWeek').prop('disabled',true);
+		$('#reinitialise').attr('disabled',false);
+		$('#saveAdjustedHours').attr('disabled',true);
+
+		$.each($('.hrsForWeek'),function(key, element){
+			$(element).val('').attr('placeholder','Re-Initialise');
+		});
+
+		
+	});
+
+	
+
 	$(document).on('keyup mouseup','.hrsForWeek',function(e){
 		$('#ModalTOTAL_HOURS').prop('disabled',true);
 		$('#reinitialise').attr('disabled',true);
 		$('#saveAdjustedHours').attr('disabled',false);
 		
+		var originalTotalHours = $('#originalTotalHours').val();		
 		var totalHours = 0;		
+		
 		$.each($('.hrsForWeek'),function(key, element){
-			totalHours = parseFloat(totalHours) + parseFloat(element.value);
+			totalHours = (parseFloat(totalHours) + parseFloat(element.value)).toFixed(2);
 		});
+	
 		$('#ModalTOTAL_HOURS').val(totalHours);
+
+		$('#saveAdjustedHours').attr('data-original-title','').tooltip('show').tooltip('hide');
+
+		if(totalHours > originalTotalHours) {
+			$('#saveAdjustedHours').attr('disabled',true);
+			$('.total-hours-group').addClass('has-error').removeClass('has-success has-warning') ;
+			var deltaHours = parseFloat(totalHours - originalTotalHours).toFixed(2);
+			$('#saveAdjustedHours').attr('data-original-title','Total Hours cannot exceed original Total Hours:' + originalTotalHours + '. Remove ' + deltaHours + ' hours');
+		} else if(totalHours == originalTotalHours){
+			$('#saveAdjustedHours').attr('disabled',false);
+			$('.total-hours-group').addClass('has-success').removeClass('has-error has-warning');	
+			$('#saveAdjustedHours').attr('data-original-title','Will save the adjusted hours/week, without changing the Start or End Dates.');		
+		} else {
+			$('#saveAdjustedHours').attr('disabled',false);
+			var deltaHours = parseFloat(originalTotalHours - totalHours).toFixed(2);
+			$('.total-hours-group').addClass('has-warning').removeClass('has-success has-error');	
+			$('#saveAdjustedHours').attr('data-original-title','Saving now, would reduce  Total Hours by ' + deltaHours + ' from ' + originalTotalHours);
+		}
+
+		
 	});
 });
 

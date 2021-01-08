@@ -377,6 +377,7 @@ function ResourceRequest() {
 			var dataDetails = $(this).parent('span');		
 			
     		$('#resourceHoursModal').on('shown.bs.modal',function(){
+
     			$('#editHoursRfs').text($(dataDetails).data('rfs'));	
     			$('#editHoursPrn').text($(dataDetails).data('prn'));
     			$('#editHoursValueStream').text($(dataDetails).data('valuestream'));
@@ -384,6 +385,7 @@ function ResourceRequest() {
     			$('#editHoursSubService').text($(dataDetails).data('subservice'));
     			$('#editHoursResourceName').text($(dataDetails).data('resourcename'));			    			
 				$('#ModalTOTAL_HOURS').val($(dataDetails).data('hrs'));			
+				$('#originalTotalHours').val($(dataDetails).data('hrs'));
 					
     			var resourceRequest = new ResourceRequest();
 				resourceRequest.initialiseEditHoursModalStartEndDates();    			
@@ -442,55 +444,6 @@ function ResourceRequest() {
 		    });
 		});
 	},
-
-	this.listenForMoveEndDate = function(){
-		$(document).on('click','#moveEndDate', function(e){
-			$(this).addClass('spinning').attr('disabled',true);
-			var endDate = $('#ModalEND_DATE').val();
-			var endDateWas = $('#endDateWas').val();
-			var hrsPerWeek = $('#ModalHRS_PER_WEEK').val();
-			var resourceReference = $('#ModalResourceReference').val();			
-		    $.ajax({
-		    	url: "ajax/moveEndDate.php",
-		        type: 'POST',
-		    	data: {endDate: endDate,
-		    		   endDateWas : endDateWas,
-		    		   hrsPerWeek : hrsPerWeek,
-		    		   resourceReference : resourceReference },
-		    	success: function(result){
-		    		$('.spinning').removeClass('spinning').attr('disabled',false);					
-				    $('#editResourceHours').html('');
-					$('#resourceHoursModal').modal('hide');
-		    		ResourceRequest.table.ajax.reload();
-		    		}
-		    });
-		});
-	},
-	
-	this.listenForMoveStartDate = function(){
-		$(document).on('click','#moveStartDate', function(e){
-			$(this).addClass('spinning').attr('disabled',true);
-			var startDate = $('#ModalSTART_DATE').val();
-			var startDateWas = $('#startDateWas').val();
-			var hrsPerWeek = $('#ModalHRS_PER_WEEK').val();
-			var resourceReference = $('#ModalResourceReference').val();			
-		    $.ajax({
-		    	url: "ajax/moveStartDate.php",
-		        type: 'POST',
-		    	data: {startDate: startDate,
-		    		   startDateWas : startDateWas,
-		    		   hrsPerWeek : hrsPerWeek,
-		    		   resourceReference : resourceReference },
-		    	success: function(result){
-		    		$('.spinning').removeClass('spinning').attr('disabled',false);					
-				    $('#editResourceHours').html('');
-					$('#resourceHoursModal').modal('hide');
-		    		ResourceRequest.table.ajax.reload();
-		    		}
-		    });
-		});
-	},
-
 
 
 	this.listenForReinitialise = function(){

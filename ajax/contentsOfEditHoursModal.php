@@ -81,10 +81,11 @@ ob_start();
   </div>
 
    <div class='row'>
-       <div class='form-group'>
+       <div class='form-group total-hours-group'>
        <label for="ModalTOTAL_HOURS" class="col-md-2 control-label" data-toggle="tooltip" data-placement="top" title="">Total Hours</label>
        <div class="col-md-4">
        <input type='number' step='0.01' min=0 max=50 class="form-control" id="ModalTOTAL_HOURS" name="ModalTOTAL_HOURS" value="" placeholder="Total Hours" >
+       <input type='hidden' id='originalTotalHours' >
        </div>
        </div>
 	</div>
@@ -92,10 +93,7 @@ ob_start();
     <div class='row'>
     <div class='col-sm-2'></div>
        <div class='col-sm-8'>
-
-       <button type="button" class="btn btn-sm btn-warning  " id='moveStartDate' disabled data-toggle='tooltip' data-placement='top' title='Will simply change the Start Date of the Request, It will either delete unrequired weeks, or add additional as required.' >Move Start Date</button>
-       <button type="button" class="btn btn-sm btn-warning  " id='reinitialise' data-toggle='tooltip' data-placement='top' title='Using the existing Start Date & End Date with the Avg Hrs per Week from this form, will reset the hours profile for the request' >Re-Initialise</button>
-       <button type="button" class="btn btn-sm btn-warning  " id='moveEndDate' disabled data-toggle='tooltip' data-placement='top' title='Will amend the End Date of the Request, either deleting weeks or adding weeks as appropriate' >Change End Date</button>
+       <button type="button" class="btn btn-sm btn-warning  " id='reinitialise' data-toggle='tooltip' data-placement='top' title='Using the Start Date, End Date and Total Hours from this form, will reset the hours profile for the request' >Re-Initialise</button>
        </div>
     <div class='col-sm-2'></div>
     </div>
@@ -138,7 +136,7 @@ $modalBody = ob_get_clean();
 ob_start();
 
 ?><button type="button" class="btn btn-warning" id='saveAdjustedHoursWithDelta' data-toggle='tooltip' data-placement='top' title='Will save this request with the adjusted hours BUT also create a new request for the hours that have been removed from this request'>Auto-Delta</button><?php
-?><button type="button" class="btn btn-primary" id='saveAdjustedHours' data-toggle='tooltip' data-placement='top' title='Will save the adjusted hours/week, without changing the Start or End Dates.'>Adjust Hrs Profile</button><?php
+?><button type="button" class="btn btn-primary" id='saveAdjustedHours' title=''>Adjust Hrs Profile</button><?php
 ?><button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 <?php
 $modalFooter = ob_get_clean();
