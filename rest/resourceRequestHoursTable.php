@@ -20,11 +20,6 @@ class resourceRequestHoursTable extends DbTable
             $hrsPerEffortDay = $hours / $effortDays;
         } else {
             $response = DateClass::businessDaysFromStartToEnd($sdate, $edate);
-            
-            var_dump($response);
-
-            
-            
             $effortDays = $response['businessDays'];
             $bankHolidays = $response['bankHolidays'];
             $hrsPerEffortDay = $hours / $effortDays;
