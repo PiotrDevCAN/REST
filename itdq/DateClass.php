@@ -73,7 +73,7 @@ class DateClass {
     static function businessDaysForWeekEndingFriday(string $weekEndingFriday,array $bankHolidays, \DateTime $startDate,\DateTime $endDate ){
         $wef = \DateTime::createFromFormat('Y-m-d', $weekEndingFriday);
         $monday = clone $wef;
-        $monday->modify('-5 days');
+        $monday->modify('-4 days');
         $day = clone $monday;
         $day->setTime(0,0);
         $endDate->setTime(0, 0);
@@ -81,7 +81,7 @@ class DateClass {
         $wef->setTime(0, 0);
         
         $weekDays = array();
-        
+      
         while($day < $startDate ){
             $day->modify('+1 day'); // Roll forward if needs be to the Start Date which could have been between Monday and Friday
         }
