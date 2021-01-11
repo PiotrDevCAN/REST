@@ -42,8 +42,8 @@ function ResourceRequest() {
 				$('#ModalSTART_DATE').val(db2Value);	
 				$('#saveAdjustedHoursWithDelta').attr('disabled',true);	
 				$('#saveAdjustedHours').attr('disabled',true);
-				$('#moveStartDate').attr('disabled',false);
-				$('#reinitialise').attr('disabled',true);
+			//	$('#moveStartDate').attr('disabled',false);
+				$('#reinitialise').attr('disabled',false);
 				this.setMaxDate(ModalendPicker.getMoment().toDate());
 				
 			}
@@ -60,8 +60,8 @@ function ResourceRequest() {
 				$('#ModalEND_DATE').val(db2Value);	
 				$('#saveAdjustedHoursWithDelta').attr('disabled',true);	
 				$('#saveAdjustedHours').attr('disabled',true);
-				$('#moveEndDate').attr('disabled',false);
-				$('#reinitialise').attr('disabled',true);
+			//	$('#moveEndDate').attr('disabled',false);
+				$('#reinitialise').attr('disabled',false);
 			}
 		});
 	},
@@ -386,6 +386,7 @@ function ResourceRequest() {
     			$('#editHoursResourceName').text($(dataDetails).data('resourcename'));			    			
 				$('#ModalTOTAL_HOURS').val($(dataDetails).data('hrs'));			
 				$('#originalTotalHours').val($(dataDetails).data('hrs'));
+				$('#ModalHOURS_TYPE').val($(dataDetails).data('hrstype'));
 					
     			var resourceRequest = new ResourceRequest();
 				resourceRequest.initialiseEditHoursModalStartEndDates();    			
@@ -592,10 +593,10 @@ function ResourceRequest() {
 	
 	this.listenForChangingHours = function (){
 		$(document).on('focus','input[type=number]',function(){
-			$('#saveAdjustedHoursWithDelta').attr('disabled',false);
-			$('#saveAdjustedHours').attr('disabled',false);
-			$('#slipStartDate').attr('disabled',true);
-			$('#moveEndDate').attr('disabled',true);
+		//	$('#saveAdjustedHoursWithDelta').attr('disabled',false); it's temporarily suspended.
+		//	$('#saveAdjustedHours').attr('disabled',false); They can't do this anymore
+		//	$('#slipStartDate').attr('disabled',true);
+		//	$('#moveEndDate').attr('disabled',true);
 		});
 	},
 	

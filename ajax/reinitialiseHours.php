@@ -1,56 +1,44 @@
 <?php
 use rest\allTables;
 use rest\resourceRequestTable;
-use rest\resourceRequestHoursRecord;
+use rest\resourceRequestRecord;
 use rest\resourceRequestHoursTable;
 use rest\resourceRequestDiaryTable;
 
 set_time_limit(0);
 ob_start();
 $autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
-
-switch (true) {
-    case empty($_POST['ModalHRS_PER_WEEK']):
-        echo 'No Hrs/Week provided for Reinitialise Hours function';
-        $valid = false;
-        break;
-
-    default:
-        $valid = true;
-    break;
-}
 $hoursResponse = null;
+$valid=true;
+$resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
+
 
 if($valid){
+    $resourceRecord = new resourceRequestRecord();
+    $resourceRecord->setFromArray(array('RESOURCE_REFERENCE'=>$_POST['ModalResourceReference']));
+    
+    $rrData = $resourceTable->getRecord($resourceRecord);
+    $resourceRecord->setFromArray($rrData); // Get current data from the table.
+    $resourceRecord->setFromArray(array('START_DATE'=>$_POST['ModalSTART_DATE'],'END_DATE'=>$_POST['ModalEND_DATE'],'TOTAL_HOURS'=>$_POST['ModalTOTAL_HOURS']));  // Override with what the user has changed on the screen.
+    $resp = $resourceTable->update($resourceRecord);
+  
+    
     $resourceReference = $_POST['ModalResourceReference'];
     $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
     try {
-        $currentRecords = $resourceHoursTable->returnAsArray(" RESOURCE_REFERENCE='" . db2_escape_string($resourceReference) . "' ","*",true);
-        $weeksSaved = 0;
-        foreach ($currentRecords as $hrsRecord){
-            $resourceHoursRecord = new resourceRequestHoursRecord();             // Start a new record
-            $hrsRecord['HOURS'] = db2_escape_string($_POST['ModalHRS_PER_WEEK']);  // Set the hours from the form
-            $resourceHoursRecord->setFromArray($hrsRecord);                      // Populate the new record 
-            $resourceHoursTable->update($resourceHoursRecord);                   // Update the record in the Table
-            $weeksSaved++;                                                       // Track how many we did.
-        }
-        $hoursResponse = $weeksSaved . " records updated.";
-        
-        resourceRequestTable::setHrsPerWeek($_POST['ModalResourceReference'],$_POST['ModalHRS_PER_WEEK'] );
-        
-        
-        $diaryEntry = "Request was re-initialised at  " . $_POST['ModalHRS_PER_WEEK'] . " Hours per week";
-        $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
-        
-        
-        
-        db2_commit($GLOBALS['conn']);
+        $resourceHoursTable->createResourceRequestHours($resourceReference,$_POST['ModalSTART_DATE'],$_POST['ModalEND_DATE'],$_POST['ModalTOTAL_HOURS'], true, $_POST['ModalHOURS_TYPE'] );
     } catch (Exception $e) {
         db2_rollback($GLOBALS['conn']);
         $hoursResponse = $e->getMessage();
     }
-
-    $resourceHoursTable->commitUpdates();
+        
+    resourceRequestTable::setTotalHours($_POST['ModalResourceReference'],$_POST['ModalTOTAL_HOURS'] );
+        
+        
+    $diaryEntry = "Request was re-initialised at  " . $_POST['ModalHRS_PER_WEEK'] . " Hours per week";
+    $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
+        
+    db2_commit($GLOBALS['conn']);
 }
 
 db2_autocommit($GLOBALS['conn'],$autoCommit);

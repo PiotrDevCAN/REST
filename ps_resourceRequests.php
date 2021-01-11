@@ -597,7 +597,7 @@ $(document).ready(function() {
 // 	resourceRequest.listenForMoveStartDate();
 	resourceRequest.listenForDuplicateResource();
  	resourceRequest.listenForConfirmedDuplication();
- 	resourceRequest.listenForChangingHours();
+// 	resourceRequest.listenForChangingHours();
  	resourceRequest.listenForSaveDiaryEntry();
  	resourceRequest.listenForSaveAdjustedHours();
  	resourceRequest.listenForSaveAdjustedHoursWithDelta();

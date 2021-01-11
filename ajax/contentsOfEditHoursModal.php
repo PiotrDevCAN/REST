@@ -86,6 +86,7 @@ ob_start();
        <div class="col-md-4">
        <input type='number' step='0.01' min=0 max=50 class="form-control" id="ModalTOTAL_HOURS" name="ModalTOTAL_HOURS" value="" placeholder="Total Hours" >
        <input type='hidden' id='originalTotalHours' >
+       <input type='hidden' id='ModalHOURS_TYPE' name='ModalHOURS_TYPE' >
        </div>
        </div>
 	</div>

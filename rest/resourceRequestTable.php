@@ -93,12 +93,10 @@ class resourceRequestTable extends DbTable
 
     function returnAsArray($startDate,$endDate, $predicate=null, $pipelineLiveArchive = 'live', $withButtons=true){
         
- //       $this->populateLastDiaryEntriesArray();
-        
+ //       $this->populateLastDiaryEntriesArray();        
         
         $autoCommit = db2_autocommit($GLOBALS['conn']);
-        db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
-        
+        db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);        
         
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
         $hoursRemainingByReference = $resourceRequestHoursTable->getHoursRemainingByReference();
@@ -166,9 +164,6 @@ class resourceRequestTable extends DbTable
         $sql .= " ON RR.RFS = RFS.RFS_ID ";
         $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$LATEST_DIARY_ENTRIES. " as LD ";
         $sql .= " ON RR.RESOURCE_REFERENCE = LD.RESOURCE_REFERENCE ";
-        
-//         $sql .= " left join resource_hours as RH ";
-//         $sql .= " ON RR.RESOURCE_REFERENCE = RH.RR ";
 
         $sql .=  " WHERE RR.RFS is not null ";
         $sql .= $pipelineLiveArchive=='archive'  ? " AND ARCHIVE is not null " : " AND ARCHIVE is null ";
@@ -241,6 +236,7 @@ class resourceRequestTable extends DbTable
         $endDateObj = !empty($row['END_DATE'])   ? Datetime::createFromFormat('Y-m-d', $row['END_DATE']) : null;
         is_object($endDateObj) ?  $endDateObj->setTime(23, 59, 59) : null; // When setting completed, compare against midnight on END_DATE
         $totalHours = $row['TOTAL_HOURS'];
+        $hoursType = $row['HOURS_TYPE'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
         $organisation = $row['ORGANISATION'];
         $service = $row['SERVICE'];
@@ -315,6 +311,7 @@ class resourceRequestTable extends DbTable
         $displayedResourceName.= "  data-endpika='" . $endDate4Picka . "' ";
         $displayedResourceName.= "  data-rfsenddate='" . $rfsEndDate . "' ";
         $displayedResourceName.= "  data-hrs='" . $totalHours . "' ";
+        $displayedResourceName.= "  data-hrstype='" . $hoursType . "' ";
         $displayedResourceName.= "  >";
 
 //         $row['RESOURCE_NAME'].= $editable ? 
