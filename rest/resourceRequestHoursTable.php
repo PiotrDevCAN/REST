@@ -74,10 +74,6 @@ class resourceRequestHoursTable extends DbTable
                 }                
             } else {
                 $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($resourceRequestHours->WEEK_ENDING_FRIDAY, $bankHolidays,$sdate, $edate);
-                
-                echo "<br/>BusinessDaysInWeek : $businessDaysInWeek WEF:" . $resourceRequestHours->WEEK_ENDING_FRIDAY . " sdate:" . $sdate->format('d-m-Y') . " edate:" . $edate->format('d-m-Y');
-                
-                
             }
             
             if($businessDaysInWeek>0){
