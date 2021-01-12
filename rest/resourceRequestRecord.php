@@ -159,7 +159,7 @@ class resourceRequestRecord extends DbRecord
    		<div id='HrsPerWeekFormGroup'>
    		<label for="TOTAL_HOURS" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Total Hours<br/><small>For this request</small></label>
    		<div class="col-md-2">
-   		<input type='number' step='0.01' min=0 max=60 class="form-control" id="TOTAL_HOURS" name="TOTAL_HOURS" value="<?=$this->TOTAL_HOURS?>" placeholder="Total Hrs For RFS" <?=$notEditable?> required >
+   		<input type='number' step='0.01' min=0 max=6000 class="form-control" id="TOTAL_HOURS" name="TOTAL_HOURS" value="<?=$this->TOTAL_HOURS?>" placeholder="Total Hrs For RFS" <?=$notEditable?> required >
    		<input id="originalTotal_Hours" name="originalTotal_Hours" value="<?=$this->TOTAL_HOURS?>" type="hidden">
    		</div>
    		</div>
