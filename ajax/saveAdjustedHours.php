@@ -32,8 +32,6 @@ foreach ($_POST as $key => $value){
 
         $data = array($hours,$resourceReference, $week);
         $result = db2_execute($hoursUpdate,$data);
-
-        var_dump($result);
     }
 }
 

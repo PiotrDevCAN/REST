@@ -482,9 +482,7 @@ class resourceRequestTable extends DbTable
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
         $sql .= "  SET TOTAL_HOURS     = " . db2_escape_string($totalHours) ;
         $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference) ." ";
-        
-        echo $sql;
-        
+       
         $rs = db2_exec($GLOBALS['conn'], $sql);
         
         if(!$rs){
