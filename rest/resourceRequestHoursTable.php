@@ -23,16 +23,13 @@ class resourceRequestHoursTable extends DbTable
             $effortDays = $response['businessDays'];
             $bankHolidays = $response['bankHolidays'];
             $hrsPerEffortDay = $hours / $effortDays;
-            
-            var_dump($hrsPerEffortDay);
-            
         }
       
         $nextDate = $sdate;
         $startPeriod = $sdate->format('oW');
         $endPeriod = $edate->format('oW');
         $nextPeriod = $nextDate->format('oW');
-
+        
         $weeksCreated = 0;
 
         $deleteExisting ? $this->clearResourceReference($resourceReference) : null;

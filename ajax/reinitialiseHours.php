@@ -35,7 +35,7 @@ if($valid){
     resourceRequestTable::setTotalHours($_POST['ModalResourceReference'],$_POST['ModalTOTAL_HOURS'] );
         
         
-    $diaryEntry = "Request was re-initialised at  " . $_POST['ModalHRS_PER_WEEK'] . " Hours per week";
+    $diaryEntry = "Request was re-initialised at  " . $_POST['ModalTOTAL_HOURS'] . " Total Hours";
     $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
         
     db2_commit($GLOBALS['conn']);
