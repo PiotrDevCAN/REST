@@ -31,6 +31,19 @@ $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($complimentaryD
 
 var_dump($businessDaysInWeek);
 
+echo "<hr/>";
+
+$startDate->modify('+1 week');
+
+$complimentaryDate = resourceRequestHoursTable::getDateComplimentaryFields($startDate, $resourceRequestHours);
+
+var_dump($complimentaryDate);
+
+$businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($complimentaryDate['WEEK_ENDING_FRIDAY'], $weekDays['bankHolidays'] ,$startDate, $endDate);
+
+var_dump($businessDaysInWeek);
+
+
 // $startDate = DateTime::createFromFormat('d-m-y', '25-12-20');
 // $endDate = DateTime::createFromFormat('d-m-y','03-01-21');
 

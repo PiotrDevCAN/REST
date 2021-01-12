@@ -25,7 +25,7 @@ class resourceRequestHoursTable extends DbTable
             $hrsPerEffortDay = $hours / $effortDays;
         }
       
-        $nextDate = $sdate;
+        $nextDate = clone $sdate;
         $startPeriod = $sdate->format('oW');
         $endPeriod = $edate->format('oW');
         $nextPeriod = $nextDate->format('oW');
@@ -38,6 +38,11 @@ class resourceRequestHoursTable extends DbTable
         $oneWeek = new \DateInterval('P1W');
 
         while($nextPeriod <= $endPeriod){
+            
+            if($nextDate > $sdate && $nextDate->format('N') != 1){
+                // Once we're past the Start Date, get 'nextDate' to always be a Monday
+                $nextDate->modify('previous Monday');
+            }
             $resourceRequestHours = new resourceRequestHoursRecord();
             $resourceRequestHours->RESOURCE_REFERENCE = $resourceReference;
             $resourceRequestHours->DATE = $nextDate->format('Y-m-d');
@@ -69,6 +74,10 @@ class resourceRequestHoursTable extends DbTable
                 }                
             } else {
                 $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($resourceRequestHours->WEEK_ENDING_FRIDAY, $bankHolidays,$sdate, $edate);
+                
+                echo "<br/>BusinessDaysInWeek : $businessDaysInWeek WEF:" . $resourceRequestHours->WEEK_ENDING_FRIDAY . " sdate:" . $sdate->format('d-m-Y') . " edate:" . $edate->format('d-m-Y');
+                
+                
             }
             
             if($businessDaysInWeek>0){
