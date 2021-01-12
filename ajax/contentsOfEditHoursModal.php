@@ -119,7 +119,7 @@ while (($row = db2_fetch_assoc($resourceHoursRs))==true){
     <div id='ModalHrsForWeekFormGroup<?=$week?>' class='form-group' style='background:<?=$stripe?>'>
      <label for='ModalHRSForWeek<?=$week?>' class='col-md-6 control-label ' data-toggle='tooltip' data-placement='top' title='Hours for week <?=$week?>'><?=$weekObj->format('\W\e\e\k W - dS M y')?></label>
        <div class='col-md-3'>
-      <input type='number' step='0.1' min=0 max=50 class="form-control hrsForWeek" id="ModalHRSForWeek<?=$week?>" name="ModalHRSForWeek<?=$week?>" value="<?=$hours;?>" placeholder="Hrs/Week" >
+      <input type='number' step='0.01' min=0 max=50 class="form-control hrsForWeek" id="ModalHRSForWeek<?=$week?>" name="ModalHRSForWeek<?=$week?>" value="<?=$hours;?>" placeholder="Hrs/Week" >
       </div>
       <div class='col-md-3'>
       <p>Claim: <?=$claimMonths[$row['CLAIM_MONTH']]?></p>
