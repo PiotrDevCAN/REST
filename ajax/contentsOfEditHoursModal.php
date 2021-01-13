@@ -109,17 +109,19 @@ $claimMonths = array(1=>'Jan',2=>'Feb',3=>'Mar',4=>'Apr',5=>'May',6=>'Jun',7=>'J
 
 
 while (($row = db2_fetch_assoc($resourceHoursRs))==true){
-    $week = $row['DATE'];
+  //  $week = $row['DATE'];
     $hours = $row['HOURS'];
+    $wef = $row['WEEK_ENDING_FRIDAY'];
 
     $stripe = $monthColours[$row['CLAIM_MONTH']];
-    $weekObj = new DateTime($week);    
+    $weekObj = new DateTime($wef);    
     ?>
 
-    <div id='ModalHrsForWeekFormGroup<?=$week?>' class='form-group' style='background:<?=$stripe?>'>
-     <label for='ModalHRSForWeek<?=$week?>' class='col-md-6 control-label ' data-toggle='tooltip' data-placement='top' title='Hours for week <?=$week?>'><?=$weekObj->format('\W\e\e\k W - dS M y')?></label>
+    <div id='ModalHrsForWefFormGroup<?=$wef?>' class='form-group' style='background:<?=$stripe?>'>
+     <label for='ModalHRSForWef<?=$wef?>' class='col-md-6 control-label ' data-toggle='tooltip' data-placement='top' title='Hours for wef <?=$wef?>'><?=$weekObj->format('\W\e\e\k W - dS M y')?></label>
        <div class='col-md-3'>
-      <input type='number' step='0.01' min=0 max=50 class="form-control hrsForWeek" id="ModalHRSForWeek<?=$week?>" name="ModalHRSForWeek<?=$week?>" value="<?=$hours;?>" placeholder="Hrs/Week" >
+      <input type='number' step='0.01' min=0 max=50 class="form-control hrsForWeek" id="ModalHRSForWef<?=$wef?>" name="ModalHRSForWef<?=$wef?>" value="<?=$hours;?>" placeholder="Hrs/Week" >
+      <input type='hidden'  name="ModalHRSForWas<?=$wef?>" value="<?=$hours;?>" >
       </div>
       <div class='col-md-3'>
       <p>Claim: <?=$claimMonths[$row['CLAIM_MONTH']]?></p>
@@ -136,7 +138,7 @@ while (($row = db2_fetch_assoc($resourceHoursRs))==true){
 $modalBody = ob_get_clean();
 ob_start();
 
-?><button type="button" disabled class="btn btn-warning" id='saveAdjustedHoursWithDelta' data-toggle='tooltip' data-placement='top' title='feature temporarily suspended.'>Auto-Delta</button><?php
+?><button type="button" class="btn btn-warning" id='saveAdjustedHoursWithDelta' data-toggle='tooltip' data-placement='top' title='Create a clone but with the hours that have been removed from this request.'>Auto-Delta</button><?php
 ?><button type="button" class="btn btn-primary" id='saveAdjustedHours' title=''>Adjust Hrs Profile</button><?php
 ?><button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 <?php

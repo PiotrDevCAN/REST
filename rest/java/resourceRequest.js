@@ -545,28 +545,24 @@ function ResourceRequest() {
 			// First create a duplicate Record.
 			var resourceReference = $('#ModalResourceReference').val();
 			var formData = $('#resourceHoursForm').serialize();
-		    $.ajax({
-		    	url: "ajax/duplicateResource.php",
+			
+			$.ajax({
+		    	url: "ajax/saveAdjustedHours.php",
 		        type: 'POST',
-		    	data: { resourceReference : resourceReference,
-                        delta: true,
-                        },
+		    	data: formData,
 		    	success: function(result){
-					$('#confirmDuplicationModal').modal('hide');
-					var resultObj = JSON.parse(result);
-		    		var deltaResourceReference = resultObj.resourceReference;
-				    $.ajax({
-				    	url: "ajax/saveAdjustedHoursWithDelta.php",
-				        type: 'POST',
-				    	data: {deltaResourceRef  : deltaResourceReference,
-                               formData          : formData },
-				    	success: function(result){
-				    		$('.spinning').removeClass('spinning').attr('disabled',false);
-				    		ResourceRequest.table.ajax.reload();
-							$('#resourceHoursModal').modal('hide');
-				    		}
-				    	});
-
+		    		$('.spinning').removeClass('spinning').attr('disabled',false);
+		    		ResourceRequest.table.ajax.reload();
+					$('#resourceHoursModal').modal('hide');
+		    		}
+		    	});
+			formDataPlus = formData + '&delta=true&resourceReference=' + resourceReference;			
+		    $.ajax({
+				url: "ajax/duplicateResource.php",
+		        type: 'POST',
+		    	data: formDataPlus,
+		    	success: function(result){									
+					ResourceRequest.table.ajax.reload();
 		    		}
 		    	});
 		});
@@ -593,7 +589,7 @@ function ResourceRequest() {
 	
 	this.listenForChangingHours = function (){
 		$(document).on('focus','input[type=number]',function(){
-		//	$('#saveAdjustedHoursWithDelta').attr('disabled',false); it's temporarily suspended.
+		$('#saveAdjustedHoursWithDelta').attr('disabled',false);
 		//	$('#saveAdjustedHours').attr('disabled',false); They can't do this anymore
 		//	$('#slipStartDate').attr('disabled',true);
 		//	$('#moveEndDate').attr('disabled',true);

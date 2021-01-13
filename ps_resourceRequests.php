@@ -632,6 +632,7 @@ $(document).ready(function(){
 		$('.hrsForWeek').prop('disabled',true);
 		$('#reinitialise').attr('disabled',false);
 		$('#saveAdjustedHours').attr('disabled',true);
+		$('#saveAdjustedHoursWithDelta').attr('disabled',true);
 
 		$.each($('.hrsForWeek'),function(key, element){
 			$(element).val('').attr('placeholder','Re-Initialise');
@@ -647,6 +648,7 @@ $(document).ready(function(){
 		$('#reinitialise').attr('disabled',true);
 		$('#saveAdjustedHours').attr('disabled',false);
 		
+		
 		var originalTotalHours = $('#originalTotalHours').val();		
 		var totalHours = 0;		
 		
@@ -657,6 +659,17 @@ $(document).ready(function(){
 		$('#ModalTOTAL_HOURS').val(totalHours);
 
 		$('#saveAdjustedHours').attr('data-original-title','').tooltip('show').tooltip('hide');
+
+
+
+console.log( totalHours + ":" + originalTotalHours ); 
+console.log( parseFloat(totalHours) < parseFloat(originalTotalHours) );
+		
+		if( parseFloat(totalHours) < parseFloat(originalTotalHours) ) {
+			$('#saveAdjustedHoursWithDelta').attr('disabled',false); // they can only Auto-Delta if they've hours to save somewhere else.
+		} else {
+			$('#saveAdjustedHoursWithDelta').attr('disabled',true);
+		}
 
 // 		if(totalHours > originalTotalHours) {
 // 			$('#saveAdjustedHours').attr('disabled',true);

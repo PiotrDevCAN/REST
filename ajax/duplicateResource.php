@@ -1,10 +1,10 @@
 <?php
 
-use itdq\DbTable;
 use rest\allTables;
 use rest\resourceRequestRecord;
 use rest\resourceRequestTable;
 use rest\resourceRequestHoursTable;
+use rest\resourceRequestDiaryTable;
 use itdq\Loader;
 
 set_time_limit(0);
@@ -26,6 +26,7 @@ $currentResource =$resourceRecord->get('RESOURCE_NAME');
 $resourceNamePrefix = $_POST['delta']=='true' ? resourceRequestTable::DELTA : resourceRequestTable::DUPLICATE;
 
 echo $_POST['delta']=='true' ? "delta is true" : "delta is not true";
+$delta = $_POST['delta']=='true' ? true : false;
 
 !empty($currentResource) ? $resourceRecord->set('RESOURCE_NAME', $resourceNamePrefix . $resourceRecord->get('RESOURCE_NAME')) : null;
 
@@ -47,9 +48,52 @@ if($saveResponse){
         $loader = new Loader();
         $predicate = " RESOURCE_REFERENCE='" . db2_escape_string($_POST['resourceReference']). "'";
         $currentHoursPerWef = $loader->loadIndexed('HOURS','WEEK_ENDING_FRIDAY',allTables::$RESOURCE_REQUEST_HOURS,$predicate);
-        foreach ($currentHoursPerWef as $currentWef => $currentHours) {
-            $resourceHoursTable->setHoursForWef($resourceReference, $currentWef, $currentHours);
+        
+        if($delta){
+            // we need to amend the Hrs per week based on what the value was and what they've entered in the form
+            foreach ($_POST as $key => $value){
+                echo $key . ":" ;
+                echo substr($key,0,14);
+                echo " ";
+                if(substr($key,0,14)== "ModalHRSForWef"){
+                    $wef = substr($key,14,10);
+                    $formHoursPerWef[$wef] = $value;   
+                    $originalHoursPerWef[$wef] = $_POST['ModalHRSForWas' . $wef];
+                }
+            } 
+            $totalDeltaHours = 0;
+            $totalOriginalHours = 0;
+            foreach ($currentHoursPerWef as $currentWef => $currentHours) {
+                $deltaHours =(float)$originalHoursPerWef[$wef] - (float)$formHoursPerWef[$currentWef]; 
+                $resourceHoursTable->setHoursForWef($resourceReference, $currentWef, $deltaHours);
+                $totalDeltaHours+= $deltaHours; 
+                $totalOriginalHours+=$originalHoursPerWef[$wef];
+            }
+            
+            $newOriginalRequestsTotalHours = (float)$totalOriginalHours - (float)$totalDeltaHours;
+            
+            resourceRequestTable::setTotalHours($resourceReference, $totalDeltaHours);
+            resourceRequestTable::setTotalHours($_POST['resourceReference'], $newOriginalRequestsTotalHours );
+            
+            $diaryEntry = "Request was auto-delta'd from:" . $_POST['resourceReference'];
+            resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);  
+            
+            $diaryEntry = "Request was auto-delta'd into:" . $resourceReference ;
+            resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['resourceReference']);
+            
+        } else {
+            foreach ($currentHoursPerWef as $currentWef => $currentHours) {
+                $resourceHoursTable->setHoursForWef($resourceReference, $currentWef, $currentHours);
+            }
+            
+            $diaryEntry = "Request was cloned from:" . $_POST['resourceReference'];
+            resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);   
+            
+            $diaryEntry = "Request was cloned into:" . $resourceReference ;
+            resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['resourceReference']);   
+            
         }
+
         db2_commit($GLOBALS['conn']);
     } catch (Exception $e) {
         $hoursResponse = $e->getMessage();

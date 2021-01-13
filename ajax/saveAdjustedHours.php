@@ -16,7 +16,7 @@ $resourceReference = $_POST['ModalResourceReference'];
 
 $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS;
 $sql .= " SET HOURS=? " ;
-$sql .= " WHERE RESOURCE_REFERENCE=? and DATE=? ";
+$sql .= " WHERE RESOURCE_REFERENCE=? and WEEK_ENDING_FRIDAY=? ";
 
 $hoursUpdate = db2_prepare($GLOBALS['conn'], $sql);
 
@@ -26,8 +26,8 @@ if(!$hoursUpdate){
 }
 
 foreach ($_POST as $key => $value){
-    if(substr($key,0,15)== "ModalHRSForWeek"){
-        $week = substr($key,15,10);
+    if(substr($key,0,14)== "ModalHRSForWef"){
+        $week = substr($key,14,10);
         $hours = $value;
 
         $data = array($hours,$resourceReference, $week);

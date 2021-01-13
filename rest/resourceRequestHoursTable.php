@@ -266,7 +266,7 @@ class resourceRequestHoursTable extends DbTable
     function prepareSetHoursForWef(int $resourceReference){  
        
         if(!isset($this->preparedSetHrsStatement)){
-            $sql.= " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
+            $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
             $sql.= " SET HOURS= ? " ;
             $sql.= " WHERE DATE(WEEK_ENDING_FRIDAY) =  ? ";
             $sql.= " AND RESOURCE_REFERENCE= " . db2_escape_string($resourceReference);   
