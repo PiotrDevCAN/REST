@@ -5,6 +5,7 @@ use rest\allTables;
 use rest\resourceRequestRecord;
 use rest\resourceRequestTable;
 use rest\resourceRequestHoursTable;
+use itdq\Loader;
 
 set_time_limit(0);
 ob_start();
@@ -36,13 +37,19 @@ $resourceReference = $resourceTable->lastId();
 
 $startDate = $resourceRecord->get('START_DATE');
 $endDate = $resourceRecord->get('END_DATE');
-$hours   = $resourceRecord->get('HRS_PER_WEEK');
-
+$hours   = $resourceRecord->get('TOTAL_HOURS');
 
 if($saveResponse){
     try {
         $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference,$startDate,$endDate,$hours );
         $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
+        
+        $loader = new Loader();
+        $predicate = " RESOURCE_REFERENCE='" . db2_escape_string($_POST['resourceReference']). "'";
+        $currentHoursPerWef = $loader->loadIndexed('HOURS','WEEK_ENDING_FRIDAY',allTables::$RESOURCE_REQUEST_HOURS,$predicate);
+        foreach ($currentHoursPerWef as $currentWef => $currentHours) {
+            $resourceHoursTable->setHoursForWef($resourceReference, $currentWef, $currentHours);
+        }
         db2_commit($GLOBALS['conn']);
     } catch (Exception $e) {
         $hoursResponse = $e->getMessage();

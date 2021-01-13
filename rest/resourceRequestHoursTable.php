@@ -8,7 +8,9 @@ use itdq\DateClass;
 class resourceRequestHoursTable extends DbTable
 {
     private $preparedGetTotalHrsStatement;
+    private $preparedSetHrsStatement;
     private $hoursRemainingByReference;
+    
     
     function createResourceRequestHours($resourceReference, $startDate,$endDate,$hours,$deleteExisting=true, $hrsType=resourceRequestRecord::HOURS_TYPE_REGULAR){
         $sdate = new \DateTime($startDate);
@@ -258,7 +260,35 @@ class resourceRequestHoursTable extends DbTable
         return $rs;
     }
 
+    function prepareSetHoursForWef(int $resourceReference){  
+       
+        if(!isset($this->preparedSetHrsStatement)){
+            $sql.= " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
+            $sql.= " SET HOURS= ? " ;
+            $sql.= " WHERE DATE(WEEK_ENDING_FRIDAY) =  ? ";
+            $sql.= " AND RESOURCE_REFERENCE= " . db2_escape_string($resourceReference);   
+            $this->preparedSetHrsStatement = db2_prepare($GLOBALS['conn'], $sql);
+            
+            if(!$this->preparedSetHrsStatement){
+                DbTable::displayErrorMessage($this->preparedSetHrsStatement, __CLASS__, __METHOD__, $sql);
+            }
+        }
+              
+        return $this->preparedSetHrsStatement ? $this->preparedSetHrsStatement : false;
+    }
 
+    
+    function setHoursForWef(int $resourceReference, string $wef, float $hours){
+        $preparedStmt = $this->prepareSetHoursForWef($resourceReference);         
+        $parameters = array($hours, $wef);
+        
+        $rs = db2_execute($preparedStmt,$parameters);
+        
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, 'prepared sql');
+        }        
+        return $rs ? true : false;        
+    }
 
 
 
