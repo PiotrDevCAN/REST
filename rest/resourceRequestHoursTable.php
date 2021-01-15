@@ -246,12 +246,15 @@ class resourceRequestHoursTable extends DbTable
         $sql.= " WHERE RESOURCE_REFERENCE IN ( ";
         $sql.= "      SELECT RESOURCE_REFERENCE ";
         $sql.= "      from " .  $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
-        $sql.= "      left join " .  $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
-        $sql.= "      on RFS.RFS_ID = RR.RFS ";
+        $sql.= "      where RR.RFS = '" . db2_escape_string($rfsId) . "' ";
         $sql.= "      ) ";
         $sql.= " AND DATE(WEEK_ENDING_FRIDAY) < CURRENT_DATE ";
         
+        error_log($sql);
+        
         $rs = db2_exec($GLOBALS['conn'], $sql);
+               
+        error_log("Db2_Num_Rows:" . db2_num_rows($rs));
         
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
