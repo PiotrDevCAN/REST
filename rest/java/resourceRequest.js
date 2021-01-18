@@ -551,20 +551,27 @@ function ResourceRequest() {
 		        type: 'POST',
 		    	data: formData,
 		    	success: function(result){
-		    		$('.spinning').removeClass('spinning').attr('disabled',false);
-		    		ResourceRequest.table.ajax.reload();
-					$('#resourceHoursModal').modal('hide');
+						
+					formDataPlus = formData + '&delta=true&resourceReference=' + resourceReference;			
+		    		$.ajax({
+						url: "ajax/duplicateResource.php",
+		        		type: 'POST',
+		    			data: formDataPlus,
+		    			success: function(result){									
+							ResourceRequest.table.ajax.reload();
+							$('.spinning').removeClass('spinning').attr('disabled',false);
+							$('#resourceHoursModal').modal('hide');
+							
+							
+		    				}
+		    			});
+					
+					
+					
+					
 		    		}
 		    	});
-			formDataPlus = formData + '&delta=true&resourceReference=' + resourceReference;			
-		    $.ajax({
-				url: "ajax/duplicateResource.php",
-		        type: 'POST',
-		    	data: formDataPlus,
-		    	success: function(result){									
-					ResourceRequest.table.ajax.reload();
-		    		}
-		    	});
+
 		});
 	},
 	this.listenForSaveStatusChange = function(){

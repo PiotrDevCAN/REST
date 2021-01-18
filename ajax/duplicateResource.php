@@ -52,9 +52,6 @@ if($saveResponse){
         if($delta){
             // we need to amend the Hrs per week based on what the value was and what they've entered in the form
             foreach ($_POST as $key => $value){
-                echo $key . ":" ;
-                echo substr($key,0,14);
-                echo " ";
                 if(substr($key,0,14)== "ModalHRSForWef"){
                     $wef = substr($key,14,10);
                     $formHoursPerWef[$wef] = $value;   
@@ -64,7 +61,7 @@ if($saveResponse){
             $totalDeltaHours = 0;
             $totalOriginalHours = 0;
             foreach ($currentHoursPerWef as $currentWef => $currentHours) {
-                $deltaHours =(float)$originalHoursPerWef[$wef] - (float)$formHoursPerWef[$currentWef]; 
+                $deltaHours =(float)$originalHoursPerWef[$currentWef] - (float)$formHoursPerWef[$currentWef]; 
                 $resourceHoursTable->setHoursForWef($resourceReference, $currentWef, $deltaHours);
                 $totalDeltaHours+= $deltaHours; 
                 $totalOriginalHours+=$originalHoursPerWef[$wef];
