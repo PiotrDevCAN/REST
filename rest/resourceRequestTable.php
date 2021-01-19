@@ -448,7 +448,7 @@ class resourceRequestTable extends DbTable
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
         $sql .= "  SET START_DATE = DATE('" . db2_escape_string($startDate) ."') ";
         $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference) ." ";
-        
+  
         $rs = db2_exec($GLOBALS['conn'], $sql);
         
         if(!$rs){
@@ -465,9 +465,7 @@ class resourceRequestTable extends DbTable
         $sql .= "  SET HRS_PER_WEEK     = " . db2_escape_string($hrsPerWeek) ;
         $sql .= "  ,   HRS_PER_WEEK_INT = " . db2_escape_string($hrsPerWeekInt) ;
         $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference) ." ";
-        
-        echo $sql;
-        
+      
         $rs = db2_exec($GLOBALS['conn'], $sql);
         
         if(!$rs){

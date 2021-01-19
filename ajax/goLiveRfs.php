@@ -6,24 +6,73 @@ use rest\emailNotifications;
 use rest\allTables;
 use rest\rfsRecord;
 use rest\resourceRequestHoursTable;
+use itdq\Loader;
+use rest\resourceRequestRecord;
+use rest\resourceRequestDiaryTable;
+use rest\resourceRequestTable;
 
 set_time_limit(0);
 ob_start();
 
 $autocommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+
 // If the start date is in the past - bring it up to today.
-$sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
-$sql.= " SET START_DATE = CURRENT_DATE ";
-$sql.= " WHERE RFS = '" . db2_escape_string($_POST['rfsid']) . "' ";
-$sql.= " AND START_DATE < CURRENT_DATE ";
+$resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);$loader = new Loader();
+$predicate = " RFS='" . db2_escape_string($_POST['rfsid']) . "' AND START_DATE <= CURRENT_DATE AND TOTAL_HOURS is not null AND END_DATE is not null " ;
+$allRequestsHours   = $loader->loadIndexed('TOTAL_HOURS','RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS, $predicate, 'asc');
+$allRequestsEnd     = $loader->loadIndexed('END_DATE'   ,'RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS, $predicate, 'asc');
+$allRequestsStart   = $loader->loadIndexed('START_DATE' ,'RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS, $predicate, 'asc');
+$allRequestsHrsType = $loader->loadIndexed('HOURS_TYPE' ,'RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS, $predicate, 'asc');
 
-$rs = db2_exec($GLOBALS['conn'], $sql);
 
-if(!$rs){
-    DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+foreach ($allRequestsHours as $resourceReference => $hours) {
+    $nextPossibleStartDate = new DateTime();
+    $dayOfWeek = $nextPossibleStartDate->format('N');
+        
+    if($allRequestsHrsType[$resourceReference] == resourceRequestRecord::HOURS_TYPE_OT_WEEK_END){
+        // It's a request for Weekend OVertime, so we have to roll forward to a Sat or Sun
+        switch ($dayOfWeek) {
+            case 6:
+                // Sat roll forward to Sunday
+                $modification  = "+1 day ";
+            break;
+            case 7:
+                // Sun roll forward to Saturday
+                $modification  = "+6 days ";
+                break;
+            default:
+                // mid-week roll forward to Saturday
+                $modification  = "+" . (6-$dayOfWeek) . " days ";   
+            break;
+        }
+    } else {
+        // It's not a weekend over time request, so must be a business day
+        switch ($dayOfWeek) {
+            case 5:
+            case 6:
+            case 7:
+                // Fri, Sat, Sun roll forward to Monday
+                $modification  = "+" . (8-$dayOfWeek) . " days ";
+            break;            
+            default:
+                // Mon to Thu roll forward one day
+                $modification  = "+1 day ";
+            break;
+        }
+    }
+    $nextPossibleStartDate->modify($modification);    
+    $nextPossibleStartDateString = $nextPossibleStartDate->format('Y-m-d'); 
+    
+    $resourceHoursTable->createResourceRequestHours($resourceReference, $nextPossibleStartDateString, $allRequestsEnd[$resourceReference], $hours);    
+    resourceRequestTable::setStartDate($resourceReference, $nextPossibleStartDateString);
+    
+    $diaryEntry = " Start date moved from " . $allRequestsStart[$resourceReference] . " to " . $nextPossibleStartDateString . " with release to Live.";
+    resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
+    
 }
 
-resourceRequestHoursTable::removeHoursRecordsForRfsPriorToday($_POST['rfsid']);
+
+// Update the requestor from the Form they've just submitted, as it often changes with going live.
 
 $sql = " UPDATE ";
 $sql.=   $GLOBALS['Db2Schema'] . "." . allTables::$RFS;
