@@ -18,6 +18,9 @@ foreach ($allRequestsHours as $resourceReference => $hours) {
     $nextPossibleStartDate  = DateTime::createFromFormat('Y-m-d', '2021-01-01');
     $nextPossibleStartDateString = $nextPossibleStartDate->format('Y-m-d'); 
     
+    
+    echo $resourceReference . ":" . $nextPossibleStartDateString . ":" .  $allRequestsEnd[$resourceReference] . ":" . $hours;
+    
     $resourceHoursTable->createResourceRequestHours($resourceReference, $nextPossibleStartDateString, $allRequestsEnd[$resourceReference], $hours);    
     resourceRequestTable::setStartDate($resourceReference, $nextPossibleStartDateString);  
 }

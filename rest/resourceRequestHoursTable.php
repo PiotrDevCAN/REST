@@ -85,6 +85,9 @@ class resourceRequestHoursTable extends DbTable
                 $businessHoursInWeek = $businessDaysInWeek * $hrsPerEffortDay;
                 $resourceRequestHours->HOURS = $businessHoursInWeek;
                 
+                $resourceRequestHours->iterateVisible();
+                
+                
                 $this->saveRecord($resourceRequestHours);
                 $weeksCreated++;
             }
