@@ -13,6 +13,7 @@ $predicate = " RFS LIKE '%PIPE%' ";
 $allRequestsHours   = $loader->loadIndexed('TOTAL_HOURS','RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS, $predicate, 'asc');
 $allRequestsEnd     = $loader->loadIndexed('END_DATE'   ,'RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS, $predicate, 'asc');
 $allRFS             = $loader->load('RFS'        ,allTables::$RESOURCE_REQUESTS, $predicate, 'asc');
+$allHrsType         = $loader->loadIndexed('HOURS_TYPE','RESOURCE_REFERENCE' ,allTables::$RESOURCE_REQUESTS, $predicate, 'asc');
 
 foreach ($allRequestsHours as $resourceReference => $hours) {
     $nextPossibleStartDate  = DateTime::createFromFormat('Y-m-d', '2021-01-01');
@@ -21,7 +22,7 @@ foreach ($allRequestsHours as $resourceReference => $hours) {
     
     echo $resourceReference . ":" . $nextPossibleStartDateString . ":" .  $allRequestsEnd[$resourceReference] . ":" . $hours;
     
-    $resourceHoursTable->createResourceRequestHours($resourceReference, $nextPossibleStartDateString, $allRequestsEnd[$resourceReference], $hours);    
+    $resourceHoursTable->createResourceRequestHours($resourceReference, $nextPossibleStartDateString, $allRequestsEnd[$resourceReference], $hours, true, $allHrsType[$resourceReference]);    
     resourceRequestTable::setStartDate($resourceReference, $nextPossibleStartDateString);  
 }
 

@@ -30,7 +30,7 @@ class resourceRequestHoursTable extends DbTable
             $dayOfWeek = 1;
             $startDay = 'monday';
         }
-      
+        
         $nextDate = clone $sdate;
         $startPeriod = $sdate->format('oW');
         $endPeriod = $edate->format('oW');
@@ -44,6 +44,7 @@ class resourceRequestHoursTable extends DbTable
         $oneWeek = new \DateInterval('P1W');
 
         while($nextPeriod <= $endPeriod){
+                       
             if($nextDate > $sdate && $nextDate->format('N') != $dayOfWeek){
                 // Once we're past the Start Date, get 'nextDate' to always be a Monday/Saturday
                 $nextDate->modify('previous ' . $startDay);
@@ -85,19 +86,14 @@ class resourceRequestHoursTable extends DbTable
                 $businessHoursInWeek = $businessDaysInWeek * $hrsPerEffortDay;
                 $resourceRequestHours->HOURS = $businessHoursInWeek;
                 
-                $resourceRequestHours->iterateVisible();
-                
+                $resourceRequestHours->iterateVisible();                
                 
                 $this->saveRecord($resourceRequestHours);
                 $weeksCreated++;
             }
             
             $nextDate->add($oneWeek);
-            $nextPeriod = $nextDate->format('oW');
-            
-            
-
-            
+            $nextPeriod = $nextDate->format('oW');            
 
         }
 

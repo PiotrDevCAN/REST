@@ -63,7 +63,7 @@ foreach ($allRequestsHours as $resourceReference => $hours) {
     $nextPossibleStartDate->modify($modification);    
     $nextPossibleStartDateString = $nextPossibleStartDate->format('Y-m-d'); 
     
-    $resourceHoursTable->createResourceRequestHours($resourceReference, $nextPossibleStartDateString, $allRequestsEnd[$resourceReference], $hours);    
+    $resourceHoursTable->createResourceRequestHours($resourceReference, $nextPossibleStartDateString, $allRequestsEnd[$resourceReference], $hours, true,$allRequestsHrsType[$resourceReference]  );    
     resourceRequestTable::setStartDate($resourceReference, $nextPossibleStartDateString);
     
     $diaryEntry = " Start date moved from " . $allRequestsStart[$resourceReference] . " to " . $nextPossibleStartDateString . " with release to Live.";
