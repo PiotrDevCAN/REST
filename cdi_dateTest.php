@@ -2,46 +2,72 @@
 use itdq\DateClass;
 use rest\resourceRequestHoursTable;
 use rest\resourceRequestHoursRecord;
+use rest\resourceRequestRecord;
+use rest\allTables;
 
 
-$resourceRequestHours = new resourceRequestHoursRecord();
-$startDate = DateTime::createFromFormat('d-m-y', '12-01-21');
-$endDate = DateTime::createFromFormat('d-m-y','20-01-21');
+$sdate = new DateTime('2021-01-22');
+// $edate = new DateTime('2021-02-21');
 
-$weekendDays = DateClass::weekendDaysFromStartToEnd($startDate,$endDate);
-$weekDays    = DateClass::businessDaysFromStartToEnd($startDate, $endDate);
-echo "<h4> From : " . $startDate->format('d-M-Y') . " To: " . $endDate->format('d-M-Y') . " Weekend Days:" . $weekendDays .  " Business Days:" . $weekDays['businessDays'] . "</h4>";
-
-$complimentaryDate = resourceRequestHoursTable::getDateComplimentaryFields($startDate, $resourceRequestHours);
+echo "<pre>";
+// var_dump($sdate);
+// $start = clone $sdate;
+// $start->modify('next Saturday');
 
 
-var_dump($complimentaryDate);
 
-$businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($complimentaryDate['WEEK_ENDING_FRIDAY'], $weekDays['bankHolidays'] ,$startDate, $endDate);
+// $start = DateClass::adjustStartDate($sdate, resourceRequestRecord::HOURS_TYPE_OT_WEEK_END);
 
-var_dump($businessDaysInWeek);
+// var_dump($sdate);
 
-echo "<hr/>";
+// var_dump($start);
 
-$complimentaryDate = resourceRequestHoursTable::getDateComplimentaryFields($endDate, $resourceRequestHours);
 
-var_dump($complimentaryDate);
 
-$businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($complimentaryDate['WEEK_ENDING_FRIDAY'], $weekDays['bankHolidays'] ,$startDate, $endDate);
 
-var_dump($businessDaysInWeek);
 
-echo "<hr/>";
+$resReqHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
+$resReqHoursTable->createResourceRequestHours('50116', '2021-01-22', '2021-02-21', 120,true, resourceRequestRecord::HOURS_TYPE_OT_WEEK_END);
 
-$startDate->modify('+1 week');
 
-$complimentaryDate = resourceRequestHoursTable::getDateComplimentaryFields($startDate, $resourceRequestHours);
+// $resourceRequestHours = new resourceRequestHoursRecord();
+// $startDate = DateTime::createFromFormat('d-m-y', '12-01-21');
+// $endDate = DateTime::createFromFormat('d-m-y','20-01-21');
 
-var_dump($complimentaryDate);
+// $weekendDays = DateClass::weekendDaysFromStartToEnd($startDate,$endDate);
+// $weekDays    = DateClass::businessDaysFromStartToEnd($startDate, $endDate);
+// echo "<h4> From : " . $startDate->format('d-M-Y') . " To: " . $endDate->format('d-M-Y') . " Weekend Days:" . $weekendDays .  " Business Days:" . $weekDays['businessDays'] . "</h4>";
 
-$businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($complimentaryDate['WEEK_ENDING_FRIDAY'], $weekDays['bankHolidays'] ,$startDate, $endDate);
+// $complimentaryDate = resourceRequestHoursTable::getDateComplimentaryFields($startDate, $resourceRequestHours);
 
-var_dump($businessDaysInWeek);
+
+// var_dump($complimentaryDate);
+
+// $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($complimentaryDate['WEEK_ENDING_FRIDAY'], $weekDays['bankHolidays'] ,$startDate, $endDate);
+
+// var_dump($businessDaysInWeek);
+
+// echo "<hr/>";
+
+// $complimentaryDate = resourceRequestHoursTable::getDateComplimentaryFields($endDate, $resourceRequestHours);
+
+// var_dump($complimentaryDate);
+
+// $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($complimentaryDate['WEEK_ENDING_FRIDAY'], $weekDays['bankHolidays'] ,$startDate, $endDate);
+
+// var_dump($businessDaysInWeek);
+
+// echo "<hr/>";
+
+// $startDate->modify('+1 week');
+
+// $complimentaryDate = resourceRequestHoursTable::getDateComplimentaryFields($startDate, $resourceRequestHours);
+
+// var_dump($complimentaryDate);
+
+// $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($complimentaryDate['WEEK_ENDING_FRIDAY'], $weekDays['bankHolidays'] ,$startDate, $endDate);
+
+// var_dump($businessDaysInWeek);
 
 
 // $startDate = DateTime::createFromFormat('d-m-y', '25-12-20');

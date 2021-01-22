@@ -3,6 +3,8 @@ namespace itdq;
 
 
 use rest\allTables;
+use rest\resourceRequestRecord;
+use rest\resourceRequestTable;
 
 class DateClass {
     const FRIDAY = 5;
@@ -149,6 +151,32 @@ class DateClass {
         return (($weeks*5)-$excessFirstWeekDays+$missingLastWeekDays);
         
     }
+    
+    
+    static function adjustStartDate(\DateTime $startDate, $hrsType = null){
+        // If they enter Week End Overtime, then they have to start on a Saturday or Sunday
+        //        
+        // If they don't enter Week End OVertime, they CAN'T START on a Saturday or Sunday
+        //
+        $adjustedStartDate = clone $startDate;
+        
+        if($hrsType == resourceRequestRecord::HOURS_TYPE_OT_WEEK_END){         
+            if($adjustedStartDate->format('N')<6){
+                // If it's not a Saturday/Sunday then roll forward to next Saturday
+                $adjustedStartDate->modify('next Saturday');                
+                
+            }
+        } else {            
+            if($adjustedStartDate->format('N')>5){
+                // If it's a weekend, roll forward to the next Monday
+                $adjustedStartDate->modify('next Monday');
+ 
+            }; 
+        }    
+ 
+        return $adjustedStartDate;
+    }
+    
     
     static function weekendDaysFromStartToEnd(\DateTime $startDate, \DateTime $endDate){
         // Calculates the number of Sat & Sun days between 2 dates.

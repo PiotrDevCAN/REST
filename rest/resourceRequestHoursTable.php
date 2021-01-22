@@ -22,6 +22,7 @@ class resourceRequestHoursTable extends DbTable
             $hrsPerEffortDay = $hours / $effortDays;
             $dayOfWeek = 6;
             $startDay = 'saturday';
+            $sdate = DateClass::adjustStartDate($sdate, $hrsType);           
         } else {
             $response = DateClass::businessDaysFromStartToEnd($sdate, $edate);
             $effortDays = $response['businessDays'];
@@ -29,10 +30,11 @@ class resourceRequestHoursTable extends DbTable
             $hrsPerEffortDay = $hours / $effortDays;
             $dayOfWeek = 1;
             $startDay = 'monday';
+            $sdate = DateClass::adjustStartDate($sdate);
         }
-        
+         
         $nextDate = clone $sdate;
-        $startPeriod = $sdate->format('oW');
+        // $startPeriod = $sdate->format('oW');
         $endPeriod = $edate->format('oW');
         $nextPeriod = $nextDate->format('oW');
         
@@ -40,7 +42,7 @@ class resourceRequestHoursTable extends DbTable
 
         $deleteExisting ? $this->clearResourceReference($resourceReference) : null;
 
-        $temp = 3;
+        // $temp = 3;
         $oneWeek = new \DateInterval('P1W');
 
         while($nextPeriod <= $endPeriod){
@@ -128,7 +130,7 @@ class resourceRequestHoursTable extends DbTable
         if($resourceReference){
             $sql = " DELETE FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName ;
             $sql .= " WHERE RESOURCE_REFERENCE='" . db2_escape_string($resourceReference) . "' ";
-            $rs = $this->execute($sql);
+            $this->execute($sql);
             $this->commitUpdates();
         }
     }
