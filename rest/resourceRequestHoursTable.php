@@ -144,6 +144,7 @@ class resourceRequestHoursTable extends DbTable
         $sql.= " on RRH.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE  ";
         $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql.= " on RR.RFS = RFS.RFS_ID ";
+        $sql.= empty($predicate) ? null : " WHERE 1=1 AND " . $predicate;
         $sql.= " ) ";
         $sql.= " order by 1,2"; 
         

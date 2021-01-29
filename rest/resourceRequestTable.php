@@ -91,7 +91,7 @@ class resourceRequestTable extends DbTable
      }
     
 
-    function returnAsArray($startDate,$endDate, $predicate=null, $pipelineLiveArchive = 'live', $withButtons=true){
+    function returnAsArray($startDate,$endDate, $predicate=null, $pipelineLiveArchive = 'Live', $withButtons=true){
         
  //       $this->populateLastDiaryEntriesArray();        
         
@@ -172,6 +172,9 @@ class resourceRequestTable extends DbTable
 
         $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";
 
+        
+        error_log(__FILE__ . ":" . __LINE__ . ":" . $pipelineLiveArchive);
+        error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
         error_log(__FILE__ . ":" . __LINE__ . ":" . $sql);
 
         $resultSet = $this->execute($sql);

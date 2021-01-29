@@ -4,13 +4,16 @@ use rest\allTables;
 use rest\resourceRequestTable;
 use rest\rfsRecord;
 
-$startDate = !empty($_POST['startdate']) ? $_POST['startdate'] : null;
-$endDate = !empty($_POST['enddate']) ? $_POST['enddate'] : null;
+$startDate = !empty($_REQUEST['startdate']) ? $_REQUEST['startdate'] : null;
+$endDate = !empty($_REQUEST['enddate']) ? $_REQUEST['enddate'] : null;
 
 $startDateObj = new \DateTime($startDate);
 $endDateObj = !empty($endDate) ? new \DateTime($endDate) : $startDateObj->add(new DateInterval('P3M')); // default 3 months from StartDate
 
-$pipelineLiveArchive = !empty(($_POST['pipelineLiveArchive'])) ? $_POST['pipelineLiveArchive'] : rfsRecord::RFS_STATUS_LIVE;
+
+error_log(__FILE__ . ":" . __LINE__ . ":" . $_REQUEST['pipelineLiveArchive']);
+
+$pipelineLiveArchive = !empty($_REQUEST['pipelineLiveArchive']) ? $_REQUEST['pipelineLiveArchive'] : rfsRecord::RFS_STATUS_LIVE;
 $predicate = null;
 
 $resourceRequestable = new resourceRequestTable(allTables::$RESOURCE_REQUEST_HOURS);
