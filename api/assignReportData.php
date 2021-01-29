@@ -10,9 +10,6 @@ $endDate = !empty($_REQUEST['enddate']) ? $_REQUEST['enddate'] : null;
 $startDateObj = new \DateTime($startDate);
 $endDateObj = !empty($endDate) ? new \DateTime($endDate) : $startDateObj->add(new DateInterval('P3M')); // default 3 months from StartDate
 
-
-error_log(__FILE__ . ":" . __LINE__ . ":" . $_REQUEST['pipelineLiveArchive']);
-
 $pipelineLiveArchive = !empty($_REQUEST['pipelineLiveArchive']) ? $_REQUEST['pipelineLiveArchive'] : rfsRecord::RFS_STATUS_LIVE;
 $predicate = null;
 
