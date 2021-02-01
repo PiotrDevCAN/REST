@@ -102,18 +102,18 @@ class rfsTable extends DbTable
         $thisMonthObj->setDate($thisMonthObj->format('Y'), $thisMonthObj->format('m'), 01);
         $thisMonthsClaimCutoff = DateClass::claimMonth($thisMonthObj->format('d-m-Y'));
       
-        $startMonthObj > $thisMonthsClaimCutoff ? $startMonthObj->add(new \DateInterval('P28D')) : null;
+        $startMonthObj > $thisMonthsClaimCutoff ? $startMonthObj->add(new \DateInterval('P1M')) : null;
         $startYear  = $startMonthObj->format('Y');
         $startMonth = $startMonthObj->format('m');
         
         $lastMonthObj = clone $startMonthObj;
-        $sixMonths = new \DateInterval('P168D');
+        $sixMonths = new \DateInterval('P6M');
         $lastMonthObj->add($sixMonths);
         $lastYear = $lastMonthObj->format('Y');
         $lastMonth = $lastMonthObj->format('m');
                  
         $nextMonthObj = clone $startMonthObj;
-        $oneMonth = new \DateInterval('P28D');
+        $oneMonth = new \DateInterval('P1M');
         $monthLabels = array();
         $monthDetails = array();
         

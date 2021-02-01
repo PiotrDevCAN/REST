@@ -8,7 +8,7 @@ $startDate = !empty($_REQUEST['startdate']) ? $_REQUEST['startdate'] : null;
 $endDate = !empty($_REQUEST['enddate']) ? $_REQUEST['enddate'] : null;
 
 $startDateObj = new \DateTime($startDate);
-$endDateObj = !empty($endDate) ? new \DateTime($endDate) : $startDateObj->add(new DateInterval('P84D')); // default 3 months from StartDate
+$endDateObj = !empty($endDate) ? new \DateTime($endDate) : $startDateObj->add(new DateInterval('P3M')); // default 3 months from StartDate
 
 $pipelineLiveArchive = !empty($_REQUEST['pipelineLiveArchive']) ? $_REQUEST['pipelineLiveArchive'] : rfsRecord::RFS_STATUS_LIVE;
 $predicate = null;
