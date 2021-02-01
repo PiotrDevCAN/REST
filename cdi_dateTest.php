@@ -6,14 +6,18 @@ use rest\resourceRequestRecord;
 use rest\allTables;
 
 
-$sdate = new DateTime('2021-01-22');
+$sdate = new DateTime('2021-01-30');
 // $edate = new DateTime('2021-02-21');
 
 echo "<pre>";
-// var_dump($sdate);
+var_dump($sdate);
+
+$sdate->add(new \DateInterval('P28D'));
+var_dump($sdate);
+
 // $start = clone $sdate;
 // $start->modify('next Saturday');
-
+echo "</pre>";
 
 
 // $start = DateClass::adjustStartDate($sdate, resourceRequestRecord::HOURS_TYPE_OT_WEEK_END);
@@ -26,8 +30,8 @@ echo "<pre>";
 
 
 
-$resReqHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
-$resReqHoursTable->createResourceRequestHours('50116', '2021-01-22', '2021-02-21', 120,true, resourceRequestRecord::HOURS_TYPE_OT_WEEK_END);
+// $resReqHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
+// $resReqHoursTable->createResourceRequestHours('50116', '2021-01-22', '2021-02-21', 120,true, resourceRequestRecord::HOURS_TYPE_OT_WEEK_END);
 
 
 // $resourceRequestHours = new resourceRequestHoursRecord();

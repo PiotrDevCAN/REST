@@ -10,8 +10,8 @@ $thisMonthObj = new \DateTime();
 $thisMonthObj->setDate($thisMonthObj->format('Y'), $thisMonthObj->format('m'), 01);
 $thisMonthsClaimCutoff = DateClass::claimMonth($thisMonthObj->format('d-m-Y'));
 
-$nextMonthObj > $thisMonthsClaimCutoff ? $nextMonthObj->add(new \DateInterval('P1M')) : null;
-$oneMonth = new DateInterval('P1M');
+$nextMonthObj > $thisMonthsClaimCutoff ? $nextMonthObj->add(new \DateInterval('P28D')) : null;
+$oneMonth = new DateInterval('P28D');
 $monthLabels = array();
 
 for ($i = 0; $i < 6; $i++) {
