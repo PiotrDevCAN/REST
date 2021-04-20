@@ -38,7 +38,7 @@ $w3php = array(
 $ds = ldap_connect($w3php['ldaps_host']);
 var_dump($ds);
 
-$filter = "(&(mail=rob.daniel@uk.ibm.com)(objectclass=ibmPerson))";
+$filter = "(&(mail=piotr.tajanowicz@ibm.com)(objectclass=ibmPerson))";
 
 $sr = ldap_search($ds, $w3php['ldap_basedn'], $filter, $w3php['ldap_attr']);
 

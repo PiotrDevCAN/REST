@@ -4,7 +4,7 @@ use rest\allTables;
 
 // include 'php/ldap.php';
 
-// $resp = employee_in_group('REST_Admin', 'rob.daniel@uk.ibm.com');
+// $resp = employee_in_group('REST_Admin', 'piotr.tajanowicz@ibm.com');
 
 // var_dump($resp);
 
@@ -12,7 +12,7 @@ use rest\allTables;
 
 // var_dump($resp);
 
-// $_SESSION['ssoEmail'] = 'rob.daniel@uk.ibm.com';
+// $_SESSION['ssoEmail'] = 'piotr.tajanowicz@ibm.com';
 // $_SESSION['adminBg'] = 'REST_Admin';
 // $_SESSION['userBg'] = 'REST_User';
 // $_SESSION['pmoBg'] = 'REST_Pmo';
