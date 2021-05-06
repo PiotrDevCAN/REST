@@ -2,11 +2,14 @@
 use rest\allTables;
 use rest\rfsRecord;
 
+function ob_html_compress($buf){
+    return str_replace(array("\n","\r"),'',$buf);
+}
+
 $pipelineLiveArchive = !empty($_GET['pipelineLiveArchive']) ? trim($_GET['pipelineLiveArchive']) : 'live';
 $organisation = trim($_GET['organisation']);
 
 $resourceRequestTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUESTS : allTables::$RESOURCE_REQUESTS;
-
 
 $sql = " Select distinct RFS ";
 $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTable . " AS R ";
@@ -35,4 +38,15 @@ if($rs){
 }
 
 $response = array('results'=>$data);
+
+if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+    if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+        ob_start("ob_gzhandler");
+    } else {
+        ob_start("ob_html_compress");
+    }
+} else {
+    ob_start("ob_html_compress");
+}
+
 echo json_encode($response);

@@ -8,9 +8,12 @@ use itdq\PhpMemoryTrace;
 use rest\rfsRecord;
 use itdq\DbTable;
 
+function ob_html_compress($buf){
+    return str_replace(array("\n","\r"),'',$buf);
+}
+
 set_time_limit(0);
 ini_set('memory_limit','300M');
-
 ob_start();
 PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
 
@@ -45,20 +48,16 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     $predicate .= ! empty($rfsId) ? " AND RFS='" . db2_escape_string($rfsId) . "' " : null;
     $predicate .= ! empty($organisation) ? " AND ORGANISATION='" . db2_escape_string($organisation) . "' " : null;
     $predicate .= ! empty($businessUnit) ? " AND BUSINESS_UNIT='" . db2_escape_string($businessUnit) . "' " : null;
-    
-    
+
     error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
     
 //     $mqt = new DbTable(allTables::$MQT_MAX_REF);
 //     $mqt->refresh();
     
-    
-    
     $dataAndSql = $resourceRequestTable->returnAsArray($startDate, $endDate, $predicate, $pipelineLiveArchive);
     $data = $dataAndSql['data'];
     $sql = $dataAndSql['sql'];
    
-
     PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
 
     $testJson = json_encode($data);
@@ -89,6 +88,16 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
 }
 
 $json = json_encode($response);
+
+if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+    if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+        ob_start("ob_gzhandler");
+    } else {
+        ob_start("ob_html_compress");
+    }
+} else {
+    ob_start("ob_html_compress");
+}
 
 if($json){
     echo $json;
