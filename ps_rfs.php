@@ -20,11 +20,14 @@ $rfsTable = new rfsTable(allTables::$RFS);
 ?>
 <?php $pipelineChecked = isset($_COOKIE['pipelineChecked']) ? $_COOKIE['pipelineChecked'] : null;?>
 <?php $liveChecked     = isset($_COOKIE['liveChecked']) ? $_COOKIE['liveChecked'] : null;?>
+<?php $bothChecked     = isset($_COOKIE['bothChecked']) ? $_COOKIE['bothChecked'] : null;?>
 <?php $archiveChecked  = isset($_COOKIE['archiveChecked']) ? $_COOKIE['archiveChecked'] : null;?>
 <?php $defaultToLive   = (empty($pipelineChecked) && empty($liveChecked) && empty($archiveChecked)) ? ' checked ' : null?>
 
 <?php $pipelineDisabled = (!($_SESSION['isAdmin'])) && !$_SESSION['isRfs'] ? 'disabled' : null;?>
-<?php $liveDisabled     = (!($_SESSION['isAdmin'])) &&  $_SESSION['isRfs'] ?'disabled' : null;?>
+<?php $liveDisabled     = (!($_SESSION['isAdmin'])) &&  $_SESSION['isRfs'] ? 'disabled' : null;?>
+<?php $bothDisabled     = (!($_SESSION['isAdmin'])) && !$_SESSION['isRfs'] ? 'disabled' : null;?>
+
 <?php $archiveDisabled  = 'disabled' ?>
 
 
@@ -38,8 +41,9 @@ $rfsTable = new rfsTable(allTables::$RFS);
 	<div class='form-group text-right' >
 	 <label for='pipelineLiveArchive' class='col-md-2 control-label text-right'>RFS Status</label>
       	<div class='col-md-10  text-left' >
- 			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$pipelineChecked?>  data-toggle="button" value='pipeline' <?=$pipelineDisabled?>>Pipeline</label>
+ 			  <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$pipelineChecked?>  data-toggle="button" value='pipeline' <?=$pipelineDisabled?>>Pipeline</label>
   			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$liveChecked?> <?=$defaultToLive?> data-toggle="button" value='live' <?=$liveDisabled?> >Live</label>
+        <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$bothChecked?> data-toggle="button" value='both' <?=$bothDisabled?> >Both</label>
   			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$archiveChecked?> data-toggle="button" value='archive'  <?=$archiveDisabled?>>Archive</label>
 	    </div>
 	</div>

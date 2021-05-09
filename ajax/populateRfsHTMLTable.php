@@ -19,8 +19,9 @@ $valueStream  = !empty($_POST['valuestream'])   ? trim($_POST['valuestream']) : 
 $businessUnit = !empty($_POST['businessunit']) ? trim($_POST['businessunit']) : null;
 $requestor    = !empty($_POST['requestor'])    ? trim($_POST['requestor']) : null;
 
-$pipelineLiveArchive    = !empty($_POST['pipelineLiveArchive'])    ? trim($_POST['pipelineLiveArchive']) : null;
+$pipelineLiveArchive = !empty($_POST['pipelineLiveArchive']) ? trim($_POST['pipelineLiveArchive']) : null;
 $pipelineSelection = rfsRecord::$rfsStatusMapping[$pipelineLiveArchive];
+$bothStatuses = $pipelineLiveArchive=='both' ? true : false;
 $withArchive = $pipelineLiveArchive=='archive' ? true : false;
 
 $predicate = " 1=1 ";
@@ -28,7 +29,20 @@ $predicate .= ! empty($rfsId) && $rfsId !=='All'  ? " AND RFS.RFS_ID='" . db2_es
 $predicate .= ! empty($requestor) && $requestor !=='All' ? " AND lower(REQUESTOR_EMAIL)='" . db2_escape_string(strtolower($requestor)) . "' " : null;
 $predicate .= ! empty($businessUnit) && $businessUnit!=='All' ? " AND BUSINESS_UNIT='" . db2_escape_string($businessUnit) . "' " : null;
 $predicate .= ! empty($valueStream) && $valueStream!=='All' ? " AND VALUE_STREAM='" . db2_escape_string($valueStream) . "' " : null;
-$predicate .= ! empty($pipelineLiveArchive) && !$withArchive ? " AND RFS_STATUS='" . db2_escape_string($pipelineSelection) . "' " : null;
+
+if ($bothStatuses && !$withArchive) {
+    $predicate .= " AND (";
+    foreach (rfsRecord::$rfsStatus as $key => $rfsState) {
+        if ($key == 0) {
+            $predicate .= " ( RFS_STATUS='" . db2_escape_string($rfsState) . "')";
+        } else {
+            $predicate .= " OR ( RFS_STATUS='" . db2_escape_string($rfsState) . "')";
+        }
+    }
+    $predicate .= ")";
+} else {
+    $predicate .= ! empty($pipelineLiveArchive) && !$withArchive ? " AND RFS_STATUS='" . db2_escape_string($pipelineSelection) . "' " : null;
+}
 
 if (empty($rfsId) && empty($valueStream) && empty($requestor) && empty($businessUnit)) {
     $response = array(

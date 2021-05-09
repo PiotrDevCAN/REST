@@ -51,9 +51,10 @@ td.dataTables_empty{
 	<div class='form-group' >
 	 <label for='pipelineLiveArchive' class='col-md-3 control-label text-right'>RFS Status</label>
       	<div class='col-md-9  text-left' >
- 			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive"   data-toggle="button" value='pipeline' disabled >Pipeline</label>
-  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" checked  data-toggle="button" value='live'  >Live</label>
-  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive"  data-toggle="button" value='archive' disabled >Archive</label>
+ 			  <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='pipeline' disabled >Pipeline</label>
+  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" checked  data-toggle="button" value='live' >Live</label>
+        <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='both' disabled >Both</label>
+  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='archive' disabled >Archive</label>
 	    </div>
 	</div>
 	</div>
