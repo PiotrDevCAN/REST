@@ -41,7 +41,6 @@ class rfsRecord extends DbRecord
     static public $rfsStatus  = array(self::RFS_STATUS_PIPELINE,self::RFS_STATUS_LIVE);
     static public $rfsStatusMapping  = array('pipeline'=>self::RFS_STATUS_PIPELINE,'live'=>self::RFS_STATUS_LIVE);
 
-
     static public $columnHeadings = array("RFS ID", "PRN", "Project Title", "Project Code", "Requestor Name", "Requestor Email", "Value Stream", "Link to PGMP", "RFS Creator", "RFS Created",'Archived','RFS Type','ILC Work Item','RFS Status','Business Unit','End Date');
 
     function __construct($pwd=null){

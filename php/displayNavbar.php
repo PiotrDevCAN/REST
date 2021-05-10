@@ -30,6 +30,8 @@ $cdiAdmin->addOption($traceDelete);
 $adminMenu      = new NavbarMenu('REST Admin','accessCdi accessAdmin');
 $organisation   = new NavbarOption('Organisation','pa_organisation.php'               ,'accessCdi accessAdmin');
 $adminMenu->addOption($organisation);
+$leavers 		= new NavbarOption('IBM Leavers','pa_leavers.php'					  ,'accessCdi accessAdmin');
+$adminMenu->addOption($leavers);
 
 $request        = new NavbarMenu(  'Request'                                          ,'accessCdi accessAdmin accessDemand accessRfs');
 $newRfs         = new NavbarOption('New RFS','pr_newRfs.php'                          ,'accessCdi accessAdmin accessDemand accessRfs');
@@ -55,10 +57,12 @@ $reports        = new NavbarMenu('Report');
 $listRfs        = new NavbarOption('RFS Report', 'ps_rfs.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
 $claim          = new NavbarOption('Requests', 'ps_ClaimMonthly.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
 $hrsPerWeek     = new NavbarOption('HrsPerWeek', 'ps_HoursPerWeekPerResource.php','accessCdi accessAdmin');
+$noResReq     	= new NavbarOption('Requests Assigned To Leavers', 'ps_NoResourceRequests.php','accessCdi accessAdmin');
 
 $reports->addOption($listRfs);
 $reports->addOption($claim);
 $reports->addOption($hrsPerWeek);
+$reports->addOption($noResReq);
 // $dummy          = new NavbarOption('Dummy entry', 'pr_dummyReport.php','accessUser accessReports');
 
 $navbar->addMenu($cdiAdmin);

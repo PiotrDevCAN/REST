@@ -83,7 +83,6 @@ function Rfs() {
 		});
 	},
 
-
 	this.listenForDeleteRfs = function(){
 		$(document).on('click','.deleteRfs', function(e){
 			var rfsId = $(this).data('rfsid');
@@ -92,9 +91,6 @@ function Rfs() {
 			$('#deleteRfsModal').modal('show');
 			});
 	},
-
-
-
 
 	this.listenForConfirmDeleteRfs = function(){
 		$(document).on('click','#deleteConmfirmedRfs', function(e){
@@ -115,8 +111,7 @@ function Rfs() {
 		    });
 		});
 	},
-	
-	
+
 	this.listenForConfirmGoLiveRfs = function(){
 		$(document).on('submit','#goLiveRfsForm', function(e){
 			$('#confirmGoLiveRfs').addClass('spinning').attr('disabled',true);
@@ -177,7 +172,6 @@ function Rfs() {
 			Rfs.table.ajax.reload();
 		});		
 	},
-	
 
 	this.listenForSelectRequestor = function(){
 		$(document).on('change','#selectRequestor',function(){	
@@ -186,8 +180,6 @@ function Rfs() {
 			Rfs.table.ajax.reload();
 		});		
 	},
-	
-	
 
 	this.initialiseDataTable = function(){
 	    // Setup - add a text input to each footer cell
@@ -259,7 +251,7 @@ function Rfs() {
 	    });
 	},
 	
-		this.initialiseClaimTable = function(){
+	this.initialiseClaimTable = function(){
 	    // Setup - add a text input to each footer cell
 	    $('#claimTable_id tfoot th').each( function () {
 	        var title = $(this).text();
@@ -327,10 +319,6 @@ function Rfs() {
 				null,
 				null,
 	        ],
-
-
-
-
 	    });
 	    Rfs.table.columns([1,2,3,4,5,8,9,10,19,20,21]).visible(false,false);
 	    Rfs.table.columns.adjust().draw(false);
@@ -348,14 +336,9 @@ function Rfs() {
 	    } );
 	},
 
-	
-	
-	
 	this.buildClaimReport =  function(){
 		var formData = $('form').serialize();		
 		var rfs = new Rfs();
-		
-		
 	    $.ajax({
 	    	url: "ajax/createClaimHTMLTable.php",
 	        type: 'POST',
@@ -370,9 +353,110 @@ function Rfs() {
 	    		}
 	    });
 	},
-	
-	
-	
+
+	this.initialiseLeftTable = function(){
+	    // Setup - add a text input to each footer cell
+	    $('#leftTable_id tfoot th').each( function () {
+	        var title = $(this).text();
+	        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+	    } );
+		// DataTable
+	    Rfs.table = $('#leftTable_id').DataTable({
+	    	language: {
+	    	      emptyTable: "Please select one or more of :  RFS, Value Stream, Business Unit, Requestor from above"
+	    	},
+	    	ajax: {
+	            url: 'ajax/populateLeftHTMLTable.php',
+	            type: 'POST',
+	            data: function ( d ) {
+	                d.rfsid = $('#selectRfs option:selected').val();
+	                d.valuestream = $('#selectValueStream option:selected').val();
+	                d.businessunit = $('#selectBusinessUnit option:selected').val();
+	                d.requestor = $('#selectRequestor option:selected').val();
+	            },
+	        }	,
+	    	autoWidth: true,
+	    	deferRender: true,
+	    	responsive: true,
+	    	processing: true,
+	    	colReorder: true,
+	    	dom: 'Blfrtip',
+	        buttons: [
+	                  'colvis',
+	                  'excelHtml5',
+	                  'csvHtml5',
+	                  'print'
+	              ],
+
+	        columns: [ 
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+	            { defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
+	            { defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+		        null,
+				null,
+				null,
+				null,
+	        ],
+	    });
+	    Rfs.table.columns([1,2,3,4,5,8,9,10,19,20,21]).visible(false,false);
+	    Rfs.table.columns.adjust().draw(false);
+	    // Apply the search
+	    Rfs.table.columns().every( function () {
+	        var that = this;
+
+	        $( 'input', this.footer() ).on( 'keyup change', function () {
+	            if ( that.search() !== this.value ) {
+	                that
+	                    .search( this.value )
+	                    .draw();
+	            }
+	        } );
+	    } );
+	},
+
+	this.buildLeftReport =  function(){
+		var formData = $('form').serialize();		
+		var rfs = new Rfs();
+	    $.ajax({
+	    	url: "ajax/createLeftHTMLTable.php",
+	        type: 'POST',
+	    	data: formData,
+	        before: function(){
+	        	$('#leftTableDiv').html('<h2>Table being built</h2>');
+	        },
+	    	success: function(result){
+	    		$('#leftTable_id').DataTable().destroy();
+	        	$("#leftTableDiv").html(result);
+	        	rfs.initialiseLeftTable();
+	    		}
+	    });
+	},
+
 	this.buildPipelineReport =  function(){
 		var formData = $('form').serialize();
 		var rfs = new Rfs();
@@ -429,15 +513,10 @@ function Rfs() {
 	    } );
 	},
 
-	
-	
-	
-
 	this.destroyRfsReport = function(){
 		$('#rfsTable_id').DataTable().destroy();
 	}
-	
-	
+
 	this.listenForSaveRfs = function(){
 		$( "#rfsForm" ).submit(function( event ) {
 			$(':submit').addClass('spinning').attr('disabled',true);
@@ -547,7 +626,6 @@ function Rfs() {
 		return startPicker;
 	}	
 	
-	
 	this.prepareEndDateOnModal = function(element){
 		
 		var reference = $(element).data('reference');		
@@ -572,8 +650,6 @@ function Rfs() {
     	})
 		return endPicker;
 	}
-
-	
 
 	this.listenForSaveSlippedRfsDates = function(){
 		$( "#saveSlippedRfsDates" ).on('click',function( event ) {
@@ -600,7 +676,6 @@ function Rfs() {
 					}
 		    	});
 			});	
-
 		});
 	}
 }
