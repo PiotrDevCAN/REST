@@ -33,13 +33,16 @@ if ($err) {
     $inactivePersonTable->clear(false);
 
     $responseObj = json_decode($response);
-    foreach ($responseObj as $personEntry) {
-        $inactivePersonRecord->setFromArray($personEntry);
-        $db2result = $inactivePersonTable->insert($inactivePersonRecord);
-
-        if(!$db2result){
-            echo db2_stmt_error();
-            echo db2_stmt_errormsg();
+    if (count($responseObj) > 0) {
+        foreach ($responseObj as $personEntry) {
+            
+            $inactivePersonRecord->setFromArray($personEntry);
+            $db2result = $inactivePersonTable->insert($inactivePersonRecord);
+    
+            if(!$db2result){
+                echo db2_stmt_error();
+                echo db2_stmt_errormsg();
+            }
         }
-    }    
+    }     
 }
