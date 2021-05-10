@@ -11,10 +11,13 @@ $curl = curl_init();
 
 curl_setopt_array($curl, array(
     CURLOPT_URL => $url,
+    // CURLOPT_HEADER => 1,
+    CURLOPT_HEADER => FALSE,
     CURLOPT_RETURNTRANSFER => 1, 
+    CURLOPT_SSL_VERIFYHOST => 0,
+    CURLOPT_SSL_VERIFYPEER => 0,
     CURLOPT_HTTPHEADER => array(
         "Content-Type: application/json",
-        
     ),
 ));
 
