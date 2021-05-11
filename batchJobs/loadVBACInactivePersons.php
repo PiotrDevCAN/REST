@@ -6,6 +6,11 @@ use rest\inactivePersonTable;
 set_time_limit(0);
 
 $url = $_ENV['vbac_url'] . '/api/employeesLeft.php?token=' . $_ENV['vbac_api_token'];
+echo $url;
+echo '<br>';
+echo '<br><pre>';
+print_r($_ENV);
+echo '</pre>';
 
 $curl = curl_init();
 
@@ -23,7 +28,7 @@ curl_setopt_array($curl, array(
 
 $response = curl_exec($curl);
 $err = curl_error($curl);
-
+print_r($response);
 curl_close($curl);
 
 if ($err) {
@@ -37,8 +42,14 @@ if ($err) {
 
     $responseObj = json_decode($response);
     if (count($responseObj) > 0) {
-        foreach ($responseObj as $personEntry) {
+        // foreach ($responseObj as $personEntry) {
             
+            $personEntry = array(
+                'EMAIL_ADDRESS' => 'test',
+                'NOTES_ID' => 'test',
+                'PES_STATUS' => 'test'
+            );
+
             $inactivePersonRecord->setFromArray($personEntry);
             $db2result = $inactivePersonTable->insert($inactivePersonRecord);
     
@@ -46,7 +57,7 @@ if ($err) {
                 echo db2_stmt_error();
                 echo db2_stmt_errormsg();
             }
-        }
+        // }
     }
     // echo count($responseObj) . ' records read from VBAC api';
 }
