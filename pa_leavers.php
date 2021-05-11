@@ -40,39 +40,43 @@ function initialiseTable(){
 		processing: true,
 		responsive: false,
 		dom: 'Blfrtip',
-    	buttons: [
-            'colvis',
-            $.extend( true, {}, buttonCommon, {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    orthogonal: 'sort',
-                    stripHtml: true,
-                    stripNewLines:false
-                },
-				customize: function( xlsx ) {
-					var sheet = xlsx.xl.worksheets['sheet1.xml'];
-				}
-        }),
-        $.extend( true, {}, buttonCommon, {
-            extend: 'csvHtml5',
-            exportOptions: {
-                orthogonal: 'sort',
-                stripHtml: true,
-                stripNewLines:false
-            }
-        }),
-        $.extend( true, {}, buttonCommon, {
-            extend: 'print',
-            exportOptions: {
-                orthogonal: 'sort',
-                stripHtml: true,
-                stripNewLines:false
-            }
-        })
-          ],
+    	// buttons: [
+        //     'colvis',
+        //     $.extend( true, {}, buttonCommon, {
+        //         extend: 'excelHtml5',
+        //         exportOptions: {
+        //             orthogonal: 'sort',
+        //             stripHtml: true,
+        //             stripNewLines:false
+        //         },
+		// 		customize: function( xlsx ) {
+		// 			var sheet = xlsx.xl.worksheets['sheet1.xml'];
+		// 		}
+        //     }),
+        //     $.extend( true, {}, buttonCommon, {
+        //         extend: 'csvHtml5',
+        //         exportOptions: {
+        //             orthogonal: 'sort',
+        //             stripHtml: true,
+        //             stripNewLines:false
+        //         }
+        //     }),
+        //     $.extend( true, {}, buttonCommon, {
+        //         extend: 'print',
+        //         exportOptions: {
+        //             orthogonal: 'sort',
+        //             stripHtml: true,
+        //             stripNewLines:false
+        //         }
+        //     })
+        // ],
         ajax: {
         	    "url":"/ajax/populateLeaversTable.php",
         	    "type": "GET",
+                // success: function(data, textStatus, jqXHR)
+                // {
+                //     console.log(data); //*** returns correct json data
+                // }
         },
         drawCallback: function( row, data ) {
         	$("[data-toggle='toggle']").bootstrapToggle('destroy')
@@ -85,7 +89,7 @@ function initialiseTable(){
 			{ data: "EMAIL_ADDRESS","defaultContent": "" },
             { data: "NOTES_ID","defaultContent": "" },
             { data: "PES_STATUS","defaultContent": "" }
-            ]
+        ]
 	});
 }
 

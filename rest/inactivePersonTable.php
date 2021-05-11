@@ -218,7 +218,7 @@ class inactivePersonTable extends DbTable {
         while (($row=db2_fetch_assoc($rs))==true) {
             $display = array();
             $row = array_map('trim', $row);
-            $display['EMAIL_ADDRESS'] = $row['EMAIL_ADDRESS'];
+            $display['EMAIL_ADDRESS'] = !empty($row['EMAIL_ADDRESS']) ? $row['EMAIL_ADDRESS'] : 'unavailable in VBAC';
             $display['NOTES_ID'] = $row['NOTES_ID'];
             $display['PES_STATUS'] = $row['PES_STATUS'];
             $displayAble[] = $display;
