@@ -1,19 +1,17 @@
 <?php
 use rest\allTables;
 use rest\resourceRequestTable;
-use rest\resourceRequestRecord;
 use itdq\Trace;
 use rest\rfsTable;
 use itdq\PhpMemoryTrace;
 use rest\rfsRecord;
-use itdq\DbTable;
 
 function ob_html_compress($buf){
     return str_replace(array("\n","\r"),'',$buf);
 }
-
+$_SESSION['peekUsage'] = 0;
 set_time_limit(0);
-ini_set('memory_limit','300M');
+ini_set('memory_limit','1024M');
 ob_start();
 PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
 
@@ -28,7 +26,6 @@ $pipelineLive = $pipelineLiveArchive=='archive' ? null : $pipelineLive;
 $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
 $organisation = !empty($_POST['organisation']) ? $_POST['organisation'] : null;
 $businessUnit = !empty($_POST['businessunit']) ? $_POST['businessunit'] : null;
-
 
 if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     $response = array(
@@ -50,14 +47,11 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     $predicate .= ! empty($businessUnit) ? " AND BUSINESS_UNIT='" . db2_escape_string($businessUnit) . "' " : null;
 
     error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
-    
-//     $mqt = new DbTable(allTables::$MQT_MAX_REF);
-//     $mqt->refresh();
-    
+
     $dataAndSql = $resourceRequestTable->returnAsArray($startDate, $endDate, $predicate, $pipelineLiveArchive);
     $data = $dataAndSql['data'];
     $sql = $dataAndSql['sql'];
-   
+
     PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
 
     $testJson = json_encode($data);
@@ -75,6 +69,7 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
 
     echo "Bad Records removed:$badRecords";
+    echo " ".$_SESSION['peekUsage'];
 
     $messages = ob_get_clean();
     ob_start();
@@ -82,7 +77,8 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     $response = array(
         'messages' => $messages,
         'badrecords' => $badRecords,
-        "data" => $data,
+        // "data" => $data,
+        "data" => '',
         "sql" => $sql
     );
 }
