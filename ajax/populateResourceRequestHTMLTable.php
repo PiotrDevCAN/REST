@@ -9,7 +9,7 @@ use rest\rfsRecord;
 function ob_html_compress($buf){
     return str_replace(array("\n","\r"),'',$buf);
 }
-$_SESSION['peekUsage'] = 0;
+
 set_time_limit(0);
 ini_set('memory_limit','1024M');
 ob_start();
@@ -77,8 +77,7 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     $response = array(
         'messages' => $messages,
         'badrecords' => $badRecords,
-        // "data" => $data,
-        "data" => '',
+        "data" => $data,
         "sql" => $sql
     );
 }
