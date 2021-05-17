@@ -727,6 +727,9 @@ function ResourceRequest() {
 	},
 
 	this.initialiseDataTable = function(){
+		// Show the table
+		$('#resourceRequestsTable_id').show();
+
 		// Setup - add a text input to each footer cell
 	    $('#resourceRequestsTable_id tfoot th').each( function () {
 	        var title = $(this).text();

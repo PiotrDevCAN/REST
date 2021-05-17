@@ -30,7 +30,6 @@ $rfsTable = new rfsTable(allTables::$RFS);
 
 <?php $archiveDisabled  = 'disabled' ?>
 
-
 <div class='container-fluid'>
 <h3>RFS Report</h3>
 

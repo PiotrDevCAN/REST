@@ -19,7 +19,7 @@ class resourceRequestTable extends DbTable
         $RRheaderCells = resourceRequestRecord::htmlHeaderCellsStatic($startDate);
         $RFSheaderCells = rfsRecord::htmlHeaderCellsStatic();
         ?>
-        <table id='resourceRequestsTable_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%'>
+        <table id='resourceRequestsTable_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%' style='display: none;'>
         <thead>
         <tr><?=$RFSheaderCells . $RRheaderCells ;?></tr></thead>
         <tbody>

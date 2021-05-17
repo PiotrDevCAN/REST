@@ -196,6 +196,9 @@ function Rfs() {
 	},
 
 	this.initialiseDataTable = function(){
+		// Show the table
+		$('#rfsTable_id').show();
+
 	    // Setup - add a text input to each footer cell
 	    $('#rfsTable_id tfoot th').each( function () {
 	        var title = $(this).text();
@@ -288,6 +291,9 @@ function Rfs() {
 	},
 	
 	this.initialiseClaimTable = function(){
+		// Show the table
+		$('#claimTable_id').show();
+
 	    // Setup - add a text input to each footer cell
 	    $('#claimTable_id tfoot th').each( function () {
 	        var title = $(this).text();
@@ -394,6 +400,9 @@ function Rfs() {
 	},
 
 	this.initialiseLeftTable = function(){
+		// Show the table
+		$('#leftTable_id').show();
+
 	    // Setup - add a text input to each footer cell
 	    $('#leftTable_id tfoot th').each( function () {
 	        var title = $(this).text();
@@ -523,6 +532,9 @@ function Rfs() {
 	},
 	
 	this.initialisePipelineDataTable = function(){
+		// Show the table
+		$('#rfsTable_id').show();
+
 	    // Setup - add a text input to each footer cell
 	    $('#rfsTable_id tfoot th').each( function () {
 	        var title = $(this).text();

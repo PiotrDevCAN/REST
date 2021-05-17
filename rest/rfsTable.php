@@ -12,7 +12,7 @@ class rfsTable extends DbTable
     static function buildHTMLTable($tableId = 'rfs'){
         $RFSheaderCells = rfsRecord::htmlHeaderCellsStatic();
         ?>
-        <table id='<?=$tableId;?>Table_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%'>
+        <table id='<?=$tableId;?>Table_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%' style='display: none;'>
         <thead>
         <tr><?=$RFSheaderCells;?></tr></thead>
         <tbody>
@@ -37,7 +37,7 @@ class rfsTable extends DbTable
             $nextMonthObj->add($oneMonth);    
         }
         ?>
-        <table id='<?=$tableId;?>Table_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%'>
+        <table id='<?=$tableId;?>Table_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%' style='display: none;'>
         <thead>
         <tr>
         <th>RFS ID</th><th>PRN</th><th>Project Title</th><th>Project Code</th><th>Requestor Name</th><th>Requestor Email</th><th>Value Stream</th><th>Business Unit</th>

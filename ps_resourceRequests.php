@@ -523,9 +523,6 @@ td.dataTables_empty{
   </div>
 </div>
 
-
-
-
 <?php
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 ?>
