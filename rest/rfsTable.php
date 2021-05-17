@@ -420,11 +420,20 @@ class rfsTable extends DbTable
                 break; // It's got invalid chars in it that will be a problem later.
             }     
             
+            $startDate = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
+            $startDateSortable = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Ymd') : null;
+            $endDate         = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
+            $endDateSortable = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
+            
             // foreach ($row as $key => $data){ 
             //     $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
             //     unset($row[$key]);
             // }
             $row = array_map('trim',$row);
+            
+            $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
+            $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
+            
             $allData[] = $row;
         }
         return array('data'=>$allData, 'sql'=>$sql, 'total'=>$countRow['TOTAL']);
