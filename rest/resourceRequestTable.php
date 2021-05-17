@@ -196,7 +196,7 @@ class resourceRequestTable extends DbTable
             $testJson = json_encode($row);
             if(!$testJson){
                 error_log("Invalid character found");
-                erorr_log(print_r($row,true));
+                error_log(print_r($row,true));
                 
                 throw new \Exception("Invalid character found in Row ");
                 break; // It's got invalid chars in it that will be a problem later.
