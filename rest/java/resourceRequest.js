@@ -739,9 +739,9 @@ function ResourceRequest() {
 		// DataTable
 	    ResourceRequest.table = $('#resourceRequestsTable_id').DataTable({
 	    	language: {
-	    	      emptyTable: "Please select Organisation, Business Unit and/or RFS from dropdowns above",
-				//   searchPlaceholder: "Search ALL fields - Very slow",
-				  processing: "Processing<i class='fas fa-spinner fa-spin '></i>"
+	    		// emptyTable: "Please select Organisation, Business Unit and/or RFS from dropdowns above",
+				emptyTable: "No response data available",
+				processing: "Processing<i class='fas fa-spinner fa-spin '></i>"
 			},
 	    	ajax: {
 	            url: 'ajax/populateResourceRequestHTMLTable.php',

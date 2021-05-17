@@ -285,7 +285,7 @@ class rfsTable extends DbTable
         
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
-        $allData = null;
+        $allData = array();
         
         while(($row = db2_fetch_assoc($resultSet))==true){
             $testJson = json_encode($row);
@@ -412,7 +412,7 @@ class rfsTable extends DbTable
         
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
-        $allData = null;
+        $allData = array();
         
         while(($row = db2_fetch_assoc($resultSet))==true){
             $testJson = json_encode($row);

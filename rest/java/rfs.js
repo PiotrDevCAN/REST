@@ -207,9 +207,9 @@ function Rfs() {
 		// DataTable
 	    Rfs.table = $('#rfsTable_id').DataTable({
 	    	language: {
-	    	      emptyTable: "Please select one or more of :  RFS, Value Stream, Business Unit, Requestor from above",
-				//   searchPlaceholder: "Search ALL fields - Very slow", 
-				  processing: "Processing<i class='fas fa-spinner fa-spin '></i>"
+	    	    // emptyTable: "Please select one or more of :  RFS, Value Stream, Business Unit, Requestor from above",
+				emptyTable: "No response data available",
+				processing: "Processing<i class='fas fa-spinner fa-spin '></i>"
 			},
 	    	ajax: {
 	            url: 'ajax/populateRfsHTMLTable.php',
@@ -302,8 +302,9 @@ function Rfs() {
 		// DataTable
 	    Rfs.table = $('#claimTable_id').DataTable({
 	    	language: {
-	    	      emptyTable: "Please select one or more of :  RFS, Value Stream, Business Unit, Requestor from above",
-				  processing: "Processing<i class='fas fa-spinner fa-spin '></i>"
+				// emptyTable: "Please select one or more of :  RFS, Value Stream, Business Unit, Requestor from above",
+				emptyTable: "No response data available",
+				processing: "Processing<i class='fas fa-spinner fa-spin '></i>"
 			},
 	    	ajax: {
 	            url: 'ajax/populateClaimHTMLTable.php',
@@ -411,7 +412,8 @@ function Rfs() {
 		// DataTable
 		Rfs.table = $('#leftTable_id').DataTable({
 			language: {
-				emptyTable: "Please select one or more of :  RFS, Value Stream, Business Unit, Requestor from above",
+				// emptyTable: "Please select one or more of :  RFS, Value Stream, Business Unit, Requestor from above",
+				emptyTable: "No response data available",
 				processing: "Processing<i class='fas fa-spinner fa-spin '></i>"
 			},
 			ajax: {
