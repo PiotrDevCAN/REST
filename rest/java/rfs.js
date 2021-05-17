@@ -261,8 +261,8 @@ function Rfs() {
 				{ name: "RFS_END_DATE",  data: "RFS_END_DATE", defaultContent: "", visible:true, render: { _:'display', sort:'sort' }, },				
 			]
 	    });
-	    Rfs.table.columns([10]).visible(false,false);
-	    Rfs.table.columns.adjust().draw(false);
+	    // Rfs.table.columns([10]).visible(false,false);
+	    // Rfs.table.columns.adjust().draw(false);
 	    
 		this.applySearch();
 	},
@@ -372,8 +372,8 @@ function Rfs() {
 				{ name: "OCT_21", data: "OCT_21", defaultContent: "", visible:false },
 	        ],
 	    });
-	    Rfs.table.columns([1,2,3,4,5,8,9,10,19,20,21]).visible(false,false);
-	    Rfs.table.columns.adjust().draw(false);
+	    // Rfs.table.columns([1,2,3,4,5,8,9,10,19,20,21]).visible(false,false);
+	    // Rfs.table.columns.adjust().draw(false);
 		this.applySearch();
 	},
 
@@ -482,8 +482,8 @@ function Rfs() {
 				{ name: "OCT_21", data: "OCT_21", defaultContent: "", visible:false },
 	        ],
 		});
-		Rfs.table.columns([1,2,3,4,5,8,9,10,19,20,21]).visible(false,false);
-		Rfs.table.columns.adjust().draw(false);
+		// Rfs.table.columns([1,2,3,4,5,8,9,10,19,20,21]).visible(false,false);
+		// Rfs.table.columns.adjust().draw(false);
 		this.applySearch();
 	},
 

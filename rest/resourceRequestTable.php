@@ -189,6 +189,8 @@ class resourceRequestTable extends DbTable
         $allData['total'] = $countRow['TOTAL'];
         $allData['data'] = array();
  
+        $counter = 0;
+
         while(($row = db2_fetch_assoc($resultSet))==true){
             PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
             $testJson = json_encode($row);
@@ -204,6 +206,10 @@ class resourceRequestTable extends DbTable
             $row['weeks_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] : null;
            
             $withButtons ? $this->addGlyphicons($row) : null;
+            
+            $row['DT_RowId'] = 'row_'.$counter;
+
+            $counter++;
             $allData['data'][]  = $row;
         }
 

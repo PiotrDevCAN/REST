@@ -159,6 +159,8 @@ class rfsTable extends DbTable
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
+        $counter = 0;
+
         while(($row = db2_fetch_assoc($resultSet))==true){
             $testJson = json_encode($row);
             if(!$testJson){
@@ -183,6 +185,9 @@ class rfsTable extends DbTable
             $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
             $row['RFS_END_DATE'] = array('display'=> $rfsEndDate,'sort'=>$rfsEndDateSortable);
             
+            $row['DT_RowId'] = 'row_'.$counter;
+
+            $counter++;
             $allData[] = $row;
         }
         return array('data'=>$allData, 'sql'=>$sql, 'total'=>$countRow['TOTAL']);
@@ -287,6 +292,8 @@ class rfsTable extends DbTable
         $resultSet ? null : die("SQL Failed");
         $allData = array();
         
+        $counter = 0;
+
         while(($row = db2_fetch_assoc($resultSet))==true){
             $testJson = json_encode($row);
             if(!$testJson){
@@ -307,6 +314,9 @@ class rfsTable extends DbTable
             $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
             $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
             
+            $row['DT_RowId'] = 'row_'.$counter;
+
+            $counter++;
             $allData[] = $row;
         }
         return array('data'=>$allData, 'sql'=>$sql, 'total'=>$countRow['TOTAL']);
@@ -414,6 +424,8 @@ class rfsTable extends DbTable
         $resultSet ? null : die("SQL Failed");
         $allData = array();
         
+        $counter = 0;
+
         while(($row = db2_fetch_assoc($resultSet))==true){
             $testJson = json_encode($row);
             if(!$testJson){
@@ -434,6 +446,9 @@ class rfsTable extends DbTable
             $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
             $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
             
+            $row['DT_RowId'] = 'row_'.$counter;
+
+            $counter++;
             $allData[] = $row;
         }
         return array('data'=>$allData, 'sql'=>$sql, 'total'=>$countRow['TOTAL']);
