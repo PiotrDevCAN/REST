@@ -138,11 +138,14 @@ td.dataTables_empty{
 <input type='hidden' id='bwo' value='' />
 <div id='messageArea'></div>
 <div id='resourceTableDiv'>
+<?php
+  $startDate = !empty($_POST['START_DATE']) ? $_POST['START_DATE'] : null;
+  $endDate = !empty($_POST['END_DATE']) ? $_POST['END_DATE'] : null;
+
+  resourceRequestTable::buildHTMLTable($startDate, $endDate);
+?>
 </div>
 </div>
-
-
-
 
 <!-- Modal -->
 <div id="resourceNameModal" class="modal fade" role="dialog">
@@ -393,49 +396,48 @@ td.dataTables_empty{
       <div class="modal-header" >
         <h4 class="modal-title">Status</h4>
       </div>
-      <div class="modal-body" >
+    <div class="modal-body" >
 
 		<form id='statusChangeForm' class='form-horizontal' >
-		<div class="form-group">
-		    <label for="statusChangeRR" class='col-sm-2' >Reference</label>
-		    <div class='col-sm-8'>
-	    	<input type="text" class="form-control" id="statusChangeRR"  name="statusChangeRR" disabled>
-	    	</div>
-  		</div>
-  		<div class="form-group">
-		    <label for="statusChangeRfs" class='col-sm-2' >RFS</label>
-		    <div class='col-sm-8'>
-	    	<input type="text" class="form-control" id="statusChangeRfs" name="statusChangeRfs" disabled>
-	    	</div>
-  		</div>
-		<div class="form-group">
-		    <label for="statusChangeService" class='col-sm-2' >Organisation</label>
-		    <div class='col-sm-8'>
-	    	<input type="text" class="form-control" id="statusChangeService" name="statusChangeService" disabled>
-	    	</div>
-  		</div>
-  		<div class="form-group">
-		    <label for="statusChangeSub" class='col-sm-2' >Service</label>
-		    <div class='col-sm-8'>
-	    	<input type="text" class="form-control" id="statusChangeSub" name="statusChangeSub" disabled>
-	    	</div>
-  		</div>
+      <div class="form-group">
+          <label for="statusChangeRR" class='col-sm-2' >Reference</label>
+          <div class='col-sm-8'>
+          <input type="text" class="form-control" id="statusChangeRR"  name="statusChangeRR" disabled>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="statusChangeRfs" class='col-sm-2' >RFS</label>
+          <div class='col-sm-8'>
+          <input type="text" class="form-control" id="statusChangeRfs" name="statusChangeRfs" disabled>
+          </div>
+        </div>
+      <div class="form-group">
+          <label for="statusChangeService" class='col-sm-2' >Organisation</label>
+          <div class='col-sm-8'>
+          <input type="text" class="form-control" id="statusChangeService" name="statusChangeService" disabled>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="statusChangeSub" class='col-sm-2' >Service</label>
+          <div class='col-sm-8'>
+          <input type="text" class="form-control" id="statusChangeSub" name="statusChangeSub" disabled>
+          </div>
+        </div>
 
-		<div class="form-group">
-		    <label for="statusChangeStart" class='col-sm-2' >Start</label>
-		    <div class='col-sm-8'>
-	    	<input type="text" class="form-control" id="statusChangeStart" name="statusChangeStart" disabled>
-	    	</div>
-  		</div>
+      <div class="form-group">
+          <label for="statusChangeStart" class='col-sm-2' >Start</label>
+          <div class='col-sm-8'>
+          <input type="text" class="form-control" id="statusChangeStart" name="statusChangeStart" disabled>
+          </div>
+      </div>
 
-  		<div class="form-group">
-  		<label class='col-sm-2'>Status</label>
-
-  		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_ASSIGNED ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_ASSIGNED)?>' ><?=resourceRequestRecord::STATUS_ASSIGNED ?></label>
-		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_COMPLETED ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_COMPLETED)?>'><?=resourceRequestRecord::STATUS_COMPLETED ?></label>
-		 <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_NEW ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_NEW)?>'><?=resourceRequestRecord::STATUS_NEW ?></label>
-		</div>
-        </form>
+      <div class="form-group">
+        <label class='col-sm-2'>Status</label>
+        <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_ASSIGNED ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_ASSIGNED)?>' ><?=resourceRequestRecord::STATUS_ASSIGNED ?></label>
+        <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_COMPLETED ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_COMPLETED)?>'><?=resourceRequestRecord::STATUS_COMPLETED ?></label>
+        <label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='<?=resourceRequestRecord::STATUS_NEW ?>' id='statusRadio<?=str_replace(' ', '_', resourceRequestRecord::STATUS_NEW)?>'><?=resourceRequestRecord::STATUS_NEW ?></label>
+      </div>
+    </form>
 
 	</div>
     <div class="modal-footer" >
@@ -585,7 +587,7 @@ $(document).ready(function() {
 	var resourceRequest = new ResourceRequest();
 	resourceRequest.prepareRfsSelect();
 //	resourceRequest.initialiseDateSelect(allowPast); This was causing the use of up and down arrows to change the Date Field on the form which we didn't want.
-	resourceRequest.buildResourceReport();
+	resourceRequest.buildResourceReport(false);
 	resourceRequest.populateDiaryWhenModalShown();
 	resourceRequest.populateResourceDropDownWhenModalShown();
 	resourceRequest.listenForEditResourceName();

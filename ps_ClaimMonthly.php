@@ -2,6 +2,7 @@
 use itdq\Trace;
 use itdq\Loader;
 use rest\allTables;
+use rest\rfsTable;
 
 set_time_limit(0);
 
@@ -105,6 +106,9 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is nu
 <hr/>
 
 <div id='claimTableDiv'>
+<?php
+    rfsTable::buildHTMLRequestsTable('claim');
+?>
 </div>
 </div>
 <?php
@@ -135,7 +139,7 @@ $(document).ready(function() {
 	$(".select").select2();
 
     var rfs = new Rfs();
-	rfs.buildClaimReport();
+	rfs.buildClaimReport(false);
 	rfs.listenForSelectRequestor();
 	rfs.listenForSelectValueStream();
 	rfs.listenForSelectBusinessUnit();

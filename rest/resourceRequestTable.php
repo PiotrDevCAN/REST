@@ -15,18 +15,17 @@ class resourceRequestTable extends DbTable
     private $hrsThisWeekByResourceReference;
     private $lastDiaryEntriesByResourceReference;
 
-    function buildHTMLTable($startDate,$endDate){
+    static function buildHTMLTable($startDate,$endDate){
+        $RRheaderCells = resourceRequestRecord::htmlHeaderCellsStatic($startDate);
+        $RFSheaderCells = rfsRecord::htmlHeaderCellsStatic();
         ?>
-        <table id='resourceRequestsTable_id' class="table table-striped table-bordered" cellspacing="0" width="100%">
-		<thead>
-   		<?php
-    		resourceRequestRecord::htmlHeaderRow();
-    	?>
-    	</thead>
-    	<tbody>
-    		<tr><</tr>
-    	</tbody>
-		</table>
+        <table id='resourceRequestsTable_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%'>
+        <thead>
+        <tr><?=$RFSheaderCells . $RRheaderCells ;?></tr></thead>
+        <tbody>
+        </tbody>
+        <tfoot><tr><?=$RFSheaderCells . $RRheaderCells ;?></tr></tfoot>
+        </table>
         <?php
     }
 
@@ -44,7 +43,6 @@ class resourceRequestTable extends DbTable
         
         return $row ? trim($row['RESOURCE_NAME']) : false;
     }
-    
     
     function updateResourceName($resourceReference,$resourceName, $clear=null){
         
@@ -87,13 +85,9 @@ class resourceRequestTable extends DbTable
         }
         
         error_log(__FILE__ . ":" . __LINE__ . "Elapsed:" . (microtime(true)-$postExec));
-        
      }
     
-
-    function returnAsArray($startDate,$endDate, $predicate=null, $pipelineLiveArchive = 'Live', $withButtons=true){
-        
- //       $this->populateLastDiaryEntriesArray();        
+    function returnAsArray($startDate, $endDate, $predicate = null, $pipelineLiveArchive = 'Live', $withButtons = true, $limit = false, $offset = false){
         
         $autoCommit = db2_autocommit($GLOBALS['conn']);
         db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);        
@@ -118,7 +112,6 @@ class resourceRequestTable extends DbTable
 
         $sql =  " WITH resource_hours as (";
         $sql .= "  SELECT RESOURCE_REFERENCE as RR ";
-              
 
         while($startDateObj->format('Ym') <= $endDateObj->format('Ym')){
             $dataTableColName = "MONTH_" . substr("00" . ++$monthNumber,-2);
@@ -128,7 +121,7 @@ class resourceRequestTable extends DbTable
         }
 
         $sql .= " FROM ( ";
-        $sql .= "        SELECT RESOURCE_REFERENCE ";
+        $sql .= " SELECT RESOURCE_REFERENCE ";
 
         $startDateObj = new \DateTime($startDate);
         $day =  $startDateObj->format('d');
@@ -151,9 +144,9 @@ class resourceRequestTable extends DbTable
         $resourceRequestHoursTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUEST_HOURS : allTables::$RESOURCE_REQUEST_HOURS;
 
         $sql .=  " FROM " . $GLOBALS['Db2Schema'] . "." . $resourceRequestHoursTable;
-        $sql .= "   WHERE  ( claim_month >= " . $startDateObj->format('m') . " and claim_year = " . $startDateObj->format('Y') . ")  " ;
+        $sql .= " WHERE  ( claim_month >= " . $startDateObj->format('m') . " and claim_year = " . $startDateObj->format('Y') . ")  " ;
         $sql .= $startDateObj->format('Y') !==  $endDateObj->format('Y') ?  "    AND (claim_year > " . $startDateObj->format('Y') . " and claim_year < " . $endDateObj->format('Y') . " ) " : null;
-        $sql .= "         AND (claim_month <= " . $endDateObj->format('m') . " and claim_year = " . $endDateObj->format('Y') . ")  " ;
+        $sql .= " AND (claim_month <= " . $endDateObj->format('m') . " and claim_year = " . $endDateObj->format('Y') . ")  " ;
         $sql .= " ) as resource_hours ";
         $sql .= " GROUP BY RESOURCE_REFERENCE ";
         $sql .= " ) ";
@@ -170,8 +163,19 @@ class resourceRequestTable extends DbTable
         $sql .= $pipelineLiveArchive=='pipeline' ? " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " : " AND RFS_STATUS!='" . rfsRecord::RFS_STATUS_PIPELINE . "' ";
         $sql .= !empty($predicate) ? " $predicate " : null ;
 
-        $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";
+        // $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";
 
+        $countSql = "SELECT COUNT(*) as TOTAL";
+        $countSql.= " FROM (";
+        $countSql.= $sql;   
+        $countSql.= " ) ";
+
+        $countResultSet = $this->execute($countSql);
+        $countResultSet ? null : die("SQL Failed");
+        $countRow = db2_fetch_assoc($countResultSet);
+        
+        $sql .= $limit !== false ? " LIMIT ".$limit : null;
+        $sql .= $offset !== false ? " OFFSET ".$offset : null;
         
         error_log(__FILE__ . ":" . __LINE__ . ":" . $pipelineLiveArchive);
         error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
@@ -182,6 +186,7 @@ class resourceRequestTable extends DbTable
         $resultSet ? null : die("SQL Failed");
 
         $allData = array();
+        $allData['total'] = $countRow['TOTAL'];
         $allData['data'] = array();
  
         while(($row = db2_fetch_assoc($resultSet))==true){
@@ -208,7 +213,6 @@ class resourceRequestTable extends DbTable
         
         return $allData ;
     }
-
 
     function addGlyphicons(&$row){
         $today = new \DateTime();
@@ -267,7 +271,6 @@ class resourceRequestTable extends DbTable
             break;
         }
         
-        
         $row['STATUS']= $completeable ? 
         "<button type='button' class='btn btn-xs changeStatusCompleted accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
                     data-rfs='" .$rfsId . "'
@@ -280,12 +283,9 @@ class resourceRequestTable extends DbTable
                     data-resourcename='" . $resourceName . "'
                     data-start='" . $startDate4Picka . "'
                     data-end='" . $endDate4Picka . "'
-
-
          >
          <span data-toggle='tooltip' title='Change Status to Completed' class='glyphicon glyphicon-check ' aria-hidden='true' ></span>
             </button>&nbsp;<span class='$assignColor'>$status</span>" : "<span class='$assignColor'>$status</span>";
-                       
 
         $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';
         $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::DUPLICATE))==resourceRequestTable::DUPLICATE ? 'text-success' : $editButtonColor;
@@ -340,7 +340,6 @@ class resourceRequestTable extends DbTable
         $displayedResourceName.= "&nbsp;" . $resName ;
         $displayedResourceName.= "</span>";
         
-        
         $calendarEntry = !empty($row['LATEST_ENTRY']) ?  $row['LATEST_ENTRY'] . " <small>" . $row['ENTRY_CREATOR'] . ' ' . $row['ENTRY_CREATED'] . "</small>" : null;
 //        $calendarEntry = "<small>Latest diary entry not currently available</small>";      
         
@@ -353,10 +352,8 @@ class resourceRequestTable extends DbTable
         $displayedResourceName.= "<span data-toggle='tooltip' title='Open Diary' class='glyphicon glyphicon-book ' aria-hidden='true' ></span>";
         $displayedResourceName.= "</button><div class='latestDiary'>" . $calendarEntry . "</div>";
         
-        
         $row['RESOURCE_NAME']   = array('display'=> $displayedResourceName, 'sort'=>$resourceName);
 
-                  
         $displayRfsId = $rfsId . " : " . $row['RESOURCE_REFERENCE'];
         $displayRfsId.= $row['CLONED_FROM']> 0 ? "&nbsp;<i>(" . $row['CLONED_FROM'] . ")</i>" : null;
         
@@ -393,12 +390,10 @@ class resourceRequestTable extends DbTable
              <span data-toggle='tooltip' title='Delete Resource Request' class='glyphicon glyphicon-trash text-warning ' aria-hidden='true' ></span>
              </button>": null;
         
-        
         $row['RFS']        = array('display'=> $displayRfsId, 'sort'=>$rfsId);
         
         $displayHrsPerWeek = "";
         $hrsThisWeek =   $displayHrsPerWeek.= isset($this->hrsThisWeekByResourceReference[$resourceReference]) ?  $this->hrsThisWeekByResourceReference[$resourceReference] : "N/A";
-        
         
         $displayStartDate = '';
         $displayStartDate.= "<span class='$assignColor'>$startDate  to  $endDate <br/>";
@@ -418,18 +413,11 @@ class resourceRequestTable extends DbTable
         $displayHrsPerWeek = "Total Hrs:" . $totalHours . "<br/>";
         $displayHrsPerWeek.= ($started == 'Active') ? "This Week:" . $hrsThisWeek : null;
         
-        
         $row['TOTAL_HOURS'] = array('display'=>$displayHrsPerWeek,'sort'=>$totalHours);
         
         $row['ORGANISATION']=array('display'=>$row['ORGANISATION'] . "<br/><small>" . $row['SERVICE'] . "</small>", 'sort'=>$organisation);
-  
-      
         
-        
-        
-
     }
-    
     
     static function setEndDate($resourceReference, $endDate){
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
@@ -445,7 +433,6 @@ class resourceRequestTable extends DbTable
 
         return true;
     }
-    
     
     static function setStartDate($resourceReference, $startDate){
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . \rest\allTables::$RESOURCE_REQUESTS;
@@ -494,8 +481,6 @@ class resourceRequestTable extends DbTable
         return true;
     }
     
-
-
     static function getVbacActiveResourcesForSelect2(){
         if(!isset($_SESSION['vbacEmployees']) || !isset($_SESSION['myTribe'])){
             $_SESSION['vbacEmployees'] = array();
@@ -538,9 +523,7 @@ class resourceRequestTable extends DbTable
 //         } else {
 //             throw new Exception("No tribe found for : " . $_SESSION['ssoEmail']);
 //         }
-            
-
-         
+        
         // process the employees, flagging as 'local' those in the "myTribe" tribe     
          
         foreach ($vbacEmployees as $value) {
@@ -563,7 +546,6 @@ class resourceRequestTable extends DbTable
         return $tribeEmployees;
     }
     
-    
     static function getDetailsforRfsDateSlip($rfsId=null){
        
         $sql = " SELECT RESOURCE_REFERENCE, START_DATE, END_DATE, ORGANISATION, SERVICE, DESCRIPTION ";
@@ -585,7 +567,6 @@ class resourceRequestTable extends DbTable
         
     }
 
-    
     static function setRequestStatus($resourceRequest=null, $status=null){
         $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
         $sql.= !empty($status) && !empty($resourceRequest) ? " SET STATUS='" . db2_escape_string(trim($status)) . "' " : null ;
@@ -600,6 +581,4 @@ class resourceRequestTable extends DbTable
         }
         return $rs;
     }
-
-
 }

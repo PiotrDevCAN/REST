@@ -360,13 +360,22 @@ class rfsRecord extends DbRecord
 
     static function htmlHeaderRow(){
         $headerRow = "<tr>";
-        $headerRow .= rfsRecord::htmlHeaderCells();
+        $headerRow .= rfsRecord::htmlHeaderCellsStatic();
 
         $headerRow .= "</tr>";
         return $headerRow;
     }
 
     function htmlHeaderCells(){
+        $headerCells = "";
+        foreach (rfsRecord::$columnHeadings as $key => $value )
+        {
+            $headerCells .= "<th>" . $value . "</th>";
+        }
+        return $headerCells;
+    }
+
+	static function htmlHeaderCellsStatic(){
         $headerCells = "";
         foreach (rfsRecord::$columnHeadings as $key => $value )
         {

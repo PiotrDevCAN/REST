@@ -1,7 +1,10 @@
 <?php
+
+use itdq\DateClass;
 use itdq\Trace;
 use itdq\Loader;
 use rest\allTables;
+use rest\rfsTable;
 
 set_time_limit(0);
 
@@ -105,6 +108,9 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is nu
 <hr/>
 
 <div id='leftTableDiv'>
+<?php
+  rfsTable::buildHTMLRequestsTable('left');
+?>
 </div>
 </div>
 <?php
@@ -113,11 +119,11 @@ Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 
 <style>
 td.dataTables_empty{
-    color:white;
+  color:white;
 }
 
 .dataTables_wrapper .dataTables_processing {
-background-color:#006699;
+  background-color:#006699;
 }
 td.dataTables_empty {
 	text-align: center;
@@ -133,7 +139,7 @@ $(document).ready(function() {
 	$(".select").select2();
 
     var rfs = new Rfs();
-    rfs.buildLeftReport();
+    rfs.buildLeftReport(false);
     rfs.listenForSelectRequestor();
     rfs.listenForSelectValueStream();
     rfs.listenForSelectBusinessUnit();

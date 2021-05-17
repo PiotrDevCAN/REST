@@ -194,8 +194,6 @@ class resourceRequestRecord extends DbRecord
 
    		</div>
    		
-   		
-
         <div class='form-group required'>
 	       	<label for='ORGANISATION' class='col-md-2 control-label ceta-label-left'>Organisation</label>
     	       	<div class='col-md-3'>
@@ -263,16 +261,13 @@ class resourceRequestRecord extends DbRecord
     <?php
     }
 
-
-
     static function htmlHeaderRow($startDate=null, $endDate=null){
         $headerRow = "<tr>";
-        $headerRow .= resourceRequestRecord::htmlHeaderCells($startDate,$endDate);
+        $headerRow .= resourceRequestRecord::htmlHeaderCellsStatic($startDate,$endDate);
         $headerRow .= "</tr>";
 
         return $headerRow;
     }
-
 
     function htmlHeaderCells($startDate=null){
         $headerCells = "";
@@ -281,9 +276,7 @@ class resourceRequestRecord extends DbRecord
             $headerCells .= "<th>" . $value . "</th>";
         }
 
-
         $headerCells .= "<th>RR</th>";  // allow for the RR field that will come from DB2 from the join
-
 
 //         $startDateObj = new \DateTime($startDate);
 //         $day =  $startDateObj->format('d');
@@ -310,5 +303,38 @@ class resourceRequestRecord extends DbRecord
         return $headerCells;
     }
 
+    static function htmlHeaderCellsStatic($startDate=null){
+        $headerCells = "";
+        foreach (resourceRequestRecord::$columnHeadings as $key => $value )
+        {
+            $headerCells .= "<th>" . $value . "</th>";
+        }
+
+        $headerCells .= "<th>RR</th>";  // allow for the RR field that will come from DB2 from the join
+
+//         $startDateObj = new \DateTime($startDate);
+//         $day =  $startDateObj->format('d');
+//         if($day > 28){
+//             // We can't step through adding months if we start on 29th,30th or 31st.
+//             $year = $startDateObj->format('Y');
+//             $month = $startDateObj->format('m');
+//             $startDateObj->setDate($year, $month, '28');
+//         }
+
+//         $endDate = null;
+//         $endDateObj = new \DateTime($endDate);
+
+//         if(empty($endDate)){
+//             $endDateObj = \DateTime::createFromFormat('Y-m-d',$startDateObj->format('Y-m-d'));
+//             $endDateObj->modify("+5 months");
+//         }
+
+//         while($startDateObj->format('Ym') <= $endDateObj->format('Ym')){
+//             $headerCells .= "<th>" . $startDateObj->format('M-y') . "</th>";
+//             $startDateObj->modify('+1 month');
+//         }
+
+        return $headerCells;
+    }
 }
 

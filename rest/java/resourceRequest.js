@@ -6,15 +6,15 @@ var ModalstartPicker;
 var ModalendPicker;
 
 var buttonCommon = {
-		 exportOptions: {
-            format: {
-               body: function ( data, row, column, node ) {
-               //   return data ?  data.replace( /<br\s*\/?>/ig, "\n") : data ;
-               return data ? data.replace( /<br\s*\/?>/ig, "\n").replace(/(&nbsp;|<([^>]+)>)/ig, "") : data ;
-               //    data.replace( /[$,.]/g, '' ) : data.replace(/(&nbsp;|<([^>]+)>)/ig, "");
-               }
-            }
-        }
+	exportOptions: {
+		format: {
+			body: function ( data, row, column, node ) {
+			//   return data ?  data.replace( /<br\s*\/?>/ig, "\n") : data ;
+			return data ? data.replace( /<br\s*\/?>/ig, "\n").replace(/(&nbsp;|<([^>]+)>)/ig, "") : data ;
+			//    data.replace( /[$,.]/g, '' ) : data.replace(/(&nbsp;|<([^>]+)>)/ig, "");
+			}
+		}
+	}
 };
 
 function formatResourceName(resource){	
@@ -23,13 +23,26 @@ function formatResourceName(resource){
 	return text;
 }
 
-
 function ResourceRequest() {
 
 	var table;
 	var resourceNamesForSelect2 = [];
 	var ModalendEarlyPicker;
-	
+
+	this.applySearch = function(){
+		// Apply the search
+		ResourceRequest.table.columns().every( function () {
+			var that = this;
+			$( 'input', this.footer() ).on( 'keyup change', function () {
+				if ( that.search() !== this.value ) {
+					that
+						.search( this.value )
+						.draw();
+				}
+			} );
+		} );
+	}
+
 	this.initialiseEditHoursModalStartEndDates = function(){
 		ModalstartPicker = new Pikaday({
 			firstDay:1,
@@ -66,7 +79,6 @@ function ResourceRequest() {
 		});
 	},
 	
-
 	this.init = function(){
 	},
 
@@ -120,8 +132,6 @@ function ResourceRequest() {
 		    		ResourceRequest.table.ajax.reload();
 		    		}
 		    });
-
-
 		});
 	},
 
@@ -142,8 +152,7 @@ function ResourceRequest() {
 		    		$('#editRequestModalBody').html(resultObj.form);
 		    		$('#editRequestModal').modal('show');
 		    	}
-		    });			
-			
+		    });
 		});
 	},
 	
@@ -187,7 +196,7 @@ function ResourceRequest() {
 		});
 	},
 	
-		this.endEarlyModalHidden = function(){
+	this.endEarlyModalHidden = function(){
 		$('#endEarlyModal').on('hidden.bs.modal', function(){
 		    $('.spinning').removeClass('spinning').attr('disabled',false);
 			$('#endEarlyRR').val('');
@@ -200,7 +209,6 @@ function ResourceRequest() {
 			ResourceRequest.ModalendEarlyPicker.destroy();
 		});
 	},
-	
 	
 	this.listenForSaveEndEarly = function(){
 		$(document).on('click','#endEarlyConfirmed', function(e){
@@ -229,9 +237,8 @@ function ResourceRequest() {
 					ResourceRequest.table.ajax.reload();
 			    	}
 			    });		
-			});
+		});
 	},
-	
 	
 	this.populateDiaryWhenModalShown = function(){
 		$('#diaryModal').on('shown.bs.modal', function(){
@@ -287,7 +294,6 @@ function ResourceRequest() {
 			}
 		});
 	},
-	
 
 	this.listenForEditResourceName = function(){
 		$(document).on('click','.editResource', function(e){
@@ -330,8 +336,7 @@ function ResourceRequest() {
 						ResourceRequest.table.ajax.reload();
 		    			$('#errorMessageModal').modal('show');
 		    		}
-
-		    		}
+				}
 		    });
 		});
 	},
@@ -364,12 +369,10 @@ function ResourceRequest() {
 						ResourceRequest.table.ajax.reload();
 		    			$('#errorMessageModal').modal('show');
 		    		}
-
-		    		}
+		    	}
 		    });
 		});
 	},
-
 
 	this.listenForEditHours = function(){
 		$(document).on('click','.editHours', function(e){
@@ -417,16 +420,17 @@ function ResourceRequest() {
 			$.ajax({
 		    	url: "ajax/contentsOfEditHoursModal.php",
 		        type: 'POST',
-		    	data: {	resourceReference: resourceReference  	},
+		    	data: {	resourceReference: resourceReference },
 		    	success: function(result){		    	
 		    		resultObj = JSON.parse(result);
 		    		$('#messageArea').html("");
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		$('#editResourceHours').html(resultObj.editResourceHours);
 		    		$('#editResourceHoursFooter').html(resultObj.editResourceHoursFooter);
-		    		$('#resourceHoursModal').modal('show');		    	}
-		    	});			
-			});
+		    		$('#resourceHoursModal').modal('show');
+				}
+			});			
+		});
 	},
 
 	this.listenForSlipStartDate = function(){
@@ -441,11 +445,10 @@ function ResourceRequest() {
 				    $('#editResourceHours').html('');
 					$('#resourceHoursModal').modal('hide');
 		    		ResourceRequest.table.ajax.reload();
-		    		}
+				}
 		    });
 		});
 	},
-
 
 	this.listenForReinitialise = function(){
 		$(document).on('click','#reinitialise', function(e){
@@ -460,7 +463,7 @@ function ResourceRequest() {
 		    		ResourceRequest.table.ajax.reload();
 		    		$('#editResourceHours').html('<p></p>');
 				    $('#resourceHoursModal').modal('hide');
-		    		}
+				}
 		    });
 		});
 	},
@@ -476,7 +479,6 @@ function ResourceRequest() {
 		});
 	},
 
-
 	this.listenForConfirmedDuplication = function(){
 		$(document).on('click','#duplicationConfirmed', function(e){			
 			$(this).addClass('spinning').attr('disabled',true);
@@ -484,16 +486,17 @@ function ResourceRequest() {
 		    $.ajax({
 		    	url: "ajax/duplicateResource.php",
 		        type: 'POST',
-		    	data: { resourceReference : resourceReference,
-		    			delta: false,
-		    			},
+		    	data: { 
+					resourceReference : resourceReference,
+					delta: false,
+				},
 		    	success: function(result){
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 					$('#confirmDuplicationModal').modal('hide');
 					
 		    		ResourceRequest.table.ajax.reload();
-		    		}
-		    	});
+				}
+			});
 		});
 	},
 	
@@ -513,13 +516,10 @@ function ResourceRequest() {
 					$('#RESOURCE_REFERENCE').val('');
 					$('#newDiaryEntry').html('');
 					$('#diaryModal').modal('hide');
-		    		}
-		    	});
+				}
+			});
 		});
 	},
-	
-	
-	
 
 	this.listenForSaveAdjustedHours = function(){
 		$(document).on('click','#saveAdjustedHours', function(e){
@@ -534,8 +534,8 @@ function ResourceRequest() {
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		ResourceRequest.table.ajax.reload();
 					$('#resourceHoursModal').modal('hide');
-		    		}
-		    	});
+				}
+			});
 		});
 	},
 
@@ -561,17 +561,10 @@ function ResourceRequest() {
 							ResourceRequest.table.ajax.reload();
 							$('.spinning').removeClass('spinning').attr('disabled',false);
 							$('#resourceHoursModal').modal('hide');
-							
-							
-		    				}
-		    			});
-					
-					
-					
-					
-		    		}
-		    	});
-
+						}
+					});	
+				}
+			});
 		});
 	},
 	this.listenForSaveStatusChange = function(){
@@ -589,8 +582,8 @@ function ResourceRequest() {
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		ResourceRequest.table.ajax.reload();
 					$('#statusModal').modal('hide');
-		    		}
-		    	});
+				}
+			});
 		});
 	},
 	
@@ -631,7 +624,7 @@ function ResourceRequest() {
 		});		
 	},
 	
-		this.listenForSelectBusinessUnit = function(){
+	this.listenForSelectBusinessUnit = function(){
 		$(document).on('change','#selectBusinessUnit',function(){			
 			var org = $('#selectBusinessUnit option:selected').val();			
 			document.cookie = "selectedBusinessUnit=" + org + ";" + "path=/;max-age=604800;samesite=lax;";
@@ -639,44 +632,41 @@ function ResourceRequest() {
 		});		
 	},
 
-
-
-
 	this.listenForDdDetails = function(){
 		$(document).on('click','#ddDetails', function(e){
 			ResourceRequest.table.columns([17,18]).visible(false,false);
 		    ResourceRequest.table.columns([22,24,25]).visible(true,false);
 		    ResourceRequest.table.columns.adjust().draw(false);
-			});
+		});
 	},
 	
 	this.listenForUnallocated = function(){
 		$(document).on('click','#unallocated', function(e){		
 		    ResourceRequest.table.column(28).search('New').draw();
-			});
+		});
 	},
 	
 	this.listenForCompleteable = function(){
 		$(document).on('click','#completeable', function(e){		
 		    ResourceRequest.table.column(28).search('Assigned.').draw();
-			});
+		});
 	},
 	
 	this.listenForPlannedOnly = function(){
 		$(document).on('click','#plannedOnly', function(e){		
 		    ResourceRequest.table.column(21).search('Planned').draw();
-			});
+		});
 	},
 	
 	this.listenForActiveOnly = function(){
 		$(document).on('click','#activeOnly', function(e){		
 		    ResourceRequest.table.column(21).search('Active').draw();
-			});
+		});
 	},
 
 	this.listenForRemovePassed = function(){
 		$(document).on('click','#removePassed', function(e){
-			 ResourceRequest.table.column(21).search("").column(24).search("").column(28).search("");
+			ResourceRequest.table.column(21).search("").column(24).search("").column(28).search("");
 			$.fn.dataTable.ext.search.push(
     			function( settings, data, dataIndex ) {
 			        if (data[21].includes('Completed')  ){
@@ -685,11 +675,10 @@ function ResourceRequest() {
         			return true;
     			}
 			);
-		   ResourceRequest.table.draw();
+		    ResourceRequest.table.draw();
 			$.fn.dataTable.ext.search.pop();
 		});
 	},
-	
 	
 	// $('#example').DataTable({"iDisplayLength": 100, "search": {regex: true}}).column(1).search("backlog|Stretch|Solid|NIR", true, false ).draw(); 
 
@@ -700,7 +689,6 @@ function ResourceRequest() {
 		    ResourceRequest.table.columns.adjust().column(21).search("").column(24).search("").column(28).search("").draw(false);
 		})			
 	},
-
 
 	this.listenForChangeStatus = function(){
 		$(document).on('click','.changeStatus', function(e){
@@ -733,24 +721,25 @@ function ResourceRequest() {
 		    	success: function(result){
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		ResourceRequest.table.ajax.reload();
-		    		}
-		    	});
+				}
+			});
 		});
 	},
 
-
 	this.initialiseDataTable = function(){
-	    // Setup - add a text input to each footer cell
+		// Setup - add a text input to each footer cell
 	    $('#resourceRequestsTable_id tfoot th').each( function () {
 	        var title = $(this).text();
 	        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
 	    } );
+
 		// DataTable
 	    ResourceRequest.table = $('#resourceRequestsTable_id').DataTable({
-	    	
 	    	language: {
-	    	      emptyTable: "Please select Organisation, Business Unit and/or RFS from dropdowns above"
-	    	},
+	    	      emptyTable: "Please select Organisation, Business Unit and/or RFS from dropdowns above",
+				//   searchPlaceholder: "Search ALL fields - Very slow",
+				  processing: "Processing<i class='fas fa-spinner fa-spin '></i>"
+			},
 	    	ajax: {
 	            url: 'ajax/populateResourceRequestHTMLTable.php',
 	            data: function ( d ) {
@@ -761,13 +750,21 @@ function ResourceRequest() {
 	                d.businessunit = $('#selectBusinessUnit option:selected').val();
 	            },
 	            type: 'POST',
-	        }	,
-	    	autoWidth: false,
-	    	deferRender: true,
-	    	processing: true,
-	    	responsive: true,
-	    	colReorder: true,
-	    	dom: 'Blfrtip',
+				beforeSend: function() {
+					$('#resourceRequestsTable_id_processing').show();
+				},
+				complete: function() {
+					$('#resourceRequestsTable_id_processing').hide();
+				}
+	        },
+			pageLength: 100,
+			serverSide: true,
+			autoWidth: true,
+			deferRender: true,
+			processing: true,
+			// responsive: true, // 
+			colReorder: true,
+			dom: 'Blfrtip',
 	        buttons: [
                 'colvis',
                 $.extend( true, {}, buttonCommon, {
@@ -775,115 +772,99 @@ function ResourceRequest() {
                     exportOptions: {
                         orthogonal: 'sort',
                         stripHtml: true,
-                        stripNewLines:false
+						stripNewLines:false
                     },
                     filename: 'REST_Export',
                     customize: function( xlsx ) {
-                         var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                     }
-            }),
-            $.extend( true, {}, buttonCommon, {
-                extend: 'csvHtml5',                
-                exportOptions: {
-                    orthogonal: 'sort',
-                    stripHtml: true,
-                    stripNewLines:false
-                },
-                filename: 'REST_Export',
-            }),
-            $.extend( true, {}, buttonCommon, {
-                extend: 'print',
-                exportOptions: {
-                    orthogonal: 'sort',
-                    stripHtml: true,
-                    stripNewLines:false
-                }
-            })
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    }
+				}),
+				$.extend( true, {}, buttonCommon, {
+					extend: 'csvHtml5',                
+					exportOptions: {
+						orthogonal: 'sort',
+						stripHtml: true,
+						stripNewLines:false
+					},
+					filename: 'REST_Export',
+				}),
+				$.extend( true, {}, buttonCommon, {
+					extend: 'print',
+					exportOptions: {
+						orthogonal: 'sort',
+						stripHtml: true,
+						stripNewLines:false
+					}
+				})
             ],
 	        columns: [
-	            { data: "RFS_ID"           ,defaultContent: "", visible:false },
-	            { data: "PRN"              ,defaultContent: "", visible:false },
-	            { data: "PROJECT_TITLE"    ,defaultContent: "", visible:false },
-	            { data: "PROJECT_CODE"     ,defaultContent: "", visible:false },
-	            { data: "REQUESTOR_NAME"   ,defaultContent: "", visible:false },
-	            { data: "REQUESTOR_EMAIL"  ,defaultContent: "", visible:false },
-	            { data: "VALUE_STREAM"     ,defaultContent: "", visible:false },
-	            { data: "LINK_TO_PGMP"     ,defaultContent: "", visible:false },
-	            { data: "RFS_CREATOR"      ,defaultContent: "", visible:false },
-	            { data: "RFS_CREATED_TIMESTAMP",defaultContent: "", visible:false },
-	            { data: "ARCHIVE"          ,defaultContent: "", visible:false },
-	            { data: "RFS_TYPE"         ,defaultContent: "", visible:false },
-	            { data: "ILC_WORK_ITEM"    ,defaultContent: "", visible:false },
-	            { data: "RFS_STATUS"       ,defaultContent: "", visible:false },
-	            { data: "BUSINESS_UNIT"    ,defaultContent: "", visible:false },
-	            { data: "RFS_END_DATE"     ,defaultContent: "", visible:false },
-	            { data: "RESOURCE_REFERENCE",defaultContent: "", visible:false },
-	            { data: "RFS"              ,defaultContent: "", visible:true, render: { _:'display', sort:'sort' }},	           
-	            { data: "ORGANISATION"     ,defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
-	            { data: "SERVICE"          ,defaultContent: "", visible:false },
-	            { data: "DESCRIPTION"      ,defaultContent: "", visible:true },
-	            { data: "START_DATE"       ,defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
-	            { data: "END_DATE"         ,defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
-	            { data: "TOTAL_HOURS"      ,defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
-	            { data: "RESOURCE_NAME"    ,defaultContent: "", visible:true , render: { _:'display', sort:'sort' }, },
-	            { data: "RR_CREATOR"       ,defaultContent: "", visible:false },
-	            { data: "RR_CREATED_TIMESTAMP",defaultContent: "", visible:false },
-	            { data: "CLONED_FROM"      ,defaultContent: "", visible:false },
-	            { data: "STATUS"           ,defaultContent: "", visible:true },
-	            { data: "RATE_TYPE"        ,defaultContent: "", visible:false },
-	            { data: "HOURS_TYPE"        ,defaultContent: "", visible:false },
-	            { data: "RR"               ,defaultContent: "", visible:false },
-//	            { data: "MONTH_01"         ,defaultContent: "",visible:true},
-//	            { data: "MONTH_02"         ,defaultContent: "",visible:true},
-//	            { data: "MONTH_03"         ,defaultContent: "",visible:true},
-//	            { data: "MONTH_04"         ,defaultContent: "",visible:true},
-//	            { data: "MONTH_05"         ,defaultContent: "",visible:true},
-//	            { data: "MONTH_06"         ,defaultContent: "",visible:true},
-	        	
+	            { name: "RFS_ID", data: "RFS_ID", defaultContent: "", visible:false },
+	            { name: "PRN", data: "PRN", defaultContent: "", visible:false },
+	            { name: "PROJECT_TITLE", data: "PROJECT_TITLE", defaultContent: "", visible:false },
+	            { name: "PROJECT_CODE", data: "PROJECT_CODE", defaultContent: "", visible:false },
+	            { name: "REQUESTOR_NAME", data: "REQUESTOR_NAME", defaultContent: "", visible:false },
+	            { name: "REQUESTOR_EMAIL", data: "REQUESTOR_EMAIL", defaultContent: "", visible:false },
+	            { name: "VALUE_STREAM", data: "VALUE_STREAM", defaultContent: "", visible:false },
+	            { name: "LINK_TO_PGMP", data: "LINK_TO_PGMP", defaultContent: "", visible:false },
+	            { name: "RFS_CREATOR", data: "RFS_CREATOR", defaultContent: "", visible:false },
+	            { name: "RFS_CREATED_TIMESTAMP", data: "RFS_CREATED_TIMESTAMP", defaultContent: "", visible:false },
+	            { name: "ARCHIVE", data: "ARCHIVE", defaultContent: "", visible:false },
+	            { name: "RFS_TYPE", data: "RFS_TYPE", defaultContent: "", visible:false },
+	            { name: "ILC_WORK_ITEM", data: "ILC_WORK_ITEM", defaultContent: "", visible:false },
+	            { name: "RFS_STATUS", data: "RFS_STATUS", defaultContent: "", visible:false },
+	            { name: "BUSINESS_UNIT", data: "BUSINESS_UNIT", defaultContent: "", visible:false },
+	            { name: "RFS_END_DATE", data: "RFS_END_DATE", defaultContent: "", visible:false },
+	            { name: "RESOURCE_REFERENCE", data: "RESOURCE_REFERENCE", defaultContent: "", visible:false },
+	            { name: "RFS", data: "RFS", defaultContent: "", visible:true, render: { _:'display', sort:'sort' }},	           
+	            { name: "ORGANISATION", data: "ORGANISATION", defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
+	            { name: "SERVICE", data: "SERVICE", defaultContent: "", visible:false },
+	            { name: "DESCRIPTION", data: "DESCRIPTION", defaultContent: "", visible:true },
+	            { name: "START_DATE", data: "START_DATE", defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
+	            { name: "END_DATE", data: "END_DATE", defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
+	            { name: "TOTAL_HOURS", data: "TOTAL_HOURS", defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
+	            { name: "RESOURCE_NAME", data: "RESOURCE_NAME", defaultContent: "", visible:true , render: { _:'display', sort:'sort' }, },
+	            { name: "RR_CREATOR", data: "RR_CREATOR", defaultContent: "", visible:false },
+	            { name: "RR_CREATED_TIMESTAMP", data: "RR_CREATED_TIMESTAMP", defaultContent: "", visible:false },
+	            { name: "CLONED_FROM", data: "CLONED_FROM", defaultContent: "", visible:false },
+	            { name: "STATUS", data: "STATUS", defaultContent: "", visible:true },
+	            { name: "RATE_TYPE", data: "RATE_TYPE", defaultContent: "", visible:false },
+	            { name: "HOURS_TYPE", data: "HOURS_TYPE", defaultContent: "", visible:false },
+	            { name: "RR", data: "RR", defaultContent: "", visible:false },       	
 	        ]
-	    });       
+	    });
 
-	    // Apply the search
 	    $(ResourceRequest.table.column(16).header()).text('RFS:RR');
 
-
-	    ResourceRequest.table.columns().every( function () {
-			var that = this;
-	        $( 'input', this.footer() ).on( 'keyup change', function () {
-	            if ( that.search() !== this.value ) {
-	                that
-	                    .search( this.value )
-	                    .draw();
-	            }
-	        } );
-	    } );
+		this.applySearch();
 	    
 	    ResourceRequest.table.on( 'responsive-display', function () {
 	    	restrictButtonAccess();
 	    });
-
 	},
 
-	this.buildResourceReport =  function(){
-		var formData = $('form').serialize();
+	this.buildResourceReport =  function(getColumnsFromAjax){
 		var resourceRequest = new ResourceRequest();
-
-	    $.ajax({
-	    	url: "ajax/createResourceReportHTMLTable.php",
-	        type: 'POST',
-	        serverside: true,
-	    	data: formData,
-	        before: function(){
-	        	$('#resourceTableDiv').html('<h2>Table being built</h2>');
-	        },
-	    	success: function(result){
-	    		$('#resourceRequestsTable_id').DataTable().destroy();
-	        	$("#resourceTableDiv").html(result);
-	        	resourceRequest.initialiseDataTable();
-	    		}
-	    });
+		
+		if(getColumnsFromAjax == null){
+			var formData = $('form').serialize();
+			$.ajax({
+				url: "ajax/createResourceReportHTMLTable.php",
+				type: 'POST',
+				serverside: true,
+				data: formData,
+				before: function(){
+					$('#resourceTableDiv').html('<h2>Table being built</h2>');
+				},
+				success: function(result){
+					$('#resourceRequestsTable_id').DataTable().destroy();
+					$("#resourceTableDiv").html(result);
+					resourceRequest.initialiseDataTable();
+				}
+			});
+		} else {
+			resourceRequest.initialiseDataTable();
+		}
 	},
-
 
 	this.initialiseDateSelect = function(allowPast = false){
 		var endDate;
@@ -935,23 +916,19 @@ function ResourceRequest() {
 		    resourceRequest.buildResourceReport();
 		};
 
+		_startDate = startPicker.getDate(),
+		_endDate = endPicker.getDate();
 
-	_startDate = startPicker.getDate(),
-	_endDate = endPicker.getDate();
+		if (_startDate) {
+			startDate = _startDate;
+			this.updateStartDate();
+		}
 
-	if (_startDate) {
-	    startDate = _startDate;
-	    this.updateStartDate();
-	}
-
-	if (_endDate) {
-	    endDate = _endDate;
-	    this.updateEndDate();
-	}
-
-
+		if (_endDate) {
+			endDate = _endDate;
+			this.updateEndDate();
+		}
 	},
-
 
 	this.destroyResourceReport = function(){
 		$('#resourceRequestsTable_id').DataTable().destroy();
@@ -982,67 +959,61 @@ function ResourceRequest() {
 			$('#saveDiaryEntry').attr('disabled',true);	
 			
 			$('#diaryModal').modal('show');	
-		    
 		});
 	},
-	
-	
-	
-	
+
 	this.listenForResourceRequestEditShown = function(){
 		$(document).on('shown.bs.modal',function(e){
-		$( "#resourceRequestForm" ).submit(function( event ) {
-			$('#resourceRequestForm :submit').addClass('spinning').attr('disabled',true);
-			var url = 'ajax/saveResourceRecord.php';
-			var disabledFields = $(':disabled');
-			$(disabledFields).removeAttr('disabled');
-			var formData = $("#resourceRequestForm").serialize();
-			$(disabledFields).attr('disabled',true);
-			
-			$.ajax({
-				type:'post',
-		  		url: url,
-		  		data:formData,
-		  		context: document.body,
- 	      	beforeSend: function(data) {
-	        	//	do the following before the save is started
-	        	},
-	      	success: function(response) {
-	            // 	do what ever you want with the server response if that response is "success"
-	               // $('.modal-body').html(JSON.parse(response));
-				   $('#editRequestModal').modal('hide');	
-	               var responseObj = JSON.parse(response);
-	               var resourceRef =  "<p>Resource Ref:" + responseObj.resourceReference + "</p>";
-	               var savedResponse =  "<p>Saved:" + responseObj.saveResponse +  "</p>";
-	               var hoursResponse =  "<p>" + responseObj.hoursResponse +  "</p>";
-	               var messages =  "<p>" + responseObj.Messages +  "</p>";
+			$( "#resourceRequestForm" ).submit(function( event ) {
+				$('#resourceRequestForm :submit').addClass('spinning').attr('disabled',true);
+				var url = 'ajax/saveResourceRecord.php';
+				var disabledFields = $(':disabled');
+				$(disabledFields).removeAttr('disabled');
+				var formData = $("#resourceRequestForm").serialize();
+				$(disabledFields).attr('disabled',true);
+				
+				$.ajax({
+					type:'post',
+					url: url,
+					data:formData,
+					context: document.body,
+					beforeSend: function(data) {
+						//	do the following before the save is started
+						},
+					success: function(response) {
+						// 	do what ever you want with the server response if that response is "success"
+						// $('.modal-body').html(JSON.parse(response));
+						$('#editRequestModal').modal('hide');	
+						var responseObj = JSON.parse(response);
+						var resourceRef =  "<p>Resource Ref:" + responseObj.resourceReference + "</p>";
+						var savedResponse =  "<p>Saved:" + responseObj.saveResponse +  "</p>";
+						var hoursResponse =  "<p>" + responseObj.hoursResponse +  "</p>";
+						var messages =  "<p>" + responseObj.Messages +  "</p>";
 
-					$('.spinning').removeClass('spinning').attr('disabled',false);
-					ResourceRequest.table.ajax.reload();
+						$('.spinning').removeClass('spinning').attr('disabled',false);
+						ResourceRequest.table.ajax.reload();
 
-	                $('#recordSaveDiv').html(resourceRef + savedResponse + hoursResponse + messages);
-	                $('#recordSavedModal').modal('show');
-          		},
-	      	fail: function(response){
-	                $('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
-	                $('#myModal').modal('show');
-				},
-	      	error: function(error){
-	            //	handle errors here. What errors	            :-)!
-	        		FormClass.displayAjaxError('<p>Ajax call has errored.</p><p>URL:"' + url + '"</p><p>Error Status:"' + error.statusText + '"</p>');
-	        		jQuery('.slaSave').html('Save').prop('disable',true );
-	        	},
-	      	always: function(){
+						$('#recordSaveDiv').html(resourceRef + savedResponse + hoursResponse + messages);
+						$('#recordSavedModal').modal('show');
+					},
+					fail: function(response){
+						$('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
+						$('#myModal').modal('show');
+					},
+					error: function(error){
+						//	handle errors here. What errors	            :-)!
+						FormClass.displayAjaxError('<p>Ajax call has errored.</p><p>URL:"' + url + '"</p><p>Error Status:"' + error.statusText + '"</p>');
+						jQuery('.slaSave').html('Save').prop('disable',true );
+					},
+					always: function(){
 
-	      	}
-		});
-	event.preventDefault();
-	});		
+					}
+				});
+				event.preventDefault();
+			});
 		});
 	}
-
 }
-
 
 $( document ).ready(function() {
 	var resourceRequest = new ResourceRequest();

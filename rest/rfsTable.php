@@ -1,12 +1,86 @@
 <?php
 namespace rest;
 
+use DateInterval;
 use itdq\DbTable;
 use itdq\DateClass;
 
 class rfsTable extends DbTable
 {
     protected $rfsMaxEndDate;
+
+    static function buildHTMLTable($tableId = 'rfs'){
+        $RFSheaderCells = rfsRecord::htmlHeaderCellsStatic();
+        ?>
+        <table id='<?=$tableId;?>Table_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%'>
+        <thead>
+        <tr><?=$RFSheaderCells;?></tr></thead>
+        <tbody>
+        </tbody>
+        <tfoot><tr><?=$RFSheaderCells ;?></tr></tfoot>
+        </table>
+        <?php
+    }
+
+    static function buildHTMLRequestsTable($tableId = 'rfs'){
+        $nextMonthObj = new \DateTime();
+        $thisMonthObj = new \DateTime();
+        $thisMonthObj->setDate($thisMonthObj->format('Y'), $thisMonthObj->format('m'), 01);
+        $thisMonthsClaimCutoff = DateClass::claimMonth($thisMonthObj->format('d-m-Y'));
+
+        $nextMonthObj > $thisMonthsClaimCutoff ? $nextMonthObj->add(new \DateInterval('P1M')) : null;
+        $oneMonth = new DateInterval('P1M');
+        $monthLabels = array();
+
+        for ($i = 0; $i < 6; $i++) {
+            $monthLabels[] = $nextMonthObj->format('M_y');
+            $nextMonthObj->add($oneMonth);    
+        }
+        ?>
+        <table id='<?=$tableId;?>Table_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%'>
+        <thead>
+        <tr>
+        <th>RFS ID</th><th>PRN</th><th>Project Title</th><th>Project Code</th><th>Requestor Name</th><th>Requestor Email</th><th>Value Stream</th><th>Business Unit</th>
+        <th>Link to PGMP</th><th>RFS Creator</th><th>RFS Created</th>
+        <th>Resource Ref</th><th>Organisation</th><th>Service</th><th>Description</th><th>Start Date</th><th>End Date</th>
+        <th>Total Hours</th><th>Resource Name</th><th>Request Creator</th><th>Request Created</th>
+        <th>Cloned From</th><th>Status</th><th>Rate Type</th><th>Hours Type</th><th>RFS Status</th>
+        <?php 
+        foreach ($monthLabels as $label) {
+            ?><th><?=$label?></th><?php 
+        }
+        ?>
+        </tr></thead>
+        <tbody>
+        </tbody>
+        <tfoot><tr>
+        <th>RFS ID</th><th>PRN</th><th>Project Title</th><th>Project Code</th><th>Requestor Name</th><th>Requestor Email</th><th>Value Stream</th><th>Business Unit</th>
+        <th>RFS Creator</th><th>RFS Created</th>
+        <th>Link to PGMP</th><th>Resource Ref</th><th>Organisation</th><th>Service</th><th>Description</th><th>Start Date</th><th>End Date</th>
+        <th>Total Hours</th><th>Resource Name</th><th>Request Creator</th><th>Request Created</th>
+        <th>Cloned From</th><th>Status</th><th>Rate Type</th><th>Hours Type</th><th>RFS Status</th>
+        <?php 
+        foreach ($monthLabels as $label) {
+            ?><th><?=$label?></th><?php 
+        }
+        ?>
+        </tr></tfoot>
+        </table>
+        <?php
+    }
+
+    static function buildHTMLPipelineTable($tableId = 'rfs'){
+        ?>
+        <table id='<?=$tableId;?>Table_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%'>
+        <thead>
+        <tr><th>RFS ID</th><th>Title</th><th>Resource Req.</th><th>From</th><th>To</th><th>Value Stream</th><th>Link to PGMP</th></tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot><tr><th>RFS ID</th><th>Title</th><th>Resource Req.</th><th>From</th><th>To</th><th>Value Stream</th><th>Link to PGMP</th></tr></tfoot>
+        </table>
+        <?php
+    }
 
     static function rfsPredicateFilterOnPipeline($option=null){
         // Determines if the user is in a group that can only see the pipeline, can NOT see the pipline, or can see both pipeline and live.
@@ -58,10 +132,9 @@ class rfsTable extends DbTable
             <?php
         }
         ?></script><?php
-
     }
 
-    function returnAsArray($predicate=null, $withArchive=false){
+    function returnAsArray($predicate = null, $withArchive = false, $limit = false, $offset = false){
         $sql  = " SELECT RFS.*, RDR.* ";
         $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql .= " LEFT JOIN ". $GLOBALS['Db2Schema'] . "." . allTables::$RFS_DATE_RANGE . " as RDR ";
@@ -69,6 +142,18 @@ class rfsTable extends DbTable
         $sql .= " WHERE 1=1 " ;
         $sql .= $withArchive ? " AND ARCHIVE is not null " : " AND ARCHIVE is null ";
         $sql .= !empty($predicate) ? " AND  $predicate " : null ;
+        
+        $countSql = "SELECT COUNT(*) as TOTAL";
+        $countSql.= " FROM (";
+        $countSql.= $sql;   
+        $countSql.= " ) ";
+
+        $countResultSet = $this->execute($countSql);
+        $countResultSet ? null : die("SQL Failed");
+        $countRow = db2_fetch_assoc($countResultSet);
+        
+        $sql .= $limit !== false ? " LIMIT ".$limit : null;
+        $sql .= $offset !== false ? " OFFSET ".$offset : null;
         
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
@@ -80,18 +165,30 @@ class rfsTable extends DbTable
                 break; // It's got invalid chars in it that will be a problem later.
             }
             $this->addGlyphicons($row);
-         
             
-            foreach ($row as $key=>$data){
-                $row[] = trim($row[$key]);
-                unset($row[$key]);
-            }
-            $allData[]  = $row;            
+            $startDate = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
+            $startDateSortable = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Ymd') : null;
+            $endDate         = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
+            $endDateSortable = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
+            $rfsEndDate         = !empty($row['RFS_END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['RFS_END_DATE'])->format('d M Y') : null;
+            $rfsEndDateSortable = !empty($row['RFS_END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['RFS_END_DATE'])->format('Ymd') : null;
+            
+            // foreach ($row as $key => $data){
+            //     $row[] = trim($row[$key]);
+            //     unset($row[$key]);
+            // }
+            $row = array_map('trim',$row);
+            
+            $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
+            $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
+            $row['RFS_END_DATE'] = array('display'=> $rfsEndDate,'sort'=>$rfsEndDateSortable);
+            
+            $allData[] = $row;
         }
-        return array('data'=>$allData,'sql'=>$sql);
+        return array('data'=>$allData, 'sql'=>$sql, 'total'=>$countRow['TOTAL']);
     }
 
-    function returnClaimReportAsArray($predicate=null, $withArchive=false){
+    function returnClaimReportAsArray($predicate = null, $withArchive = false, $limit = false, $offset = false){
         
         // The first month we need to show them is the CLAIM month they are currently in. 
         // So start with today, and get the next Claim Cut off - th
@@ -139,7 +236,7 @@ class rfsTable extends DbTable
         }
 
         $sql.=" from ( ";
-        $sql.="     select RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME ";
+        $sql.=" select RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME ";
         
         foreach ($monthDetails as $key => $detail) {
             $sql.=", case when (CLAIM_YEAR = " . $detail['year'] . " and CLAIM_MONTH = " . $detail['month'] . ") then sum(hours) else null end as " . $monthLabels[$key];
@@ -174,6 +271,18 @@ class rfsTable extends DbTable
         $sql.= " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE ";
         $sql.= !empty($predicate) ? " AND  $predicate " : null ;
         
+        $countSql = "SELECT COUNT(*) as TOTAL";
+        $countSql.= " FROM (";
+        $countSql.= $sql;   
+        $countSql.= " ) ";
+
+        $countResultSet = $this->execute($countSql);
+        $countResultSet ? null : die("SQL Failed");
+        $countRow = db2_fetch_assoc($countResultSet);
+        
+        $sql .= $limit !== false ? " LIMIT ".$limit : null;
+        $sql .= $offset !== false ? " OFFSET ".$offset : null;
+        
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
         $allData = null;
@@ -189,19 +298,21 @@ class rfsTable extends DbTable
             $endDate         = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
             $endDateSortable = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
             
+            // foreach ($row as $key => $data){ 
+            //     $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
+            //     unset($row[$key]);
+            // }
+            $row = array_map('trim',$row);
+            
             $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
             $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
             
-            foreach ($row as $key=>$data){ 
-                $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
-                unset($row[$key]);
-            }
-            $allData[]  = $row;
+            $allData[] = $row;
         }
-        return array('data'=>$allData,'sql'=>$sql);
+        return array('data'=>$allData, 'sql'=>$sql, 'total'=>$countRow['TOTAL']);
     }
 
-    function returnLeftReportAsArray($predicate=null, $withArchive=false){
+    function returnLeftReportAsArray($predicate=null, $withArchive = false, $limit = false, $offset = false){
         
         // The first month we need to show them is the CLAIM month they are currently in. 
         // So start with today, and get the next Claim Cut off - th
@@ -278,14 +389,26 @@ class rfsTable extends DbTable
         $sql.= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR ";
         $sql.= " ON RR.RFS =  RFS.RFS_ID ";        
-        $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$INACTIVE_PERSON . " as IP ";
-        $sql.= " ON IP.NOTES_ID =  RR.RESOURCE_NAME ";        
+        // $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$INACTIVE_PERSON . " as IP ";
+        // $sql.= " ON IP.NOTES_ID =  RR.RESOURCE_NAME ";        
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
         $sql.= " AND ARCHIVE is null ";
         $sql.= " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE ";        
-        $sql.= " AND IP.NOTES_ID IS NOT NULL ";
+        // $sql.= " AND IP.NOTES_ID IS NOT NULL ";
         $sql.= !empty($predicate) ? " AND  $predicate " : null ;
+
+        $countSql = "SELECT COUNT(*) as TOTAL";
+        $countSql.= " FROM (";
+        $countSql.= $sql;   
+        $countSql.= " ) ";
+
+        $countResultSet = $this->execute($countSql);
+        $countResultSet ? null : die("SQL Failed");
+        $countRow = db2_fetch_assoc($countResultSet);
+        
+        $sql .= $limit !== false ? " LIMIT ".$limit : null;
+        $sql .= $offset !== false ? " OFFSET ".$offset : null;
         
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
@@ -297,21 +420,14 @@ class rfsTable extends DbTable
                 break; // It's got invalid chars in it that will be a problem later.
             }     
             
-            $startDate = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
-            $startDateSortable = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Ymd') : null;
-            $endDate         = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
-            $endDateSortable = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
-            
-            $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
-            $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
-            
-            foreach ($row as $key=>$data){ 
-                $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
-                unset($row[$key]);
-            }
-            $allData[]  = $row;
+            // foreach ($row as $key => $data){ 
+            //     $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
+            //     unset($row[$key]);
+            // }
+            $row = array_map('trim',$row);
+            $allData[] = $row;
         }
-        return array('data'=>$allData,'sql'=>$sql);
+        return array('data'=>$allData, 'sql'=>$sql, 'total'=>$countRow['TOTAL']);
     }
 
     function addGlyphicons(&$row){

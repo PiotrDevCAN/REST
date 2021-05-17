@@ -1,5 +1,6 @@
 <?php
 use itdq\Trace;
+use rest\rfsTable;
 
 set_time_limit(0);
 
@@ -8,6 +9,9 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 <div class='container-fluid'>
 <h3>Pipeline Report</h3>
 <div id='rfsTableDiv'>
+<?php
+  rfsTable::buildHTMLPipelineTable();
+?>
 </div>
 </div>
 
@@ -85,7 +89,7 @@ Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 <script>
 $(document).ready(function() {
 	var rfs = new Rfs();
-	rfs.buildPipelineReport();
+	rfs.buildPipelineReport(false);
 	rfs.listenForDeleteRfs();
 	rfs.listenForGoLiveRfs();
 	rfs.listenForConfirmDeleteRfs();
