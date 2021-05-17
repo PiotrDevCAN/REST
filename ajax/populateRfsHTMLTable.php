@@ -30,8 +30,7 @@ if ($columns && is_array($columns)) {
             $searchValue = $column['search']['value'];
             $searchRegex = $column['search']['regex']; // boolean
 
-            if (!empty($column['search']['value'])) {            
-                // $searchPredicate .= " AND " . $columnName . " = '" . $searchValue . "'";
+            if (!empty($column['search']['value'])) {
                 $searchPredicate .= " AND " . $columnName . " LIKE '%" . $searchValue . "%'";
             }
         }
@@ -119,7 +118,7 @@ if ($bothStatuses && !$withArchive) {
 }
 
 // merge all preducates
-// $predicate .= $searchPredicate . $orderPredicate;
+$predicate .= $searchPredicate . $orderPredicate;
 
 // if (empty($rfsId) && empty($valueStream) && empty($requestor) && empty($businessUnit)) {
 //     $response = array(

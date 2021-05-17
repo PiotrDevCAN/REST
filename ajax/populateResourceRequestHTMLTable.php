@@ -34,8 +34,7 @@ if ($columns && is_array($columns)) {
             $searchValue = $column['search']['value'];
             $searchRegex = $column['search']['regex']; // boolean
 
-            if (!empty($column['search']['value'])) {            
-                // $searchPredicate .= " AND " . $columnName . " = '" . $searchValue . "'";
+            if (!empty($column['search']['value'])) {
                 $searchPredicate .= " AND " . $columnName . " LIKE '%" . $searchValue . "%'";
             }
         }
