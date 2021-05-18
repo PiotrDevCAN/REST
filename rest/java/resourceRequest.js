@@ -817,7 +817,7 @@ function ResourceRequest() {
 	            { name: "RFS_STATUS", data: "RFS_STATUS", defaultContent: "", visible:false },
 	            { name: "BUSINESS_UNIT", data: "BUSINESS_UNIT", defaultContent: "", visible:false },
 	            { name: "RFS_END_DATE", data: "RFS_END_DATE", defaultContent: "", visible:false },
-	            { name: "RESOURCE_REFERENCE", data: "RESOURCE_REFERENCE", defaultContent: "", visible:false },
+	            { name: "RR.RESOURCE_REFERENCE", data: "RESOURCE_REFERENCE", defaultContent: "", visible:false },
 	            { name: "RFS", data: "RFS", defaultContent: "", visible:true, render: { _:'display', sort:'sort' }},	           
 	            { name: "ORGANISATION", data: "ORGANISATION", defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
 	            { name: "SERVICE", data: "SERVICE", defaultContent: "", visible:false },

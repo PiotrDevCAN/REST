@@ -348,7 +348,7 @@ function Rfs() {
 				{ name: "LINK_TO_PGMP", data: "LINK_TO_PGMP", defaultContent: "", visible:false },
 				{ name: "RFS_CREATOR", data: "RFS_CREATOR", defaultContent: "", visible:false },
 				{ name: "RFS_CREATED", data: "RFS_CREATED", defaultContent: "", visible:false },
-				{ name: "RESOURCE_REFERENCE", data: "RESOURCE_REFERENCE", defaultContent: "", visible:true },
+				{ name: "RR.RESOURCE_REFERENCE", data: "RESOURCE_REFERENCE", defaultContent: "", visible:true },
 				{ name: "ORGANISATION", data: "ORGANISATION", defaultContent: "", visible:true },
 				{ name: "SERVICE", data: "SERVICE", defaultContent: "", visible:true },
 				{ name: "DESCRIPTION", data: "DESCRIPTION", defaultContent: "", visible:true },
@@ -458,7 +458,7 @@ function Rfs() {
 				{ name: "LINK_TO_PGMP", data: "LINK_TO_PGMP", defaultContent: "", visible:false },
 				{ name: "RFS_CREATOR", data: "RFS_CREATOR", defaultContent: "", visible:false },
 				{ name: "RFS_CREATED", data: "RFS_CREATED", defaultContent: "", visible:false },
-				{ name: "RESOURCE_REFERENCE", data: "RESOURCE_REFERENCE", defaultContent: "", visible:true },
+				{ name: "RR.RESOURCE_REFERENCE", data: "RESOURCE_REFERENCE", defaultContent: "", visible:true },
 				{ name: "ORGANISATION", data: "ORGANISATION", defaultContent: "", visible:true },
 				{ name: "SERVICE", data: "SERVICE", defaultContent: "", visible:true },
 				{ name: "DESCRIPTION", data: "DESCRIPTION", defaultContent: "", visible:true },
@@ -487,10 +487,10 @@ function Rfs() {
 		this.applySearch();
 
 		// set rows roles
-	    // $('#leftTable_id tbody tr').each( function () {
-	    //     $(this).attr( 'role', 'row' );
-		// 	$(this).prop( 'role', 'row' );
-	    // } );
+	    $('#leftTable_id tbody tr').each( function () {
+			$(this).attr( 'role', 'row' );
+			$(this).prop( 'role', 'row' );
+	    } );
 	},
 
 	this.buildLeftReport =  function(getColumnsFromAjax){

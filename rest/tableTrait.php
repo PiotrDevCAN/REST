@@ -11,7 +11,8 @@ trait tableTrait
         if ($columns && is_array($columns)) {
             if (count($columns) > 0) {
                 foreach($columns as $key => $column) {
-                    $columnName = $column['data'];
+                    // $columnName = $column['data'];
+                    $columnName = $column['name'];
                     $searchable = $column['searchable'];
                     $searchValue = trim($column['search']['value']);
                     $searchRegex = $column['search']['regex']; // boolean
@@ -40,7 +41,8 @@ trait tableTrait
                         && $column !== false
                         && $direction !== false
                     ) {
-                        $columnName = $columns[$column]['data'];
+                        // $columnName = $columns[$column]['data'];
+                        $columnName = $columns[$column]['name'];
                         $orderable = $columns[$column]['orderable'];
                         if ($orderable == 'true') {
                             $orderPredicate .= " " . $columnName . " " . $direction;
