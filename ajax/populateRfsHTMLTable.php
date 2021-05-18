@@ -16,59 +16,6 @@ $length = isset($_POST['length']) ? $_POST['length'] : false;
 $start = isset($_POST['start']) ? $_POST['start'] : false;
 $draw = isset($_POST['draw']) ? $_POST['draw'] : false;
 
-$columns = isset($_POST['columns']) ? $_POST['columns'] : false;
-$ordering = isset($_POST['order']) ? $_POST['order'] : false;
-$search = isset($_POST['search']) ? $_POST['search'] : false;
-
-// column filtering
-$searchPredicate = "";
-if ($columns && is_array($columns)) {
-    if (count($columns) > 0) {
-        foreach($columns as $key => $column) {
-            $columnName = $column['data'];
-            $searchable = $column['searchable'];
-            $searchValue = $column['search']['value'];
-            $searchRegex = $column['search']['regex']; // boolean
-
-            if (!empty($column['search']['value'])) {
-                $searchPredicate .= " AND " . $columnName . " LIKE '%" . $searchValue . "%'";
-            }
-        }
-        echo $searchPredicate;
-    }
-}
-
-// column ordering
-$orderPredicate = "";
-if ($ordering && is_array($ordering)) {
-    if (count($ordering) > 0) {
-        $orderPredicate .= " ORDER BY ";
-        foreach($ordering as $key => $order) {
-            $column = isset($order['column']) ? $order['column'] : false;
-            $direction = isset($order['dir']) ? $order['dir'] : false;
-            if (array_key_exists($column, $columns) 
-                && $column !== false
-                && $direction !== false
-            ) {
-                $columnName = $columns[$column]['data'];
-                $orderable = $columns[$column]['orderable'];
-                if ($orderable == 'true') {
-                    $orderPredicate .= " " . $columnName . " " . $direction;
-                }
-            }
-        }
-        echo $orderPredicate;
-    }
-}
-
-// global filtering
-if ($search && is_array($search)) {
-    if (count($search) > 0) {
-        $searchValue = $search['value'];
-        $searchRegex = $search['regex']; // boolean
-    }
-}
-
 $rfsTable = new rfsTable(allTables::$RFS);
 
 // $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
@@ -118,7 +65,7 @@ if ($bothStatuses && !$withArchive) {
 }
 
 // merge all preducates
-$predicate .= $searchPredicate . $orderPredicate;
+$predicate .= $rfsTable->prepareSearchPredicate() . $rfsTable->prepareOrderingPredicate();
 
 // if (empty($rfsId) && empty($valueStream) && empty($requestor) && empty($businessUnit)) {
 //     $response = array(

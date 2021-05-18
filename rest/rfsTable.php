@@ -7,6 +7,8 @@ use itdq\DateClass;
 
 class rfsTable extends DbTable
 {
+    use tableTrait;
+
     protected $rfsMaxEndDate;
 
     static function buildHTMLTable($tableId = 'rfs'){
@@ -96,12 +98,12 @@ class rfsTable extends DbTable
                     break;
                 case $_SESSION['isRfs']:
                     // Can only see pipeline
-                   $predicate =  " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " ;
+                    $predicate =  " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " ;
                     break;
                 case $_SESSION['isSupply']:
                 case $_SESSION['isDemand']:
                     // Can only see Live
-                      $predicate =  " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_LIVE . "' " ;
+                    $predicate =  " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_LIVE . "' " ;
                     break;
                 default:
                     $predicate =  null;

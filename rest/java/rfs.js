@@ -485,6 +485,12 @@ function Rfs() {
 		// Rfs.table.columns([1,2,3,4,5,8,9,10,19,20,21]).visible(false,false);
 		// Rfs.table.columns.adjust().draw(false);
 		this.applySearch();
+
+		// set rows roles
+	    // $('#leftTable_id tbody tr').each( function () {
+	    //     $(this).attr( 'role', 'row' );
+		// 	$(this).prop( 'role', 'row' );
+	    // } );
 	},
 
 	this.buildLeftReport =  function(getColumnsFromAjax){
