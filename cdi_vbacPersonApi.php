@@ -29,19 +29,31 @@ if ($err) {
     $inactivePersonTable  = new inactivePersonTable(allTables::$INACTIVE_PERSON);
     $inactivePersonRecord = new inactivePersonRecord();
 
-    // $inactivePersonTable->clear(false);
+    $clear = isset($_POST['clear']) ? $_POST['clear'] : false;
+    if ($clear) {
+        $inactivePersonTable->clear(false);
+    }
 
     $responseObj = json_decode($response);
-    if (count($responseObj) > 0) {
-        foreach ($responseObj as $personEntry) {
-            $inactivePersonRecord->setFromArray($personEntry);
-            // $db2result = $inactivePersonTable->insert($inactivePersonRecord);
-    
-    //         if(!$db2result){
-    //             echo db2_stmt_error();
-    //             echo db2_stmt_errormsg();
-    //         }
+    $loadCounter = 0;
+
+    $load = isset($_POST['load']) ? $_POST['load'] : false;
+    if ($load) {
+        if (count($responseObj) > 0) {
+            foreach ($responseObj as $personEntry) {
+                $inactivePersonRecord->setFromArray($personEntry);
+                $db2result = $inactivePersonTable->insert($inactivePersonRecord);
+        
+                if(!$db2result){
+                    echo db2_stmt_error();
+                    echo db2_stmt_errormsg();
+                } else {
+                    $loadCounter++;
+                }
+            }
         }
     }
+
     echo count($responseObj) . ' records read from VBAC api';
+    echo $loadCounter . ' records loaded to REST db';
 }
