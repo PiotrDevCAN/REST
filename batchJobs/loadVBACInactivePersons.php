@@ -5,8 +5,6 @@ use rest\inactivePersonTable;
 
 set_time_limit(0);
 
-$_ENV['vbac_url'] = 'https://vbac-ut.dal1a.ciocloud.nonprod.intranet.ibm.com';
-
 $url = $_ENV['vbac_url'] . '/api/employeesLeft.php?token=' . $_ENV['vbac_api_token'];
 
 $curl = curl_init();

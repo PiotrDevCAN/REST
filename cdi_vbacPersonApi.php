@@ -3,6 +3,8 @@ use rest\allTables;
 use rest\inactivePersonRecord;
 use rest\inactivePersonTable;
 
+set_time_limit(0);
+
 $url = $_ENV['vbac_url'] . '/api/employeesLeft.php?token=' . $_ENV['vbac_api_token'];
 
 $curl = curl_init();
@@ -41,5 +43,6 @@ if ($err) {
     //         }
     //     }
     // }
+    var_dump($url);
     echo count($responseObj) . ' records read from VBAC api';
 }
