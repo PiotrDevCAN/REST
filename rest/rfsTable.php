@@ -401,13 +401,13 @@ class rfsTable extends DbTable
         $sql.= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR ";
         $sql.= " ON RR.RFS =  RFS.RFS_ID ";        
-        // $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$INACTIVE_PERSON . " as IP ";
-        // $sql.= " ON IP.NOTES_ID =  RR.RESOURCE_NAME ";        
+        $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$INACTIVE_PERSON . " as IP ";
+        $sql.= " ON IP.NOTES_ID =  RR.RESOURCE_NAME ";        
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
         $sql.= " AND ARCHIVE is null ";
         $sql.= " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE ";        
-        // $sql.= " AND IP.NOTES_ID IS NOT NULL ";
+        $sql.= " AND IP.NOTES_ID IS NOT NULL ";
         $sql.= !empty($predicate) ? " AND  $predicate " : null ;
 
         $countSql = "SELECT COUNT(*) as TOTAL";
