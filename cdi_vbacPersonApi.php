@@ -39,6 +39,10 @@ if ($err) {
 
     $load = isset($_GET['load']) ? $_GET['load'] : false;
     if ($load) {
+
+        $autoCommit = db2_autocommit($GLOBALS['conn']);
+        db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);   
+        
         if (count($responseObj) > 0) {
             foreach ($responseObj as $personEntry) {
                 $inactivePersonRecord->setFromArray($personEntry);
@@ -52,8 +56,11 @@ if ($err) {
                 }
             }
         }
+
+        db2_autocommit($GLOBALS['conn'],$autoCommit);
     }
 
     echo count($responseObj) . ' records read from VBAC api';
+    echo '<br>';
     echo $loadCounter . ' records loaded to REST db';
 }
