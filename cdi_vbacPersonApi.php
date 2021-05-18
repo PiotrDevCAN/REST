@@ -31,7 +31,7 @@ if ($err) {
 
     $clear = isset($_GET['clear']) ? $_GET['clear'] : false;
     if ($clear) {
-        $inactivePersonTable->clear(false);
+        $inactivePersonTable->clear();
     }
 
     $responseObj = json_decode($response);
@@ -39,6 +39,8 @@ if ($err) {
 
     $load = isset($_GET['load']) ? $_GET['load'] : false;
     if ($load) {
+
+        $success = true;
 
         $autoCommit = db2_autocommit($GLOBALS['conn']);
         db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);   
@@ -49,6 +51,8 @@ if ($err) {
                 $db2result = $inactivePersonTable->insert($inactivePersonRecord);
         
                 if(!$db2result){
+                    $success = false;
+
                     echo db2_stmt_error();
                     echo db2_stmt_errormsg();
                 } else {
@@ -57,10 +61,15 @@ if ($err) {
             }
         }
 
+        if($success){
+            db2_commit($GLOBALS['conn']);
+        } else {
+            db2_rollback($GLOBALS['conn']);
+        }
+
         db2_autocommit($GLOBALS['conn'],$autoCommit);
     }
 
-    echo count($responseObj) . ' records read from VBAC api';
-    echo '<br>';
-    echo $loadCounter . ' records loaded to REST db';
+    echo '<BR/><B>' . count($responseObj) . ' records read from VBAC api</B>';
+    echo '<BR/><B>' . $loadCounter . ' records loaded to REST db</B>';
 }
