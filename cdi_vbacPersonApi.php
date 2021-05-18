@@ -27,19 +27,19 @@ if ($err) {
     $inactivePersonTable  = new inactivePersonTable(allTables::$INACTIVE_PERSON);
     $inactivePersonRecord = new inactivePersonRecord();
 
-    $inactivePersonTable->clear(false);
+    // $inactivePersonTable->clear(false);
 
-    $responseObj = json_decode($response);
-    if (count($responseObj) > 0) {
-        foreach ($responseObj as $personEntry) {
-            $inactivePersonRecord->setFromArray($personEntry);
-            $db2result = $inactivePersonTable->insert($inactivePersonRecord);
+    // $responseObj = json_decode($response);
+    // if (count($responseObj) > 0) {
+    //     foreach ($responseObj as $personEntry) {
+    //         $inactivePersonRecord->setFromArray($personEntry);
+    //         $db2result = $inactivePersonTable->insert($inactivePersonRecord);
     
-            if(!$db2result){
-                echo db2_stmt_error();
-                echo db2_stmt_errormsg();
-            }
-        }
-    }
+    //         if(!$db2result){
+    //             echo db2_stmt_error();
+    //             echo db2_stmt_errormsg();
+    //         }
+    //     }
+    // }
     echo count($responseObj) . ' records read from VBAC api';
 }
