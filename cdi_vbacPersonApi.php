@@ -29,7 +29,7 @@ if ($err) {
     $inactivePersonTable  = new inactivePersonTable(allTables::$INACTIVE_PERSON);
     $inactivePersonRecord = new inactivePersonRecord();
 
-    $clear = isset($_POST['clear']) ? $_POST['clear'] : false;
+    $clear = isset($_GET['clear']) ? $_GET['clear'] : false;
     if ($clear) {
         $inactivePersonTable->clear(false);
     }
@@ -37,7 +37,7 @@ if ($err) {
     $responseObj = json_decode($response);
     $loadCounter = 0;
 
-    $load = isset($_POST['load']) ? $_POST['load'] : false;
+    $load = isset($_GET['load']) ? $_GET['load'] : false;
     if ($load) {
         if (count($responseObj) > 0) {
             foreach ($responseObj as $personEntry) {
