@@ -1,5 +1,7 @@
 <?php
-// URL : https://vbac-ut.dal1a.ciocloud.nonprod.intranet.ibm.com/api/employeesLeft.php?token=soEkCfj8zGNDLZ8yXH2YJjpehd8ijzlS";
+use rest\allTables;
+use rest\inactivePersonRecord;
+use rest\inactivePersonTable;
 
 $url = $_ENV['vbac_url'] . '/api/employeesLeft.php?token=' . $_ENV['vbac_api_token'];
 
@@ -21,11 +23,23 @@ curl_close($curl);
 if ($err) {
     echo "cURL Error #:" . $err;
 } else {
+
+    $inactivePersonTable  = new inactivePersonTable(allTables::$INACTIVE_PERSON);
+    $inactivePersonRecord = new inactivePersonRecord();
+
+    $inactivePersonTable->clear(false);
+
     $responseObj = json_decode($response);
-    echo $responseObj->status;
-    foreach ($responseObj->data as $claimEntry) {
-        echo "<pre>";
-        print_r($claimEntry);
-        echo "</pre>";
+    if (count($responseObj) > 0) {
+        foreach ($responseObj as $personEntry) {
+            $inactivePersonRecord->setFromArray($personEntry);
+            $db2result = $inactivePersonTable->insert($inactivePersonRecord);
+    
+            if(!$db2result){
+                echo db2_stmt_error();
+                echo db2_stmt_errormsg();
+            }
+        }
     }
+    echo count($responseObj) . ' records read from VBAC api';
 }
