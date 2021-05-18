@@ -78,9 +78,9 @@ class resourceRequestRecord extends DbRecord
         $rfsPredicate = rfsTable::rfsPredicateFilterOnPipeline();
         $allRfs = $loader->load('RFS_ID',allTables::$RFS,$rfsPredicate);
 
-        $predicate = " STATUS='" . StaticOrganisationTable::ENABLED . "' ";
+        $predicate = " STATUS='" . staticOrganisationTable::ENABLED . "' ";
         $allOrganisation = $loader->load('ORGANISATION',allTables::$STATIC_ORGANISATION,$predicate);
-        $allService = StaticOrganisationTable::getAllOrganisationsAndServices($predicate);
+        $allService = staticOrganisationTable::getAllOrganisationsAndServices($predicate);
         JavaScript::buildSelectArray($allService, 'organisation');
 
         $startDate = empty($this->START_DATE) ? null : new \DateTime($this->START_DATE);

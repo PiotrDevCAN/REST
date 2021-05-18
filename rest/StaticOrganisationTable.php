@@ -11,7 +11,7 @@ use itdq\DbTable;
  * ALTER TABLE "REST_XT"."STATIC_ORGANISATION" ADD COLUMN "STATUS" CHAR(10) NOT NULL WITH DEFAULT 'enabled';
  *
  */
-class StaticOrganisationTable extends DbTable
+class staticOrganisationTable extends DbTable
 {
     const ENABLED = 'enabled';
     const DISABLED = 'disabled';

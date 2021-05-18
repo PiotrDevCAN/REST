@@ -1,12 +1,12 @@
 <?php
 use itdq\Trace;
-use rest\StaticOrganisationTable;
+use rest\staticOrganisationTable;
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
 ob_start();
 
-$toggleResult = $_POST['currentStatus']==StaticOrganisationTable::ENABLED ? StaticOrganisationTable::disableService($_POST['ORGANISATION'],$_POST['SERVICE']) : StaticOrganisationTable::enableService($_POST['ORGANISATION'],$_POST['SERVICE']);
+$toggleResult = $_POST['currentStatus']==staticOrganisationTable::ENABLED ? staticOrganisationTable::disableService($_POST['ORGANISATION'],$_POST['SERVICE']) : staticOrganisationTable::enableService($_POST['ORGANISATION'],$_POST['SERVICE']);
 
 if(!$toggleResult){
     echo db2_stmt_error();

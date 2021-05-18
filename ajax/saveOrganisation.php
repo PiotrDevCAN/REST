@@ -2,15 +2,15 @@
 use itdq\Trace;
 use rest\allTables;
 use itdq\FormClass;
-use rest\StaticOrganisationTable;
-use rest\StaticOrganisationRecord;
+use rest\staticOrganisationTable;
+use rest\staticOrganisationRecord;
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
 ob_start();
 
-$organisationTable  = new StaticOrganisationTable(allTables::$STATIC_ORGANISATION);
-$organisationTableRecord = new StaticOrganisationRecord();
+$organisationTable  = new staticOrganisationTable(allTables::$STATIC_ORGANISATION);
+$organisationTableRecord = new staticOrganisationRecord();
 $organisationTableRecord->setFromArray(array('ORGANISATION'=>$_POST['ORGANISATION'],'SERVICE'=>$_POST['SERVICE'],'STATUS'=>$_POST['statusRadio']));
 
 if($_POST['mode']==FormClass::$modeDEFINE){

@@ -1,7 +1,7 @@
 <?php
 
 
-use rest\StaticOrganisationTable;
+use rest\staticOrganisationTable;
 use rest\allTables;
 
 function ob_html_compress($buf){
@@ -11,7 +11,7 @@ function ob_html_compress($buf){
 set_time_limit(0);
 ob_start();
 
-$staticOrganisation = new StaticOrganisationTable(allTables::$STATIC_ORGANISATION);
+$staticOrganisation = new staticOrganisationTable(allTables::$STATIC_ORGANISATION);
 $data = $staticOrganisation->returnForDataTables();
 
 $messages = ob_get_clean();

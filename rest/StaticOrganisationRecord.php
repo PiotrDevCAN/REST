@@ -10,7 +10,7 @@ use itdq\FormClass;
  * @author gb001399
  *
  */
-class StaticOrganisationRecord extends DbRecord
+class staticOrganisationRecord extends DbRecord
 {
 
     public $ORGANISATION;
