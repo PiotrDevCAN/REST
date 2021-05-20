@@ -408,6 +408,7 @@ class rfsTable extends DbTable
         $sql.= " AND ARCHIVE is null ";
         $sql.= " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE ";        
         $sql.= " AND AR.NOTES_ID IS NULL ";
+        $sql.= " AND RR.Status = '" . resourceRequestRecord::STATUS_ASSIGNED . "'";
         $sql.= !empty($predicate) ? " AND  $predicate " : null ;
 
         $countSql = "SELECT COUNT(*) as TOTAL";
