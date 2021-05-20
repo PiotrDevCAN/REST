@@ -1,7 +1,6 @@
 <?php
 
 function tryConnect($conn_string){
-
     error_log("Attempting connect to DB2 : " . $conn_string);
     $start = microtime(true);
     $conn = db2_connect( $conn_string, "", "" );
@@ -11,9 +10,7 @@ function tryConnect($conn_string){
     return $conn;
 }
 
-
-if( isset($_ENV['ssldsn']) )
-{
+if( isset($_ENV['ssldsn']) ) {
     # Get database details from the VCAP_SERVICES environment variable
     #
     # *This can only work if you have used the Bluemix dashboard to
@@ -46,9 +43,7 @@ if( isset($_ENV['ssldsn']) )
         }
     }
     
-
-    if( $conn )
-    {
+    if( $conn ) {
         $GLOBALS['conn'] = $conn;
         $schema = isset($GLOBALS['Db2Schema']) ? $GLOBALS['Db2Schema'] : 'REST';
         $Statement = "SET CURRENT SCHEMA='$schema';";
@@ -67,24 +62,17 @@ if( isset($_ENV['ssldsn']) )
             exit("Set current schema failed");
         }
         db2_autocommit($conn, TRUE); // This is how it was on the Wintel Box - so the code has no/few commit points.
-    }
-    else
-    {
+    } else {
         error_log(__FILE__ . __LINE__ . " Connect to DB2 Failed");
         error_log(__FILE__ . __LINE__ . $conn_string);
         error_log(__FILE__ . __LINE__ . db2_conn_errormsg());
         error_log(__FILE__ . __LINE__ . db2_conn_error());
         throw new Exception('Failed to connect to DB2');
     }
-}
-else
-{
+} else {
     echo "<pre>";
     print_r($_ENV);
     echo "</pre>";
     echo "<p>No credentials.</p>";
 }
-
-
-
 ?>

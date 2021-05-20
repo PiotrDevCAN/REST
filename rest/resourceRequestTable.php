@@ -493,20 +493,20 @@ class resourceRequestTable extends DbTable
         if(!isset($_SESSION['vbacEmployees']) || !isset($_SESSION['myTribe'])){
             $_SESSION['vbacEmployees'] = array();
             
-             $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=SQUAD_NAME,P.EMAIL_ADDRESS,TRIBE_NAME';
+            $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=SQUAD_NAME,P.EMAIL_ADDRESS,TRIBE_NAME';
 
-             $ch = curl_init();
-             curl_setopt($ch, CURLOPT_HEADER,         1);
-             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-             curl_setopt($ch, CURLOPT_HEADER,        FALSE);
-             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);  // it doesn't like the self signed certs on Cirrus
-             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-             curl_setopt($ch, CURLOPT_URL, $url);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_HEADER,         1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_HEADER,        FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);  // it doesn't like the self signed certs on Cirrus
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_URL, $url);
 
-             $allEmployeesJson = curl_exec($ch);
-             $allEmployees = json_decode($allEmployeesJson);
-             
-             foreach ($allEmployees as $employeeDetails) {
+            $allEmployeesJson = curl_exec($ch);
+            $allEmployees = json_decode($allEmployeesJson);
+            
+            foreach ($allEmployees as $employeeDetails) {
                 $_SESSION['vbacEmployees'][] = array(
                     'id'=>trim($employeeDetails->NOTES_ID),
                     'text'=>trim($employeeDetails->NOTES_ID),
@@ -520,7 +520,7 @@ class resourceRequestTable extends DbTable
                 } else {
                     $_SESSION['myTribe'] = '';
                 }
-             }
+            }
         }     
         
         $vbacEmployees = $_SESSION['vbacEmployees'];
