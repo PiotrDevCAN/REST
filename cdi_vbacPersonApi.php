@@ -1,11 +1,12 @@
 <?php
 use rest\allTables;
-use rest\inactivePersonRecord;
-use rest\inactivePersonTable;
+use rest\activeResourceRecord;
+use rest\activeResourceTable;
 
 set_time_limit(0);
 
-$url = $_ENV['vbac_url'] . '/api/employeesLeft.php?token=' . $_ENV['vbac_api_token'];
+// $_ENV['vbac_url'] = 'https://vbac.dal1a.cirrus.ibm.com';
+$url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=P.EMAIL_ADDRESS,P.PES_STATUS,SQUAD_NAME,TRIBE_NAME';
 
 $curl = curl_init();
 
@@ -26,12 +27,12 @@ if ($err) {
     echo "cURL Error #:" . $err;
 } else {
 
-    $inactivePersonTable  = new inactivePersonTable(allTables::$INACTIVE_PERSON);
-    $inactivePersonRecord = new inactivePersonRecord();
+    $activeResourceTable  = new activeResourceTable(allTables::$ACTIVE_RESOURCE);
+    $activeResourceRecord = new activeResourceRecord();
 
     $clear = isset($_GET['clear']) ? $_GET['clear'] : false;
     if ($clear) {
-        $inactivePersonTable->clear();
+        $activeResourceTable->clear();
     }
 
     $responseObj = json_decode($response);
@@ -50,13 +51,14 @@ if ($err) {
         
         if (count($responseObj) > 0) {
             
-            $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$INACTIVE_PERSON . " ( EMAIL_ADDRESS, NOTES_ID, PES_STATUS )  Values ";
+            $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( EMAIL_ADDRESS, NOTES_ID, PES_STATUS )  Values ";
                 
             foreach ($responseObj as $key => $personEntry) {
+
                 // -------------------------------------------------------------------
 
-                // $inactivePersonRecord->setFromArray($personEntry);
-                // $db2result = $inactivePersonTable->insert($inactivePersonRecord);
+                // $activeResourceRecord->setFromArray($personEntry);
+                // $db2result = $activeResourceTable->insert($activeResourceRecord);
 
                 // if(!$db2result){
                 //     $success = false;
@@ -69,7 +71,7 @@ if ($err) {
 
                 // -------------------------------------------------------------------
 
-                // $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$INACTIVE_PERSON . " ( EMAIL_ADDRESS, NOTES_ID, PES_STATUS ) ";
+                // $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( EMAIL_ADDRESS, NOTES_ID, PES_STATUS ) ";
                 // $sql .= " Values ('" . db2_escape_string(trim($personEntry->EMAIL_ADDRESS)) . "','" . db2_escape_string($personEntry->NOTES_ID) . "','" . db2_escape_string($personEntry->PES_STATUS) . "' ) ";
                 
                 // $rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
@@ -83,6 +85,7 @@ if ($err) {
                 // Database Load Finished : 2021-05-19 08:59:06
 
                 // -------------------------------------------------------------------
+                
                 if ($key > 0) {
                     $sql .= " ,";    
                 }
@@ -90,11 +93,9 @@ if ($err) {
                 
                 $loadCounter++;
                 
-                // -------------------------------------------------------------------                               
+                // -------------------------------------------------------------------
+
             }
-            
-            // echo $sql;
-            // exit;
 
             $rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
             if (! $rs) {

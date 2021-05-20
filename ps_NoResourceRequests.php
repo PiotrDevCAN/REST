@@ -19,7 +19,7 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is nu
 // $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 ?>
 <div class='container-fluid'>
-<h3>Requests With Resource Who Left IBM</h3>
+<h3>Requests With None Active Resource</h3>
 
 <div class='container'>
 
@@ -107,9 +107,9 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is nu
 
 <hr/>
 
-<div id='leftTableDiv'>
+<div id='noneActiveTableDiv'>
 <?php
-  rfsTable::buildHTMLRequestsTable('left');
+  rfsTable::buildHTMLRequestsTable('noneActive');
 ?>
 </div>
 </div>
@@ -139,7 +139,7 @@ $(document).ready(function() {
 	$(".select").select2();
 
     var rfs = new Rfs();
-    rfs.buildLeftReport(false);
+    rfs.buildNoneActiveReport(false);
     rfs.listenForSelectRequestor();
     rfs.listenForSelectValueStream();
     rfs.listenForSelectBusinessUnit();

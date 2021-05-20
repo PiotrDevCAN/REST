@@ -400,24 +400,24 @@ function Rfs() {
 		}
 	},
 
-	this.initialiseLeftTable = function(){
+	this.initialiseNoneActiveTable = function(){
 		// Show the table
-		$('#leftTable_id').show();
+		$('#noneActiveTable_id').show();
 
 	    // Setup - add a text input to each footer cell
-	    $('#leftTable_id tfoot th').each( function () {
+	    $('#noneActiveTable_id tfoot th').each( function () {
 	        var title = $(this).text();
 	        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
 	    } );
 		// DataTable
-		Rfs.table = $('#leftTable_id').DataTable({
+		Rfs.table = $('#noneActiveTable_id').DataTable({
 			language: {
 				// emptyTable: "Please select one or more of :  RFS, Value Stream, Business Unit, Requestor from above",
 				emptyTable: "No response data available",
 				processing: "Processing<i class='fas fa-spinner fa-spin '></i>"
 			},
 			ajax: {
-				url: 'ajax/populateLeftHTMLTable.php',
+				url: 'ajax/populateNoneActiveHTMLTable.php',
 				data: function ( d ) {
 					d.rfsid = $('#selectRfs option:selected').val();
 					d.valuestream = $('#selectValueStream option:selected').val();
@@ -426,10 +426,10 @@ function Rfs() {
 				},
 				type: 'POST',
 				beforeSend: function() {
-					$('#leftTable_id_processing').show();
+					$('#noneActiveTable_id_processing').show();
 				},
 				complete: function() {
-					$('#leftTable_id_processing').hide();
+					$('#noneActiveTable_id_processing').hide();
 				}
 			},
 			pageLength: 100,
@@ -487,13 +487,13 @@ function Rfs() {
 		this.applySearch();
 
 		// set rows roles
-	    $('#leftTable_id tbody tr').each( function () {
+	    $('#noneActiveTable_id tbody tr').each( function () {
 			$(this).attr( 'role', 'row' );
 			$(this).prop( 'role', 'row' );
 	    } );
 	},
 
-	this.buildLeftReport =  function(getColumnsFromAjax){
+	this.buildNoneActiveReport =  function(getColumnsFromAjax){
 		var rfs = new Rfs();
 
 		if(getColumnsFromAjax == null){
@@ -503,16 +503,16 @@ function Rfs() {
 				type: 'POST',
 				data: formData,
 				before: function(){
-					$('#leftTableDiv').html('<h2>Table being built</h2>');
+					$('#noneActiveTableDiv').html('<h2>Table being built</h2>');
 				},
 				success: function(result){
-					$('#leftTable_id').DataTable().destroy();
-					$("#leftTableDiv").html(result);
-					rfs.initialiseLeftTable();
+					$('#noneActiveTable_id').DataTable().destroy();
+					$("#noneActiveTableDiv").html(result);
+					rfs.initialiseNoneActiveTable();
 				}
 			});
 		} else {
-			rfs.initialiseLeftTable();
+			rfs.initialiseNoneActiveTable();
 		}
 	},
 

@@ -1,7 +1,7 @@
 <?php
 use rest\allTables;
-use rest\inactivePersonRecord;
-use rest\inactivePersonTable;
+use rest\activeResourceRecord;
+use rest\activeResourceTable;
 
 set_time_limit(0);
 
@@ -31,16 +31,16 @@ if ($err) {
     echo "cURL Error #:" . $err;
 } else {
 
-    $inactivePersonTable  = new inactivePersonTable(allTables::$INACTIVE_PERSON);
-    $inactivePersonRecord = new inactivePersonRecord();
+    $activeResourceTable  = new activeResourceTable(allTables::$ACTIVE_RESOURCE);
+    $activeResourceRecord = new activeResourceRecord();
 
-    $inactivePersonTable->clear(false);
+    $activeResourceTable->clear(false);
 
     $responseObj = json_decode($response);
     if (count($responseObj) > 0) {
         foreach ($responseObj as $personEntry) {
-            $inactivePersonRecord->setFromArray($personEntry);
-            $db2result = $inactivePersonTable->insert($inactivePersonRecord);
+            $activeResourceRecord->setFromArray($personEntry);
+            $db2result = $activeResourceTable->insert($activeResourceRecord);
     
             if(!$db2result){
                 echo db2_stmt_error();

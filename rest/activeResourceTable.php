@@ -4,9 +4,9 @@ namespace rest;
 use itdq\DbTable;
 use itdq\AuditTable;
 use itdq\Loader;
-use rest\inactivePersonRecord;
+use rest\activeResourceRecord;
 
-class inactivePersonTable extends DbTable {
+class activeResourceTable extends DbTable {
 
     public $employeeTypeMapping;
 
@@ -29,17 +29,17 @@ class inactivePersonTable extends DbTable {
     const PES_LEVEL_TWO = 'Level 2';
     const PES_LEVEL_DEFAULT = self::PES_LEVEL_TWO;
 
-    static private $excludeFromRecheckNotification = "'" . inactivePersonRecord::PES_STATUS_RECHECK_REQ . "'" 
-                                                  . ",'" . inactivePersonRecord::PES_STATUS_RECHECK_PROGRESSING . "'"
-                                                  . ",'" . inactivePersonRecord::PES_STATUS_PROVISIONAL . "'"
-                                                  . ",'" . inactivePersonRecord::PES_STATUS_LEFT_IBM . "'" 
-                                                  . ",'" . inactivePersonRecord::PES_STATUS_REVOKED . "'"
-                                                  . ",'" . inactivePersonRecord::PES_STATUS_DECLINED . "'"
-                                                  . ",'" . inactivePersonRecord::PES_STATUS_MOVER . "'"
-                                                  . ",'" . inactivePersonRecord::PES_STATUS_REQUESTED . "'"
-                                                  . ",'" . inactivePersonRecord::PES_STATUS_FAILED . "'"
-                                                  . ",'" . inactivePersonRecord::PES_STATUS_INITIATED . "'"
-                                                  . ",'" . inactivePersonRecord::PES_STATUS_REMOVED . "'"
+    static private $excludeFromRecheckNotification = "'" . activeResourceRecord::PES_STATUS_RECHECK_REQ . "'" 
+                                                  . ",'" . activeResourceRecord::PES_STATUS_RECHECK_PROGRESSING . "'"
+                                                  . ",'" . activeResourceRecord::PES_STATUS_PROVISIONAL . "'"
+                                                  . ",'" . activeResourceRecord::PES_STATUS_LEFT_IBM . "'" 
+                                                  . ",'" . activeResourceRecord::PES_STATUS_REVOKED . "'"
+                                                  . ",'" . activeResourceRecord::PES_STATUS_DECLINED . "'"
+                                                  . ",'" . activeResourceRecord::PES_STATUS_MOVER . "'"
+                                                  . ",'" . activeResourceRecord::PES_STATUS_REQUESTED . "'"
+                                                  . ",'" . activeResourceRecord::PES_STATUS_FAILED . "'"
+                                                  . ",'" . activeResourceRecord::PES_STATUS_INITIATED . "'"
+                                                  . ",'" . activeResourceRecord::PES_STATUS_REMOVED . "'"
                                                   ;
 
 
@@ -48,7 +48,7 @@ class inactivePersonTable extends DbTable {
     }
 
     static function getNextVirtualCnum(){
-        $sql  = " SELECT CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$INACTIVE_PERSON;
+        $sql  = " SELECT CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE CNUM LIKE '%XXX' or CNUM LIKE '%xxx' or CNUM LIKE '%999' ";
         $sql .= " order by CNUM desc ";
         $sql .= " OPTIMIZE FOR 1 ROW ";
@@ -76,22 +76,22 @@ class inactivePersonTable extends DbTable {
     static function activePersonPredicate($includeProvisionalClearance = true, $tableAbbrv = null ){
         $activePredicate = " ((( " ;
         $activePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $activePredicate.= "REVALIDATION_STATUS in ('" . inactivePersonRecord::REVALIDATED_FOUND . "','" . inactivePersonRecord::REVALIDATED_VENDOR . "','" . inactivePersonRecord::REVALIDATED_POTENTIAL . "') or trim(";
+        $activePredicate.= "REVALIDATION_STATUS in ('" . activeResourceRecord::REVALIDATED_FOUND . "','" . activeResourceRecord::REVALIDATED_VENDOR . "','" . activeResourceRecord::REVALIDATED_POTENTIAL . "') or trim(";
         $activePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
         $activePredicate.= "REVALIDATION_STATUS) is null or ";
         $activePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $activePredicate.= "REVALIDATION_STATUS like '" . inactivePersonRecord::REVALIDATED_OFFBOARDING . "%') ";
+        $activePredicate.= "REVALIDATION_STATUS like '" . activeResourceRecord::REVALIDATED_OFFBOARDING . "%') ";
         $activePredicate.= "   OR ";
         $activePredicate.= " ( trim( ";
         $activePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
         $activePredicate.= "REVALIDATION_STATUS) is null ) )";
         $activePredicate.= " AND ";
         $activePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $activePredicate.= "REVALIDATION_STATUS not like '" . inactivePersonRecord::REVALIDATED_OFFBOARDING . "%:%" .inactivePersonRecord::REVALIDATED_LEAVER . "%' " ;
+        $activePredicate.= "REVALIDATION_STATUS not like '" . activeResourceRecord::REVALIDATED_OFFBOARDING . "%:%" .activeResourceRecord::REVALIDATED_LEAVER . "%' " ;
         $activePredicate.= " AND ";
         $activePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $activePredicate.= "PES_STATUS in ('". inactivePersonRecord::PES_STATUS_CLEARED ."','". inactivePersonRecord::PES_STATUS_CLEARED_PERSONAL ."','". inactivePersonRecord::PES_STATUS_EXCEPTION ."','". inactivePersonRecord::PES_STATUS_RECHECK_REQ ."','". inactivePersonRecord::PES_STATUS_RECHECK_PROGRESSING ."','". inactivePersonRecord::PES_STATUS_MOVER ."'";
-        $activePredicate.= $includeProvisionalClearance ? ",'" . inactivePersonRecord::PES_STATUS_PROVISIONAL . "'" : null ;
+        $activePredicate.= "PES_STATUS in ('". activeResourceRecord::PES_STATUS_CLEARED ."','". activeResourceRecord::PES_STATUS_CLEARED_PERSONAL ."','". activeResourceRecord::PES_STATUS_EXCEPTION ."','". activeResourceRecord::PES_STATUS_RECHECK_REQ ."','". activeResourceRecord::PES_STATUS_RECHECK_PROGRESSING ."','". activeResourceRecord::PES_STATUS_MOVER ."'";
+        $activePredicate.= $includeProvisionalClearance ? ",'" . activeResourceRecord::PES_STATUS_PROVISIONAL . "'" : null ;
         $activePredicate.= " ) ) ";
         return $activePredicate;
     }
@@ -99,18 +99,18 @@ class inactivePersonTable extends DbTable {
     static function inactivePersonPredicate($includeProvisionalClearance = true, $tableAbbrv = null ){
         $inactivePredicate = " ((( " ;
         $inactivePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $inactivePredicate.= "REVALIDATION_STATUS in ('" . inactivePersonRecord::REVALIDATED_FOUND . "','" . inactivePersonRecord::REVALIDATED_VENDOR . "','" . inactivePersonRecord::REVALIDATED_POTENTIAL . "') or trim(";
+        $inactivePredicate.= "REVALIDATION_STATUS in ('" . activeResourceRecord::REVALIDATED_FOUND . "','" . activeResourceRecord::REVALIDATED_VENDOR . "','" . activeResourceRecord::REVALIDATED_POTENTIAL . "') or trim(";
         $inactivePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
         $inactivePredicate.= "REVALIDATION_STATUS) is null or ";
         $inactivePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $inactivePredicate.= "REVALIDATION_STATUS like '" . inactivePersonRecord::REVALIDATED_OFFBOARDING . "%') ";
+        $inactivePredicate.= "REVALIDATION_STATUS like '" . activeResourceRecord::REVALIDATED_OFFBOARDING . "%') ";
         $inactivePredicate.= "   OR ";
         $inactivePredicate.= " ( trim( ";
         $inactivePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
         $inactivePredicate.= "REVALIDATION_STATUS) is null ) )";
         $inactivePredicate.= " AND ";
         $inactivePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $inactivePredicate.= "REVALIDATION_STATUS not like '" . inactivePersonRecord::REVALIDATED_OFFBOARDING . "%:%" .inactivePersonRecord::REVALIDATED_LEAVER . "%' " ;
+        $inactivePredicate.= "REVALIDATION_STATUS not like '" . activeResourceRecord::REVALIDATED_OFFBOARDING . "%:%" .activeResourceRecord::REVALIDATED_LEAVER . "%' " ;
         $inactivePredicate.= " AND ";
         $inactivePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
         $inactivePredicate.= "PES_STATUS not in (" . self::$excludeFromRecheckNotification . ") ";
@@ -129,8 +129,8 @@ class inactivePersonTable extends DbTable {
 
         $data = array();
 
-        $isFM   = inactivePersonTable::isManager($_SESSION['ssoEmail']);
-        $myCnum = inactivePersonTable::myCnum();
+        $isFM   = activeResourceTable::isManager($_SESSION['ssoEmail']);
+        $myCnum = activeResourceTable::myCnum();
 
         $justaUser = !$_SESSION['isCdi']  && !$_SESSION['isPmo'] && !$_SESSION['isPes'] && !$_SESSION['isFm'] ;
 
@@ -247,9 +247,9 @@ class inactivePersonTable extends DbTable {
                             echo "Column: $key Value: $value";
                             if($autoClear && !$jsonEncodable){
                                 $row[$key] = null;
-                                $inactivePersonRecord = new inactivePersonRecord();
-                                $inactivePersonRecord->setFromArray($row);
-                                $this->saveRecord($inactivePersonRecord);
+                                $activeResourceRecord = new activeResourceRecord();
+                                $activeResourceRecord->setFromArray($row);
+                                $this->saveRecord($activeResourceRecord);
                             }
                         }
                     }
@@ -261,7 +261,7 @@ class inactivePersonTable extends DbTable {
 
     function  prepareFields($row){
         $this->loader = empty($this->loader) ? new Loader() : $this->loader;
-        $this->allNotesIdByCnum = empty($this->allNotesIdByCnum) ? $this->loader->loadIndexed('NOTES_ID','CNUM',allTables::$INACTIVE_PERSON) : $this->allNotesIdByCnum;
+        $this->allNotesIdByCnum = empty($this->allNotesIdByCnum) ? $this->loader->loadIndexed('NOTES_ID','CNUM',allTables::$ACTIVE_RESOURCE) : $this->allNotesIdByCnum;
         $this->employeeTypeMapping = empty($this->employeeTypeMapping) ? $this->loader->loadIndexed('DESCRIPTION','CODE',allTables::$EMPLOYEE_TYPE_MAPPING) : $this->employeeTypeMapping ;
 
         $preparedRow = array_map('trim', $row);
@@ -283,17 +283,17 @@ class inactivePersonTable extends DbTable {
         $cnum = trim($row['CNUM']);
         $row['actualCNUM'] = $cnum;
         $flag = isset($row['FM_MANAGER_FLAG']) ? $row['FM_MANAGER_FLAG'] : null ;
-        $status = empty($row['PES_STATUS']) ? inactivePersonRecord::PES_STATUS_NOT_REQUESTED : trim($row['PES_STATUS']) ;
+        $status = empty($row['PES_STATUS']) ? activeResourceRecord::PES_STATUS_NOT_REQUESTED : trim($row['PES_STATUS']) ;
         $projectedEndDateObj = !empty($row['PROJECTED_END_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['PROJECTED_END_DATE']) : false;
         $potentialForOffboarding = $projectedEndDateObj ? $projectedEndDateObj <= $this->thirtyDaysHence : false; // Thirty day rule.
-        $potentialForOffboarding = $potentialForOffboarding || $row['REVALIDATION_STATUS']==inactivePersonRecord::REVALIDATED_LEAVER ? true : $potentialForOffboarding;  // Any leaver - has potential to be offboarded
-        $potentialForOffboarding = substr(trim($row['REVALIDATION_STATUS']),0,10)==inactivePersonRecord::REVALIDATED_OFFBOARDED ? false : $potentialForOffboarding;
-        $potentialForOffboarding = substr(trim($row['REVALIDATION_STATUS']),0,11)==inactivePersonRecord::REVALIDATED_OFFBOARDING ? false : $potentialForOffboarding;
-        $potentialForOffboarding = trim($row['REVALIDATION_STATUS'])==inactivePersonRecord::REVALIDATED_PREBOARDER ? true : $potentialForOffboarding;
+        $potentialForOffboarding = $potentialForOffboarding || $row['REVALIDATION_STATUS']==activeResourceRecord::REVALIDATED_LEAVER ? true : $potentialForOffboarding;  // Any leaver - has potential to be offboarded
+        $potentialForOffboarding = substr(trim($row['REVALIDATION_STATUS']),0,10)==activeResourceRecord::REVALIDATED_OFFBOARDED ? false : $potentialForOffboarding;
+        $potentialForOffboarding = substr(trim($row['REVALIDATION_STATUS']),0,11)==activeResourceRecord::REVALIDATED_OFFBOARDING ? false : $potentialForOffboarding;
+        $potentialForOffboarding = trim($row['REVALIDATION_STATUS'])==activeResourceRecord::REVALIDATED_PREBOARDER ? true : $potentialForOffboarding;
 
         $offboardingHint = $projectedEndDateObj <= $this->thirtyDaysHence ? '&nbsp;End date within 60 days' : null; // Thirty day rule. (MOdified 4th July
-        $offboardingHint = $row['REVALIDATION_STATUS']==inactivePersonRecord::REVALIDATED_LEAVER ? '&nbsp;Flagged as Leaver' : $offboardingHint; // flagged as a leaver.
-        $offboardingHint = $row['REVALIDATION_STATUS']==inactivePersonRecord::REVALIDATED_PREBOARDER ? '&nbsp;Is a preboarder' : $offboardingHint; // flagged as a preboarder.
+        $offboardingHint = $row['REVALIDATION_STATUS']==activeResourceRecord::REVALIDATED_LEAVER ? '&nbsp;Flagged as Leaver' : $offboardingHint; // flagged as a leaver.
+        $offboardingHint = $row['REVALIDATION_STATUS']==activeResourceRecord::REVALIDATED_PREBOARDER ? '&nbsp;Is a preboarder' : $offboardingHint; // flagged as a preboarder.
 
 
         $revalidationStatus = trim($row['REVALIDATION_STATUS']);
@@ -312,20 +312,20 @@ class inactivePersonTable extends DbTable {
             $pmoStatus = empty($pmoStatus) ? 'To be assessed' : $pmoStatus;
             $row['PMO_STATUS']  = "";
 
-            if($pmoStatus=='To be assessed' || $pmoStatus==inactivePersonRecord::PMO_STATUS_AWARE){
+            if($pmoStatus=='To be assessed' || $pmoStatus==activeResourceRecord::PMO_STATUS_AWARE){
                 $row['PMO_STATUS'] .= "<button type='button' class='btn btn-default btn-xs btnSetPmoStatus' aria-label='Left Align' ";
                 $row['PMO_STATUS'] .= "data-cnum='" .$cnum . "' ";
-                $row['PMO_STATUS'] .= "data-setpmostatusto='" .inactivePersonRecord::PMO_STATUS_CONFIRMED . "' ";
+                $row['PMO_STATUS'] .= "data-setpmostatusto='" .activeResourceRecord::PMO_STATUS_CONFIRMED . "' ";
                 $row['PMO_STATUS'] .= " data-toggle='tooltip' data-placement='top' title='Set PMO Status Aware'";
                 $row['PMO_STATUS'] .= " > ";
                 $row['PMO_STATUS'] .= "<span class='glyphicon glyphicon-thumbs-up ' aria-hidden='true'></span>";
                 $row['PMO_STATUS'] .= " </button> ";
             }
 
-            if($pmoStatus=='To be assessed' || $pmoStatus==inactivePersonRecord::PMO_STATUS_CONFIRMED){
+            if($pmoStatus=='To be assessed' || $pmoStatus==activeResourceRecord::PMO_STATUS_CONFIRMED){
                 $row['PMO_STATUS'] .= "<button type='button' class='btn btn-default btn-xs btnSetPmoStatus' aria-label='Left Align' ";
                 $row['PMO_STATUS'] .= "data-cnum='" .$cnum . "' ";
-                $row['PMO_STATUS'] .= "data-setpmostatusto='" .inactivePersonRecord::PMO_STATUS_AWARE . "' ";
+                $row['PMO_STATUS'] .= "data-setpmostatusto='" .activeResourceRecord::PMO_STATUS_AWARE . "' ";
                 $row['PMO_STATUS'] .= " data-toggle='tooltip' data-placement='top' title='Set PMO Status Confirmed'";
                 $row['PMO_STATUS'] .= " > ";
                 $row['PMO_STATUS'] .= "<span class='glyphicon glyphicon-thumbs-down ' aria-hidden='true'></span>";
@@ -384,7 +384,7 @@ class inactivePersonTable extends DbTable {
         $row['NOTES_ID'] .= " </button>";
 
 
-        if(($_SESSION['isPes'] || $_SESSION['isPmo'] || $_SESSION['isFm'] || $_SESSION['isCdi']) && ($revalidationStatus!=inactivePersonRecord::REVALIDATED_OFFBOARDED))  {
+        if(($_SESSION['isPes'] || $_SESSION['isPmo'] || $_SESSION['isFm'] || $_SESSION['isCdi']) && ($revalidationStatus!=activeResourceRecord::REVALIDATED_OFFBOARDED))  {
             $row['NOTES_ID'] .= "<button type='button' class='btn btn-default btn-xs btnEditPerson' aria-label='Left Align' ";
             $row['NOTES_ID'] .= "data-cnum='" .$cnum . "'";
             $row['NOTES_ID'] .= " data-toggle='tooltip' data-placement='top' title='Edit Person Record'";
@@ -396,7 +396,7 @@ class inactivePersonTable extends DbTable {
         $row['NOTES_ID'] .= $notesId;
 
 
-        if( ($_SESSION['isPmo'] || $_SESSION['isCdi']) && (substr(trim($row['REVALIDATION_STATUS']),0,11)==inactivePersonRecord::REVALIDATED_OFFBOARDING))  {
+        if( ($_SESSION['isPmo'] || $_SESSION['isCdi']) && (substr(trim($row['REVALIDATION_STATUS']),0,11)==activeResourceRecord::REVALIDATED_OFFBOARDING))  {
             $row['REVALIDATION_STATUS']  = "<button type='button' class='btn btn-default btn-xs btnStopOffboarding btn-danger' aria-label='Left Align' ";
             $row['REVALIDATION_STATUS'] .= "data-cnum='" .$cnum . "'";
             $row['REVALIDATION_STATUS'] .= " data-toggle='tooltip' data-placement='top' title='Stop Offboarding Process'";
@@ -413,7 +413,7 @@ class inactivePersonTable extends DbTable {
             $row['REVALIDATION_STATUS'] .= $revalidationStatus;
         }
 
-        if( $potentialForOffboarding && ($_SESSION['isPmo'] || $_SESSION['isCdi']) && substr(trim($row['REVALIDATION_STATUS']),0,11)!=inactivePersonRecord::REVALIDATED_OFFBOARDING )  {
+        if( $potentialForOffboarding && ($_SESSION['isPmo'] || $_SESSION['isCdi']) && substr(trim($row['REVALIDATION_STATUS']),0,11)!=activeResourceRecord::REVALIDATED_OFFBOARDING )  {
             $row['REVALIDATION_STATUS']  = "<button type='button' class='btn btn-default btn-xs btnOffboarding btn-warning' aria-label='Left Align' ";
             $row['REVALIDATION_STATUS'] .= "data-cnum='" .$cnum . "'";
             $row['REVALIDATION_STATUS'] .= " data-toggle='tooltip' data-placement='top' title='Initiate Offboarding." . $offboardingHint . "' ";
@@ -423,7 +423,7 @@ class inactivePersonTable extends DbTable {
             $row['REVALIDATION_STATUS'] .= $revalidationStatus;
          }
 
-         if( ($_SESSION['isPmo'] || $_SESSION['isCdi']) && substr(trim($row['REVALIDATION_STATUS']),0,10)==inactivePersonRecord::REVALIDATED_OFFBOARDED )  {
+         if( ($_SESSION['isPmo'] || $_SESSION['isCdi']) && substr(trim($row['REVALIDATION_STATUS']),0,10)==activeResourceRecord::REVALIDATED_OFFBOARDED )  {
              $row['REVALIDATION_STATUS']  = "<button type='button' class='btn btn-default btn-xs btnDeoffBoarding btn-danger' aria-label='Left Align' ";
              $row['REVALIDATION_STATUS'] .= "data-cnum='" .$cnum . "'";
              $row['REVALIDATION_STATUS'] .= "title='Bring back from Offboarding.'";
@@ -497,7 +497,7 @@ class inactivePersonTable extends DbTable {
             return false;
         }
 
-        $sql = ' SELECT FM_MANAGER_FLAG FROM "' . $GLOBALS['Db2Schema'] . '".' . allTables::$INACTIVE_PERSON;
+        $sql = ' SELECT FM_MANAGER_FLAG FROM "' . $GLOBALS['Db2Schema'] . '".' . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . db2_escape_string(strtoupper(trim($emailAddress))) . "' ";
 
         $resultSet = db2_exec($GLOBALS['conn'], $sql);
@@ -510,9 +510,6 @@ class inactivePersonTable extends DbTable {
         $row = db2_fetch_assoc($resultSet);
 
         if(is_bool($row['FM_MANAGER_FLAG'])){
-            var_dump($row);
-            var_dump($resultSet);
-            echo $sql;
             throw new \Exception('problem in' . __FILE__ . __FUNCTION__);
         }
 
@@ -531,7 +528,7 @@ class inactivePersonTable extends DbTable {
             return false;
         }
 
-        $sql = " SELECT CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$INACTIVE_PERSON;
+        $sql = " SELECT CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . db2_escape_string(strtoupper(trim($_SESSION['ssoEmail']))) . "' ";
 
         $resultSet = db2_exec($GLOBALS['conn'], $sql);
@@ -556,7 +553,7 @@ class inactivePersonTable extends DbTable {
             return false;
         }
 
-        $sql = " SELECT FM_CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$INACTIVE_PERSON;
+        $sql = " SELECT FM_CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . db2_escape_string(strtoupper(trim($_SESSION['ssoEmail']))) . "' ";
 
         $resultSet = db2_exec($GLOBALS['conn'], $sql);
@@ -573,7 +570,7 @@ class inactivePersonTable extends DbTable {
     }
 
     static function getNotesidFromCnum($cnum){
-        $sql = " SELECT NOTES_ID FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$INACTIVE_PERSON;
+        $sql = " SELECT NOTES_ID FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE CNUM = '" . db2_escape_string(strtoupper(trim($cnum))) . "' ";
 
         $resultSet = db2_exec($GLOBALS['conn'], $sql);
@@ -593,17 +590,17 @@ class inactivePersonTable extends DbTable {
 
         if(empty($preBoarded)){
             $availPreBoPredicate  = " ( CNUM LIKE '%xxx' or CNUM LIKE '%XXX' or CNUM LIKE '%999' ) ";
-            $availPreBoPredicate .= " AND ( REVALIDATION_STATUS in ('" . inactivePersonRecord::REVALIDATED_PREBOARDER . "','" . inactivePersonRecord::REVALIDATED_VENDOR . "')) ";
+            $availPreBoPredicate .= " AND ( REVALIDATION_STATUS in ('" . activeResourceRecord::REVALIDATED_PREBOARDER . "','" . activeResourceRecord::REVALIDATED_VENDOR . "')) ";
             $availPreBoPredicate .= " AND ((PES_STATUS_DETAILS not like 'Boarded as%' )  or ( PES_STATUS_DETAILS is null)) ";
             $availPreBoPredicate .= " AND PES_STATUS not in (";
-            $availPreBoPredicate .= " '" . inactivePersonRecord::PES_STATUS_FAILED . "' "; // Pre-boarded who haven't been boarded
-            $availPreBoPredicate .= ",'" . inactivePersonRecord::PES_STATUS_REMOVED ."' ";
+            $availPreBoPredicate .= " '" . activeResourceRecord::PES_STATUS_FAILED . "' "; // Pre-boarded who haven't been boarded
+            $availPreBoPredicate .= ",'" . activeResourceRecord::PES_STATUS_REMOVED ."' ";
             $availPreBoPredicate .= " )";
         } else {
             $availPreBoPredicate  = " ( CNUM = '" . db2_escape_string($preBoarded) . "' ) ";
         }
 
-        $sql =  " SELECT distinct FIRST_NAME, LAST_NAME, EMAIL_ADDRESS, CNUM  FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$INACTIVE_PERSON;
+        $sql =  " SELECT distinct FIRST_NAME, LAST_NAME, EMAIL_ADDRESS, CNUM  FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE " . $availPreBoPredicate;
         $sql .= " ORDER BY FIRST_NAME, LAST_NAME ";
 
@@ -640,8 +637,8 @@ class inactivePersonTable extends DbTable {
             case $boarder:
                 // Don't add buttons if this is a boarded - pre-boarder record.
                 break;
-            case $status == inactivePersonRecord::PES_STATUS_TBD && !$_SESSION['isPes']:
-            case $status == inactivePersonRecord::PES_STATUS_NOT_REQUESTED:
+            case $status == activeResourceRecord::PES_STATUS_TBD && !$_SESSION['isPes']:
+            case $status == activeResourceRecord::PES_STATUS_NOT_REQUESTED:
                 $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesInitiate accessRestrict accessPmo accessFm' ";
                 $pesStatusWithButton.= "aria-label='Left Align' ";
                 $pesStatusWithButton.= " data-cnum='" .$actualCnum . "' ";
@@ -651,17 +648,17 @@ class inactivePersonTable extends DbTable {
                 $pesStatusWithButton.= "<span class='glyPesInitiate glyphicon glyphicon-plane ' aria-hidden='true'></span>";
                 $pesStatusWithButton.= "</button>&nbsp;";
                 break;
-            case $status == inactivePersonRecord::PES_STATUS_INITIATED && $_SESSION['isPes'] ;           
-            case $status == inactivePersonRecord::PES_STATUS_RESTART   && $_SESSION['isPes'] ;
-            case $status == inactivePersonRecord::PES_STATUS_RECHECK_REQ && $_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_INITIATED && $_SESSION['isPes'] ;           
+            case $status == activeResourceRecord::PES_STATUS_RESTART   && $_SESSION['isPes'] ;
+            case $status == activeResourceRecord::PES_STATUS_RECHECK_REQ && $_SESSION['isPes'] :
                 $emailAddress = trim($row['EMAIL_ADDRESS']);
                 $firstName    = trim($row['FIRST_NAME']);
                 $lastName     = trim($row['LAST_NAME']);
                 $country      = trim($row['COUNTRY']);
                 $openseat     = trim($row['OPEN_SEAT_NUMBER']);
                 $cnum         = trim($row['CNUM']);
-                $recheck      = ($status==inactivePersonRecord::PES_STATUS_RECHECK_REQ) ? 'yes' : 'no' ;
-                $aeroplaneColor= ($status==inactivePersonRecord::PES_STATUS_RECHECK_REQ)? 'yellow' : 'green' ;
+                $recheck      = ($status==activeResourceRecord::PES_STATUS_RECHECK_REQ) ? 'yes' : 'no' ;
+                $aeroplaneColor= ($status==activeResourceRecord::PES_STATUS_RECHECK_REQ)? 'yellow' : 'green' ;
 
                 $missing = !empty($emailAddress) ? '' : ' Email Address';
                 $missing.= !empty($firstName) ? '' : ' First Name';
@@ -703,9 +700,9 @@ class inactivePersonTable extends DbTable {
                 $pesStatusWithButton.= "<span class='glyphicon glyphicon-edit ' aria-hidden='true'></span>";
                 $pesStatusWithButton.= "</button> ";
                 break;
-            case $status == inactivePersonRecord::PES_STATUS_DECLINED && ( $_SESSION['isFm'] || $_SESSION['isCdi'] )  ;
-            case $status == inactivePersonRecord::PES_STATUS_FAILED && ( $_SESSION['isFm'] || $_SESSION['isCdi'] )  ;
-            case $status == inactivePersonRecord::PES_STATUS_REMOVED && ( $_SESSION['isFm'] || $_SESSION['isCdi'] )  :
+            case $status == activeResourceRecord::PES_STATUS_DECLINED && ( $_SESSION['isFm'] || $_SESSION['isCdi'] )  ;
+            case $status == activeResourceRecord::PES_STATUS_FAILED && ( $_SESSION['isFm'] || $_SESSION['isCdi'] )  ;
+            case $status == activeResourceRecord::PES_STATUS_REMOVED && ( $_SESSION['isFm'] || $_SESSION['isCdi'] )  :
                 $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesRestart accessRestrict accessFm accessCdi' aria-label='Left Align' ";
                 $pesStatusWithButton.= " data-cnum='" .$actualCnum . "' ";
                 $pesStatusWithButton.= " data-notesid='" . $notesId . "' ";
@@ -720,19 +717,19 @@ class inactivePersonTable extends DbTable {
                 $pesStatusWithButton.= "<span class='glyphicon glyphicon-refresh ' aria-hidden='true' ></span>";
                 $pesStatusWithButton.= "</button>";
                 break;
-            case $status == inactivePersonRecord::PES_STATUS_REQUESTED && $_SESSION['isPes'] :
-            case $status == inactivePersonRecord::PES_STATUS_CLEARED_PERSONAL && $_SESSION['isPes'] :
-            case $status == inactivePersonRecord::PES_STATUS_CLEARED && $_SESSION['isPes'] :
-            case $status == inactivePersonRecord::PES_STATUS_EXCEPTION && $_SESSION['isPes'] :
-            case $status == inactivePersonRecord::PES_STATUS_DECLINED && $_SESSION['isPes'] ;
-            case $status == inactivePersonRecord::PES_STATUS_FAILED && $_SESSION['isPes'] ;
-            case $status == inactivePersonRecord::PES_STATUS_REMOVED && $_SESSION['isPes'] :
-            case $status == inactivePersonRecord::PES_STATUS_REVOKED && $_SESSION['isPes'] :
-            case $status == inactivePersonRecord::PES_STATUS_LEFT_IBM && $_SESSION['isPes'] :
-            case $status == inactivePersonRecord::PES_STATUS_PROVISIONAL && $_SESSION['isPes'] :
-            case $status == inactivePersonRecord::PES_STATUS_TBD && $_SESSION['isPes'] :
-            case $status == inactivePersonRecord::PES_STATUS_MOVER && $_SESSION['isPes'] :
-            case $status == inactivePersonRecord::PES_STATUS_RECHECK_PROGRESSING && $_SESSION['isPes'] ;
+            case $status == activeResourceRecord::PES_STATUS_REQUESTED && $_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_CLEARED_PERSONAL && $_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_CLEARED && $_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_EXCEPTION && $_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_DECLINED && $_SESSION['isPes'] ;
+            case $status == activeResourceRecord::PES_STATUS_FAILED && $_SESSION['isPes'] ;
+            case $status == activeResourceRecord::PES_STATUS_REMOVED && $_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_REVOKED && $_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_LEFT_IBM && $_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_PROVISIONAL && $_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_TBD && $_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_MOVER && $_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_RECHECK_PROGRESSING && $_SESSION['isPes'] ;
                 $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesStatus' aria-label='Left Align' ";
                 $pesStatusWithButton.= " data-cnum='" .$actualCnum . "' ";
                 $pesStatusWithButton.= " data-notesid='" . $notesId . "' ";
@@ -748,11 +745,11 @@ class inactivePersonTable extends DbTable {
                 $pesStatusWithButton.= "<span class='glyphicon glyphicon-edit ' aria-hidden='true'></span>";
                 $pesStatusWithButton.= "</button>";
                 break;
-            case $status == inactivePersonRecord::PES_STATUS_REQUESTED && !$_SESSION['isPes'] :
-            case $status == inactivePersonRecord::PES_STATUS_RECHECK_REQ && !$_SESSION['isPes'] :
-            case $status == inactivePersonRecord::PES_STATUS_MOVER && !$_SESSION['isPes'] :
-            case $status == inactivePersonRecord::PES_STATUS_INITIATED && !$_SESSION['isPes'] ;
-            case $status == inactivePersonRecord::PES_STATUS_RECHECK_PROGRESSING && !$_SESSION['isPes'] ;
+            case $status == activeResourceRecord::PES_STATUS_REQUESTED && !$_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_RECHECK_REQ && !$_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_MOVER && !$_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_INITIATED && !$_SESSION['isPes'] ;
+            case $status == activeResourceRecord::PES_STATUS_RECHECK_PROGRESSING && !$_SESSION['isPes'] ;
                 $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesStop accessRestrict accessFm' aria-label='Left Align' ";
                 $pesStatusWithButton.= " data-cnum='" .$actualCnum . "' ";
                 $pesStatusWithButton.= " data-notesid='" . $notesId . "' ";
@@ -766,12 +763,12 @@ class inactivePersonTable extends DbTable {
                 $pesStatusWithButton.= "<span class='glyphicon glyphicon-ban-circle ' aria-hidden='true' ></span>";
                 $pesStatusWithButton.= "</button>";
                 break;
-            case $status == inactivePersonRecord::PES_STATUS_CANCEL_CONFIRMED && $_SESSION['isPes'] :
+            case $status == activeResourceRecord::PES_STATUS_CANCEL_CONFIRMED && $_SESSION['isPes'] :
             default:
                 break;
         }
 
-        if(isset($row['PROCESSING_STATUS']) && ( $row['PES_STATUS']== inactivePersonRecord::PES_STATUS_INITIATED || $row['PES_STATUS']==inactivePersonRecord::PES_STATUS_RECHECK_PROGRESSING || $row['PES_STATUS']==inactivePersonRecord::PES_STATUS_REQUESTED || $row['PES_STATUS']==inactivePersonRecord::PES_STATUS_RECHECK_REQ || $row['PES_STATUS']==inactivePersonRecord::PES_STATUS_MOVER ) ){
+        if(isset($row['PROCESSING_STATUS']) && ( $row['PES_STATUS']== activeResourceRecord::PES_STATUS_INITIATED || $row['PES_STATUS']==activeResourceRecord::PES_STATUS_RECHECK_PROGRESSING || $row['PES_STATUS']==activeResourceRecord::PES_STATUS_REQUESTED || $row['PES_STATUS']==activeResourceRecord::PES_STATUS_RECHECK_REQ || $row['PES_STATUS']==activeResourceRecord::PES_STATUS_MOVER ) ){
 
             $pesStatusWithButton .= "<br/><button type='button' class='btn btn-default btn-xs btnTogglePesTrackerStatusDetails' aria-label='Left Align' data-toggle='tooltip' data-placement='top' title='See PES Tracker Status' >";
             $pesStatusWithButton .= !empty($row['PROCESSING_STATUS']) ? "&nbsp;<small>" . $row['PROCESSING_STATUS'] . "</small>&nbsp;" : null;

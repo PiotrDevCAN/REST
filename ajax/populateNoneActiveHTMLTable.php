@@ -49,7 +49,7 @@ $predicate .= $rfsTable->prepareSearchPredicate() . $rfsTable->prepareOrderingPr
 //     );
 // } else {
 
-    $data = $rfsTable->returnLeftReportAsArray($predicate, false, $length, $start);
+    $data = $rfsTable->returnNoneActiveReportAsArray($predicate, false, $length, $start);
     $message = ob_get_clean();
     ob_start();
 

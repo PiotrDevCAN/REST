@@ -507,11 +507,19 @@ class resourceRequestTable extends DbTable
              $allEmployees = json_decode($allEmployeesJson);
              
              foreach ($allEmployees as $employeeDetails) {
-                 $_SESSION['vbacEmployees'][] = array('id'=>trim($employeeDetails->NOTES_ID), 'text'=>trim($employeeDetails->NOTES_ID), 'role'=>trim($employeeDetails->SQUAD_NAME),'tribe'=>trim($employeeDetails->TRIBE_NAME),'distance'=>'remote');
-                 !empty($employeeDetails->TRIBE_NAME) ?  $_SESSION['allTribes'][trim($employeeDetails->TRIBE_NAME)] = trim($employeeDetails->TRIBE_NAME)  : null ;
-                 if(strtolower($employeeDetails->EMAIL_ADDRESS)==strtolower($_SESSION['ssoEmail'])){
-                     $_SESSION['myTribe'] = $employeeDetails->TRIBE_NAME;
-                 }
+                $_SESSION['vbacEmployees'][] = array(
+                    'id'=>trim($employeeDetails->NOTES_ID),
+                    'text'=>trim($employeeDetails->NOTES_ID),
+                    'role'=>trim($employeeDetails->SQUAD_NAME),
+                    'tribe'=>trim($employeeDetails->TRIBE_NAME),
+                    'distance'=>'remote'
+                );
+                !empty($employeeDetails->TRIBE_NAME) ?  $_SESSION['allTribes'][trim($employeeDetails->TRIBE_NAME)] = trim($employeeDetails->TRIBE_NAME)  : null ;
+                if(strtolower($employeeDetails->EMAIL_ADDRESS)==strtolower($_SESSION['ssoEmail'])) {
+                    $_SESSION['myTribe'] = $employeeDetails->TRIBE_NAME;
+                } else {
+                    $_SESSION['myTribe'] = '';
+                }
              }
         }     
         
@@ -536,9 +544,6 @@ class resourceRequestTable extends DbTable
          
         foreach ($vbacEmployees as $value) {
 //          error_log('notesId:' . $value['id'] . ' tribe:' . $value['tribe'] . " bestmatch:" . $bestMatch . " bu:" . $businessUnit);            $
-
-            var_dump($value['id']);
-            var_dump(strtolower(substr(trim($value['id']),-4)));
             if(strtolower(substr(trim($value['id']), -4))=='/ibm'){  // Filter out invalid Notes Ids
                 if($value['tribe']==$myTribe){
                     $value['distance']='local';

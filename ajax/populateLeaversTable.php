@@ -1,7 +1,7 @@
 <?php
 
 use rest\allTables;
-use rest\inactivePersonTable;
+use rest\activeResourceTable;
 
 function ob_html_compress($buf){
     return str_replace(array("\n","\r"),'',$buf);
@@ -10,7 +10,7 @@ function ob_html_compress($buf){
 set_time_limit(0);
 ob_start();
 
-$inactivePerson = new inactivePersonTable(allTables::$INACTIVE_PERSON);
+$inactivePerson = new activeResourceTable(allTables::$ACTIVE_RESOURCE);
 $data = $inactivePerson->returnForDataTables();
 
 $messages = ob_get_clean();

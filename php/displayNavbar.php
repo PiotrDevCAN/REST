@@ -30,8 +30,8 @@ $cdiAdmin->addOption($traceDelete);
 $adminMenu      = new NavbarMenu('REST Admin','accessCdi accessAdmin');
 $organisation   = new NavbarOption('Organisation','pa_organisation.php'               ,'accessCdi accessAdmin');
 $adminMenu->addOption($organisation);
-$leavers 		= new NavbarOption('IBM Leavers','pa_leavers.php'					  ,'accessCdi accessAdmin');
-$adminMenu->addOption($leavers);
+$VBACactiveResources 		= new NavbarOption('VBAC Active Resources','pa_activeResources.php'					  ,'accessCdi accessAdmin');
+$adminMenu->addOption($VBACactiveResources);
 
 $request        = new NavbarMenu(  'Request'                                          ,'accessCdi accessAdmin accessDemand accessRfs');
 $newRfs         = new NavbarOption('New RFS','pr_newRfs.php'                          ,'accessCdi accessAdmin accessDemand accessRfs');

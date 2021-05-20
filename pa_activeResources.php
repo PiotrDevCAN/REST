@@ -6,7 +6,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 ?>
 
 <div class='container'>
-<h2>List of IBM Leavers</h2>
+<h2>List of VBAC Active Resources</h2>
 
 <div style='width: 75%'>
 <table id='leaverTable' >

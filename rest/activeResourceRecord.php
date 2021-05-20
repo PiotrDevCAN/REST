@@ -10,7 +10,7 @@ use itdq\DbRecord;
  * ALTER TABLE "ROB_DEV"."PERSON" ADD COLUMN "SQUAD_NUMBER" NUMERIC(5);
  *
  */
-class inactivePersonRecord extends DbRecord
+class activeResourceRecord extends DbRecord
 {
     protected $CNUM;
     protected $OPEN_SEAT_NUMBER;
