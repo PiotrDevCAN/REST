@@ -509,7 +509,6 @@ class resourceRequestTable extends DbTable
             $allEmployees = json_decode($allEmployeesJson);
             
             foreach ($allEmployees as $employeeDetails) {
-                print_r($employeeDetails);
                 $_SESSION['vbacEmployees'][] = array(
                     'id'=>trim($employeeDetails->NOTES_ID),
                     'text'=>trim($employeeDetails->NOTES_ID),
@@ -551,13 +550,14 @@ class resourceRequestTable extends DbTable
         foreach ($vbacEmployees as $value) {
 //          error_log('notesId:' . $value['id'] . ' tribe:' . $value['tribe'] . " bestmatch:" . $bestMatch . " bu:" . $businessUnit);            $
             if(strtolower(substr(trim($value['id']), -4))=='/ibm'){  // Filter out invalid Notes Ids
-                if($value['tribe']==$myTribe){
-                    $value['distance']='local';
+                // get from user's tribe
+                if(!is_null($myTribe) && $value['tribe'] === $myTribe) {
+                    $value['distance'] = 'local';
                     $tribeEmployees[] = $value;
-                } else {
-                    if($_SESSION['isAdmin']){
-                        $tribeEmployees[] = $value;
-                    }
+                }
+                // check admin only
+                if($_SESSION['isAdmin']){
+                    $tribeEmployees[] = $value;
                 }
             }
         }
