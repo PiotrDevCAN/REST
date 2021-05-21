@@ -495,7 +495,6 @@ class resourceRequestTable extends DbTable
             $_SESSION['vbacEmployees'] = array();
             
             $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=SQUAD_NAME,P.EMAIL_ADDRESS,TRIBE_NAME';
-            echo $url;
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_HEADER,         1);
@@ -525,12 +524,11 @@ class resourceRequestTable extends DbTable
         
         $vbacEmployees = $_SESSION['vbacEmployees'];
 
-        // if (isset($_SESSION['myTribe'])) {
+        if (isset($_SESSION['myTribe'])) {
             $myTribe = $_SESSION['myTribe'];
-        // } else {
-        //     // $myTribe = NULL;
-        //     $myTribe = 'temporaty development tribe';
-        // }
+        } else {
+            $myTribe = NULL;
+        }
          // Find business unit for this tribe.     
 //         $bestMatchScore = 0;
 //         $bestMatch = '';
@@ -547,11 +545,12 @@ class resourceRequestTable extends DbTable
 //         }
         
         // process the employees, flagging as 'local' those in the "myTribe" tribe     
-         
+
+        $tribeEmployees = array();
         foreach ($vbacEmployees as $value) {
 //          error_log('notesId:' . $value['id'] . ' tribe:' . $value['tribe'] . " bestmatch:" . $bestMatch . " bu:" . $businessUnit);            $
             if(strtolower(substr(trim($value['id']), -4))=='/ibm'){  // Filter out invalid Notes Ids
-                if($value['tribe'] == $myTribe) {
+                if($value['tribe'] === $myTribe) {
                     $value['distance'] = 'local';
                     $tribeEmployees[] = $value;
                 } else {
