@@ -528,7 +528,8 @@ class resourceRequestTable extends DbTable
         if (isset($_SESSION['myTribe'])) {
             $myTribe = $_SESSION['myTribe'];
         } else {
-            $myTribe = NULL;
+            // $myTribe = NULL;
+            $myTribe = 'temporaty development tribe';
         }
          // Find business unit for this tribe.     
 //         $bestMatchScore = 0;
@@ -550,14 +551,13 @@ class resourceRequestTable extends DbTable
         foreach ($vbacEmployees as $value) {
 //          error_log('notesId:' . $value['id'] . ' tribe:' . $value['tribe'] . " bestmatch:" . $bestMatch . " bu:" . $businessUnit);            $
             if(strtolower(substr(trim($value['id']), -4))=='/ibm'){  // Filter out invalid Notes Ids
-                // get from user's tribe
-                if(!is_null($myTribe) && $value['tribe'] === $myTribe) {
+                if($value['tribe'] == $myTribe) {
                     $value['distance'] = 'local';
                     $tribeEmployees[] = $value;
-                }
-                // check admin only
-                if($_SESSION['isAdmin']){
-                    $tribeEmployees[] = $value;
+                } else {
+                    if($_SESSION['isAdmin']){
+                        $tribeEmployees[] = $value;
+                    }
                 }
             }
         }
