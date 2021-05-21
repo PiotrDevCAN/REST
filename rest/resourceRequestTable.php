@@ -271,7 +271,7 @@ class resourceRequestTable extends DbTable
             case $today > $endDateObj:
                 $assignColor = 'text-danger';
                 $started     = 'Completed';
-                $editable = false;
+                // $editable = false;
                 break;           
             default:
                 $assignColor = 'text-primary';
@@ -521,7 +521,6 @@ class resourceRequestTable extends DbTable
                     $_SESSION['myTribe'] = $employeeDetails->TRIBE_NAME;
                 }
             }
-            var_dump($_SESSION['allTribes']);
         }     
         
         $vbacEmployees = $_SESSION['vbacEmployees'];
