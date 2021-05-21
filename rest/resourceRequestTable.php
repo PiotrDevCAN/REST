@@ -271,7 +271,7 @@ class resourceRequestTable extends DbTable
             case $today > $endDateObj:
                 $assignColor = 'text-danger';
                 $started     = 'Completed';
-                // $editable = false;
+                $editable = false;
                 break;           
             default:
                 $assignColor = 'text-primary';
