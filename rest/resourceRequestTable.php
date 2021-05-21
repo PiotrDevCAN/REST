@@ -271,7 +271,7 @@ class resourceRequestTable extends DbTable
             case $today > $endDateObj:
                 $assignColor = 'text-danger';
                 $started     = 'Completed';
-                $editable = false;
+                // $editable = false;
                 break;           
             default:
                 $assignColor = 'text-primary';
@@ -509,6 +509,7 @@ class resourceRequestTable extends DbTable
             $allEmployees = json_decode($allEmployeesJson);
             
             foreach ($allEmployees as $employeeDetails) {
+                print_r($employeeDetails);
                 $_SESSION['vbacEmployees'][] = array(
                     'id'=>trim($employeeDetails->NOTES_ID),
                     'text'=>trim($employeeDetails->NOTES_ID),
@@ -550,7 +551,7 @@ class resourceRequestTable extends DbTable
         foreach ($vbacEmployees as $value) {
 //          error_log('notesId:' . $value['id'] . ' tribe:' . $value['tribe'] . " bestmatch:" . $bestMatch . " bu:" . $businessUnit);            $
             if(strtolower(substr(trim($value['id']), -4))=='/ibm'){  // Filter out invalid Notes Ids
-                if($value['tribe']===$myTribe){
+                if($value['tribe']==$myTribe){
                     $value['distance']='local';
                     $tribeEmployees[] = $value;
                 } else {
