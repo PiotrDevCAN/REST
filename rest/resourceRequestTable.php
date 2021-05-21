@@ -525,12 +525,12 @@ class resourceRequestTable extends DbTable
         
         $vbacEmployees = $_SESSION['vbacEmployees'];
 
-        if (isset($_SESSION['myTribe'])) {
+        // if (isset($_SESSION['myTribe'])) {
             $myTribe = $_SESSION['myTribe'];
-        } else {
-            // $myTribe = NULL;
-            $myTribe = 'temporaty development tribe';
-        }
+        // } else {
+        //     // $myTribe = NULL;
+        //     $myTribe = 'temporaty development tribe';
+        // }
          // Find business unit for this tribe.     
 //         $bestMatchScore = 0;
 //         $bestMatch = '';
