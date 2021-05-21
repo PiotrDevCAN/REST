@@ -801,7 +801,7 @@ function ResourceRequest() {
 				})
             ],
 	        columns: [
-	            { name: "RFS_ID", data: "RFS_ID", defaultContent: "", visible:false },
+	            { name: "RFS.RFS_ID", data: "RFS_ID", defaultContent: "", visible:false }, // RFS.RFS_ID
 	            { name: "PRN", data: "PRN", defaultContent: "", visible:false },
 	            { name: "PROJECT_TITLE", data: "PROJECT_TITLE", defaultContent: "", visible:false },
 	            { name: "PROJECT_CODE", data: "PROJECT_CODE", defaultContent: "", visible:false },
@@ -818,13 +818,13 @@ function ResourceRequest() {
 	            { name: "BUSINESS_UNIT", data: "BUSINESS_UNIT", defaultContent: "", visible:false },
 	            { name: "RFS_END_DATE", data: "RFS_END_DATE", defaultContent: "", visible:false },
 	            { name: "RR.RESOURCE_REFERENCE", data: "RESOURCE_REFERENCE", defaultContent: "", visible:false },
-	            { name: "RFS", data: "RFS", defaultContent: "", visible:true, render: { _:'display', sort:'sort' }},	           
+	            { name: "RFS_AND_RESOURCE_REFERENCE_COMPLEX", data: "RFS", defaultContent: "", visible:true, render: { _:'display', sort:'sort' }}, // RR.RFS       
 	            { name: "ORGANISATION", data: "ORGANISATION", defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
 	            { name: "SERVICE", data: "SERVICE", defaultContent: "", visible:false },
 	            { name: "DESCRIPTION", data: "DESCRIPTION", defaultContent: "", visible:true },
-	            { name: "START_DATE", data: "START_DATE", defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
-	            { name: "END_DATE", data: "END_DATE", defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
-	            { name: "TOTAL_HOURS", data: "TOTAL_HOURS", defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
+	            { name: "START_DATE_COMPLEX", data: "START_DATE", defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
+	            { name: "END_DATE_COMPLEX", data: "END_DATE", defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
+	            { name: "TOTAL_HOURS_COMPLEX", data: "TOTAL_HOURS", defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
 	            { name: "RESOURCE_NAME", data: "RESOURCE_NAME", defaultContent: "", visible:true , render: { _:'display', sort:'sort' }, },
 	            { name: "RR_CREATOR", data: "RR_CREATOR", defaultContent: "", visible:false },
 	            { name: "RR_CREATED_TIMESTAMP", data: "RR_CREATED_TIMESTAMP", defaultContent: "", visible:false },

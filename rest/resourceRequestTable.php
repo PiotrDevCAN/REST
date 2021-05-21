@@ -279,20 +279,20 @@ class resourceRequestTable extends DbTable
             break;
         }
         
-        $row['STATUS']= $completeable ? 
-        "<button type='button' class='btn btn-xs changeStatusCompleted accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
-                    data-rfs='" .$rfsId . "'
-                    data-resourcereference='" .$resourceReference . "'
-                    data-prn='" .$prn . "'
-                    data-valuestream='" .$valuestream . "'
-                    data-status='" . $status . "'
-                    data-organisation='" .$organisation .  "'
-                    data-service='" . $service . "'
-                    data-resourcename='" . $resourceName . "'
-                    data-start='" . $startDate4Picka . "'
-                    data-end='" . $endDate4Picka . "'
-         >
-         <span data-toggle='tooltip' title='Change Status to Completed' class='glyphicon glyphicon-check ' aria-hidden='true' ></span>
+        $row['STATUS'] = $completeable ? 
+            "<button type='button' class='btn btn-xs changeStatusCompleted accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
+                data-rfs='" . $rfsId . "'
+                data-resourcereference='" . $resourceReference . "'
+                data-prn='" . $prn . "'
+                data-valuestream='" . $valuestream . "'
+                data-status='" . $status . "'
+                data-organisation='" . $organisation .  "'
+                data-service='" . $service . "'
+                data-resourcename='" . $resourceName . "'
+                data-start='" . $startDate4Picka . "'
+                data-end='" . $endDate4Picka . "'
+            >
+                <span data-toggle='tooltip' title='Change Status to Completed' class='glyphicon glyphicon-check ' aria-hidden='true' ></span>
             </button>&nbsp;<span class='$assignColor'>$status</span>" : "<span class='$assignColor'>$status</span>";
 
         $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';
@@ -325,22 +325,22 @@ class resourceRequestTable extends DbTable
         $displayedResourceName.= "  data-hrstype='" . $hoursType . "' ";
         $displayedResourceName.= "  >";
 
-//         $row['RESOURCE_NAME'].= $editable ? 
-//             "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' >
-//             <span data-toggle='tooltip' class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Request'></span>
-//             </button>" : null;
+//        $row['RESOURCE_NAME'].= $editable ? 
+//            "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' >
+//                <span data-toggle='tooltip' class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Request'></span>
+//            </button>" : null;
         $displayedResourceName.= $editable ? 
-             "<button type='button' class='btn btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' data-resource-name='" . $resourceName . "' >
-              <span data-toggle='tooltip' class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true' title='Edit Assigned Resource'></span>
-              </button>" : null;
+            "<button type='button' class='btn btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' data-resource-name='" . $resourceName . "' >
+                <span data-toggle='tooltip' class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true' title='Edit Assigned Resource'></span>
+            </button>" : null;
         $displayedResourceName.= $editable ? 
             "<button type='button' class='btn btn-xs editHours accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-startDate='" . $startDate . "' >
-             <span data-toggle='tooltip' class=' glyphicon glyphicon-time text-primary' aria-hidden='true' title='Edit Dates/Hours'></span>
-             </button>" : null;
+                <span data-toggle='tooltip' class=' glyphicon glyphicon-time text-primary' aria-hidden='true' title='Edit Dates/Hours'></span>
+            </button>" : null;
         $displayedResourceName.= $editable ?
             "<button type='button' class='btn btn-xs endEarly accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-endDate='" . $endDate . "' >
-             <span data-toggle='tooltip' class=' glyphicon glyphicon-flash text-primary' aria-hidden='true' title='Indicate Completed'></span>
-             </button>" : null;
+                <span data-toggle='tooltip' class=' glyphicon glyphicon-flash text-primary' aria-hidden='true' title='Indicate Completed'></span>
+            </button>" : null;
         
         $resName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $resName;
         $resName = substr($resourceName,0,strlen(resourceRequestTable::DELTA))==resourceRequestTable::DELTA ? "<i>Unallocated</i><br/>" . trim($resourceName) : $resName;
@@ -380,25 +380,26 @@ class resourceRequestTable extends DbTable
         $displayRfsId.= "  >";
         
         $displayRfsId.= $editable ?
-        "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' >
-            <span data-toggle='tooltip' class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Request'></span>
+            "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' >
+                <span data-toggle='tooltip' class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Request'></span>
             </button>" : null;
         
         $displayRfsId.= $duplicatable && $editable ?
-        "<button type='button' class='btn btn-xs requestDuplication accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam' aria-label='Left Align'
-                    data-reference='" . $resourceReference . "'
-                    data-rfs='" . $row['RFS_ID'] . "'
-                    data-type='" . $row['SERVICE'] . "'
-                    data-start='" . $row['START_DATE'] . "'
-                  >
-              <span data-toggle='tooltip' class='glyphicon glyphicon-duplicate text-primary' aria-hidden='true' title='Clone Resource Request'></span>
-              </button>" : null;
+            "<button type='button' class='btn btn-xs requestDuplication accessRestrict accessAdmin accessCdi accessSupply $canBeAmendedByDemandTeam' aria-label='Left Align'
+                data-reference='" . $resourceReference . "'
+                data-rfs='" . $row['RFS_ID'] . "'
+                data-type='" . $row['SERVICE'] . "'
+                data-start='" . $row['START_DATE'] . "'
+            >
+                <span data-toggle='tooltip' class='glyphicon glyphicon-duplicate text-primary' aria-hidden='true' title='Clone Resource Request'></span>
+            </button>" : null;
         
-        $displayRfsId.= $editable ? "<button type='button' class='btn btn-xs deleteRecord accessRestrict $canBeAmendedByDemandTeam accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $service . "' >
-             <span data-toggle='tooltip' title='Delete Resource Request' class='glyphicon glyphicon-trash text-warning ' aria-hidden='true' ></span>
-             </button>": null;
+        $displayRfsId.= $editable ? 
+            "<button type='button' class='btn btn-xs deleteRecord accessRestrict $canBeAmendedByDemandTeam accessAdmin accessCdi ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-platform='" .trim($row['ORGANISATION']) .  "' data-rfs='" .trim($row['RFS_ID']) . "' data-type='" . $service . "' >
+                <span data-toggle='tooltip' title='Delete Resource Request' class='glyphicon glyphicon-trash text-warning ' aria-hidden='true' ></span>
+            </button>": null;
         
-        $row['RFS']        = array('display'=> $displayRfsId, 'sort'=>$rfsId);
+        $row['RFS'] = array('display'=> $displayRfsId, 'sort'=>$rfsId);
         
         $displayHrsPerWeek = "";
         $hrsThisWeek =   $displayHrsPerWeek.= isset($this->hrsThisWeekByResourceReference[$resourceReference]) ?  $this->hrsThisWeekByResourceReference[$resourceReference] : "N/A";
@@ -517,14 +518,17 @@ class resourceRequestTable extends DbTable
                 !empty($employeeDetails->TRIBE_NAME) ?  $_SESSION['allTribes'][trim($employeeDetails->TRIBE_NAME)] = trim($employeeDetails->TRIBE_NAME)  : null ;
                 if(strtolower($employeeDetails->EMAIL_ADDRESS)==strtolower($_SESSION['ssoEmail'])) {
                     $_SESSION['myTribe'] = $employeeDetails->TRIBE_NAME;
-                } else {
-                    $_SESSION['myTribe'] = '';
                 }
             }
         }     
         
         $vbacEmployees = $_SESSION['vbacEmployees'];
-        $myTribe       = $_SESSION['myTribe'];
+
+        if (isset($_SESSION['myTribe'])) {
+            $myTribe = $_SESSION['myTribe'];
+        } else {
+            $myTribe = NULL;
+        }
          // Find business unit for this tribe.     
 //         $bestMatchScore = 0;
 //         $bestMatch = '';

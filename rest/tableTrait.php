@@ -16,14 +16,49 @@ trait tableTrait
                     $searchable = $column['searchable'];
                     $searchValue = trim($column['search']['value']);
                     $searchRegex = $column['search']['regex']; // boolean
-
-                    if (!empty($column['search']['value'])) {
-                        $searchPredicate .= " AND " . $columnName . " LIKE '%" . $searchValue . "%'";
+                    if (! strpos ( $columnName, "COMPLEX" )) {
+                        if (!empty($searchValue)) {
+                            // $searchPredicate .= " AND " . $columnName . " LIKE '%" . $searchValue . "%'";
+                            $searchPredicate .= " AND REGEXP_LIKE(" .$columnName. ", '" .$searchValue. "', 1, 'i')";
+                        }
                     }
                 }
             }
         }
         return $searchPredicate;
+    }
+
+    function prepareComplexSearchPredicate() {
+        // column filtering
+        $columns = isset($_POST['columns']) ? $_POST['columns'] : false;
+        $complexSearchPredicate = "";
+        if ($columns && is_array($columns)) {
+            if (count($columns) > 0) {
+                foreach($columns as $key => $column) {
+                    $columnName = $column['name'];
+                    $searchValue = trim($column['search']['value']);
+                    if (!empty($searchValue)) {
+                        switch($columnName) {
+                            case 'RFS_AND_RESOURCE_REFERENCE_COMPLEX':
+                                $complexSearchPredicate .= " AND REGEXP_LIKE(CONCAT(CONCAT(RFS.RFS_ID, ' : '), RR.RESOURCE_REFERENCE), '" .$searchValue. "', 1, 'i')";
+                                break;
+                            case 'TOTAL_HOURS_COMPLEX':
+                                $complexSearchPredicate .= " AND REGEXP_LIKE(CONCAT('Total Hrs:', TOTAL_HOURS), '" .$searchValue. "', 1, 'i')";
+                                break;
+                            case 'START_DATE_COMPLEX':
+                                // $complexSearchPredicate .= " AND REGEXP_LIKE(" .$columnName. ", '" .$searchValue. "', 1, 'i')";                            
+                                break;
+                            case 'END_DATE_COMPLEX':
+                                // $complexSearchPredicate .= " AND REGEXP_LIKE(" .$columnName. ", '" .$searchValue. "', 1, 'i')";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+        return $complexSearchPredicate;
     }
 
     function prepareOrderingPredicate() {

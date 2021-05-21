@@ -56,7 +56,7 @@ $businessUnit = !empty($_POST['businessunit']) ? $_POST['businessunit'] : 'All';
     $predicate .= ! empty($businessUnit) ? " AND BUSINESS_UNIT='" . db2_escape_string($businessUnit) . "' " : null;
 
     // merge all preducates
-    $predicate .= $resourceRequestTable->prepareSearchPredicate() . $resourceRequestTable->prepareOrderingPredicate();
+    $predicate .= $resourceRequestTable->prepareSearchPredicate() . $resourceRequestTable->prepareComplexSearchPredicate() . $resourceRequestTable->prepareOrderingPredicate();
 
     error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
 
