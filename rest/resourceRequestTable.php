@@ -521,6 +521,7 @@ class resourceRequestTable extends DbTable
                     $_SESSION['myTribe'] = $employeeDetails->TRIBE_NAME;
                 }
             }
+            var_dump($_SESSION['allTribes']);
         }     
         
         $vbacEmployees = $_SESSION['vbacEmployees'];
@@ -550,8 +551,8 @@ class resourceRequestTable extends DbTable
         foreach ($vbacEmployees as $value) {
 //          error_log('notesId:' . $value['id'] . ' tribe:' . $value['tribe'] . " bestmatch:" . $bestMatch . " bu:" . $businessUnit);            $
             if(strtolower(substr(trim($value['id']), -4))=='/ibm'){  // Filter out invalid Notes Ids
-                if($value['tribe']==$myTribe){
-                    $value['distance']='localAAA';
+                if($value['tribe']===$myTribe){
+                    $value['distance']='local';
                     $tribeEmployees[] = $value;
                 } else {
                     if($_SESSION['isAdmin']){
