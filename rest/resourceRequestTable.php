@@ -491,6 +491,10 @@ class resourceRequestTable extends DbTable
     }
     
     static function getVbacActiveResourcesForSelect2(){
+
+        unset($_SESSION['vbacEmployees']);
+        unset($_SESSION['myTribe']);
+
         if(!isset($_SESSION['vbacEmployees']) || !isset($_SESSION['myTribe'])){
             $_SESSION['vbacEmployees'] = array();
             
