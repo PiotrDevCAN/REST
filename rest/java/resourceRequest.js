@@ -765,7 +765,7 @@ function ResourceRequest() {
 			autoWidth: true,
 			deferRender: true,
 			processing: true,
-			responsive: true,
+			// responsive: true,
 			colReorder: true,
 			dom: 'Blfrtip',
 	        buttons: [
