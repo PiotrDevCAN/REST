@@ -8,7 +8,9 @@ use \DateTime;
 use Complex\Exception;
 
 class resourceRequestTable extends DbTable
-{
+{    
+    use tableTrait;
+
     const DUPLICATE = 'Dup of';
     const DELTA     = 'Delta from';
     

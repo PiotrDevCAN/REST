@@ -11,8 +11,31 @@ use itdq\AllItdqTables;
 class DiaryTable  extends DbTable {
 
 	static function insertEntry( $entry) {
-		$sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$DIARY . " ( ENTRY, CREATOR) ";
-		$sql .= " Values ('" . db2_escape_string(trim($entry)) . "','" . db2_escape_string($_SESSION['ssoEmail']) . "' ) ";
+
+		// --- temporary walkaround ---
+
+		$latestDiaryIdSql = "SELECT MAX(DIARY_REFERENCE) as LATEST_DIARY_REF "; 
+        $latestDiaryIdSql.= " FROM " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$DIARY;
+
+		$rs = DB2_EXEC ( $GLOBALS['conn'], $latestDiaryIdSql );
+		if (! $rs) {		
+			echo "<BR/>" . db2_stmt_error ();
+			echo "<BR/>" . db2_stmt_errormsg () . "<BR/>";
+			exit ( "Error in: " . __METHOD__ . " running: " . $sql );
+		}
+
+		while(($row = db2_fetch_assoc($rs))==true){
+			$latestDiaryId = $row['LATEST_DIARY_REF'];
+		}
+		$latestDiaryId++;
+
+		$sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$DIARY . " ( DIARY_REFERENCE, ENTRY, CREATOR ) ";
+		$sql .= " Values ('" . db2_escape_string(trim($latestDiaryId)) . "', '" . db2_escape_string(trim($entry)) . "','" . db2_escape_string($_SESSION['ssoEmail']) . "' ) ";
+		
+		// --- temporary walkaround ---
+
+		// $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$DIARY . " ( ENTRY, CREATOR) ";
+		// $sql .= " Values ('" . db2_escape_string(trim($entry)) . "','" . db2_escape_string($_SESSION['ssoEmail']) . "' ) ";
 
 		$rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
 		if (! $rs) {		

@@ -5,7 +5,9 @@ use itdq\DbTable;
 use itdq\DateClass;
 
 class rfsTable extends DbTable
-{
+{    
+    use tableTrait;
+
     protected $rfsMaxEndDate;
 
     static function rfsPredicateFilterOnPipeline($option=null){
@@ -201,7 +203,7 @@ class rfsTable extends DbTable
         return array('data'=>$allData,'sql'=>$sql);
     }
 
-    function returnLeftReportAsArray($predicate=null, $withArchive=false){
+    function returnNoneActiveReportAsArray($predicate=null, $withArchive = false, $limit = false, $offset = false){
         
         // The first month we need to show them is the CLAIM month they are currently in. 
         // So start with today, and get the next Claim Cut off - th
@@ -278,19 +280,22 @@ class rfsTable extends DbTable
         $sql.= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR ";
         $sql.= " ON RR.RFS =  RFS.RFS_ID ";        
-        $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$INACTIVE_PERSON . " as IP ";
-        $sql.= " ON IP.NOTES_ID =  RR.RESOURCE_NAME ";        
+        $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
+        $sql.= " ON AR.NOTES_ID =  RR.RESOURCE_NAME ";        
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
         $sql.= " AND ARCHIVE is null ";
         $sql.= " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE ";        
-        $sql.= " AND IP.NOTES_ID IS NOT NULL ";
+        $sql.= " AND AR.NOTES_ID IS NULL ";
+        $sql.= " AND RR.Status = '" . resourceRequestRecord::STATUS_ASSIGNED . "'";
         $sql.= !empty($predicate) ? " AND  $predicate " : null ;
-        
+
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
-        $allData = null;
+        $allData = array();
         
+        $counter = 0;
+
         while(($row = db2_fetch_assoc($resultSet))==true){
             $testJson = json_encode($row);
             if(!$testJson){
@@ -302,16 +307,21 @@ class rfsTable extends DbTable
             $endDate         = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
             $endDateSortable = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
             
+            // foreach ($row as $key => $data){ 
+            //     $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
+            //     unset($row[$key]);
+            // }
+            $row = array_map('trim',$row);
+            
             $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
             $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
             
-            foreach ($row as $key=>$data){ 
-                $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
-                unset($row[$key]);
-            }
-            $allData[]  = $row;
+            $row['DT_RowId'] = 'row_'.$counter;
+
+            $counter++;
+            $allData[] = $row;
         }
-        return array('data'=>$allData,'sql'=>$sql);
+        return array('data'=>$allData, 'sql'=>$sql);
     }
 
     function addGlyphicons(&$row){

@@ -31,7 +31,7 @@ class allTables
     public static $STATIC_VALUE_STREAM    = 'STATIC_VALUE_STREAM';
     public static $STATIC_ORGANISATION    = 'STATIC_ORGANISATION';
 
-    public static $INACTIVE_PERSON = 'INACTIVE_PERSON';
+    public static $ACTIVE_RESOURCE = 'INACTIVE_PERSON';
 }
 
 /*

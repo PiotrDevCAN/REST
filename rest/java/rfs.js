@@ -8,6 +8,20 @@ function Rfs() {
 
 	var table;
 
+	this.applySearch = function(){
+		// Apply the search
+		Rfs.table.columns().every( function () {
+			var that = this;
+			$( 'input', this.footer() ).on( 'keyup change', function () {
+				if ( that.search() !== this.value ) {
+					that
+						.search( this.value )
+						.draw();
+				}
+			} );
+		} );
+	}
+
 	this.listenForArchiveRfs = function(){
 		$(document).on('click','.archiveRfs', function(e){
 			var rfsId = $(this).data('rfsid');
@@ -354,25 +368,44 @@ function Rfs() {
 	    });
 	},
 
-	this.initialiseLeftTable = function(){
+	this.buildNoneActiveReport =  function(getColumnsFromAjax){
+		var rfs = new Rfs();
+
+		var formData = $('form').serialize();
+		$.ajax({
+			url: "ajax/createNoneActiveHTMLTable.php",
+			type: 'POST',
+			data: formData,
+			before: function(){
+				$('#noneActiveTableDiv').html('<h2>Table being built</h2>');
+			},
+			success: function(result){
+				$('#noneActiveTable_id').DataTable().destroy();
+				$("#noneActiveTableDiv").html(result);
+				rfs.initialiseNoneActiveTable();
+				}
+		});
+	},
+
+	this.initialiseNoneActiveTable = function(){
 	    // Setup - add a text input to each footer cell
-	    $('#leftTable_id tfoot th').each( function () {
+	    $('#noneActiveTable_id tfoot th').each( function () {
 	        var title = $(this).text();
 	        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
 	    } );
 		// DataTable
-	    Rfs.table = $('#leftTable_id').DataTable({
+	    Rfs.table = $('#noneActiveTable_id').DataTable({
 	    	language: {
-	    	      emptyTable: "Please select one or more of :  RFS, Value Stream, Business Unit, Requestor from above"
+	    	      //emptyTable: "Please select one or more of :  RFS, Value Stream, Business Unit, Requestor from above"
 	    	},
 	    	ajax: {
-	            url: 'ajax/populateLeftHTMLTable.php',
+	            url: 'ajax/populateNoneActiveHTMLTable.php',
 	            type: 'POST',
 	            data: function ( d ) {
-	                d.rfsid = $('#selectRfs option:selected').val();
-	                d.valuestream = $('#selectValueStream option:selected').val();
-	                d.businessunit = $('#selectBusinessUnit option:selected').val();
-	                d.requestor = $('#selectRequestor option:selected').val();
+	            //     d.rfsid = $('#selectRfs option:selected').val();
+	            //     d.valuestream = $('#selectValueStream option:selected').val();
+	            //     d.businessunit = $('#selectBusinessUnit option:selected').val();
+	            //     d.requestor = $('#selectRequestor option:selected').val();
 	            },
 	        }	,
 	    	autoWidth: true,
@@ -389,38 +422,39 @@ function Rfs() {
 	              ],
 
 	        columns: [ 
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-	            { defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
-	            { defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-		        null,
-				null,
-				null,
-				null,
+		        { name: "RFS_ID", data: "RFS_ID", defaultContent: "", visible:true },
+				{ name: "PRN", data: "PRN", defaultContent: "", visible:false },
+				{ name: "PROJECT_TITLE", data: "PROJECT_TITLE", defaultContent: "", visible:false },
+				{ name: "PROJECT_CODE", data: "PROJECT_CODE", defaultContent: "", visible:false },
+				{ name: "REQUESTOR_NAME", data: "REQUESTOR_NAME", defaultContent: "", visible:false },
+				{ name: "REQUESTOR_EMAIL", data: "REQUESTOR_EMAIL", defaultContent: "", visible:false },
+				{ name: "VALUE_STREAM", data: "VALUE_STREAM", defaultContent: "", visible:false },
+				{ name: "BUSINESS_UNIT", data: "BUSINESS_UNIT", defaultContent: "", visible:true },
+				{ name: "LINK_TO_PGMP", data: "LINK_TO_PGMP", defaultContent: "", visible:false },
+				{ name: "RFS_CREATOR", data: "RFS_CREATOR", defaultContent: "", visible:false },
+				{ name: "RFS_CREATED", data: "RFS_CREATED", defaultContent: "", visible:false },
+				{ name: "RR.RESOURCE_REFERENCE", data: "RESOURCE_REFERENCE", defaultContent: "", visible:true },
+				{ name: "ORGANISATION", data: "ORGANISATION", defaultContent: "", visible:false },
+				{ name: "SERVICE", data: "SERVICE", defaultContent: "", visible:true },
+				{ name: "DESCRIPTION", data: "DESCRIPTION", defaultContent: "", visible:false },
+				{ name: "START_DATE",  data: "START_DATE", defaultContent: "", visible:false,  render: { _:'display', sort:'sort' }, },
+				{ name: "END_DATE",  data: "END_DATE", defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
+				{ name: "TOTAL_HOURS", data: "TOTAL_HOURS", defaultContent: "", visible:false },
+				{ name: "RESOURCE_NAME", data: "RESOURCE_NAME", defaultContent: "", visible:true },
+				{ name: "REQUEST_CREATOR", data: "REQUEST_CREATOR", defaultContent: "", visible:false },
+				{ name: "REQUEST_CREATED", data: "REQUEST_CREATED", defaultContent: "", visible:false },
+				{ name: "CLONED_FROM", data: "CLONED_FROM", defaultContent: "", visible:false },
+				{ name: "STATUS", data: "STATUS", defaultContent: "", visible:false },
+				{ name: "RATE_TYPE", data: "RATE_TYPE", defaultContent: "", visible:false },
+				{ name: "HOURS_TYPE", data: "HOURS_TYPE", defaultContent: "", visible:false },
+				{ name: "RFS_STATUS", data: "RFS_STATUS", defaultContent: "", visible:false },
+				// workaround needed
+				{ name: "MAY_21", data: "MAY_21", defaultContent: "", visible:false },
+				{ name: "JUN_21", data: "JUN_21", defaultContent: "", visible:false },
+				{ name: "JUL_21", data: "JUL_21", defaultContent: "", visible:false },
+				{ name: "AUG_21", data: "AUG_21", defaultContent: "", visible:false },
+				{ name: "SEP_21", data: "SEP_21", defaultContent: "", visible:false },
+				{ name: "OCT_21", data: "OCT_21", defaultContent: "", visible:false },
 	        ],
 	    });
 	    Rfs.table.columns([1,2,3,4,5,8,9,10,19,20,21]).visible(false,false);
@@ -437,24 +471,6 @@ function Rfs() {
 	            }
 	        } );
 	    } );
-	},
-
-	this.buildLeftReport =  function(){
-		var formData = $('form').serialize();		
-		var rfs = new Rfs();
-	    $.ajax({
-	    	url: "ajax/createLeftHTMLTable.php",
-	        type: 'POST',
-	    	data: formData,
-	        before: function(){
-	        	$('#leftTableDiv').html('<h2>Table being built</h2>');
-	        },
-	    	success: function(result){
-	    		$('#leftTable_id').DataTable().destroy();
-	        	$("#leftTableDiv").html(result);
-	        	rfs.initialiseLeftTable();
-	    		}
-	    });
 	},
 
 	this.buildPipelineReport =  function(){
