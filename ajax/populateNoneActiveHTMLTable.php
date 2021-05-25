@@ -12,10 +12,6 @@ set_time_limit(0);
 ob_start();
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
-$length = isset($_POST['length']) ? $_POST['length'] : false;
-$start = isset($_POST['start']) ? $_POST['start'] : false;
-$draw = isset($_POST['draw']) ? $_POST['draw'] : false;
-
 $rfsTable = new rfsTable(allTables::$RFS);
 
 // $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
@@ -39,9 +35,6 @@ $predicate .= ! empty($valueStream) ? " AND VALUE_STREAM='" . db2_escape_string(
 $predicate .= ! empty($businessUnit) ? " AND BUSINESS_UNIT='" . db2_escape_string($businessUnit) . "' " : null;
 $predicate .= ! empty($requestor) ? " AND lower(REQUESTOR_EMAIL)='" . db2_escape_string(strtolower($requestor)) . "' " : null;
 
-// merge all preducates
-$predicate .= $rfsTable->prepareSearchPredicate() . $rfsTable->prepareOrderingPredicate();
-
 // if (empty($rfsId) && empty($valueStream) && empty($requestor) && empty($businessUnit)) {
 //     $response = array(
 //         'messages' => 'No Drop Down Selection Made By User',
@@ -54,11 +47,7 @@ $predicate .= $rfsTable->prepareSearchPredicate() . $rfsTable->prepareOrderingPr
     ob_start();
 
     $response = array(
-        "draw" => $draw,
-        "recordsTotal" => $data['total'],
-        "recordsFiltered" => $data['total'],
         "data" => $data['data'],
-        // 'error' => $data['error'],    // Do not include if there is no error.
         'message' => $message,
         'sql' => $data['sql']
     );

@@ -117,7 +117,7 @@ function Rfs() {
 		    	success: function(result){
 					$('.spinning').removeClass('spinning').attr('enabled');
 		    		var resultObj = JSON.parse(result);
-					$('#deleteRfsModalBody').html(resultObj.Messages);
+					$('#deleteRfsModalBody').html(resultObj.messages);
 					Rfs.table.ajax.reload();
 					setTimeout(function(){ $('#deleteRfsModal').modal('hide'); }, 3000);
 
@@ -400,54 +400,61 @@ function Rfs() {
 		}
 	},
 
-	this.initialiseNoneActiveTable = function(){
-		// Show the table
-		$('#noneActiveTable_id').show();
+	this.buildNoneActiveReport =  function(getColumnsFromAjax){
+		var rfs = new Rfs();
 
+		var formData = $('form').serialize();
+		$.ajax({
+			url: "ajax/createNoneActiveHTMLTable.php",
+			type: 'POST',
+			data: formData,
+			before: function(){
+				$('#noneActiveTableDiv').html('<h2>Table being built</h2>');
+			},
+			success: function(result){
+				$('#noneActiveTable_id').DataTable().destroy();
+				$("#noneActiveTableDiv").html(result);
+				rfs.initialiseNoneActiveTable();
+				}
+		});
+	},
+
+	this.initialiseNoneActiveTable = function(){
 	    // Setup - add a text input to each footer cell
 	    $('#noneActiveTable_id tfoot th').each( function () {
 	        var title = $(this).text();
 	        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
 	    } );
 		// DataTable
-		Rfs.table = $('#noneActiveTable_id').DataTable({
-			language: {
-				// emptyTable: "Please select one or more of :  RFS, Value Stream, Business Unit, Requestor from above",
-				emptyTable: "No response data available",
-				processing: "Processing<i class='fas fa-spinner fa-spin '></i>"
-			},
-			ajax: {
-				url: 'ajax/populateNoneActiveHTMLTable.php',
-				data: function ( d ) {
-					d.rfsid = $('#selectRfs option:selected').val();
-					d.valuestream = $('#selectValueStream option:selected').val();
-					d.businessunit = $('#selectBusinessUnit option:selected').val();
-					d.requestor = $('#selectRequestor option:selected').val();
-				},
-				type: 'POST',
-				beforeSend: function() {
-					$('#noneActiveTable_id_processing').show();
-				},
-				complete: function() {
-					$('#noneActiveTable_id_processing').hide();
-				}
-			},
-			pageLength: 100,
-			serverSide: true,
-			autoWidth: true,
-			deferRender: true,
-			processing: true,
-			responsive: true,
-			colReorder: true,
-			dom: 'Blfrtip',
-			buttons: [
-				'colvis',
-				'excelHtml5',
-				'csvHtml5',
-				'print'
-			],
-			columns: [
-				{ name: "RFS_ID", data: "RFS_ID", defaultContent: "", visible:true },
+	    Rfs.table = $('#noneActiveTable_id').DataTable({
+	    	language: {
+	    	      //emptyTable: "Please select one or more of :  RFS, Value Stream, Business Unit, Requestor from above"
+	    	},
+	    	ajax: {
+	            url: 'ajax/populateNoneActiveHTMLTable.php',
+	            type: 'POST',
+	            data: function ( d ) {
+	            //     d.rfsid = $('#selectRfs option:selected').val();
+	            //     d.valuestream = $('#selectValueStream option:selected').val();
+	            //     d.businessunit = $('#selectBusinessUnit option:selected').val();
+	            //     d.requestor = $('#selectRequestor option:selected').val();
+	            },
+	        }	,
+	    	autoWidth: true,
+	    	deferRender: true,
+	    	responsive: true,
+	    	processing: true,
+	    	colReorder: true,
+	    	dom: 'Blfrtip',
+	        buttons: [
+	                  'colvis',
+	                  'excelHtml5',
+	                  'csvHtml5',
+	                  'print'
+	              ],
+
+	        columns: [ 
+		        { name: "RFS_ID", data: "RFS_ID", defaultContent: "", visible:true },
 				{ name: "PRN", data: "PRN", defaultContent: "", visible:false },
 				{ name: "PROJECT_TITLE", data: "PROJECT_TITLE", defaultContent: "", visible:false },
 				{ name: "PROJECT_CODE", data: "PROJECT_CODE", defaultContent: "", visible:false },
@@ -493,30 +500,8 @@ function Rfs() {
 	    } );
 	},
 
-	this.buildNoneActiveReport =  function(getColumnsFromAjax){
-		var rfs = new Rfs();
-
-		if(getColumnsFromAjax == null){
-			var formData = $('form').serialize();
-			$.ajax({
-				url: "ajax/createLeftHTMLTable.php",
-				type: 'POST',
-				data: formData,
-				before: function(){
-					$('#noneActiveTableDiv').html('<h2>Table being built</h2>');
-				},
-				success: function(result){
-					$('#noneActiveTable_id').DataTable().destroy();
-					$("#noneActiveTableDiv").html(result);
-					rfs.initialiseNoneActiveTable();
-				}
-			});
-		} else {
-			rfs.initialiseNoneActiveTable();
-		}
-	},
-
-	this.buildPipelineReport = function(getColumnsFromAjax){
+	this.buildPipelineReport =  function(){
+		var formData = $('form').serialize();
 		var rfs = new Rfs();
 
 		if(getColumnsFromAjax == null){
@@ -594,48 +579,49 @@ function Rfs() {
 			  	context: document.body,
 	 	      	beforeSend: function(data) {
 		        	//	do the following before the save is started
-		        	},
+				},
 		      	success: function(response) {
 		            // 	do what ever you want with the server response if that response is "success"
-					   $('.spinning').removeClass('spinning');
-					   $('#editRfsModal').modal('hide');
-		               var responseObj = JSON.parse(response);
-		               var rfsIdTxt =  "<p><b>RFS ID:</b>" + responseObj.rfsId + "</p>";
-		               var savedResponse =  responseObj.saveResponse;
-		               if(savedResponse){
-		            	   var scan = "<scan>";
-		               } else {
-		            	   var scan = "<scan style='color:red'>";
-		               }
-		               var savedResponseTxt =  "<p>" + scan + " <b>Record Saved:</b>" + savedResponse +  "</scan></p>";
-		               if(responseObj.Messages != null){
-		            	   var messages =  "<p>" + responseObj.Messages +  "</p>";
-		               }
-		               var messages =  "<p>" + responseObj.Messages +  "</p>";
-		               $('#myModal .modal-body').html(rfsIdTxt + savedResponseTxt + messages);
-					   	
-		               $('#myModal').modal('show');
-		               $('#myModal').on('hidden.bs.modal', function () {
-		                	  // do something…
-			                if(responseObj.Update==true){
-		    	            	window.close();
-		        	        } else {
-		            	    	$('#resetRfs').click();
-		            	    	$('.spinning').removeClass('spinning');
-		            	    	$('#RFS_ID').css("background-color","#ffffff");
-		                	}
-	                	});
+					$('.spinning').removeClass('spinning');
+					$('#editRfsModal').modal('hide');
+					var responseObj = JSON.parse(response);
+					var rfsIdTxt =  "<p><b>RFS ID:</b>" + responseObj.rfsId + "</p>";
+					var savedResponse =  responseObj.saveResponse;
+					if(savedResponse){
+						var scan = "<scan>";
+					} else {
+						var scan = "<scan style='color:red'>";
+					}
+					var savedResponseTxt =  "<p>" + scan + " <b>Record Saved:</b>" + savedResponse +  "</scan></p>";
+					if(responseObj.messages != null){
+						var messages =  "<p>" + responseObj.messages +  "</p>";
+					}
+					var messages =  "<p>" + responseObj.messages +  "</p>";
+					$('#myModal .modal-body').html(rfsIdTxt + savedResponseTxt + messages);
+					
+					$('#myModal').modal('show');
+					$('#myModal').on('hidden.bs.modal', function () {
+						// do something…
+						if(responseObj.update==true){
+							window.close();
+						} else {
+							$('#resetRfs').click();
+							$('.spinning').removeClass('spinning');
+							$('#RFS_ID').css("background-color","#ffffff");
+						}
+					});
 	          	},
 		      	fail: function(response){						
-		                $('#myModal .modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
-		                $('#myModal').modal('show');
-					},
+					$('#myModal .modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
+					$('#myModal').modal('show');
+				},
 		      	error: function(error){
 		            //	handle errors here. What errors	            :-)!
-		        		console.log('Ajax error' );
-		        		console.log(error.statusText);
-		                $('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Rob</h2>");
-		        	}
+					console.log('Ajax error' );
+					console.log(error.statusText);
+					$('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Rob</h2>");
+					$('#myModal').modal('show');
+				}
 			});
 		event.preventDefault();
 		});

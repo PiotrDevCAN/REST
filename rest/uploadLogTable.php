@@ -8,7 +8,7 @@ class uploadLogTable extends DbTable
 
     function lastCompletedLoad($uploadTable= null){
 
-        $uploadTable = empty($uploadTable)? allTables::$INFLIGHT_PROJECTS : $uploadTable;
+        // $uploadTable = empty($uploadTable)? allTables::$INFLIGHT_PROJECTS : $uploadTable;
 
         $sql = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " WHERE UPLOAD_STATUS='Completed' AND UPLOAD_TABLENAME='" . $uploadTable . "' ";
@@ -28,7 +28,8 @@ class uploadLogTable extends DbTable
     }
 
     function lastLoad($uploadTable= null){
-        $uploadTable = empty($uploadTable)? allTables::$INFLIGHT_PROJECTS : $uploadTable;
+
+        // $uploadTable = empty($uploadTable)? allTables::$INFLIGHT_PROJECTS : $uploadTable;
 
         $sql = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " WHERE UPLOAD_TABLENAME='" . $uploadTable . "' ";

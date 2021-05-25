@@ -53,7 +53,7 @@ $messages = ob_get_clean();
 ob_start();
 $success = empty($messages);
 
-$response = array('success'=>$success,'resourceReference'=>$_POST['RESOURCE_REFERENCE'], 'resourceName' => $_POST['RESOURCE_NAME'], 'Messages'=>$messages, 'Exception'=> $exception) ;
+$response = array('success'=>$success,'resourceReference'=>$_POST['RESOURCE_REFERENCE'], 'resourceName' => $_POST['RESOURCE_NAME'], 'messages'=>$messages, 'Exception'=> $exception) ;
 
 AuditTable::audit(__FILE__ . "called by:" . $_SESSION['ssoEmail'] . " Response:" . print_r($response,true),AuditTable::RECORD_TYPE_AUDIT);
 

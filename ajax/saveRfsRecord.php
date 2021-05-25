@@ -36,7 +36,13 @@ if(trim($_POST['mode'])==FormClass::$modeEDIT){
 $messages = ob_get_clean();
 ob_start();
 
-$response = array('rfsId' => $parmsTrimmed['RFS_ID'], 'saveResponse' => $saveResponse, 'Messages'=>$messages,'Update'=>$update,'new'=>true);
+$response = array(
+    'rfsId' => $parmsTrimmed['RFS_ID'],
+    'saveResponse' => $saveResponse, 
+    'messages'=>$messages,
+    'update'=>$update,
+    'new'=>true
+);
 
 ob_clean();
 echo json_encode($response);

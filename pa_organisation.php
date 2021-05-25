@@ -54,7 +54,7 @@ $organisationRecord->displayForm(itdq\FormClass::$modeDEFINE);
 </div>
 </div>
 
-<script>
+<script type='text/javascript'>
 
 var organisationTable;
 

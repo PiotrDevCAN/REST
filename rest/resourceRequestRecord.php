@@ -65,7 +65,6 @@ class resourceRequestRecord extends DbRecord
         }
     }
 
-
     function displayForm($mode)
     {
         $notEditable = $mode==FormClass::$modeEDIT ? ' disabled ' : null;
@@ -193,7 +192,7 @@ class resourceRequestRecord extends DbRecord
    		</div>
 
    		</div>
-   		
+
         <div class='form-group required'>
 	       	<label for='ORGANISATION' class='col-md-2 control-label ceta-label-left'>Organisation</label>
     	       	<div class='col-md-3'>

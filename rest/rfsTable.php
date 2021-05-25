@@ -5,8 +5,7 @@ use DateInterval;
 use itdq\DbTable;
 use itdq\DateClass;
 
-class rfsTable extends DbTable
-{
+class rfsTable extends DbTable {
     use tableTrait;
 
     protected $rfsMaxEndDate;
@@ -411,18 +410,6 @@ class rfsTable extends DbTable
         $sql.= " AND RR.Status = '" . resourceRequestRecord::STATUS_ASSIGNED . "'";
         $sql.= !empty($predicate) ? " AND  $predicate " : null ;
 
-        $countSql = "SELECT COUNT(*) as TOTAL";
-        $countSql.= " FROM (";
-        $countSql.= $sql;   
-        $countSql.= " ) ";
-
-        $countResultSet = $this->execute($countSql);
-        $countResultSet ? null : die("SQL Failed");
-        $countRow = db2_fetch_assoc($countResultSet);
-        
-        $sql .= $limit !== false ? " LIMIT ".$limit : null;
-        $sql .= $offset !== false ? " OFFSET ".$offset : null;
-        
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
         $allData = array();
@@ -454,7 +441,7 @@ class rfsTable extends DbTable
             $counter++;
             $allData[] = $row;
         }
-        return array('data'=>$allData, 'sql'=>$sql, 'total'=>$countRow['TOTAL']);
+        return array('data'=>$allData, 'sql'=>$sql);
     }
 
     function addGlyphicons(&$row){
@@ -530,7 +517,6 @@ class rfsTable extends DbTable
 
         return true;
     }
-    
     
     static function getRequestorEmail($rfsId){
         $sql = " SELECT REQUESTOR_EMAIL ";

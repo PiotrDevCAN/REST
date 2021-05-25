@@ -81,7 +81,6 @@ class emailNotifications
     
     static function sendRfsNotification($rfsid,$emailEntry, $emailPattern){
         
-             
         $rfsTable = new rfsTable(allTables::$RFS);
         $rfsData = $rfsTable->getPredicate(" RFS_ID ='" . db2_escape_string($rfsid) . "' ");
         $endDate   = new \DateTime($rfsData['RFS_END_DATE']);
@@ -143,7 +142,4 @@ class emailNotifications
         BlueMail::send_mail($to, "Update to: " . $rfsid , $emailBody, 'REST@noreply.ibm.com',$cc);
         
     }
-    
-
-    
 }

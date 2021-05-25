@@ -1,6 +1,5 @@
 <?php
 
-use itdq\DateClass;
 use itdq\Trace;
 use itdq\Loader;
 use rest\allTables;
@@ -24,9 +23,6 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is nu
 <hr/>
 
 <div id='noneActiveTableDiv'>
-<?php
-  rfsTable::buildHTMLRequestsTable('noneActive');
-?>
 </div>
 </div>
 <?php

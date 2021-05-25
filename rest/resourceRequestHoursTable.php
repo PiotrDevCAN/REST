@@ -4,37 +4,94 @@ namespace rest;
 use itdq\DbTable;
 use itdq\DateClass;
 
-
 class resourceRequestHoursTable extends DbTable
 {
     private $preparedGetTotalHrsStatement;
     private $preparedSetHrsStatement;
     private $hoursRemainingByReference;
     
-    
-    function createResourceRequestHours($resourceReference, $startDate,$endDate,$hours,$deleteExisting=true, $hrsType=resourceRequestRecord::HOURS_TYPE_REGULAR){
+    function createResourceRequestHours($resourceReference=null, $startDate=null, $endDate=null, $hours=0, $deleteExisting=true, $hrsType=resourceRequestRecord::HOURS_TYPE_REGULAR){
+        
+        if ($resourceReference === null) {
+            throw new \Exception("Invalid Resource Reference");
+        }
+
+        if ($startDate === null) {
+            throw new \Exception("Invalid Start Date");
+        }
+
+        if ($endDate === null) {
+            throw new \Exception("Invalid End Date");
+        }
+
+        if ($hours == 0) {
+            throw new \Exception("Invalid Total Hours amount");
+        }
+
         $sdate = new \DateTime($startDate);
         $edate = new \DateTime($endDate);        
-       
+
+        // 'businessDays' => $businessDays, 
+        // 'workingDays'=> $workingDays,
+        // 'bankHolidays' => $bankHolidays
+
+        // If businesshrs is 0 then they must choose Weekend Overtime
+        // If weekendhrs (or whatever it is called) is 0 they can choose regular or weekday overtime
+
+        switch ($hrsType) {
+            case resourceRequestRecord::HOURS_TYPE_OT_WEEK_END:
+                $effortDays = DateClass::weekendDaysFromStartToEnd($sdate, $edate);
+                $bankHolidays = array();
+                $hrsPerEffortDay = $hours / $effortDays;
+                $dayOfWeek = 6;
+                $startDay = 'saturday';
+                $sdate = DateClass::adjustStartDate($sdate, $hrsType);
+                break;
+            case resourceRequestRecord::HOURS_TYPE_REGULAR:
+            case resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY:
+                $response = DateClass::businessDaysFromStartToEnd($sdate, $edate);
+                $effortDays = $response['businessDays'];
+                $bankHolidays = $response['bankHolidays'];
+                if ($effortDays > 0) {
+                    $hrsPerEffortDay = $hours / $effortDays;
+                } else {
+                    $hrsPerEffortDay = $hours;
+                }
+                $dayOfWeek = 1;
+                $startDay = 'monday';
+                $sdate = DateClass::adjustStartDate($sdate);
+                break;
+            default:
+                error_log("Invalid hours type found");
+                
+                throw new \Exception("Invalid hours type found");
+                break;
+        }
+
+        /*
         if($hrsType == resourceRequestRecord::HOURS_TYPE_OT_WEEK_END){
             $effortDays = DateClass::weekendDaysFromStartToEnd($sdate, $edate);
             $bankHolidays = array();
             $hrsPerEffortDay = $hours / $effortDays;
             $dayOfWeek = 6;
             $startDay = 'saturday';
-            $sdate = DateClass::adjustStartDate($sdate, $hrsType);           
+            $sdate = DateClass::adjustStartDate($sdate, $hrsType);
         } else {
             $response = DateClass::businessDaysFromStartToEnd($sdate, $edate);
             $effortDays = $response['businessDays'];
             $bankHolidays = $response['bankHolidays'];
-            $hrsPerEffortDay = $hours / $effortDays;
+            if ($effortDays > 0) {
+                $hrsPerEffortDay = $hours / $effortDays;
+            } else {
+                $hrsPerEffortDay = $hours;
+            }
             $dayOfWeek = 1;
             $startDay = 'monday';
             $sdate = DateClass::adjustStartDate($sdate);
         }
-         
+        */
+        
         $nextDate = clone $sdate;
-        // $startPeriod = $sdate->format('oW');
         $endPeriod = $edate->format('oW');
         $nextPeriod = $nextDate->format('oW');
         
@@ -42,7 +99,6 @@ class resourceRequestHoursTable extends DbTable
 
         $deleteExisting ? $this->clearResourceReference($resourceReference) : null;
 
-        // $temp = 3;
         $oneWeek = new \DateInterval('P1W');
 
         while($nextPeriod <= $endPeriod){
@@ -54,7 +110,6 @@ class resourceRequestHoursTable extends DbTable
             $resourceRequestHours = new resourceRequestHoursRecord();
             $resourceRequestHours->RESOURCE_REFERENCE = $resourceReference;
             $resourceRequestHours->DATE = $nextDate->format('Y-m-d');
-            // $resourceRequestHours->HOURS = $hours;
             $resourceRequestHours->YEAR = $nextDate->format('o');
             $resourceRequestHours->WEEK_NUMBER = $nextDate->format('W');
 
@@ -63,6 +118,35 @@ class resourceRequestHoursTable extends DbTable
             $resourceRequestHours->DATE = $resourceRequestHours->WEEK_ENDING_FRIDAY;
             $wefDate = new \DateTime($resourceRequestHours->WEEK_ENDING_FRIDAY);
             
+            switch ($hrsType) {
+                case resourceRequestRecord::HOURS_TYPE_OT_WEEK_END:
+                    if($edate > $wefDate){
+                        $businessDaysInWeek = 2; // Includes whole weekend
+                    } else {
+                        switch ($edate->format('N')) {
+                            case 6: // Ends on a Saturday
+                                $businessDaysInWeek = 1;
+                                break; 
+                            case 7: // Ends on a Sunday
+                                $businessDaysInWeek = 2;
+                                break; 
+                            default:
+                                // Ends before the weekend starts
+                                $businessDaysInWeek = 0;
+                                break;
+                        }
+                    }  
+                    break;
+                case resourceRequestRecord::HOURS_TYPE_REGULAR:
+                case resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY:
+                    $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($resourceRequestHours->WEEK_ENDING_FRIDAY, $bankHolidays,$sdate, $edate);
+                    break;        
+                default:
+                    $businessDaysInWeek = 0;
+                    break;
+            }
+
+            /*
             if($hrsType == resourceRequestRecord::HOURS_TYPE_OT_WEEK_END){
                 if($edate > $wefDate){
                     $businessDaysInWeek = 2; // Includes whole weekend
@@ -83,6 +167,7 @@ class resourceRequestHoursTable extends DbTable
             } else {
                 $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($resourceRequestHours->WEEK_ENDING_FRIDAY, $bankHolidays,$sdate, $edate);
             }
+            */
             
             if($businessDaysInWeek>0){
                 $businessHoursInWeek = $businessDaysInWeek * $hrsPerEffortDay;
@@ -90,11 +175,12 @@ class resourceRequestHoursTable extends DbTable
                 
                 $this->saveRecord($resourceRequestHours);
                 $weeksCreated++;
+            } else {
+
             }
             
             $nextDate->add($oneWeek);
-            $nextPeriod = $nextDate->format('oW');            
-
+            $nextPeriod = $nextDate->format('oW');
         }
 
         return $weeksCreated;
@@ -110,7 +196,6 @@ class resourceRequestHoursTable extends DbTable
         $resourceHoursRecord->CLAIM_YEAR = $complimentaryField['CLAIM_YEAR'];
     }
 
-
     static function getDateComplimentaryFields($date){
 
         $weekEndingFriday = DateClass::weekEnding($date->format('Y-m-d'));
@@ -124,7 +209,6 @@ class resourceRequestHoursTable extends DbTable
         return $complimentaryField;
 
     }
-
 
     function clearResourceReference($resourceReference=null){
         if($resourceReference){
@@ -166,7 +250,6 @@ class resourceRequestHoursTable extends DbTable
         }
     }
     
-
     function returnAsArray($predicate=null,$selectableColumns='*', $assoc=false){
         $sql = " SELECT " . $selectableColumns;
         $sql .= " FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
@@ -201,8 +284,6 @@ class resourceRequestHoursTable extends DbTable
 //         }
 //         return $this->preparedGetTotalHrsStatement;
 //     }
-
-
 
 //     function getTotalHoursForRequest($resourceReference=null){
 //         if(empty($resourceReference)){
@@ -286,7 +367,6 @@ class resourceRequestHoursTable extends DbTable
         return $this->preparedSetHrsStatement ? $this->preparedSetHrsStatement : false;
     }
 
-    
     function setHoursForWef(int $resourceReference, string $wef, float $hours){
         $preparedStmt = $this->prepareSetHoursForWef($resourceReference);         
         $parameters = array($hours, $wef);
@@ -298,7 +378,4 @@ class resourceRequestHoursTable extends DbTable
         }        
         return $rs ? true : false;        
     }
-
-
-
 }

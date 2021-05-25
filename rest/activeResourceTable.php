@@ -29,20 +29,6 @@ class activeResourceTable extends DbTable {
     const PES_LEVEL_TWO = 'Level 2';
     const PES_LEVEL_DEFAULT = self::PES_LEVEL_TWO;
 
-    static private $excludeFromRecheckNotification = "'" . activeResourceRecord::PES_STATUS_RECHECK_REQ . "'" 
-                                                  . ",'" . activeResourceRecord::PES_STATUS_RECHECK_PROGRESSING . "'"
-                                                  . ",'" . activeResourceRecord::PES_STATUS_PROVISIONAL . "'"
-                                                  . ",'" . activeResourceRecord::PES_STATUS_LEFT_IBM . "'" 
-                                                  . ",'" . activeResourceRecord::PES_STATUS_REVOKED . "'"
-                                                  . ",'" . activeResourceRecord::PES_STATUS_DECLINED . "'"
-                                                  . ",'" . activeResourceRecord::PES_STATUS_MOVER . "'"
-                                                  . ",'" . activeResourceRecord::PES_STATUS_REQUESTED . "'"
-                                                  . ",'" . activeResourceRecord::PES_STATUS_FAILED . "'"
-                                                  . ",'" . activeResourceRecord::PES_STATUS_INITIATED . "'"
-                                                  . ",'" . activeResourceRecord::PES_STATUS_REMOVED . "'"
-                                                  ;
-
-
     function __construct($table,$pwd=null,$log=true){
         parent::__construct($table,$pwd,$log);
     }
@@ -70,7 +56,6 @@ class activeResourceTable extends DbTable {
         }
 
         return $nextVirtualCnum;
-
     }
 
     static function activePersonPredicate($includeProvisionalClearance = true, $tableAbbrv = null ){
@@ -93,34 +78,14 @@ class activeResourceTable extends DbTable {
         $activePredicate.= "PES_STATUS in ('". activeResourceRecord::PES_STATUS_CLEARED ."','". activeResourceRecord::PES_STATUS_CLEARED_PERSONAL ."','". activeResourceRecord::PES_STATUS_EXCEPTION ."','". activeResourceRecord::PES_STATUS_RECHECK_REQ ."','". activeResourceRecord::PES_STATUS_RECHECK_PROGRESSING ."','". activeResourceRecord::PES_STATUS_MOVER ."'";
         $activePredicate.= $includeProvisionalClearance ? ",'" . activeResourceRecord::PES_STATUS_PROVISIONAL . "'" : null ;
         $activePredicate.= " ) ) ";
-        return $activePredicate;
-    }
 
-    static function inactivePersonPredicate($includeProvisionalClearance = true, $tableAbbrv = null ){
-        $inactivePredicate = " ((( " ;
-        $inactivePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $inactivePredicate.= "REVALIDATION_STATUS in ('" . activeResourceRecord::REVALIDATED_FOUND . "','" . activeResourceRecord::REVALIDATED_VENDOR . "','" . activeResourceRecord::REVALIDATED_POTENTIAL . "') or trim(";
-        $inactivePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $inactivePredicate.= "REVALIDATION_STATUS) is null or ";
-        $inactivePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $inactivePredicate.= "REVALIDATION_STATUS like '" . activeResourceRecord::REVALIDATED_OFFBOARDING . "%') ";
-        $inactivePredicate.= "   OR ";
-        $inactivePredicate.= " ( trim( ";
-        $inactivePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $inactivePredicate.= "REVALIDATION_STATUS) is null ) )";
-        $inactivePredicate.= " AND ";
-        $inactivePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $inactivePredicate.= "REVALIDATION_STATUS not like '" . activeResourceRecord::REVALIDATED_OFFBOARDING . "%:%" .activeResourceRecord::REVALIDATED_LEAVER . "%' " ;
-        $inactivePredicate.= " AND ";
-        $inactivePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $inactivePredicate.= "PES_STATUS not in (" . self::$excludeFromRecheckNotification . ") ";
-        $inactivePredicate.= " ) ";
-        return $inactivePredicate;
+        return $activePredicate;
     }
 
     function returnAsArray($preboadersAction=self::PORTAL_PRE_BOARDER_EXCLUDE){
 
-        $this->allDelegates = delegateTable::allDelegates();
+        // $this->allDelegates = delegateTable::allDelegates();
+        $this->allDelegates = array();
 
         $preboadersAction = empty($preboadersAction) ? self::PORTAL_PRE_BOARDER_EXCLUDE : $preboadersAction;
 
@@ -163,7 +128,6 @@ class activeResourceTable extends DbTable {
                 $data[] = $rowWithButtonsAdded;
             }
         }
-
         return $data;
     }
 
@@ -174,7 +138,6 @@ class activeResourceTable extends DbTable {
         $sql = " SELECT CNUM, FIRST_NAME, LAST_NAME, EMAIL_ADDRESS, NOTES_ID, FM_CNUM ";
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName ;
         $sql.= " WHERE " . $activePredicate;
-
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 

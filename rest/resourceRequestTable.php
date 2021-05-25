@@ -7,8 +7,7 @@ use itdq\Loader;
 use \DateTime;
 use Complex\Exception;
 
-class resourceRequestTable extends DbTable
-{
+class resourceRequestTable extends DbTable {
     use tableTrait;
 
     const DUPLICATE = 'Dup of';
@@ -279,20 +278,22 @@ class resourceRequestTable extends DbTable
             break;
         }
         
-        $row['STATUS'] = $completeable ? 
-            "<button type='button' class='btn btn-xs changeStatusCompleted accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
-                data-rfs='" . $rfsId . "'
-                data-resourcereference='" . $resourceReference . "'
-                data-prn='" . $prn . "'
-                data-valuestream='" . $valuestream . "'
-                data-status='" . $status . "'
-                data-organisation='" . $organisation .  "'
-                data-service='" . $service . "'
-                data-resourcename='" . $resourceName . "'
-                data-start='" . $startDate4Picka . "'
-                data-end='" . $endDate4Picka . "'
-            >
-                <span data-toggle='tooltip' title='Change Status to Completed' class='glyphicon glyphicon-check ' aria-hidden='true' ></span>
+        $row['STATUS']= $completeable ? 
+        "<button type='button' class='btn btn-xs changeStatusCompleted accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
+                    data-rfs='" .$rfsId . "'
+                    data-resourcereference='" .$resourceReference . "'
+                    data-prn='" .$prn . "'
+                    data-valuestream='" .$valuestream . "'
+                    data-status='" . $status . "'
+                    data-organisation='" .$organisation .  "'
+                    data-service='" . $service . "'
+                    data-resourcename='" . $resourceName . "'
+                    data-start='" . $startDate4Picka . "'
+                    data-end='" . $endDate4Picka . "'
+
+
+         >
+         <span data-toggle='tooltip' title='Change Status to Completed' class='glyphicon glyphicon-check ' aria-hidden='true' ></span>
             </button>&nbsp;<span class='$assignColor'>$status</span>" : "<span class='$assignColor'>$status</span>";
 
         $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';

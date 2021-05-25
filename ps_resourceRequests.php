@@ -569,9 +569,7 @@ ul.select2-results li:nth-child(even):hover{
 
 </style>
 
-
-
-<script>
+<script type='text/javascript'>
 
 var startPicker;
 
