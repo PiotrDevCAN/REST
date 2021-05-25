@@ -68,10 +68,13 @@ class DateClass {
         $workingDays  = self::workingDaysFromStartToEnd($startDate, $endDate);        
         $bankHolidays = self::bankHolidaysFromStartToEnd($startDate, $endDate);        
         $businessDays = $bankHolidays ? $workingDays - count($bankHolidays) : $workingDays;        
-        return array('businessDays' => $businessDays, 'workingDays'=> $workingDays, 'bankHolidays' => $bankHolidays);        
+        return array(
+            'businessDays' => $businessDays, 
+            'workingDays'=> $workingDays,
+            'bankHolidays' => $bankHolidays
+        );        
     }
     
-
     static function businessDaysForWeekEndingFriday(string $weekEndingFriday,array $bankHolidays, \DateTime $startDate,\DateTime $endDate ){
         $wef = \DateTime::createFromFormat('Y-m-d', $weekEndingFriday);
         $monday = clone $wef;
@@ -96,7 +99,6 @@ class DateClass {
     
         return count($workingDaysArray);
     }
-    
     
     /*
      * 
@@ -147,12 +149,10 @@ class DateClass {
 //         echo "<br/>End:" . $endDate->format('d-M-Y') . " Adjusted:" . $adjustedEndDate->format('d-M-Y');
 //         echo "<br/>Total:$totalDays Weeks:$weeks Pre:$excessFirstWeekDays Post:$missingLastWeekDays";
         
-        
         return (($weeks*5)-$excessFirstWeekDays+$missingLastWeekDays);
         
     }
-    
-    
+
     static function adjustStartDate(\DateTime $startDate, $hrsType = null){
         // If they enter Week End Overtime, then they have to start on a Saturday or Sunday
         //        
@@ -176,7 +176,6 @@ class DateClass {
  
         return $adjustedStartDate;
     }
-    
     
     static function weekendDaysFromStartToEnd(\DateTime $startDate, \DateTime $endDate){
         // Calculates the number of Sat & Sun days between 2 dates.
@@ -217,8 +216,6 @@ class DateClass {
         
          return ($weeks*2) + $lastWeekDays + $firstWeekDays; //
     }
-    
-    
 
     static function bankHolidaysFromStartToEnd(\DateTime $startDate, \DateTime $endDate){       
         
@@ -242,5 +239,4 @@ class DateClass {
         return $data;       
         
     }
-
 }

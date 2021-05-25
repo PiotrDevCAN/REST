@@ -49,15 +49,14 @@ $resourceRecord->displayForm($mode);
   </div>
 </div>
 
-
-<script>
+<script type='text/javascript'>
 $(document).ready(function() {
 
 	$(".select").select2({
 		  tags: true,
 		  createTag: function(params) {
-              return undefined;
-         }
+        return undefined;
+      }
 	});
 
 	$('#ORGANISATION').on('select2:select', function(e){
@@ -65,35 +64,31 @@ $(document).ready(function() {
     	var entry = organisation[0].indexOf(serviceSelected);
     	var data = organisation[entry+1];
     	if ($('#SERVICE').hasClass("select2-hidden-accessible")) {
-    	    // Select2 has been initialized
-    	    $('#SERVICE').val("").trigger("change");
-    		$('#SERVICE').empty().select2('destroy').attr('disabled',true);
+        // Select2 has been initialized
+        $('#SERVICE').val("").trigger("change");
+        $('#SERVICE').empty().select2('destroy').attr('disabled',true);
     	}
     	$("#SERVICE").select2({
     		  data: data
     	}).attr('disabled',false).val('').trigger('change');
 
-
     	if(data.length==2){
-    		$("#SERVICE").val(data[1].text).trigger('change');
-        }
-
+        $("#SERVICE").val(data[1].text).trigger('change');
+      }
 	});
 });
-
 
 $("form").on("reset", function () {
 	$(".select").val('').trigger('change');
 	$("#STATUS").val('New').trigger('change');
 });
 
-
 $(document).ready(function(){
 	pickers = initPickers();
 });
 
 function initPickers() {
-	var startDate;
+	  var startDate;
     var endDate;
    	
     this.updateStartDate = function() {
@@ -107,30 +102,30 @@ function initPickers() {
         endPicker.setEndRange(endDate);
     };
     this.startPicker = new Pikaday({
-    	firstDay:1,
-        field: document.getElementById('InputSTART_DATE'),
-        format: 'D MMM YYYY',
-        showTime: false,
-        minDate: new Date(),
-        onSelect: function() {
-             var db2Value = this.getMoment().format('YYYY-MM-DD')
-             jQuery('#START_DATE').val(db2Value);
-            startDate = this.getDate();
-             updateStartDate();
-        }
+      firstDay:1,
+      field: document.getElementById('InputSTART_DATE'),
+      format: 'D MMM YYYY',
+      showTime: false,
+      minDate: new Date(),
+      onSelect: function() {
+            var db2Value = this.getMoment().format('YYYY-MM-DD')
+            jQuery('#START_DATE').val(db2Value);
+          startDate = this.getDate();
+            updateStartDate();
+      }
     });
     this.endPicker = new Pikaday({
     	firstDay:1,
-        field: document.getElementById('InputEND_DATE'),
-        format: 'D MMM YYYY',
-        showTime: false,
-        minDate: new Date(),
-        onSelect: function() {
-            var db2Value = this.getMoment().format('YYYY-MM-DD')
-            jQuery('#END_DATE').val(db2Value);
-            endDate = this.getDate();
-            updateEndDate();
-        }
+      field: document.getElementById('InputEND_DATE'),
+      format: 'D MMM YYYY',
+      showTime: false,
+      minDate: new Date(),
+      onSelect: function() {
+          var db2Value = this.getMoment().format('YYYY-MM-DD')
+          jQuery('#END_DATE').val(db2Value);
+          endDate = this.getDate();
+          updateEndDate();
+      }
     });
 
     var _startDate = this.startPicker.getDate();
@@ -149,7 +144,7 @@ function initPickers() {
 
 $(document).ready(function(){
 
-	$( "#resourceRequestForm" ).submit(function( event ) {
+	  $( "#resourceRequestForm" ).submit(function( event ) {
 		$(':submit').addClass('spinning').attr('disabled',true);
 		var url = 'ajax/saveResourceRecord.php';
 		var disabledFields = $(':disabled');
@@ -157,74 +152,72 @@ $(document).ready(function(){
 		var formData = $("#resourceRequestForm").serialize();
 		$(disabledFields).attr('disabled',true);
 		jQuery.ajax({
-			type:'post',
+			  type:'post',
 		  	url: url,
 		  	data:formData,
 		  	context: document.body,
- 	      	beforeSend: function(data) {
-	        	//	do the following before the save is started
-	        	},
-	      	success: function(response) {
-	            // 	do what ever you want with the server response if that response is "success"
-	               // $('.modal-body').html(JSON.parse(response));
-	               var responseObj = JSON.parse(response);
-	               var resourceRef =  "<p>Resource Ref:" + responseObj.resourceReference + "</p>";
-	               var savedResponse =  "<p>Saved:" + responseObj.saveResponse +  "</p>";
-	               var hoursResponse =  "<p>" + responseObj.hoursResponse +  "</p>";
-	               var messages =  "<p>" + responseObj.Messages +  "</p>";
-	                $('.modal-body').html(resourceRef + savedResponse + hoursResponse + messages);
-	                $('#myModal').modal('show');
-	                $('#myModal').on('hidden.bs.modal', function () {
-	                	  // do something…
-		                if(responseObj.Update==true){
-	    	            	window.close();
-	        	        } else {
-	            	    	$('#resetResourceRequest').click();
-	            	    	$(':submit').removeClass('spinning').attr('disabled',false);
-	                	}
-              	})
-          		},
-	      	fail: function(response){
-	                $('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
-	                $('#myModal').modal('show');
-				},
-	      	error: function(error){
-	            //	handle errors here. What errors	            :-)!
-	        		FormClass.displayAjaxError('<p>Ajax call has errored.</p><p>URL:"' + url + '"</p><p>Error Status:"' + error.statusText + '"</p>');
-	        		jQuery('.slaSave').html('Save').prop('disable',true );
-	        	},
-	      	always: function(){
+        beforeSend: function(data) {
+          // do the following before the save is started
+			  },
+        success: function(response) {
+          // do what ever you want with the server response if that response is "success"
+          // $('.modal-body').html(JSON.parse(response));
+          var responseObj = JSON.parse(response);
+          var resourceRef =  "<p>Resource Ref: " + responseObj.resourceReference + "</p>";
+          var savedResponse =  "<p>Saved: " + responseObj.saveResponse +  "</p>";
+          var hoursResponse =  "<p>" + responseObj.hoursResponse +  "</p>";
+          var messages =  "<p><b>" + responseObj.messages +  "</b></p>";
+          $('.modal-body').html(resourceRef + savedResponse + hoursResponse + messages);
+          $('#myModal').modal('show');
+          $('#myModal').on('hidden.bs.modal', function () {
+            // do somethingâ€¦
+            if(responseObj.create==true){
+              // reset form
+              $('#resetResourceRequest').click();
+              $(':submit').removeClass('spinning').attr('disabled',false);
+            } else {
+              // there must be an issue so show message and summary
+              window.close();
+              $(':submit').removeClass('spinning').attr('disabled',false);
+            }
+          })
+        },
+        fail: function(response){
+          $('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
+          $('#myModal').modal('show');
+        },
+        error: function(error){
+          //	handle errors here. What errors	            :-)!
+          $('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Rob</h2>");
+          $('#myModal').modal('show');
+        },
+        always: function(){
 
-	      	}
+        }
 		});
-	event.preventDefault();
+	  event.preventDefault();
 	});
 });
-
 
 $('#RFS').on('select2:select', function(e){
 	var rfsSelected= $(e.params.data)[0].text;
 	var maxEndDate = null;
 
-    $.ajax({
-        url: "ajax/endDateForRfs.php",
-        type: 'POST',
-        data: { rfs:rfsSelected },	                
-        success: function(result){
-	    	var resultObj = JSON.parse(result);
-	    	if(resultObj.rfsEndDate!==null){
-		    	maxEndDate = new Date(resultObj.rfsEndDate);
-		    	endPicker.setDate(maxEndDate);
-				endPicker.setMaxDate(maxEndDate);
-				startPicker.setMaxDate(maxEndDate);
-	    	}	
-        }
+  $.ajax({
+      url: "ajax/endDateForRfs.php",
+      type: 'POST',
+      data: { rfs:rfsSelected },	                
+      success: function(result){
+        var resultObj = JSON.parse(result);
+        if(resultObj.rfsEndDate!==null){
+          maxEndDate = new Date(resultObj.rfsEndDate);
+          endPicker.setDate(maxEndDate);
+          endPicker.setMaxDate(maxEndDate);
+          startPicker.setMaxDate(maxEndDate);
+        }	
+      }
   });
-
 });
-
-
-
 
 </script>
 <style>
@@ -237,13 +230,11 @@ for($year=$currentYear-1;$year<=$currentYear+1;$year++){
     for($month=1;$month<=12;$month++){
         $date = '01-' . substr('00' . $month,2) . "-" . $year;
         $claimCutoff = DateClass::claimMonth($date);
-         ?>[data-pika-year="<?=$year;?>"][data-pika-month="<?=$month-1;?>"][data-pika-day="<?=$claimCutoff->format('d');?>"] {background-color: white; color:red; outline:solid; outline-color:grey;outline-width:thin; content='claim'}<?php
+        ?>[data-pika-year="<?=$year;?>"][data-pika-month="<?=$month-1;?>"][data-pika-day="<?=$claimCutoff->format('d');?>"] {background-color: white; color:red; outline:solid; outline-color:grey;outline-width:thin; content='claim'}<?php
     }
 }
 ?>
 </style>
-
-
 
 <?php
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);

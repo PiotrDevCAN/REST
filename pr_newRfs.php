@@ -49,13 +49,7 @@ $rfsRecord->displayForm($mode);
   </div>
 </div>
 
-
-
-
-
-
-
-<script>
+<script type='text/javascript'>
 $(document).ready(function() {
 	$('#LINK_TO_PGMP').attr('required',false);
 });
@@ -104,7 +98,6 @@ $(document).ready(function(){
 
 	$('#VALUE_STREAM').select2();
 
-
 	$( "#rfsForm" ).submit(function( event ) {
 		$(':submit').addClass('spinning').attr('disabled',true);
 		var url = 'ajax/saveRfsRecord.php';
@@ -118,46 +111,47 @@ $(document).ready(function(){
 		  	data:formData,
 		  	context: document.body,
  	      	beforeSend: function(data) {
-	        	//	do the following before the save is started
-	        	},
+				// do the following before the save is started
+			},
 	      	success: function(response) {
-	            // 	do what ever you want with the server response if that response is "success"
-	               // $('.modal-body').html(JSON.parse(response));
-	               var responseObj = JSON.parse(response);
-	               var rfsIdTxt =  "<p><b>RFS ID:</b>" + responseObj.rfsId + "</p>";
-	               var savedResponse =  responseObj.saveResponse;
-	               if(savedResponse){
-	            	   var scan = "<scan>";
-	               } else {
-	            	   var scan = "<scan style='color:red'>";
-	               }
-	               var savedResponseTxt =  "<p>" + scan + " <b>Record Saved:</b>" + savedResponse +  "</scan></p>";
-	               if(responseObj.Messages != null){
-	            	   var messages =  "<p>" + responseObj.Messages +  "</p>";
-	               }
-	               var messages =  "<p>" + responseObj.Messages +  "</p>";
-	                $('.modal-body').html(rfsIdTxt + savedResponseTxt + messages);
-	                $('#myModal').modal('show');
-	                $('#myModal').on('hidden.bs.modal', function () {
-	                	  // do something…
-		                if(responseObj.Update==true){
-	    	            	window.close();
-	        	        } else {
-	            	    	 $('#resetRfs').click();
-	            	    	 $(':submit').removeClass('spinning').attr('disabled',false);
-	                	}
-                	})
-	               knownRfs.push(responseObj.rfsId);
-	               $('#RFS_ID').css("background-color","#ffffff");
+	            // do what ever you want with the server response if that response is "success"
+				// $('.modal-body').html(JSON.parse(response));
+				var responseObj = JSON.parse(response);
+				var rfsIdTxt =  "<p><b>RFS ID:</b>" + responseObj.rfsId + "</p>";
+				var savedResponse =  responseObj.saveResponse;
+				if(savedResponse){
+					var scan = "<scan>";
+				} else {
+					var scan = "<scan style='color:red'>";
+				}
+				var savedResponseTxt =  "<p>" + scan + " <b>Record Saved:</b>" + savedResponse +  "</scan></p>";
+				if(responseObj.messages != null){
+					var messages =  "<p>" + responseObj.messages +  "</p>";
+				}
+				var messages =  "<p>" + responseObj.messages +  "</p>";
+				$('.modal-body').html(rfsIdTxt + savedResponseTxt + messages);
+				$('#myModal').modal('show');
+				$('#myModal').on('hidden.bs.modal', function () {
+					// do somethingâ€¦
+					if(responseObj.update==true){
+						window.close();
+					} else {
+							$('#resetRfs').click();
+							$(':submit').removeClass('spinning').attr('disabled',false);
+					}
+				})
+				knownRfs.push(responseObj.rfsId);
+				$('#RFS_ID').css("background-color","#ffffff");
           	},
 	      	fail: function(response){
-	                $('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
-	                $('#myModal').modal('show');
-				},
+				$('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
+				$('#myModal').modal('show');
+			},
 	      	error: function(error){
 	            //	handle errors here. What errors	            :-)!
-	                $('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Rob</h2>");
-	        	},
+				$('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Rob</h2>");
+				$('#myModal').modal('show');
+			},
 	      	always: function(){
 	      	}
 		});

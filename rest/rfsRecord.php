@@ -308,7 +308,7 @@ class rfsRecord extends DbRecord
 		    
 		    ?>
 		    <div class='form-group' >		    
-		    <div class='col-md-12' style='background:#eeeeee;border='#cccccc'>
+		    <div class='col-md-12' style='background:#eeeeee;border:#cccccc'>
 		    <small>
 		    <?="Ref:" . $requestDetails['RESOURCE_REFERENCE']. "<br/>" . $requestDetails['ORGANISATION'] . ":" . $requestDetails['SERVICE'] . "<br/>" . $requestDetails['DESCRIPTION']?>
 		    </small>

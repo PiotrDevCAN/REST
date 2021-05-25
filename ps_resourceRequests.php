@@ -6,7 +6,7 @@ use itdq\Loader;
 use rest\resourceRequestTable;
 use itdq\DateClass;
 use rest\rfsTable;
-use rest\StaticOrganisationTable;
+use rest\staticOrganisationTable;
 use itdq\JavaScript;
 
 set_time_limit(0);
@@ -27,8 +27,8 @@ $pipelineChecked     =  $_SESSION['isRfs'] ? ' checked ' : null;
 $nonPipelineDisabled =  $_SESSION['isRfs'] ? ' disabled ' : null;
 $defaultToLive       =  empty($pipelineChecked) ? 'checked' : null;
 
-$predicate = " STATUS='" . StaticOrganisationTable::ENABLED . "' ";
-$allService = StaticOrganisationTable::getAllOrganisationsAndServices($predicate);
+$predicate = " STATUS='" . staticOrganisationTable::ENABLED . "' ";
+$allService = staticOrganisationTable::getAllOrganisationsAndServices($predicate);
 JavaScript::buildSelectArray($allService, 'organisation');
 
 ?>
@@ -570,9 +570,7 @@ ul.select2-results li:nth-child(even):hover{
 
 </style>
 
-
-
-<script>
+<script type='text/javascript'>
 
 var startPicker;
 

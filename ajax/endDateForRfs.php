@@ -22,7 +22,6 @@ $row = db2_fetch_assoc($rs);
 
 $endDate = !empty($row['RFS_END_DATE']) ? $row['RFS_END_DATE'] : null;
 
-
 $messages = ob_get_clean();
 ob_start();
 $response = array('rfsEndDate'=>$endDate,'messages'=>$messages);

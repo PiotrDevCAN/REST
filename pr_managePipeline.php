@@ -82,7 +82,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 ?>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function() {
 	var rfs = new Rfs();
 	rfs.buildPipelineReport();

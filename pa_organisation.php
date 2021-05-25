@@ -1,8 +1,8 @@
 <?php
 use itdq\Trace;
 use itdq\FormClass;
-use rest\StaticOrganisationRecord;
-use rest\StaticOrganisationTable;
+use rest\staticOrganisationRecord;
+use rest\staticOrganisationTable;
 
 ?>
 <div class='container'>
@@ -11,7 +11,7 @@ use rest\StaticOrganisationTable;
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
-$organisationRecord = new StaticOrganisationRecord();
+$organisationRecord = new staticOrganisationRecord();
 $organisationRecord->displayForm(itdq\FormClass::$modeDEFINE);
 
 ?>
@@ -54,7 +54,7 @@ $organisationRecord->displayForm(itdq\FormClass::$modeDEFINE);
 </div>
 </div>
 
-<script>
+<script type='text/javascript'>
 
 var organisationTable;
 
@@ -122,7 +122,7 @@ function listenForToggleStatus(){
 
 function listenForResetForm(){
 	$(document).on('click','#resetOrganisation',function(){
-		$("input[name=statusRadio][value=<?=StaticOrganisationTable::ENABLED;?>]").prop('checked', true)
+		$("input[name=statusRadio][value=<?=staticOrganisationTable::ENABLED;?>]").prop('checked', true)
 		$("input[name=statusRadio]").attr('disabled',false);
 		$('#ORGANISATION').val('');
 		$('#SERVICE').val('');

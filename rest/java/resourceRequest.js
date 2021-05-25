@@ -111,7 +111,7 @@ function ResourceRequest() {
 		    	success: function(result){
 		    		resultObj = JSON.parse(result);
 		    		var message = "<h3>Record(s) deleted, you may now close this window</h3>";
-		    		message += "<br/>Feedback from Delete : <small>" +resultObj.Messages + "</small>"
+		    		message += "<br/>Feedback from Delete : <small>" +resultObj.messages + "</small>"
 		    		$('#deleteMessageBody').html(message);
 		    		$('#confirmDeleteResource').attr('disabled',true);
 					var clickedButtons = $('.spinning');
@@ -323,15 +323,14 @@ function ResourceRequest() {
 						$('.spinning').removeClass('spinning');
 						ResourceRequest.table.ajax.reload();		    			
 		    		} else {
-		    			$('#errorMessageBody').html(resultObj.Messages);
+		    			$('#errorMessageBody').html(resultObj.messages);
 		    			$('#resourceNameModal').modal('hide');
 						$('.spinning').removeClass('spinning').attr('disabled',false);
 						$('#clearResourceName').attr('disabled',false);
 						ResourceRequest.table.ajax.reload();
 		    			$('#errorMessageModal').modal('show');
 		    		}
-
-		    		}
+				}
 		    });
 		});
 	},
@@ -357,15 +356,14 @@ function ResourceRequest() {
 						$('.spinning').removeClass('spinning');
 						ResourceRequest.table.ajax.reload();		    			
 		    		} else {
-		    			$('#errorMessageBody').html(resultObj.Messages);
+		    			$('#errorMessageBody').html(resultObj.messages);
 		    			$('#resourceNameModal').modal('hide');
 						$('.spinning').removeClass('spinning').attr('disabled',false);
 						$('#saveResourceName').attr('disabled',false);
 						ResourceRequest.table.ajax.reload();
 		    			$('#errorMessageModal').modal('show');
 		    		}
-
-		    		}
+				}
 		    });
 		});
 	},
@@ -446,7 +444,6 @@ function ResourceRequest() {
 		});
 	},
 
-
 	this.listenForReinitialise = function(){
 		$(document).on('click','#reinitialise', function(e){
 			$(this).addClass('spinning').attr('disabled',true);
@@ -455,12 +452,42 @@ function ResourceRequest() {
 		    	url: "ajax/reinitialiseHours.php",
 		        type: 'POST',
 		    	data: formData,
-		    	success: function(result){
-		    		$('.spinning').removeClass('spinning').attr('disabled',false);
-		    		ResourceRequest.table.ajax.reload();
-		    		$('#editResourceHours').html('<p></p>');
-				    $('#resourceHoursModal').modal('hide');
+				beforeSend: function(data) {
+					// do the following before the save is started
+				},
+				// success: function(result){
+		    	// 	$('.spinning').removeClass('spinning').attr('disabled',false);
+		    	// 	ResourceRequest.table.ajax.reload();
+		    	// 	$('#editResourceHours').html('<p></p>');
+				//     $('#resourceHoursModal').modal('hide');
+				// },
+				success: function(result){		  
+		    		var resultObj = JSON.parse(result);
+		    		if(resultObj.success==true){
+						$('.spinning').removeClass('spinning').attr('disabled',false);
+						ResourceRequest.table.ajax.reload();
+						$('#editResourceHours').html('<p></p>');
+						$('#resourceHoursModal').modal('hide');	
+		    		} else {
+		    			$('#errorMessageBody').html(resultObj.messages);
+		    			$('#resourceHoursModal').modal('hide');
+						$('.spinning').removeClass('spinning').attr('disabled',false);
+						ResourceRequest.table.ajax.reload();
+		    			$('#errorMessageModal').modal('show');
 		    		}
+				},
+				fail: function(response){
+					$('.modal-body').html("<h2>Json call to reinitialise hours Failed.Tell Rob</h2>");
+					$('#myModal').modal('show');
+				},
+				error: function(error){
+					//	handle errors here. What errors	            :-)!
+					$('.modal-body').html("<h2>Json call to reinitialise hours Errored " + error.statusText + " Tell Rob</h2>");
+					$('#myModal').modal('show');
+				},
+				always: function(){
+
+				}
 		    });
 		});
 	},
@@ -986,61 +1013,57 @@ function ResourceRequest() {
 		});
 	},
 	
-	
-	
-	
 	this.listenForResourceRequestEditShown = function(){
 		$(document).on('shown.bs.modal',function(e){
-		$( "#resourceRequestForm" ).submit(function( event ) {
-			$('#resourceRequestForm :submit').addClass('spinning').attr('disabled',true);
-			var url = 'ajax/saveResourceRecord.php';
-			var disabledFields = $(':disabled');
-			$(disabledFields).removeAttr('disabled');
-			var formData = $("#resourceRequestForm").serialize();
-			$(disabledFields).attr('disabled',true);
-			
-			$.ajax({
-				type:'post',
-		  		url: url,
-		  		data:formData,
-		  		context: document.body,
- 	      	beforeSend: function(data) {
-	        	//	do the following before the save is started
-	        	},
-	      	success: function(response) {
-	            // 	do what ever you want with the server response if that response is "success"
-	               // $('.modal-body').html(JSON.parse(response));
-				   $('#editRequestModal').modal('hide');	
-	               var responseObj = JSON.parse(response);
-	               var resourceRef =  "<p>Resource Ref:" + responseObj.resourceReference + "</p>";
-	               var savedResponse =  "<p>Saved:" + responseObj.saveResponse +  "</p>";
-	               var hoursResponse =  "<p>" + responseObj.hoursResponse +  "</p>";
-	               var messages =  "<p>" + responseObj.Messages +  "</p>";
+			$( "#resourceRequestForm" ).submit(function( event ) {
+				$('#resourceRequestForm :submit').addClass('spinning').attr('disabled',true);
+				var url = 'ajax/saveResourceRecord.php';
+				var disabledFields = $(':disabled');
+				$(disabledFields).removeAttr('disabled');
+				var formData = $("#resourceRequestForm").serialize();
+				$(disabledFields).attr('disabled',true);
+				
+				$.ajax({
+					type:'post',
+					url: url,
+					data:formData,
+					context: document.body,
+					beforeSend: function(data) {
+						// do the following before the save is started
+					},
+					success: function(response) {
+						// do what ever you want with the server response if that response is "success"
+						// $('.modal-body').html(JSON.parse(response));
+						$('#editRequestModal').modal('hide');	
+						var responseObj = JSON.parse(response);
+						var resourceRef =  "<p>Resource Ref:" + responseObj.resourceReference + "</p>";
+						var savedResponse =  "<p>Saved:" + responseObj.saveResponse +  "</p>";
+						var hoursResponse =  "<p>" + responseObj.hoursResponse +  "</p>";
+						var messages =  "<p><b>" + responseObj.messages +  "</b></p>";
 
-					$('.spinning').removeClass('spinning').attr('disabled',false);
-					ResourceRequest.table.ajax.reload();
+						$('.spinning').removeClass('spinning').attr('disabled',false);
+						ResourceRequest.table.ajax.reload();
 
-	                $('#recordSaveDiv').html(resourceRef + savedResponse + hoursResponse + messages);
-	                $('#recordSavedModal').modal('show');
-          		},
-	      	fail: function(response){
-	                $('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
-	                $('#myModal').modal('show');
-				},
-	      	error: function(error){
-	            //	handle errors here. What errors	            :-)!
-	        		FormClass.displayAjaxError('<p>Ajax call has errored.</p><p>URL:"' + url + '"</p><p>Error Status:"' + error.statusText + '"</p>');
-	        		jQuery('.slaSave').html('Save').prop('disable',true );
-	        	},
-	      	always: function(){
+						$('#recordSaveDiv').html(resourceRef + savedResponse + hoursResponse + messages);
+						$('#recordSavedModal').modal('show');
+					},
+					fail: function(response){
+						$('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
+						$('#myModal').modal('show');
+					},
+					error: function(error){
+						//	handle errors here. What errors	            :-)!
+						$('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Rob</h2>");
+						$('#myModal').modal('show');
+					},
+					always: function(){
 
-	      	}
-		});
-	event.preventDefault();
-	});		
+					}
+				});
+				event.preventDefault();
+			});		
 		});
 	}
-
 }
 
 

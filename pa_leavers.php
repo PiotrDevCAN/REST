@@ -22,7 +22,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 </div>
 </div>
 
-<script>
+<script type='text/javascript'>
 
 var buttonCommon = {
 	exportOptions: {

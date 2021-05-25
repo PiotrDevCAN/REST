@@ -27,7 +27,10 @@ resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['RESOURCE_REFERENCE']
 $messages = ob_get_clean();
 ob_start();
 
-$response = array('rrId' => $_POST['RESOURCE_REFERENCE'], 'Messages'=>$messages);
+$response = array(
+    'rrId' => $_POST['RESOURCE_REFERENCE'],
+    'messages'=>$messages
+);
 
 ob_clean();
 echo json_encode($response);

@@ -191,7 +191,7 @@ class resourceRequestTable extends DbTable
             $testJson = json_encode($row);
             if(!$testJson){
                 error_log("Invalid character found");
-                erorr_log(print_r($row,true));
+                error_log(print_r($row,true));
                 
                 throw new \Exception("Invalid character found in Row ");
                 break; // It's got invalid chars in it that will be a problem later.
@@ -261,14 +261,13 @@ class resourceRequestTable extends DbTable
             case $today > $endDateObj:
                 $assignColor = 'text-danger';
                 $started     = 'Completed';
-                $editable = false;
+                // $editable = false;
                 break;           
             default:
                 $assignColor = 'text-primary';
                 $started     = 'Unclear';
             break;
         }
-        
         
         $row['STATUS']= $completeable ? 
         "<button type='button' class='btn btn-xs changeStatusCompleted accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'

@@ -10,8 +10,8 @@ function ob_html_compress($buf){
 set_time_limit(0);
 ob_start();
 
-$inactivePerson = new activeResourceTable(allTables::$ACTIVE_RESOURCE);
-$data = $inactivePerson->returnForDataTables();
+$activeResource = new activeResourceTable(allTables::$ACTIVE_RESOURCE);
+$data = $activeResource->returnForDataTables();
 
 $messages = ob_get_clean();
 ob_start();

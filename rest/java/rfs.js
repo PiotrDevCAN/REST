@@ -117,7 +117,7 @@ function Rfs() {
 		    	success: function(result){
 					$('.spinning').removeClass('spinning').attr('enabled');
 		    		var resultObj = JSON.parse(result);
-					$('#deleteRfsModalBody').html(resultObj.Messages);
+					$('#deleteRfsModalBody').html(resultObj.messages);
 					Rfs.table.ajax.reload();
 					setTimeout(function(){ $('#deleteRfsModal').modal('hide'); }, 3000);
 
@@ -548,48 +548,49 @@ function Rfs() {
 			  	context: document.body,
 	 	      	beforeSend: function(data) {
 		        	//	do the following before the save is started
-		        	},
+				},
 		      	success: function(response) {
 		            // 	do what ever you want with the server response if that response is "success"
-					   $('.spinning').removeClass('spinning');
-					   $('#editRfsModal').modal('hide');
-		               var responseObj = JSON.parse(response);
-		               var rfsIdTxt =  "<p><b>RFS ID:</b>" + responseObj.rfsId + "</p>";
-		               var savedResponse =  responseObj.saveResponse;
-		               if(savedResponse){
-		            	   var scan = "<scan>";
-		               } else {
-		            	   var scan = "<scan style='color:red'>";
-		               }
-		               var savedResponseTxt =  "<p>" + scan + " <b>Record Saved:</b>" + savedResponse +  "</scan></p>";
-		               if(responseObj.Messages != null){
-		            	   var messages =  "<p>" + responseObj.Messages +  "</p>";
-		               }
-		               var messages =  "<p>" + responseObj.Messages +  "</p>";
-		               $('#myModal .modal-body').html(rfsIdTxt + savedResponseTxt + messages);
-					   	
-		               $('#myModal').modal('show');
-		               $('#myModal').on('hidden.bs.modal', function () {
-		                	  // do something…
-			                if(responseObj.Update==true){
-		    	            	window.close();
-		        	        } else {
-		            	    	$('#resetRfs').click();
-		            	    	$('.spinning').removeClass('spinning');
-		            	    	$('#RFS_ID').css("background-color","#ffffff");
-		                	}
-	                	});
+					$('.spinning').removeClass('spinning');
+					$('#editRfsModal').modal('hide');
+					var responseObj = JSON.parse(response);
+					var rfsIdTxt =  "<p><b>RFS ID:</b>" + responseObj.rfsId + "</p>";
+					var savedResponse =  responseObj.saveResponse;
+					if(savedResponse){
+						var scan = "<scan>";
+					} else {
+						var scan = "<scan style='color:red'>";
+					}
+					var savedResponseTxt =  "<p>" + scan + " <b>Record Saved:</b>" + savedResponse +  "</scan></p>";
+					if(responseObj.messages != null){
+						var messages =  "<p>" + responseObj.messages +  "</p>";
+					}
+					var messages =  "<p>" + responseObj.messages +  "</p>";
+					$('#myModal .modal-body').html(rfsIdTxt + savedResponseTxt + messages);
+					
+					$('#myModal').modal('show');
+					$('#myModal').on('hidden.bs.modal', function () {
+						// do something…
+						if(responseObj.update==true){
+							window.close();
+						} else {
+							$('#resetRfs').click();
+							$('.spinning').removeClass('spinning');
+							$('#RFS_ID').css("background-color","#ffffff");
+						}
+					});
 	          	},
 		      	fail: function(response){						
-		                $('#myModal .modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
-		                $('#myModal').modal('show');
-					},
+					$('#myModal .modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
+					$('#myModal').modal('show');
+				},
 		      	error: function(error){
 		            //	handle errors here. What errors	            :-)!
-		        		console.log('Ajax error' );
-		        		console.log(error.statusText);
-		                $('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Rob</h2>");
-		        	}
+					console.log('Ajax error' );
+					console.log(error.statusText);
+					$('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Rob</h2>");
+					$('#myModal').modal('show');
+				}
 			});
 		event.preventDefault();
 		});
