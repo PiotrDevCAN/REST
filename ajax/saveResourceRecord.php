@@ -14,6 +14,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 $rfs = !empty($_POST['RFS']) ? trim($_POST['RFS']) : null;
 $startDate = !empty($_POST['START_DATE']) ? trim($_POST['START_DATE']) : null;
 $endDate = !empty($_POST['END_DATE']) ? trim($_POST['END_DATE']) : $_POST['START_DATE'];
+
 $totalHours = !empty($_POST['TOTAL_HOURS']) ? trim($_POST['TOTAL_HOURS']) : 0;
 $rateType = !empty($_POST['RATE_TYPE']) ? trim($_POST['RATE_TYPE']) : null;
 $hoursType = !empty($_POST['HOURS_TYPE']) ? trim($_POST['HOURS_TYPE']) : resourceRequestRecord::HOURS_TYPE_REGULAR;
@@ -29,6 +30,8 @@ $rrCreator = !empty($_POST['RR_CREATOR']) ? trim($_POST['RR_CREATOR']) : '';
 $invalidRateType = !in_array($rateType, resourceRequestRecord::$allRateTypes);
 $invalidHoursType = !in_array($hoursType, resourceRequestRecord::$allHourTypes);
 $invalidTotalHoursAmount = empty($totalHours);
+$invalidStartDate = resourceRequestTable::validateDate($startDate) === false;
+$invalidEndDate = resourceRequestTable::validateDate($endDate) === false;
 
 if ($startDate == null || $endDate == null || $rateType == null || $organisation == null || $service == null || $mode == null) {
     $invalidOtherParameters = true;
@@ -36,39 +39,37 @@ if ($startDate == null || $endDate == null || $rateType == null || $organisation
     $invalidOtherParameters = false;
 }
 
+// default validation values
+$saveResponse = false;
+$hoursResponse = '';
+$create = false;
+$update = false;
+
 switch (true) {
     case $invalidRateType:
         // rate type protection
-        $saveResponse = false;
-        $hoursResponse = '';
         $messages = 'Cannot save Resouce Request with provided Rate Type value.';
-        $create = false;
-        $update = false;
         break;
     case $invalidHoursType:
         // hours type protection
-        $saveResponse = false;
-        $hoursResponse = '';
         $messages = 'Cannot save Resouce Request with provided Hours Type value.';
-        $create = false;
-        $update = false;
         break;
     case $invalidTotalHoursAmount:
         // zero total hours protection
-        $saveResponse = false;
-        $hoursResponse = '';
         $messages = 'Cannot save Resouce Request with zero total hours.';
-        $create = false;
-        $update = false;
         break;
+    case $invalidStartDate:
+        // start date protection
+        $messages = 'Cannot save Resouce Request with zprovided Start Date value.';
+        break;
+    case $invalidEndDate:
+        // end date protection
+        $messages = 'Cannot save Resouce Request with provided End Date value.';
+        break; 
     case $invalidOtherParameters:
         // required parameters protection
-        $saveResponse = false;
-        $hoursResponse = '';
         $messages = 'Significant parameters from form are missing.';
-        $create = false;
-        $update = false;
-        break;
+        break;       
     default:
         $resourceRecord = new resourceRequestRecord();
         $resourceRecord->setFromArray($_POST);
@@ -77,13 +78,13 @@ switch (true) {
             $rrData = $resourceTable->getRecord($resourceRecord);
             $resourceRecord->setFromArray($rrData); // Get current data from the table.
             $resourceRecord->setFromArray($_POST);  // Override with what the user has changed on the screen.
-            $saveResponse  = $resourceTable->update($resourceRecord);
+            $saveResponse = $resourceTable->update($resourceRecord);
             $saveResponse = $saveResponse ? true : false;
             $resourceReference = $resourceRecord->get('RESOURCE_REFERENCE');
             $create = false;
             $update = true;
         } else {
-            $saveResponse  = $resourceTable->insert($resourceRecord);
+            $saveResponse = $resourceTable->insert($resourceRecord);
             $resourceReference = $resourceTable->lastId();
             $create = true;
             $update = false;

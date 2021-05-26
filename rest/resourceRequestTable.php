@@ -88,8 +88,10 @@ class resourceRequestTable extends DbTable {
         error_log(__FILE__ . ":" . __LINE__ . "Elapsed:" . (microtime(true)-$postExec));
      }
     
-    function returnAsArray($startDate, $endDate, $predicate = null, $pipelineLiveArchive = 'Live', $withButtons = true, $limit = false, $offset = false){
+     function returnAsArray($startDate,$endDate, $predicate=null, $pipelineLiveArchive = 'Live', $withButtons=true){
         
+        //       $this->populateLastDiaryEntriesArray();        
+               
         $autoCommit = db2_autocommit($GLOBALS['conn']);
         db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);        
         
@@ -113,6 +115,7 @@ class resourceRequestTable extends DbTable {
 
         $sql =  " WITH resource_hours as (";
         $sql .= "  SELECT RESOURCE_REFERENCE as RR ";
+                
 
         while($startDateObj->format('Ym') <= $endDateObj->format('Ym')){
             $dataTableColName = "MONTH_" . substr("00" . ++$monthNumber,-2);
@@ -122,7 +125,7 @@ class resourceRequestTable extends DbTable {
         }
 
         $sql .= " FROM ( ";
-        $sql .= " SELECT RESOURCE_REFERENCE ";
+        $sql .= "        SELECT RESOURCE_REFERENCE ";
 
         $startDateObj = new \DateTime($startDate);
         $day =  $startDateObj->format('d');
@@ -145,9 +148,9 @@ class resourceRequestTable extends DbTable {
         $resourceRequestHoursTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUEST_HOURS : allTables::$RESOURCE_REQUEST_HOURS;
 
         $sql .=  " FROM " . $GLOBALS['Db2Schema'] . "." . $resourceRequestHoursTable;
-        $sql .= " WHERE  ( claim_month >= " . $startDateObj->format('m') . " and claim_year = " . $startDateObj->format('Y') . ")  " ;
+        $sql .= "   WHERE  ( claim_month >= " . $startDateObj->format('m') . " and claim_year = " . $startDateObj->format('Y') . ")  " ;
         $sql .= $startDateObj->format('Y') !==  $endDateObj->format('Y') ?  "    AND (claim_year > " . $startDateObj->format('Y') . " and claim_year < " . $endDateObj->format('Y') . " ) " : null;
-        $sql .= " AND (claim_month <= " . $endDateObj->format('m') . " and claim_year = " . $endDateObj->format('Y') . ")  " ;
+        $sql .= "         AND (claim_month <= " . $endDateObj->format('m') . " and claim_year = " . $endDateObj->format('Y') . ")  " ;
         $sql .= " ) as resource_hours ";
         $sql .= " GROUP BY RESOURCE_REFERENCE ";
         $sql .= " ) ";
@@ -164,19 +167,8 @@ class resourceRequestTable extends DbTable {
         $sql .= $pipelineLiveArchive=='pipeline' ? " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " : " AND RFS_STATUS!='" . rfsRecord::RFS_STATUS_PIPELINE . "' ";
         $sql .= !empty($predicate) ? " $predicate " : null ;
 
-        // $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";
+        $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";
 
-        $countSql = "SELECT COUNT(*) as TOTAL";
-        $countSql.= " FROM (";
-        $countSql.= $sql;   
-        $countSql.= " ) ";
-
-        $countResultSet = $this->execute($countSql);
-        $countResultSet ? null : die("SQL Failed");
-        $countRow = db2_fetch_assoc($countResultSet);
-        
-        $sql .= $limit !== false ? " LIMIT ".$limit : null;
-        $sql .= $offset !== false ? " OFFSET ".$offset : null;
         
         error_log(__FILE__ . ":" . __LINE__ . ":" . $pipelineLiveArchive);
         error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
@@ -187,10 +179,7 @@ class resourceRequestTable extends DbTable {
         $resultSet ? null : die("SQL Failed");
 
         $allData = array();
-        $allData['total'] = $countRow['TOTAL'];
         $allData['data'] = array();
- 
-        $counter = 0;
 
         while(($row = db2_fetch_assoc($resultSet))==true){
             PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
@@ -205,12 +194,8 @@ class resourceRequestTable extends DbTable {
             $row = array_map('trim',$row);
             $row['hours_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] : null;
             $row['weeks_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] : null;
-           
-            $withButtons ? $this->addGlyphicons($row) : null;
             
-            $row['DT_RowId'] = 'row_'.$counter;
-
-            $counter++;
+            $withButtons ? $this->addGlyphicons($row) : null;
             $allData['data'][]  = $row;
         }
 

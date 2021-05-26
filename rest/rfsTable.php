@@ -135,7 +135,7 @@ class rfsTable extends DbTable {
         ?></script><?php
     }
 
-    function returnAsArray($predicate = null, $withArchive = false, $limit = false, $offset = false){
+    function returnAsArray($predicate=null, $withArchive=false){
         $sql  = " SELECT RFS.*, RDR.* ";
         $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql .= " LEFT JOIN ". $GLOBALS['Db2Schema'] . "." . allTables::$RFS_DATE_RANGE . " as RDR ";
@@ -144,23 +144,9 @@ class rfsTable extends DbTable {
         $sql .= $withArchive ? " AND ARCHIVE is not null " : " AND ARCHIVE is null ";
         $sql .= !empty($predicate) ? " AND  $predicate " : null ;
         
-        $countSql = "SELECT COUNT(*) as TOTAL";
-        $countSql.= " FROM (";
-        $countSql.= $sql;   
-        $countSql.= " ) ";
-
-        $countResultSet = $this->execute($countSql);
-        $countResultSet ? null : die("SQL Failed");
-        $countRow = db2_fetch_assoc($countResultSet);
-        
-        $sql .= $limit !== false ? " LIMIT ".$limit : null;
-        $sql .= $offset !== false ? " OFFSET ".$offset : null;
-        
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
         $allData = array();
-
-        $counter = 0;
 
         while(($row = db2_fetch_assoc($resultSet))==true){
             $testJson = json_encode($row);
@@ -168,33 +154,18 @@ class rfsTable extends DbTable {
                 break; // It's got invalid chars in it that will be a problem later.
             }
             $this->addGlyphicons($row);
+         
             
-            $startDate = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
-            $startDateSortable = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Ymd') : null;
-            $endDate         = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
-            $endDateSortable = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
-            $rfsEndDate         = !empty($row['RFS_END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['RFS_END_DATE'])->format('d M Y') : null;
-            $rfsEndDateSortable = !empty($row['RFS_END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['RFS_END_DATE'])->format('Ymd') : null;
-            
-            // foreach ($row as $key => $data){
-            //     $row[] = trim($row[$key]);
-            //     unset($row[$key]);
-            // }
-            $row = array_map('trim',$row);
-            
-            $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
-            $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
-            $row['RFS_END_DATE'] = array('display'=> $rfsEndDate,'sort'=>$rfsEndDateSortable);
-            
-            $row['DT_RowId'] = 'row_'.$counter;
-
-            $counter++;
-            $allData[] = $row;
+            foreach ($row as $key=>$data){
+                $row[] = trim($row[$key]);
+                unset($row[$key]);
+            }
+            $allData[]  = $row;            
         }
-        return array('data'=>$allData, 'sql'=>$sql, 'total'=>$countRow['TOTAL']);
+        return array('data'=>$allData,'sql'=>$sql);
     }
 
-    function returnClaimReportAsArray($predicate = null, $withArchive = false, $limit = false, $offset = false){
+    function returnClaimReportAsArray($predicate=null, $withArchive=false){
         
         // The first month we need to show them is the CLAIM month they are currently in. 
         // So start with today, and get the next Claim Cut off - th
@@ -242,7 +213,7 @@ class rfsTable extends DbTable {
         }
 
         $sql.=" from ( ";
-        $sql.=" select RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME ";
+        $sql.="     select RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME ";
         
         foreach ($monthDetails as $key => $detail) {
             $sql.=", case when (CLAIM_YEAR = " . $detail['year'] . " and CLAIM_MONTH = " . $detail['month'] . ") then sum(hours) else null end as " . $monthLabels[$key];
@@ -277,24 +248,10 @@ class rfsTable extends DbTable {
         $sql.= " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE ";
         $sql.= !empty($predicate) ? " AND  $predicate " : null ;
         
-        $countSql = "SELECT COUNT(*) as TOTAL";
-        $countSql.= " FROM (";
-        $countSql.= $sql;   
-        $countSql.= " ) ";
-
-        $countResultSet = $this->execute($countSql);
-        $countResultSet ? null : die("SQL Failed");
-        $countRow = db2_fetch_assoc($countResultSet);
-        
-        $sql .= $limit !== false ? " LIMIT ".$limit : null;
-        $sql .= $offset !== false ? " OFFSET ".$offset : null;
-        
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
-        $allData = array();
+        $allData = null;
         
-        $counter = 0;
-
         while(($row = db2_fetch_assoc($resultSet))==true){
             $testJson = json_encode($row);
             if(!$testJson){
@@ -306,21 +263,16 @@ class rfsTable extends DbTable {
             $endDate         = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
             $endDateSortable = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
             
-            // foreach ($row as $key => $data){ 
-            //     $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
-            //     unset($row[$key]);
-            // }
-            $row = array_map('trim',$row);
-            
             $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
             $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
             
-            $row['DT_RowId'] = 'row_'.$counter;
-
-            $counter++;
-            $allData[] = $row;
+            foreach ($row as $key=>$data){ 
+                $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
+                unset($row[$key]);
+            }
+            $allData[]  = $row;
         }
-        return array('data'=>$allData, 'sql'=>$sql, 'total'=>$countRow['TOTAL']);
+        return array('data'=>$allData,'sql'=>$sql);
     }
 
     function returnNoneActiveReportAsArray($predicate=null, $withArchive = false, $limit = false, $offset = false){

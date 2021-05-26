@@ -6,6 +6,8 @@ use itdq\DateClass;
 
 class resourceRequestHoursTable extends DbTable
 {
+    use tableTrait;
+
     private $preparedGetTotalHrsStatement;
     private $preparedSetHrsStatement;
     private $hoursRemainingByReference;

@@ -4,7 +4,12 @@ namespace rest;
 
 trait tableTrait
 {
-    function prepareSearchPredicate() {
+    static function validateDate($date, $format = 'Y-m-d'){
+        $d = \DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) === $date;
+    }
+
+    static function prepareSearchPredicate() {
         // column filtering
         $columns = isset($_POST['columns']) ? $_POST['columns'] : false;
         $searchPredicate = "";
@@ -28,7 +33,7 @@ trait tableTrait
         return $searchPredicate;
     }
 
-    function prepareComplexSearchPredicate() {
+    static function prepareComplexSearchPredicate() {
         // column filtering
         $columns = isset($_POST['columns']) ? $_POST['columns'] : false;
         $complexSearchPredicate = "";
@@ -61,7 +66,7 @@ trait tableTrait
         return $complexSearchPredicate;
     }
 
-    function prepareOrderingPredicate() {
+    static function prepareOrderingPredicate() {
         // column ordering
         $columns = isset($_POST['columns']) ? $_POST['columns'] : false;
         $ordering = isset($_POST['order']) ? $_POST['order'] : false;
@@ -89,7 +94,7 @@ trait tableTrait
         return $orderPredicate;
     }
 
-    function prepareGlobalSearchPredicate() {
+    static function prepareGlobalSearchPredicate() {
         // global filtering
         $globalSearch = isset($_POST['search']) ? $_POST['search'] : false;
         $globalSearchPredicate = "";

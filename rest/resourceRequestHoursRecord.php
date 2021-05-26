@@ -12,7 +12,6 @@ use itdq\FormClass;
  */
 class resourceRequestHoursRecord extends DbRecord
 {
-
     public $RESOURCE_REFERENCE;
     public $DATE;
     public $HOURS;   //  ALTER TABLE "REST_UT"."RESOURCE_REQUEST_HOURS" ALTER COLUMN "HOURS" SET DATA TYPE DECIMAL(4,2);    
@@ -22,5 +21,4 @@ class resourceRequestHoursRecord extends DbRecord
     public $CLAIM_CUTOFF;
     public $CLAIM_MONTH;
     public $CLAIM_YEAR;
-
 }

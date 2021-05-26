@@ -6,6 +6,7 @@ use rest\rfsRecord;
 use rest\rfsTable;
 use itdq\FormClass;
 use itdq\Loader;
+
 set_time_limit(0);
 ob_start();
 
@@ -16,26 +17,30 @@ $parmsTrimmed = array_map('trim', $_POST);
 // $requestorName = !empty($_POST['REQUESTOR_NAME']) ? trim($_POST['REQUESTOR_NAME']) : null;
 // $requestorEmail = !empty($_POST['REQUESTOR_EMAIL']) ? trim($_POST['REQUESTOR_EMAIL']) : null;
 // $valueStream = !empty($_POST['VALUE_STREAM']) ? trim($_POST['VALUE_STREAM']) : null;
-// $rfsEndDate = !empty($_POST['RFS_END_DATE']) ? trim($_POST['RFS_END_DATE']) : null;
+
+$rfsEndDate = !empty($_POST['RFS_END_DATE']) ? trim($_POST['RFS_END_DATE']) : null;
 
 $rfsType = !empty($_POST['RFS_TYPE']) ? trim($_POST['RFS_TYPE']) : null;
 $rfsStatus = !empty($_POST['RFS_STATUS']) ? trim($_POST['RFS_STATUS']) : null;
 
 $invalidRfsType = !in_array($rfsType, rfsRecord::$rfsType);
 $invalidRfsStatus = !in_array($rfsStatus, rfsRecord::$rfsStatus);
+$invalidRfsEndDate = rfsTable::validateDate($rfsEndDate) === false;
+
+// default validation values
+$saveResponse = false;
+$create = false;
+$update = false;
 
 switch (true) {
     case $invalidRfsType:
-        $saveResponse = false;
         $messages = 'Cannot save RFS Record with provided RFS Type value.';
-        $create = false;
-        $update = false;
         break;
     case $invalidRfsStatus:
-        $saveResponse = false;
         $messages = 'Cannot save RFS Record with provided RFS Status value.';
-        $create = false;
-        $update = false;
+        break;
+    case $invalidRfsEndDate:
+        $messages = 'Cannot save RFS Record with provided RFS End Date value.';
         break;
     default:
             
