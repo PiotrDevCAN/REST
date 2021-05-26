@@ -3,7 +3,6 @@
 use itdq\Trace;
 use itdq\Loader;
 use rest\allTables;
-use rest\rfsTable;
 
 set_time_limit(0);
 

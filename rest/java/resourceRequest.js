@@ -757,22 +757,17 @@ function ResourceRequest() {
 	},
 
 	this.initialiseDataTable = function(){
-		// Show the table
-		$('#resourceRequestsTable_id').show();
-
-		// Setup - add a text input to each footer cell
+	    // Setup - add a text input to each footer cell
 	    $('#resourceRequestsTable_id tfoot th').each( function () {
 	        var title = $(this).text();
 	        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
 	    } );
-
 		// DataTable
 	    ResourceRequest.table = $('#resourceRequestsTable_id').DataTable({
+	    	
 	    	language: {
-	    		// emptyTable: "Please select Organisation, Business Unit and/or RFS from dropdowns above",
-				emptyTable: "No response data available",
-				processing: "Processing<i class='fas fa-spinner fa-spin '></i>"
-			},
+	    	      emptyTable: "Please select Organisation, Business Unit and/or RFS from dropdowns above"
+	    	},
 	    	ajax: {
 	            url: 'ajax/populateResourceRequestHTMLTable.php',
 	            data: function ( d ) {
@@ -783,21 +778,13 @@ function ResourceRequest() {
 	                d.businessunit = $('#selectBusinessUnit option:selected').val();
 	            },
 	            type: 'POST',
-				beforeSend: function() {
-					$('#resourceRequestsTable_id_processing').show();
-				},
-				complete: function() {
-					$('#resourceRequestsTable_id_processing').hide();
-				}
-	        },
-			pageLength: 100,
-			serverSide: true,
-			autoWidth: true,
-			deferRender: true,
-			processing: true,
-			// responsive: true,
-			colReorder: true,
-			dom: 'Blfrtip',
+	        }	,
+	    	autoWidth: false,
+	    	deferRender: true,
+	    	processing: true,
+	    	responsive: true,
+	    	colReorder: true,
+	    	dom: 'Blfrtip',
 	        buttons: [
                 'colvis',
                 $.extend( true, {}, buttonCommon, {
@@ -805,74 +792,93 @@ function ResourceRequest() {
                     exportOptions: {
                         orthogonal: 'sort',
                         stripHtml: true,
-						stripNewLines:false
+                        stripNewLines:false
                     },
                     filename: 'REST_Export',
                     customize: function( xlsx ) {
-                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                    }
-				}),
-				$.extend( true, {}, buttonCommon, {
-					extend: 'csvHtml5',                
-					exportOptions: {
-						orthogonal: 'sort',
-						stripHtml: true,
-						stripNewLines:false
-					},
-					filename: 'REST_Export',
-				}),
-				$.extend( true, {}, buttonCommon, {
-					extend: 'print',
-					exportOptions: {
-						orthogonal: 'sort',
-						stripHtml: true,
-						stripNewLines:false
-					}
-				})
+                         var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                     }
+            }),
+            $.extend( true, {}, buttonCommon, {
+                extend: 'csvHtml5',                
+                exportOptions: {
+                    orthogonal: 'sort',
+                    stripHtml: true,
+                    stripNewLines:false
+                },
+                filename: 'REST_Export',
+            }),
+            $.extend( true, {}, buttonCommon, {
+                extend: 'print',
+                exportOptions: {
+                    orthogonal: 'sort',
+                    stripHtml: true,
+                    stripNewLines:false
+                }
+            })
             ],
 	        columns: [
-	            { name: "RFS.RFS_ID", data: "RFS_ID", defaultContent: "", visible:false }, // RFS.RFS_ID
-	            { name: "PRN", data: "PRN", defaultContent: "", visible:false },
-	            { name: "PROJECT_TITLE", data: "PROJECT_TITLE", defaultContent: "", visible:false },
-	            { name: "PROJECT_CODE", data: "PROJECT_CODE", defaultContent: "", visible:false },
-	            { name: "REQUESTOR_NAME", data: "REQUESTOR_NAME", defaultContent: "", visible:false },
-	            { name: "REQUESTOR_EMAIL", data: "REQUESTOR_EMAIL", defaultContent: "", visible:false },
-	            { name: "VALUE_STREAM", data: "VALUE_STREAM", defaultContent: "", visible:false },
-	            { name: "LINK_TO_PGMP", data: "LINK_TO_PGMP", defaultContent: "", visible:false },
-	            { name: "RFS_CREATOR", data: "RFS_CREATOR", defaultContent: "", visible:false },
-	            { name: "RFS_CREATED_TIMESTAMP", data: "RFS_CREATED_TIMESTAMP", defaultContent: "", visible:false },
-	            { name: "ARCHIVE", data: "ARCHIVE", defaultContent: "", visible:false },
-	            { name: "RFS_TYPE", data: "RFS_TYPE", defaultContent: "", visible:false },
-	            { name: "ILC_WORK_ITEM", data: "ILC_WORK_ITEM", defaultContent: "", visible:false },
-	            { name: "RFS_STATUS", data: "RFS_STATUS", defaultContent: "", visible:false },
-	            { name: "BUSINESS_UNIT", data: "BUSINESS_UNIT", defaultContent: "", visible:false },
-	            { name: "RFS_END_DATE", data: "RFS_END_DATE", defaultContent: "", visible:false },
-	            { name: "RR.RESOURCE_REFERENCE", data: "RESOURCE_REFERENCE", defaultContent: "", visible:false },
-	            { name: "RFS_AND_RESOURCE_REFERENCE_COMPLEX", data: "RFS", defaultContent: "", visible:true, render: { _:'display', sort:'sort' }}, // RR.RFS       
-	            { name: "ORGANISATION", data: "ORGANISATION", defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
-	            { name: "SERVICE", data: "SERVICE", defaultContent: "", visible:false },
-	            { name: "DESCRIPTION", data: "DESCRIPTION", defaultContent: "", visible:true },
-	            { name: "START_DATE_COMPLEX", data: "START_DATE", defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
-	            { name: "END_DATE_COMPLEX", data: "END_DATE", defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
-	            { name: "TOTAL_HOURS_COMPLEX", data: "TOTAL_HOURS", defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
-	            { name: "RESOURCE_NAME", data: "RESOURCE_NAME", defaultContent: "", visible:true , render: { _:'display', sort:'sort' }, },
-	            { name: "RR_CREATOR", data: "RR_CREATOR", defaultContent: "", visible:false },
-	            { name: "RR_CREATED_TIMESTAMP", data: "RR_CREATED_TIMESTAMP", defaultContent: "", visible:false },
-	            { name: "CLONED_FROM", data: "CLONED_FROM", defaultContent: "", visible:false },
-	            { name: "STATUS", data: "STATUS", defaultContent: "", visible:true },
-	            { name: "RATE_TYPE", data: "RATE_TYPE", defaultContent: "", visible:false },
-	            { name: "HOURS_TYPE", data: "HOURS_TYPE", defaultContent: "", visible:false },
-	            { name: "RR", data: "RR", defaultContent: "", visible:false },       	
+	            { data: "RFS_ID"           ,defaultContent: "", visible:false },
+	            { data: "PRN"              ,defaultContent: "", visible:false },
+	            { data: "PROJECT_TITLE"    ,defaultContent: "", visible:false },
+	            { data: "PROJECT_CODE"     ,defaultContent: "", visible:false },
+	            { data: "REQUESTOR_NAME"   ,defaultContent: "", visible:false },
+	            { data: "REQUESTOR_EMAIL"  ,defaultContent: "", visible:false },
+	            { data: "VALUE_STREAM"     ,defaultContent: "", visible:false },
+	            { data: "LINK_TO_PGMP"     ,defaultContent: "", visible:false },
+	            { data: "RFS_CREATOR"      ,defaultContent: "", visible:false },
+	            { data: "RFS_CREATED_TIMESTAMP",defaultContent: "", visible:false },
+	            { data: "ARCHIVE"          ,defaultContent: "", visible:false },
+	            { data: "RFS_TYPE"         ,defaultContent: "", visible:false },
+	            { data: "ILC_WORK_ITEM"    ,defaultContent: "", visible:false },
+	            { data: "RFS_STATUS"       ,defaultContent: "", visible:false },
+	            { data: "BUSINESS_UNIT"    ,defaultContent: "", visible:false },
+	            { data: "RFS_END_DATE"     ,defaultContent: "", visible:false },
+	            { data: "RESOURCE_REFERENCE",defaultContent: "", visible:false },
+	            { data: "RFS"              ,defaultContent: "", visible:true, render: { _:'display', sort:'sort' }},	           
+	            { data: "ORGANISATION"     ,defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
+	            { data: "SERVICE"          ,defaultContent: "", visible:false },
+	            { data: "DESCRIPTION"      ,defaultContent: "", visible:true },
+	            { data: "START_DATE"       ,defaultContent: "", visible:true,  render: { _:'display', sort:'sort' }, },
+	            { data: "END_DATE"         ,defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
+	            { data: "TOTAL_HOURS"      ,defaultContent: "", visible:false, render: { _:'display', sort:'sort' }, },
+	            { data: "RESOURCE_NAME"    ,defaultContent: "", visible:true , render: { _:'display', sort:'sort' }, },
+	            { data: "RR_CREATOR"       ,defaultContent: "", visible:false },
+	            { data: "RR_CREATED_TIMESTAMP",defaultContent: "", visible:false },
+	            { data: "CLONED_FROM"      ,defaultContent: "", visible:false },
+	            { data: "STATUS"           ,defaultContent: "", visible:true },
+	            { data: "RATE_TYPE"        ,defaultContent: "", visible:false },
+	            { data: "HOURS_TYPE"        ,defaultContent: "", visible:false },
+	            { data: "RR"               ,defaultContent: "", visible:false },
+//	            { data: "MONTH_01"         ,defaultContent: "",visible:true},
+//	            { data: "MONTH_02"         ,defaultContent: "",visible:true},
+//	            { data: "MONTH_03"         ,defaultContent: "",visible:true},
+//	            { data: "MONTH_04"         ,defaultContent: "",visible:true},
+//	            { data: "MONTH_05"         ,defaultContent: "",visible:true},
+//	            { data: "MONTH_06"         ,defaultContent: "",visible:true},
+	        	
 	        ]
-	    });
+	    });       
 
+	    // Apply the search
 	    $(ResourceRequest.table.column(16).header()).text('RFS:RR');
 
-		this.applySearch();
+
+	    ResourceRequest.table.columns().every( function () {
+			var that = this;
+	        $( 'input', this.footer() ).on( 'keyup change', function () {
+	            if ( that.search() !== this.value ) {
+	                that
+	                    .search( this.value )
+	                    .draw();
+	            }
+	        } );
+	    } );
 	    
 	    ResourceRequest.table.on( 'responsive-display', function () {
 	    	restrictButtonAccess();
 	    });
+
 	},
 
 	this.buildResourceReport =  function(getColumnsFromAjax){
@@ -883,7 +889,6 @@ function ResourceRequest() {
 			$.ajax({
 				url: "ajax/createResourceReportHTMLTable.php",
 				type: 'POST',
-				serverside: true,
 				data: formData,
 				before: function(){
 					$('#resourceTableDiv').html('<h2>Table being built</h2>');

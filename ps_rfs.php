@@ -30,6 +30,7 @@ $rfsTable = new rfsTable(allTables::$RFS);
 
 <?php $archiveDisabled  = 'disabled' ?>
 
+
 <div class='container-fluid'>
 <h3>RFS Report</h3>
 
@@ -47,6 +48,8 @@ $rfsTable = new rfsTable(allTables::$RFS);
 	    </div>
 	</div>
 	</div>
+
+
 
 	<div class='form-group text-right' >
     <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>
@@ -132,9 +135,6 @@ $rfsTable = new rfsTable(allTables::$RFS);
 <hr/>
 
 <div id='rfsTableDiv'>
-<?php
-  rfsTable::buildHTMLTable();
-?>
 </div>
 </div>
 
@@ -336,7 +336,7 @@ $(document).ready(function() {
 	$(".select").select2();
 
     var rfs = new Rfs();
-	rfs.buildRfsReport(false);
+	rfs.buildRfsReport();
 	rfs.listenForGoLiveRfs();
 	rfs.listenForConfirmGoLiveRfs();
 	rfs.listenForDeleteRfs();
