@@ -54,11 +54,9 @@ $(document).ready(function() {
 	$('#LINK_TO_PGMP').attr('required',false);
 });
 
-
 $("form").on("reset", function () {
 	$(".select").val('').trigger('change');
 });
-
 
 $('#RFS_ID').on('focusout',function(e){
 	var newRfsId = $(this).val().trim();
@@ -92,8 +90,6 @@ $('#RFS_ID').on('focusout',function(e){
 	};
 });
 
-
-
 $(document).ready(function(){
 
 	$('#VALUE_STREAM').select2();
@@ -117,30 +113,30 @@ $(document).ready(function(){
 	            // do what ever you want with the server response if that response is "success"
 				// $('.modal-body').html(JSON.parse(response));
 				var responseObj = JSON.parse(response);
-				var rfsIdTxt =  "<p><b>RFS ID:</b>" + responseObj.rfsId + "</p>";
+				var rfsIdTxt =  "<p><b>RFS ID: </b>" + responseObj.rfsId + "</p>";
 				var savedResponse =  responseObj.saveResponse;
 				if(savedResponse){
 					var scan = "<scan>";
 				} else {
 					var scan = "<scan style='color:red'>";
 				}
-				var savedResponseTxt =  "<p>" + scan + " <b>Record Saved:</b>" + savedResponse +  "</scan></p>";
-				if(responseObj.messages != null){
-					var messages =  "<p>" + responseObj.messages +  "</p>";
-				}
-				var messages =  "<p>" + responseObj.messages +  "</p>";
+				var savedResponseTxt =  "<p>" + scan + " <b>Record Saved: </b>" + savedResponse +  "</scan></p>";
+				var messages =  "<p><b>" + responseObj.messages +  "</b></p>";
 				$('.modal-body').html(rfsIdTxt + savedResponseTxt + messages);
 				$('#myModal').modal('show');
 				$('#myModal').on('hidden.bs.modal', function () {
 					// do something…
-					if(responseObj.update==true){
-						window.close();
+					if(responseObj.create==true){
+						// reset form
+						$('#resetRfs').click();
+						$(':submit').removeClass('spinning').attr('disabled',false);
+						knownRfs.push(responseObj.rfsId);
 					} else {
-							$('#resetRfs').click();
-							$(':submit').removeClass('spinning').attr('disabled',false);
+						// there must be an issue so show message and summary
+						window.close();
+              			$(':submit').removeClass('spinning').attr('disabled',false);
 					}
 				})
-				knownRfs.push(responseObj.rfsId);
 				$('#RFS_ID').css("background-color","#ffffff");
           	},
 	      	fail: function(response){
@@ -159,7 +155,6 @@ $(document).ready(function(){
 	});
 });
 
-
 $(document).ready(function(){
 	$('#REQUESTOR_EMAIL').keyup(function(){
 		var regex = RegExp('ibm.com$');
@@ -170,11 +165,7 @@ $(document).ready(function(){
 		});
 });
 
-
-
 </script>
-
-
 
 <?php
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);

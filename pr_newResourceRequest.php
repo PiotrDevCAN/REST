@@ -163,8 +163,8 @@ $(document).ready(function(){
           // do what ever you want with the server response if that response is "success"
           // $('.modal-body').html(JSON.parse(response));
           var responseObj = JSON.parse(response);
-          var resourceRef =  "<p>Resource Ref: " + responseObj.resourceReference + "</p>";
-          var savedResponse =  "<p>Saved: " + responseObj.saveResponse +  "</p>";
+          var resourceRef =  "<p><b>Resource Ref: " + responseObj.resourceReference + "</b></p>";
+          var savedResponse =  "<p><b>Saved: " + responseObj.saveResponse +  "</b></p>";
           var hoursResponse =  "<p>" + responseObj.hoursResponse +  "</p>";
           var messages =  "<p><b>" + responseObj.messages +  "</b></p>";
           $('.modal-body').html(resourceRef + savedResponse + hoursResponse + messages);

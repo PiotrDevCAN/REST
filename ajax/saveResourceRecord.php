@@ -26,23 +26,50 @@ $resourceReference = !empty($_POST['RESOURCE_REFERENCE']) ? trim($_POST['RESOURC
 $status = !empty($_POST['STATUS']) ? trim($_POST['STATUS']) : '';
 $rrCreator = !empty($_POST['RR_CREATOR']) ? trim($_POST['RR_CREATOR']) : '';
 
-if ($totalHours == 0) {
-    // zero total hours protection
-    $saveResponse = false;
-    $hoursResponse = '';
-    $messages = 'Cannot save Resouce Request with zero total hours.';
-    $create = false;
-    $update = false;
+$invalidRateType = !in_array($rateType, resourceRequestRecord::$allRateTypes);
+$invalidHoursType = !in_array($hoursType, resourceRequestRecord::$allHourTypes);
+$invalidTotalHoursAmount = empty($totalHours);
+
+if ($startDate == null || $endDate == null || $rateType == null || $organisation == null || $service == null || $mode == null) {
+    $invalidOtherParameters = true;
 } else {
-    if ($startDate == null || $endDate == null || $rateType == null || $organisation == null || $service == null || $mode == null) {
+    $invalidOtherParameters = false;
+}
+
+switch (true) {
+    case $invalidRateType:
+        // rate type protection
+        $saveResponse = false;
+        $hoursResponse = '';
+        $messages = 'Cannot save Resouce Request with provided Rate Type value.';
+        $create = false;
+        $update = false;
+        break;
+    case $invalidHoursType:
+        // hours type protection
+        $saveResponse = false;
+        $hoursResponse = '';
+        $messages = 'Cannot save Resouce Request with provided Hours Type value.';
+        $create = false;
+        $update = false;
+        break;
+    case $invalidTotalHoursAmount:
+        // zero total hours protection
+        $saveResponse = false;
+        $hoursResponse = '';
+        $messages = 'Cannot save Resouce Request with zero total hours.';
+        $create = false;
+        $update = false;
+        break;
+    case $invalidOtherParameters:
         // required parameters protection
         $saveResponse = false;
         $hoursResponse = '';
         $messages = 'Significant parameters from form are missing.';
         $create = false;
         $update = false;
-    } else {
-        
+        break;
+    default:
         $resourceRecord = new resourceRequestRecord();
         $resourceRecord->setFromArray($_POST);
         $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
@@ -83,7 +110,8 @@ if ($totalHours == 0) {
         // }
 
         $messages = ob_get_clean();
-    }
+        
+        break;
 }
 
 ob_start();

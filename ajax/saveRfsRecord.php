@@ -9,37 +9,72 @@ use itdq\Loader;
 set_time_limit(0);
 ob_start();
 
-$loader = new Loader();
-$rfsRecord = new rfsRecord();
-
 $parmsTrimmed = array_map('trim', $_POST);
-$allBusinessUnit = $loader->loadIndexed('BUSINESS_UNIT','VALUE_STREAM', allTables::$STATIC_VALUE_STREAM);
-$businessUnit = isset($_POST['VALUE_STREAM']) ? $allBusinessUnit[$_POST['VALUE_STREAM']]: null;
 
-$rfsRecord->setFromArray($parmsTrimmed);
-$rfsRecord->setFromArray(array('BUSINESS_UNIT'=>$businessUnit));
+// $rfsId = !empty($_POST['RFS_ID']) ? trim($_POST['RFS_ID']) : null;
+// $projectTitle = !empty($_POST['PROJECT_TITLE']) ? trim($_POST['PROJECT_TITLE']) : null;
+// $requestorName = !empty($_POST['REQUESTOR_NAME']) ? trim($_POST['REQUESTOR_NAME']) : null;
+// $requestorEmail = !empty($_POST['REQUESTOR_EMAIL']) ? trim($_POST['REQUESTOR_EMAIL']) : null;
+// $valueStream = !empty($_POST['VALUE_STREAM']) ? trim($_POST['VALUE_STREAM']) : null;
+// $rfsEndDate = !empty($_POST['RFS_END_DATE']) ? trim($_POST['RFS_END_DATE']) : null;
 
-$rfsTable = new rfsTable(allTables::$RFS);
-if(trim($_POST['mode'])==FormClass::$modeEDIT){
-    $rfsTable = new rfsTable(allTables::$RFS);
-    $rfsData = $rfsTable->getRecord($rfsRecord);
-    $rfsRecord->setFromArray($rfsData);
-    $rfsRecord->setFromArray($_POST);
-    $rfsRecord->setFromArray(array('BUSINESS_UNIT'=>$businessUnit));
-    $saveResponse  = $rfsTable->update($rfsRecord);
-    $saveResponse = $saveResponse ? true : false;
-    $update = true;
-} else {
-    $saveResponse  = $rfsTable->insert($rfsRecord);
-    $update = false;
+$rfsType = !empty($_POST['RFS_TYPE']) ? trim($_POST['RFS_TYPE']) : null;
+$rfsStatus = !empty($_POST['RFS_STATUS']) ? trim($_POST['RFS_STATUS']) : null;
+
+$invalidRfsType = !in_array($rfsType, rfsRecord::$rfsType);
+$invalidRfsStatus = !in_array($rfsStatus, rfsRecord::$rfsStatus);
+
+switch (true) {
+    case $invalidRfsType:
+        $saveResponse = false;
+        $messages = 'Cannot save RFS Record with provided RFS Type value.';
+        $create = false;
+        $update = false;
+        break;
+    case $invalidRfsStatus:
+        $saveResponse = false;
+        $messages = 'Cannot save RFS Record with provided RFS Status value.';
+        $create = false;
+        $update = false;
+        break;
+    default:
+            
+        $loader = new Loader();
+        $rfsRecord = new rfsRecord();
+
+        $allBusinessUnit = $loader->loadIndexed('BUSINESS_UNIT','VALUE_STREAM', allTables::$STATIC_VALUE_STREAM);
+        $businessUnit = isset($_POST['VALUE_STREAM']) ? $allBusinessUnit[$_POST['VALUE_STREAM']]: null;
+        
+        $rfsRecord->setFromArray($parmsTrimmed);
+        $rfsRecord->setFromArray(array('BUSINESS_UNIT'=>$businessUnit));
+        
+        $rfsTable = new rfsTable(allTables::$RFS);
+        if(trim($_POST['mode'])==FormClass::$modeEDIT){
+            $rfsTable = new rfsTable(allTables::$RFS);
+            $rfsData = $rfsTable->getRecord($rfsRecord);
+            $rfsRecord->setFromArray($rfsData);
+            $rfsRecord->setFromArray($_POST);
+            $rfsRecord->setFromArray(array('BUSINESS_UNIT'=>$businessUnit));
+            $saveResponse = $rfsTable->update($rfsRecord);
+            $saveResponse = $saveResponse ? true : false;
+            $create = false;
+            $update = true;
+        } else {
+            $saveResponse  = $rfsTable->insert($rfsRecord);
+            $create = true;
+            $update = false;
+        }
+        $messages = ob_get_clean();
+        break;
 }
-$messages = ob_get_clean();
+
 ob_start();
 
 $response = array(
     'rfsId' => $parmsTrimmed['RFS_ID'],
     'saveResponse' => $saveResponse, 
     'messages'=>$messages,
+    'create'=>$create,
     'update'=>$update,
     'new'=>true
 );
