@@ -90,7 +90,7 @@ class resourceRequestTable extends DbTable {
     
      function returnAsArray($startDate,$endDate, $predicate=null, $pipelineLiveArchive = 'Live', $withButtons=true){
         
-        //       $this->populateLastDiaryEntriesArray();        
+//       $this->populateLastDiaryEntriesArray();        
                
         $autoCommit = db2_autocommit($GLOBALS['conn']);
         db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);        
