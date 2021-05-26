@@ -7,8 +7,7 @@ ob_start();
 
 error_log('opening ' . __FILE__);
 
-// $activeResources = resourceRequestTable::getVbacActiveResourcesForSelect2();
-$activeResources = array();
+$activeResources = resourceRequestTable::getVbacActiveResourcesForSelect2();
 
 error_log('returned from resourceRequestTable::getVbacActiveResourcesForSelect2()');
 error_log(count($activeResources) . " active resources");
