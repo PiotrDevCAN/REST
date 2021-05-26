@@ -477,10 +477,6 @@ class resourceRequestTable extends DbTable {
     }
     
     static function getVbacActiveResourcesForSelect2(){
-
-        unset($_SESSION['vbacEmployees']);
-        unset($_SESSION['myTribe']);
-
         if(!isset($_SESSION['vbacEmployees']) || !isset($_SESSION['myTribe'])){
             $_SESSION['vbacEmployees'] = array();
             
@@ -514,11 +510,11 @@ class resourceRequestTable extends DbTable {
         
         $vbacEmployees = $_SESSION['vbacEmployees'];
 
-        if (isset($_SESSION['myTribe'])) {
+        // if (isset($_SESSION['myTribe'])) {
             $myTribe = $_SESSION['myTribe'];
-        } else {
-            $myTribe = NULL;
-        }
+        // } else {
+        //     $myTribe = NULL;
+        // }
          // Find business unit for this tribe.     
 //         $bestMatchScore = 0;
 //         $bestMatch = '';
