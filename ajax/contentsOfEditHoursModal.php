@@ -84,7 +84,7 @@ ob_start();
        <div class='form-group total-hours-group'>
        <label for="ModalTOTAL_HOURS" class="col-md-2 control-label" data-toggle="tooltip" data-placement="top" title="">Total Hours</label>
        <div class="col-md-4">
-       <input type='number' step='0.01' min=0 max=50 class="form-control" id="ModalTOTAL_HOURS" name="ModalTOTAL_HOURS" value="" placeholder="Total Hours" >
+       <input type='number' step='0.01' min='0' max='1000' class="form-control" id="ModalTOTAL_HOURS" name="ModalTOTAL_HOURS" value="" placeholder="Total Hours" >
        <input type='hidden' id='originalTotalHours' >
        <input type='hidden' id='ModalHOURS_TYPE' name='ModalHOURS_TYPE' >
        </div>
@@ -106,8 +106,6 @@ ob_start();
 $monthColours = array(1=>'#bdbdbd',2=>'#eeeeee',3=>'#bdbdbd',4=>'#eeeeee',5=>'#bdbdbd',6=>'#eeeeee',7=>'#bdbdbd',8=>'#eeeeee',9=>'#bdbdbd',10=>'#eeeeee',11=>'#bdbdbd',12=>'#eeeeee',);
 $claimMonths = array(1=>'Jan',2=>'Feb',3=>'Mar',4=>'Apr',5=>'May',6=>'Jun',7=>'Jul',8=>'Aug',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Dec',);
 
-
-
 while (($row = db2_fetch_assoc($resourceHoursRs))==true){
   //  $week = $row['DATE'];
     $hours = $row['HOURS'];
@@ -120,7 +118,7 @@ while (($row = db2_fetch_assoc($resourceHoursRs))==true){
     <div id='ModalHrsForWefFormGroup<?=$wef?>' class='form-group' style='background:<?=$stripe?>'>
      <label for='ModalHRSForWef<?=$wef?>' class='col-md-6 control-label ' data-toggle='tooltip' data-placement='top' title='Hours for wef <?=$wef?>'><?=$weekObj->format('\W\e\e\k W - dS M y')?></label>
        <div class='col-md-3'>
-      <input type='number' step='0.01' min=0 max=50 class="form-control hrsForWeek" id="ModalHRSForWef<?=$wef?>" name="ModalHRSForWef<?=$wef?>" value="<?=$hours;?>" placeholder="Hrs/Week" >
+      <input type='number' step='0.01' min='0' max='1000' class="form-control hrsForWeek" id="ModalHRSForWef<?=$wef?>" name="ModalHRSForWef<?=$wef?>" value="<?=$hours;?>" placeholder="Hrs/Week" >
       <input type='hidden'  name="ModalHRSForWas<?=$wef?>" value="<?=$hours;?>" >
       </div>
       <div class='col-md-3'>
