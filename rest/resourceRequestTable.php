@@ -480,41 +480,30 @@ class resourceRequestTable extends DbTable {
         if(!isset($_SESSION['vbacEmployees']) || !isset($_SESSION['myTribe'])){
             $_SESSION['vbacEmployees'] = array();
             
-            $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=SQUAD_NAME,P.EMAIL_ADDRESS,TRIBE_NAME';
+             $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=SQUAD_NAME,P.EMAIL_ADDRESS,TRIBE_NAME';
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_HEADER,         1);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_HEADER,        FALSE);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);  // it doesn't like the self signed certs on Cirrus
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($ch, CURLOPT_URL, $url);
+             $ch = curl_init();
+             curl_setopt($ch, CURLOPT_HEADER,         1);
+             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+             curl_setopt($ch, CURLOPT_HEADER,        FALSE);
+             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);  // it doesn't like the self signed certs on Cirrus
+             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+             curl_setopt($ch, CURLOPT_URL, $url);
 
-            $allEmployeesJson = curl_exec($ch);
-            $allEmployees = json_decode($allEmployeesJson);
-            
-            foreach ($allEmployees as $employeeDetails) {
-                $_SESSION['vbacEmployees'][] = array(
-                    'id'=>trim($employeeDetails->NOTES_ID),
-                    'text'=>trim($employeeDetails->NOTES_ID),
-                    'role'=>trim($employeeDetails->SQUAD_NAME),
-                    'tribe'=>trim($employeeDetails->TRIBE_NAME),
-                    'distance'=>'remote'
-                );
-                !empty($employeeDetails->TRIBE_NAME) ?  $_SESSION['allTribes'][trim($employeeDetails->TRIBE_NAME)] = trim($employeeDetails->TRIBE_NAME)  : null ;
-                if(strtolower($employeeDetails->EMAIL_ADDRESS)==strtolower($_SESSION['ssoEmail'])) {
-                    $_SESSION['myTribe'] = $employeeDetails->TRIBE_NAME;
-                }
-            }
+             $allEmployeesJson = curl_exec($ch);
+             $allEmployees = json_decode($allEmployeesJson);
+             
+             foreach ($allEmployees as $employeeDetails) {
+                 $_SESSION['vbacEmployees'][] = array('id'=>trim($employeeDetails->NOTES_ID), 'text'=>trim($employeeDetails->NOTES_ID), 'role'=>trim($employeeDetails->SQUAD_NAME),'tribe'=>trim($employeeDetails->TRIBE_NAME),'distance'=>'remote');
+                 !empty($employeeDetails->TRIBE_NAME) ?  $_SESSION['allTribes'][trim($employeeDetails->TRIBE_NAME)] = trim($employeeDetails->TRIBE_NAME)  : null ;
+                 if(strtolower($employeeDetails->EMAIL_ADDRESS)==strtolower($_SESSION['ssoEmail'])){
+                     $_SESSION['myTribe'] = $employeeDetails->TRIBE_NAME;
+                 }
+             }
         }     
         
         $vbacEmployees = $_SESSION['vbacEmployees'];
-
-        // if (isset($_SESSION['myTribe'])) {
-            $myTribe = $_SESSION['myTribe'];
-        // } else {
-        //     $myTribe = NULL;
-        // }
+        $myTribe       = $_SESSION['myTribe'];
          // Find business unit for this tribe.     
 //         $bestMatchScore = 0;
 //         $bestMatch = '';
@@ -529,15 +518,19 @@ class resourceRequestTable extends DbTable {
 //         } else {
 //             throw new Exception("No tribe found for : " . $_SESSION['ssoEmail']);
 //         }
-        
-        // process the employees, flagging as 'local' those in the "myTribe" tribe     
+            
 
-        $tribeEmployees = array();
+         
+        // process the employees, flagging as 'local' those in the "myTribe" tribe     
+         
         foreach ($vbacEmployees as $value) {
 //          error_log('notesId:' . $value['id'] . ' tribe:' . $value['tribe'] . " bestmatch:" . $bestMatch . " bu:" . $businessUnit);            $
+
+            var_dump($value['id']);
+            var_dump(strtolower(substr(trim($value['id']),-4)));
             if(strtolower(substr(trim($value['id']), -4))=='/ibm'){  // Filter out invalid Notes Ids
-                if($value['tribe'] === $myTribe) {
-                    $value['distance'] = 'local';
+                if($value['tribe']==$myTribe){
+                    $value['distance']='local';
                     $tribeEmployees[] = $value;
                 } else {
                     if($_SESSION['isAdmin']){

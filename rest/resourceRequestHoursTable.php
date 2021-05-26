@@ -18,11 +18,11 @@ class resourceRequestHoursTable extends DbTable
             throw new \Exception("Invalid Resource Reference");
         }
 
-        if ($startDate === null) {
+        if ($startDate === null || self::validateDate($startDate) === false) {
             throw new \Exception("Invalid Start Date");
         }
 
-        if ($endDate === null) {
+        if ($endDate === null || self::validateDate($endDate) === false) {
             throw new \Exception("Invalid End Date");
         }
 
