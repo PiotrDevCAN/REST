@@ -136,7 +136,7 @@ switch (true) {
                         $hoursResponse = $e->getMessage();
                     }
 
-                    $diaryEntry = "Hours Type in Request was changed at from  " . $originalHoursType . " to " . $_POST['HOURS_TYPE'] . ")";
+                    $diaryEntry = "Hours Type in Request was changed from  " . $originalHoursType . " to " . $_POST['HOURS_TYPE'] . ")";
                     $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
 
                     $diaryEntry = "Request was re-initialised at  " . $totalHours . " Total Hours (Start Date:" . $startDate . " End Date: " . $endDate . ")";
