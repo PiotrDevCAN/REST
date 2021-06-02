@@ -13,7 +13,7 @@ $start = microtime(True);
 
 $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
 
-$resourceHoursRs  = $resourceHoursTable->getRsWithPredicate(" RESOURCE_REFERENCE='" . trim($_POST['resourceReference']) . "' ");
+$resourceHoursRs  = $resourceHoursTable->getRsWithPredicate(" RESOURCE_REFERENCE='" . trim($_POST['resourceReference']) . "' ORDER BY YEAR ASC, WEEK_NUMBER ASC ");
 // $resourceTotalHrs = $resourceHoursTable->getTotalHoursForRequest($_POST['resourceReference']);
 
 

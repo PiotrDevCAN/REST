@@ -73,29 +73,6 @@ class resourceRequestHoursTable extends DbTable
                 break;
         }
 
-        /*
-        if($hrsType == resourceRequestRecord::HOURS_TYPE_OT_WEEK_END){
-            $effortDays = DateClass::weekendDaysFromStartToEnd($sdate, $edate);
-            $bankHolidays = array();
-            $hrsPerEffortDay = $hours / $effortDays;
-            $dayOfWeek = 6;
-            $startDay = 'saturday';
-            $sdate = DateClass::adjustStartDate($sdate, $hrsType);
-        } else {
-            $response = DateClass::businessDaysFromStartToEnd($sdate, $edate);
-            $effortDays = $response['businessDays'];
-            $bankHolidays = $response['bankHolidays'];
-            if ($effortDays > 0) {
-                $hrsPerEffortDay = $hours / $effortDays;
-            } else {
-                $hrsPerEffortDay = $hours;
-            }
-            $dayOfWeek = 1;
-            $startDay = 'monday';
-            $sdate = DateClass::adjustStartDate($sdate);
-        }
-        */
-        
         $nextDate = clone $sdate;
         $endPeriod = $edate->format('oW');
         $nextPeriod = $nextDate->format('oW');
