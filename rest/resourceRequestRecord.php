@@ -13,7 +13,6 @@ use itdq\JavaScript;
  */
 class resourceRequestRecord extends DbRecord
 {
-
     protected $RESOURCE_REFERENCE;
     protected $RFS;
     protected $ORGANISATION; // was known as CURRENT_PLATFORM
@@ -31,9 +30,23 @@ class resourceRequestRecord extends DbRecord
     protected $HRS_PER_WEEK;
     protected $TOTAL_HOURS; // ALTER TABLE "REST_DEV"."RESOURCE_REQUESTS" ADD COLUMN "TOTAL_HOURS" DECIMAL(8,2);
 
-    static public $columnHeadings = array("Resource Ref", "RFS", "Organisation", "Service",
-                                          "Description", "Start Date", "End Date", "Total Hours", "Resource Name",
-        "Request Creator", "Request Created","Cloned From", "Status",'Rate_Type','Hours_type'    );
+    static public $columnHeadings = array(
+        "Resource Ref", 
+        "RFS", 
+        "Organisation", 
+        "Service",
+        "Description",
+        "Start Date", 
+        "End Date", 
+        "Total Hours", 
+        "Resource Name",
+        "Request Creator", 
+        "Request Created",
+        "Cloned From", 
+        "Status",
+        'Rate_Type',
+        'Hours_type'
+    );
 
     CONST STATUS_NEW        = 'New';
 //     CONST STATUS_REDIRECTED = 'Re-Directed';
@@ -165,11 +178,16 @@ class resourceRequestRecord extends DbRecord
    			<label class="col-md-offset-1 col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Rate Type</label>
    			<div class="col-md-4">
    			<?php 
+            $this->RATE_TYPE = empty($this->RATE_TYPE) ? self::RATE_TYPE_BLENDED : $this->RATE_TYPE;
+            $disabledRateType = empty($this->RESOURCE_NAME) ? null : 'disabled';
    			foreach (self::$allRateTypes as $rateType) {
    			    $checked = $rateType == $this->RATE_TYPE ? ' checked ' : null;
-   			    ?><label class="radio-inline"><input type="radio" name="RATE_TYPE" value='<?=$rateType?>' required <?=$checked;?> ><?=$rateType?></label><?php 
-   			}   			
-   			?>
+   			    ?><label class="radio-inline"><input type="radio" name="RATE_TYPE" value='<?=$rateType?>' required <?=$checked;?> <?=$disabledRateType;?>><?=$rateType?></label><?php 
+   			}
+            if (!is_null($disabledRateType)) {
+                $this->formHiddenInput('RATE_TYPE',$this->RATE_TYPE,'RATE_TYPE');   			
+            }
+            ?>
  			</div>						 
    		</div>
 
@@ -181,11 +199,16 @@ class resourceRequestRecord extends DbRecord
    			<label class="col-md-offset-5 col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Hours Type</label>
    			<div class="col-md-5">
    			<?php 
-   			foreach (self::$allHourTypes as $hoursType) {
+            $this->HOURS_TYPE = empty($this->HOURS_TYPE) ? self::HOURS_TYPE_REGULAR : $this->HOURS_TYPE;
+            $disabledHoursType = empty($this->RESOURCE_NAME) ? null : 'disabled';
+            foreach (self::$allHourTypes as $hoursType) {
    			    $checked = $hoursType == $this->HOURS_TYPE ? ' checked ' : null;
-   			    ?><label class="radio-inline"><input type="radio" name="HOURS_TYPE" value='<?=$hoursType?>' required <?=$checked?> ><?=$hoursType?></label><?php 
-   			}   			
-   			?>
+   			    ?><label class="radio-inline"><input type="radio" name="HOURS_TYPE" value='<?=$hoursType?>' required <?=$checked?> <?=$disabledHoursType;?>><?=$hoursType?></label><?php 
+   			}
+            if (!is_null($disabledHoursType)) {
+                $this->formHiddenInput('HOURS_TYPE',$this->HOURS_TYPE,'HOURS_TYPE');			
+   			}
+            ?>
  			</div>						 
    		</div>
 

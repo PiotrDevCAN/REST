@@ -57,8 +57,7 @@ function ResourceRequest() {
 				$('#saveAdjustedHours').attr('disabled',true);
 			//	$('#moveStartDate').attr('disabled',false);
 				$('#reinitialise').attr('disabled',false);
-				this.setMaxDate(ModalendPicker.getMoment().toDate());
-				
+				this.setMaxDate(ModalendPicker.getMoment().toDate());				
 			}
 		});
 		
