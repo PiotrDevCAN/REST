@@ -107,7 +107,8 @@ switch (true) {
                 // unassigned requests
                 if (empty($resourceRecord->RESOURCE_NAME)) {
                     // we can change hours type
-                    if ($resourceRecord->HOURS_TYPE != $_POST['HOURS_TYPE']) {
+                    $originalHoursType = $resourceRecord->HOURS_TYPE;
+                    if ($originalHoursType != $_POST['HOURS_TYPE']) {
                         $reinitialiseHours = true;
                     } else {
                         $reinitialiseHours = false;
@@ -134,6 +135,9 @@ switch (true) {
                     } catch (Exception $e) {
                         $hoursResponse = $e->getMessage();
                     }
+
+                    $diaryEntry = "Hours Type in Request was changed at from  " . $originalHoursType . " to " . $_POST['HOURS_TYPE'] . ")";
+                    $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
 
                     $diaryEntry = "Request was re-initialised at  " . $totalHours . " Total Hours (Start Date:" . $startDate . " End Date: " . $endDate . ")";
                     $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
