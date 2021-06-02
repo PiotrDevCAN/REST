@@ -310,7 +310,7 @@ class resourceRequestTable extends DbTable {
         $displayedResourceName.= "  data-rfsenddate='" . $rfsEndDate . "' ";
         $displayedResourceName.= "  data-hrs='" . $totalHours . "' ";
         $displayedResourceName.= "  data-hrstype='" . $hoursType . "' ";
-        $displayedResourceName.= "  data-ratetype='" . $rate . "' ";
+        $displayedResourceName.= "  data-ratetype='" . $rateType . "' ";
         $displayedResourceName.= "  >";
 
 //        $row['RESOURCE_NAME'].= $editable ? 
