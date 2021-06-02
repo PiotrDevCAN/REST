@@ -105,9 +105,9 @@ switch (true) {
                 $resourceRecord->setFromArray($rrData); // Get current data from the table.
 
                 // unassigned requests
-                if (empty($resourceRecord->RESOURCE_NAME)) {
+                if (empty($resourceRecord->get('RESOURCE_NAME'))) {
                     // we can change hours type
-                    $originalHoursType = $resourceRecord->HOURS_TYPE;
+                    $originalHoursType = $resourceRecord->get('HOURS_TYPE');
                     if ($originalHoursType != $_POST['HOURS_TYPE']) {
                         $reinitialiseHours = true;
                     } else {
