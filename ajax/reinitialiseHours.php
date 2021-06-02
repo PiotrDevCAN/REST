@@ -63,47 +63,43 @@ switch (true) {
         break;
     default:
         $autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
-        // $valid=true;
-        $valid=false;
 
         $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 
-        if($valid){
-            $resourceRecord = new resourceRequestRecord();
-            $resourceRecord->setFromArray(array('RESOURCE_REFERENCE'=>$resourceReference));
-            
-            $rrData = $resourceTable->getRecord($resourceRecord);
-            $resourceRecord->setFromArray($rrData); // Get current data from the table.
-            $resourceRecord->setFromArray(
-                array(
-                    'START_DATE'=>$startDate,
-                    'END_DATE'=>$endDate,
-                    'TOTAL_HOURS'=>$totalHours
-                )
-            );  
-            // Override with what the user has changed on the screen.
-            $saveResponse = $resourceTable->update($resourceRecord);
-            $saveResponse = $saveResponse ? true : false;
-            
-            if ($saveResponse) {
-                $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
-                $resourceHoursSaved = false;
-                try {
-                    $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $hoursType );
-                    $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
-                } catch (Exception $e) {
-                    db2_rollback($GLOBALS['conn']);
-                    $hoursResponse = $e->getMessage();
-                }
-                
-                resourceRequestTable::setTotalHours($resourceReference, $totalHours);
-                
-                $diaryEntry = "Request was re-initialised at  " . $totalHours . " Total Hours (Start Date:" . $startDate . " End Date: " . $endDate . ")";
-                $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
-                
-                $success = true;
-                db2_commit($GLOBALS['conn']);
+        $resourceRecord = new resourceRequestRecord();
+        $resourceRecord->setFromArray(array('RESOURCE_REFERENCE'=>$resourceReference));
+        
+        $rrData = $resourceTable->getRecord($resourceRecord);
+        $resourceRecord->setFromArray($rrData); // Get current data from the table.
+        $resourceRecord->setFromArray(
+            array(
+                'START_DATE'=>$startDate,
+                'END_DATE'=>$endDate,
+                'TOTAL_HOURS'=>$totalHours
+            )
+        );  
+        // Override with what the user has changed on the screen.
+        $saveResponse = $resourceTable->update($resourceRecord);
+        $saveResponse = $saveResponse ? true : false;
+        
+        if ($saveResponse) {
+            $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
+            $resourceHoursSaved = false;
+            try {
+                $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $hoursType );
+                $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
+            } catch (Exception $e) {
+                db2_rollback($GLOBALS['conn']);
+                $hoursResponse = $e->getMessage();
             }
+            
+            resourceRequestTable::setTotalHours($resourceReference, $totalHours);
+            
+            $diaryEntry = "Request was re-initialised at  " . $totalHours . " Total Hours (Start Date:" . $startDate . " End Date: " . $endDate . ")";
+            $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
+            
+            $success = true;
+            db2_commit($GLOBALS['conn']);
         }
 
         db2_autocommit($GLOBALS['conn'],$autoCommit);
