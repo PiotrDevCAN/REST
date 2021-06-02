@@ -37,7 +37,6 @@ $hoursResponse = '';
 $diaryRef = '';
 
 switch (true) {
-
     case $invalidRateType:
         // rate type protection
         $messages = 'Cannot save Resouce Request with provided Rate Type value.';
@@ -46,7 +45,6 @@ switch (true) {
         // hours type protection
         $messages = 'Cannot save Resouce Request with provided Hours Type value.';
         break;
-
     case $invalidTotalHoursAmount:
         // zero total hours protection
         $messages = 'Cannot save Resouce Request with zero total hours.';
@@ -65,7 +63,6 @@ switch (true) {
         break;
     default:
         $autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
-        $hoursResponse = null;
         // $valid=true;
         $valid=false;
 
@@ -83,27 +80,32 @@ switch (true) {
                     'END_DATE'=>$endDate,
                     'TOTAL_HOURS'=>$totalHours
                 )
-            );  // Override with what the user has changed on the screen.
-            $resp = $resourceTable->update($resourceRecord);
+            );  
+            // Override with what the user has changed on the screen.
+            $saveResponse = $resourceTable->update($resourceRecord);
+            $saveResponse = $saveResponse ? true : false;
             
-            $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
-            try {
-                $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $hoursType );
-            } catch (Exception $e) {
-                db2_rollback($GLOBALS['conn']);
-                $hoursResponse = $e->getMessage();
-            }
+            if ($saveResponse) {
+                $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
+                $resourceHoursSaved = false;
+                try {
+                    $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $hoursType );
+                    $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
+                } catch (Exception $e) {
+                    db2_rollback($GLOBALS['conn']);
+                    $hoursResponse = $e->getMessage();
+                }
                 
-            resourceRequestTable::setTotalHours($resourceReference,$totalHours );
-            
-            $diaryEntry = "Request was re-initialised at  " . $totalHours . " Total Hours (Start Date:" . $startDate . " End Date: " . $endDate . ")";
-            $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
-            
-            $success = true;
-            db2_commit($GLOBALS['conn']);
+                resourceRequestTable::setTotalHours($resourceReference, $totalHours);
+                
+                $diaryEntry = "Request was re-initialised at  " . $totalHours . " Total Hours (Start Date:" . $startDate . " End Date: " . $endDate . ")";
+                $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
+                
+                $success = true;
+                db2_commit($GLOBALS['conn']);
+            }
         }
 
-        $success = true;
         db2_autocommit($GLOBALS['conn'],$autoCommit);
 
         $messages = ob_get_clean();
