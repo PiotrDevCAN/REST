@@ -184,9 +184,9 @@ class resourceRequestRecord extends DbRecord
    			    $checked = $rateType == $this->RATE_TYPE ? ' checked ' : null;
    			    ?><label class="radio-inline"><input type="radio" name="RATE_TYPE" value='<?=$rateType?>' required <?=$checked;?> <?=$disabledRateType;?>><?=$rateType?></label><?php 
    			}
-            if (!is_null($disabledRateType)) {
-                $this->formHiddenInput('RATE_TYPE',$this->RATE_TYPE,'RATE_TYPE');   			
-            }
+            // if (!is_null($disabledRateType)) {
+            //     $this->formHiddenInput('RATE_TYPE',$this->RATE_TYPE,'RATE_TYPE');   			
+            // }
             ?>
  			</div>						 
    		</div>
@@ -205,9 +205,9 @@ class resourceRequestRecord extends DbRecord
    			    $checked = $hoursType == $this->HOURS_TYPE ? ' checked ' : null;
    			    ?><label class="radio-inline"><input type="radio" name="HOURS_TYPE" value='<?=$hoursType?>' required <?=$checked?> <?=$disabledHoursType;?>><?=$hoursType?></label><?php 
    			}
-            if (!is_null($disabledHoursType)) {
-                $this->formHiddenInput('HOURS_TYPE',$this->HOURS_TYPE,'HOURS_TYPE');			
-   			}
+            // if (!is_null($disabledHoursType)) {
+            //     $this->formHiddenInput('HOURS_TYPE',$this->HOURS_TYPE,'HOURS_TYPE');			
+   			// }
             ?>
  			</div>						 
    		</div>
