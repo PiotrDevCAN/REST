@@ -13,12 +13,19 @@ $startDate = !empty($_POST['ModalSTART_DATE']) ? trim($_POST['ModalSTART_DATE'])
 $endDate = !empty($_POST['ModalEND_DATE']) ? trim($_POST['ModalEND_DATE']) : null;
 $totalHours = !empty($_POST['ModalTOTAL_HOURS']) ? trim($_POST['ModalTOTAL_HOURS']) : 0;
 $hoursType = !empty($_POST['ModalHOURS_TYPE']) ? trim($_POST['ModalHOURS_TYPE']) : resourceRequestRecord::HOURS_TYPE_REGULAR;
+$rateType = !empty($_POST['ModalRATE_TYPE']) ? trim($_POST['ModalRATE_TYPE']) : resourceRequestRecord::RATE_TYPE_BLENDED;
 
+// set default values
+$hoursType = empty($hoursType) ? resourceRequestRecord::HOURS_TYPE_REGULAR : $hoursType;
+$rateType = empty($rateType) ? resourceRequestRecord::RATE_TYPE_BLENDED: $rateType;
+
+$invalidRateType = !in_array($rateType, resourceRequestRecord::$allRateTypes);
+$invalidHoursType = !in_array($hoursType, resourceRequestRecord::$allHourTypes);
 $invalidTotalHoursAmount = empty($totalHours);
 $invalidStartDate = resourceRequestTable::validateDate($startDate) === false;
 $invalidEndDate = resourceRequestTable::validateDate($endDate) === false;
 
-if ($startDate == null || $endDate == null || $resourceReference == null) {
+if ($resourceReference == null || $startDate == null || $endDate == null) {
     $invalidOtherParameters = true;
 } else {
     $invalidOtherParameters = false;
@@ -30,6 +37,16 @@ $hoursResponse = '';
 $diaryRef = '';
 
 switch (true) {
+
+    case $invalidRateType:
+        // rate type protection
+        $messages = 'Cannot save Resouce Request with provided Rate Type value.';
+        break;
+    case $invalidHoursType:
+        // hours type protection
+        $messages = 'Cannot save Resouce Request with provided Hours Type value.';
+        break;
+
     case $invalidTotalHoursAmount:
         // zero total hours protection
         $messages = 'Cannot save Resouce Request with zero total hours.';
@@ -49,7 +66,9 @@ switch (true) {
     default:
         $autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
         $hoursResponse = null;
-        $valid=true;
+        // $valid=true;
+        $valid=false;
+
         $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 
         if($valid){
@@ -84,6 +103,7 @@ switch (true) {
             db2_commit($GLOBALS['conn']);
         }
 
+        $success = true;
         db2_autocommit($GLOBALS['conn'],$autoCommit);
 
         $messages = ob_get_clean();

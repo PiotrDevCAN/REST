@@ -31,25 +31,25 @@ $rfsTable = new rfsTable(allTables::$RFS);
 <?php $archiveDisabled  = 'disabled' ?>
 
 
-<div class='container-fluid'>
+<div class='container'>
 <h3>RFS Report</h3>
 
 <div class='container'>
 
-<form id='reportDates'>
+<form id='reportDates' class='form-horizontal'>
 	<div class='row'>
+  <div class='col-md-5'> 
 	<div class='form-group text-right' >
-	 <label for='pipelineLiveArchive' class='col-md-2 control-label text-right'>RFS Status</label>
-      	<div class='col-md-10  text-left' >
+	 <label for='pipelineLiveArchive' class='col-md-3 control-label text-right'>RFS Status</label>
+      	<div class='col-md-9  text-left' >
  			  <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$pipelineChecked?>  data-toggle="button" value='pipeline' <?=$pipelineDisabled?>>Pipeline</label>
   			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$liveChecked?> <?=$defaultToLive?> data-toggle="button" value='live' <?=$liveDisabled?> >Live</label>
         <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$bothChecked?> data-toggle="button" value='both' <?=$bothDisabled?> >Both</label>
   			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$archiveChecked?> data-toggle="button" value='archive'  <?=$archiveDisabled?>>Archive</label>
 	    </div>
 	</div>
+  </div>
 	</div>
-
-
 
 	<div class='form-group text-right' >
     <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>

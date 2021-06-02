@@ -144,7 +144,7 @@ function initPickers() {
 
 $(document).ready(function(){
 
-	  $( "#resourceRequestForm" ).submit(function( event ) {
+  $( "#resourceRequestForm" ).submit(function( event ) {
 		$(':submit').addClass('spinning').attr('disabled',true);
 		var url = 'ajax/saveResourceRecord.php';
 		var disabledFields = $(':disabled');

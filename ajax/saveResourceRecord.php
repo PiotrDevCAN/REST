@@ -16,7 +16,7 @@ $startDate = !empty($_POST['START_DATE']) ? trim($_POST['START_DATE']) : null;
 $endDate = !empty($_POST['END_DATE']) ? trim($_POST['END_DATE']) : $_POST['START_DATE'];
 
 $totalHours = !empty($_POST['TOTAL_HOURS']) ? trim($_POST['TOTAL_HOURS']) : 0;
-$rateType = !empty($_POST['RATE_TYPE']) ? trim($_POST['RATE_TYPE']) : null;
+$rateType = !empty($_POST['RATE_TYPE']) ? trim($_POST['RATE_TYPE']) : resourceRequestRecord::RATE_TYPE_BLENDED;
 $hoursType = !empty($_POST['HOURS_TYPE']) ? trim($_POST['HOURS_TYPE']) : resourceRequestRecord::HOURS_TYPE_REGULAR;
 $organisation = !empty($_POST['ORGANISATION']) ? trim($_POST['ORGANISATION']) : null;
 $service = !empty($_POST['SERVICE']) ? trim($_POST['SERVICE']) : null;

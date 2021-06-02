@@ -15,18 +15,22 @@ class resourceRequestHoursTable extends DbTable
     function createResourceRequestHours($resourceReference=null, $startDate=null, $endDate=null, $hours=0, $deleteExisting=true, $hrsType=resourceRequestRecord::HOURS_TYPE_REGULAR){
         
         if ($resourceReference === null) {
+            error_log("Invalid Resource Reference");
             throw new \Exception("Invalid Resource Reference");
         }
 
-        if ($startDate === null || self::validateDate($startDate) === false) {
+        if ($startDate === null || self::validateDate($startDate) === false) {            
+            error_log("Invalid Start Date");                
             throw new \Exception("Invalid Start Date");
         }
 
         if ($endDate === null || self::validateDate($endDate) === false) {
+            error_log("Invalid End Date");
             throw new \Exception("Invalid End Date");
         }
 
-        if ($hours == 0) {
+        if ($hours == 0) {            
+            error_log("Invalid Total Hours amount");
             throw new \Exception("Invalid Total Hours amount");
         }
 
@@ -65,7 +69,6 @@ class resourceRequestHoursTable extends DbTable
                 break;
             default:
                 error_log("Invalid hours type found");
-                
                 throw new \Exception("Invalid hours type found");
                 break;
         }
@@ -171,7 +174,7 @@ class resourceRequestHoursTable extends DbTable
             }
             */
             
-            if($businessDaysInWeek>0){
+            if($businessDaysInWeek > 0){
                 $businessHoursInWeek = $businessDaysInWeek * $hrsPerEffortDay;
                 $resourceRequestHours->HOURS = $businessHoursInWeek;
                 

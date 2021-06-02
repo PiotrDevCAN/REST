@@ -15,7 +15,7 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is nu
 // $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
 // $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 ?>
-<div class='container-fluid'>
+<div class='container'>
 <h3>Rest Requests Report (Hrs/Mth)</h3>
 
 <div class='container'>

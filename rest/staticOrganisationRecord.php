@@ -17,7 +17,7 @@ class staticOrganisationRecord extends DbRecord
     public $SERVICE;
     public $STATUS;
 
-	function displayForm($mode=FormClass::$modeDEFINE){
+	function displayForm($mode){
         $allButtons = array();
         ?>
         <form id='organisationForm' class="form-horizontal"  method='post'>

@@ -110,6 +110,9 @@ function ResourceRequest() {
 			$('#confirmDeleteModal').modal('show');
 			$('#confirmDeleteResource').attr('disabled',false);
 		});
+		$('#confirmDeleteModal').on('hidden.bs.modal', function () {
+			$('.spinning').removeClass('spinning').attr('disabled',false);
+		}); 
 	},
 
 	this.listenForConfirmedDelete = function(){
@@ -130,7 +133,7 @@ function ResourceRequest() {
 					clickedButtons.removeClass('spinning');
 					clickedButtons.not('#confirmDeleteResource').attr('disabled',false);					
 		    		ResourceRequest.table.ajax.reload();
-		    		}
+				}
 		    });
 		});
 	},
@@ -141,12 +144,14 @@ function ResourceRequest() {
 			$(this).prev('td.details-control').trigger('click');	
 			
 			var resourceReference = $(this).data('reference');
+			$('#messageArea').html("<div class='col-sm-4'></div><div class='col-sm-4'><h4>Form loading...<span class='glyphicon glyphicon-refresh spinning'></span></h4><br/><small>This may take a few seconds</small></div><div class='col-sm-4'></div>");
 			
 		    $.ajax({
 		    	url: "ajax/getEditResourceForm.php",
 		        type: 'POST',
 		    	data: {resourceReference:resourceReference},
 		    	success: function(result){
+					$('#messageArea').html("");
 		    		$('.spinning').removeClass('spinning').attr('disabled',false);
 		    		var resultObj = JSON.parse(result);		    		
 		    		$('#editRequestModalBody').html(resultObj.form);
@@ -284,7 +289,7 @@ function ResourceRequest() {
 						$('#clearResourceName').attr('disabled',false);
 						$('#RESOURCE_NAME').attr('disabled',false);
 						$('#pleaseWaitMessage').html('');
-			    		}
+					}
 			    });	
 			} else {
 				$('.spinning').removeClass('spinning').attr('disabled',false);
@@ -390,6 +395,7 @@ function ResourceRequest() {
 				$('#ModalTOTAL_HOURS').val($(dataDetails).data('hrs'));			
 				$('#originalTotalHours').val($(dataDetails).data('hrs'));
 				$('#ModalHOURS_TYPE').val($(dataDetails).data('hrstype'));
+				$('#ModalRATE_TYPE').val($(dataDetails).data('ratetype'));
 					
     			var resourceRequest = new ResourceRequest();
 				resourceRequest.initialiseEditHoursModalStartEndDates();    			
@@ -507,6 +513,9 @@ function ResourceRequest() {
 			$('#confirmDuplicateStart').text($.trim($(this).data('start')));			
 			$('#confirmDuplicationModal').modal('show');			
 		});
+		$('#confirmDuplicationModal').on('hidden.bs.modal', function () {
+			$('.spinning').removeClass('spinning').attr('disabled',false);
+		});
 	},
 
 	this.listenForConfirmedDuplication = function(){
@@ -597,35 +606,7 @@ function ResourceRequest() {
 			});
 		});
 	},
-	this.listenForSaveStatusChange = function(){
-		$(document).on('click','#saveStatusChange', function(e){
-			$(this).addClass('spinning').attr('disabled',true);
-			var disabled = $('input:disabled');
-			$(disabled).prop('disabled',false);
-			var formData = $('#statusChangeForm').serialize();
-			$(disabled).prop('disabled',true);
-		    $.ajax({
-		    	url: "ajax/saveStatusChange.php",
-		        type: 'POST',
-		    	data: formData,
-		    	success: function(result){
-		    		$('.spinning').removeClass('spinning').attr('disabled',false);
-		    		ResourceRequest.table.ajax.reload();
-					$('#statusModal').modal('hide');
-				}
-			});
-		});
-	},
-	
-	this.listenForChangingHours = function (){
-		$(document).on('focus','input[type=number]',function(){
-		$('#saveAdjustedHoursWithDelta').attr('disabled',false);
-		//	$('#saveAdjustedHours').attr('disabled',false); They can't do this anymore
-		//	$('#slipStartDate').attr('disabled',true);
-		//	$('#moveEndDate').attr('disabled',true);
-		});
-	},
-	
+
 	this.listenForChangePipelineLiveArchive = function(){
 		$(document).on('change','input:radio[name=pipelineLiveArchive]',function(){			
 			var cookieName = this.dataset.cookie;
@@ -637,7 +618,7 @@ function ResourceRequest() {
 			ResourceRequest.table.ajax.reload();
 		});
 	},
-	
+
 	this.listenForSelectSpecificRfs = function(){
 		$(document).on('change','#selectRfs',function(){	
 			var rfs = $('#selectRfs option:selected').val();			
@@ -1009,7 +990,6 @@ function ResourceRequest() {
 				$(disabledFields).removeAttr('disabled');
 				var formData = $("#resourceRequestForm").serialize();
 				$(disabledFields).attr('disabled',true);
-				
 				$.ajax({
 					type:'post',
 					url: url,

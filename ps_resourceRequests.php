@@ -40,17 +40,16 @@ td.dataTables_empty{
 
 </style>
 
-
 <div class='container'>
 
 <h3>Assign Resource to Requests - Selection</h3>
 
-<form id='reportDates'>
+<form id='reportDates' class='form-horizontal'>
 	<div class='row'>
 	<div class='col-md-5'> 
 	<div class='form-group' >
 	 <label for='pipelineLiveArchive' class='col-md-3 control-label text-right'>RFS Status</label>
-      	<div class='col-md-9  text-left' >
+      <div class='col-md-9  text-left' >
  			  <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='pipeline' disabled >Pipeline</label>
   			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" checked  data-toggle="button" value='live' >Live</label>
         <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='both' disabled >Both</label>
@@ -60,14 +59,14 @@ td.dataTables_empty{
 	</div>
 	</div>
 	<div class='row'>
-	   <div class='col-md-5'>  
+	   <div class='col-md-6'>  
        <div class='form-group'>
         <label for='selectOrganisation' class='col-md-3 control-label text-right'>Organisation</label>
         	<div class='col-md-9 text-left'>
-              	<select class='form-control select' id='selectOrganisation'
-                  	          name='organisation'
-                  	          data-placeholder="Select Organisation" data-allow-clear="true"
-                  	          >
+              <select class='form-control select' id='selectOrganisation'
+                name='organisation'
+                data-placeholder="Select Organisation" data-allow-clear="true"
+                >
             	<option value=''>Select Organisation</option>
             	<option value='All'>All</option>
                 <?php
@@ -105,22 +104,20 @@ td.dataTables_empty{
             </div>
 	    </div>
 	    
-	    </div>
-
-	    <div class='form-group'>	    
-	    <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>
-        	<div class='col-md-3 text-left'>
-              	<select class='form-control select' 
-              			id='selectRfs'
-                  	    name='selectRfs'
-                  	    data-placeholder="Select RFS" 
-                  	    data-allow-clear="true"
-                ></select>
-            </div>
-	    
-	    
-	    </div>
-	    </div>
+    </div>
+    <div class='col-md-6'>
+      <div class='form-group'>	    
+      <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>
+        <div class='col-md-9 text-left'>
+          <select class='form-control select' id='selectRfs'
+                  name='selectRfs'
+                  data-placeholder="Select RFS" 
+                  data-allow-clear="true"
+          ></select>
+        </div>
+      </div>
+    </div>  
+  </div>
 	    	    
 </form>
 </div>
@@ -141,9 +138,6 @@ td.dataTables_empty{
 </div>
 </div>
 
-
-
-
 <!-- Modal -->
 <div id="resourceNameModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -154,33 +148,36 @@ td.dataTables_empty{
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Allocate Resource Name</h4>
       </div>
-      <form id='resourceNameForm'>
+      <form id='resourceNameForm' class='form-horizontal'>
       <div class="modal-body">
-      <div class="form-group"  >
-      <label for="businessUnit" class="col-md-3	control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Business Unit</label>
-      <div class='col-md-9'><input type='text' class='form-control' id="businessUnit"  value="" disabled ></div>
-      </div>
-      
-  		<div class="form-group required" id="PROJECT_TITLEFormGroup" >
-  		<div class='row'>
-            <label for="RESOURCE_NAME" class="col-md-3	control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Resource Name</label>
-              <div class="col-md-9">
-              	<select class='form-control select' id='RESOURCE_NAME'
-                  	          name='RESOURCE_NAME'
-                  	          required='required'
-                  	          data-placeholder="Select Resource"
-                  	          data-allow-clear="true"
-                  	          disabled="true"
-                  	           >
-            	<option value=''>Select Resource<option>
-               	</select>
-               	<p id='pleaseWaitMessage'></p>
-                  <input type='hidden' id="RESOURCE_REFERENCE" name="RESOURCE_REFERENCE" value="" >
-                  <input type='hidden' id="parent" name="parent" value="" >
-                  <input type='hidden' id="currentResourceName"  value="" >
-                  
-              </div>
+        <div class='row'>
+          <div class="form-group"  >
+            <label for="businessUnit" class="col-md-3	control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Business Unit</label>
+            <div class='col-md-9'>
+              <input type='text' class='form-control' id="businessUnit"  value="" disabled >
+            </div>
+          </div>
         </div>
+        <div class='row'>
+          <div class="form-group required" id="PROJECT_TITLEFormGroup" >
+            <label for="RESOURCE_NAME" class="col-md-3	control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Resource Name</label>
+            <div class="col-md-9">
+              <select class='form-control select' id='RESOURCE_NAME'
+                name='RESOURCE_NAME'
+                required='required'
+                data-placeholder="Select Resource"
+                data-allow-clear="true"
+                disabled="true"
+              >
+                <option value=''>Select Resource<option>
+              </select>
+              <p id='pleaseWaitMessage'></p>
+              <input type='hidden' id="RESOURCE_REFERENCE" name="RESOURCE_REFERENCE" value="" >
+              <input type='hidden' id="parent" name="parent" value="" >
+              <input type='hidden' id="currentResourceName"  value="" >
+                    
+            </div>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -478,36 +475,40 @@ td.dataTables_empty{
         <h4 class="modal-title">Diary</h4>
       </div>
       <div class="modal-body">
-      <form id='diaryForm'>
-  		<div class="form-group " >
-  		<div class='row'>
+      <form id='diaryForm' class='form-horizontal'>
+        <div class='row'>
+          <div class="form-group " >
             <label for="rfs" class="col-md-3 control-label ceta-label-left required" data-toggle="tooltip" data-placement="top" title="" data-original-title="">RFS</label>
-           <div class='col-md-8'>
-           <input class="form-control" id="rfs" value="" placeholder="RFS Id"  type="text" maxlength="20" disabled>
-           </div>
-        </div>
-  		<div class='row'>
-            <label for="request" class="col-md-3 control-label ceta-label-left required" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Request</label>
-           <div class='col-md-8'>
-           <input class="form-control" id="request" value="" placeholder="Request"  type="text" maxlength="20" disabled>
-           </div>
+            <div class='col-md-8'>
+            <input class="form-control" id="rfs" value="" placeholder="RFS Id"  type="text" maxlength="20" disabled>
+            </div>
+          </div>
         </div>
         <div class='row'>
-            <label for="organisation" class="col-md-3 control-label ceta-label-left required" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Organisation</label>
-           <div class='col-md-8'>
-           <input class="form-control" id="organisation" value="" placeholder="Organisation"  type="text" maxlength="20" disabled>
-           </div>
+          <div class="form-group " >
+            <label for="request" class="col-md-3 control-label ceta-label-left required" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Request</label>
+            <div class='col-md-8'>
+            <input class="form-control" id="request" value="" placeholder="Request"  type="text" maxlength="20" disabled>
+            </div>
+          </div>
         </div>
+        <div class='row'>
+        <div class="form-group " >
+              <label for="organisation" class="col-md-3 control-label ceta-label-left required" data-toggle="tooltip" data-placement="top" title="" data-original-title="">Organisation</label>
+            <div class='col-md-8'>
+            <input class="form-control" id="organisation" value="" placeholder="Organisation"  type="text" maxlength="20" disabled>
+            </div>
+          </div>
         </div>   
-  		<div class="form-group " >
-  		<div class='row'>
+        <div class='row'>
+          <div class="form-group " >
             <label for="newDiaryEntry" class="col-md-3	control-label ceta-label-left required" data-toggle="tooltip" data-placement="top" title="" data-original-title="">New Entry</label>
             <div class="col-md-8 diaryEntry" contenteditable='true' id='newDiaryEntry' data-placeholder='type new diary entry here'></div>
+          </div>
         </div>
         <div class='row'>       
-             <div class="col-md-10 col-md-offset-1	 diary" id='diary'></div>
-        </div>
-        </div>    
+          <div class="col-md-10 col-md-offset-1	 diary" id='diary'></div>
+        </div> 
         <input type='hidden' id='RESOURCE_REQUEST' value=''/>    
       </form>
       </div>
@@ -592,15 +593,11 @@ $(document).ready(function() {
 	resourceRequest.listenForEditHours();
 	resourceRequest.listenForSlipStartDate();
 	resourceRequest.listenForReinitialise();
-// 	resourceRequest.listenForMoveEndDate();
-// 	resourceRequest.listenForMoveStartDate();
 	resourceRequest.listenForDuplicateResource();
  	resourceRequest.listenForConfirmedDuplication();
-// 	resourceRequest.listenForChangingHours();
  	resourceRequest.listenForSaveDiaryEntry();
  	resourceRequest.listenForSaveAdjustedHours();
  	resourceRequest.listenForSaveAdjustedHoursWithDelta();
-// 	resourceRequest.listenForSaveStatusChange();
 	resourceRequest.listenForResetReport();
 	resourceRequest.listenForUnallocated();
 	resourceRequest.listenForCompleteable();
@@ -635,18 +632,13 @@ $(document).ready(function(){
 
 		$.each($('.hrsForWeek'),function(key, element){
 			$(element).val('').attr('placeholder','Re-Initialise');
-		});
-
-		
+		});		
 	});
-
-	
 
 	$(document).on('keyup mouseup','.hrsForWeek',function(e){
 		$('#ModalTOTAL_HOURS').prop('disabled',true);
 		$('#reinitialise').attr('disabled',true);
 		$('#saveAdjustedHours').attr('disabled',false);
-		
 		
 		var originalTotalHours = $('#originalTotalHours').val();		
 		var totalHours = 0;		
@@ -658,8 +650,6 @@ $(document).ready(function(){
 		$('#ModalTOTAL_HOURS').val(totalHours);
 
 		$('#saveAdjustedHours').attr('data-original-title','').tooltip('show').tooltip('hide');
-
-
 
 console.log( totalHours + ":" + originalTotalHours ); 
 console.log( parseFloat(totalHours) < parseFloat(originalTotalHours) );

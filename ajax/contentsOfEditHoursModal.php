@@ -54,7 +54,7 @@ ob_start();
    <input type='hidden' name='ModalResourceReference' id='ModalResourceReference' value='<?=trim($_POST['resourceReference'])?>' />
    <div class='row'>
    <div class='form-group' >
-     <div id='ModalSTART_DATE" . "FormGroup' >
+     <div id='ModalSTART_DATEFormGroup' >
      <label for='ModalSTART_DATE' class='col-md-2 control-label ' data-toggle='tooltip' data-placement='top' title=''>Start Date</label>
        <div class='col-md-4'>
          <div id='calendarFormGroupModalSTART_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='ModalSTART_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
@@ -66,7 +66,7 @@ ob_start();
        </div>
    </div>
 
-     <div id='ModalEND_DATE" . "FormGroup' >
+     <div id='ModalEND_DATEFormGroup' >
      <label for='ModalEND_DATE' class='col-md-2 control-label ' data-toggle='tooltip' data-placement='top' title=''>End Date</label>
        <div class='col-md-4'>
          <div id='calendarFormGroupModalEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='ModalEND_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
@@ -87,6 +87,7 @@ ob_start();
        <input type='number' step='0.01' min='0' max='1000' class="form-control" id="ModalTOTAL_HOURS" name="ModalTOTAL_HOURS" value="" placeholder="Total Hours" >
        <input type='hidden' id='originalTotalHours' >
        <input type='hidden' id='ModalHOURS_TYPE' name='ModalHOURS_TYPE' >
+       <input type='hidden' id='ModalRATE_TYPE' name='ModalRATE_TYPE' >
        </div>
        </div>
 	</div>

@@ -126,11 +126,9 @@ class resourceRequestRecord extends DbRecord
 
         </div>
 
-
    		<div class='form-group' >
 
-
-        <div id='START_DATE" . "FormGroup' class='required'>
+        <div id='START_DATEFormGroup' class='required'>
         <label for='START_DATE' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>Start Date</label>
         <div class='col-md-3'>
         <div id='calendarFormGroupSTART_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='START_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
@@ -141,7 +139,7 @@ class resourceRequestRecord extends DbRecord
         </div>
         </div>
 
-        <div id='END_DATE" . "FormGroup' class='required'>
+        <div id='END_DATEFormGroup' class='required'>
         <label for='END_DATE' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>End Date</label>
         <div class='col-md-3'>
         <div id='calendarFormGroupEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
@@ -177,7 +175,7 @@ class resourceRequestRecord extends DbRecord
 
    		</div>
    		
-   		 <div class='form-group required'>
+        <div class='form-group required'>
    		
    		<div id='HrsTypeFormGroup'>
    			<label class="col-md-offset-5 col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Hours Type</label>

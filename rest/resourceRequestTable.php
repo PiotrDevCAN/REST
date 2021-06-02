@@ -236,6 +236,7 @@ class resourceRequestTable extends DbTable {
         is_object($endDateObj) ?  $endDateObj->setTime(23, 59, 59) : null; // When setting completed, compare against midnight on END_DATE
         $totalHours = $row['TOTAL_HOURS'];
         $hoursType = $row['HOURS_TYPE'];
+        $rateType = $row['RATE_TYPE'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
         $organisation = $row['ORGANISATION'];
         $service = $row['SERVICE'];
@@ -255,7 +256,7 @@ class resourceRequestTable extends DbTable {
             case $today > $endDateObj:
                 $assignColor = 'text-danger';
                 $started     = 'Completed';
-                $editable = false;
+                // $editable = false;
                 break;           
             default:
                 $assignColor = 'text-primary';
@@ -309,6 +310,7 @@ class resourceRequestTable extends DbTable {
         $displayedResourceName.= "  data-rfsenddate='" . $rfsEndDate . "' ";
         $displayedResourceName.= "  data-hrs='" . $totalHours . "' ";
         $displayedResourceName.= "  data-hrstype='" . $hoursType . "' ";
+        $displayedResourceName.= "  data-ratetype='" . $rate . "' ";
         $displayedResourceName.= "  >";
 
 //        $row['RESOURCE_NAME'].= $editable ? 
