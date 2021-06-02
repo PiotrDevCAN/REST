@@ -6,12 +6,14 @@ use rest\resourceRequestTable;
 use rest\resourceRequestHoursTable;
 use itdq\FormClass;
 use itdq\Trace;
+use rest\resourceRequestDiaryTable;
 
 set_time_limit(0);
 ob_start();
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $rfs = !empty($_POST['RFS']) ? trim($_POST['RFS']) : null;
+
 $startDate = !empty($_POST['START_DATE']) ? trim($_POST['START_DATE']) : null;
 $endDate = !empty($_POST['END_DATE']) ? trim($_POST['END_DATE']) : $_POST['START_DATE'];
 
@@ -24,6 +26,7 @@ $description = !empty($_POST['DESCRIPTION']) ? trim($_POST['DESCRIPTION']) : '';
 
 $mode = !empty($_POST['mode']) ? trim($_POST['mode']) : '';
 $resourceReference = !empty($_POST['RESOURCE_REFERENCE']) ? trim($_POST['RESOURCE_REFERENCE']) : '';
+$resourceName = !empty($_POST['RESOURCE_NAME']) ? trim($_POST['RESOURCE_NAME']) : '';
 $status = !empty($_POST['STATUS']) ? trim($_POST['STATUS']) : '';
 $rrCreator = !empty($_POST['RR_CREATOR']) ? trim($_POST['RR_CREATOR']) : '';
 
@@ -71,44 +74,75 @@ switch (true) {
         $messages = 'Significant parameters from form are missing.';
         break;       
     default:
+
         $resourceRecord = new resourceRequestRecord();
         $resourceRecord->setFromArray($_POST);
         $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
-        if($mode==FormClass::$modeEDIT){
-            $rrData = $resourceTable->getRecord($resourceRecord);
-            $resourceRecord->setFromArray($rrData); // Get current data from the table.
-            $resourceRecord->setFromArray($_POST);  // Override with what the user has changed on the screen.
-            $saveResponse = $resourceTable->update($resourceRecord);
-            $saveResponse = $saveResponse ? true : false;
-            $resourceReference = $resourceRecord->get('RESOURCE_REFERENCE');
-            $create = false;
-            $update = true;
-        } else {
-            $saveResponse = $resourceTable->insert($resourceRecord);
-            $resourceReference = $resourceTable->lastId();
-            $create = true;
-            $update = false;
+
+        switch ($mode) {
+            case FormClass::$modeDEFINE:
+                
+                $saveResponse = $resourceTable->insert($resourceRecord);
+                $resourceReference = $resourceTable->lastId();
+                $create = true;
+                $update = false;
+
+                if($saveResponse){
+                    $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
+                    $resourceHoursSaved = false;
+                    try {
+                        $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $resourceRecord->getValue('HOURS_TYPE') );
+                        $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
+                    } catch (Exception $e) {
+                        $hoursResponse = $e->getMessage();
+                    }
+                }
+                
+                break;
+            case FormClass::$modeEDIT:
+                
+                $rrData = $resourceTable->getRecord($resourceRecord);
+                $resourceRecord->setFromArray($rrData); // Get current data from the table.
+
+                // unassigned requests
+                if (empty($resourceRecord->RESOURCE_NAME)) {
+                    // we can change hours type
+                    if ($resourceRecord->HOURS_TYPE != $_POST['HOURS_TYPE']) {
+                        $reinitialiseHours = true;
+                    } else {
+                        $reinitialiseHours = false;
+                    }                    
+                } else {
+                    // keep previous type
+                    unset($_POST['HOURS_TYPE']);
+                    $reinitialiseHours = false;
+                }
+
+                $resourceRecord->setFromArray($_POST);  // Override with what the user has changed on the screen.
+                $saveResponse = $resourceTable->update($resourceRecord);
+                $saveResponse = $saveResponse ? true : false;
+                $resourceReference = $resourceRecord->get('RESOURCE_REFERENCE');
+                $create = false;
+                $update = true;
+
+                if ($saveResponse && $reinitialiseHours) {
+                    $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
+                    $resourceHoursSaved = false;
+                    try {
+                        $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $resourceRecord->getValue('HOURS_TYPE') );
+                        $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
+                    } catch (Exception $e) {
+                        $hoursResponse = $e->getMessage();
+                    }
+
+                    $diaryEntry = "Request was re-initialised at  " . $totalHours . " Total Hours (Start Date:" . $startDate . " End Date: " . $endDate . ")";
+                    $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
+                }
+                break;
+            default:
+                echo 'Cannot save Resouce Request with provided Mode value.';
+                break;
         }
-
-        $hoursResponse = '';
-
-        if($saveResponse && $mode!=FormClass::$modeEDIT){ // if they were editing, dont change the hours, that's done a different way.
-            $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
-            $resourceHoursSaved = false;
-            try {
-                $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $resourceRecord->getValue('HOURS_TYPE') );
-                $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
-            } catch (Exception $e) {
-                $hoursResponse = $e->getMessage();
-            }
-        }
-
-        // if($saveResponse && $mode==FormClass::$modeDEFINE){
-        //     $saveResponse = false;
-
-        //     // delete created request
-        //     $resourceTable->deleteRecord($resourceRecord);
-        // }
 
         $messages = ob_get_clean();
         

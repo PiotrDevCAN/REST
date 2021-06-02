@@ -21,7 +21,6 @@ if(isset($_REQUEST['resourceReference'])){
     $resourceRequestRecord->set('RESOURCE_REFERENCE', $_REQUEST['resourceReference']);
     $resourceRequestData = $resourceRequestTable->getRecord($resourceRequestRecord);
     $resourceRequestRecord->setFromArray($resourceRequestData);
-
 } else {
     $resourceRequestRecord = new resourceRequestRecord();
     $mode = FormClass::$modeDEFINE;

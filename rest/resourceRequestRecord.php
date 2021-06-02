@@ -188,6 +188,7 @@ class resourceRequestRecord extends DbRecord
             //     $this->formHiddenInput('RATE_TYPE',$this->RATE_TYPE,'RATE_TYPE');   			
             // }
             ?>
+            <input id="originalRateType" name="originalRateType" value="<?=$this->RATE_TYPE?>" type="hidden">
  			</div>						 
    		</div>
 
@@ -209,6 +210,7 @@ class resourceRequestRecord extends DbRecord
             //     $this->formHiddenInput('HOURS_TYPE',$this->HOURS_TYPE,'HOURS_TYPE');			
    			// }
             ?>
+            <input id="originalHoursType" name="originalHoursType" value="<?=$this->HOURS_TYPE?>" type="hidden">
  			</div>						 
    		</div>
 
@@ -265,6 +267,7 @@ class resourceRequestRecord extends DbRecord
    		$this->formTextArea('Description', 'DESCRIPTION', null, null, null,2000, 'top',null, 1, "High level description of work required");
    		$this->formHiddenInput('mode',$mode,'mode');
    		$this->formHiddenInput('RESOURCE_REFERENCE',$this->RESOURCE_REFERENCE,'RESOURCE_REFERENCE');
+        $this->formHiddenInput('RESOURCE_NAME',$this->RESOURCE_NAME,'RESOURCE_NAME');
    		$this->formHiddenInput('STATUS',$this->STATUS,'STATUS');
    		$this->formHiddenInput('RR_CREATOR',$_SESSION['ssoEmail'],'RR_CREATOR');
 
