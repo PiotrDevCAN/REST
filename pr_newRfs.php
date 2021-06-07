@@ -140,12 +140,12 @@ $(document).ready(function(){
 				$('#RFS_ID').css("background-color","#ffffff");
           	},
 	      	fail: function(response){
-				$('.modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
+				$('.modal-body').html("<h2>Json call to save record Failed.Tell Piotr</h2>");
 				$('#myModal').modal('show');
 			},
 	      	error: function(error){
 	            //	handle errors here. What errors	            :-)!
-				$('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Rob</h2>");
+				$('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Piotr</h2>");
 				$('#myModal').modal('show');
 			},
 	      	always: function(){

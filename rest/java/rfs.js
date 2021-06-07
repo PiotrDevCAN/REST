@@ -45,7 +45,7 @@ function Rfs() {
 					$('#archiveRfsModalBody').html(resultObj.messages);
 					setTimeout(function(){ $('#archiveRfsModal').modal('hide'); }, 2000);
 					$('#archiveConfirmedRfs').removeClass('spinning');
-		    		}
+				}
 		    });
 		});
 	},
@@ -135,9 +135,11 @@ function Rfs() {
 		    $.ajax({
 		    	url: "ajax/goLiveRfs.php",
 		        type: 'POST',
-		    	data: {    rfsid:rfsid,
-                   requestorName:requestorName,
-                  requestorEmail:requestorEmail},
+		    	data: {
+					rfsid:rfsid,
+					requestorName:requestorName,
+					requestorEmail:requestorEmail
+				},
 		    	success: function(result){
 		    		var resultObj = JSON.parse(result);
 					Rfs.table.ajax.reload();
@@ -146,8 +148,7 @@ function Rfs() {
 					$('#plREQUESTOR_EMAIL').val('');
 					$('.spinning').removeClass('spinning').attr('disabled',false);
 					$('#goLiveRfsModal').modal('hide');
-					
-	    		}
+				}
 		    });
 		});
 	},
@@ -591,14 +592,14 @@ function Rfs() {
 					});
 	          	},
 		      	fail: function(response){						
-					$('#myModal .modal-body').html("<h2>Json call to save record Failed.Tell Rob</h2>");
+					$('#myModal .modal-body').html("<h2>Json call to save record Failed.Tell Piotr</h2>");
 					$('#myModal').modal('show');
 				},
 		      	error: function(error){
 		            //	handle errors here. What errors	            :-)!
 					console.log('Ajax error' );
 					console.log(error.statusText);
-					$('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Rob</h2>");
+					$('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Piotr</h2>");
 					$('#myModal').modal('show');
 				}
 			});

@@ -158,7 +158,6 @@ $rfsTable = new rfsTable(allTables::$RFS);
   </div>
 </div>
 
-
 <!-- Modal -->
 <div id="deleteRfsModal" class="modal fade" role="dialog">
   <div class="modal-dialog">

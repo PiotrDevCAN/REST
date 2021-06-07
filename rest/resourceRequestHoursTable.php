@@ -37,12 +37,64 @@ class resourceRequestHoursTable extends DbTable
         $sdate = new \DateTime($startDate);
         $edate = new \DateTime($endDate);        
 
-        // 'businessDays' => $businessDays, 
-        // 'workingDays'=> $workingDays,
-        // 'bankHolidays' => $bankHolidays
+        // get amount of days per type
+        $weekendDays = DateClass::weekendDaysFromStartToEnd($sdate, $edate);
 
-        // If businesshrs is 0 then they must choose Weekend Overtime
-        // If weekendhrs (or whatever it is called) is 0 they can choose regular or weekday overtime
+        $calculatedBusinessDays = DateClass::businessDaysFromStartToEnd($sdate, $edate);
+        $businessDays = $calculatedBusinessDays['businessDays'];
+
+        if ($businessDays == 0) {
+            // If businesshrs is 0 then they must choose Weekend Overtime
+            switch ($hrsType) {
+                case resourceRequestRecord::HOURS_TYPE_OT_WEEK_END:
+                    $effortDays = $weekendDays;
+                    $bankHolidays = array();
+                    $hrsPerEffortDay = $hours / $effortDays;
+                    $dayOfWeek = 6;
+                    $startDay = 'saturday';
+                    $sdate = DateClass::adjustStartDate($sdate, $hrsType);
+                    break;
+                default:
+                    error_log("Invalid hours type found");
+                    throw new \Exception("There are no business days between selected dates, choose Weekend Overtime hours type instead.");
+                    break;
+            }
+        } else {
+            echo 'Amount of business days '.$businessDays;
+        }
+
+        if ($weekendDays == 0) {
+            // If weekendhrs (or whatever it is called) is 0 they can choose regular or weekday overtime
+            switch ($hrsType) {
+                case resourceRequestRecord::HOURS_TYPE_REGULAR:
+                case resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY:
+
+                    // $response = DateClass::businessDaysFromStartToEnd($sdate, $edate);
+                    // $effortDays = $response['businessDays'];
+                    // $bankHolidays = $response['bankHolidays'];
+
+                    $effortDays = $businessDays;
+                    $bankHolidays = $calculatedBusinessDays['bankHolidays'];
+                    if ($effortDays > 0) {
+                        $hrsPerEffortDay = $hours / $effortDays;
+                    } else {
+                        $hrsPerEffortDay = $hours;
+                    }
+                    $dayOfWeek = 1;
+                    $startDay = 'monday';
+                    $sdate = DateClass::adjustStartDate($sdate);
+                    break;
+                default:
+                    error_log("Invalid hours type found");
+                    throw new \Exception("There are no weekend days between selected dates, choose Regular or Weekday Overtime hours type instead.");
+                    break;
+            }
+        } else {
+            echo 'Amount of weekend days '.$weekendDays;
+        }
+        
+        /*-------------------------------------------------
+        * working part
 
         switch ($hrsType) {
             case resourceRequestRecord::HOURS_TYPE_OT_WEEK_END:
@@ -72,6 +124,8 @@ class resourceRequestHoursTable extends DbTable
                 throw new \Exception("Invalid hours type found");
                 break;
         }
+
+        -------------------------------------------------*/
 
         $nextDate = clone $sdate;
         $endPeriod = $edate->format('oW');
@@ -121,36 +175,13 @@ class resourceRequestHoursTable extends DbTable
                     break;
                 case resourceRequestRecord::HOURS_TYPE_REGULAR:
                 case resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY:
-                    $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($resourceRequestHours->WEEK_ENDING_FRIDAY, $bankHolidays,$sdate, $edate);
+                    $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($resourceRequestHours->WEEK_ENDING_FRIDAY, $bankHolidays, $sdate, $edate);
                     break;        
                 default:
                     $businessDaysInWeek = 0;
                     break;
             }
 
-            /*
-            if($hrsType == resourceRequestRecord::HOURS_TYPE_OT_WEEK_END){
-                if($edate > $wefDate){
-                    $businessDaysInWeek = 2; // Includes whole weekend
-                } else {
-                    switch ($edate->format('N')) {
-                        case 6: // Ends on a Saturday
-                            $businessDaysInWeek = 1;
-                            break; 
-                        case 7: // Ends on a Sunday
-                            $businessDaysInWeek = 2;
-                            break; 
-                        default:
-                            // Ends before the weekend starts
-                            $businessDaysInWeek = 0;                             
-                            break;
-                    }
-                }                
-            } else {
-                $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($resourceRequestHours->WEEK_ENDING_FRIDAY, $bankHolidays,$sdate, $edate);
-            }
-            */
-            
             if($businessDaysInWeek > 0){
                 $businessHoursInWeek = $businessDaysInWeek * $hrsPerEffortDay;
                 $resourceRequestHours->HOURS = $businessHoursInWeek;

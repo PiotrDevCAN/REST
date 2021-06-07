@@ -303,8 +303,6 @@ td.dataTables_empty{
   </div>
 </div>
 
-
-
 <!-- Modal -->
 <div id="confirmDuplicationModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -442,7 +440,6 @@ td.dataTables_empty{
   </div>
 </div>
 
-
 <!-- Modal -->
 <div id="editRequestModal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
@@ -462,7 +459,6 @@ td.dataTables_empty{
 
   </div>
 </div>
-
 
 <!-- Modal -->
 <div id="diaryModal" class="modal fade" role="dialog">
@@ -521,9 +517,6 @@ td.dataTables_empty{
 
   </div>
 </div>
-
-
-
 
 <?php
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);
@@ -651,9 +644,9 @@ $(document).ready(function(){
 
 		$('#saveAdjustedHours').attr('data-original-title','').tooltip('show').tooltip('hide');
 
-console.log( totalHours + ":" + originalTotalHours ); 
-console.log( parseFloat(totalHours) < parseFloat(originalTotalHours) );
-		
+    console.log( totalHours + ":" + originalTotalHours ); 
+    console.log( parseFloat(totalHours) < parseFloat(originalTotalHours) );
+        
 		if( parseFloat(totalHours) < parseFloat(originalTotalHours) ) {
 			$('#saveAdjustedHoursWithDelta').attr('disabled',false); // they can only Auto-Delta if they've hours to save somewhere else.
 		} else {
@@ -684,8 +677,7 @@ console.log( parseFloat(totalHours) < parseFloat(originalTotalHours) );
 $('#editRequestModal').on('shown.bs.modal', function (e) {
 	$("#ORGANISATION").select2();
 	$("#SERVICE").select2();
-	})
-
+})
 
 $(document).on('select2:select', '#ORGANISATION',  function(e){
 	var serviceSelected= $(e.params.data)[0].text;
@@ -706,12 +698,7 @@ $(document).on('select2:select', '#ORGANISATION',  function(e){
     }
 });
 
-
-
-
-
 </script>
-
 
 <style>
 

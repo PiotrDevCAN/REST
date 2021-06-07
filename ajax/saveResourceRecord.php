@@ -95,6 +95,7 @@ switch (true) {
                         $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
                     } catch (Exception $e) {
                         $hoursResponse = $e->getMessage();
+                        $create = false;
                     }
                 }
                 
@@ -134,6 +135,7 @@ switch (true) {
                         $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
                     } catch (Exception $e) {
                         $hoursResponse = $e->getMessage();
+                        $update = false;
                     }
 
                     $diaryEntry = "Hours Type in Request was changed from  " . $originalHoursType . " to " . $_POST['HOURS_TYPE'];

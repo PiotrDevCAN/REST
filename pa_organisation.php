@@ -100,9 +100,11 @@ function listenForToggleStatus(){
 		$.ajax({
 			url: "ajax/updateOrganisationStatus.php",
 		    type: 'POST',
-		    data: {currentStatus:status,
+		    data: {
+				currentStatus:status,
 		    	ORGANISATION:organisation,
-		    	     SERVICE:service},
+				SERVICE:service
+			},
 		    success: function(result){
 		    	var resultObj = JSON.parse(result);
 		    	var success   = resultObj.success;

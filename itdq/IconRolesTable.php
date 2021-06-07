@@ -262,7 +262,7 @@ class IconRolesTable extends DbTable {
 						$rolesArray [trim ( urldecode ( $value ['role'] ) )] = trim ( urldecode ( $value ['role'] ) );
 						break;
 					default :
-						exit ( " Value is an unexpected type. Tell rob, let him sweat about it." );
+						exit ( " Value is an unexpected type. Tell Piotr, let him sweat about it." );
 						break;
 				}
 			}
