@@ -256,7 +256,7 @@ class resourceRequestTable extends DbTable {
             case $today > $endDateObj:
                 $assignColor = 'text-danger';
                 $started     = 'Completed';
-                // $editable = false;
+                $editable = false;
                 break;           
             default:
                 $assignColor = 'text-primary';
@@ -313,10 +313,6 @@ class resourceRequestTable extends DbTable {
         $displayedResourceName.= "  data-ratetype='" . $rateType . "' ";
         $displayedResourceName.= "  >";
 
-//        $row['RESOURCE_NAME'].= $editable ? 
-//            "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' >
-//                <span data-toggle='tooltip' class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Request'></span>
-//            </button>" : null;
         $displayedResourceName.= $editable ? 
             "<button type='button' class='btn btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' data-resource-name='" . $resourceName . "' >
                 <span data-toggle='tooltip' class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true' title='Edit Assigned Resource'></span>
