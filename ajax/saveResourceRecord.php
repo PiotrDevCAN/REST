@@ -74,6 +74,7 @@ switch (true) {
         $messages = 'Significant parameters from form are missing.';
         break;       
     default:
+        $autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
         $resourceRecord = new resourceRequestRecord();
         $resourceRecord->setFromArray($_POST);
@@ -98,7 +99,14 @@ switch (true) {
                         $create = false;
                     }
                 }
-                
+
+                if ($saveResponse && $create == true) {
+                    db2_commit($GLOBALS['conn']);
+                } else {
+                    $resourceReference = 'Record has been not created';
+                    $saveResponse = false;
+                    db2_rollback($GLOBALS['conn']);
+                }
                 break;
             case FormClass::$modeEDIT:
                 
@@ -144,14 +152,24 @@ switch (true) {
                     $diaryEntry = "Request was re-initialised at  " . $totalHours . " Total Hours (Start Date:" . $startDate . " End Date: " . $endDate . ")";
                     $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
                 }
+
+                if ($saveResponse && $update == true) {
+                    db2_commit($GLOBALS['conn']);
+                } else {
+                    $resourceReference = 'Record has been not updated';
+                    $saveResponse = false;
+                    db2_rollback($GLOBALS['conn']);
+                }
                 break;
             default:
                 echo 'Cannot save Resouce Request with provided Mode value.';
                 break;
         }
 
+        db2_autocommit($GLOBALS['conn'],$autoCommit);
+
         $messages = ob_get_clean();
-        
+
         break;
 }
 
