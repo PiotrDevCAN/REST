@@ -110,42 +110,49 @@ $(document).ready(function(){
 				// do the following before the save is started
 			},
 	      	success: function(response) {
-	            // do what ever you want with the server response if that response is "success"
-				// $('.modal-body').html(JSON.parse(response));
-				var responseObj = JSON.parse(response);
-				var rfsIdTxt =  "<p><b>RFS ID: </b>" + responseObj.rfsId + "</p>";
-				var savedResponse =  responseObj.saveResponse;
-				if(savedResponse){
-					var scan = "<scan>";
-				} else {
-					var scan = "<scan style='color:red'>";
-				}
-				var savedResponseTxt =  "<p>" + scan + " <b>Record Saved: </b>" + savedResponse +  "</scan></p>";
-				var messages =  "<p><b>" + responseObj.messages +  "</b></p>";
-				$('.modal-body').html(rfsIdTxt + savedResponseTxt + messages);
-				$('#myModal').modal('show');
-				$('#myModal').on('hidden.bs.modal', function () {
-					// do something…
-					if(responseObj.create==true){
-						// reset form
-						$('#resetRfs').click();
-						$(':submit').removeClass('spinning').attr('disabled',false);
-						knownRfs.push(responseObj.rfsId);
+				try {
+					// do what ever you want with the server response if that response is "success"
+					var responseObj = JSON.parse(response);
+					var rfsIdTxt =  "<p><b>RFS ID: </b>" + responseObj.rfsId + "</p>";
+					var savedResponse =  responseObj.saveResponse;
+					if(savedResponse){
+						var scan = "<scan>";
 					} else {
-						// there must be an issue so show message and summary
-						window.close();
-              			$(':submit').removeClass('spinning').attr('disabled',false);
+						var scan = "<scan style='color:red'>";
 					}
-				})
-				$('#RFS_ID').css("background-color","#ffffff");
+					var savedResponseTxt =  "<p>" + scan + " <b>Record Saved: </b>" + savedResponse +  "</scan></p>";
+					var messages =  "<p><b>" + responseObj.messages +  "</b></p>";
+					$('.modal-body').html(rfsIdTxt + savedResponseTxt + messages);
+					$('#myModal').modal('show');
+					$('#myModal').on('hidden.bs.modal', function () {
+						// do something…
+						if(responseObj.create==true){
+							// reset form
+							$('#resetRfs').click();
+							$(':submit').removeClass('spinning').attr('disabled',false);
+							knownRfs.push(responseObj.rfsId);
+						} else {
+							// there must be an issue so show message and summary
+							window.close();
+							$(':submit').removeClass('spinning').attr('disabled',false);
+						}
+					})
+					$('#RFS_ID').css("background-color","#ffffff");
+				} catch (e) {
+					$('.modal-body').html("<h2>Json call to save record Failed.Tell Piotr</h2>");
+					$('.spinning').removeClass('spinning').attr('disabled',false);
+					$('#myModal').modal('show');
+				}
           	},
 	      	fail: function(response){
 				$('.modal-body').html("<h2>Json call to save record Failed.Tell Piotr</h2>");
+				$('.spinning').removeClass('spinning').attr('disabled',false);
 				$('#myModal').modal('show');
 			},
 	      	error: function(error){
 	            //	handle errors here. What errors	            :-)!
 				$('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Piotr</h2>");
+				$('.spinning').removeClass('spinning').attr('disabled',false);
 				$('#myModal').modal('show');
 			},
 	      	always: function(){

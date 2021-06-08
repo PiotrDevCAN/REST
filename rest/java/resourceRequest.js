@@ -1252,7 +1252,6 @@ function ResourceRequest() {
 					},
 					success: function(response) {
 						// do what ever you want with the server response if that response is "success"
-						// $('.modal-body').html(JSON.parse(response));
 						$('#editRequestModal').modal('hide');	
 						var responseObj = JSON.parse(response);
 						var resourceRef =  "<p>Resource Ref:" + responseObj.resourceReference + "</p>";

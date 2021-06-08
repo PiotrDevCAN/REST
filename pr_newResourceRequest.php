@@ -160,35 +160,42 @@ $(document).ready(function(){
           // do the following before the save is started
 			  },
         success: function(response) {
-          // do what ever you want with the server response if that response is "success"
-          // $('.modal-body').html(JSON.parse(response));
-          var responseObj = JSON.parse(response);
-          var resourceRef =  "<p><b>Resource Ref: " + responseObj.resourceReference + "</b></p>";
-          var savedResponse =  "<p><b>Saved: " + responseObj.saveResponse +  "</b></p>";
-          var hoursResponse =  "<p>" + responseObj.hoursResponse +  "</p>";
-          var messages =  "<p><b>" + responseObj.messages +  "</b></p>";
-          $('.modal-body').html(resourceRef + savedResponse + hoursResponse + messages);
-          $('#myModal').modal('show');
-          $('#myModal').on('hidden.bs.modal', function () {
-            // do something…
-            if(responseObj.create==true){
-              // reset form
-              $('#resetResourceRequest').click();
-              $(':submit').removeClass('spinning').attr('disabled',false);
-            } else {
-              // there must be an issue so show message and summary
-              window.close();
-              $(':submit').removeClass('spinning').attr('disabled',false);
-            }
-          })
+          try {
+            // do what ever you want with the server response if that response is "success"
+            var responseObj = JSON.parse(response);
+            var resourceRef =  "<p><b>Resource Ref: " + responseObj.resourceReference + "</b></p>";
+            var savedResponse =  "<p><b>Saved: " + responseObj.saveResponse +  "</b></p>";
+            var hoursResponse =  "<p>" + responseObj.hoursResponse +  "</p>";
+            var messages =  "<p><b>" + responseObj.messages +  "</b></p>";
+            $('.modal-body').html(resourceRef + savedResponse + hoursResponse + messages);
+            $('#myModal').modal('show');
+            $('#myModal').on('hidden.bs.modal', function () {
+              // do something…
+              if(responseObj.create==true){
+                // reset form
+                $('#resetResourceRequest').click();
+                $(':submit').removeClass('spinning').attr('disabled',false);
+              } else {
+                // there must be an issue so show message and summary
+                window.close();
+                $(':submit').removeClass('spinning').attr('disabled',false);
+              }
+            })
+          } catch (e) {
+            $('.modal-body').html("<h2>Json call to save record Failed.Tell Piotr</h2>");
+            $('.spinning').removeClass('spinning').attr('disabled',false);
+            $('#myModal').modal('show');
+          }
         },
         fail: function(response){
           $('.modal-body').html("<h2>Json call to save record Failed.Tell Piotr</h2>");
+          $('.spinning').removeClass('spinning').attr('disabled',false);
           $('#myModal').modal('show');
         },
         error: function(error){
           //	handle errors here. What errors	            :-)!
           $('.modal-body').html("<h2>Json call to save record Errored " + error.statusText + " Tell Piotr</h2>");
+          $('.spinning').removeClass('spinning').attr('disabled',false);
           $('#myModal').modal('show');
         },
         always: function(){

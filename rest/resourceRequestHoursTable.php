@@ -14,7 +14,9 @@ class resourceRequestHoursTable extends DbTable
     
     function createResourceRequestHours($resourceReference=null, $startDate=null, $endDate=null, $hours=0, $deleteExisting=true, $hrsType=resourceRequestRecord::HOURS_TYPE_REGULAR){
         
+        $weeksCreated = 0;
         $stopped = false;
+        $callbackMessage = '';
 
         if ($resourceReference === null) {
             error_log("Invalid Resource Reference");
@@ -40,6 +42,13 @@ class resourceRequestHoursTable extends DbTable
             $stopped = true;
         }
 
+        $invalidHoursType = !in_array($hrsType, resourceRequestRecord::$allHourTypes);
+        if ($invalidHoursType) {
+            error_log("Invalid Hours Type found");
+            throw new \Exception("Invalid Hours Type found");
+            $stopped = true;
+        }
+
         $sdate = new \DateTime($startDate);
         $edate = new \DateTime($endDate);        
 
@@ -50,9 +59,57 @@ class resourceRequestHoursTable extends DbTable
         $businessDays = $calculatedBusinessDays['businessDays'];
 
         $bankHolidays = array();
+        $allowedHoursType = array();
 
-        if ($businessDays == 0) {
-            // If businesshrs is 0 then they must choose Weekend Overtime
+        if ($businessDays > 0 && $weekendDays > 0) {
+            // all type are correct
+            $allowedHoursType = array(
+                resourceRequestRecord::HOURS_TYPE_OT_WEEK_END,
+                resourceRequestRecord::HOURS_TYPE_REGULAR,
+                resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY
+            );
+        } else {
+            if ($businessDays == 0 && $weekendDays > 0) {
+                // If businesshrs is 0 then they must choose Weekend Overtime
+                $allowedHoursType = array(
+                    resourceRequestRecord::HOURS_TYPE_OT_WEEK_END
+                );
+                $callbackMessage = 'For selected period of time "'.resourceRequestRecord::HOURS_TYPE_OT_WEEK_END.'" hours type must be choosen.';
+            }
+            elseif ($weekendDays == 0 && $businessDays > 0 ) {
+                // If weekendhrs (or whatever it is called) is 0 they can choose regular or weekday overtime
+                $allowedHoursType = array(
+                    resourceRequestRecord::HOURS_TYPE_REGULAR,
+                    resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY
+                );
+                $callbackMessage = 'For selected period of time either "'.resourceRequestRecord::HOURS_TYPE_REGULAR.'" or "'.resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY.'" hours type must be choosen.';
+            } else {
+                error_log("Invalid Calculation Of Business Or Weekend Days");
+                throw new \Exception("Invalid Calculation Of Business Or Weekend Days");
+                $stopped = true;
+            }
+        }
+
+        // validate if an appropriate type is selected
+        $notAllowedHoursType = !in_array($hrsType, $allowedHoursType);
+
+        switch (true) {
+            case $notAllowedHoursType:
+                // hours type protection
+                error_log("Not Allowed Hours Type found");
+                if (!empty($callbackMessage)) {
+                    throw new \Exception($callbackMessage);
+                } else {
+                    throw new \Exception("Not Allowed Hours Type found");
+                }
+                $stopped = true;
+                break;
+            default:
+                break;
+        }
+
+        if ($stopped == false) {
+
             switch ($hrsType) {
                 case resourceRequestRecord::HOURS_TYPE_OT_WEEK_END:
                     $effortDays = $weekendDays;
@@ -62,26 +119,8 @@ class resourceRequestHoursTable extends DbTable
                     $startDay = 'saturday';
                     $sdate = DateClass::adjustStartDate($sdate, $hrsType);
                     break;
-                default:
-                    error_log("Invalid hours type found");
-                    throw new \Exception("There are no business days between selected dates, choose Weekend Overtime hours type instead.");
-                    $stopped = true;
-                    break;
-            }
-        } else {
-            echo 'Amount of business days '.$businessDays;
-        }
-
-        if ($weekendDays == 0) {
-            // If weekendhrs (or whatever it is called) is 0 they can choose regular or weekday overtime
-            switch ($hrsType) {
                 case resourceRequestRecord::HOURS_TYPE_REGULAR:
                 case resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY:
-
-                    // $response = DateClass::businessDaysFromStartToEnd($sdate, $edate);
-                    // $effortDays = $response['businessDays'];
-                    // $bankHolidays = $response['bankHolidays'];
-
                     $effortDays = $businessDays;
                     $bankHolidays = $calculatedBusinessDays['bankHolidays'];
                     if ($effortDays > 0) {
@@ -94,52 +133,12 @@ class resourceRequestHoursTable extends DbTable
                     $sdate = DateClass::adjustStartDate($sdate);
                     break;
                 default:
-                    error_log("Invalid hours type found");
-                    throw new \Exception("There are no weekend days between selected dates, choose Regular or Weekday Overtime hours type instead.");
+                    error_log("Invalid Hours Type found");
+                    throw new \Exception("Invalid Hours Type found");
                     $stopped = true;
                     break;
             }
-        } else {
-            echo 'Amount of weekend days '.$weekendDays;
-        }
-        
-        /*-------------------------------------------------
-        * working part
 
-        switch ($hrsType) {
-            case resourceRequestRecord::HOURS_TYPE_OT_WEEK_END:
-                $effortDays = DateClass::weekendDaysFromStartToEnd($sdate, $edate);
-                $bankHolidays = array();
-                $hrsPerEffortDay = $hours / $effortDays;
-                $dayOfWeek = 6;
-                $startDay = 'saturday';
-                $sdate = DateClass::adjustStartDate($sdate, $hrsType);
-                break;
-            case resourceRequestRecord::HOURS_TYPE_REGULAR:
-            case resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY:
-                $response = DateClass::businessDaysFromStartToEnd($sdate, $edate);
-                $effortDays = $response['businessDays'];
-                $bankHolidays = $response['bankHolidays'];
-                if ($effortDays > 0) {
-                    $hrsPerEffortDay = $hours / $effortDays;
-                } else {
-                    $hrsPerEffortDay = $hours;
-                }
-                $dayOfWeek = 1;
-                $startDay = 'monday';
-                $sdate = DateClass::adjustStartDate($sdate);
-                break;
-            default:
-                error_log("Invalid hours type found");
-                throw new \Exception("Invalid hours type found");
-                break;
-        }
-
-        -------------------------------------------------*/
-
-        $weeksCreated = 0;
-        
-        if ($stopped == false) {
             $nextDate = clone $sdate;
             $endPeriod = $edate->format('oW');
             $nextPeriod = $nextDate->format('oW');
@@ -205,7 +204,7 @@ class resourceRequestHoursTable extends DbTable
                 
                 $nextDate->add($oneWeek);
                 $nextPeriod = $nextDate->format('oW');
-            }   
+            }
         }
 
         return $weeksCreated;
