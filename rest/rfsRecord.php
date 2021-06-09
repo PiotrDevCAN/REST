@@ -298,10 +298,10 @@ class rfsRecord extends DbRecord
 		    $startDate = new \DateTime($requestDetails['START_DATE']);
 		    $endDate   = new \DateTime($requestDetails['END_DATE']);
 		    
-		    $startDateStr = empty($startDate) ? null : $startDate->format('dMy');
+		    $startDateStr = empty($startDate) ? null : $startDate->format('d M y');
 		    $startDateStr2 = empty($startDate) ? null : $startDate->format('Y-m-d');
 		    
-		    $endDateStr = empty($endDate) ? null : $endDate->format('dMy');
+		    $endDateStr = empty($endDate) ? null : $endDate->format('d M y');
 		    $endDateStr2 = empty($endDate) ? null : $endDate->format('Y-m-d');
 		    
 		    $rr = $requestDetails['RESOURCE_REFERENCE'];
