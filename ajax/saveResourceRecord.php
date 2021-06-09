@@ -140,11 +140,11 @@ switch (true) {
                     $resourceHoursSaved = false;
                     try {
 
-                        echo $resourceReference;
-                        echo $resourceRecord->getValue('HOURS_TYPE');
-                        echo $startDate;
-                        echo $endDate;
-                        echo $totalHours;
+                        // echo $resourceReference;
+                        // echo $resourceRecord->getValue('HOURS_TYPE');
+                        // echo $startDate;
+                        // echo $endDate;
+                        // echo $totalHours;
 
                         $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $resourceRecord->getValue('HOURS_TYPE') );
                         $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";

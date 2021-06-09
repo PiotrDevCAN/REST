@@ -159,8 +159,8 @@ class resourceRequestHoursTable extends DbTable
             $iteration = 1;
             while($nextPeriod <= $endPeriod) {
                 
-                echo '<br/>';
-                echo ' iteration '.$iteration;
+                // echo '<br/>';
+                // echo ' iteration '.$iteration;
 
                 // echo '<br/>';
                 // echo ' endPeriod '.$endPeriod;
@@ -270,7 +270,6 @@ class resourceRequestHoursTable extends DbTable
         $complimentaryField['CLAIM_YEAR'] = $claimCutoff->format('Y');
 
         return $complimentaryField;
-
     }
 
     function clearResourceReference($resourceReference=null){
