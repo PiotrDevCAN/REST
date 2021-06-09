@@ -58,11 +58,13 @@ $listRfs        = new NavbarOption('RFS Report', 'ps_rfs.php','accessCdi accessA
 $claim          = new NavbarOption('Requests', 'ps_ClaimMonthly.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
 $hrsPerWeek     = new NavbarOption('HrsPerWeek', 'ps_HoursPerWeekPerResource.php','accessCdi accessAdmin');
 $noResReq     	= new NavbarOption('Requests Assigned To Leavers', 'ps_NoResourceRequests.php','accessCdi accessAdmin');
+// $incorWeeksReq  = new NavbarOption('Requests with Incorrect Weekends', 'ps_IncorrectWeekendsRequests.php','accessCdi accessAdmin');
 
 $reports->addOption($listRfs);
 $reports->addOption($claim);
 $reports->addOption($hrsPerWeek);
 $reports->addOption($noResReq);
+// $reports->addOption($incorWeeksReq);
 // $dummy          = new NavbarOption('Dummy entry', 'pr_dummyReport.php','accessUser accessReports');
 
 $navbar->addMenu($cdiAdmin);

@@ -53,29 +53,29 @@ ob_start();
 <form id='resourceHoursForm'>
    <input type='hidden' name='ModalResourceReference' id='ModalResourceReference' value='<?=trim($_POST['resourceReference'])?>' />
    <div class='row'>
-   <div class='form-group' >
-     <div id='ModalSTART_DATEFormGroup' >
-     <label for='ModalSTART_DATE' class='col-md-2 control-label ' data-toggle='tooltip' data-placement='top' title=''>Start Date</label>
-       <div class='col-md-4'>
-         <div id='calendarFormGroupModalSTART_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='ModalSTART_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
-           <input id='InputModalSTART_DATE' class='form-control' type='text' readonly value='' placeholder='Select From' required />
-           <input type='hidden' id='ModalSTART_DATE' name='ModalSTART_DATE' value='' />
-           <input type='hidden' id='startDateWas' name='startDateWas' value='' />
-           <span class='input-group-addon'><span id='calendarIconModalSTART_DATE' class='glyphicon glyphicon-calendar'></span></span>
-           </div>
-       </div>
-   </div>
+    <div class='form-group' >
+      <div id='ModalSTART_DATEFormGroup' >
+        <label for='ModalSTART_DATE' class='col-md-2 control-label ' data-toggle='tooltip' data-placement='top' title=''>Start Date</label>
+        <div class='col-md-4'>
+          <div id='calendarFormGroupModalSTART_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='ModalSTART_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
+            <input id='InputModalSTART_DATE' class='form-control' type='text' readonly value='' placeholder='Select From' required />
+            <input type='hidden' id='ModalSTART_DATE' name='ModalSTART_DATE' value='' />
+            <input type='hidden' id='startDateWas' name='startDateWas' value='' />
+            <span class='input-group-addon'><span id='calendarIconModalSTART_DATE' class='glyphicon glyphicon-calendar'></span></span>
+          </div>
+        </div>
+      </div>
 
-     <div id='ModalEND_DATEFormGroup' >
-     <label for='ModalEND_DATE' class='col-md-2 control-label ' data-toggle='tooltip' data-placement='top' title=''>End Date</label>
-       <div class='col-md-4'>
-         <div id='calendarFormGroupModalEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='ModalEND_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
-           <input id='InputModalEND_DATE' class='form-control' type='text' readonly value='' placeholder='Select To' required />
-           <input type='hidden' id='ModalEND_DATE' name='ModalEND_DATE' value='' />
-           <input type='hidden' id='endDateWas' name='endDateWas' value='' />
-           <span class='input-group-addon'><span id='calendarIconModalEND_DATE' class='glyphicon glyphicon-calendar'></span></span>
-           </div>
-       </div>
+    <div id='ModalEND_DATEFormGroup' >
+      <label for='ModalEND_DATE' class='col-md-2 control-label ' data-toggle='tooltip' data-placement='top' title=''>End Date</label>
+      <div class='col-md-4'>
+        <div id='calendarFormGroupModalEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='ModalEND_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
+          <input id='InputModalEND_DATE' class='form-control' type='text' readonly value='' placeholder='Select To' required />
+          <input type='hidden' id='ModalEND_DATE' name='ModalEND_DATE' value='' />
+          <input type='hidden' id='endDateWas' name='endDateWas' value='' />
+          <span class='input-group-addon'><span id='calendarIconModalEND_DATE' class='glyphicon glyphicon-calendar'></span></span>
+        </div>
+      </div>
    </div>
    </div>
   </div>
@@ -92,14 +92,15 @@ ob_start();
        </div>
 	</div>
 
-    <div class='row'>
+  <div class='row'>
     <div class='col-sm-2'></div>
-       <div class='col-sm-8'>
-       <button type="button" class="btn btn-sm btn-warning  " id='reinitialise' data-toggle='tooltip' data-placement='top' title='Using the Start Date, End Date and Total Hours from this form, will reset the hours profile for the request' >Re-Initialise</button>
-       </div>
-    <div class='col-sm-2'></div>
+    <div class='col-sm-8'>
+      <p>
+        <button type="button" class="btn btn-sm btn-warning  " id='reinitialise' data-toggle='tooltip' data-placement='top' title='Using the Start Date, End Date and Total Hours from this form, will reset the hours profile for the request' >Re-Initialise</button>
+      </p>
     </div>
-
+    <div class='col-sm-2'></div>
+  </div>
 
 <div class='form-horizontal'>
 <?php
