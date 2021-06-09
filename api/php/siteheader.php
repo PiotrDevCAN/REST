@@ -29,9 +29,6 @@ session_set_save_handler($handler, true);
 session_start();
 error_log(__FILE__ . "session:" . session_id());
 
-
-
 $GLOBALS['Db2Schema'] = strtoupper($_ENV['environment']);
 $_SESSION['ssoEmail'] = empty($_SESSION['ssoEmail']) ? 'API Invocation' : $_SESSION['ssoEmail'];
 include "connect.php";
-
