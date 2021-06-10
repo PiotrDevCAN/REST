@@ -105,15 +105,6 @@ class resourceRequestRecord extends DbRecord
         $this->STATUS = empty($this->STATUS) ? 'New' : $this->STATUS;
 
         ?>
-<!--         <div class="form-group required" id="RFS_IDFormGroup"> -->
-
-<!--         	<label for="RFS_ID" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">RFS ID</label> -->
-<!--         	<div class="col-md-2"> -->
-<!--         	<input class="form-control" id="RFS_ID" name="RFS_ID" value="" placeholder="Enter RFS Id" required="required" type="text"> -->
-<!--         	<input id="originalRFS_ID" name="originalRFS_ID" value="" type="hidden"> -->
-<!--         	</div> -->
-
-<!--         </div> -->
    		<div class='form-group required'>
 
             <label for='RFS' class='col-md-2 control-label ceta-label-left'>RFS</label>
@@ -181,9 +172,6 @@ class resourceRequestRecord extends DbRecord
                         $checked = $rateType == $this->RATE_TYPE ? ' checked ' : null;
                         ?><label class="radio-inline"><input type="radio" name="RATE_TYPE" value='<?=$rateType?>' required <?=$checked;?> <?=$disabledRateType;?>><?=$rateType?></label><?php 
                     }
-                    // if (!is_null($disabledRateType)) {
-                    //     $this->formHiddenInput('RATE_TYPE',$this->RATE_TYPE,'RATE_TYPE');   			
-                    // }
                     ?>
                     <input id="originalRateType" name="originalRateType" value="<?=$this->RATE_TYPE?>" type="hidden">
                 </div>						 
@@ -203,9 +191,6 @@ class resourceRequestRecord extends DbRecord
                     $checked = $hoursType == $this->HOURS_TYPE ? ' checked ' : null;
                     ?><label class="radio-inline"><input type="radio" name="HOURS_TYPE" value='<?=$hoursType?>' required <?=$checked?> <?=$disabledHoursType;?>><?=$hoursType?></label><?php 
                 }
-                // if (!is_null($disabledHoursType)) {
-                //     $this->formHiddenInput('HOURS_TYPE',$this->HOURS_TYPE,'HOURS_TYPE');			
-                // }
                 ?>
                 <input id="originalHoursType" name="originalHoursType" value="<?=$this->HOURS_TYPE?>" type="hidden">
  			</div>						 
@@ -217,11 +202,11 @@ class resourceRequestRecord extends DbRecord
 	       	<label for='ORGANISATION' class='col-md-2 control-label ceta-label-left'>Organisation</label>
     	       	<div class='col-md-3'>
                 <select class='form-control select'
-                		id='ORGANISATION'
-                        name='ORGANISATION'
-                        required='required'
-                        data-placeholder="Select Organisation" 
-                        data-allow-clear="true">
+                    id='ORGANISATION'
+                    name='ORGANISATION'
+                    required='required'
+                    data-placeholder="Select Organisation" 
+                    data-allow-clear="true">
                 <option value=''>Select Organisation<option>
                 <?php
                     foreach ($allOrganisation as $key => $value) {
@@ -266,7 +251,8 @@ class resourceRequestRecord extends DbRecord
    		$this->formHiddenInput('RESOURCE_REFERENCE',$this->RESOURCE_REFERENCE,'RESOURCE_REFERENCE');
         $this->formHiddenInput('RESOURCE_NAME',$this->RESOURCE_NAME,'RESOURCE_NAME');
    		$this->formHiddenInput('STATUS',$this->STATUS,'STATUS');
-   		$this->formHiddenInput('RR_CREATOR',$_SESSION['ssoEmail'],'RR_CREATOR');
+        $rrCreator = $mode==FormClass::$modeEDIT ? $this->RR_CREATOR : $_SESSION['ssoEmail'];
+		$this->formHiddenInput('RR_CREATOR',$rrCreator,'RR_CREATOR');
 
    		$submitButton = $mode==FormClass::$modeEDIT ?  $this->formButton('submit','Submit','updateResourceRequest',null,'Update') :  $this->formButton('submit','Submit','saveResourceRequest',null,'Submit');
    		$resetButton  = $this->formButton('reset','Reset','resetResourceRequest',null,'Reset','btn-warning');

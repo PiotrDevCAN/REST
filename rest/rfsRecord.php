@@ -269,7 +269,8 @@ class rfsRecord extends DbRecord
 
         <?php
         $allButtons = array();
-   		$this->formHiddenInput('RFS_CREATOR',$_SESSION['ssoEmail'],'RFS_CREATOR');
+		$rfsCreator = $mode==FormClass::$modeEDIT ? $this->RFS_CREATOR : $_SESSION['ssoEmail']; 
+		$this->formHiddenInput('RFS_CREATOR',$rfsCreator,'RFS_CREATOR');
    		$this->formHiddenInput('mode',$mode,'mode');
    		$submitButton = $mode==FormClass::$modeEDIT ?  $this->formButton('submit','Submit','updateRfs',null,'Update') :  $this->formButton('submit','Submit','saveRfs',null,'Submit');
    		$resetButton  = $this->formButton('reset','Reset','resetRfs',null,'Reset','btn-warning');
