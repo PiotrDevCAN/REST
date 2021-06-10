@@ -459,6 +459,7 @@ function Rfs() {
 				{ name: "RATE_TYPE", data: "RATE_TYPE", defaultContent: "", visible:false },
 				{ name: "HOURS_TYPE", data: "HOURS_TYPE", defaultContent: "", visible:false },
 				{ name: "RFS_STATUS", data: "RFS_STATUS", defaultContent: "", visible:false },
+				{ name: "RFS_TYPE", data: "RFS_TYPE", defaultContent: "", visible:false },
 				// workaround needed
 				{ name: "MAY_21", data: "MAY_21", defaultContent: "", visible:false },
 				{ name: "JUN_21", data: "JUN_21", defaultContent: "", visible:false },
