@@ -284,7 +284,13 @@ class resourceRequestHoursTable extends DbTable
     function returnHrsPerWeek($predicate= null, $rsOnly = false) {
         $sql = " select * ";
         $sql.= " from ( ";
-        $sql.= " select RRH.RESOURCE_REFERENCE as RR, WEEK_ENDING_FRIDAY as WEF, HOURS, RFS, SERVICE, RESOURCE_NAME,  HOURS_TYPE ";
+        $sql.= " select RRH.RESOURCE_REFERENCE as RR, WEEK_ENDING_FRIDAY as WEF, HOURS, RFS, SERVICE,";
+        $sql.= " ( CASE 
+            WHEN LOCATE('" . resourceRequestTable::DUPLICATE . "', RESOURCE_NAME) THEN null
+            WHEN LOCATE('" . resourceRequestTable::DELTA . "', RESOURCE_NAME) THEN null
+            ELSE RESOURCE_NAME
+        END) AS RESOURCE_NAME, ";
+        $sql.= " HOURS_TYPE ";
         $sql.= " from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " AS RRH ";
         $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR  ";
         $sql.= " on RRH.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE  ";

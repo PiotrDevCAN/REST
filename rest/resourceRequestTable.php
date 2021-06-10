@@ -336,7 +336,7 @@ class resourceRequestTable extends DbTable {
 //        $calendarEntry = "<small>Latest diary entry not currently available</small>";      
         
         $displayedResourceName.= "<br/><button type='button' class='btn btn-xs btnOpenDiary accessRestrict accessAdmin accessCdi accessSupply accessDemand ' ";
-        $displayedResourceName.= "     aria-label='Left Align'  ";
+        $displayedResourceName.= " aria-label='Left Align'  ";
         $displayedResourceName.= " data-reference='" .$resourceReference . "' ";
         $displayedResourceName.= " data-rfs='" .$rfsId . "'  ";
         $displayedResourceName.= " data-organisation='" .$organisation . "'  ";
