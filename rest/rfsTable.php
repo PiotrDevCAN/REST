@@ -135,6 +135,137 @@ class rfsTable extends DbTable {
         ?></script><?php
     }
 
+    static function getRequestorEmail($rfsId){
+        $sql = " SELECT REQUESTOR_EMAIL ";
+        $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . \rest\allTables::$RFS;
+        $sql.= " WHERE RFS_ID='" . db2_escape_string($rfsId) . "' ";
+        $rs = db2_exec($GLOBALS['conn'], $sql);
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);            
+        }
+        
+        $row = db2_fetch_assoc($rs);
+        return trim($row['REQUESTOR_EMAIL']);
+    }
+
+    function prepareDatesForQuery(){
+        
+        // The first month we need to show them is the CLAIM month they are currently in. 
+        // So start with today, and get the next Claim Cut off - th
+        
+        $startMonthObj = new \DateTime();
+        $thisMonthObj = new \DateTime();
+        $thisMonthObj->setDate($thisMonthObj->format('Y'), $thisMonthObj->format('m'), 01);
+        $thisMonthsClaimCutoff = DateClass::claimMonth($thisMonthObj->format('d-m-Y'));
+      
+        $startMonthObj > $thisMonthsClaimCutoff ? $startMonthObj->add(new \DateInterval('P1M')) : null;
+        $startYear  = $startMonthObj->format('Y');
+        $startMonth = $startMonthObj->format('m');
+        
+        $lastMonthObj = clone $startMonthObj;
+        $sixMonths = new \DateInterval('P6M');
+        $lastMonthObj->add($sixMonths);
+        $lastYear = $lastMonthObj->format('Y');
+        $lastMonth = $lastMonthObj->format('m');
+                 
+        $nextMonthObj = clone $startMonthObj;
+        $oneMonth = new \DateInterval('P1M');
+        $monthLabels = array();
+        $monthDetails = array();
+        
+        for ($i = 0; $i < 6; $i++) {
+            $monthLabels[] = $nextMonthObj->format('M_y');
+            $monthDetails[$i]['year'] = $nextMonthObj->format('Y');
+            $monthDetails[$i]['month'] = $nextMonthObj->format('m');
+            $nextMonthObj->add($oneMonth);
+        }
+
+        $dates = array(            
+            'monthLabels' => $monthLabels,
+            'monthDetails' => $monthDetails,
+            'startYear' => $startYear,
+            'startMonth' => $startMonth,
+            'lastYear' => $lastYear,
+            'lastMonth' => $lastMonth
+        );
+
+        return $dates;
+    }
+
+    function prepareDatesForResults($row){
+        $startDate = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
+        $startDateSortable = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Ymd') : null;
+        $endDate         = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
+        $endDateSortable = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
+        
+        $dates = array(            
+            'startDate' => $startDate,
+            'startDateSortable' => $startDateSortable,
+            'endDate' => $endDate,
+            'endDateSortable' => $endDateSortable
+        );
+
+        return $dates;
+    }
+
+    function prepareListQuery(){
+
+    }
+
+    function  rfsMaxEndDate($rfsid){
+        if(empty($this->rfsMaxEndDate)){
+            // We've not populated the array of RFS & END_DATES, so do that now.
+            $sql = " SELECT RFS, MAX(END_DATE) as END_DATE FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS ;
+            $sql .= " GROUP BY RFS ";
+
+            $rs = db2_exec($GLOBALS['conn'], $sql);
+
+            if(!$rs) {
+                DbTable::displayErrorMessage($rs,__CLASS__, __METHOD__, $sql);
+            }
+
+            while (($row=db2_fetch_assoc($rs))==true) {
+                $this->rfsMaxEndDate[strtoupper(trim($row['RFS']))] = isset($row['END_DATE']) ? trim($row['END_DATE']) : null ;
+            }
+        }
+        return isset($this->rfsMaxEndDate[strtoupper(trim($rfsid))]) ? new \DateTime($this->rfsMaxEndDate[strtoupper(trim($rfsid))]) : false;
+    }
+
+    function addGlyphicons(&$row){
+        $rfsId = trim($row['RFS_ID']);
+        $today = new \DateTime();
+        $rfsEndDate = $this->rfsMaxEndDate($rfsId);
+        $archiveable = false;
+        if($rfsEndDate){
+            $archiveable = $rfsEndDate < $today ? true : false;
+        }
+        
+        $pipelineRfs  =  trim($row['RFS_STATUS'])==rfsRecord::RFS_STATUS_PIPELINE  ?  true : false;
+
+        if($archiveable) {
+            $row['RFS_ID'] = "<button type='button' class='btn btn-warning btn-xs archiveRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "' >
+              <span class='glyphicon glyphicon-floppy-remove' aria-hidden='true' data-html='true' data-html='true' data-toggle='tooltip' title='Archive RFS Safer than deleting' ></span>
+              </button>";
+        } else {
+            $row['RFS_ID'] = ""; /// NEed something so next statement can be an append.
+        }
+        
+        $row['RFS_ID'] .= $pipelineRfs  ? "<button type='button' class='btn btn-success btn-xs goLiveRfs accessRestrict accessAdmin accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "' >
+              <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Release to Live' ></span>
+              </button>&nbsp;" : null;    
+        $row['RFS_ID'] .="<button disabled  type='button' class='btn btn-success btn-xs slipRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
+              <span class='glyphicon glyphicon-calendar' aria-hidden='true'  data-toggle='tooltip' title='This function has been depricated' ></span></button>";        
+        $row['RFS_ID'] .="<button type='button' class='btn btn-success btn-xs editRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>              
+              <span class='glyphicon glyphicon-edit' aria-hidden='true'  data-toggle='tooltip' title='Edit RFS' ></span>
+              </button>"  . "&nbsp;" .  "<button type='button' class='btn btn-danger btn-xs deleteRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
+              <span class='glyphicon glyphicon-trash' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Delete RFS Can not be recovered' ></span>
+              </button>" . "&nbsp;";
+
+        $row['RFS_ID'] .= $rfsId;
+        $linkToPgmp = trim($row['LINK_TO_PGMP']);
+        $row['LINK_TO_PGMP'] = empty($linkToPgmp) ? null : "<a href='$linkToPgmp' target='_blank' >$linkToPgmp</a>";
+    }
+
     function returnAsArray($predicate=null, $withArchive=false){
         $sql  = " SELECT RFS.*, RDR.* ";
         $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
@@ -154,9 +285,8 @@ class rfsTable extends DbTable {
                 break; // It's got invalid chars in it that will be a problem later.
             }
             $this->addGlyphicons($row);
-         
             
-            foreach ($row as $key=>$data){
+            foreach ($row as $key => $data){
                 $row[] = trim($row[$key]);
                 unset($row[$key]);
             }
@@ -167,36 +297,18 @@ class rfsTable extends DbTable {
 
     function returnClaimReportAsArray($predicate=null, $withArchive=false){
         
-        // The first month we need to show them is the CLAIM month they are currently in. 
-        // So start with today, and get the next Claim Cut off - th
-        
-        $startMonthObj = new \DateTime();
-        $thisMonthObj = new \DateTime();
-        $thisMonthObj->setDate($thisMonthObj->format('Y'), $thisMonthObj->format('m'), 01);
-        $thisMonthsClaimCutoff = DateClass::claimMonth($thisMonthObj->format('d-m-Y'));
-      
-        $startMonthObj > $thisMonthsClaimCutoff ? $startMonthObj->add(new \DateInterval('P1M')) : null;
-        $startYear  = $startMonthObj->format('Y');
-        $startMonth = $startMonthObj->format('m');
-        
-        $lastMonthObj = clone $startMonthObj;
-        $sixMonths = new \DateInterval('P6M');
-        $lastMonthObj->add($sixMonths);
-        $lastYear = $lastMonthObj->format('Y');
-        $lastMonth = $lastMonthObj->format('m');
-                 
-        $nextMonthObj = clone $startMonthObj;
-        $oneMonth = new \DateInterval('P1M');
-        $monthLabels = array();
-        $monthDetails = array();
-        
-        for ($i = 0; $i < 6; $i++) {
-            $monthLabels[] = $nextMonthObj->format('M_y');
-            $monthDetails[$i]['year'] = $nextMonthObj->format('Y');
-            $monthDetails[$i]['month'] = $nextMonthObj->format('m');
-            $nextMonthObj->add($oneMonth);
-        }
-           
+        $dates = $this->prepareDatesForQuery();
+        $monthLabels = $dates['monthLabels'];
+        $monthDetails = $dates['monthDetails'];
+
+        $startYear = $dates['startYear'];
+        $startMonth = $dates['startMonth'];
+
+        $lastYear = $dates['lastYear'];
+        $lastMonth = $dates['lastMonth'];
+
+        $sql = $this->prepareListQuery();
+
         $sql = "";
         $sql.=" WITH ";
         $sql.= " CLAIM(RESOURCE_REFERENCE ";
@@ -207,7 +319,7 @@ class rfsTable extends DbTable {
 
         $sql.= " ) AS ( ";
         $sql.=" select RESOURCE_REFERENCE RESOURCE_NAME ";
-        
+
         foreach ($monthLabels as $label) {
             $sql.=", sum($label) as $label ";
         }
@@ -251,22 +363,23 @@ class rfsTable extends DbTable {
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
         $allData = null;
-        
+
         while(($row = db2_fetch_assoc($resultSet))==true){
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
             }     
             
-            $startDate = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
-            $startDateSortable = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Ymd') : null;
-            $endDate         = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
-            $endDateSortable = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
+            $rowDates = $this->prepareDatesForResults($row);
+            $startDate = $rowDates['startDate'];
+            $startDateSortable = $rowDates['startDateSortable'];
+            $endDate = $rowDates['endDate'];
+            $endDateSortable = $rowDates['endDateSortable'];
             
             $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
             $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
             
-            foreach ($row as $key=>$data){ 
+            foreach ($row as $key => $data){ 
                 $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
                 unset($row[$key]);
             }
@@ -277,36 +390,16 @@ class rfsTable extends DbTable {
 
     function returnClaimReportAsJson($predicate=null, $withArchive=false){
         
-        // The first month we need to show them is the CLAIM month they are currently in. 
-        // So start with today, and get the next Claim Cut off - th
-        
-        $startMonthObj = new \DateTime();
-        $thisMonthObj = new \DateTime();
-        $thisMonthObj->setDate($thisMonthObj->format('Y'), $thisMonthObj->format('m'), 01);
-        $thisMonthsClaimCutoff = DateClass::claimMonth($thisMonthObj->format('d-m-Y'));
-      
-        $startMonthObj > $thisMonthsClaimCutoff ? $startMonthObj->add(new \DateInterval('P1M')) : null;
-        $startYear  = $startMonthObj->format('Y');
-        $startMonth = $startMonthObj->format('m');
-        
-        $lastMonthObj = clone $startMonthObj;
-        $sixMonths = new \DateInterval('P6M');
-        $lastMonthObj->add($sixMonths);
-        $lastYear = $lastMonthObj->format('Y');
-        $lastMonth = $lastMonthObj->format('m');
-                 
-        $nextMonthObj = clone $startMonthObj;
-        $oneMonth = new \DateInterval('P1M');
-        $monthLabels = array();
-        $monthDetails = array();
-        
-        for ($i = 0; $i < 6; $i++) {
-            $monthLabels[] = $nextMonthObj->format('M_y');
-            $monthDetails[$i]['year'] = $nextMonthObj->format('Y');
-            $monthDetails[$i]['month'] = $nextMonthObj->format('m');
-            $nextMonthObj->add($oneMonth);
-        }
-           
+        $dates = $this->prepareDatesForQuery();
+        $monthLabels = $dates['monthLabels'];
+        $monthDetails = $dates['monthDetails'];
+
+        $startYear = $dates['startYear'];
+        $startMonth = $dates['startMonth'];
+
+        $lastYear = $dates['lastYear'];
+        $lastMonth = $dates['lastMonth'];
+
         $sql = "";
         $sql.=" WITH ";
         $sql.= " CLAIM(RESOURCE_REFERENCE ";
@@ -346,8 +439,14 @@ class rfsTable extends DbTable {
         $sql.= " SELECT RFS.RFS_ID,RFS.PRN,RFS.PROJECT_TITLE,RFS.PROJECT_CODE,RFS.REQUESTOR_NAME,RFS.REQUESTOR_EMAIL,RFS.VALUE_STREAM,RFS.BUSINESS_UNIT ";
         $sql.= " ,RFS.LINK_TO_PGMP, ";
         $sql.= " RFS.RFS_CREATOR,RFS.RFS_CREATED_TIMESTAMP AS RFS_CREATED , ";
-        $sql.= " RR.RESOURCE_REFERENCE,RR.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE, ";
-        $sql.= " RR.TOTAL_HOURS,RR.RESOURCE_NAME,RR.RR_CREATOR AS REQUEST_CREATOR,RR.RR_CREATED_TIMESTAMP AS REQUEST_CREATED, ";
+        $sql.= " RR.RESOURCE_REFERENCE,RR.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE,RR.TOTAL_HOURS, ";
+        $sql.= " ";
+        $sql.= "( CASE 
+            WHEN LOCATE('" . resourceRequestTable::DUPLICATE . "', RR.RESOURCE_NAME) THEN null
+            WHEN LOCATE('" . resourceRequestTable::DELTA . "', RR.RESOURCE_NAME) THEN null
+            ELSE RR.RESOURCE_NAME
+        END) AS RESOURCE_NAME,";
+        $sql.= " RR.RR_CREATOR AS REQUEST_CREATOR,RR.RR_CREATED_TIMESTAMP AS REQUEST_CREATED, ";
         $sql.= " RR.CLONED_FROM, RR.STATUS, RR.RATE_TYPE, RR.HOURS_TYPE, RFS.RFS_STATUS, RFS.RFS_TYPE, CLAIM.* ";
         $sql.= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR ";
@@ -361,67 +460,46 @@ class rfsTable extends DbTable {
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
         $allData = null;
-        
+
         while(($row = db2_fetch_assoc($resultSet))==true){
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
             }
             
-            $startDate = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
-            $startDateSortable = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Ymd') : null;
-            $endDate         = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
-            $endDateSortable = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
-            
-            // $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
-            // $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
+            $rowDates = $this->prepareDatesForResults($row);
+            $startDate = $rowDates['startDate'];
+            $startDateSortable = $rowDates['startDateSortable'];
+            $endDate = $rowDates['endDate'];
+            $endDateSortable = $rowDates['endDateSortable'];
             
             $row['START_DATE'] = $startDate;
             $row['START_DATE_RAW'] = $startDateSortable;
             $row['END_DATE']   = $endDate;
             $row['END_DATE_RAW']   = $endDateSortable;
 
-            foreach ($row as $key=>$data){ 
-                $row[$key] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
+            foreach ($row as $key => $data){
+                // $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
                 // unset($row[$key]);
+                $row[$key] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key]; 
             }
             $allData[]  = $row;
         }
         return array('data'=>$allData,'sql'=>$sql);
     }
 
-    function returnNoneActiveReportAsArray($predicate=null, $withArchive = false, $limit = false, $offset = false){
+    function returnNoneActiveReportAsArray($predicate=null, $withArchive = false){
         
-        // The first month we need to show them is the CLAIM month they are currently in. 
-        // So start with today, and get the next Claim Cut off - th
-        
-        $startMonthObj = new \DateTime();
-        $thisMonthObj = new \DateTime();
-        $thisMonthObj->setDate($thisMonthObj->format('Y'), $thisMonthObj->format('m'), 01);
-        $thisMonthsClaimCutoff = DateClass::claimMonth($thisMonthObj->format('d-m-Y'));
-      
-        $startMonthObj > $thisMonthsClaimCutoff ? $startMonthObj->add(new \DateInterval('P1M')) : null;
-        $startYear  = $startMonthObj->format('Y');
-        $startMonth = $startMonthObj->format('m');
-        
-        $lastMonthObj = clone $startMonthObj;
-        $sixMonths = new \DateInterval('P6M');
-        $lastMonthObj->add($sixMonths);
-        $lastYear = $lastMonthObj->format('Y');
-        $lastMonth = $lastMonthObj->format('m');
-                 
-        $nextMonthObj = clone $startMonthObj;
-        $oneMonth = new \DateInterval('P1M');
-        $monthLabels = array();
-        $monthDetails = array();
-        
-        for ($i = 0; $i < 6; $i++) {
-            $monthLabels[] = $nextMonthObj->format('M_y');
-            $monthDetails[$i]['year'] = $nextMonthObj->format('Y');
-            $monthDetails[$i]['month'] = $nextMonthObj->format('m');
-            $nextMonthObj->add($oneMonth);
-        }
-           
+        $dates = $this->prepareDatesForQuery();
+        $monthLabels = $dates['monthLabels'];
+        $monthDetails = $dates['monthDetails'];
+
+        $startYear = $dates['startYear'];
+        $startMonth = $dates['startMonth'];
+
+        $lastYear = $dates['lastYear'];
+        $lastMonth = $dates['lastMonth'];
+
         $sql = "";
         $sql.=" WITH ";
         $sql.= " CLAIM(RESOURCE_REFERENCE ";
@@ -480,8 +558,6 @@ class rfsTable extends DbTable {
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
         $allData = array();
-        
-        $counter = 0;
 
         while(($row = db2_fetch_assoc($resultSet))==true){
             $testJson = json_encode($row);
@@ -489,84 +565,26 @@ class rfsTable extends DbTable {
                 break; // It's got invalid chars in it that will be a problem later.
             }     
             
-            $startDate = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
-            $startDateSortable = !empty($row['START_DATE']) ? \Datetime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Ymd') : null;
-            $endDate         = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
-            $endDateSortable = !empty($row['END_DATE'])     ? \Datetime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
-            
-            // foreach ($row as $key => $data){ 
-            //     $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
-            //     unset($row[$key]);
-            // }
-            $row = array_map('trim',$row);
+            $rowDates = $this->prepareDatesForResults($row);
+            $startDate = $rowDates['startDate'];
+            $startDateSortable = $rowDates['startDateSortable'];
+            $endDate = $rowDates['endDate'];
+            $endDateSortable = $rowDates['endDateSortable'];
             
             $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
             $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
-            
-            $row['DT_RowId'] = 'row_'.$counter;
-
-            $counter++;
+                      
+            foreach ($row as $key => $data){
+                // $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
+                // unset($row[$key]);
+                $row[$key] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
+            }
             $allData[] = $row;
         }
         return array('data'=>$allData, 'sql'=>$sql);
     }
 
-    function addGlyphicons(&$row){
-        $rfsId = trim($row['RFS_ID']);
-        $today = new \DateTime();
-        $rfsEndDate = $this->rfsMaxEndDate($rfsId);
-        $archiveable = false;
-        if($rfsEndDate){
-            $archiveable = $rfsEndDate < $today ? true : false;
-        }
-        
-        $pipelineRfs  =  trim($row['RFS_STATUS'])==rfsRecord::RFS_STATUS_PIPELINE  ?  true : false;
-
-        if($archiveable) {
-            $row['RFS_ID'] = "<button type='button' class='btn btn-warning btn-xs archiveRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "' >
-              <span class='glyphicon glyphicon-floppy-remove' aria-hidden='true' data-html='true' data-html='true' data-toggle='tooltip' title='Archive RFS Safer than deleting' ></span>
-              </button>";
-        } else {
-            $row['RFS_ID'] = ""; /// NEed something so next statement can be an append.
-        }
-        
-        $row['RFS_ID'] .= $pipelineRfs  ? "<button type='button' class='btn btn-success btn-xs goLiveRfs accessRestrict accessAdmin accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "' >
-              <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Release to Live' ></span>
-              </button>&nbsp;" : null;    
-        $row['RFS_ID'] .="<button disabled  type='button' class='btn btn-success btn-xs slipRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
-              <span class='glyphicon glyphicon-calendar' aria-hidden='true'  data-toggle='tooltip' title='This function has been depricated' ></span></button>";        
-        $row['RFS_ID'] .="<button type='button' class='btn btn-success btn-xs editRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>              
-              <span class='glyphicon glyphicon-edit' aria-hidden='true'  data-toggle='tooltip' title='Edit RFS' ></span>
-              </button>"  . "&nbsp;" .  "<button type='button' class='btn btn-danger btn-xs deleteRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>
-              <span class='glyphicon glyphicon-trash' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Delete RFS Can not be recovered' ></span>
-              </button>" . "&nbsp;";
-
-        $row['RFS_ID'] .= $rfsId;
-        $linkToPgmp = trim($row['LINK_TO_PGMP']);
-        $row['LINK_TO_PGMP'] = empty($linkToPgmp) ? null : "<a href='$linkToPgmp' target='_blank' >$linkToPgmp</a>";
-    }
-
-    function  rfsMaxEndDate($rfsid){
-        if(empty($this->rfsMaxEndDate)){
-            // We've not populated the array of RFS & END_DATES, so do that now.
-            $sql = " SELECT RFS, MAX(END_DATE) as END_DATE FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS ;
-            $sql .= " GROUP BY RFS ";
-
-            $rs = db2_exec($GLOBALS['conn'], $sql);
-
-            if(!$rs) {
-                DbTable::displayErrorMessage($rs,__CLASS__, __METHOD__, $sql);
-            }
-
-            while (($row=db2_fetch_assoc($rs))==true) {
-                $this->rfsMaxEndDate[strtoupper(trim($row['RFS']))] = isset($row['END_DATE']) ? trim($row['END_DATE']) : null ;
-            }
-        }
-        return isset($this->rfsMaxEndDate[strtoupper(trim($rfsid))]) ? new \DateTime($this->rfsMaxEndDate[strtoupper(trim($rfsid))]) : false;
-
-    }
-
-    function  archiveRfs($rfsid){
+    function archiveRfs($rfsid){
         if(empty($rfsid)){
             return false;
         }
@@ -584,21 +602,4 @@ class rfsTable extends DbTable {
 
         return true;
     }
-    
-    static function getRequestorEmail($rfsId){
-        $sql = " SELECT REQUESTOR_EMAIL ";
-        $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . \rest\allTables::$RFS;
-        $sql.= " WHERE RFS_ID='" . db2_escape_string($rfsId) . "' ";
-        $rs = db2_exec($GLOBALS['conn'], $sql);
-        if(!$rs){
-            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);            
-        }
-        
-        $row = db2_fetch_assoc($rs);
-        return trim($row['REQUESTOR_EMAIL']);
-    }
-
-
-
-
 }
