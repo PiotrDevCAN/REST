@@ -12,7 +12,6 @@ ob_start();
 
 $autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
-
 $resourceRecord = new resourceRequestRecord();
 $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
@@ -23,12 +22,14 @@ $resourceRecord->set('RESOURCE_REFERENCE', null); // So we get a new record when
 $resourceRecord->set('RR_CREATED_TIMESTAMP', null); // so we know when the clone was created.
 $currentResource =$resourceRecord->get('RESOURCE_NAME');
 
-$resourceNamePrefix = $_POST['delta']=='true' ? resourceRequestTable::DELTA : resourceRequestTable::DUPLICATE;
-
 echo $_POST['delta']=='true' ? "delta is true" : "delta is not true";
 $delta = $_POST['delta']=='true' ? true : false;
 
-!empty($currentResource) ? $resourceRecord->set('RESOURCE_NAME', $resourceNamePrefix . $resourceRecord->get('RESOURCE_NAME')) : null;
+// When duplicating or auto-d'ing I would just update the resource name as null so it shows as unallocated
+// $resourceNamePrefix = $_POST['delta']=='true' ? resourceRequestTable::DELTA : resourceRequestTable::DUPLICATE;
+// !empty($currentResource) ? $resourceRecord->set('RESOURCE_NAME', $resourceNamePrefix . $resourceRecord->get('RESOURCE_NAME')) : null;
+$resourceNamePrefix = '';
+$resourceRecord->set('RESOURCE_NAME', null);
 
 $resourceRecord->set('CLONED_FROM',$_POST['resourceReference']);
 
@@ -104,8 +105,14 @@ db2_autocommit($GLOBALS['conn'],$autoCommit);
 $messages = ob_get_clean();
 ob_start();
 
-$response = array('resourceReference'=>$resourceReference, 'saveResponse' => $saveResponse, 'hoursResponse'=>$hoursResponse,
-                  'Messages'=>$messages, 'POST'=>print_r($_POST,true),'resourceNamePrefix',$resourceNamePrefix);
+$response = array(
+    'resourceReference'=>$resourceReference, 
+    'saveResponse' => $saveResponse, 
+    'hoursResponse'=>$hoursResponse,
+    'Messages'=>$messages, 
+    'POST'=>print_r($_POST,true),
+    'resourceNamePrefix',$resourceNamePrefix
+);
 
 ob_clean();
 echo json_encode($response);
