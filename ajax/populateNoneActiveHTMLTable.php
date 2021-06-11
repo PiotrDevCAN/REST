@@ -42,7 +42,7 @@ $predicate .= ! empty($requestor) ? " AND lower(REQUESTOR_EMAIL)='" . db2_escape
 //     );
 // } else {
 
-    $data = $rfsTable->returnNoneActiveReportAsArray($predicate, false, $length, $start);
+    $data = $rfsTable->returnNoneActiveReportAsArray($predicate);
     $message = ob_get_clean();
     ob_start();
 

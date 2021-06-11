@@ -236,6 +236,7 @@ class resourceRequestTable extends DbTable {
         is_object($endDateObj) ?  $endDateObj->setTime(23, 59, 59) : null; // When setting completed, compare against midnight on END_DATE
         $totalHours = $row['TOTAL_HOURS'];
         $hoursType = $row['HOURS_TYPE'];
+        $rateType = $row['RATE_TYPE'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
         $organisation = $row['ORGANISATION'];
         $service = $row['SERVICE'];
@@ -309,12 +310,9 @@ class resourceRequestTable extends DbTable {
         $displayedResourceName.= "  data-rfsenddate='" . $rfsEndDate . "' ";
         $displayedResourceName.= "  data-hrs='" . $totalHours . "' ";
         $displayedResourceName.= "  data-hrstype='" . $hoursType . "' ";
+        $displayedResourceName.= "  data-ratetype='" . $rateType . "' ";
         $displayedResourceName.= "  >";
 
-//        $row['RESOURCE_NAME'].= $editable ? 
-//            "<button type='button' class='btn btn-xs editRecord accessRestrict accessAdmin accessCdi $canBeAmendedByDemandTeam ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' >
-//                <span data-toggle='tooltip' class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Resource Request'></span>
-//            </button>" : null;
         $displayedResourceName.= $editable ? 
             "<button type='button' class='btn btn-xs editResource accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align' data-reference='" .$resourceReference . "' data-type='" .$service . "' data-resource-name='" . $resourceName . "' >
                 <span data-toggle='tooltip' class='glyphicon glyphicon-user $editButtonColor' aria-hidden='true' title='Edit Assigned Resource'></span>
@@ -330,7 +328,8 @@ class resourceRequestTable extends DbTable {
         
         $resName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $resName;
         $resName = substr($resourceName,0,strlen(resourceRequestTable::DELTA))==resourceRequestTable::DELTA ? "<i>Unallocated</i><br/>" . trim($resourceName) : $resName;
-
+        $resName = substr($resourceName,0,strlen(resourceRequestTable::DUPLICATE))==resourceRequestTable::DUPLICATE ? "<i>Unallocated</i><br/>" . trim($resourceName) : $resName;
+        
         $displayedResourceName.= "&nbsp;" . $resName ;
         $displayedResourceName.= "</span>";
         
@@ -338,7 +337,7 @@ class resourceRequestTable extends DbTable {
 //        $calendarEntry = "<small>Latest diary entry not currently available</small>";      
         
         $displayedResourceName.= "<br/><button type='button' class='btn btn-xs btnOpenDiary accessRestrict accessAdmin accessCdi accessSupply accessDemand ' ";
-        $displayedResourceName.= "     aria-label='Left Align'  ";
+        $displayedResourceName.= " aria-label='Left Align'  ";
         $displayedResourceName.= " data-reference='" .$resourceReference . "' ";
         $displayedResourceName.= " data-rfs='" .$rfsId . "'  ";
         $displayedResourceName.= " data-organisation='" .$organisation . "'  ";
