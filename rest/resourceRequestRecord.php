@@ -243,6 +243,7 @@ class resourceRequestRecord extends DbRecord
    		$this->formTextArea('Description', 'DESCRIPTION', null, null, null,2000, 'top',null, 1, "High level description of work required");
    		$this->formHiddenInput('mode',$mode,'mode');
    		$this->formHiddenInput('RESOURCE_REFERENCE',$this->RESOURCE_REFERENCE,'RESOURCE_REFERENCE');
+        $this->formHiddenInput('RESOURCE_NAME',$this->RESOURCE_NAME,'RESOURCE_NAME');
         $this->formHiddenInput('STATUS',$this->STATUS,'STATUS');
         $rrCreator = $mode==FormClass::$modeEDIT ? $this->RR_CREATOR : $_SESSION['ssoEmail'];
 		$this->formHiddenInput('RR_CREATOR',$rrCreator,'RR_CREATOR');
