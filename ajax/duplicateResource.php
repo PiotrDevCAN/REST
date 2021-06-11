@@ -30,6 +30,7 @@ $delta = $_POST['delta']=='true' ? true : false;
 // !empty($currentResource) ? $resourceRecord->set('RESOURCE_NAME', $resourceNamePrefix . $resourceRecord->get('RESOURCE_NAME')) : null;
 $resourceNamePrefix = '';
 $resourceRecord->set('RESOURCE_NAME', null);
+$resourceRecord->set('STATUS', resourceRequestRecord::STATUS_NEW);
 
 $resourceRecord->set('CLONED_FROM',$_POST['resourceReference']);
 
