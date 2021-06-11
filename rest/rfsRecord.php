@@ -269,7 +269,8 @@ class rfsRecord extends DbRecord
 
         <?php
         $allButtons = array();
-   		$this->formHiddenInput('RFS_CREATOR',$_SESSION['ssoEmail'],'RFS_CREATOR');
+		$rfsCreator = $mode==FormClass::$modeEDIT ? $this->RFS_CREATOR : $_SESSION['ssoEmail']; 
+		$this->formHiddenInput('RFS_CREATOR',$rfsCreator,'RFS_CREATOR');
    		$this->formHiddenInput('mode',$mode,'mode');
    		$submitButton = $mode==FormClass::$modeEDIT ?  $this->formButton('submit','Submit','updateRfs',null,'Update') :  $this->formButton('submit','Submit','saveRfs',null,'Submit');
    		$resetButton  = $this->formButton('reset','Reset','resetRfs',null,'Reset','btn-warning');
@@ -298,10 +299,10 @@ class rfsRecord extends DbRecord
 		    $startDate = new \DateTime($requestDetails['START_DATE']);
 		    $endDate   = new \DateTime($requestDetails['END_DATE']);
 		    
-		    $startDateStr = empty($startDate) ? null : $startDate->format('dMy');
+		    $startDateStr = empty($startDate) ? null : $startDate->format('d M y');
 		    $startDateStr2 = empty($startDate) ? null : $startDate->format('Y-m-d');
 		    
-		    $endDateStr = empty($endDate) ? null : $endDate->format('dMy');
+		    $endDateStr = empty($endDate) ? null : $endDate->format('d M y');
 		    $endDateStr2 = empty($endDate) ? null : $endDate->format('Y-m-d');
 		    
 		    $rr = $requestDetails['RESOURCE_REFERENCE'];

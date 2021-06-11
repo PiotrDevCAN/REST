@@ -13,7 +13,6 @@ use itdq\JavaScript;
  */
 class resourceRequestRecord extends DbRecord
 {
-
     protected $RESOURCE_REFERENCE;
     protected $RFS;
     protected $ORGANISATION; // was known as CURRENT_PLATFORM
@@ -31,9 +30,23 @@ class resourceRequestRecord extends DbRecord
     protected $HRS_PER_WEEK;
     protected $TOTAL_HOURS; // ALTER TABLE "REST_DEV"."RESOURCE_REQUESTS" ADD COLUMN "TOTAL_HOURS" DECIMAL(8,2);
 
-    static public $columnHeadings = array("Resource Ref", "RFS", "Organisation", "Service",
-                                          "Description", "Start Date", "End Date", "Total Hours", "Resource Name",
-        "Request Creator", "Request Created","Cloned From", "Status",'Rate_Type','Hours_type'    );
+    static public $columnHeadings = array(
+        "Resource Ref", 
+        "RFS", 
+        "Organisation", 
+        "Service",
+        "Description",
+        "Start Date", 
+        "End Date", 
+        "Total Hours", 
+        "Resource Name",
+        "Request Creator", 
+        "Request Created",
+        "Cloned From", 
+        "Status",
+        'Rate_Type',
+        'Hours_type'
+    );
 
     CONST STATUS_NEW        = 'New';
 //     CONST STATUS_REDIRECTED = 'Re-Directed';
@@ -83,24 +96,15 @@ class resourceRequestRecord extends DbRecord
         JavaScript::buildSelectArray($allService, 'organisation');
 
         $startDate = empty($this->START_DATE) ? null : new \DateTime($this->START_DATE);
-        $startDateStr = empty($startDate) ? null : $startDate->format('dMy');
+        $startDateStr = empty($startDate) ? null : $startDate->format('d M y');
         $startDateStr2 = empty($startDate) ? null : $startDate->format('Y-m-d');
         $endDate = empty($this->END_DATE) ? null : new \DateTime($this->END_DATE);
-        $endDateStr = empty($endDate) ? null : $endDate->format('dMy');
+        $endDateStr = empty($endDate) ? null : $endDate->format('d M y');
         $endDateStr2 = empty($endDate) ? null : $endDate->format('Y-m-d');
         
         $this->STATUS = empty($this->STATUS) ? 'New' : $this->STATUS;
 
         ?>
-<!--         <div class="form-group required" id="RFS_IDFormGroup"> -->
-
-<!--         	<label for="RFS_ID" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">RFS ID</label> -->
-<!--         	<div class="col-md-2"> -->
-<!--         	<input class="form-control" id="RFS_ID" name="RFS_ID" value="" placeholder="Enter RFS Id" required="required" type="text"> -->
-<!--         	<input id="originalRFS_ID" name="originalRFS_ID" value="" type="hidden"> -->
-<!--         	</div> -->
-
-<!--         </div> -->
    		<div class='form-group required'>
 
             <label for='RFS' class='col-md-2 control-label ceta-label-left'>RFS</label>
@@ -122,73 +126,68 @@ class resourceRequestRecord extends DbRecord
                </select>
             </div>
 
-
-
         </div>
-
 
    		<div class='form-group' >
+            <div id='START_DATEFormGroup' class='required'>
+                <label for='START_DATE' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>Start Date</label>
+                <div class='col-md-3'>
+                    <div id='calendarFormGroupSTART_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='START_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
+                        <input id='InputSTART_DATE' class='form-control' type='text'  value='<?=$startDateStr?>' placeholder='Select Start Date' required  <?=$notEditable?>/>
+                        <input type='hidden' id='START_DATE' name='START_DATE' value='<?=$startDateStr2?>' required/>
+                        <span class='input-group-addon'><span id='calendarIconSTART_DATE' class='glyphicon glyphicon-calendar'></span></span>
+                    </div>
+                </div>
+            </div>
 
-
-        <div id='START_DATE" . "FormGroup' class='required'>
-        <label for='START_DATE' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>Start Date</label>
-        <div class='col-md-3'>
-        <div id='calendarFormGroupSTART_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='START_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
-        <input id='InputSTART_DATE' class='form-control' type='text'  value='<?=$startDateStr?>' placeholder='Select Start Date' required  <?=$notEditable?>/>
-        <input type='hidden' id='START_DATE' name='START_DATE' value='<?=$startDateStr2?>' required/>
-        <span class='input-group-addon'><span id='calendarIconSTART_DATE' class='glyphicon glyphicon-calendar'></span></span>
-        </div>
-        </div>
-        </div>
-
-        <div id='END_DATE" . "FormGroup' class='required'>
-        <label for='END_DATE' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>End Date</label>
-        <div class='col-md-3'>
-        <div id='calendarFormGroupEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
-        <input id='InputEND_DATE' class='form-control' type='text'  value='<?=$endDateStr?>' placeholder='Select End Date' required <?=$notEditable?> />
-        <input type='hidden' id='END_DATE' name='END_DATE' value='<?=$endDateStr2?>' required />
-        <span class='input-group-addon'><span id='calendarIconEND_DATE' class='glyphicon glyphicon-calendar'></span></span>
-        </div>
-        </div>
-        </div>
+            <div id='END_DATEFormGroup' class='required'>
+                <label for='END_DATE' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>End Date</label>
+                <div class='col-md-3'>
+                    <div id='calendarFormGroupEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
+                        <input id='InputEND_DATE' class='form-control' type='text'  value='<?=$endDateStr?>' placeholder='Select End Date' required <?=$notEditable?> />
+                        <input type='hidden' id='END_DATE' name='END_DATE' value='<?=$endDateStr2?>' required />
+                        <span class='input-group-addon'><span id='calendarIconEND_DATE' class='glyphicon glyphicon-calendar'></span></span>
+                    </div>
+                </div>
+            </div>
         </div>
 
    		<div class='form-group required'>
    		
-   		<div id='HrsPerWeekFormGroup'>
-   		<label for="TOTAL_HOURS" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Total Hours<br/><small>For this request</small></label>
-   		<div class="col-md-2">
-   		<input type='number' step='0.01' min=0 max=6000 class="form-control" id="TOTAL_HOURS" name="TOTAL_HOURS" value="<?=$this->TOTAL_HOURS?>" placeholder="Total Hrs For RFS" <?=$notEditable?> required >
-   		<input id="originalTotal_Hours" name="originalTotal_Hours" value="<?=$this->TOTAL_HOURS?>" type="hidden">
-   		</div>
-   		</div>
-   		
-   		<div id='HrsRateFormGroup'>
-   			<label class="col-md-offset-1 col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Rate Type</label>
-   			<div class="col-md-4">
-   			<?php 
-   			foreach (self::$allRateTypes as $rateType) {
-   			    $checked = $rateType == $this->RATE_TYPE ? ' checked ' : null;
-   			    ?><label class="radio-inline"><input type="radio" name="RATE_TYPE" value='<?=$rateType?>' required <?=$checked;?> ><?=$rateType?></label><?php 
-   			}   			
-   			?>
- 			</div>						 
-   		</div>
+            <div id='HrsPerWeekFormGroup'>
+                <label for="TOTAL_HOURS" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Total Hours<br/><small>For this request</small></label>
+                <div class="col-md-2">
+                    <input type='number' step='0.01' min=0 max=6000 class="form-control" id="TOTAL_HOURS" name="TOTAL_HOURS" value="<?=$this->TOTAL_HOURS?>" placeholder="Total Hrs For RFS" <?=$notEditable?> required >
+                    <input id="originalTotal_Hours" name="originalTotal_Hours" value="<?=$this->TOTAL_HOURS?>" type="hidden">
+                </div>
+            </div>
+            
+            <div id='HrsRateFormGroup'>
+                <label class="col-md-offset-1 col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Rate Type</label>
+                <div class="col-md-4">
+                    <?php 
+                    foreach (self::$allRateTypes as $rateType) {
+                        $checked = $rateType == $this->RATE_TYPE ? ' checked ' : null;
+                        ?><label class="radio-inline"><input type="radio" name="RATE_TYPE" value='<?=$rateType?>' required <?=$checked;?>><?=$rateType?></label><?php 
+                    }
+                    ?>
+                </div>						 
+            </div>
 
    		</div>
    		
-   		 <div class='form-group required'>
+        <div class='form-group required'>
    		
    		<div id='HrsTypeFormGroup'>
    			<label class="col-md-offset-5 col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Hours Type</label>
    			<div class="col-md-5">
-   			<?php 
-   			foreach (self::$allHourTypes as $hoursType) {
-   			    $checked = $hoursType == $this->HOURS_TYPE ? ' checked ' : null;
-   			    ?><label class="radio-inline"><input type="radio" name="HOURS_TYPE" value='<?=$hoursType?>' required <?=$checked?> ><?=$hoursType?></label><?php 
-   			}   			
-   			?>
- 			</div>						 
+                <?php 
+                foreach (self::$allHourTypes as $hoursType) {
+                    $checked = $hoursType == $this->HOURS_TYPE ? ' checked ' : null;
+                    ?><label class="radio-inline"><input type="radio" name="HOURS_TYPE" value='<?=$hoursType?>' required <?=$checked?>><?=$hoursType?></label><?php 
+                }
+                ?>
+            </div>						 
    		</div>
 
    		</div>
@@ -197,11 +196,11 @@ class resourceRequestRecord extends DbRecord
 	       	<label for='ORGANISATION' class='col-md-2 control-label ceta-label-left'>Organisation</label>
     	       	<div class='col-md-3'>
                 <select class='form-control select'
-                		id='ORGANISATION'
-                        name='ORGANISATION'
-                        required='required'
-                        data-placeholder="Select Organisation" 
-                        data-allow-clear="true">
+                    id='ORGANISATION'
+                    name='ORGANISATION'
+                    required='required'
+                    data-placeholder="Select Organisation" 
+                    data-allow-clear="true">
                 <option value=''>Select Organisation<option>
                 <?php
                     foreach ($allOrganisation as $key => $value) {
@@ -244,9 +243,9 @@ class resourceRequestRecord extends DbRecord
    		$this->formTextArea('Description', 'DESCRIPTION', null, null, null,2000, 'top',null, 1, "High level description of work required");
    		$this->formHiddenInput('mode',$mode,'mode');
    		$this->formHiddenInput('RESOURCE_REFERENCE',$this->RESOURCE_REFERENCE,'RESOURCE_REFERENCE');
-   		$this->formHiddenInput('STATUS',$this->STATUS,'STATUS');
-   		$this->formHiddenInput('RR_CREATOR',$_SESSION['ssoEmail'],'RR_CREATOR');
-
+        $this->formHiddenInput('STATUS',$this->STATUS,'STATUS');
+        $rrCreator = $mode==FormClass::$modeEDIT ? $this->RR_CREATOR : $_SESSION['ssoEmail'];
+		$this->formHiddenInput('RR_CREATOR',$rrCreator,'RR_CREATOR');
    		$submitButton = $mode==FormClass::$modeEDIT ?  $this->formButton('submit','Submit','updateResourceRequest',null,'Update') :  $this->formButton('submit','Submit','saveResourceRequest',null,'Submit');
    		$resetButton  = $this->formButton('reset','Reset','resetResourceRequest',null,'Reset','btn-warning');
    		$allButtons[] = $submitButton;
