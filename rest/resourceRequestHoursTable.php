@@ -161,6 +161,7 @@ class resourceRequestHoursTable extends DbTable
                 
                 // echo '<br/>';
                 // echo ' iteration '.$iteration;
+                // echo '<br/>----------------------------------------------';
 
                 // echo '<br/>';
                 // echo ' endPeriod '.$endPeriod;
@@ -190,23 +191,29 @@ class resourceRequestHoursTable extends DbTable
                 self::populateComplimentaryDateFields($nextDate, $resourceRequestHoursRecord);
                 
                 $resourceRequestHoursRecord->DATE = $resourceRequestHoursRecord->WEEK_ENDING_FRIDAY;
-                $wefDate = new \DateTime($resourceRequestHoursRecord->WEEK_ENDING_FRIDAY);
+                $weelEndingFriday_Date = new \DateTime($resourceRequestHoursRecord->WEEK_ENDING_FRIDAY);
                 
                 switch ($hrsType) {
                     case resourceRequestRecord::HOURS_TYPE_OT_WEEK_END:
-                        if($edate > $wefDate){
+                        if($edate > $weelEndingFriday_Date){
                             $businessDaysInWeek = 2; // Includes whole weekend
                         } else {
 
                             // echo '<br/>';
-                            // echo ' edate on '.$edate->format('d-M-Y');
+                            // echo ' next_Date on '.$nextDate->format('d-M-Y');
                             
                             // echo '<br/>';
-                            // echo ' wefDate on '.$wefDate->format('d-M-Y');
+                            // echo ' next on '.$nextDate->format('N');
+                            
+                            // echo '<br/>';
+                            // echo ' end_Date on '.$edate->format('d-M-Y');
                             
                             // echo '<br/>';
                             // echo ' ends on '.$edate->format('N');
-
+                            
+                            // echo '<br/>';
+                            // echo ' weelEndingFriday_Date on '.$weelEndingFriday_Date->format('d-M-Y');
+                            
                             switch ($edate->format('N')) {
                                 case 6: // Ends on a Saturday
                                     $businessDaysInWeek = 1;
@@ -215,8 +222,13 @@ class resourceRequestHoursTable extends DbTable
                                     $businessDaysInWeek = 2;
                                     break; 
                                 default:
-                                    // Ends before the weekend starts
-                                    $businessDaysInWeek = 0;
+                                    if($nextPeriod < $endPeriod) {
+                                        // Ends in the next period
+                                        $businessDaysInWeek = 2;
+                                    } else {
+                                        // Ends before the weekend starts
+                                        $businessDaysInWeek = 0;
+                                    }
                                     break;
                             }
                         }  
@@ -231,6 +243,12 @@ class resourceRequestHoursTable extends DbTable
                 }
     
                 if($businessDaysInWeek > 0){
+                    
+                    // echo '<br/>';
+                    // echo ' businessDaysInWeek  '.$businessDaysInWeek;
+                    // echo '<br/>';
+                    // echo ' hrsPerEffortDay  '.$hrsPerEffortDay;
+
                     $businessHoursInWeek = $businessDaysInWeek * $hrsPerEffortDay;
                     $resourceRequestHoursRecord->HOURS = $businessHoursInWeek;
                     

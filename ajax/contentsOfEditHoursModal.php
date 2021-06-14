@@ -48,6 +48,11 @@ ob_start();
 <div class='col-md-9'><p><span id='editHoursResourceName'></span></p></div>
 </div>
 
+<div class='row'>
+<div class='col-md-3'><div class="pull-right"><p><b>Hours Type:</b></p></div></div>
+<div class='col-md-9'><p><span id='editHoursType'></span></p></div>
+</div>
+
 <hr/>
 
 <form id='resourceHoursForm'>

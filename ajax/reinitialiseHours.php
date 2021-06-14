@@ -82,6 +82,8 @@ switch (true) {
         $saveResponse = $resourceTable->update($resourceRecord);
         $saveResponse = $saveResponse ? true : false;
         
+        $success = true;
+
         if ($saveResponse) {
             $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
             $resourceHoursSaved = false;
@@ -89,17 +91,20 @@ switch (true) {
                 $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $hoursType );
                 $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
             } catch (Exception $e) {
-                db2_rollback($GLOBALS['conn']);
                 $hoursResponse = $e->getMessage();
+                $success = false;
             }
             
             resourceRequestTable::setTotalHours($resourceReference, $totalHours);
             
             $diaryEntry = "Request was re-initialised at  " . $totalHours . " Total Hours (Start Date:" . $startDate . " End Date: " . $endDate . ")";
-            $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
-            
-            $success = true;
+            $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);            
+        }
+
+        if ($saveResponse && $success == true) {
             db2_commit($GLOBALS['conn']);
+        } else {
+            db2_rollback($GLOBALS['conn']);
         }
 
         db2_autocommit($GLOBALS['conn'],$autoCommit);

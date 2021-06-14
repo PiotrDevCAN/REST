@@ -253,7 +253,6 @@ class resourceRequestRecord extends DbRecord
    		$this->formHiddenInput('STATUS',$this->STATUS,'STATUS');
         $rrCreator = $mode==FormClass::$modeEDIT ? $this->RR_CREATOR : $_SESSION['ssoEmail'];
 		$this->formHiddenInput('RR_CREATOR',$rrCreator,'RR_CREATOR');
-
    		$submitButton = $mode==FormClass::$modeEDIT ?  $this->formButton('submit','Submit','updateResourceRequest',null,'Update') :  $this->formButton('submit','Submit','saveResourceRequest',null,'Submit');
    		$resetButton  = $this->formButton('reset','Reset','resetResourceRequest',null,'Reset','btn-warning');
    		$allButtons[] = $submitButton;

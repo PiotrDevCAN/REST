@@ -564,6 +564,10 @@ class rfsTable extends DbTable {
         $sql.= " AND ARCHIVE is null ";
         $sql.= " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE ";        
         $sql.= " AND AR.NOTES_ID IS NULL ";
+        $sql.= " AND (
+            RR.RESOURCE_NAME NOT LIKE '" . resourceRequestTable::DUPLICATE . "%' 
+            OR RR.RESOURCE_NAME NOT LIKE '" . resourceRequestTable::DELTA . "%'
+        )";
         $sql.= " AND RR.Status = '" . resourceRequestRecord::STATUS_ASSIGNED . "'";
         $sql.= !empty($predicate) ? " AND  $predicate " : null ;
 
