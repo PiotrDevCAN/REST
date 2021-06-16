@@ -37,6 +37,8 @@ $rfsTable = new rfsTable(allTables::$RFS);
 <div class='container'>
 
 <form id='reportDates' class='form-horizontal'>
+<?php
+/*
 	<div class='row'>
   <div class='col-md-5'> 
 	<div class='form-group text-right' >
@@ -50,7 +52,9 @@ $rfsTable = new rfsTable(allTables::$RFS);
 	</div>
   </div>
 	</div>
-
+*/
+?>
+  <input type='hidden' id="pipelineLiveArchive" name="pipelineLiveArchive" value="live" >
 	<div class='form-group text-right' >
     <label for='selectRfs' class='col-md-1 control-label text-right'>RFS</label>
         	<div class='col-md-2 text-left'>

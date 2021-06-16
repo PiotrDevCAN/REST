@@ -45,19 +45,24 @@ td.dataTables_empty{
 <h3>Assign Resource to Requests - Selection</h3>
 
 <form id='reportDates' class='form-horizontal'>
+<?php
+/*
 	<div class='row'>
-	<div class='col-md-5'> 
-	<div class='form-group' >
-	 <label for='pipelineLiveArchive' class='col-md-3 control-label text-right'>RFS Status</label>
-      <div class='col-md-9  text-left' >
- 			  <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='pipeline' disabled >Pipeline</label>
-  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" checked  data-toggle="button" value='live' >Live</label>
-        <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='both' disabled >Both</label>
-  			<label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='archive' disabled >Archive</label>
-	    </div>
+    <div class='col-md-5'> 
+      <div class='form-group' >
+        <label for='pipelineLiveArchive' class='col-md-3 control-label text-right'>RFS Status</label>
+        <div class='col-md-9  text-left' >
+          <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='pipeline' disabled >Pipeline</label>
+          <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" checked  data-toggle="button" value='live' >Live</label>
+          <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='both' disabled >Both</label>
+          <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" data-toggle="button" value='archive' disabled >Archive</label>
+        </div>
+      </div>
+    </div>
 	</div>
-	</div>
-	</div>
+*/
+?>
+  <input type='hidden' id="pipelineLiveArchive" name="pipelineLiveArchive" value="live" >
 	<div class='row'>
 	   <div class='col-md-6'>  
        <div class='form-group'>
@@ -347,6 +352,25 @@ td.dataTables_empty{
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="messageModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Message</h4>
+      </div>
+      <div class="modal-body" id='messageModalBody'>
+      </div>
+      <div class="modal-footer">
       </div>
     </div>
 
