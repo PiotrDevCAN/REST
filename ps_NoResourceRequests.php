@@ -16,11 +16,15 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is nu
 // $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
 // $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 ?>
-<div class='container-fluid'>
+<div class='container'>
+
 <h3>Requests With None Active Resource</h3>
+
+</div>
 
 <hr/>
 
+<div class='container-fluid'>
 <div id='noneActiveTableDiv'>
 </div>
 </div>
