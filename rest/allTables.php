@@ -10,9 +10,12 @@ namespace rest;
  */
 class allTables
 {
-    
+    public static $ARCHIVED_RFS                    = 'ARCHIVED_RFS';
     public static $ARCHIVED_RESOURCE_REQUESTS      = 'ARCHIVED_RESOURCE_REQUESTS';
     public static $ARCHIVED_RESOURCE_REQUEST_HOURS = 'ARCHIVED_RESOURCE_REQUEST_HOURS';
+    public static $ARCHIVED_RESOURCE_REQUEST_DIARY = 'ARCHIVED_RESOURCE_REQUEST_DIARY';
+    public static $ARCHIVED_DIARY                  = 'ARCHIVED_DIARY';
+
     
     public static $BANK_HOLIDAYS                   = 'BANK_HOLIDAYS';
     

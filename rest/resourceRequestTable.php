@@ -144,8 +144,11 @@ class resourceRequestTable extends DbTable {
 
         $startDateObj = new \DateTime($startDate);
         
-        $resourceRequestTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUESTS : allTables::$RESOURCE_REQUESTS;
-        $resourceRequestHoursTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUEST_HOURS : allTables::$RESOURCE_REQUEST_HOURS;
+        // $resourceRequestTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUESTS : allTables::$RESOURCE_REQUESTS;
+        // $resourceRequestHoursTable = $pipelineLiveArchive=='archive'  ? allTables::$ARCHIVED_RESOURCE_REQUEST_HOURS : allTables::$RESOURCE_REQUEST_HOURS;
+
+        $resourceRequestTable = allTables::$RESOURCE_REQUESTS;
+        $resourceRequestHoursTable = allTables::$RESOURCE_REQUEST_HOURS;
 
         $sql .=  " FROM " . $GLOBALS['Db2Schema'] . "." . $resourceRequestHoursTable;
         $sql .= "   WHERE  ( claim_month >= " . $startDateObj->format('m') . " and claim_year = " . $startDateObj->format('Y') . ")  " ;
@@ -168,7 +171,6 @@ class resourceRequestTable extends DbTable {
         $sql .= !empty($predicate) ? " $predicate " : null ;
 
         $sql .= " ORDER BY RFS.RFS_CREATED_TIMESTAMP DESC ";
-
         
         error_log(__FILE__ . ":" . __LINE__ . ":" . $pipelineLiveArchive);
         error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
@@ -577,6 +579,20 @@ class resourceRequestTable extends DbTable {
         } else {
             resourceRequestDiaryTable::insertEntry("Status set to " . db2_escape_string(trim($status)), $resourceRequest); 
         }
+        return $rs;
+    }
+
+    function getArchieved($rfsId=null){
+        $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
+        $sql .= " WHERE RFS = '" . db2_escape_string($rfsId) . "' ";
+
+        $rs = db2_exec($GLOBALS['conn'], $sql);
+
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+            return false;
+        }
+        
         return $rs;
     }
 }

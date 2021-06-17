@@ -75,13 +75,13 @@ td.dataTables_empty{
               <option value=''>Select Organisation</option>
               <option value='All'>All</option>
               <?php
-                  foreach ($allCtbService as $value) {
-                        $displayValue = trim($value);
-                        $returnValue  = trim($value);
-                        $selectedOrg = isset($_COOKIE['selectedOrganisation']) ? $_COOKIE['selectedOrganisation'] : null;
-                        $selected = htmlspecialchars_decode($returnValue)==htmlspecialchars_decode($selectedOrg) ? 'selected' : null;
-                        ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
-                  }
+                foreach ($allCtbService as $value) {
+                  $displayValue = trim($value);
+                  $returnValue  = trim($value);
+                  $selectedOrg = isset($_COOKIE['selectedOrganisation']) ? $_COOKIE['selectedOrganisation'] : null;
+                  $selected = htmlspecialchars_decode($returnValue)==htmlspecialchars_decode($selectedOrg) ? 'selected' : null;
+                  ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
+                }
               ?>
               </select>
           </div>
@@ -90,23 +90,24 @@ td.dataTables_empty{
 	    <div class='form-group'>
         <label for='selectBusinessUnit' class='col-md-3 control-label text-right'>Business Unit</label>
         <div class='col-md-9 text-left'>
-              <select class='form-control select' id='selectBusinessUnit'
-                name='businessUnit'
-                data-placeholder="Select Business Unit" data-allow-clear="true"
-                >
-                <option value=''>Select Business Unit</option>
-                <option value='All'>All</option>
-              <?php
-              foreach ($allBusinessUnits as $value) {
-                        $displayValue = trim($value);
-                        $returnValue  = trim($value);
-                        $selectedBusinessUnit = isset($_COOKIE['selectedBusinessUnit']) ? $_COOKIE['selectedBusinessUnit'] : null;
-                        $selected = htmlspecialchars_decode($returnValue)==htmlspecialchars_decode($selectedBusinessUnit) ? 'selected' : null;
-                        ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
-                  }
-              ?>
-              </select>
-          </div>
+          <select class='form-control select' id='selectBusinessUnit'
+            name='businessUnit'
+            data-placeholder="Select Business Unit" data-allow-clear="true"
+            >
+            <option value=''>Select Business Unit</option>
+            <option value='All'>All</option>
+          <?php
+            
+            foreach ($allBusinessUnits as $value) {
+              $displayValue = trim($value);
+              $returnValue  = trim($value);
+              $selectedBusinessUnit = isset($_COOKIE['selectedBusinessUnit']) ? $_COOKIE['selectedBusinessUnit'] : null;
+              $selected = htmlspecialchars_decode($returnValue)==htmlspecialchars_decode($selectedBusinessUnit) ? 'selected' : null;
+              ?><option value='<?=$returnValue?>' <?=$selected;?> ><?=$displayValue?></option><?php
+            }
+          ?>
+          </select>
+        </div>
 	    </div>
 	    
     </div>
@@ -630,7 +631,7 @@ $(document).ready(function() {
 	resourceRequest.listenForDeleteRecord();
 	resourceRequest.listenForConfirmedDelete();
 	resourceRequest.listenForChangeStatusCompleted();
-	resourceRequest.listenForChangePipelineLiveArchive();
+	// resourceRequest.listenForChangePipelineLiveArchive();
 	resourceRequest.listenForSelectSpecificRfs();
 	resourceRequest.listenForSelectOrganisation();
 	resourceRequest.listenForSelectBusinessUnit();

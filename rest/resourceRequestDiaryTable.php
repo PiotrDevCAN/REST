@@ -6,7 +6,6 @@ use itdq\DateClass;
 use itdq\DiaryTable;
 use itdq\AllItdqTables;
 
-
 class resourceRequestDiaryTable extends DbTable
 {
     const SEND_EMAIL_NOTIFICATION = true;
@@ -81,6 +80,18 @@ class resourceRequestDiaryTable extends DbTable
         
     }
     
+    function getArchieved($resourceReference=null){
+        $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
+        $sql .= " WHERE RESOURCE_REFERENCE = '" . db2_escape_string($resourceReference) . "' ";
 
+        $rs = db2_exec($GLOBALS['conn'], $sql);
+
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+            return false;
+        }
+        
+        return $rs;
+    }
 
 }

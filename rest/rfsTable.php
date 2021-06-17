@@ -605,7 +605,7 @@ class rfsTable extends DbTable {
             return false;
         }
 
-        $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS;
+        $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " SET ARCHIVE = CURRENT TIMESTAMP ";
         $sql .= " WHERE RFS_ID ='" . db2_escape_string($rfsid) . "' " ;
 
@@ -617,5 +617,19 @@ class rfsTable extends DbTable {
         }
 
         return true;
+    }
+
+    function getArchieved(){
+        $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
+        $sql .= " WHERE ARCHIVE IS NOT NULL  ";
+
+        $rs = db2_exec($GLOBALS['conn'], $sql);
+
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+            return false;
+        }
+        
+        return $rs;
     }
 }

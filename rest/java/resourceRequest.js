@@ -860,6 +860,7 @@ function ResourceRequest() {
 		});
 	},
 
+	/*
 	this.listenForChangePipelineLiveArchive = function(){
 		$(document).on('change','input:radio[name=pipelineLiveArchive]',function(){			
 			var cookieName = this.dataset.cookie;
@@ -871,6 +872,7 @@ function ResourceRequest() {
 			ResourceRequest.table.ajax.reload();
 		});
 	},
+	*/
 
 	this.listenForSelectSpecificRfs = function(){
 		$(document).on('change','#selectRfs',function(){	

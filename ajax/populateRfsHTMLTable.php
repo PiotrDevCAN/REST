@@ -20,7 +20,11 @@ $businessUnit = !empty($_POST['businessunit']) ? trim($_POST['businessunit']) : 
 $requestor    = !empty($_POST['requestor'])    ? trim($_POST['requestor']) : null;
 
 $pipelineLiveArchive = !empty($_POST['pipelineLiveArchive']) ? trim($_POST['pipelineLiveArchive']) : null;
-$pipelineSelection = rfsRecord::$rfsStatusMapping[$pipelineLiveArchive];
+if (array_key_exists($pipelineLiveArchive, rfsRecord::$rfsStatusMapping)) {
+    $pipelineSelection = rfsRecord::$rfsStatusMapping[$pipelineLiveArchive];
+} else {
+    $pipelineSelection = null;
+}
 $bothStatuses = $pipelineLiveArchive=='both' ? true : false;
 $withArchive = $pipelineLiveArchive=='archive' ? true : false;
 

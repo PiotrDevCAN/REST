@@ -28,29 +28,12 @@ $spreadsheet->getProperties()->setCreator('REST')
 ->setCategory('Resource Extract');
 // Add some data
 
-
 try {
-//     $sql = " select * ";
-//     $sql.= " from ( ";
-//     $sql.= " select RRH.RESOURCE_REFERENCE, RRH.WEEK_ENDING_FRIDAY, RRH.HOURS, RR.*, RFS.* ";
-//     $sql.= " from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " AS RRH ";
-//     $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR  ";
-//     $sql.= " on RRH.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE  ";
-//     $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
-//     $sql.= " on RR.RFS = RFS.RFS_ID ";
-    
-//  //   $sql.= " WHERE RR.RFS = 'LBOP-PCR-000088' ";
-    
-//     $sql.= " ) ";
-//     $sql.= " order by 1,2";  // dont show boarded pre-boarders
     set_time_limit(0);
     $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
     $rsOnly = true;
     $rs = $resourceRequestHoursTable->returnHrsPerWeek(null, $rsOnly);
 
-//     set_time_limit(0);
-//     $rs = db2_exec($GLOBALS['conn'], $sql);
- 
     if($rs){
         $recordsFound = DbTable::writeResultSetToXls($rs, $spreadsheet);
         if($recordsFound){
