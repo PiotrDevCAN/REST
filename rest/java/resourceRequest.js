@@ -165,11 +165,15 @@ function ResourceRequest() {
 			var resourceReference = $(this).data('reference');
 			$('#messageArea').html("<div class='col-sm-4'></div><div class='col-sm-4'><h4>Form loading...<span class='glyphicon glyphicon-refresh spinning'></span></h4><br/><small>This may take a few seconds</small></div><div class='col-sm-4'></div>");
 			
+			// $('#messageModalBody').html("<h4>Form loading...<span class='glyphicon glyphicon-refresh spinning'></span></h4><br/><small>This may take a few seconds</small>");
+			// $('#messageModal').modal('show');
+
 		    $.ajax({
 		    	url: "ajax/getEditResourceForm.php",
 		        type: 'POST',
 		    	data: {resourceReference:resourceReference},
 		    	success: function(result){
+					// $('#messageModal').modal('hide');
 					try {
 						var resultObj = JSON.parse(result);
 						$('#messageArea').html("");
@@ -561,14 +565,19 @@ function ResourceRequest() {
     		var resourceReference = $(dataDetails).data('resourcereference');
 			$('#resourceHoursForm').find('#RESOURCE_REFERENCE').val(resourceReference);
 			$('#messageArea').html("<div class='col-sm-4'></div><div class='col-sm-4'><h4>Form loading...<span class='glyphicon glyphicon-refresh spinning'></span></h4><br/><small>This may take a few seconds</small></div><div class='col-sm-4'></div>");
+			
+			// $('#messageModalBody').html("<h4>Form loading...<span class='glyphicon glyphicon-refresh spinning'></span></h4><br/><small>This may take a few seconds</small>");
+			// $('#messageModal').modal('show');
+			
 			$.ajax({
 		    	url: "ajax/contentsOfEditHoursModal.php",
 		        type: 'POST',
 		    	data: {	resourceReference: resourceReference },
 		    	success: function(result){
-		    		try {
+		    		// $('#messageModal').modal('hide');
+					try {
 						var resultObj = JSON.parse(result);
-						$('#messageArea').html("");
+						// $('#messageArea').html("");
 						$('.spinning').removeClass('spinning').attr('disabled',false);
 						$('#editResourceHours').html(resultObj.editResourceHours);
 						$('#editResourceHoursFooter').html(resultObj.editResourceHoursFooter);
@@ -1057,8 +1066,8 @@ function ResourceRequest() {
             })
             ],
 	        columns: [
-	            { data: "RFS_ID"           ,defaultContent: "", visible:false },
-	            { data: "PRN"              ,defaultContent: "", visible:false },
+	            { data: "RFS_ID"           ,defaultContent: "", visible:true },
+	            { data: "PRN"              ,defaultContent: "", visible:true },
 	            { data: "PROJECT_TITLE"    ,defaultContent: "", visible:false },
 	            { data: "PROJECT_CODE"     ,defaultContent: "", visible:false },
 	            { data: "REQUESTOR_NAME"   ,defaultContent: "", visible:false },

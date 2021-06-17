@@ -434,9 +434,9 @@ function Rfs() {
 
 	        columns: [ 
 		        { name: "RFS_ID", data: "RFS_ID", defaultContent: "", visible:true },
-				{ name: "PRN", data: "PRN", defaultContent: "", visible:false },
-				{ name: "PROJECT_TITLE", data: "PROJECT_TITLE", defaultContent: "", visible:false },
-				{ name: "PROJECT_CODE", data: "PROJECT_CODE", defaultContent: "", visible:false },
+				{ name: "PRN", data: "PRN", defaultContent: "", visible:true },
+				{ name: "PROJECT_TITLE", data: "PROJECT_TITLE", defaultContent: "", visible:true },
+				{ name: "PROJECT_CODE", data: "PROJECT_CODE", defaultContent: "", visible:true },
 				{ name: "REQUESTOR_NAME", data: "REQUESTOR_NAME", defaultContent: "", visible:false },
 				{ name: "REQUESTOR_EMAIL", data: "REQUESTOR_EMAIL", defaultContent: "", visible:false },
 				{ name: "VALUE_STREAM", data: "VALUE_STREAM", defaultContent: "", visible:false },
