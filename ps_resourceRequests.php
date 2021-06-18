@@ -32,13 +32,6 @@ $allService = staticOrganisationTable::getAllOrganisationsAndServices($predicate
 JavaScript::buildSelectArray($allService, 'organisation');
 
 ?>
-<style>
-
-td.dataTables_empty{
-    color:white;
-}
-
-</style>
 
 <div class='container'>
 
@@ -547,52 +540,9 @@ td.dataTables_empty{
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 ?>
 
-<style>
-.dataTables_wrapper .dataTables_processing {
-background-color:#006699;
-}
-td.dataTables_empty {
-	text-align: center;
-	font-size: 20px;
-	background-color:#006699;
-}
-
-div.diaryEntry { 
-  height: 55px;
-  overflow-y: scroll;
-  border: 2px solid lightgray;
-}
-
-div.diary {
-  padding-top: 1em;
-  background-color: whitesmoke;  
-  height: 200px;
-  overflow-y: scroll;
-  border: 2px solid lightgray;
-}
-
-[contentEditable=true]:empty:not(:focus):before{
-    content:attr(data-placeholder);
-    color:#aea79f;
-}
-
-
-ul.select2-results li:nth-child(even){
-	background-color: #ddd;
-	color: black;
-}
-ul.select2-results li:nth-child(even):hover{
-	background-color: #333;
-	color: white;
-}
-
-
-</style>
-
 <script type='text/javascript'>
 
 var startPicker;
-
 
 $(document).ready(function() {
 	$('#pleaseWaitMessage').html('Please wait while resource list is fetched');
@@ -725,7 +675,47 @@ $(document).on('select2:select', '#ORGANISATION',  function(e){
 
 </script>
 
-<style>
+<style type="text/css">
+.dataTables_wrapper .dataTables_processing {
+  background-color:#006699;
+  height: 60px;
+}
+td.dataTables_empty {
+  color:white;
+	text-align: center;
+	font-size: 20px;
+	background-color:#006699;
+}
+
+
+<style type="text/css">
+div.diaryEntry { 
+  height: 55px;
+  overflow-y: scroll;
+  border: 2px solid lightgray;
+}
+
+div.diary {
+  padding-top: 1em;
+  background-color: whitesmoke;  
+  height: 200px;
+  overflow-y: scroll;
+  border: 2px solid lightgray;
+}
+
+[contentEditable=true]:empty:not(:focus):before{
+    content:attr(data-placeholder);
+    color:#aea79f;
+}
+
+ul.select2-results li:nth-child(even){
+	background-color: #ddd;
+	color: black;
+}
+ul.select2-results li:nth-child(even):hover{
+	background-color: #333;
+	color: white;
+}
 
 <?php
 $date = new DateTime();

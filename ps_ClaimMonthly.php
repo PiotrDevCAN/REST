@@ -110,15 +110,14 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is nu
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 ?>
 
-<style>
-td.dataTables_empty{
-    color:white;
-}
+<style type="text/css">
 
 .dataTables_wrapper .dataTables_processing {
-background-color:#006699;
+    background-color:#006699;
+    height: 60px;
 }
 td.dataTables_empty {
+    color:white;
 	text-align: center;
 	font-size: 20px;
 	background-color:#006699;

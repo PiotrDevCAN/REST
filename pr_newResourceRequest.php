@@ -227,7 +227,7 @@ $('#RFS').on('select2:select', function(e){
 });
 
 </script>
-<style>
+<style type="text/css">
 
 <?php
 $date = new DateTime();

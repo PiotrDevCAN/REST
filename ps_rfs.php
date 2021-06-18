@@ -315,24 +315,7 @@ $rfsTable = new rfsTable(allTables::$RFS);
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 ?>
 
-<style>
-td.dataTables_empty{
-    color:white;
-}
-
-.dataTables_wrapper .dataTables_processing {
-background-color:#006699;
-}
-td.dataTables_empty {
-	text-align: center;
-	font-size: 20px;
-	background-color:#006699;
-}
-
-
-</style>
 <script type='text/javascript'>
-
 
 $(document).ready(function() {
 	
@@ -403,12 +386,20 @@ $(document).on('keyup','#REQUESTOR_EMAIL',function(){
 	ibmEmailAddress ? $("#REQUESTOR_EMAIL").css('color','DARKGREEN') : $('#REQUESTOR_EMAIL').css('color','CRIMSON');
 });
 
-
-
 </script>
 
+<style type="text/css">
 
-<style>
+.dataTables_wrapper .dataTables_processing {
+    background-color:#006699;
+    height: 60px;
+}
+td.dataTables_empty {
+  color:white;
+	text-align: center;
+	font-size: 20px;
+	background-color:#006699;
+}
 
 <?php
 $date = new DateTime();
