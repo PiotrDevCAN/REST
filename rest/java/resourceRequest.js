@@ -1068,8 +1068,8 @@ function ResourceRequest() {
             })
             ],
 	        columns: [
-	            { data: "RFS_ID"           ,defaultContent: "", visible:true },
-	            { data: "PRN"              ,defaultContent: "", visible:true },
+	            { data: "RFS_ID"           ,defaultContent: "", visible:false },
+	            { data: "PRN"              ,defaultContent: "", visible:false },
 	            { data: "PROJECT_TITLE"    ,defaultContent: "", visible:false },
 	            { data: "PROJECT_CODE"     ,defaultContent: "", visible:false },
 	            { data: "REQUESTOR_NAME"   ,defaultContent: "", visible:false },
@@ -1097,8 +1097,8 @@ function ResourceRequest() {
 	            { data: "RR_CREATED_TIMESTAMP",defaultContent: "", visible:false },
 	            { data: "CLONED_FROM"      ,defaultContent: "", visible:false },
 	            { data: "STATUS"           ,defaultContent: "", visible:true },
-	            { data: "RATE_TYPE"        ,defaultContent: "", visible:false },
-	            { data: "HOURS_TYPE"        ,defaultContent: "", visible:false },
+	            { data: "RATE_TYPE"        ,defaultContent: "", visible:true },
+	            { data: "HOURS_TYPE"        ,defaultContent: "", visible:true },
 	            { data: "RR"               ,defaultContent: "", visible:false },
 //	            { data: "MONTH_01"         ,defaultContent: "",visible:true},
 //	            { data: "MONTH_02"         ,defaultContent: "",visible:true},
@@ -1106,7 +1106,6 @@ function ResourceRequest() {
 //	            { data: "MONTH_04"         ,defaultContent: "",visible:true},
 //	            { data: "MONTH_05"         ,defaultContent: "",visible:true},
 //	            { data: "MONTH_06"         ,defaultContent: "",visible:true},
-	        	
 	        ]
 	    });       
 

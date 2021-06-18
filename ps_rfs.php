@@ -338,7 +338,7 @@ $(document).ready(function() {
 	
 	$(".select").select2();
 
-    var rfs = new Rfs();
+  var rfs = new Rfs();
 	rfs.buildRfsReport();
 	rfs.listenForGoLiveRfs();
 	rfs.listenForConfirmGoLiveRfs();

@@ -54,7 +54,7 @@ $(document).ready(function() {
 	$(".select").select2();
 
     var rfs = new Rfs();
-    rfs.buildNoneActiveReport(false);
+    rfs.buildNoneActiveReport();
     rfs.listenForSelectRequestor();
     rfs.listenForSelectValueStream();
     rfs.listenForSelectBusinessUnit();

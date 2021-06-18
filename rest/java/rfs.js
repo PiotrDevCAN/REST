@@ -217,7 +217,7 @@ function Rfs() {
 	                d.requestor = $('#selectRequestor option:selected').val();
 	                d.pipelineLiveArchive = $('input[name="pipelineLiveArchive"]:checked').val();
 	            },
-	        }	,
+	        },
 	    	autoWidth: true,
 	    	deferRender: true,
 	    	responsive: true,
@@ -225,11 +225,11 @@ function Rfs() {
 	    	colReorder: true,
 	    	dom: 'Blfrtip',
 	        buttons: [
-	                  'colvis',
-	                  'excelHtml5',
-	                  'csvHtml5',
-	                  'print'
-	              ],
+				'colvis',
+				'excelHtml5',
+				'csvHtml5',
+				'print'
+			],
 	    });
 	    Rfs.table.columns([10]).visible(false,false);
 	    Rfs.table.columns.adjust().draw(false);
@@ -298,12 +298,11 @@ function Rfs() {
 	    	colReorder: true,
 	    	dom: 'Blfrtip',
 	        buttons: [
-	                  'colvis',
-	                  'excelHtml5',
-	                  'csvHtml5',
-	                  'print'
-	              ],
-
+				'colvis',
+				'excelHtml5',
+				'csvHtml5',
+				'print'
+			],
 	        columns: [ 
 		        null,
 		        null,
@@ -382,20 +381,24 @@ function Rfs() {
 	this.buildNoneActiveReport =  function(getColumnsFromAjax){
 		var rfs = new Rfs();
 
-		var formData = $('form').serialize();
-		$.ajax({
-			url: "ajax/createNoneActiveHTMLTable.php",
-			type: 'POST',
-			data: formData,
-			before: function(){
-				$('#noneActiveTableDiv').html('<h2>Table being built</h2>');
-			},
-			success: function(result){
-				$('#noneActiveTable_id').DataTable().destroy();
-				$("#noneActiveTableDiv").html(result);
-				rfs.initialiseNoneActiveTable();
+		if(getColumnsFromAjax == null){
+			var formData = $('form').serialize();
+			$.ajax({
+				url: "ajax/createNoneActiveHTMLTable.php",
+				type: 'POST',
+				data: formData,
+				before: function(){
+					$('#noneActiveTableDiv').html('<h2>Table being built</h2>');
+				},
+				success: function(result){
+					$('#noneActiveTable_id').DataTable().destroy();
+					$("#noneActiveTableDiv").html(result);
+					rfs.initialiseNoneActiveTable();
 				}
-		});
+			});
+		} else {
+			rfs.initialiseNoneActiveTable();
+		}
 	},
 
 	this.initialiseNoneActiveTable = function(){
@@ -426,12 +429,11 @@ function Rfs() {
 	    	colReorder: true,
 	    	dom: 'Blfrtip',
 	        buttons: [
-	                  'colvis',
-	                  'excelHtml5',
-	                  'csvHtml5',
-	                  'print'
-	              ],
-
+				'colvis',
+				'excelHtml5',
+				'csvHtml5',
+				'print'
+			],
 	        columns: [ 
 		        { name: "RFS_ID", data: "RFS_ID", defaultContent: "", visible:true },
 				{ name: "PRN", data: "PRN", defaultContent: "", visible:true },
@@ -480,7 +482,7 @@ function Rfs() {
 	    } );
 	},
 
-	this.buildPipelineReport =  function(){
+	this.buildPipelineReport =  function(getColumnsFromAjax){
 		var formData = $('form').serialize();
 		var rfs = new Rfs();
 
@@ -522,11 +524,11 @@ function Rfs() {
 	    	colReorder: true,
 	    	dom: 'Blfrtip',
 	        buttons: [
-	                  'colvis',
-	                  'excelHtml5',
-	                  'csvHtml5',
-	                  'print'
-	              ],
+				'colvis',
+				'excelHtml5',
+				'csvHtml5',
+				'print'
+			],
 	    });
 	    // Apply the search
 	    Rfs.table.columns().every( function () {
