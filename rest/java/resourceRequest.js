@@ -1021,7 +1021,8 @@ function ResourceRequest() {
 	    	ajax: {
 	            url: 'ajax/populateResourceRequestHTMLTable.php',
 	            data: function ( d ) {
-	                d.pipelineLiveArchive  = $("input:radio[name=pipelineLiveArchive]:checked").val();
+					// d.pipelineLiveArchive = $("input:radio[name=pipelineLiveArchive]:checked").val();
+					d.pipelineLiveArchive = $('input[name="pipelineLiveArchive"]').val();
 	                d.archiveLive  = $('#archiveLive').prop('checked');
 	                d.rfsid = $('#selectRfs option:selected').val();
 	                d.organisation = $('#selectOrganisation option:selected').val();
@@ -1241,9 +1242,10 @@ function ResourceRequest() {
 				url: 'ajax/populateSelectRfsForRR.php',
 				dataType: 'json',
 				data: function (params) {
-					var pipelineLiveArchive  = $("input:radio[name=pipelineLiveArchive]:checked").val();
+					// var pipelineLiveArchive = $("input:radio[name=pipelineLiveArchive]:checked").val();
+					var pipelineLiveArchive = $('input[name="pipelineLiveArchive"]').val();
 					var organisation = $('#selectOrganisation option:selected').val();
-      				return { pipelineLiveArchive : pipelineLiveArchive, term: params.term, organisation: organisation 	};
+      				return { pipelineLiveArchive : pipelineLiveArchive, term: params.term, organisation: organisation };
     			},	
 		 	},	  
 		})

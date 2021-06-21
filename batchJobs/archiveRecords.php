@@ -4,16 +4,30 @@ use itdq\AllItdqTables;
 use itdq\DbRecord;
 use itdq\Loader;
 use rest\allTables;
-use rest\diaryRecord;
-use rest\diaryTable;
-use rest\rfsRecord;
+
+use rest\archived\archivedRfsTable;
+use rest\archived\archivedResourceRequestTable;
+use rest\archived\archivedResourceRequestHoursTable;
+use rest\archived\archivedResourceRequestDiaryTable;
+use rest\archived\archivedDiaryTable;
+
 use rest\rfsTable;
-use rest\resourceRequestRecord;
 use rest\resourceRequestTable;
-use rest\resourceRequestHoursRecord;
 use rest\resourceRequestHoursTable;
-use rest\resourceRequestDiaryRecord;
 use rest\resourceRequestDiaryTable;
+use rest\diaryTable;
+
+use rest\archived\archivedRfsRecord;
+use rest\archived\archivedResourceRequestRecord;
+use rest\archived\archivedResourceRequestHoursRecord;
+use rest\archived\archivedResourceRequestDiaryRecord;
+use rest\archived\archivedDiaryRecord;
+
+use rest\rfsRecord;
+use rest\resourceRequestRecord;
+use rest\resourceRequestHoursRecord;
+use rest\resourceRequestDiaryRecord;
+use rest\diaryRecord;
 
 // set_time_limit(0);
 // ob_start();
@@ -30,11 +44,11 @@ $diaryRecordsArchived = 0;
 
 try {
     // prepare archieved tables for insert
-    $archivedRfsTable = new rfsTable(allTables::$ARCHIVED_RFS);
-    $archivedResReqTable = new resourceRequestTable(allTables::$ARCHIVED_RESOURCE_REQUESTS);
-    $archivedResReqHoursTable = new resourceRequestHoursTable(allTables::$ARCHIVED_RESOURCE_REQUEST_HOURS);
-    $archivedResReqDiaryTable = new resourceRequestDiaryTable(allTables::$ARCHIVED_RESOURCE_REQUEST_DIARY);
-    $archivedDiaryTable = new diaryTable(allTables::$ARCHIVED_DIARY);
+    $archivedRfsTable = new archivedRfsTable(allTables::$ARCHIVED_RFS);
+    $archivedResReqTable = new archivedResourceRequestTable(allTables::$ARCHIVED_RESOURCE_REQUESTS);
+    $archivedResReqHoursTable = new archivedResourceRequestHoursTable(allTables::$ARCHIVED_RESOURCE_REQUEST_HOURS);
+    $archivedResReqDiaryTable = new archivedResourceRequestDiaryTable(allTables::$ARCHIVED_RESOURCE_REQUEST_DIARY);
+    $archivedDiaryTable = new archivedDiaryTable(allTables::$ARCHIVED_DIARY);
 
     $archivedRfsTable->clear(false);
     $archivedResReqTable->clear(false);
@@ -48,11 +62,19 @@ try {
     $resReqDiaryTable = new resourceRequestDiaryTable(allTables::$RESOURCE_REQUEST_DIARY);
     $diaryTable = new diaryTable(AllItdqTables::$DIARY);
 
+    $rfsRecord = new archivedRfsRecord();
+    $resourceRequestRecord = new archivedResourceRequestRecord();
+    $resourceRequestHoursRecord = new archivedResourceRequestHoursRecord();
+    $resourceRequestDiaryRecord = new archivedResourceRequestDiaryRecord();
+    $diaryRecord = new archivedDiaryRecord();
+
+    /*
     $rfsRecord = new rfsRecord();
     $resourceRequestRecord = new resourceRequestRecord();
     $resourceRequestHoursRecord = new resourceRequestHoursRecord();
     $resourceRequestDiaryRecord = new resourceRequestDiaryRecord();
     $diaryRecord = new diaryRecord();
+    */
 
     $date = new \DateTime();
     $currentDate = $date->format('Y-m-d');
@@ -74,7 +96,7 @@ try {
         while(($rowRRData=db2_fetch_assoc($archievedResourceRequestsRs))==true){
             // get record data
             $resourceRequestRecord->setFromArray($rowRRData);
-            
+
             $additionalFields = array();
             $additionalFields['SYS_START'] = $currentDate;
             $additionalFields['SYS_END'] = $currentDate;
@@ -140,8 +162,8 @@ try {
         $rfsRecordsArchived++;
     }
 
-    db2_commit($GLOBALS['conn']);
-    // db2_rollback($GLOBALS['conn']);
+    // db2_commit($GLOBALS['conn']);
+    db2_rollback($GLOBALS['conn']);
 
 } catch (Exception $e) {
     $messages = $e->getMessage();

@@ -90,7 +90,6 @@ JavaScript::buildSelectArray($allService, 'organisation');
             <option value=''>Select Business Unit</option>
             <option value='All'>All</option>
           <?php
-            
             foreach ($allBusinessUnits as $value) {
               $displayValue = trim($value);
               $returnValue  = trim($value);

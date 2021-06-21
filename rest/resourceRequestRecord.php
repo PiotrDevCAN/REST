@@ -25,10 +25,6 @@ class resourceRequestRecord extends DbRecord
     protected $RR_CREATED_TIMESTAMP;
     protected $CLONED_FROM;
     protected $STATUS;
-
-    protected $SYS_START;
-    protected $SYS_END;
-
     protected $RATE_TYPE;
     protected $HOURS_TYPE;
     protected $HRS_PER_WEEK;
