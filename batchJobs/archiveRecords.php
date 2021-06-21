@@ -2,32 +2,22 @@
 
 use itdq\AllItdqTables;
 use itdq\DbRecord;
-use itdq\Loader;
 use rest\allTables;
-
 use rest\archived\archivedRfsTable;
 use rest\archived\archivedResourceRequestTable;
 use rest\archived\archivedResourceRequestHoursTable;
 use rest\archived\archivedResourceRequestDiaryTable;
 use rest\archived\archivedDiaryTable;
-
 use rest\rfsTable;
 use rest\resourceRequestTable;
 use rest\resourceRequestHoursTable;
 use rest\resourceRequestDiaryTable;
 use rest\diaryTable;
-
 use rest\archived\archivedRfsRecord;
 use rest\archived\archivedResourceRequestRecord;
 use rest\archived\archivedResourceRequestHoursRecord;
 use rest\archived\archivedResourceRequestDiaryRecord;
 use rest\archived\archivedDiaryRecord;
-
-use rest\rfsRecord;
-use rest\resourceRequestRecord;
-use rest\resourceRequestHoursRecord;
-use rest\resourceRequestDiaryRecord;
-use rest\diaryRecord;
 
 // set_time_limit(0);
 // ob_start();
@@ -41,6 +31,8 @@ $rrRecordsArchived = 0;
 $rrHoursRecordsArchived = 0;
 $rrDiaryRecordsArchived = 0;
 $diaryRecordsArchived = 0;
+
+$success = false;
 
 try {
     // prepare archieved tables for insert
@@ -68,26 +60,11 @@ try {
     $resourceRequestDiaryRecord = new archivedResourceRequestDiaryRecord();
     $diaryRecord = new archivedDiaryRecord();
 
-    /*
-    $rfsRecord = new rfsRecord();
-    $resourceRequestRecord = new resourceRequestRecord();
-    $resourceRequestHoursRecord = new resourceRequestHoursRecord();
-    $resourceRequestDiaryRecord = new resourceRequestDiaryRecord();
-    $diaryRecord = new diaryRecord();
-    */
-
     $date = new \DateTime();
     $currentDate = $date->format('Y-m-d');
 
-    // $archievedResourceRequestsInsertArray = array();
-
-    // $columnsRs = db2_columns($GLOBALS['conn'], '', $GLOBALS['Db2Schema'], allTables::$RESOURCE_REQUESTS, '%');
-    // while(($row=db2_fetch_assoc($columnsRs))==true){
-    //     $archievedResourceRequestsInsertArray[] = null;
-    //     echo '<pre>';
-    //     print_r($row['COLUMN_NAME']);
-    //     echo '</pre>';
-    // }
+    // prepare all keys available in target table
+    $insertArrayKeys = $archivedResReqTable->getColumns();
 
     $archivedRfsRs = $rfsTable->getArchieved();
     while(($rowRFSData=db2_fetch_assoc($archivedRfsRs))==true){
@@ -115,8 +92,18 @@ try {
             }
             // $resourceRequestRecord->iterateVisible();
 
+            // walk around due to differences in tables definitions between DEV and UT
+            $mappedDbRecord = new DbRecord();
+            foreach($insertArrayKeys as $key => $value) {
+                if (property_exists($resourceRequestRecord, $key)) {
+                    $valueFromRecord = $resourceRequestRecord->getValue($key);
+                    $mappedDbRecord->$key = $valueFromRecord;
+                }
+            }
+
             // move RR record from live to archive table
-            $archivedResReqTable->insert($resourceRequestRecord);
+            $archivedResReqTable->insert($mappedDbRecord);
+            // $archivedResReqTable->insert($resourceRequestRecord);
             $resReqTable->deleteRecord($resourceRequestRecord);
 
             // get RESOURCE_REFERENCE
@@ -172,10 +159,16 @@ try {
         $rfsRecordsArchived++;
     }
 
-    db2_commit($GLOBALS['conn']);
+    // confirm that we can approve inserts or deletions
+    $success = true;
 
 } catch (Exception $e) {
     $messages = $e->getMessage();
+}
+
+if($success){
+    db2_commit($GLOBALS['conn']);
+} else {
     db2_rollback($GLOBALS['conn']);
 }
 
