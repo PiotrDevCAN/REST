@@ -79,6 +79,16 @@ try {
     $date = new \DateTime();
     $currentDate = $date->format('Y-m-d');
 
+    // $archievedResourceRequestsInsertArray = array();
+
+    // $columnsRs = db2_columns($GLOBALS['conn'], '', $GLOBALS['Db2Schema'], allTables::$RESOURCE_REQUESTS, '%');
+    // while(($row=db2_fetch_assoc($columnsRs))==true){
+    //     $archievedResourceRequestsInsertArray[] = null;
+    //     echo '<pre>';
+    //     print_r($row['COLUMN_NAME']);
+    //     echo '</pre>';
+    // }
+
     $archivedRfsRs = $rfsTable->getArchieved();
     while(($rowRFSData=db2_fetch_assoc($archivedRfsRs))==true){
         // get record data
@@ -87,7 +97,7 @@ try {
 
         // move RFS record from live to archive table
         $archivedRfsTable->insert($rfsRecord);
-        // $rfsTable->deleteRecord($rfsRecord);
+        $rfsTable->deleteRecord($rfsRecord);
 
         // get RFS_ID
         $currentRfsId = $rfsRecord->get('RFS_ID');
@@ -107,7 +117,7 @@ try {
 
             // move RR record from live to archive table
             $archivedResReqTable->insert($resourceRequestRecord);
-            // $resReqTable->deleteRecord($resourceRequestRecord);
+            $resReqTable->deleteRecord($resourceRequestRecord);
 
             // get RESOURCE_REFERENCE
             $currentResourceReference = $resourceRequestRecord->get('RESOURCE_REFERENCE');
@@ -120,7 +130,7 @@ try {
 
                 // move RR hours record from live to archive table
                 $archivedResReqHoursTable->insert($resourceRequestHoursRecord);
-                // $resReqHoursTable->deleteRecord($resourceRequestHoursRecord);
+                $resReqHoursTable->deleteRecord($resourceRequestHoursRecord);
 
                 $rrHoursRecordsArchived++;
             }
@@ -134,7 +144,7 @@ try {
 
                 // move RR diary record from live to archive table
                 $archivedResReqDiaryTable->insert($resourceRequestDiaryRecord);
-                // $archivedResReqDiaryTable->deleteRecord($resourceRequestDiaryRecord);
+                $archivedResReqDiaryTable->deleteRecord($resourceRequestDiaryRecord);
 
                 // get DIARY_REFERENCE
                 $currentDiaryReference = $resourceRequestDiaryRecord->get('DIARY_REFERENCE');
@@ -148,7 +158,7 @@ try {
 
                     // move DIARY record from live to archive table
                     $archivedDiaryTable->insert($diaryRecord);
-                    // $diaryTable->deleteRecord($diaryRecord);
+                    $diaryTable->deleteRecord($diaryRecord);
 
                     $diaryRecordsArchived++;
                 }
@@ -162,8 +172,7 @@ try {
         $rfsRecordsArchived++;
     }
 
-    // db2_commit($GLOBALS['conn']);
-    db2_rollback($GLOBALS['conn']);
+    db2_commit($GLOBALS['conn']);
 
 } catch (Exception $e) {
     $messages = $e->getMessage();
