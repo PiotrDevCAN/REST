@@ -562,42 +562,18 @@ class rfsTable extends DbTable {
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
         $sql.= " AND ARCHIVE is null ";
-        // $sql.= " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE ";        
-        // $sql.= " AND AR.NOTES_ID IS NULL ";
-        // $sql.= " AND (
-        //     RR.RESOURCE_NAME NOT LIKE '" . resourceRequestTable::DUPLICATE . "%' 
-        //     OR RR.RESOURCE_NAME NOT LIKE '" . resourceRequestTable::DELTA . "%'
-        // )";
+        $sql.= " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE ";        
+        $sql.= " AND AR.NOTES_ID IS NULL ";
+        $sql.= " AND (
+            RR.RESOURCE_NAME NOT LIKE '" . resourceRequestTable::DUPLICATE . "%' 
+            OR RR.RESOURCE_NAME NOT LIKE '" . resourceRequestTable::DELTA . "%'
+        )";
         $sql.= " AND RR.Status = '" . resourceRequestRecord::STATUS_ASSIGNED . "'";
         $sql.= !empty($predicate) ? " AND  $predicate " : null ;
 
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
         $allData = array();
-
-        // while(($row = db2_fetch_assoc($resultSet))==true){
-        //     $testJson = json_encode($row);
-        //     if(!$testJson){
-        //         break; // It's got invalid chars in it that will be a problem later.
-        //     }     
-            
-        //     $rowDates = $this->prepareDatesForResults($row);
-        //     $startDate = $rowDates['startDate'];
-        //     $startDateSortable = $rowDates['startDateSortable'];
-        //     $endDate = $rowDates['endDate'];
-        //     $endDateSortable = $rowDates['endDateSortable'];
-            
-        //     $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
-        //     $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
-                      
-        //     foreach ($row as $key => $data){
-        //         // $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
-        //         // unset($row[$key]);
-        //         $row[$key] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
-        //     }
-        //     $allData[] = $row;
-        // }
-        // return array('data'=>$allData, 'sql'=>$sql);
 
         while(($row = db2_fetch_assoc($resultSet))==true){
             $testJson = json_encode($row);
