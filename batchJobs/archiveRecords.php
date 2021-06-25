@@ -64,7 +64,11 @@ try {
     $currentDate = $date->format('Y-m-d');
 
     // prepare all keys available in target table
-    $insertArrayKeys = $archivedResReqTable->getColumns();
+    $insertRfsArrayKeys = $archivedRfsTable->getColumns();
+    $insertResReqArrayKeys = $archivedResReqTable->getColumns();
+    $insertResReqHoursArrayKeys = $archivedResReqHoursTable->getColumns();
+    $insertResReqDiaryArrayKeys = $archivedResReqDiaryTable->getColumns();
+    $insertDiaryArrayKeys = $archivedDiaryTable->getColumns();
 
     $archivedRfsRs = $rfsTable->getArchieved();
     while(($rowRFSData=db2_fetch_assoc($archivedRfsRs))==true){
@@ -72,9 +76,23 @@ try {
         $rfsRecord->setFromArray($rowRFSData);
         // $rfsRecord->iterateVisible();
 
+            // walk around due to differences in tables definitions between DEV and UT
+            $mappedDbRecord = new DbRecord();
+            foreach($insertRfsArrayKeys as $key => $value) {
+                if (property_exists($rfsRecord, $key)) {
+                    $valueFromRecord = $rfsRecord->getValue($key);
+                    $mappedDbRecord->$key = $valueFromRecord;
+                }
+            }
+
         // move RFS record from live to archive table
-        $archivedRfsTable->insert($rfsRecord);
-        $rfsTable->deleteRecord($rfsRecord);
+        $insertResponse = $archivedRfsTable->insert($mappedDbRecord);
+        // $insertResponse = $archivedRfsTable->insert($rfsRecord);
+        if($insertResponse){
+            $rfsTable->deleteRecord($rfsRecord);               
+        } else {
+            throw new \Exception("Can't insert RFS record to " . allTables::$ARCHIVED_RFS . " table");
+        }
 
         // get RFS_ID
         $currentRfsId = $rfsRecord->get('RFS_ID');
@@ -94,7 +112,7 @@ try {
 
             // walk around due to differences in tables definitions between DEV and UT
             $mappedDbRecord = new DbRecord();
-            foreach($insertArrayKeys as $key => $value) {
+            foreach($insertResReqArrayKeys as $key => $value) {
                 if (property_exists($resourceRequestRecord, $key)) {
                     $valueFromRecord = $resourceRequestRecord->getValue($key);
                     $mappedDbRecord->$key = $valueFromRecord;
@@ -102,9 +120,13 @@ try {
             }
 
             // move RR record from live to archive table
-            $archivedResReqTable->insert($mappedDbRecord);
-            // $archivedResReqTable->insert($resourceRequestRecord);
-            $resReqTable->deleteRecord($resourceRequestRecord);
+            $insertResponse = $archivedResReqTable->insert($mappedDbRecord);
+            // $insertResponse = $archivedResReqTable->insert($mappedDbRecord);
+            if($insertResponse){        
+               $resReqTable->deleteRecord($resourceRequestRecord);           
+            } else {
+                throw new \Exception("Can't insert RR record to " . allTables::$ARCHIVED_RESOURCE_REQUESTS . " table");
+            }
 
             // get RESOURCE_REFERENCE
             $currentResourceReference = $resourceRequestRecord->get('RESOURCE_REFERENCE');
@@ -115,9 +137,23 @@ try {
                 $resourceRequestHoursRecord->setFromArray($rowRRHData);
                 // $resourceRequestHoursRecord->iterateVisible();
 
+                // walk around due to differences in tables definitions between DEV and UT
+                $mappedDbRecord = new DbRecord();
+                foreach($insertResReqArrayKeys as $key => $value) {
+                    if (property_exists($resourceRequestHoursRecord, $key)) {
+                        $valueFromRecord = $resourceRequestHoursRecord->getValue($key);
+                        $mappedDbRecord->$key = $valueFromRecord;
+                    }
+                }
+
                 // move RR hours record from live to archive table
-                $archivedResReqHoursTable->insert($resourceRequestHoursRecord);
-                $resReqHoursTable->deleteRecord($resourceRequestHoursRecord);
+                $insertResponse = $archivedResReqHoursTable->insert($mappedDbRecord);
+                // $insertResponse = $archivedResReqHoursTable->insert($resourceRequestHoursRecord);
+                if($insertResponse){            
+                    $resReqHoursTable->deleteRecord($resourceRequestHoursRecord);       
+                } else {
+                    throw new \Exception("Can't insert RR Hours record to " . allTables::$ARCHIVED_RESOURCE_REQUEST_HOURS . " table");
+                }
 
                 $rrHoursRecordsArchived++;
             }
@@ -129,10 +165,24 @@ try {
                 $resourceRequestDiaryRecord->setFromArray($rowRRDData);
                 // $resourceRequestDiaryRecord->iterateVisible();
 
-                // move RR diary record from live to archive table
-                $archivedResReqDiaryTable->insert($resourceRequestDiaryRecord);
-                $archivedResReqDiaryTable->deleteRecord($resourceRequestDiaryRecord);
+                // walk around due to differences in tables definitions between DEV and UT
+                $mappedDbRecord = new DbRecord();
+                foreach($insertResReqArrayKeys as $key => $value) {
+                    if (property_exists($resourceRequestDiaryRecord, $key)) {
+                        $valueFromRecord = $resourceRequestDiaryRecord->getValue($key);
+                        $mappedDbRecord->$key = $valueFromRecord;
+                    }
+                }
 
+                // move RR diary record from live to archive table
+                $insertResponse = $archivedResReqDiaryTable->insert($mappedDbRecord);
+                // $insertResponse = $archivedResReqDiaryTable->insert($resourceRequestDiaryRecord);
+                if($insertResponse){
+                    $archivedResReqDiaryTable->deleteRecord($resourceRequestDiaryRecord);        
+                } else {
+                    throw new \Exception("Can't insert RR Diary record to " . allTables::$ARCHIVED_RESOURCE_REQUEST_DIARY . " table");
+                }
+                
                 // get DIARY_REFERENCE
                 $currentDiaryReference = $resourceRequestDiaryRecord->get('DIARY_REFERENCE');
 
@@ -143,9 +193,23 @@ try {
                     $diaryRecord->setFromArray($rowADData);
                     // $diaryRecord->iterateVisible();
 
+                    // walk around due to differences in tables definitions between DEV and UT
+                    $mappedDbRecord = new DbRecord();
+                    foreach($insertResReqArrayKeys as $key => $value) {
+                        if (property_exists($diaryRecord, $key)) {
+                            $valueFromRecord = $diaryRecord->getValue($key);
+                            $mappedDbRecord->$key = $valueFromRecord;
+                        }
+                    }
+
                     // move DIARY record from live to archive table
-                    $archivedDiaryTable->insert($diaryRecord);
-                    $diaryTable->deleteRecord($diaryRecord);
+                    $insertResponse = $archivedDiaryTable->insert($mappedDbRecord);
+                    // $insertResponse = $archivedDiaryTable->insert($diaryRecord);
+                    if($insertResponse){
+                        $diaryTable->deleteRecord($diaryRecord);
+                    } else {
+                        throw new \Exception("Can't insert Diary record to " . allTables::$ARCHIVED_DIARY . " table");
+                    }
 
                     $diaryRecordsArchived++;
                 }

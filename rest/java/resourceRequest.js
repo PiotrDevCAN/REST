@@ -1099,7 +1099,7 @@ function ResourceRequest() {
 	            { data: "CLONED_FROM"      ,defaultContent: "", visible:false },
 	            { data: "STATUS"           ,defaultContent: "", visible:true },
 	            { data: "RATE_TYPE"        ,defaultContent: "", visible:true },
-	            { data: "HOURS_TYPE"        ,defaultContent: "", visible:true },
+	            { data: "HOURS_TYPE"       ,defaultContent: "", visible:true },
 	            { data: "RR"               ,defaultContent: "", visible:false },
 //	            { data: "MONTH_01"         ,defaultContent: "",visible:true},
 //	            { data: "MONTH_02"         ,defaultContent: "",visible:true},

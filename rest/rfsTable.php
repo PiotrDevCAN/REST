@@ -292,7 +292,7 @@ class rfsTable extends DbTable {
             }
             $allData[]  = $row;            
         }
-        return array('data'=>$allData,'sql'=>$sql);
+        return array('data'=>$allData, 'sql'=>$sql);
     }
 
     function returnClaimReportAsArray($predicate=null, $withArchive=false){
@@ -391,7 +391,7 @@ class rfsTable extends DbTable {
             }
             $allData[]  = $row;
         }
-        return array('data'=>$allData,'sql'=>$sql);
+        return array('data'=>$allData, 'sql'=>$sql);
     }
 
     function returnClaimReportAsJson($predicate=null, $withArchive=false){
@@ -491,7 +491,7 @@ class rfsTable extends DbTable {
             }
             $allData[]  = $row;
         }
-        return array('data'=>$allData,'sql'=>$sql);
+        return array('data'=>$allData, 'sql'=>$sql);
     }
 
     function returnNoneActiveReportAsArray($predicate=null, $withArchive = false){
@@ -575,6 +575,30 @@ class rfsTable extends DbTable {
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
+        // while(($row = db2_fetch_assoc($resultSet))==true){
+        //     $testJson = json_encode($row);
+        //     if(!$testJson){
+        //         break; // It's got invalid chars in it that will be a problem later.
+        //     }     
+            
+        //     $rowDates = $this->prepareDatesForResults($row);
+        //     $startDate = $rowDates['startDate'];
+        //     $startDateSortable = $rowDates['startDateSortable'];
+        //     $endDate = $rowDates['endDate'];
+        //     $endDateSortable = $rowDates['endDateSortable'];
+            
+        //     $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
+        //     $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
+                      
+        //     foreach ($row as $key => $data){
+        //         // $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
+        //         // unset($row[$key]);
+        //         $row[$key] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
+        //     }
+        //     $allData[] = $row;
+        // }
+        // return array('data'=>$allData, 'sql'=>$sql);
+
         while(($row = db2_fetch_assoc($resultSet))==true){
             $testJson = json_encode($row);
             if(!$testJson){
@@ -589,13 +613,12 @@ class rfsTable extends DbTable {
             
             $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
             $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
-                      
-            foreach ($row as $key => $data){
-                // $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
-                // unset($row[$key]);
-                $row[$key] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
+            
+            foreach ($row as $key => $data){ 
+                $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
+                unset($row[$key]);
             }
-            $allData[] = $row;
+            $allData[]  = $row;
         }
         return array('data'=>$allData, 'sql'=>$sql);
     }

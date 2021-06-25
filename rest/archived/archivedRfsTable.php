@@ -294,7 +294,7 @@ class archivedRfsTable extends DbTable {
             }
             $allData[]  = $row;            
         }
-        return array('data'=>$allData,'sql'=>$sql);
+        return array('data'=>$allData, 'sql'=>$sql);
     }
 
     function returnClaimReportAsArray($predicate=null, $withArchive=false){
@@ -393,7 +393,7 @@ class archivedRfsTable extends DbTable {
             }
             $allData[]  = $row;
         }
-        return array('data'=>$allData,'sql'=>$sql);
+        return array('data'=>$allData, 'sql'=>$sql);
     }
 
     function returnClaimReportAsJson($predicate=null, $withArchive=false){
@@ -493,7 +493,7 @@ class archivedRfsTable extends DbTable {
             }
             $allData[]  = $row;
         }
-        return array('data'=>$allData,'sql'=>$sql);
+        return array('data'=>$allData, 'sql'=>$sql);
     }
 
     function returnNoneActiveReportAsArray($predicate=null, $withArchive = false){
