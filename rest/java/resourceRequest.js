@@ -374,6 +374,7 @@ function ResourceRequest() {
 							if (currentResourceName === '') {
 								unlockForm = true;
 								messageForUser = 'Resource has been not allocated yet.';
+								console.log(messageForUser);
 							} else {
 								for(var i=0; i<resourceNamesForSelect2.length; i++){
 									if(resourceNamesForSelect2[i].id == currentResourceName){
@@ -385,9 +386,11 @@ function ResourceRequest() {
 								if(employeeFound == true){
 									unlockForm = true;
 									messageForUser = '';
+									console.log('clear message');
 								} else {
 									unlockForm = false;
 									messageForUser = 'Employee not found in dataset read from VBAC.';
+									console.log(messageForUser);
 								}
 							}
 
