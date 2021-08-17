@@ -364,10 +364,28 @@ function ResourceRequest() {
 								data          : resourceNamesForSelect2,
 								templateResult: formatResourceName
 							}).val(currentResourceName).trigger('change');
-							$('.spinning').removeClass('spinning').attr('disabled',false);
-							$('#clearResourceName').attr('disabled',false);
-							$('#RESOURCE_NAME').attr('disabled',false);
-							$('#pleaseWaitMessage').html('');
+
+							var employeeFound = false;
+							for(var i=0; i<resourceNamesForSelect2.length; i++){
+								if(resourceNamesForSelect2[i].id == currentResourceName){
+								   console.log("The search found in JSON Object");
+								   employeeFound = true;
+								   break;
+								}
+							}
+
+							$('.spinning').removeClass('spinning');
+							if(employeeFound==true){
+								$('#clearResourceName').attr('disabled',false);
+								$('#saveResourceName').attr('disabled',false);
+								$('#RESOURCE_NAME').attr('disabled',false);
+								$('#pleaseWaitMessage').html('');
+							} else {
+								$('#clearResourceName').attr('disabled',true);
+								$('#saveResourceName').attr('disabled',true);
+								$('#RESOURCE_NAME').attr('disabled',true);
+								$('#pleaseWaitMessage').html('Employee not found in dataset read from VBAC.');
+							}
 						} catch (e) {
 							$('#errorMessageBody').html("<h2>Json call to get Vbac active resources for select Failed.Tell Piotr</h2><p>"+e+"</p>");
 							$('.spinning').removeClass('spinning').attr('disabled',false);
