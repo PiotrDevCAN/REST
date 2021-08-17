@@ -6,6 +6,7 @@ use rest\rfsRecord;
 
 $pipelineArchive = !empty($_REQUEST['pipelineLiveArchive']) ? trim($_REQUEST['pipelineLiveArchive']) : null;
 
+$notArchivePredicate = 'ARCHIVE IS NULL ';
 switch (strtolower($pipelineArchive)) {
     case 'live':
         $predicate = "RFS_STATUS='" . rfsRecord::RFS_STATUS_LIVE . "' ";
@@ -19,7 +20,7 @@ switch (strtolower($pipelineArchive)) {
 }
 
 $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
-$data = $resourceRequestHoursTable->returnHrsPerWeek($predicate);
+$data = $resourceRequestHoursTable->returnHrsPerWeek($predicate.$notArchivePredicate);
 
 $messages = ob_get_clean();
 
