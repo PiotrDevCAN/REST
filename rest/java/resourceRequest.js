@@ -371,7 +371,10 @@ function ResourceRequest() {
 							var unlockForm = false;
 							var messageForUser = '';
 
-							if (currentResourceName !== '') {
+							if (currentResourceName === '') {
+								unlockForm = true;
+								messageForUser = 'Resource has been not allocated yet.';
+							} else {
 								for(var i=0; i<resourceNamesForSelect2.length; i++){
 									if(resourceNamesForSelect2[i].id == currentResourceName){
 										console.log("The search found in JSON Object");
@@ -386,9 +389,6 @@ function ResourceRequest() {
 									unlockForm = false;
 									messageForUser = 'Employee not found in dataset read from VBAC.';
 								}
-							} else {
-								unlockForm = true;
-								messageForUser = 'Resource has been not allocated yet.';
 							}
 
 							if(unlockForm == true){
@@ -424,10 +424,12 @@ function ResourceRequest() {
 					}
 			    });	
 			} else {
-				$('.spinning').removeClass('spinning').attr('disabled',false);
+				$('.spinning').removeClass('spinning');
 				$('#RESOURCE_NAME').val(currentResourceName).trigger('change');
 				$('#RESOURCE_NAME').attr('disabled',false);
-					$('#clearResourceName').attr('disabled',false);
+				$('#saveResourceName').attr('disabled',false);
+				$('#clearResourceName').attr('disabled',false);
+				$('#pleaseWaitMessage').html('');
 			}
 		});
 	},
