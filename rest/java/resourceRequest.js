@@ -367,8 +367,11 @@ function ResourceRequest() {
 							
 							$('.spinning').removeClass('spinning');
 
+							var employeeFound = false;
+							var unlockForm = false;
+							var messageForUser = 'Employee not found in dataset read from VBAC.';
+
 							if (currentResourceName !== '') {
-								var employeeFound = false;
 								for(var i=0; i<resourceNamesForSelect2.length; i++){
 									if(resourceNamesForSelect2[i].id == currentResourceName){
 										console.log("The search found in JSON Object");
@@ -377,22 +380,28 @@ function ResourceRequest() {
 									}
 								}
 								if(employeeFound == true){
-									$('#RESOURCE_NAME').attr('disabled',false);
-									$('#saveResourceName').attr('disabled',false);
-									$('#clearResourceName').attr('disabled',false);
-									$('#pleaseWaitMessage').html('');
+									unlockForm = true;
+									messageForUser = '';
 								} else {
-									$('#RESOURCE_NAME').attr('disabled',true);
-									$('#saveResourceName').attr('disabled',true);
-									$('#clearResourceName').attr('disabled',true);
-									$('#pleaseWaitMessage').html('Employee not found in dataset read from VBAC.');
+									unlockForm = false;
+									messageForUser = 'Employee not found in dataset read from VBAC.';
 								}
 							} else {
+								unlockForm = true;
+								messageForUser = 'Resource has been not allocated yet.';
+							}
+
+							if(unlockForm == true){
 								$('#RESOURCE_NAME').attr('disabled',true);
 								$('#saveResourceName').attr('disabled',true);
 								$('#clearResourceName').attr('disabled',true);
-								$('#pleaseWaitMessage').html('Resource has been not allocated yet.');
+							} else {
+								$('#RESOURCE_NAME').attr('disabled',false);
+								$('#saveResourceName').attr('disabled',false);
+								$('#clearResourceName').attr('disabled',false);
 							}
+							$('#pleaseWaitMessage').html(messageForUser);
+
 						} catch (e) {
 							$('#errorMessageBody').html("<h2>Json call to get Vbac active resources for select Failed.Tell Piotr</h2><p>"+e+"</p>");
 							$('.spinning').removeClass('spinning').attr('disabled',true);
