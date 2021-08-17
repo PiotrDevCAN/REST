@@ -341,6 +341,48 @@ function ResourceRequest() {
 		});	
 	},
 
+	this.setFormParameters = function(resourceNames, resourceName){
+
+		var employeeFound = false;
+		var unlockForm = false;
+		var messageForUser = '';
+
+		if (resourceName === '') {
+			unlockForm = true;
+			messageForUser = 'Resource has been not allocated yet.';
+			console.log(messageForUser);
+		} else {
+			for(var i=0; i<resourceNames.length; i++){
+				if(resourceNames[i].id == resourceName){
+					console.log("The search found in JSON Object");
+					employeeFound = true;
+					break;
+				}
+			}
+			if(employeeFound == true){
+				unlockForm = true;
+				messageForUser = '';
+				console.log('clear message');
+			} else {
+				unlockForm = false;
+				messageForUser = 'Employee not found in dataset read from VBAC.';
+				console.log(messageForUser);
+			}
+		}
+
+		if(unlockForm == true){
+			$('#RESOURCE_NAME').attr('disabled',true);
+			$('#saveResourceName').attr('disabled',true);
+			$('#clearResourceName').attr('disabled',true);
+		} else {
+			$('#RESOURCE_NAME').attr('disabled',false);
+			$('#saveResourceName').attr('disabled',false);
+			$('#clearResourceName').attr('disabled',false);
+		}
+		$('#pleaseWaitMessage').html(messageForUser);
+
+	}
+
 	this.populateResourceDropDownWhenModalShown = function(){
 		$('#resourceNameModal').on('shown.bs.modal', function(){
 			$('#RESOURCE_NAME').attr('disabled',true);
@@ -351,7 +393,8 @@ function ResourceRequest() {
 			
 			console.log(currentResourceName);
 			
-			if (!resourceNamesForSelect2.length){	
+			if(typeof(resourceNamesForSelect2) == 'undefined' ){
+				// make ajax call
 				$.ajax({
 			    	url: "ajax/getVbacActiveResourcesForSelect2.php",
 			        type: 'POST',
@@ -359,52 +402,14 @@ function ResourceRequest() {
 			    	success: function(result){
 						try {
 							var resultObj = JSON.parse(result);
-							resourceNamesForSelect2 = resultObj.data;
+							var resourceNamesForSelect2 = resultObj.data;
 							$('#RESOURCE_NAME').select2({
 								data          : resourceNamesForSelect2,
 								templateResult: formatResourceName
 							}).val(currentResourceName).trigger('change');
 							
 							$('.spinning').removeClass('spinning');
-
-							var employeeFound = false;
-							var unlockForm = false;
-							var messageForUser = '';
-
-							if (currentResourceName === '') {
-								unlockForm = true;
-								messageForUser = 'Resource has been not allocated yet.';
-								console.log(messageForUser);
-							} else {
-								for(var i=0; i<resourceNamesForSelect2.length; i++){
-									if(resourceNamesForSelect2[i].id == currentResourceName){
-										console.log("The search found in JSON Object");
-										employeeFound = true;
-										break;
-									}
-								}
-								if(employeeFound == true){
-									unlockForm = true;
-									messageForUser = '';
-									console.log('clear message');
-								} else {
-									unlockForm = false;
-									messageForUser = 'Employee not found in dataset read from VBAC.';
-									console.log(messageForUser);
-								}
-							}
-
-							if(unlockForm == true){
-								$('#RESOURCE_NAME').attr('disabled',true);
-								$('#saveResourceName').attr('disabled',true);
-								$('#clearResourceName').attr('disabled',true);
-							} else {
-								$('#RESOURCE_NAME').attr('disabled',false);
-								$('#saveResourceName').attr('disabled',false);
-								$('#clearResourceName').attr('disabled',false);
-							}
-							$('#pleaseWaitMessage').html(messageForUser);
-
+							resourceRequest.setFormParameters(resourceNamesForSelect2, currentResourceName);
 						} catch (e) {
 							$('#errorMessageBody').html("<h2>Json call to get Vbac active resources for select Failed.Tell Piotr</h2><p>"+e+"</p>");
 							$('.spinning').removeClass('spinning').attr('disabled',true);
@@ -425,14 +430,10 @@ function ResourceRequest() {
 					always: function(){
 	
 					}
-			    });	
+			    });
 			} else {
 				$('.spinning').removeClass('spinning');
-				$('#RESOURCE_NAME').val(currentResourceName).trigger('change');
-				$('#RESOURCE_NAME').attr('disabled',false);
-				$('#saveResourceName').attr('disabled',false);
-				$('#clearResourceName').attr('disabled',false);
-				$('#pleaseWaitMessage').html('');
+				resourceRequest.setFormParameters(resourceNamesForSelect2, currentResourceName);
 			}
 		});
 	},
