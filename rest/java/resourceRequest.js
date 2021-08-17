@@ -409,7 +409,7 @@ function ResourceRequest() {
 							}).val(currentResourceName).trigger('change');
 							
 							$('.spinning').removeClass('spinning');
-							resourceRequest.setFormParameters(resourceNamesForSelect2, currentResourceName);
+							this.setFormParameters(resourceNamesForSelect2, currentResourceName);
 						} catch (e) {
 							$('#errorMessageBody').html("<h2>Json call to get Vbac active resources for select Failed.Tell Piotr</h2><p>"+e+"</p>");
 							$('.spinning').removeClass('spinning').attr('disabled',true);
@@ -433,7 +433,7 @@ function ResourceRequest() {
 			    });
 			} else {
 				$('.spinning').removeClass('spinning');
-				resourceRequest.setFormParameters(resourceNamesForSelect2, currentResourceName);
+				this.setFormParameters(resourceNamesForSelect2, currentResourceName);
 			}
 		});
 	},
