@@ -346,8 +346,8 @@ function ResourceRequest() {
 			$('#RESOURCE_NAME').attr('disabled',true);
 			$('#saveResourceName').addClass('spinning').attr('disabled',true);
 			$('#clearResourceName').attr('disabled',true);
-			var businessUnit = $('#businessUnit').val();
-			var currentResourceName = $('#currentResourceName').val();	
+			var businessUnit = $.trim($('#businessUnit').val());
+			var currentResourceName = $.trim($('#currentResourceName').val());	
 			
 			console.log(currentResourceName);
 			
@@ -364,43 +364,50 @@ function ResourceRequest() {
 								data          : resourceNamesForSelect2,
 								templateResult: formatResourceName
 							}).val(currentResourceName).trigger('change');
-
-							var employeeFound = false;
-							for(var i=0; i<resourceNamesForSelect2.length; i++){
-								if(resourceNamesForSelect2[i].id == currentResourceName){
-								   console.log("The search found in JSON Object");
-								   employeeFound = true;
-								   break;
-								}
-							}
-
+							
 							$('.spinning').removeClass('spinning');
-							if(employeeFound==true){
-								$('#clearResourceName').attr('disabled',false);
-								$('#saveResourceName').attr('disabled',false);
-								$('#RESOURCE_NAME').attr('disabled',false);
-								$('#pleaseWaitMessage').html('');
+
+							if (currentResourceName !== '') {
+								var employeeFound = false;
+								for(var i=0; i<resourceNamesForSelect2.length; i++){
+									if(resourceNamesForSelect2[i].id == currentResourceName){
+										console.log("The search found in JSON Object");
+										employeeFound = true;
+										break;
+									}
+								}
+								if(employeeFound == true){
+									$('#RESOURCE_NAME').attr('disabled',false);
+									$('#saveResourceName').attr('disabled',false);
+									$('#clearResourceName').attr('disabled',false);
+									$('#pleaseWaitMessage').html('');
+								} else {
+									$('#RESOURCE_NAME').attr('disabled',true);
+									$('#saveResourceName').attr('disabled',true);
+									$('#clearResourceName').attr('disabled',true);
+									$('#pleaseWaitMessage').html('Employee not found in dataset read from VBAC.');
+								}
 							} else {
-								$('#clearResourceName').attr('disabled',true);
-								$('#saveResourceName').attr('disabled',true);
 								$('#RESOURCE_NAME').attr('disabled',true);
-								$('#pleaseWaitMessage').html('Employee not found in dataset read from VBAC.');
+								$('#saveResourceName').attr('disabled',true);
+								$('#clearResourceName').attr('disabled',true);
+								$('#pleaseWaitMessage').html('Resource has been not allocated yet.');
 							}
 						} catch (e) {
 							$('#errorMessageBody').html("<h2>Json call to get Vbac active resources for select Failed.Tell Piotr</h2><p>"+e+"</p>");
-							$('.spinning').removeClass('spinning').attr('disabled',false);
+							$('.spinning').removeClass('spinning').attr('disabled',true);
 							$('#errorMessageModal').modal('show');
 						}
 					},
 					fail: function(response){
 						$('#errorMessageBody').html("<h2>Json call to get Vbac active resources for select Failed.Tell Piotr</h2>");
-						$('.spinning').removeClass('spinning').attr('disabled',false);
+						$('.spinning').removeClass('spinning').attr('disabled',true);
 						$('#errorMessageModal').modal('show');
 					},
 					error: function(error){
 						//	handle errors here. What errors	            :-)!
 						$('#errorMessageBody').html("<h2>Json call to get Vbac active resources for select Errored " + error.statusText + " Tell Piotr</h2>");
-						$('.spinning').removeClass('spinning').attr('disabled',false);
+						$('.spinning').removeClass('spinning').attr('disabled',true);
 						$('#errorMessageModal').modal('show');
 					},
 					always: function(){
