@@ -369,7 +369,7 @@ function ResourceRequest() {
 
 							var employeeFound = false;
 							var unlockForm = false;
-							var messageForUser = 'Employee not found in dataset read from VBAC.';
+							var messageForUser = '';
 
 							if (currentResourceName !== '') {
 								for(var i=0; i<resourceNamesForSelect2.length; i++){
