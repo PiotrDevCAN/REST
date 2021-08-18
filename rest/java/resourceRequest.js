@@ -343,12 +343,10 @@ function ResourceRequest() {
 
 	this.setFormParameters = function(resourceNames, resourceName){
 
-		var resourceRequest = new ResourceRequest();
-		
 		var employeeFound = false;
 		var unlockForm = false;
 		var messageForUser = '';
-
+		
 		if (resourceName === '') {
 			unlockForm = true;
 			messageForUser = 'Resource has been not allocated yet.';
@@ -400,7 +398,7 @@ function ResourceRequest() {
 			console.log(resourceNamesForSelect2);
 			console.log(typeof(resourceNamesForSelect2));
 			
-			if(typeof(resourceNamesForSelect2) == 'undefined' ){
+			if(typeof(resourceNamesForSelect2) === 'undefined' ){
 				// make ajax call
 				$.ajax({
 			    	url: "ajax/getVbacActiveResourcesForSelect2.php",
