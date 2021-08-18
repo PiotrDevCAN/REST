@@ -393,9 +393,12 @@ function ResourceRequest() {
 			var businessUnit = $.trim($('#businessUnit').val());
 			var currentResourceName = $.trim($('#currentResourceName').val());	
 			
+			var resourceNamesForSelect2;
 			var resourceRequest = new ResourceRequest();
 
 			console.log(currentResourceName);
+			console.log(resourceNamesForSelect2);
+			console.log(typeof(resourceNamesForSelect2));
 			
 			if(typeof(resourceNamesForSelect2) == 'undefined' ){
 				// make ajax call
@@ -406,7 +409,7 @@ function ResourceRequest() {
 			    	success: function(result){
 						try {
 							var resultObj = JSON.parse(result);
-							var resourceNamesForSelect2 = resultObj.data;
+							resourceNamesForSelect2 = resultObj.data;
 							$('#RESOURCE_NAME').select2({
 								data          : resourceNamesForSelect2,
 								templateResult: formatResourceName
