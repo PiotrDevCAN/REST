@@ -347,6 +347,8 @@ function ResourceRequest() {
 		var unlockForm = false;
 		var messageForUser = '';
 		
+		$('#RESOURCE_NAME').val(resourceName).trigger('change');
+
 		if (resourceName === '') {
 			unlockForm = true;
 			messageForUser = 'Resource has been not allocated yet.';
@@ -407,7 +409,8 @@ function ResourceRequest() {
 							$('#RESOURCE_NAME').select2({
 								data          : resourceNames,
 								templateResult: formatResourceName
-							}).val(currentResourceName).trigger('change');
+							});
+							//.val(currentResourceName).trigger('change');
 							
 							$('.spinning').removeClass('spinning');
 							resourceRequest.setFormParameters(resourceNames, currentResourceName);
