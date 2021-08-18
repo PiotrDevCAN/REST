@@ -371,13 +371,13 @@ function ResourceRequest() {
 		}
 
 		if(unlockForm == true){
-			$('#RESOURCE_NAME').attr('disabled',true);
-			$('#saveResourceName').attr('disabled',true);
-			$('#clearResourceName').attr('disabled',true);
-		} else {
 			$('#RESOURCE_NAME').attr('disabled',false);
 			$('#saveResourceName').attr('disabled',false);
 			$('#clearResourceName').attr('disabled',false);
+		} else {
+			$('#RESOURCE_NAME').attr('disabled',true);
+			$('#saveResourceName').attr('disabled',true);
+			$('#clearResourceName').attr('disabled',true);
 		}
 		$('#pleaseWaitMessage').html(messageForUser);
 
@@ -392,12 +392,8 @@ function ResourceRequest() {
 			var currentResourceName = $.trim($('#currentResourceName').val());	
 			
 			var resourceRequest = new ResourceRequest();
-
-			console.log(currentResourceName);
-			console.log(window.resourceNamesForSelect2);
-			console.log(typeof(window.resourceNamesForSelect2));
 			
-			if(typeof(window.resourceNamesForSelect2) === 'undefined' ){
+			if(typeof(window.vbacActiveResources) === 'undefined' ){
 				// make ajax call
 				$.ajax({
 			    	url: "ajax/getVbacActiveResourcesForSelect2.php",
@@ -406,14 +402,15 @@ function ResourceRequest() {
 			    	success: function(result){
 						try {
 							var resultObj = JSON.parse(result);
-							window.resourceNamesForSelect2 = resultObj.data;
+							var resourceNames = resultObj.data;
+							window.vbacActiveResources = resourceNames;
 							$('#RESOURCE_NAME').select2({
-								data          : window.resourceNamesForSelect2,
+								data          : resourceNames,
 								templateResult: formatResourceName
 							}).val(currentResourceName).trigger('change');
 							
 							$('.spinning').removeClass('spinning');
-							resourceRequest.setFormParameters(window.resourceNamesForSelect2, currentResourceName);
+							resourceRequest.setFormParameters(resourceNames, currentResourceName);
 						} catch (e) {
 							$('#errorMessageBody').html("<h2>Json call to get Vbac active resources for select Failed.Tell Piotr</h2><p>"+e+"</p>");
 							$('.spinning').removeClass('spinning').attr('disabled',true);
