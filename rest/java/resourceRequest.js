@@ -392,7 +392,7 @@ function ResourceRequest() {
 			var currentResourceName = $.trim($('#currentResourceName').val());	
 			
 			var resourceRequest = new ResourceRequest();
-			
+
 			if(typeof(window.vbacActiveResources) === 'undefined' ){
 				// make ajax call
 				$.ajax({
@@ -434,7 +434,7 @@ function ResourceRequest() {
 			    });
 			} else {
 				$('.spinning').removeClass('spinning');
-				resourceRequest.setFormParameters(window.resourceNamesForSelect2, currentResourceName);
+				resourceRequest.setFormParameters(window.vbacActiveResources, currentResourceName);
 			}
 		});
 	},
