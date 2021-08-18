@@ -391,14 +391,13 @@ function ResourceRequest() {
 			var businessUnit = $.trim($('#businessUnit').val());
 			var currentResourceName = $.trim($('#currentResourceName').val());	
 			
-			var resourceNamesForSelect2;
 			var resourceRequest = new ResourceRequest();
 
 			console.log(currentResourceName);
-			console.log(resourceNamesForSelect2);
-			console.log(typeof(resourceNamesForSelect2));
+			console.log(window.resourceNamesForSelect2);
+			console.log(typeof(window.resourceNamesForSelect2));
 			
-			if(typeof(resourceNamesForSelect2) === 'undefined' ){
+			if(typeof(window.resourceNamesForSelect2) === 'undefined' ){
 				// make ajax call
 				$.ajax({
 			    	url: "ajax/getVbacActiveResourcesForSelect2.php",
@@ -407,14 +406,14 @@ function ResourceRequest() {
 			    	success: function(result){
 						try {
 							var resultObj = JSON.parse(result);
-							resourceNamesForSelect2 = resultObj.data;
+							window.resourceNamesForSelect2 = resultObj.data;
 							$('#RESOURCE_NAME').select2({
-								data          : resourceNamesForSelect2,
+								data          : window.resourceNamesForSelect2,
 								templateResult: formatResourceName
 							}).val(currentResourceName).trigger('change');
 							
 							$('.spinning').removeClass('spinning');
-							resourceRequest.setFormParameters(resourceNamesForSelect2, currentResourceName);
+							resourceRequest.setFormParameters(window.resourceNamesForSelect2, currentResourceName);
 						} catch (e) {
 							$('#errorMessageBody').html("<h2>Json call to get Vbac active resources for select Failed.Tell Piotr</h2><p>"+e+"</p>");
 							$('.spinning').removeClass('spinning').attr('disabled',true);
@@ -438,7 +437,7 @@ function ResourceRequest() {
 			    });
 			} else {
 				$('.spinning').removeClass('spinning');
-				resourceRequest.setFormParameters(resourceNamesForSelect2, currentResourceName);
+				resourceRequest.setFormParameters(window.resourceNamesForSelect2, currentResourceName);
 			}
 		});
 	},
