@@ -266,6 +266,8 @@ class resourceRequestTable extends DbTable {
             break;
         }
         
+        strstr($_ENV['environment'], 'ut')  ? $editable = true : null;
+        
         $row['STATUS']= $completeable ? 
         "<button type='button' class='btn btn-xs changeStatusCompleted accessRestrict accessAdmin accessCdi accessSupply ' aria-label='Left Align'
                     data-rfs='" .$rfsId . "'
