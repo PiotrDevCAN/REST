@@ -5,10 +5,7 @@ use rest\activeResourceTable;
 
 set_time_limit(0);
 
-// Starting clock time in seconds
-$start_time = microtime(true);
-
-$url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=P.EMAIL_ADDRESS,P.PES_STATUS,SQUAD_NAME,TRIBE_NAME';
+$url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=P.EMAIL_ADDRESS,P.CNUM,P.PES_STATUS,SQUAD_NAME,TRIBE_NAME';
 
 $curl = curl_init();
 
@@ -29,20 +26,8 @@ $response = curl_exec($curl);
 $err = curl_error($curl);
 
 $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE); //check if 504 return.
-var_dump($http_code);
 
 curl_close($curl);
-
-// End clock time in seconds
-$end_time = microtime(true);
-  
-// Calculate script execution time
-$execution_time = ($end_time - $start_time);
-
-echo " Execution time of script PART 1 = ".$execution_time." sec";
-
-// Starting clock time in seconds
-$start_time = microtime(true);
 
 if ($err) {
     echo "cURL Error #:" . $err;
@@ -51,8 +36,7 @@ if ($err) {
     $activeResourceTable  = new activeResourceTable(allTables::$ACTIVE_RESOURCE);
     $activeResourceRecord = new activeResourceRecord();
 
-    // $activeResourceTable->clear(false);
-    $activeResourceTable->clear(true);
+    $activeResourceTable->clear(false);
 
     /*
     $responseObj = json_decode($response);
@@ -69,13 +53,20 @@ if ($err) {
         }
     }
     */
+
+    $responseObj = json_decode($response);
+    if (count($responseObj) > 0) {
+        
+        $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( CNUM, EMAIL_ADDRESS, NOTES_ID, PES_STATUS )  Values ";
+                
+        foreach ($responseObj as $key => $activeResourceEntry) {
+            if ($key > 0) {
+                $sql .= " ,";    
+            }
+            $sql .= " ('" . db2_escape_string(trim($activeResourceEntry->CNUM)) . "','" . db2_escape_string(trim($activeResourceEntry->EMAIL_ADDRESS)) . "','" . db2_escape_string($activeResourceEntry->NOTES_ID) . "','" . db2_escape_string($activeResourceEntry->PES_STATUS) . "' ) ";
+            
+            $loadCounter++;
+        }
+    }
     // echo count($responseObj) . ' records read from VBAC api';
 }
-
-// End clock time in seconds
-$end_time = microtime(true);
-  
-// Calculate script execution time
-$execution_time = ($end_time - $start_time);
-
-echo " Execution time of script PART 2 = ".$execution_time." sec";
