@@ -51,8 +51,10 @@ if ($err) {
     $activeResourceTable  = new activeResourceTable(allTables::$ACTIVE_RESOURCE);
     $activeResourceRecord = new activeResourceRecord();
 
-    $activeResourceTable->clear(false);
+    // $activeResourceTable->clear(false);
+    $activeResourceTable->clear(true);
 
+    /*
     $responseObj = json_decode($response);
     var_dump(count($responseObj));
     if (count($responseObj) > 0) {
@@ -66,6 +68,7 @@ if ($err) {
             }
         }
     }
+    */
     // echo count($responseObj) . ' records read from VBAC api';
 }
 
