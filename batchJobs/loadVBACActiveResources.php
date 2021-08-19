@@ -64,9 +64,7 @@ if ($err) {
                 $sql .= " ,";    
             }
             $sql .= " ('" . db2_escape_string(trim($activeResourceEntry->CNUM)) . "','" . db2_escape_string(trim($activeResourceEntry->EMAIL_ADDRESS)) . "','" . db2_escape_string($activeResourceEntry->NOTES_ID) . "','" . db2_escape_string($activeResourceEntry->PES_STATUS) . "' ) ";
-            
-            $loadCounter++;
         }
     }
-    // echo count($responseObj) . ' records read from VBAC api';
+    echo count($responseObj) . ' records read from VBAC api';
 }
