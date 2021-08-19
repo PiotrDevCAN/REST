@@ -54,6 +54,11 @@ if ($err) {
     }
     */
 
+    $success = true;
+
+    $autoCommit = db2_autocommit($GLOBALS['conn']);
+    db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);   
+    
     $responseObj = json_decode($response);
     if (count($responseObj) > 0) {
         
@@ -65,6 +70,20 @@ if ($err) {
             }
             $sql .= " ('" . db2_escape_string(trim($activeResourceEntry->CNUM)) . "','" . db2_escape_string(trim($activeResourceEntry->EMAIL_ADDRESS)) . "','" . db2_escape_string($activeResourceEntry->NOTES_ID) . "','" . db2_escape_string($activeResourceEntry->PES_STATUS) . "' ) ";
         }
+
+        $rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
+        if (! $rs) {
+            $success = false;
+        }
     }
+    
+    if($success){
+        db2_commit($GLOBALS['conn']);
+    } else {
+        db2_rollback($GLOBALS['conn']);
+    }
+
+    db2_autocommit($GLOBALS['conn'],$autoCommit);
+
     echo count($responseObj) . ' records read from VBAC api';
 }
