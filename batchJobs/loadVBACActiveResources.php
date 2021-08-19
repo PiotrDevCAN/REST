@@ -33,7 +33,17 @@ var_dump($http_code);
 
 curl_close($curl);
 
-/*
+// End clock time in seconds
+$end_time = microtime(true);
+  
+// Calculate script execution time
+$execution_time = ($end_time - $start_time);
+
+echo " Execution time of script PART 1 = ".$execution_time." sec";
+
+// Starting clock time in seconds
+$start_time = microtime(true);
+
 if ($err) {
     echo "cURL Error #:" . $err;
 } else {
@@ -44,6 +54,7 @@ if ($err) {
     $activeResourceTable->clear(false);
 
     $responseObj = json_decode($response);
+    var_dump(count($responseObj));
     if (count($responseObj) > 0) {
         foreach ($responseObj as $personEntry) {
             $activeResourceRecord->setFromArray($personEntry);
@@ -57,7 +68,6 @@ if ($err) {
     }
     // echo count($responseObj) . ' records read from VBAC api';
 }
-*/
 
 // End clock time in seconds
 $end_time = microtime(true);
@@ -65,4 +75,4 @@ $end_time = microtime(true);
 // Calculate script execution time
 $execution_time = ($end_time - $start_time);
 
-echo " Execution time of script = ".$execution_time." sec";
+echo " Execution time of script PART 2 = ".$execution_time." sec";
