@@ -5,6 +5,9 @@ use rest\activeResourceTable;
 
 set_time_limit(0);
 
+// Starting clock time in seconds
+$start_time = microtime(true);
+
 $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=P.EMAIL_ADDRESS,P.PES_STATUS,SQUAD_NAME,TRIBE_NAME';
 
 $curl = curl_init();
@@ -25,8 +28,12 @@ curl_setopt_array($curl, array(
 $response = curl_exec($curl);
 $err = curl_error($curl);
 
+$http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE); //check if 504 return.
+var_dump($http_code);
+
 curl_close($curl);
 
+/*
 if ($err) {
     echo "cURL Error #:" . $err;
 } else {
@@ -50,3 +57,12 @@ if ($err) {
     }
     // echo count($responseObj) . ' records read from VBAC api';
 }
+*/
+
+// End clock time in seconds
+$end_time = microtime(true);
+  
+// Calculate script execution time
+$execution_time = ($end_time - $start_time);
+
+echo " Execution time of script = ".$execution_time." sec";
