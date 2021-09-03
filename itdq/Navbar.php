@@ -59,6 +59,8 @@ class Navbar
 
         $hash = `git log -1 --pretty=%h`;
 
+        // $teamBlogUrl = 'https://w3.ibm.com/w3publisher/lbg-agile-accelerate/meet-the-agile-team/project-services/project-delivery';
+        $teamBlogUrl = 'https://w3.ibm.com/ocean/w3publisher/rest';
 
         ?>
         </ul>
@@ -68,7 +70,7 @@ class Navbar
         <li class='accessCdi accessPmo accessFm accessUser'
                id='Help_Page'
                data-pagename='pa_helpPage.php'><a href="pa_helpPage.php">Feedback</a></li>
-        <li class='accessCdi accessPmo accessFm accessUser'><a href="https://w3.ibm.com/w3publisher/lbg-agile-accelerate/meet-the-agile-team/project-services/project-delivery"  target='_blank'>REST Blog</a></li>       
+        <li class='accessCdi accessPmo accessFm accessUser'><a href="<?=$teamBlogUrl?>" target='_blank'>REST Blog</a></li>       
 	    </ul>
 
         </div><!-- /.navbar-collapse -->

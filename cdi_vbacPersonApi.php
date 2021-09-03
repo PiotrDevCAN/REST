@@ -7,9 +7,6 @@ set_time_limit(0);
 
 $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=P.EMAIL_ADDRESS,P.PES_STATUS,SQUAD_NAME,TRIBE_NAME';
 
-$read = new DateTime();
-echo "<BR/>VBAC API read Started : " . $read->format('Y-m-d H:i:s');
-
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
@@ -25,9 +22,6 @@ $err = curl_error($curl);
 
 curl_close($curl);
 
-$read = new DateTime();
-echo "<BR/>VBAC API read Finished : " . $read->format('Y-m-d H:i:s');
-
 if ($err) {
     echo "cURL Error #:" . $err;
 } else {
@@ -37,7 +31,7 @@ if ($err) {
 
     $clear = isset($_GET['clear']) ? $_GET['clear'] : false;
     if ($clear) {
-        $activeResourceTable->clear(false);
+        $activeResourceTable->clear();
     }
 
     $responseObj = json_decode($response);
