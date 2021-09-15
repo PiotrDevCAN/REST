@@ -536,8 +536,7 @@ class resourceRequestTable extends DbTable {
 //          error_log('notesId:' . $value['id'] . ' tribe:' . $value['tribe'] . " bestmatch:" . $bestMatch . " bu:" . $businessUnit);            $
             // var_dump($value['id']);
             // var_dump(strtolower(substr(trim($value['id']),-4)));
-            if(
-                strtolower(substr(trim($value['id']), -4))=='/ibm' || strtolower(substr(trim($value['id']), -4))=='/ocean'){  // Filter out invalid Notes Ids
+            if(strtolower(substr(trim($value['id']), -4))=='/ibm' || strtolower(substr(trim($value['id']), -6))=='/ocean'){  // Filter out invalid Notes Ids
                 if($value['tribe']==$myTribe){
                     $value['distance']='local';
                     $tribeEmployees[] = $value;
