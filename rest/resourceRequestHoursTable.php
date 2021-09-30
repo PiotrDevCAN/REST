@@ -300,9 +300,7 @@ class resourceRequestHoursTable extends DbTable
     }
     
     function returnHrsPerWeek($predicate= null, $rsOnly = false) {
-        $sql = " select * ";
-        $sql.= " from ( ";
-        $sql.= " select RRH.RESOURCE_REFERENCE as RR, WEEK_ENDING_FRIDAY as WEF, HOURS, RFS, SERVICE,";
+        $sql = " select RRH.RESOURCE_REFERENCE as RR, WEEK_ENDING_FRIDAY as WEF, HOURS, RFS, SERVICE,";
         $sql.= " ( CASE 
             WHEN LOCATE('" . resourceRequestTable::DUPLICATE . "', RESOURCE_NAME) THEN null
             WHEN LOCATE('" . resourceRequestTable::DELTA . "', RESOURCE_NAME) THEN null
@@ -315,8 +313,7 @@ class resourceRequestHoursTable extends DbTable
         $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql.= " on RR.RFS = RFS.RFS_ID ";
         $sql.= empty($predicate) ? null : " WHERE 1=1 AND " . $predicate;
-        $sql.= " ) ";
-        $sql.= " order by 1,2"; 
+        $sql.= " order by RRH.RESOURCE_REFERENCE, WEEK_ENDING_FRIDAY";
         
         $resultSet = $this->execute($sql);
         
@@ -331,7 +328,7 @@ class resourceRequestHoursTable extends DbTable
                 }
                 return $allData;                
             default:
-                return false;     ;
+                return false;
                 break;
         }
     }

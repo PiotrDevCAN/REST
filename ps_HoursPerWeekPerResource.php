@@ -33,7 +33,6 @@ try {
     $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
     $rsOnly = true;
     $rs = $resourceRequestHoursTable->returnHrsPerWeek(null, $rsOnly);
-
     if($rs){
         $recordsFound = DbTable::writeResultSetToXls($rs, $spreadsheet);
         if($recordsFound){
