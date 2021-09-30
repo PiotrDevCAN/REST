@@ -247,9 +247,9 @@ class rfsTable extends DbTable {
               <span class='glyphicon glyphicon-floppy-remove' aria-hidden='true' data-html='true' data-html='true' data-toggle='tooltip' title='Archive RFS Safer than deleting' ></span>
               </button>";
         } else {
-            $row['RFS_ID'] = ""; /// NEed something so next statement can be an append.
+            $row['RFS_ID'] = ""; /// Need something so next statement can be an append.
         }
-        
+
         $row['RFS_ID'] .= $pipelineRfs  ? "<button type='button' class='btn btn-success btn-xs goLiveRfs accessRestrict accessAdmin accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "' >
               <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Release to Live' ></span>
               </button>&nbsp;" : null;    

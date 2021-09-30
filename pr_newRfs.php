@@ -164,12 +164,26 @@ $(document).ready(function(){
 
 $(document).ready(function(){
 	$('#REQUESTOR_EMAIL').keyup(function(){
+		var oceanRegex = RegExp('ocean.ibm.com$');
 		var regex = RegExp('ibm.com$');
 		var email = $('#REQUESTOR_EMAIL').val().trim().toLowerCase();
+		var oceanEmailAddress = oceanRegex.test(email);
 		var ibmEmailAddress = regex.test(email);
-		ibmEmailAddress ? $("input[name='Submit']").attr('disabled',false) : $('input[name="Submit"]').attr('disabled',true);
-		ibmEmailAddress ? $("#REQUESTOR_EMAIL").css('color','DARKGREEN') : $('#REQUESTOR_EMAIL').css('color','CRIMSON');
-		});
+		if(oceanEmailAddress) {
+			$("input[name='Submit']").attr('disabled',false);
+			$("#REQUESTOR_EMAIL").css('color','DARKGREEN');
+			$("#IBMNotAllowed").hide();
+		} else {
+			$('input[name="Submit"]').attr('disabled',true);
+			$('#REQUESTOR_EMAIL').css('color','CRIMSON');
+			$("#IBMNotAllowed").hide();
+			if(ibmEmailAddress) {
+				if($('#REQUESTOR_EMAIL').val() !== $("#originalREQUESTOR_EMAIL").val()) {
+					$("#IBMNotAllowed").show();
+				}				
+			}
+		}
+	});
 });
 
 </script>

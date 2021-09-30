@@ -286,10 +286,10 @@ $rfsTable = new rfsTable(allTables::$RFS);
 				<div class="col-md-5">
 					<input class="form-control" id="plREQUESTOR_EMAIL"
 						name="plREQUESTOR_EMAIL" value=""
-						placeholder="Enter Project Mgr IBM Email" required="required" type="email"
+						placeholder="Enter Project Mgr Ocean Email" required="required" type="email"
 						maxlength="<?=$rfsTable->getColumnLength('REQUESTOR_EMAIL');?>"
 						>
-			
+            <p id="plIBMNotAllowed" style="display:none; color: CRIMSON">IBM email address is no longer allowed.</p>
 				</div>
 			</div>
 		</div>	
@@ -371,19 +371,45 @@ $(document).on('hide.bs.modal','#goLiveRfsModal',function(e){
 });
 
 $(document).on('keyup','#plREQUESTOR_EMAIL',function(){
-	var regex = RegExp('ibm.com$');
-	var email = $('#plREQUESTOR_EMAIL').val().trim().toLowerCase();
-	var ibmEmailAddress = regex.test(email);
-	ibmEmailAddress ? $("#confirmGoLiveRfs").attr('disabled',false)    : $("#confirmGoLiveRfs").attr('disabled',true);
-	ibmEmailAddress ? $("#plREQUESTOR_EMAIL").css('color','DARKGREEN') : $('#plREQUESTOR_EMAIL').css('color','CRIMSON');
+  var oceanRegex = RegExp('ocean.ibm.com$');
+  var regex = RegExp('ibm.com$');
+  var email = $('#plREQUESTOR_EMAIL').val().trim().toLowerCase();
+  var oceanEmailAddress = oceanRegex.test(email);
+  var ibmEmailAddress = regex.test(email);
+  if(oceanEmailAddress) {
+    $("#confirmGoLiveRfs").attr('disabled',false);
+    $("#plREQUESTOR_EMAIL").css('color','DARKGREEN');
+    $("#plIBMNotAllowed").hide();
+  } else {
+    $("#confirmGoLiveRfs").attr('disabled',true);
+    $('#plREQUESTOR_EMAIL').css('color','CRIMSON');
+    $("#plIBMNotAllowed").hide();
+    if(ibmEmailAddress) {
+      $("#plIBMNotAllowed").show();      
+    }
+  }
 });
 
 $(document).on('keyup','#REQUESTOR_EMAIL',function(){
-	var regex = RegExp('ibm.com$');
-	var email = $('#REQUESTOR_EMAIL').val().trim().toLowerCase();
-	var ibmEmailAddress = regex.test(email);
-	ibmEmailAddress ? $("input[name='Submit']").attr('disabled',false) : $('input[name="Submit"]').attr('disabled',true);
-	ibmEmailAddress ? $("#REQUESTOR_EMAIL").css('color','DARKGREEN') : $('#REQUESTOR_EMAIL').css('color','CRIMSON');
+  var oceanRegex = RegExp('ocean.ibm.com$');
+  var regex = RegExp('ibm.com$');
+  var email = $('#REQUESTOR_EMAIL').val().trim().toLowerCase();
+  var oceanEmailAddress = oceanRegex.test(email);
+  var ibmEmailAddress = regex.test(email);
+  if(oceanEmailAddress) {
+    $("input[name='Submit']").attr('disabled',false);
+    $("#REQUESTOR_EMAIL").css('color','DARKGREEN');
+    $("#IBMNotAllowed").hide();
+  } else {
+    $('input[name="Submit"]').attr('disabled',true);
+    $('#REQUESTOR_EMAIL').css('color','CRIMSON');
+    $("#IBMNotAllowed").hide();
+    if(ibmEmailAddress) {
+      if($('#REQUESTOR_EMAIL').val() !== $("#originalREQUESTOR_EMAIL").val()) {
+        $("#IBMNotAllowed").show();
+      }				
+    }
+  }
 });
 
 </script>
@@ -415,5 +441,3 @@ for($year=$currentYear-1;$year<=$currentYear+1;$year++){
 }
 ?>
 </style>
-
-
