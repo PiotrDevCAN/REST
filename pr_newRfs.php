@@ -163,7 +163,8 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-	$('#REQUESTOR_EMAIL').keyup(function(){
+	// $('#REQUESTOR_EMAIL').keyup(function(){
+	$('#REQUESTOR_EMAIL').change(function(){
 		var oceanRegex = RegExp('ocean.ibm.com$');
 		var regex = RegExp('ibm.com$');
 		var email = $('#REQUESTOR_EMAIL').val().trim().toLowerCase();

@@ -370,7 +370,8 @@ $(document).on('hide.bs.modal','#goLiveRfsModal',function(e){
 	$('.spinning').removeClass('spinning').attr('disabled',false);
 });
 
-$(document).on('keyup','#plREQUESTOR_EMAIL',function(){
+// $(document).on('keyup','#plREQUESTOR_EMAIL',function(){
+$(document).on('change','#plREQUESTOR_EMAIL',function(){
   var oceanRegex = RegExp('ocean.ibm.com$');
   var regex = RegExp('ibm.com$');
   var email = $('#plREQUESTOR_EMAIL').val().trim().toLowerCase();
@@ -390,7 +391,8 @@ $(document).on('keyup','#plREQUESTOR_EMAIL',function(){
   }
 });
 
-$(document).on('keyup','#REQUESTOR_EMAIL',function(){
+// $(document).on('keyup','#REQUESTOR_EMAIL',function(){
+$(document).on('change','#REQUESTOR_EMAIL',function(){
   var oceanRegex = RegExp('ocean.ibm.com$');
   var regex = RegExp('ibm.com$');
   var email = $('#REQUESTOR_EMAIL').val().trim().toLowerCase();
