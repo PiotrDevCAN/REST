@@ -1,5 +1,6 @@
 <?php
 
+use itdq\BluePagesSLAPHAPI;
 use itdq\DbTable;
 use rest\allTables;
 use rest\rfsRecord;
@@ -12,16 +13,33 @@ ob_start();
 
 $parmsTrimmed = array_map('trim', $_POST);
 
-// $rfsId = !empty($_POST['RFS_ID']) ? trim($_POST['RFS_ID']) : null;
-// $projectTitle = !empty($_POST['PROJECT_TITLE']) ? trim($_POST['PROJECT_TITLE']) : null;
-// $requestorName = !empty($_POST['REQUESTOR_NAME']) ? trim($_POST['REQUESTOR_NAME']) : null;
-// $requestorEmail = !empty($_POST['REQUESTOR_EMAIL']) ? trim($_POST['REQUESTOR_EMAIL']) : null;
-// $valueStream = !empty($_POST['VALUE_STREAM']) ? trim($_POST['VALUE_STREAM']) : null;
-
-$rfsEndDate = !empty($_POST['RFS_END_DATE']) ? trim($_POST['RFS_END_DATE']) : null;
-
+$rfsRequestorEmail = !empty($_POST['REQUESTOR_EMAIL']) ? trim($_POST['REQUESTOR_EMAIL']) : null;
+$rfsOriginalRequestorEmail = !empty($_POST['originalREQUESTOR_EMAIL']) ? trim($_POST['originalREQUESTOR_EMAIL']) : null;
 $rfsType = !empty($_POST['RFS_TYPE']) ? trim($_POST['RFS_TYPE']) : null;
 $rfsStatus = !empty($_POST['RFS_STATUS']) ? trim($_POST['RFS_STATUS']) : null;
+$rfsEndDate = !empty($_POST['RFS_END_DATE']) ? trim($_POST['RFS_END_DATE']) : null;
+
+$sp = strpos(strtolower($rfsRequestorEmail),'ocean');
+if($sp === FALSE){
+    // none ocean
+    if ($rfsRequestorEmail == $rfsOriginalRequestorEmail) {
+        // nothing has changed
+        $invalidRequestorEmail = false;
+    } else {        
+        // invalid none ocean
+        $invalidRequestorEmail = true;
+    }
+} else {
+    // is ocean
+    $data = BluePagesSLAPHAPI::getOceanDetailsFromIntranetId($rfsRequestorEmail);
+    if (!empty($data)) {
+        //valid ocean
+        $invalidRequestorEmail = false;
+    } else {
+        // invalid ocean
+        $invalidRequestorEmail = true;
+    }
+}
 
 $invalidRfsType = !in_array($rfsType, rfsRecord::$rfsType);
 $invalidRfsStatus = !in_array($rfsStatus, rfsRecord::$rfsStatus);
@@ -33,6 +51,9 @@ $create = false;
 $update = false;
 
 switch (true) {
+    case $invalidRequestorEmail:
+        $messages = 'Cannot save RFS Record with provided RFS Requestor Email value.';
+        break;
     case $invalidRfsType:
         $messages = 'Cannot save RFS Record with provided RFS Type value.';
         break;
