@@ -27,7 +27,7 @@ if($sp === FALSE){
     $invalidRequestorEmail = true;
 } else {
     // is ocean
-    $data = BluePagesSLAPHAPI::getOceanDetailsFromIntranetId($rfsRequestorEmail);
+    $data = BluePagesSLAPHAPI::getIBMDetailsFromIntranetId($rfsRequestorEmail);
     if (!empty($data)) {
         //valid ocean
         $invalidRequestorEmail = false;
