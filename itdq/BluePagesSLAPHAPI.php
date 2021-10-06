@@ -87,7 +87,16 @@ class BluePagesSLAPHAPI {
 		'last_name'
 	);
 
-	static function cleanupNotesid($notesid){
+	static function cleanupNotesid($notesId){
+		$sp = strpos(strtolower($notesId),'ocean');
+		if($sp === FALSE){
+			return self::cleanupIBMNotesid($notesId);
+		} else {
+			return self::cleanupOceanNotesid($notesId);
+		}
+	}
+
+	static function cleanupIBMNotesid($notesid){
 		$stepOne =  str_ireplace('CN=','',str_replace('OU=','',str_replace('O=','',$notesid)));
 		$location = strpos($stepOne,'@IBM');
 		$cleanId = substr($stepOne,0,$location);
@@ -267,11 +276,7 @@ class BluePagesSLAPHAPI {
 		$ch = curl_init ( str_replace('NOTES_ID_HERE',$amendIbm2,$url) );
 		return self::processDetails($ch);
 	}
-	
-	
-	
-	
-	
+
 	static function getNotesidFromIntranetId($intranetId){
 		if(empty($intranetId)){
 			return FALSE;
