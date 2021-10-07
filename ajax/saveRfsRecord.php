@@ -13,6 +13,17 @@ ob_start();
 
 $parmsTrimmed = array_map('trim', $_POST);
 
+$rfsId = !empty($_POST['RFS_ID']) ? trim($_POST['RFS_ID']) : null;
+
+// rfs exists check
+$rfsAlreadyExists = false;
+$exists = $loader->load('RFS_ID', allTables::$RFS, "RFS_ID='$rfsId'");
+foreach ($exists as $value) {
+    if (trim($value) == $rfsId) {
+        $rfsAlreadyExists = true;
+    }
+}
+
 $rfsRequestorEmail = !empty($_POST['REQUESTOR_EMAIL']) ? trim($_POST['REQUESTOR_EMAIL']) : null;
 $rfsOriginalRequestorEmail = !empty($_POST['originalREQUESTOR_EMAIL']) ? trim($_POST['originalREQUESTOR_EMAIL']) : null;
 $rfsType = !empty($_POST['RFS_TYPE']) ? trim($_POST['RFS_TYPE']) : null;
@@ -51,6 +62,9 @@ $create = false;
 $update = false;
 
 switch (true) {
+    case $rfsAlreadyExists:
+        $messages = 'Cannot save RFS Record due to a record with provided RFS_ID already exists.';
+        break; 
     case $invalidRequestorEmail:
         $messages = 'Cannot save RFS Record with provided RFS Requestor Email value.';
         break;

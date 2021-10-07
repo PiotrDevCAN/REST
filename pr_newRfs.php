@@ -59,7 +59,10 @@ $("form").on("reset", function () {
 });
 
 $('#RFS_ID').on('focusout',function(e){
-	var newRfsId = $(this).val().trim();
+	// var newRfsId = $(this).val().trim();
+	var newRfsId = $(this).val().trim().toUpperCase();
+	newRfsId = newRfsId.replace(/_|\s/g, '-');
+	$('#RFS_ID').val(newRfsId);
 	var allreadyExists = ($.inArray(newRfsId, knownRfs) >= 0 );
 	if(allreadyExists){ // comes back with Position in array(true) or false is it's NOT in the array.
 		$('#saveRfs').attr('disabled',true);
@@ -68,7 +71,8 @@ $('#RFS_ID').on('focusout',function(e){
 	} else {
 		var selectOptionVal = '';	
 		var valueStreamObj = $('#VALUE_STREAM');
-		var rfsId = $('#RFS_ID').val().trim().toUpperCase().substr(0,4);
+		// var rfsId = $('#RFS_ID').val().trim().toUpperCase().substr(0,4);
+		var rfsId = newRfsId.substr(0,4);
 		
 		$('#VALUE_STREAM > option').each(function() {			
 			if ( rfsId == $(this).text().substr(0,4)){

@@ -129,7 +129,7 @@ class rfsTable extends DbTable {
         <?php
 
         while(($row=db2_fetch_assoc($rs))==true){
-            ?>knownRfs.push("<?=trim($row['RFS_ID']);?>");
+            ?>knownRfs.push("<?=strtoupper(trim($row['RFS_ID']));?>");
             <?php
         }
         ?></script><?php
