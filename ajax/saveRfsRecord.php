@@ -11,6 +11,8 @@ use itdq\Loader;
 set_time_limit(0);
 ob_start();
 
+$loader = new Loader();
+
 $parmsTrimmed = array_map('trim', $_POST);
 
 $rfsId = !empty($_POST['RFS_ID']) ? trim($_POST['RFS_ID']) : null;

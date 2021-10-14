@@ -7,7 +7,7 @@ use itdq\BluePages;
 
 class emailNotifications
 {
-    static function sendNotification($resourceReference,$emailEntry, $emailPattern){
+    static function sendNotification($resourceReference, $emailEntry, $emailPattern){
     
         $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
         $resourceRequestData = $resourceTable->getPredicate(" RESOURCE_REFERENCE='" . db2_escape_string($resourceReference) . "' ");
