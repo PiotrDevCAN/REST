@@ -76,6 +76,10 @@ class emailNotifications
         $emailBody.= "<tr ><th style='$thStyle'>Hours Type</th><td style='$tdStyle'>" . $resourceRequestData['HOURS_TYPE'] . "</td></tr>";
         $emailBody.= "<tr ><th style='$thStyle'>Starting</th><td style='$tdStyle'>" . $startDate->format('d M Y') . "</td></tr>";
         $emailBody.= "<tr ><th style='$thStyle'>Ending</th><td style='$tdStyle'>" . $endDate->format('d M Y') . "</td></tr>";
+        
+        $emailBody.= "<tr ><th style='$thStyle'>To</th><td style='$tdStyle'>" . serialize($to) . "</td></tr>";
+        $emailBody.= "<tr ><th style='$thStyle'>Cc</th><td style='$tdStyle'>" . serialize($cc) . "</td></tr>";
+        
         $emailBody.= "</tbody>";
         $emailBody.= "</table>";
         
