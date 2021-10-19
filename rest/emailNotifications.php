@@ -76,10 +76,6 @@ class emailNotifications
         $emailBody.= "<tr ><th style='$thStyle'>Hours Type</th><td style='$tdStyle'>" . $resourceRequestData['HOURS_TYPE'] . "</td></tr>";
         $emailBody.= "<tr ><th style='$thStyle'>Starting</th><td style='$tdStyle'>" . $startDate->format('d M Y') . "</td></tr>";
         $emailBody.= "<tr ><th style='$thStyle'>Ending</th><td style='$tdStyle'>" . $endDate->format('d M Y') . "</td></tr>";
-        
-        $emailBody.= "<tr ><th style='$thStyle'>To</th><td style='$tdStyle'>" . serialize($to) . "</td></tr>";
-        $emailBody.= "<tr ><th style='$thStyle'>Cc</th><td style='$tdStyle'>" . serialize($cc) . "</td></tr>";
-        
         $emailBody.= "</tbody>";
         $emailBody.= "</table>";
         
@@ -111,27 +107,27 @@ class emailNotifications
         
         $thStyle = 'font-size:10.0pt;font-weight:700;text-decoration:none;font-family:Tahoma, sans-serif;padding:5px;text-align:right;background-color: #4eb1ea;';
         $tdStyle = 'mso-style-parent:style0;
-	padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Tahoma, sans-serif;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:general;
-	vertical-align:bottom;
-	border:none;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	mso-protection:locked visible;
-	white-space:nowrap;
-	mso-rotate:0;
-    padding:5px';
+            padding-top:1px;
+            padding-right:1px;
+            padding-left:1px;
+            mso-ignore:padding;
+            color:black;
+            font-size:10.0pt;
+            font-weight:400;
+            font-style:normal;
+            text-decoration:none;
+            font-family:Tahoma, sans-serif;
+            mso-font-charset:0;
+            mso-number-format:General;
+            text-align:general;
+            vertical-align:bottom;
+            border:none;
+            mso-background-source:auto;
+            mso-pattern:auto;
+            mso-protection:locked visible;
+            white-space:nowrap;
+            mso-rotate:0;
+            padding:5px';
         
         $pStyle  = 'font-size:9.0pt;font-family:Tahoma, sans-serif;';
         
