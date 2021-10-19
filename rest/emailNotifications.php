@@ -4,6 +4,7 @@ namespace rest;
 
 use itdq\BlueMail;
 use itdq\BluePages;
+use itdq\BluePagesSLAPHAPI;
 
 class emailNotifications
 {
@@ -15,48 +16,51 @@ class emailNotifications
         $startDate = new \DateTime($resourceRequestData['START_DATE']);
         $endDate   = new \DateTime($resourceRequestData['END_DATE']);
         
-        $resourceNotesid = isset($resourceRequestData['RESOURCE_NAME']) ? $resourceRequestData['RESOURCE_NAME']  : null ;
+        // get resource details
+        $resourceNotesid = isset($resourceRequestData['RESOURCE_NAME']) ? trim($resourceRequestData['RESOURCE_NAME'])  : null ;
+        $resourceEmail = !empty($resourceNotesid) ? BluePages::getIntranetIdFromNotesId($resourceNotesid) : null ;
+        
+        // get requestor details
         $requestorEmail = rfsTable::getRequestorEmail($resourceRequestData['RFS']);
         
-        if(empty($resourceNotesid)){
+        if(empty($resourceNotesid) && empty($requestorEmail)){
             // No one to notify, so don't send to anyone.
             return false;            
         }
-        
-        $resourceEmail = !empty($resourceNotesid) ? BluePages::getIntranetIdFromNotesId($resourceNotesid) : null ;
-        
-        $to = !empty($requestorEmail) ? array($resourceEmail) : array($requestorEmail); // If we have a RESOURCE_NAME send it to them, else just to the REQUESTOR
-        $cc = substr(trim(strtolower($requestorEmail)),-7 ) === 'ibm.com' ?  array($requestorEmail) : array(); // CC the requestor, if we have an IBM email address for them.
-        
+
+        // If we have a RESOURCE_NAME send it to them, else just to the REQUESTOR
+        $to = !empty($resourceEmail) ? array($resourceEmail) : array($requestorEmail);
+        // CC the requestor, if we have an IBM email address for them.
+        $cc = substr(trim(strtolower($requestorEmail)),-7 ) === 'ibm.com' ?  array($requestorEmail) : array();
+
         $replacements = array();
         foreach ($emailPattern as $field => $pattern) {
             $replacements[] = $resourceRequestData[$field];
         }
         
-        
         $thStyle = 'font-size:10.0pt;font-weight:700;text-decoration:none;font-family:Tahoma, sans-serif;padding:5px;text-align:right;background-color: #4eb1ea;';
         $tdStyle = 'mso-style-parent:style0;
-	padding-top:1px;
-	padding-right:1px;
-	padding-left:1px;
-	mso-ignore:padding;
-	color:black;
-	font-size:10.0pt;
-	font-weight:400;
-	font-style:normal;
-	text-decoration:none;
-	font-family:Tahoma, sans-serif;
-	mso-font-charset:0;
-	mso-number-format:General;
-	text-align:general;
-	vertical-align:bottom;
-	border:none;
-	mso-background-source:auto;
-	mso-pattern:auto;
-	mso-protection:locked visible;
-	white-space:nowrap;
-	mso-rotate:0;
-    padding:5px';
+            padding-top:1px;
+            padding-right:1px;
+            padding-left:1px;
+            mso-ignore:padding;
+            color:black;
+            font-size:10.0pt;
+            font-weight:400;
+            font-style:normal;
+            text-decoration:none;
+            font-family:Tahoma, sans-serif;
+            mso-font-charset:0;
+            mso-number-format:General;
+            text-align:general;
+            vertical-align:bottom;
+            border:none;
+            mso-background-source:auto;
+            mso-pattern:auto;
+            mso-protection:locked visible;
+            white-space:nowrap;
+            mso-rotate:0;
+            padding:5px';
         
         $pStyle  = 'font-size:9.0pt;font-family:Tahoma, sans-serif;';
         

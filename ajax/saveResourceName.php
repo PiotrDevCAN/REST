@@ -21,17 +21,19 @@ try {
     $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);   
     $currentResource = $resourceTable->getResourceName($resourceReference);
     $allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
-       
+    
     if(empty($clear) && $currentResource && (strtolower($currentResource) != strtolower(trim($resourceName))) && (substr($currentResource,0,5)!=='Delta')){        
+        // resource removed notification
         $emailEntry = "You have been <b>removed from</b> RFS &&rfs&& by $allocatorNotesid ";
         $emailPattern = array('RFS'=>'/&&rfs&&/');
-        emailNotifications::sendNotification($resourceReference,$emailEntry, $emailPattern);
+        emailNotifications::sendNotification($resourceReference, $emailEntry, $emailPattern);
     }
-        
+    
     if(!empty($clear)){
+        // resource unallocated notification
         $emailEntry = "You have been <b>unallocated</b> from RFS &&rfs&& by $allocatorNotesid ";
         $emailPattern = array('RFS'=>'/&&rfs&&/');
-        emailNotifications::sendNotification($resourceReference,$emailEntry, $emailPattern);         
+        emailNotifications::sendNotification($resourceReference, $emailEntry, $emailPattern);         
     }
     
     $resourceTable->updateResourceName($resourceReference, $resourceName, $clear);    
@@ -39,9 +41,10 @@ try {
     resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
     
     if(empty($clear)){
+        // resource allocated notification
         $emailEntry = "You have been <b>allocated to</b> RFS &&rfs&& by $allocatorNotesid ";
         $emailPattern = array('RFS'=>'/&&rfs&&/');
-        emailNotifications::sendNotification($resourceReference,$emailEntry, $emailPattern); 
+        emailNotifications::sendNotification($resourceReference, $emailEntry, $emailPattern); 
     }  
     
     $exception = false;

@@ -110,16 +110,28 @@ class BluePagesSLAPHAPI {
 		return $cleanId;
 	}
 
-	static public function dirtyNotesId($notesId){
-		$sp = strpos($notesId,'/O=IBM');
-		if($sp != FALSE){
-			$amendIbm2 = $notesId;
+	static function buildNotesId($notesId){
+		$sp = strpos(strtolower($notesId),'ocean');
+		if($sp === FALSE){
+			return self::buildIBMNotesId($notesId);
 		} else {
-			$amendIbm = str_replace("/IBM","xxxxx",$notesId);
-			$amendCC  = str_replace("/","/OU=",$amendIbm);
-			$amendIbm2 = str_replace("xxxxx","/O=IBM",$amendCC);
-			$amendIbm2 = "CN=" . $amendIbm2;
+			return self::buildOceanNotesId($notesId);
 		}
+	}
+
+	static function buildIBMNotesId($notesId){
+		$amendIbm = str_replace("/IBM","xxxxx",$notesId);
+		$amendCC  = str_replace("/","/OU=",$amendIbm);
+		$amendIbm2 = str_replace("xxxxx","/O=IBM",$amendCC);
+		$amendIbm2 = "CN%3D" . urlencode($amendIbm2);
+		return $amendIbm2;
+	}
+
+	static function buildOceanNotesId($notesId){
+		$amendIbm = str_replace("/OCEAN","xxxxx",$notesId);
+		$amendCC  = str_replace("/","/OU=",$amendIbm);
+		$amendIbm2 = str_replace("xxxxx","/O=OCEAN",$amendCC);
+		$amendIbm2 = "CN%3D" . urlencode($amendIbm2);
 		return $amendIbm2;
 	}
 
@@ -268,10 +280,7 @@ class BluePagesSLAPHAPI {
 		if($sp != FALSE){
 			$amendIbm2 = urlencode(trim($notesId));
 		} else {
-			$amendIbm = str_replace("/IBM","xxxxx",$notesId);
-			$amendCC  = str_replace("/","/OU=",$amendIbm);
-			$amendIbm2 = str_replace("xxxxx","/O=IBM",$amendCC);
-			$amendIbm2 = "CN%3D" . urlencode($amendIbm2);
+			$amendIbm2 = self::buildNotesId($notesId);
 		}
 		$ch = curl_init ( str_replace('NOTES_ID_HERE',$amendIbm2,$url) );
 		return self::processDetails($ch);
@@ -351,10 +360,7 @@ class BluePagesSLAPHAPI {
 		if($sp != FALSE){
 			$amendIbm2 = urlencode(trim($notesId));
 		} else {
-			$amendIbm = str_replace("/IBM","xxxxx",$notesId);
-			$amendCC  = str_replace("/","/OU=",$amendIbm);
-			$amendIbm2 = str_replace("xxxxx","/O=IBM",$amendCC);
-			$amendIbm2 = "CN%3D" . urlencode($amendIbm2);
+			$amendIbm2 = self::buildNotesId($notesId);
 		}
         // echo "<BR/>URL:" . str_replace('NOTES_ID_HERE',$amendIbm2,$url);
 		$ch = curl_init ( str_replace('NOTES_ID_HERE',$amendIbm2,$url) );
@@ -415,12 +421,9 @@ class BluePagesSLAPHAPI {
 		if($sp != FALSE){
 			$amendIbm2 = urlencode(trim($notesId));
 		} else {
-			$amendIbm = str_replace("/IBM","xxxxx",$notesId);
-			$amendCC  = str_replace("/","/OU=",$amendIbm);
-			$amendIbm2 = str_replace("xxxxx","/O=IBM",$amendCC);
-			$amendIbm2 = "CN%3D" . urlencode($amendIbm2);
+			$amendIbm2 = self::buildNotesId($notesId);
 		}
-        echo "<BR/>URL:" . str_replace('NOTES_ID_HERE',$amendIbm2,$url);
+        // echo "<BR/>URL:" . str_replace('NOTES_ID_HERE',$amendIbm2,$url);
 		$ch = curl_init ( str_replace('NOTES_ID_HERE',$amendIbm2,$url) );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
 		$m = curl_exec ( $ch );
