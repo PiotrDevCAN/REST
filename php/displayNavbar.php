@@ -28,10 +28,12 @@ $cdiAdmin->addOption($traceControl);
 $cdiAdmin->addOption($traceDelete);
 
 $adminMenu      = new NavbarMenu('REST Admin','accessCdi accessAdmin');
-$organisation   = new NavbarOption('Organisation','pa_organisation.php'               ,'accessCdi accessAdmin');
+$organisation   = new NavbarOption('Organisation','pa_organisation.php','accessCdi accessAdmin');
 $adminMenu->addOption($organisation);
-$VBACactiveResources 		= new NavbarOption('VBAC Active Resources','pa_activeResources.php'					  ,'accessCdi accessAdmin');
+$VBACactiveResources = new NavbarOption('VBAC Active Resources','pa_activeResources.php','accessCdi accessAdmin');
 $adminMenu->addOption($VBACactiveResources);
+$RFSToArchiveUpload = new NavbarOption('RFS To Archive Upload','pc_RFSToArchiveUpload.php','accessCdi accessAdmin');
+$adminMenu->addOption($RFSToArchiveUpload);
 
 $request        = new NavbarMenu(  'Request'                                          ,'accessCdi accessAdmin accessDemand accessRfs');
 $newRfs         = new NavbarOption('New RFS','pr_newRfs.php'                          ,'accessCdi accessAdmin accessDemand accessRfs');
