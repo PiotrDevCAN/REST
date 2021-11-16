@@ -176,7 +176,7 @@ class rfsRecord extends DbRecord
                     $displayValue = trim($value);
                     $returnValue = trim($value);
                 ?>
-				<option value='<?=$returnValue?>' <?=trim($this->VALUE_STREAM)==$returnValue ? 'selected' : null;?>><?=$displayValue?></option>
+				<option value='<?=$returnValue?>' <?=htmlspecialchars_decode(trim($this->VALUE_STREAM))==htmlspecialchars_decode($returnValue) ? 'selected' : null;?>><?=$displayValue?></option>
 				<?php } ?>
            	</select>
 		</div>
@@ -217,7 +217,7 @@ class rfsRecord extends DbRecord
 				<div class="col-md-1">
         			<?php
         		      foreach (self::$rfsType as $rfsType) {
-        		          $checked = trim($this->RFS_TYPE)== $rfsType ? ' checked ' : null;
+        		          $checked = htmlspecialchars_decode(trim($this->RFS_TYPE))==htmlspecialchars_decode(trim($rfsType)) ? ' checked ' : null;
         		      ?><label class="radio"><input type="radio"
 						name="RFS_TYPE" <?=$checked?> value='<?=$rfsType?>'
 						required='required'><small><?=str_replace(' ', '&nbsp;', $rfsType)?></small></label>

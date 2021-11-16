@@ -19,10 +19,14 @@ $rfsId = !empty($_POST['RFS_ID']) ? trim($_POST['RFS_ID']) : null;
 
 // rfs exists check
 $rfsAlreadyExists = false;
-$exists = $loader->load('RFS_ID', allTables::$RFS, "RFS_ID='$rfsId'");
-foreach ($exists as $value) {
-    if (trim($value) == $rfsId) {
-        $rfsAlreadyExists = true;
+if(trim($_POST['mode'])==FormClass::$modeEDIT){
+    // skip this check while updating a record
+} else {
+    $exists = $loader->load('RFS_ID', allTables::$RFS, "RFS_ID='$rfsId'");
+    foreach ($exists as $value) {
+        if (trim($value) == $rfsId) {
+            $rfsAlreadyExists = true;
+        }
     }
 }
 
