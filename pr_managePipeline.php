@@ -98,7 +98,6 @@ $(document).ready(function() {
 	rfs.listenForConfirmArchiveRfs();
 });
 
-
 $(document).on('shown.bs.modal',function(e){
 	var rfs = new Rfs();
 	rfs.preventDuplicateRfsEntry();

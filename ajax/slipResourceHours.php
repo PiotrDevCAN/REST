@@ -10,7 +10,7 @@ use rest\resourceRequestHoursTable;
 set_time_limit(0);
 ob_start();
 /*
- * Read the existing records for this Resouce Request into an array.
+ * Read the existing records for this Resource Request into an array.
  *
  * Delete all the existing hours records for this resource request
  *

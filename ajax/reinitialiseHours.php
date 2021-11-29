@@ -25,6 +25,13 @@ $invalidTotalHoursAmount = empty($totalHours);
 $invalidStartDate = resourceRequestTable::validateDate($startDate) === false;
 $invalidEndDate = resourceRequestTable::validateDate($endDate) === false;
 
+$endDatePriorStartDate = false;
+if ($invalidStartDate !== false  && $invalidEndDate !== false) {
+    if ($startDate > $endDate) {
+        $endDatePriorStartDate = true;
+    }
+}
+
 if ($resourceReference == null || $startDate == null || $endDate == null) {
     $invalidOtherParameters = true;
 } else {
@@ -39,23 +46,27 @@ $diaryRef = '';
 switch (true) {
     case $invalidRateType:
         // rate type protection
-        $messages = 'Cannot save Resouce Request with provided Rate Type value.';
+        $messages = 'Cannot save Resource Request with provided Rate Type value.';
         break;
     case $invalidHoursType:
         // hours type protection
-        $messages = 'Cannot save Resouce Request with provided Hours Type value.';
+        $messages = 'Cannot save Resource Request with provided Hours Type value.';
         break;
     case $invalidTotalHoursAmount:
         // zero total hours protection
-        $messages = 'Cannot save Resouce Request with zero total hours.';
+        $messages = 'Cannot save Resource Request with zero total hours.';
         break;
     case $invalidStartDate:
         // start date protection
-        $messages = 'Cannot save Resouce Request with zprovided Start Date value.';
+        $messages = 'Cannot save Resource Request with zprovided Start Date value.';
         break;
     case $invalidEndDate:
         // end date protection
-        $messages = 'Cannot save Resouce Request with provided End Date value.';
+        $messages = 'Cannot save Resource Request with provided End Date value.';
+        break;
+    case $endDatePriorStartDate:
+        // end date prior to start date protection
+        $messages = 'Cannot save Resource Request with provided End Date prior to Start Date.';
         break; 
     case $invalidOtherParameters:
         // required parameters protection

@@ -26,10 +26,13 @@ class rfsTable extends DbTable {
     static function buildHTMLRequestsTable($tableId = 'rfs'){
         $nextMonthObj = new \DateTime();
         $thisMonthObj = new \DateTime();
-        $thisMonthObj->setDate($thisMonthObj->format('Y'), $thisMonthObj->format('m'), 01);
+        $thisYear = $thisMonthObj->format('Y');
+        $thisMonth = $thisMonthObj->format('m');
+        $thisMonthObj->setDate($thisYear, $thisMonth, 01);
         $thisMonthsClaimCutoff = DateClass::claimMonth($thisMonthObj->format('d-m-Y'));
+        $thisMonthsClaimCutoff->add(new \DateInterval('P1D'));
 
-        $nextMonthObj > $thisMonthsClaimCutoff ? $nextMonthObj->add(new \DateInterval('P1M')) : null;
+        $nextMonthObj >= $thisMonthsClaimCutoff ? $nextMonthObj->add(new \DateInterval('P1M')) : null;
         $oneMonth = new DateInterval('P1M');
         $monthLabels = array();
 
@@ -155,10 +158,13 @@ class rfsTable extends DbTable {
         
         $startMonthObj = new \DateTime();
         $thisMonthObj = new \DateTime();
-        $thisMonthObj->setDate($thisMonthObj->format('Y'), $thisMonthObj->format('m'), 01);
+        $thisYear = $thisMonthObj->format('Y');
+        $thisMonth = $thisMonthObj->format('m');
+        $thisMonthObj->setDate($thisYear, $thisMonth, 01);
         $thisMonthsClaimCutoff = DateClass::claimMonth($thisMonthObj->format('d-m-Y'));
-      
-        $startMonthObj > $thisMonthsClaimCutoff ? $startMonthObj->add(new \DateInterval('P1M')) : null;
+        $thisMonthsClaimCutoff->add(new \DateInterval('P1D'));
+
+        $startMonthObj >= $thisMonthsClaimCutoff ? $startMonthObj->add(new \DateInterval('P1M')) : null;
         $startYear  = $startMonthObj->format('Y');
         $startMonth = $startMonthObj->format('m');
         
@@ -249,6 +255,9 @@ class rfsTable extends DbTable {
         } else {
             $row['RFS_ID'] = ""; /// Need something so next statement can be an append.
         }
+
+        $archiveable = true;
+        $pipelineRfs = true;
 
         $row['RFS_ID'] .= $pipelineRfs  ? "<button type='button' class='btn btn-success btn-xs goLiveRfs accessRestrict accessAdmin accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "' >
               <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Release to Live' ></span>
@@ -462,7 +471,7 @@ class rfsTable extends DbTable {
         $sql.= " AND ARCHIVE is null ";
         $sql.= " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE ";
         $sql.= !empty($predicate) ? " AND  $predicate " : null ;
-        
+
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
         $allData = null;

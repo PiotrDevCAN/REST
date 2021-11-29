@@ -30,16 +30,23 @@ $resourceName = !empty($_POST['RESOURCE_NAME']) ? trim($_POST['RESOURCE_NAME']) 
 $status = !empty($_POST['STATUS']) ? trim($_POST['STATUS']) : '';
 $rrCreator = !empty($_POST['RR_CREATOR']) ? trim($_POST['RR_CREATOR']) : '';
 
+if ($startDate == null || $endDate == null || $rateType == null || $organisation == null || $service == null || $mode == '') {
+    $invalidOtherParameters = true;
+} else {
+    $invalidOtherParameters = false;
+}
+
 $invalidRateType = !in_array($rateType, resourceRequestRecord::$allRateTypes);
 $invalidHoursType = !in_array($hoursType, resourceRequestRecord::$allHourTypes);
 $invalidTotalHoursAmount = empty($totalHours);
 $invalidStartDate = resourceRequestTable::validateDate($startDate) === false;
 $invalidEndDate = resourceRequestTable::validateDate($endDate) === false;
 
-if ($startDate == null || $endDate == null || $rateType == null || $organisation == null || $service == null || $mode == null) {
-    $invalidOtherParameters = true;
-} else {
-    $invalidOtherParameters = false;
+$endDatePriorStartDate = false;
+if ($invalidStartDate !== false  && $invalidEndDate !== false) {
+    if ($startDate > $endDate) {
+        $endDatePriorStartDate = true;
+    }
 }
 
 // default validation values
@@ -49,30 +56,34 @@ $create = false;
 $update = false;
 
 switch (true) {
-    case $invalidRateType:
-        // rate type protection
-        $messages = 'Cannot save Resouce Request with provided Rate Type value.';
-        break;
-    case $invalidHoursType:
-        // hours type protection
-        $messages = 'Cannot save Resouce Request with provided Hours Type value.';
-        break;
-    case $invalidTotalHoursAmount:
-        // zero total hours protection
-        $messages = 'Cannot save Resouce Request with zero total hours.';
-        break;
-    case $invalidStartDate:
-        // start date protection
-        $messages = 'Cannot save Resouce Request with zprovided Start Date value.';
-        break;
-    case $invalidEndDate:
-        // end date protection
-        $messages = 'Cannot save Resouce Request with provided End Date value.';
-        break; 
     case $invalidOtherParameters:
         // required parameters protection
         $messages = 'Significant parameters from form are missing.';
-        break;       
+        break;
+    case $invalidRateType:
+        // rate type protection
+        $messages = 'Cannot save Resource Request with provided Rate Type value.';
+        break;
+    case $invalidHoursType:
+        // hours type protection
+        $messages = 'Cannot save Resource Request with provided Hours Type value.';
+        break;
+    case $invalidTotalHoursAmount:
+        // zero total hours protection
+        $messages = 'Cannot save Resource Request with zero total hours.';
+        break;
+    case $invalidStartDate:
+        // start date protection
+        $messages = 'Cannot save Resource Request with provided Start Date value.';
+        break;
+    case $invalidEndDate:
+        // end date protection
+        $messages = 'Cannot save Resource Request with provided End Date value.';
+        break;
+    case $endDatePriorStartDate:
+        // end date prior to start date protection
+        $messages = 'Cannot save Resource Request with provided End Date prior to Start Date.';
+        break;
     default:
         $autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
@@ -162,7 +173,7 @@ switch (true) {
                 }
                 break;
             default:
-                echo 'Cannot save Resouce Request with provided Mode value.';
+                echo 'Cannot save Resource Request with provided Mode value.';
                 break;
         }
 

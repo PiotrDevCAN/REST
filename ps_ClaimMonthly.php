@@ -128,13 +128,13 @@ td.dataTables_empty {
 
 $(document).ready(function() {
 	
-	$(".select").select2();
+    $(".select").select2();
 
     var rfs = new Rfs();
-	rfs.buildClaimReport();
-	rfs.listenForSelectRequestor();
-	rfs.listenForSelectValueStream();
-	rfs.listenForSelectBusinessUnit();
-	rfs.listenForSelectRfs();
+    rfs.buildClaimReport();
+    rfs.listenForSelectRequestor();
+    rfs.listenForSelectValueStream();
+    rfs.listenForSelectBusinessUnit();
+    rfs.listenForSelectRfs();
 });
 </script>

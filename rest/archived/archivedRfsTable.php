@@ -28,10 +28,13 @@ class archivedRfsTable extends DbTable {
     static function buildHTMLRequestsTable($tableId = 'rfs'){
         $nextMonthObj = new \DateTime();
         $thisMonthObj = new \DateTime();
-        $thisMonthObj->setDate($thisMonthObj->format('Y'), $thisMonthObj->format('m'), 01);
+        $thisYear = $thisMonthObj->format('Y');
+        $thisMonth = $thisMonthObj->format('m');
+        $thisMonthObj->setDate($thisYear, $thisMonth, 01);
         $thisMonthsClaimCutoff = DateClass::claimMonth($thisMonthObj->format('d-m-Y'));
+        $thisMonthsClaimCutoff->add(new \DateInterval('P1D'));
 
-        $nextMonthObj > $thisMonthsClaimCutoff ? $nextMonthObj->add(new \DateInterval('P1M')) : null;
+        $nextMonthObj >= $thisMonthsClaimCutoff ? $nextMonthObj->add(new \DateInterval('P1M')) : null;
         $oneMonth = new DateInterval('P1M');
         $monthLabels = array();
 
@@ -157,10 +160,13 @@ class archivedRfsTable extends DbTable {
         
         $startMonthObj = new \DateTime();
         $thisMonthObj = new \DateTime();
-        $thisMonthObj->setDate($thisMonthObj->format('Y'), $thisMonthObj->format('m'), 01);
+        $thisYear = $thisMonthObj->format('Y');
+        $thisMonth = $thisMonthObj->format('m');
+        $thisMonthObj->setDate($thisYear, $thisMonth, 01);
         $thisMonthsClaimCutoff = DateClass::claimMonth($thisMonthObj->format('d-m-Y'));
+        $thisMonthsClaimCutoff->add(new \DateInterval('P1D'));
       
-        $startMonthObj > $thisMonthsClaimCutoff ? $startMonthObj->add(new \DateInterval('P1M')) : null;
+        $startMonthObj >= $thisMonthsClaimCutoff ? $startMonthObj->add(new \DateInterval('P1M')) : null;
         $startYear  = $startMonthObj->format('Y');
         $startMonth = $startMonthObj->format('m');
         

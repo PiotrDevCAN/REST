@@ -265,7 +265,7 @@ class resourceRequestTable extends DbTable {
                 $started     = 'Unclear';
             break;
         }
-        
+
         strstr($_ENV['environment'], 'ut')  ? $editable = true : null;
         
         $row['STATUS']= $completeable ? 
