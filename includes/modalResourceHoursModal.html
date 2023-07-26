@@ -1,0 +1,169 @@
+<!-- Modal -->
+<div id="resourceHoursModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">Amend Hours</h4>
+      </div>
+      <div class="modal-body" id="editResourceHours">
+        <div class="container-fluid">
+          <h2>Edit Hours for Resource Request</h2>
+          <div class='row'>
+            <div class='col-md-3'>
+              <div class="pull-right">
+                <p><b>RFS:</b></p>
+              </div>
+            </div>
+            <div class='col-md-3'>
+              <p><span id='editHoursRfs'></span></p>
+            </div>
+            <div class='col-md-3'>
+              <div class="pull-right">
+                <p><b>PRN:</b></p>
+              </div>
+            </div>
+            <div class='col-md-3'>
+              <p><span id='editHoursPrn'></span></p>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-md-3'>
+              <div class="pull-right">
+                <p><b>Value Stream:</b></p>
+              </div>
+            </div>
+            <div class='col-md-3'>
+              <p><span id='editHoursValueStream'></span></p>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-md-3'>
+              <div class="pull-right">
+                <p><b>Service:</b></p>
+              </div>
+            </div>
+            <div class='col-md-9'>
+              <p><span id='editHoursService'></span><br /><small>(<span id='editHoursSubService'></span>)</small></p>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-md-3'>
+              <div class="pull-right">
+                <p><b>Resource Name:</b></p>
+              </div>
+            </div>
+            <div class='col-md-9'>
+              <p><span id='editHoursResourceName'></span></p>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-md-3'>
+              <div class="pull-right">
+                <p><b>Hours Type:</b></p>
+              </div>
+            </div>
+
+            <div class='col-md-3'>
+              <label class="radio-inline">
+                <input type="radio" name="HOURS_TYPE" value='Regular' required>Regular
+              </label>
+            </div>
+            <div class='col-md-3'>
+              <label class="radio-inline">
+                <input type="radio" name="HOURS_TYPE" value='Weekday Overtime' required>Weekday Overtime
+              </label>
+            </div>
+            <div class='col-md-3'>
+              <label class="radio-inline">
+                <input type="radio" name="HOURS_TYPE" value='Weekend Overtime' required>Weekend Overtime
+              </label>
+            </div>
+            <input id="originalHoursType" name="originalHoursType" value="" type="hidden">
+
+          </div>
+
+          <hr />
+
+          <form id='resourceHoursForm'>
+            <input type='hidden' name='ModalResourceReference' id='ModalResourceReference' value='' />
+            <div class='row'>
+              <div class='form-group'>
+                <div id='ModalSTART_DATEFormGroup'>
+                  <label for='ModalSTART_DATE' class='col-md-2 control-label ' data-toggle='tooltip'
+                    data-placement='top' title=''>Start Date</label>
+                  <div class='col-md-4'>
+                    <div id='calendarFormGroupModalSTART_DATE' class='input-group date form_datetime'
+                      data-date-format='dd MM yyyy - HH:ii p' data-link-field='ModalSTART_DATE'
+                      data-link-format='yyyy-mm-dd-hh.ii.00'>
+                      <input id='InputModalSTART_DATE' class='form-control' type='text' value=''
+                        placeholder='Select From' required />
+                      <input type='hidden' id='ModalSTART_DATE' name='ModalSTART_DATE' value='' />
+                      <!-- <input type='hidden' id='startDateWas' name='startDateWas' value='' /> -->
+                      <span class='input-group-addon'><span id='calendarIconModalSTART_DATE'
+                          class='glyphicon glyphicon-calendar'></span></span>
+                    </div>
+                  </div>
+                </div>
+                <div id='ModalEND_DATEFormGroup'>
+                  <label for='ModalEND_DATE' class='col-md-2 control-label ' data-toggle='tooltip' data-placement='top'
+                    title=''>End Date</label>
+                  <div class='col-md-4'>
+                    <div id='calendarFormGroupModalEND_DATE' class='input-group date form_datetime'
+                      data-date-format='dd MM yyyy - HH:ii p' data-link-field='ModalEND_DATE'
+                      data-link-format='yyyy-mm-dd-hh.ii.00'>
+                      <input id='InputModalEND_DATE' class='form-control' type='text' value='' placeholder='Select To'
+                        required />
+                      <input type='hidden' id='ModalEND_DATE' name='ModalEND_DATE' value='' />
+                      <!-- <input type='hidden' id='endDateWas' name='endDateWas' value='' /> -->
+                      <span class='input-group-addon'><span id='calendarIconModalEND_DATE'
+                          class='glyphicon glyphicon-calendar'></span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class='row'>
+              <div class='form-group total-hours-group'>
+                <label for="ModalTOTAL_HOURS" class="col-md-2 control-label" data-toggle="tooltip" data-placement="top"
+                  title="">Total Hours</label>
+                <div class="col-md-4">
+                  <input type='number' step='0.01' min='0' max='1000' class="form-control" id="ModalTOTAL_HOURS"
+                    name="ModalTOTAL_HOURS" value="" placeholder="Total Hours">
+                  <input type='hidden' id='originalTotalHours'>
+                  <input type='hidden' id='ModalHOURS_TYPE' name='ModalHOURS_TYPE'>
+                  <input type='hidden' id='ModalRATE_TYPE' name='ModalRATE_TYPE'>
+                </div>
+              </div>
+            </div>
+
+            <div class='row'>
+              <div class='col-sm-2'></div>
+              <div class='col-sm-8'>
+                <p>
+                  <button type="button" class="btn btn-sm btn-warning  " id='reinitialise' data-toggle='tooltip'
+                    data-placement='top'
+                    title='Using the Hours Type, Start Date, End Date and Total Hours from this form, will reset the hours profile for the request'>Re-Initialise</button>
+                </p>
+              </div>
+              <div class='col-sm-2'></div>
+            </div>
+
+            <div class='form-horizontal' id='HrsForWefForm'></div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer" id="editResourceHoursFooter">
+        <button type="button" class="btn btn-warning" id='saveAdjustedHoursWithDelta' data-toggle='tooltip'
+          data-placement='top'
+          title='Create a clone but with the hours that have been removed from this request.'>Auto-Delta</button>
+        <button type="button" class="btn btn-primary" id='saveAdjustedHours' title=''>Adjust Hrs Profile</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

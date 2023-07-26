@@ -1,0 +1,49 @@
+
+
+--- IDENT ----
+DATABASE=BLUDB;
+HOSTNAME=86fada07-8050-4bcd-8752-0b7ce7c970e0.bs2io90l08kqb1od8lcg.databases.appdomain.cloud;
+PORT=32195;
+UID=inslfhjt;
+PWD=H27nxZ23Jo7JKVC1;
+--- PROTOCOL=TCPIP;
+--- Security=SSL;
+
+
+--- VBAC ----
+DATABASE=BLUDB;
+HOSTNAME=c15181cf-6848-4997-bb0b-6b9583c1fc3a.bs2io90l08kqb1od8lcg.databases.appdomain.cloud;
+PORT=32688;
+UID=ijz7q3o7;
+PWD=qKXcgjUR2YGJK21u;
+--- PROTOCOL=TCPIP;
+--- Security=SSL;
+
+
+--- REST ---
+DATABASE=BLUDB;
+HOSTNAME=eae49ab2-29e2-4934-96c7-96d87c14058b.bs2io90l08kqb1od8lcg.databases.appdomain.cloud;
+PORT=30441;
+UID=iS41lP04;
+PWD=NOvdhhMpq2seW5UV;
+--- PROTOCOL=TCPIP;
+--- Security=SSL;
+
+
+--- UPES ----
+DATABASE=BLUDB;
+HOSTNAME=541923aa-a2a2-40a4-9e67-94eb6e88d5f5.bs2io90l08kqb1od8lcg.databases.appdomain.cloud;
+PORT=30725;
+UID=iae2chzk;PWD=voJchMHqPNqo3mVk;
+--- PROTOCOL=TCPIP;
+--- Security=SSL;
+
+
+--- DCOM ---
+DATABASE=BLUDB;
+HOSTNAME=eae49ab2-29e2-4934-96c7-96d87c14058b.bs2io90l08kqb1od8lcg.databases.appdomain.cloud;
+PORT=30441;
+UID=iS41lP04;
+PWD=NOvdhhMpq2seW5UV;
+--- PROTOCOL=TCPIP;
+--- Security=SSL;

@@ -29,10 +29,21 @@ class allTables
     public static $RFS                    = 'RFS';    
     public static $RFS_DATE_RANGE         = 'RFS_DATE_RANGE'; // View
     public static $RFS_PIPELINE           = 'RFS_PIPELINE';  // View
+    public static $RFS_PCR                = 'RFS_PCR'; 
 
  //   public static $STATIC_BUSINESS_UNIT   = 'STATIC_BUSINESS_UNIT'; Now a field in Value Stream.
     public static $STATIC_VALUE_STREAM    = 'STATIC_VALUE_STREAM';
     public static $STATIC_ORGANISATION    = 'STATIC_ORGANISATION';
+
+    public static $STATIC_BAND            = 'STATIC_BAND';
+    public static $STATIC_PS_BAND         = 'STATIC_PS_BAND';
+    public static $STATIC_RESOURCE_TYPE   = 'STATIC_RESOURCE_TYPE';
+    public static $RESOURCE_TYPE_RATES    = 'RESOURCE_TYPE_RATES';
+    public static $RESOURCE_TRAITS        = 'RESOURCE_TRAITS';
+
+    public static $STATIC_SUBCO           = 'STATIC_SUBCO';
+    public static $SUBCO_RATES            = 'SUBCO_RATES';
+    public static $BESPOKE_RATES          = 'BESPOKE_RATES';
 
     public static $ACTIVE_RESOURCE = 'INACTIVE_PERSON';
 }

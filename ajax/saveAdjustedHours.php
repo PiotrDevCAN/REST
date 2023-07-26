@@ -30,17 +30,18 @@ foreach ($_POST as $key => $value){
         $week = substr($key,14,10);
         $hours = $value;
 
-        $data = array($hours,$resourceReference, $week);
-        $result = db2_execute($hoursUpdate,$data);
+        $data = array($hours, $resourceReference, $week);
+        $result = db2_execute($hoursUpdate, $data);
     }
 }
 
-resourceRequestTable::setTotalHours($resourceReference, $_POST['ModalTOTAL_HOURS']);
+$totalHours = !empty($_POST['ModalTOTAL_HOURS']) ? trim($_POST['ModalTOTAL_HOURS']) : 0;
+resourceRequestTable::setTotalHours($resourceReference, $totalHours);
 
 $messages = ob_get_clean();
 ob_start();
 
-$response = array('Messages'=>$messages);
+$response = array('messages'=>$messages);
 
 ob_clean();
 echo json_encode($response);

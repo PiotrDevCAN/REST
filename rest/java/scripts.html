@@ -1,8 +1,225 @@
 <?php
 
-$hash = `git log -1 --pretty=%h`;
+function get_page_mod_time() {
+    $incls = get_included_files();
+    $incls = array_filter($incls, "is_file");
+    $mod_times = array_map('filemtime', $incls);
+    $mod_time = max($mod_times);
+    
+    return $mod_time;
+}
+
+// $hash = `git log -1 --pretty=%h`;
+// $hash = rand(10,100);
+
+$hashMain = date("d F Y", get_page_mod_time());
+$hash = sha1($hashMain);
+$hash = 'v='.substr($hash, 0, 7);
+
+$file = $_SERVER['PHP_SELF'];
+
+// REST Admin
+$isOrganisation = strpos($file, 'pa_organisation.php') !== false;
+$isService = strpos($file, 'pa_service.php') !== false;
+$isOrganisationServices = strpos($file, 'pa_organisationServices.php') !== false;
+
+$isBusinessUnit = strpos($file, 'pa_businessUnit.php') !== false;
+$isValueStream = strpos($file, 'pa_valueStream.php') !== false;
+$isbusinessUnitValueStreams = strpos($file, 'pa_businessUnitValueStreams.php') !== false;
+$isResourceType = strpos($file, 'pa_resourceType.php') !== false;
+
+$isPSBand = strpos($file, 'pa_PSBand.php') !== false;
+$isBand = strpos($file, 'pa_band.php') !== false;
+$isResourceRate = strpos($file, 'pa_resourceRate.php') !== false;
+
+$isResourceTraits = strpos($file, 'pa_resourceTraits.php') !== false;
+$isBespokeRate = strpos($file, 'pa_bespokeRate.php') !== false;
+
+$isActiveResources = strpos($file, 'pa_activeResources.php') !== false;
+$isArchiveUpload = strpos($file, 'pc_RFSToArchiveUpload.php') !== false;
+
+// Request
+$isRfsEntry = strpos($file, 'ps_rfsEntry.php') !== false;
+$isRfsNew = strpos($file, 'pr_newRfs.php') !== false;
+
+$isRfsPcrEntry = strpos($file, 'pr_rfsPcrEntry.php') !== false;
+$isRfsPcrNew = strpos($file, 'pr_newRfsPcr.php') !== false;
+
+$isRRNew = strpos($file, 'pr_newResourceRequest.php') !== false;
+$isPipeline = strpos($file, 'pr_managePipeline.php') !== false;
+
+// Assign
+$isRRList = strpos($file, 'ps_resourceRequests.php') !== false;
+$isRREntry = strpos($file, 'ps_resourceRequestEntry.php') !== false;
+
+// Report
+$isRfsList = strpos($file, 'ps_rfs.php') !== false;
+$isRfsPcrList = strpos($file, 'ps_rfsPcr.php') !== false;
+$isRfsClaim = strpos($file, 'ps_ClaimMonthly.php') !== false;
+$isHoursPerWeek  = strpos($file, 'ps_HoursPerWeekPerResource.php') != false;
+$isRfsNoRR = strpos($file, 'ps_NoResourceRequests.php') !== false;
+$isRRNoMatchBUList = strpos($file, 'ps_CrossBUAssignments.php') !== false;
+
+$isRateCards = strpos($file, 'ps_rateCard.php') != false;
+$isBespokeRates = strpos($file, 'ps_bespokeRates.php') != false;
+$isforecastedHours =  strpos($file, 'ps_forecastedHours.php') != false;
+
 ?>
+<script type="text/javascript">
+    var VERSION = '<?=$hash;?>';
+    var xhrPool = [];
+</script>
+<script type="module" src="rest/java/versioning.js?<?=$hash;?>"></script>
+<script type="module" src="rest/java/modules/helper.js?<?=$hash;?>"></script>
+<script type="module" src="rest/java/modules/displayNavbar.js?<?=$hash;?>"></script>
+<script type="text/javascript" src="rest/java/typeahead.js?<?=$hash;?>"></script>
+<?php
 
-
-<script type="text/javascript" src="rest/java/resourceRequest.js?<?=$hash;?>"></script>
-<script type="text/javascript" src="rest/java/rfs.js?<?=$hash;?>"></script>
+switch (true) {
+    case $isRRList:
+        ?>
+<script type="module" src="rest/java/resourceRequest/list.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isRREntry:
+        ?>
+<script type="module" src="rest/java/resourceRequest/entry.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isRRNew:
+        ?>
+<script type="module" src="rest/java/resourceRequest/entry.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isRRNoMatchBUList:
+        ?>
+<script type="module" src="rest/java/resourceRequest/noMatchBUList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isRateCards:
+        ?>
+<script type="module" src="rest/java/RRateCardsList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isBespokeRates:
+        ?>
+<script type="module" src="rest/java/RRBespokeRatesList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isforecastedHours =  strpos($file, 'ps_forecastedHours.php') != false;
+        ?>
+<script type="module" src="rest/java/forecastedHoursList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isRfsList:
+        ?>
+<script type="module" src="rest/java/rfs/list.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isRfsPcrList:
+        ?>
+<script type="module" src="rest/java/rfsPcr/list.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isRfsClaim:
+        ?>
+<script type="module" src="rest/java/rfs/claimList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isRfsNoRR:
+        ?>
+<script type="module" src="rest/java/rfs/noneActiveList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isPipeline:
+        ?>
+<script type="module" src="rest/java/rfs/pipelineList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isOrganisation:
+        ?>
+<script type="module" src="rest/java/organisationsList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isService:
+        ?>
+<script type="module" src="rest/java/organisationsList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isOrganisationServices:
+        ?>
+<script type="module" src="rest/java/organisationsList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isBusinessUnit:
+        ?>
+<script type="module" src="rest/java/businessUnitsList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isValueStream:
+        ?>
+<script type="module" src="rest/java/valueStreamsList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isResourceType:
+        ?>
+<script type="module" src="rest/java/resourceTypesList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isPSBand:
+        ?>
+<script type="module" src="rest/java/PSBandsList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isBand:
+        ?>
+<script type="module" src="rest/java/bandsList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isResourceRate:
+        ?>
+<script type="module" src="rest/java/resourceRatesList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isResourceTraits:
+        ?>
+<script type="module" src="rest/java/resourceTraitsList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isBespokeRate:
+        ?>
+<script type="module" src="rest/java/bespokeRatesList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isActiveResources:
+        ?>
+<script type="module" src="rest/java/rfs/activeResourcesList.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isArchiveUpload:
+        
+        break;
+    case $isRfsEntry:
+        ?>
+<script type="module" src="rest/java/rfs/entry.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isRfsNew:
+        ?>
+<script type="module" src="rest/java/rfs/entry.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isRfsPcrEntry:
+        ?>
+<script type="module" src="rest/java/rfsPcr/entry.js?<?=$hash;?>"></script>
+<?php
+        break;
+    case $isRfsPcrNew:
+        ?>
+<script type="module" src="rest/java/rfsPcr/entry.js?<?=$hash;?>"></script>
+<?php
+        break;
+    default:
+        break;
+}
+?>

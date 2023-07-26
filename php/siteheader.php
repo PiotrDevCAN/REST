@@ -1,6 +1,7 @@
 <?php
 // use sessions to store authentication and authorization state
-
+// phpinfo();
+// exit;
 // ** session_cache_limiter('private');
 // ** for fpdf http://www.fpdf.org/ download of pdf files in https;
 use itdq\JwtSecureSession;
@@ -12,21 +13,25 @@ include ('splClassLoader.php');
 
 $sessionConfig = (new \ByJG\Session\SessionConfig($_SERVER['SERVER_NAME']))
 ->withTimeoutHours(24)
-->withSecret($_ENV['jwt_token']);
+->withSecret($_ENV['jwt_token'])
+->replaceSessionHandler();
 
 $handler = new JwtSecureSession($sessionConfig);
-session_set_save_handler($handler, true);
+// session_set_save_handler($handler, true);
 
-session_start();
+// session_start();
 
 error_log(__FILE__ . "session:" . session_id());
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+require_once("php/errorHandlers.php");
+
+set_error_handler('myErrorHandler');
+register_shutdown_function('fatalErrorShutdownHandler');
+
 date_default_timezone_set('UTC');
-
-
-
 
 while(ob_get_level()>0){
     ob_end_clean();
@@ -66,6 +71,14 @@ function build_template($template, $vals) {
     return $tmpl;
 }
 
+# send the template header
+function do_header() {
+    global $content, $w3nav;
+    if ($GLOBALS['header_done'] == TRUE) return;
+    $template = build_template($GLOBALS['page_template']. ".header", $GLOBALS['content']);
+    print $template;
+    $GLOBALS['header_done'] = TRUE;
+}
 
 # send the template footer
 function do_footer() {
@@ -174,6 +187,8 @@ function do_auth($group = null)
 
 if(stripos($_ENV['environment'], 'dev')) {
     $_SESSION['ssoEmail'] = $_ENV['SERVER_ADMIN'];
+    // $_SESSION['ssoEmail'] = 'Mayur.Patil@ocean.ibm.com';
+    // var_dump($_SESSION['ssoEmail']);
 } else {
     include_once "class/include.php";
     $auth = new Auth();
@@ -307,6 +322,7 @@ include ('connect.php');
 //include ('php/templates/navbar.php');
 include('displayNavbar.php');
 
-
-
+// $_SESSION['formToken'] = md5(uniqid(mt_rand(), true));
+// echo 'Session formToken';
+// echo '<br/>'.$_SESSION['formToken'];
 ?>

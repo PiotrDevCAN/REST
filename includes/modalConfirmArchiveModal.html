@@ -1,0 +1,26 @@
+<!-- Modal -->
+<div id="confirmArchiveModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">Confirm Archive</h4>
+      </div>
+      <div class="modal-body" id="archiveMessageBody"></div>
+      <form id="confirmArchiveModalForm">
+        <input type="hidden" id="archiveResourceRef" name="RESOURCE_REFERENCE" val="" />
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary glyphicon glyphicon-ok" id="confirmArchiveResource">
+          Confirm
+        </button>
+        <button type="button" class="btn btn-default glyphicon glyphicon-remove" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

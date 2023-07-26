@@ -1,21 +1,21 @@
 <?php
-use rest\allTables;
+
 use rest\resourceRequestTable;
-use rest\resourceRequestRecord;
-use rest\rfsRecord;
 
 set_time_limit(0);
-ob_start();
-$RRheaderCells = resourceRequestRecord::htmlHeaderCells($_POST['START_DATE']);
-$RFSheaderCells = rfsRecord::htmlHeaderCells();
+// ob_start();
 
-ob_clean();
-ob_start();
-?>
-<table id='resourceRequestsTable_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%'>
-<thead>
-<tr><?=$RFSheaderCells . $RRheaderCells ;?></tr></thead>
-<tbody>
-</tbody>
-<tfoot><tr><?=$RFSheaderCells . $RRheaderCells ;?></tr></tfoot></table>
-<?php
+if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+    if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+        ob_start("ob_gzhandler");
+    } else {
+        ob_start("ob_html_compress");
+    }
+} else {
+    ob_start("ob_html_compress");
+}
+
+$startDate = isset($_POST['START_DATE']) ? trim($_POST['START_DATE']) : null;
+$endDate = isset($_POST['END_DATE']) ? trim($_POST['END_DATE']) : null;
+
+resourceRequestTable::buildHTMLTable('resourceRequests', $startDate, $endDate);

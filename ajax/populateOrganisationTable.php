@@ -1,12 +1,7 @@
 <?php
 
-
 use rest\staticOrganisationTable;
 use rest\allTables;
-
-function ob_html_compress($buf){
-    return str_replace(array("\n","\r"),'',$buf);
-}
 
 set_time_limit(0);
 ob_start();

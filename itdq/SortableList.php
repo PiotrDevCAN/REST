@@ -1778,7 +1778,7 @@ class SortableList
         $titles = '';
         $data = '';
 
-        while( ($row=db2_fetch_assoc($resultSet)) == true){
+        while( ($row = db2_fetch_assoc($resultSet)) == true){
             $row = $this->preProcessRowForCsv($row);
             $titles = empty($titles) ? $this->processRowForCsvTitles($row) . "\n" : $titles;
             $data .= $this->processRowForCsvData($row) . "\n";

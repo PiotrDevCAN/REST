@@ -1,4 +1,13 @@
 
+<!-- Global Page Overlays -->
+
+<?php
+    include_once 'includes/modalErrorMessageModal.html';
+    include_once 'includes/modalMessageModal.html';
+?>
+
+<!-- End Global Page Overlays -->
+
 </body>
 
 </html>

@@ -3,6 +3,7 @@ namespace itdq;
 
 
 use rest\allTables;
+use rest\bankHoliday;
 use rest\resourceRequestRecord;
 use rest\resourceRequestTable;
 
@@ -17,10 +18,11 @@ class DateClass {
         $monday = new \DateTime($dateObj->format('Y-m-d'));
         $monday->modify('next monday');
         $weekEndingFriday = new \DateTime($monday->format('Y-m-d'));
-        $weekEndingFriday->modify('previous friday');
+        $weekEndingFriday->modify('previous Friday');
 
+        $oneWeek = new \DateInterval('P1W');
         if($weekEndingFriday < $dateObj){
-            $weekEndingFriday->add(new \DateInterval('P1W'));
+            $weekEndingFriday->add($oneWeek);
         }
         return $weekEndingFriday;
     }
@@ -39,9 +41,9 @@ class DateClass {
         $nextMonthString = $year . "-" . $nextMonth . "-01";
         $nextMonthObj = new \DateTime($nextMonthString);
         $lastMondayOfMonthObj = new \DateTime($nextMonthObj->format('Y-m-d'));
-        $lastMondayOfMonthObj->modify('previous monday');
+        $lastMondayOfMonthObj->modify('previous Monday');
         $claimCutofFriday = new \DateTime($lastMondayOfMonthObj->format('Y-m-d'));
-        $claimCutofFriday->modify('previous friday');
+        $claimCutofFriday->modify('previous Friday');
 
         if($dateObj > $claimCutofFriday){
             $claimCutofFriday = self::claimMonth($nextMonthString); // We've past the cutoff - get the next cutoff
@@ -61,17 +63,23 @@ class DateClass {
      * Returns and array containing : 
      *      'businessDays' Integer of number of non BH Mon-Fri between $startDate and $endDate
      *      'workingDays' Integer of number of Mon-Fri between $startDate and $endDate
-     *      'bankHoldidays' Array of bankHolidays between $startDate and $endDate
+     *      'bankHoldidays' Integer of number of Bank Holidays between $startDate and $endDate
+     *      'bankHolidaysDates' Array of bankHolidays between $startDate and $endDate
      * 
      */
     static function businessDaysFromStartToEnd(\DateTime $startDate, \DateTime $endDate){
-        $workingDays  = self::workingDaysFromStartToEnd($startDate, $endDate);        
-        $bankHolidays = self::bankHolidaysFromStartToEnd($startDate, $endDate);        
-        $businessDays = $bankHolidays ? $workingDays - count($bankHolidays) : $workingDays;        
+        $workingDays  = self::workingDaysFromStartToEnd($startDate, $endDate);
+        // $bankHolidays = self::bankHolidaysFromStartToEnd($startDate, $endDate);
+        $bankHolidaysData = bankHoliday::bankHolidaysFromStartToEnd($startDate, $endDate);
+        list(
+            'amount' => $bankHolidays,
+            'list' => $bankHolidaysDates
+        ) = $bankHolidaysData;
+        $businessDays = $bankHolidays ? $workingDays - $bankHolidays : $workingDays;
         return array(
-            'businessDays' => $businessDays, 
+            'businessDays' => $businessDays,
             'workingDays'=> $workingDays,
-            'bankHolidays' => $bankHolidays
+            'bankHolidays' => $bankHolidaysDates
         );        
     }
     
@@ -144,7 +152,6 @@ class DateClass {
         
         $weeks = (int)($totalDays / 7);
         
-        
 //         echo "<br/>Start:" . $startDate->format('d-M-Y') . " Adjusted:" . $adjustedStartDate->format('d-M-Y');
 //         echo "<br/>End:" . $endDate->format('d-M-Y') . " Adjusted:" . $adjustedEndDate->format('d-M-Y');
 //         echo "<br/>Total:$totalDays Weeks:$weeks Pre:$excessFirstWeekDays Post:$missingLastWeekDays";
@@ -203,17 +210,13 @@ class DateClass {
         $dateDiff = $adjustedEndDate->diff($adjustedStartDate);
         $totalDays = ($dateDiff->days)+1;  /// 2nd to the 4th is 3 days, 2nd, 3rd, and 4th but 4-2 = 2 we're really doing 4-(2-1)
         
-      
         $weeks = (int)($totalDays / 7);
         
 //         echo "<br/>Start " . $startDate->format('d-m-Y') . " Adjusted Start" . $adjustedStartDate->format('d-m-Y') . "<br/>End " . $endDate->format('d-m-Y') . " Adjusted End" . $adjustedEndDate->format('d-m-Y');
- 
-        
 //         echo "<br/>Weeks " . $weeks;
 //         echo "<br/>FirstweekDays " . $firstWeekDays;
 //         echo "<br/>LastweekDays " . $lastWeekDays;
-        
-        
+                
          return ($weeks*2) + $lastWeekDays + $firstWeekDays; //
     }
 

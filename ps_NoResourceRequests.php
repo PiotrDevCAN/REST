@@ -1,20 +1,12 @@
 <?php
 
 use itdq\Trace;
-use itdq\Loader;
-use rest\allTables;
+use rest\rfsTable;
 
 set_time_limit(0);
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
-$loader = new Loader();
-$allRfs = $loader->load('RFS_ID',allTables::$RFS, " ARCHIVE is null ");
-$allValueStream = $loader->load('VALUE_STREAM',allTables::$RFS, " ARCHIVE is null ");
-$allBusinessUnits = $loader->load('BUSINESS_UNIT',allTables::$RFS, " ARCHIVE is null ");
-$allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is null ");
 
-// $defaultForPipelineLive = $_SESSION['isRfs'] ? null : ' checked ';
-// $canSeeLive = $_SESSION['isRfs'] ? ' disabled ' : null;
 ?>
 <div class='container'>
 
@@ -26,6 +18,9 @@ $allRequestor = $loader->load('REQUESTOR_EMAIL',allTables::$RFS, " ARCHIVE is nu
 
 <div class='container-fluid'>
 <div id='noneActiveTableDiv'>
+<?php
+  rfsTable::buildHTMLRequestsTable('noneActive');
+?>
 </div>
 </div>
 <?php
@@ -46,17 +41,3 @@ td.dataTables_empty {
 }
 
 </style>
-<script type='text/javascript'>
-
-$(document).ready(function() {
-	
-	$(".select").select2();
-
-  var rfs = new Rfs();
-  rfs.buildNoneActiveReport();
-  rfs.listenForSelectRequestor();
-  rfs.listenForSelectValueStream();
-  rfs.listenForSelectBusinessUnit();
-  rfs.listenForSelectRfs();
-});
-</script>

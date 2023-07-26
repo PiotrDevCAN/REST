@@ -75,7 +75,7 @@ db2_autocommit($GLOBALS['conn'],$autoCommit);
 $messages = ob_get_clean();
 ob_start();
 
-$response = array( 'WeeksSaved'=> $weeksSaved, 'Messages'=>$messages,'Diary'=>$diaryRef);
+$response = array( 'WeeksSaved'=> $weeksSaved, 'messages'=>$messages,'Diary'=>$diaryRef);
 
 ob_clean();
 echo json_encode($response);

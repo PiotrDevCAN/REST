@@ -6,7 +6,6 @@ use itdq\DbTable;
 use rest\rfsTable;
 use rest\rfsRecord;
 
-
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
 ob_start();

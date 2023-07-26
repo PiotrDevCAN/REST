@@ -16,7 +16,7 @@ if(!isset($_ENV['environment'])){
 $site = array(
 
     // url to send feedback too. See meta tags below as well
-    'feedback_uri' => 'mailto:daniero@uk.ibm.com',
+    'feedback_uri' => 'mailto:piotr.tajanowicz@ocean.ibm.com',
 
     // base location of css, js, and images
     'assets' => '/ui',
@@ -37,7 +37,9 @@ $site = array(
     'adminBg'   => 'ventus_rest_admin',
     'demandBg'  => 'ventus_rest_demand',
     'supplyBg'  => 'ventus_rest_supply',
+    'supplyXBg' => 'ventus_rest_supply_x',
     'rfsBg'     => 'ventus_rest_rfs',
+    'rfsADBg'   => 'ventus_rest_rfs_ad',
     'reportsBg' => 'ventus_rest_ro',
 
     'nullBg' => null,

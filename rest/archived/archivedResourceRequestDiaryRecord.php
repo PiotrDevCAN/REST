@@ -2,8 +2,8 @@
 namespace rest\archived;
 
 use itdq\DbRecord;
-use itdq\Loader;
-use itdq\FormClass;
+use rest\traits\recordTrait;
+use rest\traits\resourceRequestDiaryRecordTrait;
 
 /**
  *
@@ -12,18 +12,8 @@ use itdq\FormClass;
  */
 class archivedResourceRequestDiaryRecord extends DbRecord
 {
+    use recordTrait, resourceRequestDiaryRecordTrait;
+    
     public $RESOURCE_REFERENCE;
     public $DIARY_REFERENCE;
-
-    function get($field){
-        return empty($this->$field) ? null : trim($this->$field);
-    }
-
-    function set($field,$value){
-        if(!property_exists(__CLASS__,$field)){
-            return false;
-        } else {
-            $this->$field = trim($value);
-        }
-    }
 }

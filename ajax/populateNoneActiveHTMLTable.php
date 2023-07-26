@@ -1,12 +1,8 @@
 <?php
+
 use rest\allTables;
 use rest\rfsTable;
-use rest\rfsRecord;
 use itdq\Trace;
-
-function ob_html_compress($buf){
-    return str_replace(array("\n","\r"),'',$buf);
-}
 
 set_time_limit(0);
 ob_start();
@@ -42,14 +38,15 @@ $predicate .= ! empty($requestor) ? " AND lower(REQUESTOR_EMAIL)='" . db2_escape
 //     );
 // } else {
 
-    $data = $rfsTable->returnNoneActiveReportAsArray($predicate);
+    $dataAndSql = $rfsTable->returnNoneActiveReportAsArray($predicate);
+    list('data' => $data, 'sql' => $sql) = $dataAndSql;
     $message = ob_get_clean();
     ob_start();
 
     $response = array(
-        "data" => $data['data'],
+        "data" => $data,
         'message' => $message,
-        'sql' => $data['sql']
+        'sql' => $sql
     );
 // }
 

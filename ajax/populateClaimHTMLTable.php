@@ -1,12 +1,8 @@
 <?php
+
 use rest\allTables;
 use rest\rfsTable;
-use rest\rfsRecord;
 use itdq\Trace;
-
-function ob_html_compress($buf){
-    return str_replace(array("\n","\r"),'',$buf);
-}
 
 set_time_limit(0);
 ob_start();
@@ -31,10 +27,11 @@ if (empty($rfsId) && empty($valueStream) && empty($requestor) && empty($business
         "data" => array()
     );
 } else {
-    $data = $rfsTable->returnClaimReportAsArray($predicate);
+    $dataAndSql = $rfsTable->returnClaimReportAsArray($predicate);
+    list('data' => $data, 'sql' => $sql) = $dataAndSql;
     $message = ob_get_clean();
     ob_start();
-    $response = array("data"=>$data['data'],'message'=>$message,'sql'=>$data['sql']);
+    $response = array("data"=>$data,'message'=>$message,'sql'=>$sql);
 }
 
 ob_clean();

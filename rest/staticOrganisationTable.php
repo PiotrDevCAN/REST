@@ -25,7 +25,7 @@ class staticOrganisationTable extends DbTable
 
         $allOrganisations = array();
         if($resultSet){
-            while (($row=db2_fetch_assoc($resultSet))==true) {
+            while (($row = db2_fetch_assoc($resultSet))==true) {
                 $allOrganisations[trim($row['ORGANISATION'])][] = trim($row['SERVICE']);
             }
         } else {
@@ -79,10 +79,9 @@ class staticOrganisationTable extends DbTable
             return false;
         }
 
-        //        $data = array();
         $displayAble = array();
 
-        while (($row=db2_fetch_assoc($rs))==true) {
+        while (($row = db2_fetch_assoc($rs))==true) {
             $display = array();
             $row = array_map('trim', $row);
             $display['ORGANISATION'] = $row['ORGANISATION'];

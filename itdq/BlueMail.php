@@ -29,12 +29,10 @@ class BlueMail
         $cleanedCc  = array_unique(array_diff($cc,$cleanedTo, $bcc)); // We can't CC/BCC someone already in the TO list.
         $cleanedBcc = array_unique(array_diff($bcc,$cleanedTo,$cleanedCc));
         
-       
         error_log('Subject:' . print_r($subject,true));
         error_log('To:' . print_r($cleanedTo,true));
         error_log('Cc:' . print_r($cleanedCc,true));
         error_log('BCc:' . print_r($cleanedBcc,true));
-        
         
         $status = '';
         $resp = true;
@@ -65,20 +63,27 @@ class BlueMail
             }
         }
         $mail->Subject= $subject;
-        $mail->body= $message;
-        
+        $mail->Body= $message;
         
         if($resp && $attachments){
             foreach ($attachments as $attachment){
-                
-                $exists = (file_exists($attachment)) ? "Yes" : "No" ;
-                error_log("Attachment $attachment exists:" . print_r($exists,true) );
-                error_log(print_r(scandir("../emailAttachments"),true));
-                
-                $resp = $resp ? $mail->addAttachment($attachment) : $resp;
+                if (isset($attachment['path'])) {
+                    $exists = (file_exists($attachment['path'])) ? "Yes" : "No" ;
+                    error_log("Attachment " . $attachment['path'] . " exists:" . print_r($exists,true) );
+                    // error_log(print_r(scandir("../emailAttachments"),true));
+                } else {
+                    $attachment['path'] = '';
+                }
+                if (!empty($attachment['path'])) {
+                    // send physically existing file
+                    $resp = $resp ? $mail->addAttachment($attachment['path'],$attachment['filename'],'base64',$attachment['content_type']) : $resp;
+                } else {
+                    // send temporary generated file
+                    $resp = $resp ? $mail->addStringAttachment($attachment['data'],$attachment['filename'],'base64',$attachment['content_type']) : $resp;
+                }
                 if(!$resp){
                     $status = "Errored";
-                    $response = array('response'=>"Message has not been sent.  Attachment $attachment not found");
+                    $response = array('response'=>"Message has not been sent.  Attachment ".$attachment['filename']." not found");
                 }
             }
         }
@@ -95,7 +100,7 @@ class BlueMail
                     if (filter_var($_SESSION['ssoEmail'], FILTER_VALIDATE_EMAIL)) {
                         $localEmail = $_SESSION['ssoEmail'];
                     } else {
-                        $localEmail = ! empty($_ENV['devemailid']) ? $_ENV['devemailid'] : 'daniero@uk.ibm.com';
+                        $localEmail = ! empty($_ENV['devemailid']) ? $_ENV['devemailid'] : 'piotr.tajanowicz@ocean.ibm.com';
                     }
 
                     $recipient = $_ENV['email'] == 'user' ? $localEmail : $_ENV['devemailid'];
@@ -128,7 +133,7 @@ class BlueMail
                             'response' => 'Mailer error: ' . $mail->ErrorInfo
                         );
                         $status = 'error sending';
-                        throw new \Exception('Error trying to send email :' . $subject);
+                        throw new \Exception('Error trying to send email :' . $subject . ' ' . serialize($response));
                     } else {
                         $response = array(
                             'response' => 'Message has been sent.'
@@ -161,10 +166,9 @@ class BlueMail
                     break;
             }
         } else {
-            
             $response = array(
                 'response' => "Problems adding addresses/attachements to the email",
-                 'errorInfor'=> $mail->ErrorInfo
+                'errorInfor'=> $mail->ErrorInfo
             );
             error_log("resp:" . $resp);
             error_log("ErrorInfo:" . $mail->ErrorInfo);
@@ -174,7 +178,6 @@ class BlueMail
         error_log("status:" . $status);
         error_log("ErrorInfo:" . $mail->ErrorInfo);
         
-       
         return array('sendResponse' => $response, 'Status'=>$status);
     }
 

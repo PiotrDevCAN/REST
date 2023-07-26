@@ -9,6 +9,8 @@ use rest\allTables;
 use rest\resourceRequestRecord;
 use rest\rfsTable;
 use rest\staticOrganisationTable;
+use rest\traits\recordTrait;
+use rest\traits\resourceRequestRecordTrait;
 
 /**
  *
@@ -17,6 +19,8 @@ use rest\staticOrganisationTable;
  */
 class archivedResourceRequestRecord extends DbRecord
 {
+    use recordTrait, resourceRequestRecordTrait;
+    
     // DEV table
     // RESOURCE_REFERENCE	INTEGER 	N		0	
     // RFS	CHAR 	Y	20	0	
@@ -119,8 +123,8 @@ class archivedResourceRequestRecord extends DbRecord
         "Request Created",
         "Cloned From", 
         "Status",
-        'Rate_Type',
-        'Hours_type'
+        "Rate Type",
+        "Hours Type"
     );
 
     CONST STATUS_NEW        = 'New';
@@ -141,18 +145,6 @@ class archivedResourceRequestRecord extends DbRecord
     CONST HOURS_TYPE_OT_WEEK_END  = 'Weekend Overtime';
     static public $allHourTypes   = array(self::HOURS_TYPE_REGULAR,self::HOURS_TYPE_OT_WEEK_DAY,self::HOURS_TYPE_OT_WEEK_END);
 
-    function get($field){
-        return empty($this->$field) ? null : trim($this->$field);
-    }
-
-    function set($field,$value){
-        if(!property_exists(__CLASS__,$field)){
-            return false;
-        } else {
-            $this->$field = trim($value);
-        }
-    }
-
     function displayForm($mode)
     {
         $notEditable = $mode==FormClass::$modeEDIT ? ' disabled ' : null;
@@ -162,13 +154,13 @@ class archivedResourceRequestRecord extends DbRecord
         $this->additional_comments = null;
 
         $loader = new Loader();
-        $rfsPredicate = rfsTable::rfsPredicateFilterOnPipeline();
+        $rfsPredicate = rfsTable::rfsPredicateFilterOnPipelineNotArchived();
         $allRfs = $loader->load('RFS_ID',allTables::$RFS,$rfsPredicate);
 
         $predicate = " STATUS='" . staticOrganisationTable::ENABLED . "' ";
         $allOrganisation = $loader->load('ORGANISATION',allTables::$STATIC_ORGANISATION,$predicate);
         $allService = staticOrganisationTable::getAllOrganisationsAndServices($predicate);
-        JavaScript::buildSelectArray($allService, 'organisation');
+        // JavaScript::buildSelectArray($allService, 'organisation');
 
         $startDate = empty($this->START_DATE) ? null : new \DateTime($this->START_DATE);
         $startDateStr = empty($startDate) ? null : $startDate->format('d M y');
@@ -210,6 +202,7 @@ class archivedResourceRequestRecord extends DbRecord
                     <div id='calendarFormGroupSTART_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='START_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
                         <input id='InputSTART_DATE' class='form-control' type='text'  value='<?=$startDateStr?>' placeholder='Select Start Date' required  <?=$notEditable?>/>
                         <input type='hidden' id='START_DATE' name='START_DATE' value='<?=$startDateStr2?>' required/>
+                        <!-- <input type='hidden' id='startDateWas' name='startDateWas' value='<?=$startDateStr2?>' required/> -->
                         <span class='input-group-addon'><span id='calendarIconSTART_DATE' class='glyphicon glyphicon-calendar'></span></span>
                     </div>
                 </div>
@@ -221,6 +214,7 @@ class archivedResourceRequestRecord extends DbRecord
                     <div id='calendarFormGroupEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
                         <input id='InputEND_DATE' class='form-control' type='text'  value='<?=$endDateStr?>' placeholder='Select End Date' required <?=$notEditable?> />
                         <input type='hidden' id='END_DATE' name='END_DATE' value='<?=$endDateStr2?>' required />
+                        <!-- <input type='hidden' id='endDateWas' name='endDateWas' value='<?=$endDateStr2?>' required/> -->
                         <span class='input-group-addon'><span id='calendarIconEND_DATE' class='glyphicon glyphicon-calendar'></span></span>
                     </div>
                 </div>
@@ -340,81 +334,4 @@ class archivedResourceRequestRecord extends DbRecord
 	</form>
     <?php
     }
-
-    static function htmlHeaderRow($startDate=null, $endDate=null){
-        $headerRow = "<tr>";
-        $headerRow .= resourceRequestRecord::htmlHeaderCellsStatic($startDate,$endDate);
-        $headerRow .= "</tr>";
-
-        return $headerRow;
-    }
-
-    function htmlHeaderCells($startDate=null){
-        $headerCells = "";
-        foreach (resourceRequestRecord::$columnHeadings as $key => $value )
-        {
-            $headerCells .= "<th>" . $value . "</th>";
-        }
-
-        $headerCells .= "<th>RR</th>";  // allow for the RR field that will come from DB2 from the join
-
-//         $startDateObj = new \DateTime($startDate);
-//         $day =  $startDateObj->format('d');
-//         if($day > 28){
-//             // We can't step through adding months if we start on 29th,30th or 31st.
-//             $year = $startDateObj->format('Y');
-//             $month = $startDateObj->format('m');
-//             $startDateObj->setDate($year, $month, '28');
-//         }
-
-//         $endDate = null;
-//         $endDateObj = new \DateTime($endDate);
-
-//         if(empty($endDate)){
-//             $endDateObj = \DateTime::createFromFormat('Y-m-d',$startDateObj->format('Y-m-d'));
-//             $endDateObj->modify("+5 months");
-//         }
-
-//         while($startDateObj->format('Ym') <= $endDateObj->format('Ym')){
-//             $headerCells .= "<th>" . $startDateObj->format('M-y') . "</th>";
-//             $startDateObj->modify('+1 month');
-//         }
-
-        return $headerCells;
-    }
-
-    static function htmlHeaderCellsStatic($startDate=null){
-        $headerCells = "";
-        foreach (resourceRequestRecord::$columnHeadings as $key => $value )
-        {
-            $headerCells .= "<th>" . $value . "</th>";
-        }
-
-        $headerCells .= "<th>RR</th>";  // allow for the RR field that will come from DB2 from the join
-
-//         $startDateObj = new \DateTime($startDate);
-//         $day =  $startDateObj->format('d');
-//         if($day > 28){
-//             // We can't step through adding months if we start on 29th,30th or 31st.
-//             $year = $startDateObj->format('Y');
-//             $month = $startDateObj->format('m');
-//             $startDateObj->setDate($year, $month, '28');
-//         }
-
-//         $endDate = null;
-//         $endDateObj = new \DateTime($endDate);
-
-//         if(empty($endDate)){
-//             $endDateObj = \DateTime::createFromFormat('Y-m-d',$startDateObj->format('Y-m-d'));
-//             $endDateObj->modify("+5 months");
-//         }
-
-//         while($startDateObj->format('Ym') <= $endDateObj->format('Ym')){
-//             $headerCells .= "<th>" . $startDateObj->format('M-y') . "</th>";
-//             $startDateObj->modify('+1 month');
-//         }
-
-        return $headerCells;
-    }
 }
-

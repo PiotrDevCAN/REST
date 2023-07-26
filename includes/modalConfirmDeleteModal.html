@@ -1,0 +1,31 @@
+<!-- Modal -->
+<div id="confirmDeleteModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">Confirm Delete</h4>
+      </div>
+      <div class="modal-body" id="deleteMessageBody"></div>
+      <form id="confirmDeleteModalForm">
+        <input type="hidden" id="deleteResourceRef" name="RESOURCE_REFERENCE" val="" />
+      </form>
+      <div class="modal-footer">
+        <p style="color: red; text-align: center">
+          Please be 100% sure this record should be <b>deleted</b><br />as it's
+          a time consuming process to recover it should later prove to be
+          required.<br />Consider Archiving if you just want the record removed.
+        </p>
+        <button type="button" class="btn btn-primary glyphicon glyphicon-ok" id="confirmDeleteResource">
+          Confirm
+        </button>
+        <button type="button" class="btn btn-default glyphicon glyphicon-remove" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

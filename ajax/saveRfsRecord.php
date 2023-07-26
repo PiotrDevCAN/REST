@@ -17,6 +17,8 @@ $parmsTrimmed = array_map('trim', $_POST);
 
 $rfsId = !empty($_POST['RFS_ID']) ? trim($_POST['RFS_ID']) : null;
 
+// $token = !empty($_POST['formToken']) ? trim($_POST['formToken']) : null;
+
 // rfs exists check
 $rfsAlreadyExists = false;
 if(trim($_POST['mode'])==FormClass::$modeEDIT){
@@ -34,7 +36,9 @@ $rfsRequestorEmail = !empty($_POST['REQUESTOR_EMAIL']) ? trim($_POST['REQUESTOR_
 $rfsOriginalRequestorEmail = !empty($_POST['originalREQUESTOR_EMAIL']) ? trim($_POST['originalREQUESTOR_EMAIL']) : null;
 $rfsType = !empty($_POST['RFS_TYPE']) ? trim($_POST['RFS_TYPE']) : null;
 $rfsStatus = !empty($_POST['RFS_STATUS']) ? trim($_POST['RFS_STATUS']) : null;
+$rfsStartDate = !empty($_POST['RFS_START_DATE']) ? trim($_POST['RFS_START_DATE']) : null;
 $rfsEndDate = !empty($_POST['RFS_END_DATE']) ? trim($_POST['RFS_END_DATE']) : null;
+$mode = !empty($_POST['mode']) ? trim($_POST['mode']) : '';
 
 $sp = strpos(strtolower($rfsRequestorEmail),'ocean');
 if($sp === FALSE){
@@ -58,9 +62,20 @@ if($sp === FALSE){
     }
 }
 
+// if ($token !== $_SESSION['formToken']) {
+//     $inValidToken = true;
+// } else {
+//     $inValidToken = false;
+//     $_SESSION['formToken'] = md5(uniqid(mt_rand(), true));
+// }
+
 $invalidRfsType = !in_array($rfsType, rfsRecord::$rfsType);
 $invalidRfsStatus = !in_array($rfsStatus, rfsRecord::$rfsStatus);
+$invalidRfsStartDate = rfsTable::validateDate($rfsStartDate) === false;
 $invalidRfsEndDate = rfsTable::validateDate($rfsEndDate) === false;
+
+// clean all potential errors
+ob_clean();
 
 // default validation values
 $saveResponse = false;
@@ -74,18 +89,34 @@ switch (true) {
     case $invalidRequestorEmail:
         $messages = 'Cannot save RFS Record with provided RFS Requestor Email value.';
         break;
+    // case $inValidToken:
+        // from has been already submitted
+    //     $messages = 'Form has been already submitted.';
+    //     break;
     case $invalidRfsType:
         $messages = 'Cannot save RFS Record with provided RFS Type value.';
         break;
     case $invalidRfsStatus:
         $messages = 'Cannot save RFS Record with provided RFS Status value.';
         break;
+    case $invalidRfsStartDate:
+        $messages = 'Cannot save RFS Record with provided RFS Start Date value.';
+        break;
     case $invalidRfsEndDate:
         $messages = 'Cannot save RFS Record with provided RFS End Date value.';
         break;
     default:
-            
-        $loader = new Loader();
+        
+        // switch ($mode) {
+        //     case FormClass::$modeDEFINE:
+        //         break;
+        //     case FormClass::$modeEDIT:
+        //         break;
+        //     default:
+        //         echo 'Cannot save RFS with provided Mode value.';
+        //         break;
+        // }
+        
         $rfsRecord = new rfsRecord();
 
         $allBusinessUnit = $loader->loadIndexed('BUSINESS_UNIT','VALUE_STREAM', allTables::$STATIC_VALUE_STREAM);
@@ -121,8 +152,8 @@ $response = array(
     'saveResponse' => $saveResponse, 
     'messages'=>$messages,
     'create'=>$create,
-    'update'=>$update,
-    'new'=>true
+    'update'=>$update
+    // 'formToken'=>$_SESSION['formToken']
 );
 
 ob_clean();

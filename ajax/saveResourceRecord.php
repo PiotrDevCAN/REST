@@ -14,6 +14,8 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $rfs = !empty($_POST['RFS']) ? trim($_POST['RFS']) : null;
 
+// $token = !empty($_POST['formToken']) ? trim($_POST['formToken']) : null;
+
 $startDate = !empty($_POST['START_DATE']) ? trim($_POST['START_DATE']) : null;
 $endDate = !empty($_POST['END_DATE']) ? trim($_POST['END_DATE']) : $_POST['START_DATE'];
 
@@ -36,6 +38,13 @@ if ($startDate == null || $endDate == null || $rateType == null || $organisation
     $invalidOtherParameters = false;
 }
 
+// if ($token !== $_SESSION['formToken']) {
+//     $inValidToken = true;
+// } else {
+//     $inValidToken = false;
+//     $_SESSION['formToken'] = md5(uniqid(mt_rand(), true));
+// }
+
 $invalidRateType = !in_array($rateType, resourceRequestRecord::$allRateTypes);
 $invalidHoursType = !in_array($hoursType, resourceRequestRecord::$allHourTypes);
 $invalidTotalHoursAmount = empty($totalHours);
@@ -49,6 +58,9 @@ if ($invalidStartDate !== false  && $invalidEndDate !== false) {
     }
 }
 
+// clean all potential errors
+ob_clean();
+
 // default validation values
 $saveResponse = false;
 $hoursResponse = '';
@@ -56,6 +68,10 @@ $create = false;
 $update = false;
 
 switch (true) {
+    // case $inValidToken:
+    //     // from has been already submitted
+    //     $messages = 'Form has been already submitted.';
+    //     break;
     case $invalidOtherParameters:
         // required parameters protection
         $messages = 'Significant parameters from form are missing.';
@@ -93,31 +109,45 @@ switch (true) {
 
         switch ($mode) {
             case FormClass::$modeDEFINE:
-                
-                $saveResponse = $resourceTable->insert($resourceRecord);
-                $resourceReference = $resourceTable->lastId();
-                $create = true;
-                $update = false;
 
-                if($saveResponse){
-                    $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
-                    $resourceHoursSaved = false;
-                    try {
-                        $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $resourceRecord->getValue('HOURS_TYPE') );
-                        $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
-                    } catch (Exception $e) {
-                        $hoursResponse = $e->getMessage();
-                        $create = false;
-                    }
-                }
+                // if ($token) {
+                    // if ($token === $_SESSION['formToken']) {
 
-                if ($saveResponse && $create == true) {
-                    db2_commit($GLOBALS['conn']);
-                } else {
-                    $resourceReference = 'Record has been not created';
-                    $saveResponse = false;
-                    db2_rollback($GLOBALS['conn']);
-                }
+                        // generate new token
+                        // $_SESSION['formToken'] = md5(uniqid(mt_rand(), true));
+                    
+                        $saveResponse = $resourceTable->insert($resourceRecord);
+                        $resourceReference = $resourceTable->lastId();
+                        $create = true;
+                        $update = false;
+        
+                        if($saveResponse){
+                            $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
+                            $resourceHoursSaved = false;
+                            try {
+                                $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $resourceRecord->getValue('HOURS_TYPE') );
+                                $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
+                            } catch (Exception $e) {
+                                $hoursResponse = $e->getMessage();
+                                $create = false;
+                            }
+                        }
+        
+                        if ($saveResponse && $create == true) {
+                            db2_commit($GLOBALS['conn']);
+                        } else {
+                            $resourceReference = 'Record has been not created';
+                            $saveResponse = false;
+                            db2_rollback($GLOBALS['conn']);
+                        }
+
+                    // } else {
+                    //     // from has been already submitted
+                    //     echo 'Form has been already submitted.';
+                    // }
+                // } else {
+                //     echo 'Token parameter is missing.';
+                // }
                 break;
             case FormClass::$modeEDIT:
                 
@@ -193,6 +223,7 @@ $response = array(
     'messages'=>$messages,
     'create'=>$create,
     'update'=>$update
+    // 'formToken'=>$_SESSION['formToken']
 );
 
 ob_clean();

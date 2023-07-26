@@ -4,6 +4,9 @@ USER root
 ADD . /var/www/html/
 ADD ./patch1.sh /patch1.sh
 RUN bash /patch1.sh && rm /patch1.sh
+
+RUN pecl install memcached
+
 WORKDIR /opt/ibm
 ADD ibmdsdp.tar.gz /opt/ibm/
 RUN bash dsdriver/installDSDriver
@@ -16,6 +19,11 @@ WORKDIR /var/www/html/
 # RUN sed -i  "$ a extension=ibm_db2.so" /etc/php.ini
 # RUN sed -i  "$ a extension=zip.so"     /etc/php.ini
 RUN echo "extension=ibm_db2.so" > /etc/php.d/30-pdo_ibm_db2.ini
+RUN echo "extension=memcached.so" > /etc/php.d/30-memcached.ini
+
+RUN echo LimitRequestFieldSize 4094 /etc/httpd/conf/httpd-default.conf 
+RUN echo LimitRequestLine 4094 /etc/httpd/conf/httpd-default.conf
+
 #ADD db2consv_ee.lic /opt/ibm/dsdriver/license/db2consv_ee.lic ### for zOS host, enable this line to add your license
 #RUN echo "PassEnv /opt/ibm/dsdriver/lib" > /etc/httpd/conf.d/db2-lib.conf
 RUN echo "PassEnv LIBPATH" > /etc/httpd/conf.d/db2-lib.conf
@@ -25,6 +33,8 @@ RUN chown -R 1001:0 /run
 RUN chown -R 1001:0 /etc/httpd/run
 RUN chmod -R 777 /run
 RUN chmod -R 777 /etc/httpd/run
+RUN chmod -R 777 /var/www/html/extracts
+RUN chmod -R 777 /var/www/html/public/data/archive
 USER 1001
 RUN composer install --no-interaction
 

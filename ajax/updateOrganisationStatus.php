@@ -13,7 +13,7 @@ if(!$toggleResult){
     echo db2_stmt_errormsg();
 }
 
-$messages = ob_get_flush();
+$messages = ob_get_clean();
 ob_start();
 $success = empty($messages);
 

@@ -27,7 +27,7 @@ foreach ($allRequestsHours as $resourceReference => $hours) {
 }
 
 foreach ($allRFS as $rfsid) {
-    $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . \rest\allTables::$RFS;
+    $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS;
     $sql .= "  SET RFS_STATUS     = '" . rfsRecord::RFS_STATUS_PIPELINE . "' ";
     $sql .= " WHERE RFS_ID='" . db2_escape_string($rfsid) ."' ";
     

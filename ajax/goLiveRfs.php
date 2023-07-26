@@ -127,7 +127,7 @@ switch (true) {
         break;
 }
 
-$response = array('success'=>$success,'rfsId' => $rfsId, 'Messages'=>$messages);
+$response = array('success'=>$success,'rfsId' => $rfsId, 'messages'=>$messages);
 
 ob_clean();
 echo json_encode($response);

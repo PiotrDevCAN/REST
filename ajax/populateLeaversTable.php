@@ -3,10 +3,6 @@
 use rest\allTables;
 use rest\activeResourceTable;
 
-function ob_html_compress($buf){
-    return str_replace(array("\n","\r"),'',$buf);
-}
-
 set_time_limit(0);
 ob_start();
 
@@ -16,7 +12,7 @@ $data = $activeResource->returnForDataTables();
 $messages = ob_get_clean();
 ob_start();
 
-$response = array("data"=>$data,'messages'=>$messages);
+$response = array("data"=>$data,'messages'=>$messages,'count'=>count($data));
 
 ob_clean();
 

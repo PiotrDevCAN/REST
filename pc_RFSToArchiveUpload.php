@@ -46,7 +46,7 @@ p {
 			<div id="drop-area">
 				<form class="my-form">
 					<p>To upload TXT file containing IDs of RFS records intended to archive simply drag and drop it onto the dashed region</p>
-					<input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
+					<input type="file" id="fileElem" multiple accept="text/plain" onchange="handleFiles(this.files)">
 					<label class="button" for="fileElem">or Select File here</label>
 				</form>
 			</div>
@@ -54,7 +54,7 @@ p {
 	</div>
 </div>
 
-<script>
+<script type='text/javascript'>
 
 let dropArea = document.getElementById('drop-area')
 ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {

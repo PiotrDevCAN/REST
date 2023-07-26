@@ -5,7 +5,6 @@ use itdq\DbTable;
 
 class uploadLogTable extends DbTable
 {
-
     function lastCompletedLoad($uploadTable= null){
 
         // $uploadTable = empty($uploadTable)? allTables::$INFLIGHT_PROJECTS : $uploadTable;
@@ -49,14 +48,9 @@ class uploadLogTable extends DbTable
         }
     }
 
-
-
     function wasLastLoadSuccesssful($uploadTable= null){
         $lastCompletedLoad = $this->lastCompletedLoad($uploadTable);
         $lastLoad = $this->lastLoad($uploadTable);
         return array('Successful' => $lastCompletedLoad->UPLOAD_ID == $lastLoad->UPLOAD_ID, 'lastCompletedLogRecord'=>$lastCompletedLoad, 'lastLoadLogRecord'=>$lastLoad) ;
     }
-
-
-
 }

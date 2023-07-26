@@ -110,7 +110,7 @@ $response = array(
     'resourceReference'=>$resourceReference, 
     'saveResponse' => $saveResponse, 
     'hoursResponse'=>$hoursResponse,
-    'Messages'=>$messages, 
+    'messages'=>$messages, 
     'POST'=>print_r($_POST,true),
     'resourceNamePrefix',$resourceNamePrefix
 );

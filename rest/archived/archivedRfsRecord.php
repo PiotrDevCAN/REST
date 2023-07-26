@@ -8,6 +8,8 @@ use rest\allTables;
 use rest\resourceRequestTable;
 use rest\rfsRecord;
 use rest\rfsTable;
+use rest\traits\recordTrait;
+use rest\traits\rfsRecordTrait;
 
 /**
  *
@@ -16,6 +18,8 @@ use rest\rfsTable;
  */
 class archivedRfsRecord extends DbRecord
 {
+	use recordTrait, rfsRecordTrait;
+	
     protected $RFS_ID;
     protected $PRN;
     protected $PROJECT_TITLE;
@@ -51,19 +55,6 @@ class archivedRfsRecord extends DbRecord
         $this->rfsTable = new rfsTable(allTables::$RFS);
     }
 
-    function get($field){
-        return empty($this->$field) ? null : $this->$field;
-    }
-
-    function set($field,$value){
-        if(!property_exists(__CLASS__, $field)){
-            return false;
-        } else {
-            $this->$field = $value;
-        }
-    }
-
-
     function displayForm($mode)
     {
         ?>
@@ -82,7 +73,7 @@ class archivedRfsRecord extends DbRecord
 		<div class='required'>
 			<label for="RFS_ID" class="col-md-2 control-label ceta-label-left"
 				data-toggle="tooltip" data-placement="top" title="">RFS ID</label>
-			<div class="col-md-2">
+			<div class="col-md-3">
 				<input class="form-control" id="RFS_ID" name="RFS_ID"
 					value="<?=$this->RFS_ID?>" placeholder="Enter RFS Id"
 					required="required" type="text" <?=$notEditable?>
@@ -92,21 +83,18 @@ class archivedRfsRecord extends DbRecord
 			</div>
 		</div>
 
-		<div class='col-md-1'></div>
-
 		<label for="PRN" class="col-md-2 control-label ceta-label-left"
 			data-toggle="tooltip" data-placement="top" title=""
 			data-original-title="">PRN</label>
-		<div class="col-md-2">
+		<div class="col-md-5">
 			<input class="form-control" id="PRN" name="PRN"
 				value="<?=$this->PRN?>" placeholder="PRN" type="text" maxlength="24">
 			<input id="originalPRN" name="originalPRN" value="<?=$this->PRN?>"
 				type="hidden">
 		</div>
 
-
 	</div>
-	<div class="form-group" id="PROJECT_TITLEFormGroup">
+	<div class="form-group" id="PROJECT_CODEFormGroup">
 		<label for="PROJECT_CODE"
 			class="col-md-2	 control-label ceta-label-left" data-toggle="tooltip"
 			data-placement="top" data-original-title=""
@@ -360,32 +348,4 @@ class archivedRfsRecord extends DbRecord
 		</form>
 	<?php 
 	}
-    
-
-    static function htmlHeaderRow(){
-        $headerRow = "<tr>";
-        $headerRow .= rfsRecord::htmlHeaderCellsStatic();
-
-        $headerRow .= "</tr>";
-        return $headerRow;
-    }
-
-    function htmlHeaderCells(){
-        $headerCells = "";
-        foreach (rfsRecord::$columnHeadings as $key => $value )
-        {
-            $headerCells .= "<th>" . $value . "</th>";
-        }
-        return $headerCells;
-    }
-
-	static function htmlHeaderCellsStatic(){
-        $headerCells = "";
-        foreach (rfsRecord::$columnHeadings as $key => $value )
-        {
-            $headerCells .= "<th>" . $value . "</th>";
-        }
-        return $headerCells;
-    }
-
 }

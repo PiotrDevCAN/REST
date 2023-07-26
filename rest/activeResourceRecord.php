@@ -79,6 +79,10 @@ class activeResourceRecord extends DbRecord
     
     protected $SQUAD_NUMBER;
 
+    protected $TRIBE_NAME;
+    protected $SQUAD_NAME;
+    protected $TRIBE_NAME_MAPPED;
+
     protected $person_bio;
 
     // Fields to be edited in the DataTables Reports. Need to know their position in the array $row;
@@ -118,6 +122,7 @@ class activeResourceRecord extends DbRecord
     public static $orderITNonBauTaskId = array('aurora.central.pmo@uk.ibm.com');
     public static $smCdiAuditEmail = 'e3h3j0u9u6l2q3a3@ventusdelivery.slack.com';
     public static $securityOps = array('IBM.LBG.Security.Operations@uk.ibm.com');
+    
     const PES_STATUS_NOT_REQUESTED = 'Not Requested';
     const PES_STATUS_CLEARED       = 'Cleared';
     const PES_STATUS_CLEARED_PERSONAL   = 'Cleared - Personal Reference';

@@ -61,7 +61,7 @@ db2_commit($GLOBALS['conn']);
 $messages = ob_get_clean();
 ob_start();
 
-$response = array('Messages'=>$messages);
+$response = array('messages'=>$messages);
 
 ob_clean();
 echo json_encode($response);

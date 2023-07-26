@@ -21,12 +21,15 @@ include ('vendor/autoload.php');
 include ('splClassLoader.php');
 
 $sessionConfig = (new \ByJG\Session\SessionConfig($_SERVER['SERVER_NAME']))
-->withSecret($_ENV['jwt_token']);
+->withTimeoutHours(24)
+->withSecret($_ENV['jwt_token'])
+->replaceSessionHandler();
 
 $handler = new JwtSecureSession($sessionConfig);
+// session_set_save_handler($handler, true);
 
-session_set_save_handler($handler, true);
-session_start();
+// session_start();
+
 error_log(__FILE__ . "session:" . session_id());
 
 $GLOBALS['Db2Schema'] = strtoupper($_ENV['environment']);

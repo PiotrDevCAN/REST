@@ -1,21 +1,18 @@
 <?php
-use rest\allTables;
-use rest\resourceRequestTable;
-use rest\resourceRequestRecord;
-use rest\rfsRecord;
+
+use rest\rfsTable;
 
 set_time_limit(0);
-ob_start();
+// ob_start();
 
-$RFSheaderCells = rfsRecord::htmlHeaderCells();
+if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+    if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+        ob_start("ob_gzhandler");
+    } else {
+        ob_start("ob_html_compress");
+    }
+} else {
+    ob_start("ob_html_compress");
+}
 
-ob_clean();
-ob_start();
-?>
-<table id='rfsTable_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%'>
-<thead>
-<tr><?=$RFSheaderCells;?></tr></thead>
-<tbody>
-</tbody>
-<tfoot><tr><?=$RFSheaderCells ;?></tr></tfoot></table>
-<?php
+rfsTable::buildHTMLTable();

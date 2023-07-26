@@ -101,7 +101,7 @@ ob_start();
     <div class='col-sm-2'></div>
     <div class='col-sm-8'>
       <p>
-        <button type="button" class="btn btn-sm btn-warning  " id='reinitialise' data-toggle='tooltip' data-placement='top' title='Using the Start Date, End Date and Total Hours from this form, will reset the hours profile for the request' >Re-Initialise</button>
+        <button type="button" class="btn btn-sm btn-warning  " id='reinitialise' data-toggle='tooltip' data-placement='top' title='Using the Hours Type, Start Date, End Date and Total Hours from this form, will reset the hours profile for the request' >Re-Initialise</button>
       </p>
     </div>
     <div class='col-sm-2'></div>
@@ -114,22 +114,24 @@ $monthColours = array(1=>'#bdbdbd',2=>'#eeeeee',3=>'#bdbdbd',4=>'#eeeeee',5=>'#b
 $claimMonths = array(1=>'Jan',2=>'Feb',3=>'Mar',4=>'Apr',5=>'May',6=>'Jun',7=>'Jul',8=>'Aug',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Dec',);
 
 while (($row = db2_fetch_assoc($resourceHoursRs))==true){
-  //  $week = $row['DATE'];
+    $week = $row['DATE'];
     $hours = $row['HOURS'];
     $wef = $row['WEEK_ENDING_FRIDAY'];
 
     $stripe = $monthColours[$row['CLAIM_MONTH']];
-    $weekObj = new DateTime($wef);    
+    $claimMonth = $claimMonths[$row['CLAIM_MONTH']];
+    $weekObj = new DateTime($wef);
+    $weekFormatted = $weekObj->format('\W\e\e\k W - dS M y');
     ?>
 
     <div id='ModalHrsForWefFormGroup<?=$wef?>' class='form-group' style='background:<?=$stripe?>'>
-     <label for='ModalHRSForWef<?=$wef?>' class='col-md-6 control-label ' data-toggle='tooltip' data-placement='top' title='Hours for wef <?=$wef?>'><?=$weekObj->format('\W\e\e\k W - dS M y')?></label>
-       <div class='col-md-3'>
-      <input type='number' step='0.01' min='0' max='1000' class="form-control hrsForWeek" id="ModalHRSForWef<?=$wef?>" name="ModalHRSForWef<?=$wef?>" value="<?=$hours;?>" placeholder="Hrs/Week" >
-      <input type='hidden'  name="ModalHRSForWas<?=$wef?>" value="<?=$hours;?>" >
+     <label for='ModalHRSForWef<?=$wef?>' class='col-md-6 control-label ' data-toggle='tooltip' data-placement='top' title='Hours for wef <?=$wef?>'><?=$weekFormatted?></label>
+      <div class='col-md-3'>
+        <input type='number' step='0.01' min='0' max='1000' class="form-control hrsForWeek" id="ModalHRSForWef<?=$wef?>" name="ModalHRSForWef<?=$wef?>" value="<?=$hours;?>" placeholder="Hrs/Week" >
+        <input type='hidden' name="ModalHRSForWas<?=$wef?>" value="<?=$hours;?>" >
       </div>
       <div class='col-md-3'>
-      <p>Claim: <?=$claimMonths[$row['CLAIM_MONTH']]?></p>
+        <p>Claim: <?=$claimMonth?></p>
       </div>
     </div>
     <?php

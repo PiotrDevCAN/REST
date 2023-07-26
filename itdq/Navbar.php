@@ -14,6 +14,20 @@ class Navbar
 
     protected $menuItems;
 
+    public static $ACCESS_CDI = 'accessCdi';
+    public static $ACCESS_ADMIN = 'accessAdmin';
+    public static $ACCESS_DEMAND = 'accessDemand';
+    public static $ACCESS_RFS = 'accessRfs';
+    public static $ACCESS_RFS_AD = 'accessRfsAd';
+
+    public static $ACCESS_PMO = 'accessPmo';
+    public static $ACCESS_FM = 'accessFm';
+    public static $ACCESS_USER = 'accessUser';
+    
+    public static $ACCESS_RESTRICT = 'accessRestrict';
+    public static $ACCESS_SUPPLY = 'accessSupply';
+    public static $ACCESS_SUPPLY_X = 'accessSupplyX';
+    public static $ACCESS_REPORTS = 'accessReports';
 
     function __construct($image,$brand,$search=false){
         $this->navbarImage = $image;
@@ -28,7 +42,6 @@ class Navbar
     function addOption(NavbarOption $navbarOption){
         $this->menuItems[] = $navbarOption;
     }
-
 
     function createNavbar($page){
         ?>
@@ -57,20 +70,34 @@ class Navbar
             $menu->createItem();
         }
 
-        $hash = `git log -1 --pretty=%h`;
+        function get_page_mod_time() {
+            $incls = get_included_files();
+            $incls = array_filter($incls, "is_file");
+            $mod_times = array_map('filemtime', $incls);
+            $mod_time = max($mod_times);
+            
+            return $mod_time;
+        }
+        
+        // $hash = `git log -1 --pretty=%h`;
+        $hashMain = date("d F Y", get_page_mod_time());
+        $hash = sha1($hashMain);
+        $hash = substr($hash, 0, 7);
 
         // $teamBlogUrl = 'https://w3.ibm.com/w3publisher/lbg-agile-accelerate/meet-the-agile-team/project-services/project-delivery';
-        $teamBlogUrl = 'https://w3.ibm.com/ocean/w3publisher/rest';
+        // $teamBlogUrl = 'https://w3.ibm.com/ocean/w3publisher/rest';
+        // $teamBlogUrl = 'https://kyndryl.sharepoint.com/sites/REST';
+        $teamBlogUrl = 'https://kyndryl.sharepoint.com/sites/REST/SitePages/REST-News.aspx';
 
         ?>
         </ul>
 
 		<p class='nav navbar-nav navbar-right userLevel '>User Level is:<scan id='userLevel'></scan><br/>Powered by SRE (<?=$hash;?>)</p>
         <ul class="nav navbar-nav navbar-right">
-        <li class='accessCdi accessPmo accessFm accessUser'
+        <li class='<?=self::$ACCESS_CDI?> <?=self::$ACCESS_PMO?> <?=self::$ACCESS_FM?> <?=self::$ACCESS_USER?>'
                id='Help_Page'
                data-pagename='pa_helpPage.php'><a href="pa_helpPage.php">Feedback</a></li>
-        <li class='accessCdi accessPmo accessFm accessUser'><a href="<?=$teamBlogUrl?>" target='_blank'>REST Blog</a></li>       
+        <li class='<?=self::$ACCESS_CDI?> <?=self::$ACCESS_PMO?> <?=self::$ACCESS_FM?> <?=self::$ACCESS_USER?>'><a href="<?=$teamBlogUrl?>" target='_blank'>REST Blog</a></li>       
 	    </ul>
 
         </div><!-- /.navbar-collapse -->

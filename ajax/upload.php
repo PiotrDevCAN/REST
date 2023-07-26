@@ -10,7 +10,6 @@ ob_clean();
 if (file_exists($target_file)) {
     $uploadOk = unlink($target_file);
     echo $uploadOk ? "Previous File deleted." : "Problem deleting previous file";
-
 }
 // Check file size
 if ($_FILES["file"]["size"] > 500000) {

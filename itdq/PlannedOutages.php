@@ -30,10 +30,12 @@ class PlannedOutages
     {
         $now = new \DateTime();
         $outagesOutstanding = 0;
-        foreach ($this->outages as $key => $details) {
-            if ($details['date'] >= $now) {
-                $outagesOutstanding ++;
-            } 
+        if (!is_null($this->outages) && count($this->outages) > 0) {
+            foreach ($this->outages as $key => $details) {
+                if ($details['date'] >= $now) {
+                    $outagesOutstanding ++;
+                }
+            }
         }
         $badge = $outagesOutstanding>0 ?  "<span class='badge'>$outagesOutstanding</span>" : null;
         

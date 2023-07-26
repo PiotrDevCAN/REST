@@ -26,7 +26,7 @@ $emailEntry = "A Resource Request &&rr&& linked to RFS &&rfs&& has been deleted 
 $emailPattern = array('RESOURCE_REFERENCE'=>'/&&rr&&/','RFS'=>'/&&rfs&&/');
 
 foreach ($allRequests as $resourceReference) {
-    emailNotifications::sendNotification($resourceReference,$emailEntry, $emailPattern);    
+    emailNotifications::sendNotification($resourceReference, $emailEntry, $emailPattern);    
     $diaryEntry =  $resourceReference . " was deleted because it's owning RFS " . $_POST['RFS_ID'] . " was deleted by " . $allocatorNotesid;
     resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
     $rrhTable->deleteData(" RESOURCE_REFERENCE='" . db2_escape_string($resourceReference) . "'",true);
@@ -37,6 +37,6 @@ $rfsTable->deleteData(" RFS_ID='" . db2_escape_string($_POST['RFS_ID']) . "'",tr
 
 $messages = ob_get_clean();
 
-$response = array('rfsId' => $_POST['RFS_ID'], 'Messages'=>$messages);
+$response = array('rfsId' => $_POST['RFS_ID'], 'messages'=>$messages);
 
 echo json_encode($response);

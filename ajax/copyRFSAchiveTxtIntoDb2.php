@@ -24,5 +24,5 @@ while (!$myFile->eof()) {
 }
 
 echo '<B>' . $totalCounter . ' record(s) read from file</B>';
-echo '<BR/><B>' . $archivedCounter . ' record(s) achieved</B>';
+echo '<BR/><B>' . $archivedCounter . ' record(s) archived</B>';
 echo '<BR/><B>' . $notArchivedCounter . ' record(s) not archived</B>';

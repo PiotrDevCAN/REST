@@ -25,7 +25,7 @@ $statusUpdate = resourceRequestTable::setRequestStatus($_POST['statusChangeRR'],
 $messages = ob_get_clean();
 ob_start();
 
-$response = array('success'=>$statusUpdate,'Messages'=>$messages);
+$response = array('success'=>$statusUpdate,'messages'=>$messages);
 
 ob_clean();
 echo json_encode($response);

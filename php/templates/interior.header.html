@@ -1,81 +1,100 @@
 <!DOCTYPE html>
-<html lang="en-US"><!--lang= is REQUIRED for V18 compliance-->
+<html lang="en-US">
+<!--lang= is REQUIRED for V18 compliance-->
+
 <head>
 
 	<meta http-equiv="refresh" content="3600">
-    <!--START meta data REQUIRED or V18 compliance-->
+	<!--START meta data REQUIRED or V18 compliance-->
 	<meta http-equiv="Content-type" content="text/html; ">
 	<meta name="viewport" content="width=device-width,initial-scale=1, user-scalable=no">
 	<!-- NOTE user-scalable opion above is not a V18 requirement and is used only to stop scaling on mobile devices. Do NOT include by default as there are accessibility consequences-->
 	<meta charset="UTF-8">
-    <link rel="icon" href="./ui/images/favicon.ico">
-    <link rel="canonical" href="http://www.ibm.com/______">
-    <meta name="dcterms.date" content="YYYY-MM-DD">
-    <meta name="dcterms.rights" content="������ Copyright IBM Corp. 2015">
-    <meta name="description" content="______">
-    <meta name="geo.country" content="GB">
-    <meta name="keywords" content="______">
-    <meta name="robots" content="index,follow">
-    <!--END meta data REQUIRED or V18 compliance-->
+	<link rel="icon" href="./ui/images/favicon.ico">
+	<link rel="canonical" href="http://www.ibm.com/______">
+	<meta name="dcterms.date" content="YYYY-MM-DD">
+	<meta name="dcterms.rights" content="������ Copyright IBM Corp. 2015">
+	<meta name="description" content="______">
+	<meta name="geo.country" content="GB">
+	<meta name="keywords" content="______">
+	<meta name="robots" content="index,follow">
+	<!--END meta data REQUIRED or V18 compliance-->
 
-<!-- 	<script	  src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script> -->
-    <script  type="text/javascript" src="/jquery/jquery-3.2.1.min.js" ></script>
-   
-   
+	<!-- 	<script	  src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script> -->
+	<script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+	</script>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js" crossorigin="anonymous"></script> -->
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.24/b-1.4.2/b-colvis-1.4.2/b-html5-1.4.2/b-print-1.4.2/cr-1.4.1/fc-3.2.3/fh-3.1.3/r-2.2.0/sc-1.4.3/datatables.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/en-gb.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"></script>
-<script type="text/javascript" src="java/script.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.4/jszip.min.js"></script>
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+	<!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+	</script> -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+	</script> -->
 
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+	<!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js" crossorigin="anonymous"></script> -->
+	<script type="text/javascript"
+		src="https://cdn.datatables.net/v/dt/dt-1.10.24/b-1.4.2/b-colvis-1.4.2/b-html5-1.4.2/b-print-1.4.2/cr-1.4.1/fc-3.2.3/fh-3.1.3/r-2.2.0/sc-1.4.3/datatables.min.js">
+	</script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/en-gb.js">
+	</script>
+	<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"></script> -->
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+	<script type="text/javascript" src="java/script.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.4/jszip.min.js"></script>
+	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
-
-	<title><?php echo $_SESSION['SITE_NAME']; ?>...	</title>
-
-	<!--  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" class="init"> -->
+	<title><?php echo $_SESSION['SITE_NAME']; ?>... </title>
 
 	<?php
 	echo strtoupper($_ENV['environment'])=='REST' ? '<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" integrity="sha384-zF4BRsG/fLiTGfR9QL82DrilZxrwgY/+du4p/c7J72zZj+FLYq4zY00RylP9ZjiT" crossorigin="anonymous">' : '<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/united/bootstrap.min.css" rel="stylesheet" integrity="sha384-pVJelSCJ58Og1XDc2E95RVYHZDPb9AVyXsI8NoVpB2xmtxoZKJePbMfE4mlXw7BJ" crossorigin="anonymous">';
 	?>
-  
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/basic.min.css" class="init">
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/dropzone.min.css" class="init">
-<!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" class="init"> -->
-    <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css"  />
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css"/>
+	<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+	<link rel="stylesheet" type="text/css"
+		href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/basic.min.css" class="init">
+	<link rel="stylesheet" type="text/css"
+		href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/dropzone.min.css" class="init">
+	<!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" class="init"> -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css"/> -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
 
 	<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.16/b-1.4.2/b-colvis-1.4.2/b-html5-1.4.2/b-print-1.4.2/cr-1.4.1/kt-2.3.2/r-2.2.0/rg-1.0.2/sl-1.2.3/datatables.min.css"/>  -->
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.24/b-1.4.2/b-colvis-1.4.2/b-html5-1.4.2/b-print-1.4.2/cr-1.4.1/fc-3.2.3/fh-3.1.3/r-2.2.0/sc-1.4.3/datatables.min.css"/>
-	
+	<link rel="stylesheet" type="text/css"
+		href="https://cdn.datatables.net/v/dt/dt-1.10.24/b-1.4.2/b-colvis-1.4.2/b-html5-1.4.2/b-print-1.4.2/cr-1.4.1/fc-3.2.3/fh-3.1.3/r-2.2.0/sc-1.4.3/datatables.min.css" />
+
 	<link rel="stylesheet" type="text/css" href="./css/localStyle_<?=$_ENV['environment'];?>.css" class="init">
 	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/dropzone.min.js" crossorigin="anonymous"></script>
-
-
-
-	<script>
-	$( document ).ready(function() {
-		console.log( "Page ready" );
-		//enable all tooltips on this page (including dynamically generated ones!!!)
-		$("body").tooltip({ selector: '[data-toggle="tooltip"]' });
-	});
-	
-	window.setTimeout(function() {
-	    window.location.href = "<?=$_SERVER['PHP_SELF'];?>";
-	}, 3600000 );
-	
-	
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.1.1/min/dropzone.min.js" crossorigin="anonymous">
 	</script>
 
-	</head>
+	<script type="text/javascript" src="../java/typeahead.bundle.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.js">
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/bloodhound-js@1.2.2/dist/bloodhound.min.js"></script>
+
+	<script type='text/javascript'>
+		$(document).ready(function () {
+			console.log("Page ready");
+			//enable all tooltips on this page (including dynamically generated ones!!!)
+			$("body").tooltip({
+				selector: '[data-toggle="tooltip"]'
+			});
+		});
+
+		window.setTimeout(function () {
+			window.location.href = "<?=$_SERVER['PHP_SELF'];?>";
+		}, 3600000);
+	</script>
+</head>
 
 <body>

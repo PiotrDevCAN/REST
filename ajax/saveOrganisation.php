@@ -13,7 +13,8 @@ $organisationTable  = new staticOrganisationTable(allTables::$STATIC_ORGANISATIO
 $organisationTableRecord = new staticOrganisationRecord();
 $organisationTableRecord->setFromArray(array('ORGANISATION'=>$_POST['ORGANISATION'],'SERVICE'=>$_POST['SERVICE'],'STATUS'=>$_POST['statusRadio']));
 
-if($_POST['mode']==FormClass::$modeDEFINE){
+$mode = isset($_POST['mode']) ? $_POST['mode'] : null;
+if($mode==FormClass::$modeDEFINE){
    $db2result = $organisationTable->insert($organisationTableRecord);
 } else {
    $db2result = $organisationTable->update($organisationTableRecord);
@@ -24,7 +25,7 @@ if(!$db2result){
     echo db2_stmt_errormsg();
 }
 
-$messages = ob_get_flush();
+$messages = ob_get_clean();
 ob_start();
 $success = empty($messages);
 

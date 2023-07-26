@@ -1,0 +1,121 @@
+<!-- Modal -->
+<div id="editResourceRateModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
+                <h4 class="modal-title">Edit Resource Rate</h4>
+            </div>
+            <div class="modal-body">
+                <form id="editResourceRateForm" class="form-horizontal">
+                    <div class="form-group ">
+                        <div class='required'>
+                            <label for='modalRESOURCE_TYPE_ID' class='col-md-3 control-label ceta-label-left'>Resource
+                                Type</label>
+                            <div class='col-md-9'>
+                                <select class='form-control select resourceType' id='modalRESOURCE_TYPE_ID' name='RESOURCE_TYPE_ID'
+                                    required='required' data-placeholder="Select Resource Type" data-allow-clear="true">
+                                    <option value=''>Select Resource Type
+                                    <option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class='required'>
+                            <label for='modalPS_BAND_ID' class='col-md-3 control-label ceta-label-left'>PS Band</label>
+                            <div class='col-md-9'>
+                                <select class='form-control select PSBand' id='modalPS_BAND_ID' name='PS_BAND_ID'
+                                    required='required' data-placeholder="Select PS Band" data-allow-clear="true">
+                                    <option value=''>Select PS Band
+                                    <option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group ">
+                        <div class='required'>
+                            <label for='modalBAND_ID' class='col-md-3 control-label ceta-label-left'>Band</label>
+                            <div class='col-md-9'>
+                                <select class='form-control select band' id='modalBAND_ID' name='BAND_ID' required='required'
+                                    data-placeholder="Select Band" data-allow-clear="true">
+                                    <option value=''>Select Band
+                                    <option>
+                                </select>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="form-group ">
+                        <div class='required'>
+                            <label for='modalTIME_PERIOD_START' class='col-md-3 control-label ceta-label-left'
+                                data-toggle='tooltip' data-placement='top' title=''>Time Period Start</label>
+                            <div class='col-md-9'>
+                                <div id='modalCalendarFormGroupTIME_PERIOD_START' class='input-group date form_datetime'
+                                    data-date-format='dd MM yyyy - HH:ii p' data-link-field='TIME_PERIOD_START'
+                                    data-link-format='yyyy-mm-dd-hh.ii.00'>
+                                    <input id='InputmodalTIME_PERIOD_START' class='form-control' type='text' value=''
+                                        placeholder='Select Time Period Start' required />
+                                    <input type='hidden' id='modalTIME_PERIOD_START' name='TIME_PERIOD_START' value=''
+                                        required />
+                                    <span class='input-group-addon'><span id='modalcalendarIconTIME_PERIOD_START'
+                                            class='glyphicon glyphicon-calendar'></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class='required'>
+                            <label for='modalTIME_PERIOD_END' class='col-md-3 control-label ceta-label-left'
+                                data-toggle='tooltip' data-placement='top' title=''>Time Period End</label>
+                            <div class='col-md-9'>
+                                <div id='modalCalendarFormGroupTIME_PERIOD_END' class='input-group date form_datetime'
+                                    data-date-format='dd MM yyyy - HH:ii p' data-link-field='TIME_PERIOD_END'
+                                    data-link-format='yyyy-mm-dd-hh.ii.00'>
+                                    <input id='InputmodalTIME_PERIOD_END' class='form-control' type='text' value=''
+                                        placeholder='Select Time Period End' required />
+                                    <input type='hidden' id='modalTIME_PERIOD_END' name='TIME_PERIOD_END' value=''
+                                        required />
+                                    <span class='input-group-addon'><span id='modalcalendarIconTIME_PERIOD_END'
+                                            class='glyphicon glyphicon-calendar'></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class='required'>
+                            <label for='modalDAY_RATE' class="col-md-3 control-label ceta-label-left"
+                                data-toggle="tooltip" data-placement="top" title="">Day Rate</label>
+                            <div class="col-md-9">
+                                <input type='number' step='0.01' min=0 class='form-control' id='modalDAY_RATE'
+                                    name='DAY_RATE' value='' placeholder="Day Rate" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class='required'>
+                            <label for='modalHOURLY_RATE' class="col-md-3 control-label ceta-label-left"
+                                data-toggle="tooltip" data-placement="top" title="">Hourly Rate</label>
+                            <div class="col-md-9">
+                                <input type='number' step='0.01' min=0 class='form-control' id='modalHOURLY_RATE'
+                                    name='HOURLY_RATE' value='' placeholder="Hourly Rate" required>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="modalID" name="ID" val="" />
+                    <div class='messageArea'></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="saveResourceRateForm">
+                    Save
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,10 +1,7 @@
 <?php
+
 use rest\allTables;
 use rest\rfsRecord;
-
-function ob_html_compress($buf){
-    return str_replace(array("\n","\r"),'',$buf);
-}
 
 $pipelineLiveArchive = !empty($_GET['pipelineLiveArchive']) ? trim($_GET['pipelineLiveArchive']) : 'live';
 $organisation = trim($_GET['organisation']);
@@ -27,7 +24,7 @@ $data = array();
 
 if($rs){
     $data[] = array('id'=>'All','text'=>'All'); 
-    while(($row=db2_fetch_assoc($rs))==true){
+    while(($row = db2_fetch_assoc($rs))==true){
         $data[] = array('id'=>trim($row['RFS']),'text'=>trim($row['RFS']));        
     }
 } else {

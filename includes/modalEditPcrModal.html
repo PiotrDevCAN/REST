@@ -1,0 +1,88 @@
+<!-- Modal -->
+<div id="editPcrModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">PCR for RFS Definition Form</h4>
+      </div>
+      <div class="modal-body">
+        <div class="panel panel-warning">
+          <div class="panel-heading">Info</div>
+          <div class="panel-body" id="editPcrModalBody">
+            <form id="createPcrForm" class="form-horizontal">
+              <h5>Please confirm you wish to <b>CREATE PCR</b> extension for: <b class="labelRfsId"></b> RFS record</h5>
+              <input type='hidden' id='modalPCR_ID' name='PCR_ID' value='' />
+              <input type='hidden' id='modalRFS_ID' name='RFS_ID' value='' />
+              <div class="form-group">
+                <div class='required'>
+                  <label for='modalPCR_NUMBER' class='col-md-3 control-label ceta-label-left'>PCR Number</label>
+                  <div class="col-md-9">
+                    <input type='text' class='form-control' id='modalPCR_NUMBER' name='PCR_NUMBER'
+                      placeholder="PCR Number" required />
+                    <p id="rfsPcrIdInvalid" style="display:none; color: CRIMSON">RFS PCR ID does not meet XXXX-XXX-000000 pattern</p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group ">
+                <div class='required'>
+                  <label for='modalPCR_START_DATE' class='col-md-3 control-label ceta-label-left' data-toggle='tooltip'
+                    data-placement='top' title=''>PCR Start Date</label>
+                  <div class='col-md-9'>
+                    <div id='calendarFormGroupPCR_START_DATE' class='input-group date form_datetime'
+                      data-date-format='dd MM yyyy - HH:ii p' data-link-field='PCR_START_DATE'
+                      data-link-format='yyyy-mm-dd-hh.ii.00'>
+                      <input id='InputmodalPCR_START_DATE' class='form-control' type='text' value=''
+                        placeholder='Select PCR Start Date' required />
+                      <input type='hidden' id='modalPCR_START_DATE' name='PCR_START_DATE' value='' required />
+                      <span class='input-group-addon'><span id='modalcalendarIconPCR_START_DATE'
+                          class='glyphicon glyphicon-calendar'></span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group ">
+                <div class='required'>
+                  <label for='modalPCR_END_DATE' class='col-md-3 control-label ceta-label-left' data-toggle='tooltip'
+                    data-placement='top' title=''>PCR End Date</label>
+                  <div class='col-md-9'>
+                    <div id='calendarFormGroupPCR_END_DATE' class='input-group date form_datetime'
+                      data-date-format='dd MM yyyy - HH:ii p' data-link-field='PCR_END_DATE'
+                      data-link-format='yyyy-mm-dd-hh.ii.00'>
+                      <input id='InputmodalPCR_END_DATE' class='form-control' type='text' value=''
+                        placeholder='Select PCR End Date' required />
+                      <input type='hidden' id='modalPCR_END_DATE' name='PCR_END_DATE' value='' required />
+                      <span class='input-group-addon'><span id='modalcalendarIconPCR_END_DATE'
+                          class='glyphicon glyphicon-calendar'></span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group ">
+                <div class='required'>
+                  <label for="modalPCR_AMOUNT" class="col-md-3 control-label ceta-label-left" data-toggle="tooltip"
+                    data-placement="top" title="">PCR Amount</label>
+                  <div class="col-md-9">
+                    <input type='number' step='0.01' class="form-control" id="modalPCR_AMOUNT" name="PCR_AMOUNT"
+                      value="" placeholder="PCR Amount" required />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary glyphicon glyphicon-ok" id="editConfirmedPcr">
+          Confirm
+        </button>
+        <button type="button" class="btn btn-default glyphicon glyphicon-remove" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

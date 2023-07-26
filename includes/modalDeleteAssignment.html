@@ -1,0 +1,33 @@
+<!-- Modal -->
+<div id="deleteAssignmentModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
+                <h4 class="modal-title">Delete Record</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">Caution</div>
+                    <div class="panel-body" id="deleteAssignmentModalBody">
+                        <h5>Please confirm you wish to <b>DELETE</b> this record</h5>
+                        <form id='deleteAssignmentForm'>
+                            <input type='hidden' id='modalDeleteAssignmentId' name='ID' value='' />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary glyphicon glyphicon-ok" id="deleteConfirmedAssignment">
+                    Confirm
+                </button>
+                <button type="button" class="btn btn-default glyphicon glyphicon-remove" data-dismiss="modal">
+                    Retain
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

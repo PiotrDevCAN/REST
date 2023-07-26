@@ -11,7 +11,7 @@ $rfsTable->archiveRfs($_POST['RFS_ID']);
 $messages = ob_get_clean();
 ob_start();
 
-$response = array('rfsId' => $_POST['RFS_ID'], 'Messages'=>$messages);
+$response = array('rfsId' => $_POST['RFS_ID'], 'messages'=>$messages);
 
 ob_clean();
 echo json_encode($response);

@@ -1,14 +1,11 @@
 <?php
+
 use rest\allTables;
 use rest\resourceRequestTable;
 use itdq\Trace;
 use rest\rfsTable;
 use itdq\PhpMemoryTrace;
 use rest\rfsRecord;
-
-function ob_html_compress($buf){
-    return str_replace(array("\n","\r"),'',$buf);
-}
 
 set_time_limit(0);
 ini_set('memory_limit','1024M');
@@ -18,8 +15,6 @@ PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
 Trace::pageOpening($_SERVER['PHP_SELF']);
 $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 
-$startDate = !empty($_POST['startDate']) ? $_POST['startDate'] : null;
-$endDate = !empty($_POST['endDate']) ? $_POST['endDate'] : null;
 $pipelineLiveArchive = !empty($_POST['pipelineLiveArchive']) ? $_POST['pipelineLiveArchive'] : 'live' ;
 $pipelineLive = $pipelineLiveArchive=='live' ? rfsRecord::RFS_STATUS_LIVE : rfsRecord::RFS_STATUS_PIPELINE;
 $pipelineLive = $pipelineLiveArchive=='archive' ? null : $pipelineLive;
@@ -48,9 +43,8 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
 
     error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
 
-    $dataAndSql = $resourceRequestTable->returnAsArray($startDate, $endDate, $predicate, $pipelineLiveArchive);
-    $data = $dataAndSql['data'];
-    $sql = $dataAndSql['sql'];
+    $dataAndSql = $resourceRequestTable->returnAsArraySimple($predicate, $pipelineLiveArchive);
+    list('data' => $data, 'sql' => $sql) = $dataAndSql;
 
     PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
 

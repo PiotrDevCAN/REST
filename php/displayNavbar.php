@@ -3,10 +3,13 @@ use itdq\PlannedOutages;
 use itdq\Navbar;
 use itdq\NavbarMenu;
 use itdq\NavbarOption;
+use itdq\NavbarDivider;
 include ('itdq/PlannedOutages.php');
 include ('itdq/DbTable.php');
 $plannedOutagesLabel = "Planned Outages";
+$plannedOutagesId = str_replace(" ","_",$plannedOutagesLabel);
 $plannedOutages = new PlannedOutages();
+$plannedOutagesBadge = $plannedOutages->getBadge();
 include ('UserComms/responsiveOutages_V2.php');
 
 $navBarImage = ""; //a small image to displayed at the top left of the nav bar
@@ -18,56 +21,95 @@ $page = isset($pageDetails[2]) ? $pageDetails[2] : $pageDetails[1];
 
 $navbar = new Navbar($navBarImage, $navBarBrand,$navBarSearch);
 
+$divider 		= ( new NavbarDivider(Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN));
+
 $cdiAdmin       = new NavbarMenu("CDI Admin");
-$trace          = new NavbarOption('View Trace','pi_trace.php','accessCdi');
-$traceControl   = new NavbarOption('Trace Control','pi_traceControl.php','accessCdi');
-$traceDelete    = new NavbarOption('Trace Deletion', 'pi_traceDelete.php','accessCdi');
+$trace          = new NavbarOption('View Trace','pi_trace.php',Navbar::$ACCESS_CDI);
+$traceControl   = new NavbarOption('Trace Control','pi_traceControl.php',Navbar::$ACCESS_CDI);
+$traceDelete    = new NavbarOption('Trace Deletion', 'pi_traceDelete.php',Navbar::$ACCESS_CDI);
 
 $cdiAdmin->addOption($trace);
 $cdiAdmin->addOption($traceControl);
 $cdiAdmin->addOption($traceDelete);
 
-$adminMenu      = new NavbarMenu('REST Admin','accessCdi accessAdmin');
-$organisation   = new NavbarOption('Organisation','pa_organisation.php','accessCdi accessAdmin');
+$adminMenu      = new NavbarMenu('REST Admin',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
+$organisation   = new NavbarOption('Organisation','pa_organisation.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
 $adminMenu->addOption($organisation);
-$VBACactiveResources = new NavbarOption('VBAC Active Resources','pa_activeResources.php','accessCdi accessAdmin');
+$service   		= new NavbarOption('Service','pa_service.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
+$adminMenu->addOption($service);
+$pa_organisationServices   = new NavbarOption('Service to Organisation','pa_organisationServices.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
+$adminMenu->addOption($pa_organisationServices);
+// $adminMenu->addOption( new NavbarDivider(Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN));
+// $businessUnit   = new NavbarOption('Business Unit','pa_businessUnit.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
+// $adminMenu->addOption($businessUnit);
+// $valueStream   = new NavbarOption('Value Stream','pa_valueStream.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
+// $adminMenu->addOption($valueStream);
+// $businessUnitValueStream   = new NavbarOption('Value Stream to Business Unit','pa_businessUnitValueStreams.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
+// $adminMenu->addOption($businessUnitValueStream);
+$adminMenu->addOption( new NavbarDivider(Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN));
+$resType 		= new NavbarOption('Resource Type - <b>NEW!</b>','pa_resourceType.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_RFS_AD);
+$adminMenu->addOption($resType);
+$psBand 		= new NavbarOption('PS Band - <b>NEW!</b>','pa_PSBand.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_RFS_AD);
+$adminMenu->addOption($psBand);
+// $band 			= new NavbarOption('Band - <b>NEW!</b>','pa_band.php',Navbar::$ACCESS_CDI' '.Navbar::$ACCESS_RFS_AD);
+// $adminMenu->addOption($band);
+$resRate 		= new NavbarOption('Resource Rates - <b>NEW!</b>','pa_resourceRate.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_RFS_AD);
+$adminMenu->addOption($resRate);
+$adminMenu->addOption( new NavbarDivider(Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_RFS_AD));
+$resTraits 	= new NavbarOption('Resource Traits (Assignment) - <b>NEW!</b>','pa_resourceTraits.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_RFS_AD);
+$adminMenu->addOption($resTraits);
+$bespokeRate 	= new NavbarOption('Bespoke Rates (Assignment) - <b>NEW!</b>','pa_bespokeRate.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_RFS_AD);
+$adminMenu->addOption($bespokeRate);
+$adminMenu->addOption( new NavbarDivider(Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN));
+$VBACactiveResources = new NavbarOption('VBAC Active Resources','pa_activeResources.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
 $adminMenu->addOption($VBACactiveResources);
-$RFSToArchiveUpload = new NavbarOption('RFS To Archive Upload','pc_RFSToArchiveUpload.php','accessCdi accessAdmin');
+$RFSToArchiveUpload  = new NavbarOption('RFS To Archive Upload','pc_RFSToArchiveUpload.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
 $adminMenu->addOption($RFSToArchiveUpload);
 
-$request        = new NavbarMenu(  'Request'                                          ,'accessCdi accessAdmin accessDemand accessRfs');
-$newRfs         = new NavbarOption('New RFS','pr_newRfs.php'                          ,'accessCdi accessAdmin accessDemand accessRfs');
-$newResReq      = new NavbarOption('New Resource Request', 'pr_newResourceRequest.php','accessCdi accessAdmin accessDemand accessRfs');
-// $managePipeline = new NavbarOption('Manage Pipeline', 'pr_managePipeline.php','accessCdi accessAdmin accessDemand ');
+$request        = new NavbarMenu(  'Request'                                          ,Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_DEMAND.' '.Navbar::$ACCESS_RFS);
+$newRfs         = new NavbarOption('New RFS','pr_newRfs.php'                          ,Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_DEMAND.' '.Navbar::$ACCESS_RFS);
+$newRfsPcr      = new NavbarOption('New RFS PCR - <b>NEW!</b>','pr_newRfsPcr.php'     ,Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_DEMAND.' '.Navbar::$ACCESS_RFS);
+$newResReq      = new NavbarOption('New Resource Request', 'pr_newResourceRequest.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_DEMAND.' '.Navbar::$ACCESS_RFS);
+// $managePipeline = new NavbarOption('Manage Pipeline', 'pr_managePipeline.php'	  ,Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_DEMAND.' '.Navbar::$ACCESS_RFS);
 
 $request->addOption($newRfs);
+$request->addOption($newRfsPcr);
 $request->addOption($newResReq);
-// $request->addOption(new NavbarDivider('accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports'));
-
-// $request->addOption(new NavbarDivider('accessCdi accessAdmin accessDemand'));
+// $request->addOption(new NavbarDivider(Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_DEMAND.' '.Navbar::$ACCESS_SUPPLY.' '.Navbar::$ACCESS_SUPPLY_X.' '.Navbar::$ACCESS_RFS.' '.Navbar::$ACCESS_REPORTS));
+// $request->addOption(new NavbarDivider(Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_DEMAND.''));
 // $request->addOption($managePipeline);
 
-
-$assign         = new NavbarMenu(  'Assign');
-
-$resRequest     = new NavbarOption('Resource Requests', 'ps_resourceRequests.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
-// $info           = new NavbarOption('PHP Info', 'phpinfo.php','accessCdi accessAdmin accessDemand accessSupply accessRfs');
+$assign         = new NavbarMenu('Assign');
+$resRequest     = new NavbarOption('Resource Requests', 'ps_resourceRequests.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_DEMAND.' '.Navbar::$ACCESS_SUPPLY.' '.Navbar::$ACCESS_SUPPLY_X.' '.Navbar::$ACCESS_RFS.' '.Navbar::$ACCESS_REPORTS);
+// $info           = new NavbarOption('PHP Info', 'phpinfo.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_DEMAND.' '.Navbar::$ACCESS_SUPPLY.' '.Navbar::$ACCESS_SUPPLY_X.' '.Navbar::$ACCESS_RFS.' '.Navbar::$ACCESS_REPORTS);
 $assign->addOption($resRequest);
 // $supply->addOption($info);
 
 $reports        = new NavbarMenu('Report');
-$listRfs        = new NavbarOption('RFS Report', 'ps_rfs.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
-$claim          = new NavbarOption('Requests', 'ps_ClaimMonthly.php','accessCdi accessAdmin accessDemand accessSupply accessRfs accessReports');
-$hrsPerWeek     = new NavbarOption('HrsPerWeek', 'ps_HoursPerWeekPerResource.php','accessCdi accessAdmin');
-$noResReq     	= new NavbarOption('Requests Assigned To Leavers', 'ps_NoResourceRequests.php','accessCdi accessAdmin');
-// $incorWeeksReq  = new NavbarOption('Requests with Incorrect Weekends', 'ps_IncorrectWeekendsRequests.php','accessCdi accessAdmin');
+$listRfs        = new NavbarOption('RFS Report', 'ps_rfs.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_DEMAND.' '.Navbar::$ACCESS_SUPPLY.' '.Navbar::$ACCESS_SUPPLY_X.' '.Navbar::$ACCESS_RFS.' '.Navbar::$ACCESS_REPORTS);
+$listRfsPcr     = new NavbarOption('RFS PCR Report - <b>NEW!</b>', 'ps_rfsPcr.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_DEMAND.' '.Navbar::$ACCESS_SUPPLY.' '.Navbar::$ACCESS_SUPPLY_X.' '.Navbar::$ACCESS_RFS.' '.Navbar::$ACCESS_REPORTS);
+$claim          = new NavbarOption('Requests Report', 'ps_ClaimMonthly.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN.' '.Navbar::$ACCESS_DEMAND.' '.Navbar::$ACCESS_SUPPLY.' '.Navbar::$ACCESS_SUPPLY_X.' '.Navbar::$ACCESS_RFS.' '.Navbar::$ACCESS_REPORTS);
+$hrsPerWeek     = new NavbarOption('HrsPerWeek', 'ps_HoursPerWeekPerResource.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
+$noResReq     	= new NavbarOption('Requests Assigned To Leavers', 'ps_NoResourceRequests.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
+$noMatchBUReq   = new NavbarOption('Cross BU assignments', 'ps_CrossBUAssignments.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
+// $incorWeeksReq  = new NavbarOption('Requests with Incorrect Weekends', 'ps_IncorrectWeekendsRequests.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
+$rateCard   	= new NavbarOption('Rate Card Report - <b>NEW!</b>', 'ps_rateCard.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
+$bespokeRates   = new NavbarOption('Bespoke Rates Report - <b>NEW!</b>', 'ps_bespokeRates.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
+$forecastedHours   = new NavbarOption('Forecasted Hours - <b>In development!</b>', 'ps_forecastedHours.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
 
 $reports->addOption($listRfs);
+$reports->addOption($listRfsPcr);
 $reports->addOption($claim);
 $reports->addOption($hrsPerWeek);
 $reports->addOption($noResReq);
+$reports->addOption($noMatchBUReq);
 // $reports->addOption($incorWeeksReq);
-// $dummy          = new NavbarOption('Dummy entry', 'pr_dummyReport.php','accessUser accessReports');
+$reports->addOption($divider);
+$reports->addOption($rateCard);
+$reports->addOption($bespokeRates);
+$reports->addOption($divider);
+$reports->addOption($forecastedHours);
+// $dummy = new NavbarOption('Dummy entry', 'pr_dummyReport.php',Navbar::$ACCESS_USER.' '.Navbar::$ACCESS_REPORTS);
 
 $navbar->addMenu($cdiAdmin);
 $navbar->addMenu($adminMenu);
@@ -75,124 +117,79 @@ $navbar->addMenu($request);
 $navbar->addMenu($assign);
 $navbar->addMenu($reports);
 
-$outages = new NavbarOption($plannedOutagesLabel, 'ppo_PlannedOutages.php','accessCdi accessPmo accessFm accessUser accessReports');
+$outages = new NavbarOption($plannedOutagesLabel, 'ppo_PlannedOutages.php',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_PMO.' '.Navbar::$ACCESS_FM.' '.Navbar::$ACCESS_USER.' '.Navbar::$ACCESS_REPORTS);
 $navbar->addOption($outages);
 
-$privacy = new NavbarOption('Privacy','https://w3.ibm.com/w3publisher/w3-privacy-notice','accessCdi accessUser accessReports ');
+$privacy = new NavbarOption('Privacy','https://w3.ibm.com/w3publisher/w3-privacy-notice',Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_USER.' '.Navbar::$ACCESS_REPORTS);
 $navbar->addOption($privacy);
 
 $navbar->createNavbar($page);
-
-$isCdi    = employee_in_group($_SESSION['cdiBg'],     $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessCdi')" : null;
-$isAdmin  = employee_in_group($_SESSION['adminBg'],   $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessAdmin')" : null;
-$isDemand = employee_in_group($_SESSION['demandBg'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessDemand')" : null;
-$isSupply = employee_in_group($_SESSION['supplyBg'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessSupply')" : null;
-$isRfs    = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessRfs')" : null;
-$isReports= employee_in_group($_SESSION['reportsBg'], $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? ".not('.accessReports')" : null;
-
+$isCdi    	 = employee_in_group($_SESSION['cdiBg'],     $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isAdmin  	 = employee_in_group($_SESSION['adminBg'],   $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isDemand 	 = employee_in_group($_SESSION['demandBg'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isSupply 	 = employee_in_group($_SESSION['supplyBg'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isSupplyX	 = employee_in_group($_SESSION['supplyXBg'], $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isRfs    	 = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isRfsADTeam = employee_in_group($_SESSION['rfsADBg'], 	 $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isReports	 = employee_in_group($_SESSION['reportsBg'], $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
 
 // For Testing only
 // $isCdi = null;
-// // $isAdmin = null;
+// $isAdmin = null;
 // $isDemand = null;
 // $isSupply = null;
+// $isSupplyX = true;
 // $isRfs = null;
 // $isReports = null;
 
+$isUser = (
+	!empty($isCdi) 
+	|| !empty($isAdmin) 
+	|| !empty($isDemand) 
+	|| !empty($isSupply)  
+	|| !empty($isSupplyX)  
+	|| !empty($isRfs) 
+	|| !empty($isRfsADTeam)
+	|| !empty($isReports) 
+) ? true : null;
 
+$_SESSION['isCdi']     	 = !empty($isCdi);
+$_SESSION['isAdmin']   	 = !empty($isAdmin);
+$_SESSION['isDemand']  	 = !empty($isDemand);
+$_SESSION['isSupply']  	 = !empty($isSupply);
+$_SESSION['isSupplyX'] 	 = !empty($isSupplyX);
+$_SESSION['isRfs']     	 = !empty($isRfs);
+$_SESSION['isRfsADTeam'] = !empty($isRfsADTeam);
+$_SESSION['isReports'] 	 = !empty($isReports);
+$_SESSION['isUser']      = !empty($isUser);
 
-$isUser = (!empty($isCdi) || !empty($isAdmin) || !empty($isDemand) || !empty($isSupply)  || !empty($isRfs) || !empty($isReports) ) ? ".not('.accessUser')" : null;
-
-$_SESSION['isCdi']     = !empty($isCdi);
-$_SESSION['isAdmin']   = !empty($isAdmin);
-$_SESSION['isDemand']  = !empty($isDemand);
-$_SESSION['isSupply']  = !empty($isSupply);
-$_SESSION['isUser']    = !empty($isUser);
-$_SESSION['isRfs']     = !empty($isRfs);
-$_SESSION['isReports'] = !empty($isReports);
-
-$plannedOutagesId = str_replace(" ","_",$plannedOutagesLabel);
 ?>
-<script>
-$('.navbarMenuOption')<?=$isCdi?><?=$isAdmin?><?=$isDemand?><?=$isSupply?><?=$isUser?><?=$isRfs?><?=$isReports?>.remove();
-$('.navbarMenu').not(':has(li)').remove();
+<script type='text/javascript'>
 
-$('li[data-pagename="<?=$page;?>"]').addClass('active').closest('li.dropdown').addClass('active');
-<?php
+var ACCESS_RESTRICT = '<?=Navbar::$ACCESS_RESTRICT?>';
 
+var ACCESS_CDI 		= '<?=Navbar::$ACCESS_CDI?>';
+var ACCESS_ADMIN 	= '<?=Navbar::$ACCESS_ADMIN?>';
+var ACCESS_DEMAND 	= '<?=Navbar::$ACCESS_DEMAND?>';
+var ACCESS_SUPPLY 	= '<?=Navbar::$ACCESS_SUPPLY?>';
+var ACCESS_SUPPLY_X = '<?=Navbar::$ACCESS_SUPPLY_X?>';
+var ACCESS_RFS 		= '<?=Navbar::$ACCESS_RFS?>';
+var ACCESS_RFS_AD 	= '<?=Navbar::$ACCESS_RFS_AD?>';
+var ACCESS_REPORTS 	= '<?=Navbar::$ACCESS_REPORTS?>';
+var ACCESS_USER 	= '<?=Navbar::$ACCESS_USER?>';
 
+var isCdi     	= '<?=$_SESSION['isCdi'];?>'; 
+var isAdmin   	= '<?=$_SESSION['isAdmin'];?>';
+var isDemand  	= '<?=$_SESSION['isDemand'];?>';
+var isSupply  	= '<?=$_SESSION['isSupply'];?>'; 
+var isSupplyX 	= '<?=$_SESSION['isSupplyX'];?>';
+var isRfs 	  	= '<?=$_SESSION['isRfs'];?>'; 
+var isRfsADTeam = '<?=$_SESSION['isRfsADTeam'];?>'; 
+var isReports 	= '<?=$_SESSION['isReports'];?>';
+var isUser 	  	= '<?=$_SESSION['isUser'];?>';
 
-if($page != "index.php" && substr($page,0,3)!='cdi'){
-    ?>
+var plannedOutagesId 	= '<?=$plannedOutagesId?>';
+var plannedOutagesLabel = '<?=$plannedOutagesLabel?>';
+var plannedOutagesBadge = "<?=$plannedOutagesBadge?>";
 
-    console.log('<?=$page;?>');
-
-	var pageAllowed = $('li[data-pagename="<?=$page;?>"]').length;
-	if(pageAllowed==0 ){
-		// window.location.replace('index.php');
-		// alert("You do not have access to:<?=$page?>");
-	}
-	<?php
-}
-
-$userLevel = '';
-$userLevel.= $isCdi     ? ':CDI'    : null;
-$userLevel.= $isAdmin   ? ':Admin'  : null;
-$userLevel.= $isDemand  ? ':Demand' : null;
-$userLevel.= $isSupply  ? ':Supply' : null;
-$userLevel.= $isRfs     ? ':Rfs Team' : null;
-$userLevel.= $isReports ? ':Reports Only'   : null;
-?>
-
-restrictButtonAccess = function(){
-	var userLevel  = $('#userLevel').text();
-	var isCdi      = userLevel.indexOf('CDI')     !== -1;
-	var isAdmin    = userLevel.indexOf('Admin')   !== -1;
-	var isDemand   = userLevel.indexOf('Demand')  !== -1;
-	var isSupply   = userLevel.indexOf('Supply')  !== -1;
-	var isUser     = userLevel.indexOf('User')    !== -1;
-	var isRfs      = userLevel.indexOf('Rfs Team')!== -1;
-	var isReports  = userLevel.indexOf('Reports') !== -1;
-
-	var nonPermittedButtons = $('button.accessRestrict'); // We will remove all accessRestrict buttons, unless they have the access.
-	if(isCdi){
-		// We remove .accessCdi buttons from the list of nonPermittedButtons as the person is CDI so those buttons are allowed.
-		nonPermittedButtons = $(nonPermittedButtons).not('.accessCdi');
-	}
-	if(isAdmin){
-		nonPermittedButtons = $(nonPermittedButtons).not('.accessAdmin');
-	}
-	if(isDemand){
-		nonPermittedButtons = $(nonPermittedButtons).not('.accessDemand');
-	}
-	if(isSupply){
-		nonPermittedButtons = $(nonPermittedButtons).not('.accessSupply');
-	}
-	if(isUser){
-		nonPermittedButtons = $(nonPermittedButtons).not('.accessUser');
-	}
-	if(isRfs){
-		nonPermittedButtons = $(nonPermittedButtons).not('.accessRfs');
-	}
-	if(isReports){
-		nonPermittedButtons = $(nonPermittedButtons).not('.accessReports');
-	}
-	console.log('will remove restricted buttons');
-	$(nonPermittedButtons).remove();
-};
-
-$(document).on('draw.dt',function(){
-	restrictButtonAccess();
-});
-
-
-$(document).ready(function () {
-    $('button.accessRestrict')<?=$isCdi?><?=$isAdmin?><?=$isDemand?><?=$isSupply?><?=$isUser?><?=$isReports?><?=$isRfs?>.remove();
-    $("#userLevel").html("<?=$userLevel?>");
-    var poContent = $('#<?=$plannedOutagesId?> a').html();
-	var badgedContent = poContent + "&nbsp;" + "<?=$plannedOutages->getBadge();?>";
-	$('#<?=$plannedOutagesId?> a').html(badgedContent);
-
-});
 </script>
-

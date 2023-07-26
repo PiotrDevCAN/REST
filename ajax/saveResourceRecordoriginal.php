@@ -53,7 +53,7 @@ if($saveResponse && trim($_POST['mode'])!=FormClass::$modeEDIT ){ // if they wer
 $messages = ob_get_clean();
 ob_start();
 
-$response = array('resourceReference'=>$resourceReference, 'saveResponse' => $saveResponse, 'hoursResponse'=>$hoursResponse, 'Messages'=>$messages,'Update'=>$update);
+$response = array('resourceReference'=>$resourceReference, 'saveResponse' => $saveResponse, 'hoursResponse'=>$hoursResponse, 'messages'=>$messages,'Update'=>$update);
 
 ob_clean();
 echo json_encode($response);

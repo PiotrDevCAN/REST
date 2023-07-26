@@ -2,7 +2,6 @@
 namespace rest;
 
 use itdq\DbRecord;
-use itdq\Loader;
 use itdq\FormClass;
 
 /**

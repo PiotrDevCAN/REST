@@ -4,6 +4,7 @@ namespace rest;
 use itdq\DbTable;
 use itdq\AuditTable;
 use itdq\Loader;
+use itdq\Navbar;
 use rest\activeResourceRecord;
 
 class activeResourceTable extends DbTable {
@@ -16,6 +17,9 @@ class activeResourceTable extends DbTable {
     private $thirtyDaysHence;
 
     protected $allDelegates;
+
+    const INT_STATUS_ACTIVE = 'active';
+    const INT_STATUS_INACTIVE = 'inactive'; 
 
     const PORTAL_PRE_BOARDER_EXCLUDE = 'exclude';
     const PORTAL_PRE_BOARDER_INCLUDE = 'include';
@@ -89,8 +93,10 @@ class activeResourceTable extends DbTable {
 
         $preboadersAction = empty($preboadersAction) ? self::PORTAL_PRE_BOARDER_EXCLUDE : $preboadersAction;
 
+        $sixtyDays = new \DateInterval('P60D');
         $this->thirtyDaysHence = new \DateTime();
-        $this->thirtyDaysHence->add(new \DateInterval('P60D')); // Modified 4th July 2017
+
+        $this->thirtyDaysHence = rfsTable::addTime($this->thirtyDaysHence, 60, 0, 0); // Modified 4th July 2017
 
         $data = array();
 
@@ -121,7 +127,7 @@ class activeResourceTable extends DbTable {
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         } else {
-            while(($row=db2_fetch_assoc($rs))==true){
+            while(($row = db2_fetch_assoc($rs))==true){
                 // Only editable, if they're not a "pre-Boarder" who has now been boarded.
                 $preparedRow = $this->prepareFields($row);
                 $rowWithButtonsAdded =(substr($row['PES_STATUS_DETAILS'],0,7)=='Boarded') ? $preparedRow : $this->addButtons($preparedRow);
@@ -145,7 +151,7 @@ class activeResourceTable extends DbTable {
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         } else {
-            while(($row=db2_fetch_assoc($rs))==true){
+            while(($row = db2_fetch_assoc($rs))==true){
                 $cnum = trim($row['CNUM']);
                 $preparedRow = $this->prepareFields($row);
                 $fmCnumField = $preparedRow['FM_CNUM'];
@@ -167,6 +173,7 @@ class activeResourceTable extends DbTable {
     function returnForDataTables(){
         $sql = " SELECT * ";
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
+        $sql.= " WHERE STATUS='" . self::INT_STATUS_ACTIVE. "'";
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 
@@ -175,10 +182,9 @@ class activeResourceTable extends DbTable {
             return false;
         }
 
-        //        $data = array();
         $displayAble = array();
 
-        while (($row=db2_fetch_assoc($rs))==true) {
+        while (($row = db2_fetch_assoc($rs))==true) {
             $display = array();
             $row = array_map('trim', $row);
             $display['EMAIL_ADDRESS'] = !empty($row['EMAIL_ADDRESS']) ? $row['EMAIL_ADDRESS'] : 'unavailable in VBAC';
@@ -200,7 +206,7 @@ class activeResourceTable extends DbTable {
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         } else {
-            while(($row=db2_fetch_assoc($rs))==true){
+            while(($row = db2_fetch_assoc($rs))==true){
                 $jsonEncodable = json_encode($row);
                 if(!$jsonEncodable){
                     echo "<hr/><br/>Dirty Data Found in record for : " . $row['CNUM'];
@@ -574,7 +580,7 @@ class activeResourceTable extends DbTable {
             return false;
         }
         $options = array();
-        while(($row=db2_fetch_assoc($rs))==true){
+        while(($row = db2_fetch_assoc($rs))==true){
             $option  = "<option value='" . trim($row['CNUM']) ."'";
             $option .= trim($row['CNUM']) == trim($preBoarded) ? ' selected ' : null;
             $option .= " >" . trim($row['FIRST_NAME']) ." " . trim($row['LAST_NAME'])  . " (" . trim($row['EMAIL_ADDRESS']) .") ";
@@ -602,7 +608,7 @@ class activeResourceTable extends DbTable {
                 break;
             case $status == activeResourceRecord::PES_STATUS_TBD && !$_SESSION['isPes']:
             case $status == activeResourceRecord::PES_STATUS_NOT_REQUESTED:
-                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesInitiate accessRestrict accessPmo accessFm' ";
+                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesInitiate ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_PMO." ".Navbar::$ACCESS_FM."' ";
                 $pesStatusWithButton.= "aria-label='Left Align' ";
                 $pesStatusWithButton.= " data-cnum='" .$actualCnum . "' ";
                 $pesStatusWithButton.= " data-pesstatus='$status' ";
@@ -633,7 +639,7 @@ class activeResourceTable extends DbTable {
                 $disabled = $valid ? '' : 'disabled';
                 $tooltip = $valid ? 'Confirm PES Email details' : "Missing $missing";
 
-                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnSendPesEmail accessRestrict accessPmo accessFm' ";
+                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnSendPesEmail ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_PMO." ".Navbar::$ACCESS_FM."' ";
                 $pesStatusWithButton.= "aria-label='Left Align' ";
                 $pesStatusWithButton.= " data-emailaddress='$emailAddress' ";
                 $pesStatusWithButton.= " data-firstname='$firstName' ";
@@ -666,7 +672,7 @@ class activeResourceTable extends DbTable {
             case $status == activeResourceRecord::PES_STATUS_DECLINED && ( $_SESSION['isFm'] || $_SESSION['isCdi'] )  ;
             case $status == activeResourceRecord::PES_STATUS_FAILED && ( $_SESSION['isFm'] || $_SESSION['isCdi'] )  ;
             case $status == activeResourceRecord::PES_STATUS_REMOVED && ( $_SESSION['isFm'] || $_SESSION['isCdi'] )  :
-                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesRestart accessRestrict accessFm accessCdi' aria-label='Left Align' ";
+                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesRestart ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_FM." ".Navbar::$ACCESS_CDI."' aria-label='Left Align' ";
                 $pesStatusWithButton.= " data-cnum='" .$actualCnum . "' ";
                 $pesStatusWithButton.= " data-notesid='" . $notesId . "' ";
                 $pesStatusWithButton.= " data-email='" . $email . "' ";
@@ -713,7 +719,7 @@ class activeResourceTable extends DbTable {
             case $status == activeResourceRecord::PES_STATUS_MOVER && !$_SESSION['isPes'] :
             case $status == activeResourceRecord::PES_STATUS_INITIATED && !$_SESSION['isPes'] ;
             case $status == activeResourceRecord::PES_STATUS_RECHECK_PROGRESSING && !$_SESSION['isPes'] ;
-                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesStop accessRestrict accessFm' aria-label='Left Align' ";
+                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesStop ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_FM."' aria-label='Left Align' ";
                 $pesStatusWithButton.= " data-cnum='" .$actualCnum . "' ";
                 $pesStatusWithButton.= " data-notesid='" . $notesId . "' ";
                 $pesStatusWithButton.= " data-email='" . $email . "' ";
@@ -756,7 +762,7 @@ class activeResourceTable extends DbTable {
         $squadName = $original ? $originalSquadName : $oldSquadName;
         $cnum = $row['actualCNUM'];
 
-        $agileSquadWithButton = $original ? "<button type='button' class='btn btn-default btn-xs btnEditAgileNumber accessRestrict  accessCdi' aria-label='Left Align' " : null;
+        $agileSquadWithButton = $original ? "<button type='button' class='btn btn-default btn-xs btnEditAgileNumber ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_CDI."' aria-label='Left Align' " : null;
         $agileSquadWithButton.= $original ? " data-cnum='" .$cnum . "' ": null ;
         $agileSquadWithButton.= $original ? " data-version='original' " : null ;
         $agileSquadWithButton.= $original ? " data-toggle='tooltip' data-placement='top' " : null;
@@ -767,7 +773,7 @@ class activeResourceTable extends DbTable {
         $agileSquadWithButton.= $original ?"&nbsp;" : null ;
 
         if(!empty($squadNumberField) && $original){
-            $agileSquadWithButton.= "<button type='button' class='btn btn-danger btn-xs btnClearSquadNumber accessRestrict  accessCdi' aria-label='Left Align' ";
+            $agileSquadWithButton.= "<button type='button' class='btn btn-danger btn-xs btnClearSquadNumber ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_CDI."' aria-label='Left Align' ";
             $agileSquadWithButton.= " data-cnum='" .$cnum . "' ";
             $agileSquadWithButton.= $original ? " data-version='original' " : " data-version='new' ";
             $agileSquadWithButton.= " data-toggle='tooltip' data-placement='top' ";

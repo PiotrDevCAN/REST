@@ -5,10 +5,7 @@ use rest\activeResourceTable;
 
 set_time_limit(0);
 
-// $_ENV['vbac_url'] = 'https://vbac-ut.dal1a.ciocloud.nonprod.intranet.ibm.com';
-// $url = $_ENV['vbac_url'] . '/api/employeesLeft.php?token=' . $_ENV['vbac_api_token'];
 $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=P.EMAIL_ADDRESS,P.PES_STATUS,SQUAD_NAME,TRIBE_NAME';
-// echo $url;
 
 $curl = curl_init();
 

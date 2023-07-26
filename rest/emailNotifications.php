@@ -1,7 +1,6 @@
 <?php
 namespace rest;
 
-
 use itdq\BlueMail;
 use itdq\BluePages;
 use itdq\BluePagesSLAPHAPI;
@@ -63,7 +62,9 @@ class emailNotifications
             padding:5px';
         
         $pStyle  = 'font-size:9.0pt;font-family:Tahoma, sans-serif;';
-        
+
+        $linkToRREntry = "https://" . $_SERVER['SERVER_NAME'] . "/ps_resourceRequestEntry.php?resource=" . $resourceRequestData['RESOURCE_REFERENCE'];
+                
         $emailBody = "<p style='$pStyle'>" . preg_replace($emailPattern, $replacements, $emailEntry) . "</p>";
         $emailBody.= "<br/>";
         $emailBody.= "<p style='$pStyle'>Resource Request Details:</p>";
@@ -76,14 +77,15 @@ class emailNotifications
         $emailBody.= "<tr ><th style='$thStyle'>Hours Type</th><td style='$tdStyle'>" . $resourceRequestData['HOURS_TYPE'] . "</td></tr>";
         $emailBody.= "<tr ><th style='$thStyle'>Starting</th><td style='$tdStyle'>" . $startDate->format('d M Y') . "</td></tr>";
         $emailBody.= "<tr ><th style='$thStyle'>Ending</th><td style='$tdStyle'>" . $endDate->format('d M Y') . "</td></tr>";
+        $emailBody.= "<tr ><th style='$thStyle'>For more details please refer to </th><td style='$tdStyle'><a href='".$linkToRREntry."' target='_blank'>Resource Request preview</a></td></tr>";       
         $emailBody.= "</tbody>";
         $emailBody.= "</table>";
         
-        BlueMail::send_mail($to, "Update to: " . $resourceRequestData['RFS'] . " - " . $resourceRequestData['RESOURCE_REFERENCE'], $emailBody, 'REST@noreply.ibm.com',$cc);        
-
+        $replyto = $_ENV['noreplyemailid'];
+        BlueMail::send_mail($to, "Update to: " . $resourceRequestData['RFS'] . " - " . $resourceRequestData['RESOURCE_REFERENCE'], $emailBody, $replyto, $cc);
     }
     
-    static function sendRfsNotification($rfsid,$emailEntry, $emailPattern){
+    static function sendRfsNotification($rfsid, $emailEntry, $emailPattern){
         
         $rfsTable = new rfsTable(allTables::$RFS);
         $rfsData = $rfsTable->getPredicate(" RFS_ID ='" . db2_escape_string($rfsid) . "' ");
@@ -98,12 +100,11 @@ class emailNotifications
         
         $to = array($requestorEmail); 
         $cc = array($_SESSION['ssoEmail']);
-      
+        
         $replacements = array();
         foreach ($emailPattern as $field => $pattern) {
             $replacements[] = $rfsData[$field];
         }
-        
         
         $thStyle = 'font-size:10.0pt;font-weight:700;text-decoration:none;font-family:Tahoma, sans-serif;padding:5px;text-align:right;background-color: #4eb1ea;';
         $tdStyle = 'mso-style-parent:style0;
@@ -143,7 +144,7 @@ class emailNotifications
         $emailBody.= "</tbody>";
         $emailBody.= "</table>";
         
-        BlueMail::send_mail($to, "Update to: " . $rfsid , $emailBody, 'REST@noreply.ibm.com',$cc);
-        
+        $replyto = $_ENV['noreplyemailid'];
+        BlueMail::send_mail($to, "Update to: " . $rfsid , $emailBody, $replyto, $cc);
     }
 }

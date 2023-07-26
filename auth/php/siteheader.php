@@ -14,11 +14,13 @@ include ('splClassLoader.php');
 
 $sessionConfig = (new \ByJG\Session\SessionConfig($_SERVER['SERVER_NAME']))
 ->withTimeoutHours(24)
-->withSecret($_ENV['jwt_token']);
+->withSecret($_ENV['jwt_token'])
+->replaceSessionHandler();
 
 $handler = new JwtSecureSession($sessionConfig);
-session_set_save_handler($handler, true);
-session_start();
+// session_set_save_handler($handler, true);
+
+// session_start();
 
 error_log(__FILE__ . "session:" . session_id());
 

@@ -2,8 +2,8 @@
 namespace rest;
 
 use itdq\DbRecord;
-use itdq\Loader;
-use itdq\FormClass;
+use rest\traits\recordTrait;
+use rest\traits\resourceRequestHoursRecordTrait;
 
 /**
  *
@@ -12,6 +12,8 @@ use itdq\FormClass;
  */
 class resourceRequestHoursRecord extends DbRecord
 {
+    use recordTrait, resourceRequestHoursRecordTrait;
+
     public $RESOURCE_REFERENCE;
     public $DATE;
     public $HOURS;   //  ALTER TABLE "REST_UT"."RESOURCE_REQUEST_HOURS" ALTER COLUMN "HOURS" SET DATA TYPE DECIMAL(4,2);    

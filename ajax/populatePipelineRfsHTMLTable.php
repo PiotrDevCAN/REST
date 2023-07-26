@@ -1,13 +1,8 @@
 <?php
+
 use rest\allTables;
-use rest\rfsTable;
-use rest\rfsRecord;
 use itdq\Trace;
 use rest\rfsPipelineView;
-
-function ob_html_compress($buf){
-    return str_replace(array("\n","\r"),'',$buf);
-}
 
 set_time_limit(0);
 ob_start();

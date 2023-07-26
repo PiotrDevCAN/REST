@@ -4,6 +4,7 @@ namespace rest;
 use itdq\DbRecord;
 use itdq\Loader;
 use itdq\FormClass;
+use rest\traits\recordTrait;
 
 /**
  *
@@ -12,20 +13,10 @@ use itdq\FormClass;
  */
 class diaryRecord extends DbRecord
 {
+    use recordTrait;
+
     public $DIARY_REFERENCE;
     public $ENTRY;
     public $CREATOR;
     public $CREATED;
-
-    function get($field){
-        return empty($this->$field) ? null : trim($this->$field);
-    }
-
-    function set($field,$value){
-        if(!property_exists(__CLASS__,$field)){
-            return false;
-        } else {
-            $this->$field = trim($value);
-        }
-    }
 }

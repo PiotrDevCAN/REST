@@ -3,6 +3,7 @@ namespace rest;
 
 use itdq\DbTable;
 use \DateTime;
+use itdq\Navbar;
 
 /*
  *
@@ -22,16 +23,24 @@ group by RFS_ID, PROJECT_TITLE, VALUE_STREAM, LINK_TO_PGMP
 class rfsPipelineView extends DbTable
 {
     function returnAsArray($predicate=null){
-        $sql  = " SELECT * ";
-        $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS_PIPELINE . " as RFS ";
-        $sql .= " WHERE 1=1 " ;
+        // $sql  = " SELECT * ";
+        // $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS_PIPELINE . " as RFS ";
+        // $sql .= " WHERE 1=1 " ;
+
+        $sql = "select RFS_ID, PROJECT_TITLE, count(RR.RESOURCE_REFERENCE) as REQUESTS, min(RR.START_DATE) as FROM, max(RR.END_DATE) as TO, ORGANISATION, LINK_TO_PGMP";
+		$sql .= " from " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS";
+		$sql .= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR";
+		$sql .= " on RFS.RFS_ID = RR.RFS";
+		$sql .= " where RFS_STATUS = '" . rfsRecord::RFS_STATUS_PIPELINE . "'";
+		$sql .= " group by RFS_ID, PROJECT_TITLE, ORGANISATION, LINK_TO_PGMP";
+
         $sql .= !empty($predicate) ? " AND  $predicate " : null ;
 
         $resultSet = $this->execute($sql);
 
         $resultSet ? null : die("SQL Failed");
 
-        $allData = null;
+        $allData = array();
 
         while(($row = db2_fetch_assoc($resultSet))==true){
             $row = array_map('trim',$row);
@@ -61,15 +70,15 @@ class rfsPipelineView extends DbTable
         $amberIfNotLive = $ableToGoLive ? ' btn-success ' : ' btn-warning ';
 
         $row['RFS_ID'] = "";
-        $row['RFS_ID'].= "<button type='button' class='btn btn-xs $amberIfNotLive goLiveRfs accessRestrict accessAdmin accessDemand accessCdi' $disableIdNotAbleToGoLive aria-label='Left Align' data-rfsid='" .$rfsId . "'>";
+        $row['RFS_ID'].= "<button type='button' class='btn btn-xs $amberIfNotLive goLiveRfs ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_ADMIN." ".Navbar::$ACCESS_DEMAND." ".Navbar::$ACCESS_CDI."' $disableIdNotAbleToGoLive aria-label='Left Align' data-rfsid='" .$rfsId . "'>";
         $row['RFS_ID'].= "<span class='glyphicon glyphicon-thumbs-up' aria-hidden='true' data-html='true' data-toggle='tooltip' title='$toolTip' ></span>";
         $row['RFS_ID'].= "</button>&nbsp;";
 
-        $row['RFS_ID'].= "<button type='button' class='btn  btn-xs editRfs accessRestrict accessAdmin accessDemand accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>";
+        $row['RFS_ID'].= "<button type='button' class='btn  btn-xs editRfs ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_ADMIN." ".Navbar::$ACCESS_DEMAND." ".Navbar::$ACCESS_CDI." ".Navbar::$ACCESS_RFS."' aria-label='Left Align' data-rfsid='" .$rfsId . "'>";
         $row['RFS_ID'].= "<span class='glyphicon glyphicon-edit' aria-hidden='true'  data-toggle='tooltip' title='Edit RFS' ></span>";
         $row['RFS_ID'].= "</button>&nbsp;";
 
-        $row['RFS_ID'].= "<button type='button' class='btn btn-danger btn-xs deleteRfs accessRestrict accessAdmin accessCdi accessRfs' aria-label='Left Align' data-rfsid='" .$rfsId . "'>";
+        $row['RFS_ID'].= "<button type='button' class='btn btn-danger btn-xs deleteRfs ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_ADMIN." ".Navbar::$ACCESS_CDI." ".Navbar::$ACCESS_RFS."' aria-label='Left Align' data-rfsid='" .$rfsId . "'>";
         $row['RFS_ID'].= "<span class='glyphicon glyphicon-trash' aria-hidden='true' data-html='true' data-toggle='tooltip' title='Delete RFS<br/><em>Can not be recovered</em>' ></span>";
         $row['RFS_ID'].= "</button>&nbsp;" . $rfsId;
 

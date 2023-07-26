@@ -48,5 +48,4 @@ class uploadLogRecord extends DbRecord
         $this->uploadLogTable->execute($sql);
 
     }
-
 }
