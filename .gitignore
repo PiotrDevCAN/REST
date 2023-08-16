@@ -6,3 +6,5 @@
 .htaccess
 /composer.phar
 dev_env.list
+dev.tar.gz
+msphpsql-dev/

@@ -43,5 +43,4 @@ spec:
         - configMapRef:
             name: env-configmap
         - secretRef:
-            # name: rest-app-docker-secrets-generic
-            name: env-secrets
+            name: rest-app-docker-secrets-generic
