@@ -91,7 +91,7 @@ jobs:
           namespace: ${{ steps.import-secrets.outputs.NAMESPACE }}
           secret-name: rest-app-docker-secrets-generic
           secret-type: 'generic'
-          arguments: --from-literal=db-server=${{ steps.import-secrets.outputs.DB_SERVER }} --from-literal=db-user-name=${{ steps.import-secrets.outputs.DB_USER_NAME }} --from-literal=db-user-pw=${{ steps.import-secrets.outputs.DB_USER_PW }}          
+          arguments: --from-literal=db-server=${{ steps.import-secrets.outputs.DB_SERVER }}  --from-literal=db-name=${{ steps.import-secrets.outputs.DB_NAME }} --from-literal=db-user-name=${{ steps.import-secrets.outputs.DB_USER_NAME }} --from-literal=db-user-pw=${{ steps.import-secrets.outputs.DB_USER_PW }}          
       - name: Deploy application
         id: deploy-app
         uses: Azure/k8s-deploy@v4
