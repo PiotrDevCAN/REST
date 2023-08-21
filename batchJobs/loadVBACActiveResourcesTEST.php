@@ -90,8 +90,8 @@ if ($err) {
             $rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
             if (! $rs) {
                 echo $sql;
-                echo db2_stmt_error();
-                echo db2_stmt_errormsg();
+                echo sqlsrv_errors();
+                echo sqlsrv_errors();
                 $success = false;
                 break;
             }
@@ -107,8 +107,8 @@ if ($err) {
             $db2result = $activeResourceTable->insert($activeResourceRecord);
     
             if(!$db2result){
-                echo db2_stmt_error();
-                echo db2_stmt_errormsg();
+                echo sqlsrv_errors();
+                echo sqlsrv_errors();
             }
         }
     }

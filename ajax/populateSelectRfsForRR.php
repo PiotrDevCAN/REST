@@ -29,8 +29,8 @@ if($rs){
     }
 } else {
     echo $sql;
-    echo db2_stmt_error();
-    echo db2_stmt_errormsg();
+    echo sqlsrv_errors();
+    echo sqlsrv_errors();
     throw new Exception('Db2 Exec failed in ' . __FILE__);
 }
 

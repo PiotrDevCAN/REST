@@ -27,8 +27,8 @@ $sql .= " WHERE RESOURCE_REFERENCE=? and DATE=? ";
 $hoursUpdate = db2_prepare($GLOBALS['conn'], $sql);
 
 if(!$hoursUpdate){
-    echo db2_stmt_error();
-    echo db2_stmt_errormsg();
+    echo sqlsrv_errors();
+    echo sqlsrv_errors();
 }
 
 foreach ($adjustedHours as $key => $value){

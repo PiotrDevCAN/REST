@@ -517,7 +517,7 @@ class BluePages {
 					$rs = sqlsrv_execute ( $this->preparedInsert, $data );
 					if (! $rs) {
 						echo "<BR>" . db2_stmt_error ();
-						echo "<BR>" . db2_stmt_errormsg () . "<BR>";
+						echo "<BR>" . sqlsrv_errors() () . "<BR>";
 						echo "<BR> Data :";
 						print_r ( $data );
 						exit ( "Unable to Execute $sql" );
@@ -536,7 +536,7 @@ class BluePages {
 			if (! $rs) {
 				print_r ( $_SESSION );
 				echo "<BR>" . db2_stmt_error ();
-				echo "<BR>" . db2_stmt_errormsg () . "<BR>";
+				echo "<BR>" . sqlsrv_errors() () . "<BR>";
 				exit ( "Error in: " . __METHOD__ . " running: COMMIT " );
 			}
 		}
@@ -568,7 +568,7 @@ class BluePages {
 				$rs = sqlsrv_execute ( $this->preparedInsert, $data );
 				if (! $rs) {
 					echo "<BR>" . db2_stmt_error ();
-					echo "<BR>" . db2_stmt_errormsg () . "<BR>";
+					echo "<BR>" . sqlsrv_errors() () . "<BR>";
 					echo "<BR> Data :";
 					print_r ( $data );
 					exit ( "Unable to Execute $sql" );
@@ -583,7 +583,7 @@ class BluePages {
 //			if (! $rs) {
 //				print_r ( $_SESSION );
 //				echo "<BR>" . db2_stmt_error ();
-//				echo "<BR>" . db2_stmt_errormsg () . "<BR>";
+//				echo "<BR>" . sqlsrv_errors() () . "<BR>";
 //				exit ( "Error in: " . __METHOD__ . " running: COMMIT " );
 //			}
 		}

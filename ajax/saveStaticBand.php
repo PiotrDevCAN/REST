@@ -26,8 +26,8 @@ if($mode==FormClass::$modeDEFINE){
 }
 
 if(!$db2result){
-    echo db2_stmt_error();
-    echo db2_stmt_errormsg();
+    echo sqlsrv_errors();
+    echo sqlsrv_errors();
 }
 
 $messages = ob_get_clean();

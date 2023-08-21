@@ -21,8 +21,8 @@ $sql .= " WHERE RESOURCE_REFERENCE=? and WEEK_ENDING_FRIDAY=? ";
 $hoursUpdate = db2_prepare($GLOBALS['conn'], $sql);
 
 if(!$hoursUpdate){
-    echo db2_stmt_error();
-    echo db2_stmt_errormsg();
+    echo sqlsrv_errors();
+    echo sqlsrv_errors();
 }
 
 foreach ($_POST as $key => $value){

@@ -9,8 +9,8 @@ ob_start();
 $toggleResult = $_POST['currentStatus']==staticOrganisationTable::ENABLED ? staticOrganisationTable::disableService($_POST['ORGANISATION'],$_POST['SERVICE']) : staticOrganisationTable::enableService($_POST['ORGANISATION'],$_POST['SERVICE']);
 
 if(!$toggleResult){
-    echo db2_stmt_error();
-    echo db2_stmt_errormsg();
+    echo sqlsrv_errors();
+    echo sqlsrv_errors();
 }
 
 $messages = ob_get_clean();

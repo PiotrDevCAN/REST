@@ -27,8 +27,8 @@ if($resultSet){
         }
     }
 } else {
-    db2_stmt_error();
-    db2_stmt_errormsg();
+    sqlsrv_errors();
+    sqlsrv_errors();
 }
 
 
