@@ -13,15 +13,15 @@ include ('vendor/autoload.php');
 include ('splClassLoader.php');
 
 $sessionConfig = (new \ByJG\Session\SessionConfig($_SERVER['SERVER_NAME']))
-->withTimeoutHours(24)
-->withSecret($_ENV['jwt_token'])
-->replaceSessionHandler();
+->withSecret($_ENV['jwt_token']);
 
 $handler = new JwtSecureSession($sessionConfig);
-// session_set_save_handler($handler, true);
+session_set_save_handler($handler, true);
+session_start();
 
-// session_start();
-
-error_log(__FILE__ . "session:" . session_id());
+error_log(__FILE__ . "server_name:" . $_SERVER['SERVER_NAME']);
+error_log(__FILE__ . "jwt_token:" . $_ENV['jwt_token']);
+error_log(__FILE__ . "session ID:" . session_id());
+error_log(__FILE__ . "session:" . print_r($_SESSION,true));
 
 include "connect.php";
