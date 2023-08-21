@@ -42,7 +42,7 @@ class rfsPipelineView extends DbTable
 
         $allData = array();
 
-        while(($row = db2_fetch_assoc($resultSet))==true){
+        while(($row = sqlsrv_fetch_array($resultSet))==true){
             $row = array_map('trim',$row);
             $testJson = json_encode($row);
             if(!$testJson){
@@ -97,7 +97,7 @@ class rfsPipelineView extends DbTable
         $sql .= " SET ARCHIVE = CURRENT TIMESTAMP ";
         $sql .= " WHERE RFS_ID ='" . htmlspecialchars($rfsid) . "' " ;
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);

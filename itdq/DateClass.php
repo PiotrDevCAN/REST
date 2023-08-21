@@ -227,7 +227,7 @@ class DateClass {
         $sql.= " WHERE BH_DATE >= DATE('" . $startDate->format('Y-m-d') . "') AND BH_DATE <= DATE('" . $endDate->format('Y-m-d') . "') ";
         $sql.= " ORDER BY 1 ";
         
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
         
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -235,7 +235,7 @@ class DateClass {
         
         $data = array();
 
-        while (($row = db2_fetch_assoc($rs))==true) {
+        while (($row = sqlsrv_fetch_array($rs))==true) {
             $data[] = $row['BH_DATE'];
         }
         

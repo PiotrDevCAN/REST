@@ -101,7 +101,7 @@ switch (true) {
         $messages = 'Cannot save Resource Request with provided End Date prior to Start Date.';
         break;
     default:
-        $autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+        $autoCommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
         $resourceRecord = new resourceRequestRecord();
         $resourceRecord->setFromArray($_POST);
@@ -207,7 +207,7 @@ switch (true) {
                 break;
         }
 
-        db2_autocommit($GLOBALS['conn'],$autoCommit);
+        sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
         $messages = ob_get_clean();
 

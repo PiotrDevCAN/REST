@@ -22,8 +22,8 @@ use rest\archived\archivedDiaryRecord;
 // set_time_limit(0);
 // ob_start();
 
-$autoCommit = db2_autocommit($GLOBALS['conn']);
-db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+$autoCommit = sqlsrv_commit($GLOBALS['conn']);
+sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
 $messages = '';
 $rfsRecordsArchived = 0;
@@ -71,7 +71,7 @@ try {
     $insertDiaryArrayKeys = $archivedDiaryTable->getColumns();
 
     $archivedRfsRs = $rfsTable->getArchieved();
-    while(($rowRFSData=db2_fetch_assoc($archivedRfsRs))==true){
+    while(($rowRFSData=sqlsrv_fetch_array($archivedRfsRs))==true){
         // get record data
         $rfsRecord->setFromArray($rowRFSData);
         // $rfsRecord->iterateVisible();
@@ -98,7 +98,7 @@ try {
         $currentRfsId = $rfsRecord->get('RFS_ID');
 
         $archievedResourceRequestsRs = $resReqTable->getArchieved($currentRfsId);
-        while(($rowRRData=db2_fetch_assoc($archievedResourceRequestsRs))==true){
+        while(($rowRRData=sqlsrv_fetch_array($archievedResourceRequestsRs))==true){
             // get record data
             $resourceRequestRecord->setFromArray($rowRRData);
 
@@ -132,7 +132,7 @@ try {
             $currentResourceReference = $resourceRequestRecord->get('RESOURCE_REFERENCE');
 
             $archievedResourceRequestsHoursRs = $resReqHoursTable->getArchieved($currentResourceReference);
-            while(($rowRRHData=db2_fetch_assoc($archievedResourceRequestsHoursRs))==true){
+            while(($rowRRHData=sqlsrv_fetch_array($archievedResourceRequestsHoursRs))==true){
                 // get record data
                 $resourceRequestHoursRecord->setFromArray($rowRRHData);
                 // $resourceRequestHoursRecord->iterateVisible();
@@ -160,7 +160,7 @@ try {
 
             // cleanup RESOURCE_REQUEST_DIARY table
             $archivedResReqDiaryRs = $resReqDiaryTable->getArchieved($currentResourceReference);
-            while(($rowRRDData=db2_fetch_assoc($archivedResReqDiaryRs))==true){
+            while(($rowRRDData=sqlsrv_fetch_array($archivedResReqDiaryRs))==true){
                 // get record data
                 $resourceRequestDiaryRecord->setFromArray($rowRRDData);
                 // $resourceRequestDiaryRecord->iterateVisible();
@@ -188,7 +188,7 @@ try {
 
                 // cleanup DIARY
                 $archievedDiaryRs = $diaryTable->getArchieved($currentDiaryReference);
-                while(($rowADData=db2_fetch_assoc($archievedDiaryRs))==true){
+                while(($rowADData=sqlsrv_fetch_array($archievedDiaryRs))==true){
                     // get record data
                     $diaryRecord->setFromArray($rowADData);
                     // $diaryRecord->iterateVisible();
@@ -236,7 +236,7 @@ if($success){
     db2_rollback($GLOBALS['conn']);
 }
 
-db2_autocommit($GLOBALS['conn'],$autoCommit);
+sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
 ob_start();
 

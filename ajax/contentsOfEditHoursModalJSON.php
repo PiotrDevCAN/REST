@@ -26,7 +26,7 @@ $claimMonths = array(1=>'Jan',2=>'Feb',3=>'Mar',4=>'Apr',5=>'May',6=>'Jun',7=>'J
 
 $data = array();
 
-while (($row = db2_fetch_assoc($resourceHoursRs))==true){
+while (($row = sqlsrv_fetch_array($resourceHoursRs))==true){
   $week = $row['DATE'];
   $hours = $row['HOURS'];
   $wef = $row['WEEK_ENDING_FRIDAY'];

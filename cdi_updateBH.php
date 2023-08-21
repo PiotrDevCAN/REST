@@ -22,7 +22,7 @@ var_dump($bankHolidays);
 
 // echo $sql;
 
-// $rs = db2_exec($GLOBALS['conn'], $sql);
+// $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
 // if(!$rs){
 //     DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);

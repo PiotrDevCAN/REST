@@ -43,7 +43,7 @@ class activeResourceTable extends DbTable {
         $sql .= " order by CNUM desc ";
         $sql .= " OPTIMIZE FOR 1 ROW ";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -121,13 +121,13 @@ class activeResourceTable extends DbTable {
         $sql .= " ON AS.SQUAD_NUMBER = P.SQUAD_NUMBER ";
         $sql .= " WHERE " . $predicate;
         
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         } else {
-            while(($row = db2_fetch_assoc($rs))==true){
+            while(($row = sqlsrv_fetch_array($rs))==true){
                 // Only editable, if they're not a "pre-Boarder" who has now been boarded.
                 $preparedRow = $this->prepareFields($row);
                 $rowWithButtonsAdded =(substr($row['PES_STATUS_DETAILS'],0,7)=='Boarded') ? $preparedRow : $this->addButtons($preparedRow);
@@ -145,13 +145,13 @@ class activeResourceTable extends DbTable {
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName ;
         $sql.= " WHERE " . $activePredicate;
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         } else {
-            while(($row = db2_fetch_assoc($rs))==true){
+            while(($row = sqlsrv_fetch_array($rs))==true){
                 $cnum = trim($row['CNUM']);
                 $preparedRow = $this->prepareFields($row);
                 $fmCnumField = $preparedRow['FM_CNUM'];
@@ -175,7 +175,7 @@ class activeResourceTable extends DbTable {
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql.= " WHERE STATUS='" . self::INT_STATUS_ACTIVE. "'";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -184,7 +184,7 @@ class activeResourceTable extends DbTable {
 
         $displayAble = array();
 
-        while (($row = db2_fetch_assoc($rs))==true) {
+        while (($row = sqlsrv_fetch_array($rs))==true) {
             $display = array();
             $row = array_map('trim', $row);
             $display['EMAIL_ADDRESS'] = !empty($row['EMAIL_ADDRESS']) ? $row['EMAIL_ADDRESS'] : 'unavailable in VBAC';
@@ -200,13 +200,13 @@ class activeResourceTable extends DbTable {
         $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName ;
         $sql .= " ORDER BY CNUM ";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         } else {
-            while(($row = db2_fetch_assoc($rs))==true){
+            while(($row = sqlsrv_fetch_array($rs))==true){
                 $jsonEncodable = json_encode($row);
                 if(!$jsonEncodable){
                     echo "<hr/><br/>Dirty Data Found in record for : " . $row['CNUM'];
@@ -445,7 +445,7 @@ class activeResourceTable extends DbTable {
         $sql .= $version=='original' ? " SQUAD_NUMBER = null " : " OLD_SQUAD_NUMBER = null";
         $sql .= " WHERE CNUM='" . htmlspecialchars($cnum) . "' ";
 
-        $result = db2_exec($GLOBALS['conn'], $sql);
+        $result = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$result){
             DbTable::displayErrorMessage($result, __CLASS__,__METHOD__, $sql);
@@ -469,14 +469,14 @@ class activeResourceTable extends DbTable {
         $sql = ' SELECT FM_MANAGER_FLAG FROM "' . $GLOBALS['Db2Schema'] . '".' . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . htmlspecialchars(strtoupper(trim($emailAddress))) . "' ";
 
-        $resultSet = db2_exec($GLOBALS['conn'], $sql);
+        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$resultSet){
             DbTable::displayErrorMessage($resultSet, __CLASS__, __METHOD__, $sql);
             return false;
         }
 
-        $row = db2_fetch_assoc($resultSet);
+        $row = sqlsrv_fetch_array($resultSet);
 
         if(is_bool($row['FM_MANAGER_FLAG'])){
             throw new \Exception('problem in' . __FILE__ . __FUNCTION__);
@@ -500,14 +500,14 @@ class activeResourceTable extends DbTable {
         $sql = " SELECT CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . htmlspecialchars(strtoupper(trim($_SESSION['ssoEmail']))) . "' ";
 
-        $resultSet = db2_exec($GLOBALS['conn'], $sql);
+        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$resultSet){
             DbTable::displayErrorMessage($resultSet, __CLASS__, __METHOD__, $sql);
             return false;
         }
 
-        $row = db2_fetch_assoc($resultSet);
+        $row = sqlsrv_fetch_array($resultSet);
         $myCnum = strtoupper(trim($row['CNUM']));
         $_SESSION['myCnum'] = $myCnum;
         return $_SESSION['myCnum'];
@@ -525,14 +525,14 @@ class activeResourceTable extends DbTable {
         $sql = " SELECT FM_CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . htmlspecialchars(strtoupper(trim($_SESSION['ssoEmail']))) . "' ";
 
-        $resultSet = db2_exec($GLOBALS['conn'], $sql);
+        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$resultSet){
             DbTable::displayErrorMessage($resultSet, __CLASS__, __METHOD__, $sql);
             return false;
         }
 
-        $row = db2_fetch_assoc($resultSet);
+        $row = sqlsrv_fetch_array($resultSet);
         $myManagersCnum = strtoupper(trim($row['FM_CNUM']));
         $_SESSION['myManagersCnum'] = $myManagersCnum;
         return $_SESSION['myManagersCnum'];
@@ -542,14 +542,14 @@ class activeResourceTable extends DbTable {
         $sql = " SELECT NOTES_ID FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE CNUM = '" . htmlspecialchars(strtoupper(trim($cnum))) . "' ";
 
-        $resultSet = db2_exec($GLOBALS['conn'], $sql);
+        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$resultSet){
             DbTable::displayErrorMessage($resultSet, __CLASS__, __METHOD__, $sql);
             return false;
         }
 
-        $row = db2_fetch_assoc($resultSet);
+        $row = sqlsrv_fetch_array($resultSet);
         $notesid = trim($row['NOTES_ID']);
         return $notesid;
     }
@@ -573,14 +573,14 @@ class activeResourceTable extends DbTable {
         $sql .= " WHERE " . $availPreBoPredicate;
         $sql .= " ORDER BY FIRST_NAME, LAST_NAME ";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if (!$rs){
             DbTable::displayErrorMessage($rs,__CLASS__ , __METHOD__ , $sql);
             return false;
         }
         $options = array();
-        while(($row = db2_fetch_assoc($rs))==true){
+        while(($row = sqlsrv_fetch_array($rs))==true){
             $option  = "<option value='" . trim($row['CNUM']) ."'";
             $option .= trim($row['CNUM']) == trim($preBoarded) ? ' selected ' : null;
             $option .= " >" . trim($row['FIRST_NAME']) ." " . trim($row['LAST_NAME'])  . " (" . trim($row['EMAIL_ADDRESS']) .") ";

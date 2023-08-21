@@ -90,7 +90,7 @@ class rateCardTable extends DbTable
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
-        while(($row = db2_fetch_assoc($resultSet))==true){
+        while(($row = sqlsrv_fetch_array($resultSet))==true){
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.

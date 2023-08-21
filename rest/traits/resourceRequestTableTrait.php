@@ -65,7 +65,7 @@ trait resourceRequestTableTrait
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
         }
 
-        $row = db2_fetch_assoc($rs);
+        $row = sqlsrv_fetch_array($rs);
         
         return $row ? trim($row['RESOURCE_NAME']) : false;
     }
@@ -100,7 +100,7 @@ trait resourceRequestTableTrait
         error_log(__FILE__ . ":" . __LINE__ . ":" . $sql);
    
         $preExec = microtime(true);
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
         
         $postExec = microtime(true);
         error_log(__FILE__ . ":" . __LINE__ . "Db2 exec:" . ($postExec-$preExec));
@@ -110,7 +110,7 @@ trait resourceRequestTableTrait
             return false;
         }
         
-        while(($row= db2_fetch_assoc($rs))==true){
+        while(($row= sqlsrv_fetch_array($rs))==true){
             $this->lastDiaryEntriesByResourceReference[$row['RESOURCE_REFERENCE']] = $row;        
         }
         
@@ -132,8 +132,8 @@ trait resourceRequestTableTrait
             $this->vbacEmployeesWithSquad = array_column($vbacEmployees, 'id');
         }
 
-        $autoCommit = db2_autocommit($GLOBALS['conn']);
-        db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);        
+        $autoCommit = sqlsrv_commit($GLOBALS['conn']);
+        sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);        
         
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
         $hoursRemainingByReference = $resourceRequestHoursTable->getHoursRemainingByReference();
@@ -245,7 +245,7 @@ trait resourceRequestTableTrait
         $allData = array();
         $allData['data'] = array();
 
-        while(($row = db2_fetch_assoc($resultSet))==true){
+        while(($row = sqlsrv_fetch_array($resultSet))==true){
             PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
             $testJson = json_encode($row);
             if (!$testJson){
@@ -271,7 +271,7 @@ trait resourceRequestTableTrait
             $allData['per_page'] = $perPage;
         }
 
-        db2_autocommit($GLOBALS['conn'],$autoCommit);
+        sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
         return $allData;
     }
@@ -305,14 +305,14 @@ trait resourceRequestTableTrait
         $data = array();
 
         $preparedCountStatement = db2_prepare($GLOBALS['conn'], $countSql);
-        $rs = db2_execute($preparedCountStatement, $data);
+        $rs = sqlsrv_execute($preparedCountStatement, $data);
         if (! $rs) {
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $countSql);
             return false;
         }
         
         $counter = 0;
-        while($row = db2_fetch_assoc($preparedCountStatement)){
+        while($row = sqlsrv_fetch_array($preparedCountStatement)){
             $counter = $row['COUNTER'];
         }
 
@@ -323,8 +323,8 @@ trait resourceRequestTableTrait
             $this->vbacEmployeesWithSquad = array_column($vbacEmployees, 'id');
         }
 
-        $autoCommit = db2_autocommit($GLOBALS['conn']);
-        db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);        
+        $autoCommit = sqlsrv_commit($GLOBALS['conn']);
+        sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);        
         
         $sql = 'Statistics only';
 
@@ -345,7 +345,7 @@ trait resourceRequestTableTrait
         $allData['total'] = $counter;
         $allData['total_pages'] = ceil( $counter / $perPage );
         
-        db2_autocommit($GLOBALS['conn'],$autoCommit);
+        sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
         return $allData;
     }
@@ -359,8 +359,8 @@ trait resourceRequestTableTrait
         list('vbacEmployees' => $vbacEmployees, 'tribeEmployees' => $tribeEmployees) = $data;
         $this->vbacEmployeesWithSquad = array_column($vbacEmployees, 'id');
 
-        $autoCommit = db2_autocommit($GLOBALS['conn']);
-        db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);        
+        $autoCommit = sqlsrv_commit($GLOBALS['conn']);
+        sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);        
         
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
         $hoursRemainingByReference = $resourceRequestHoursTable->getHoursRemainingByReference();
@@ -478,7 +478,7 @@ trait resourceRequestTableTrait
         $allData = array();
         $allData['data'] = array();
 
-        while(($row = db2_fetch_assoc($resultSet))==true){
+        while(($row = sqlsrv_fetch_array($resultSet))==true){
             PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
             $testJson = json_encode($row);
             if (!$testJson){
@@ -498,7 +498,7 @@ trait resourceRequestTableTrait
 
         $allData['sql'] = $sql;
         
-        db2_autocommit($GLOBALS['conn'],$autoCommit);
+        sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
         return $allData ;
     }
@@ -814,7 +814,7 @@ trait resourceRequestTableTrait
         $sql .= "  SET END_DATE = DATE('" . htmlspecialchars($endDate) ."') ";
         $sql .= " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceReference) ." ";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if (!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -829,7 +829,7 @@ trait resourceRequestTableTrait
         $sql .= "  SET START_DATE = DATE('" . htmlspecialchars($startDate) ."') ";
         $sql .= " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceReference) ." ";
   
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
         
         if (!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -846,7 +846,7 @@ trait resourceRequestTableTrait
         $sql .= "  ,   HRS_PER_WEEK_INT = " . htmlspecialchars($hrsPerWeekInt) ;
         $sql .= " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceReference) ." ";
       
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
         
         if (!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -861,7 +861,7 @@ trait resourceRequestTableTrait
         $sql .= "  SET TOTAL_HOURS     = " . htmlspecialchars($totalHours) ;
         $sql .= " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceReference) ." ";
        
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
         
         if (!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -974,14 +974,14 @@ trait resourceRequestTableTrait
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
         $sql.= " WHERE RFS = '" . htmlspecialchars($rfsId) . "' ";
         
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
         
         if (!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
         }
      
         $data = array();
-        while (($row = db2_fetch_assoc($rs))==true) {
+        while (($row = sqlsrv_fetch_array($rs))==true) {
             $data[$row['RESOURCE_REFERENCE']] = $row;
         }
         
@@ -993,7 +993,7 @@ trait resourceRequestTableTrait
         $sql.= !empty($status) && !empty($resourceRequest) ? " SET STATUS='" . htmlspecialchars(trim($status)) . "' " : null ;
         $sql.= !empty($status) && !empty($resourceRequest) ? " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceRequest) . "  " : null;
         
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
         
         if (!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -1007,7 +1007,7 @@ trait resourceRequestTableTrait
         $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " WHERE RFS = '" . htmlspecialchars($rfsId) . "' ";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if (!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -1026,7 +1026,7 @@ trait resourceRequestTableTrait
         $sql .= " SET RFS = '" . htmlspecialchars($newRfsId) . "' " ;
         $sql .= " WHERE RFS = '" . htmlspecialchars($oldRfsId) . "' " ;
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if (!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -1042,11 +1042,11 @@ trait resourceRequestTableTrait
         $sql.= " WHERE 1=1 ";
         $sql.= empty($predicate) ? null : " AND " . $predicate;
         $sql .= " ORDER BY RFS, RESOURCE_REFERENCE  ";
-        $resultSet = db2_exec($GLOBALS['conn'], $sql);
+        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
 
         $allResourceRequests = array();
         if($resultSet){
-            while (($row = db2_fetch_assoc($resultSet))==true) {
+            while (($row = sqlsrv_fetch_array($resultSet))==true) {
                 $allResourceRequests[trim($row['RFS'])][] = trim($row['RESOURCE_REFERENCE']);
             }
         } else {
@@ -1061,11 +1061,11 @@ trait resourceRequestTableTrait
         $sql.= " WHERE 1=1 ";
         $sql.= empty($predicate) ? null : " AND " . $predicate;
         $sql .= " ORDER BY RFS, RESOURCE_REFERENCE  ";
-        $resultSet = db2_exec($GLOBALS['conn'], $sql);
+        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
 
         $allResourceRequests = array();
         if($resultSet){
-            while (($row = db2_fetch_assoc($resultSet))==true) {
+            while (($row = sqlsrv_fetch_array($resultSet))==true) {
                 $allResourceRequests[trim($row['RFS'])][] = array_map('trim',$row);
             }
         } else {

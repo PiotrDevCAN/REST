@@ -50,8 +50,8 @@ if ($err) {
 
     $success = true;
 
-    $autoCommit = db2_autocommit($GLOBALS['conn']);
-    db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);   
+    $autoCommit = sqlsrv_commit($GLOBALS['conn']);
+    sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);   
     
     $responseArr = json_decode($response, true);
     if (count($responseArr) > 0) {
@@ -154,7 +154,7 @@ if ($err) {
         db2_rollback($GLOBALS['conn']);
     }
 
-    db2_autocommit($GLOBALS['conn'],$autoCommit);
+    sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
     echo count($responseArr) . ' records read from VBAC api';
 }

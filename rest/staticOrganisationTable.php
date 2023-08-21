@@ -21,11 +21,11 @@ class staticOrganisationTable extends DbTable
         $sql.= " WHERE 1=1 ";
         $sql.= empty($predicate) ? null : " AND " . $predicate;
         $sql .= " ORDER BY ORGANISATION, SERVICE  ";
-        $resultSet = db2_exec($GLOBALS['conn'], $sql);
+        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
 
         $allOrganisations = array();
         if($resultSet){
-            while (($row = db2_fetch_assoc($resultSet))==true) {
+            while (($row = sqlsrv_fetch_array($resultSet))==true) {
                 $allOrganisations[trim($row['ORGANISATION'])][] = trim($row['SERVICE']);
             }
         } else {
@@ -42,7 +42,7 @@ class staticOrganisationTable extends DbTable
         $sql.= " WHERE ORGANISATION='" . htmlspecialchars($organisation) . "'  ";
         $sql.= "   AND SERVICE='" . htmlspecialchars($service) . "'  ";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -59,7 +59,7 @@ class staticOrganisationTable extends DbTable
         $sql.= " WHERE ORGANISATION='" . htmlspecialchars($organisation) . "'  ";
         $sql.= "   AND SERVICE='" . htmlspecialchars($service) . "'  ";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -72,7 +72,7 @@ class staticOrganisationTable extends DbTable
         $sql = " SELECT * ";
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -81,7 +81,7 @@ class staticOrganisationTable extends DbTable
 
         $displayAble = array();
 
-        while (($row = db2_fetch_assoc($rs))==true) {
+        while (($row = sqlsrv_fetch_array($rs))==true) {
             $display = array();
             $row = array_map('trim', $row);
             $display['ORGANISATION'] = $row['ORGANISATION'];

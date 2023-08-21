@@ -73,7 +73,7 @@ switch (true) {
         $messages = 'Significant parameters from form are missing.';
         break;
     default:
-        $autoCommit = db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+        $autoCommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
         $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 
@@ -118,7 +118,7 @@ switch (true) {
             db2_rollback($GLOBALS['conn']);
         }
 
-        db2_autocommit($GLOBALS['conn'],$autoCommit);
+        sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
         $messages = ob_get_clean();
 

@@ -201,7 +201,7 @@ trait rfsTableTrait
     static function loadKnownRfsToJs($predicate=null){
         $sql = " SELECT RFS_ID FROM " . $GLOBALS['Db2Schema'] . "." .  allTables::$RFS;
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -212,7 +212,7 @@ trait rfsTableTrait
         var knownRfs = [];
         <?php
 
-        while(($row = db2_fetch_assoc($rs))==true){
+        while(($row = sqlsrv_fetch_array($rs))==true){
             ?>knownRfs.push("<?=strtoupper(trim($row['RFS_ID']));?>");
             <?php
         }
@@ -223,12 +223,12 @@ trait rfsTableTrait
         $sql = " SELECT REQUESTOR_EMAIL ";
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS;
         $sql.= " WHERE RFS_ID='" . htmlspecialchars($rfsId) . "' ";
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);            
         }
         
-        $row = db2_fetch_assoc($rs);
+        $row = sqlsrv_fetch_array($rs);
         return trim($row['REQUESTOR_EMAIL']);
     }
 
@@ -304,13 +304,13 @@ trait rfsTableTrait
             $sql = " SELECT RFS, MAX(END_DATE) as END_DATE FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS ;
             $sql .= " GROUP BY RFS ";
 
-            $rs = db2_exec($GLOBALS['conn'], $sql);
+            $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
             if(!$rs) {
                 DbTable::displayErrorMessage($rs,__CLASS__, __METHOD__, $sql);
             }
 
-            while (($row = db2_fetch_assoc($rs))==true) {
+            while (($row = sqlsrv_fetch_array($rs))==true) {
                 $this->rfsMaxEndDate[strtoupper(trim($row['RFS']))] = isset($row['END_DATE']) ? trim($row['END_DATE']) : null ;
             }
         }
@@ -396,7 +396,7 @@ trait rfsTableTrait
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
-        while(($row = db2_fetch_assoc($resultSet))==true){
+        while(($row = sqlsrv_fetch_array($resultSet))==true){
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
@@ -487,7 +487,7 @@ trait rfsTableTrait
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
-        while(($row = db2_fetch_assoc($resultSet))==true){
+        while(($row = sqlsrv_fetch_array($resultSet))==true){
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
@@ -591,7 +591,7 @@ trait rfsTableTrait
                 return $resultSet;
                 break;
             case $resultSet:
-                while(($row = db2_fetch_assoc($resultSet))==true){
+                while(($row = sqlsrv_fetch_array($resultSet))==true){
                     $testJson = json_encode($row);
                     if(!$testJson){
                         break; // It's got invalid chars in it that will be a problem later.
@@ -704,7 +704,7 @@ trait rfsTableTrait
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
-        while(($row = db2_fetch_assoc($resultSet))==true){
+        while(($row = sqlsrv_fetch_array($resultSet))==true){
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
@@ -737,7 +737,7 @@ trait rfsTableTrait
         $sql .= " SET ARCHIVE = CURRENT TIMESTAMP ";
         $sql .= " WHERE RFS_ID = '" . htmlspecialchars($rfsid) . "' " ;
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -751,7 +751,7 @@ trait rfsTableTrait
         $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " WHERE " . rfsTable::NOT_ARCHIVED;
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -786,7 +786,7 @@ trait rfsTableTrait
         $sql .= " SET RFS_ID = '" . htmlspecialchars($newRfsId) . "' " ;
         $sql .= " WHERE RFS_ID = '" . htmlspecialchars($oldRfsId) . "' " ;
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if (!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);

@@ -43,7 +43,7 @@ class staticResourceRateTable extends DbTable
         // $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_BAND . " AS B ";
         // $sql.= " ON RTR.BAND_ID = B.BAND_ID ";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -52,7 +52,7 @@ class staticResourceRateTable extends DbTable
 
         $displayAble = array();
 
-        while (($row = db2_fetch_assoc($rs))==true) {
+        while (($row = sqlsrv_fetch_array($rs))==true) {
             
             $this->addGlyphicons($row);
             
@@ -90,13 +90,13 @@ class staticResourceRateTable extends DbTable
         $sql.= " WHERE RTR.RESOURCE_TYPE_ID = '" . $resourceTypeId . "'";
         $sql.= " AND  RTR.PS_BAND_ID = '" . $PSBandId . "'";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         }
-        $row = db2_fetch_assoc($rs);
+        $row = sqlsrv_fetch_array($rs);
 
         return $row;
     }
@@ -110,14 +110,14 @@ class staticResourceRateTable extends DbTable
         $sql.= " ON RT.PS_BAND_ID = SPSB.BAND_ID ";
         $sql.= " WHERE RT.RESOURCE_TYPE_ID = '" . $resourceTypeId . "'";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         }
         $data = array();
-        while(($row = db2_fetch_assoc($rs))==true){
+        while(($row = sqlsrv_fetch_array($rs))==true){
             $data[$row['BAND_ID']] = $row['BAND'];
         }
         return $data;
@@ -132,14 +132,14 @@ class staticResourceRateTable extends DbTable
         $sql.= " ON RT.BAND_ID = SB.BAND_ID ";
         $sql.= " WHERE RT.RESOURCE_TYPE_ID = '" . $resourceTypeId . "'";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         }
         $data = array();
-        while(($row = db2_fetch_assoc($rs))==true){
+        while(($row = sqlsrv_fetch_array($rs))==true){
             $data[$row['BAND_ID']] = $row['BAND'];
         }
         return $data;

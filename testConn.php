@@ -7,11 +7,11 @@ ini_set('display_errors',1);
 error_reporting(-1);
 
 // $sql = " SELECT * From REST.INFLIGHT_PROJECTS ";
-// $rs = db2_exec($GLOBALS['conn'],$sql);
+// $rs = sqlsrv_query($GLOBALS['conn'],$sql);
 // var_dump($rs);
 
 // if($rs){
-//     while(($row = db2_fetch_assoc($rs))==true){
+//     while(($row = sqlsrv_fetch_array($rs))==true){
 //     echo "<br/>" . var_dump($row);
 //     }
 // }
@@ -21,7 +21,7 @@ $rs2 = db2_columns($GLOBALS['conn'], null, $GLOBALS['Db2Schema'], 'INFLIGHT_PROJ
 var_dump($rs2);
 
 if($rs2){
-    while(($row = db2_fetch_assoc($rs2))==true){
+    while(($row = sqlsrv_fetch_array($rs2))==true){
     echo "<br/>" . var_dump($row);
     }
 }
@@ -50,7 +50,7 @@ echo "<hr/>";
 // var_dump($rs3);
 
 // if($rs3){
-//     while(($row = db2_fetch_assoc($rs3))==true){
+//     while(($row = sqlsrv_fetch_array($rs3))==true){
 //         echo "<br/>" . var_dump($row);
 //     }
 

@@ -45,8 +45,8 @@ if ($err) {
 
         $success = true;
 
-        $autoCommit = db2_autocommit($GLOBALS['conn']);
-        db2_autocommit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);   
+        $autoCommit = sqlsrv_commit($GLOBALS['conn']);
+        sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);   
         
         if (count($responseObj) > 0) {
             
@@ -110,7 +110,7 @@ if ($err) {
             db2_rollback($GLOBALS['conn']);
         }
 
-        db2_autocommit($GLOBALS['conn'],$autoCommit);
+        sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
         $loaded = new DateTime();
         echo "<BR/>Database Load Finished : " . $loaded->format('Y-m-d H:i:s');

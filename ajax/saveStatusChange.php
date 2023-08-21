@@ -13,7 +13,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 // $sql .= " SET STATUS='" . htmlspecialchars(trim($_POST['statusRadio'])) . "' " ;
 // $sql .= " WHERE RESOURCE_REFERENCE=" . htmlspecialchars(trim($_POST['statusChangeRR'])) . "  ";
 
-// $statusUpdate = db2_exec($GLOBALS['conn'], $sql);
+// $statusUpdate = sqlsrv_query($GLOBALS['conn'], $sql);
 
 // if(!$statusUpdate){
 //     echo db2_stmt_error();

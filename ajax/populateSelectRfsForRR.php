@@ -19,12 +19,12 @@ $sql.= $pipelineLiveArchive == 'pipeline' ? " AND RFS_STATUS='" . rfsRecord::RFS
 $sql.= $pipelineLiveArchive == 'archive' ? " AND ARCHIVE is not null " : " AND ARCHIVE is null " ;
 $sql.= (!empty($organisation) && ($organisation!='All' )) ? " AND ORGANISATION='" . htmlspecialchars(trim($organisation)) . "' " : null;
 $sql.= " ORDER BY 1 " ;
-$rs = db2_exec($GLOBALS['conn'], $sql);
+$rs = sqlsrv_query($GLOBALS['conn'], $sql);
 $data = array();
 
 if($rs){
     $data[] = array('id'=>'All','text'=>'All'); 
-    while(($row = db2_fetch_assoc($rs))==true){
+    while(($row = sqlsrv_fetch_array($rs))==true){
         $data[] = array('id'=>trim($row['RFS']),'text'=>trim($row['RFS']));        
     }
 } else {

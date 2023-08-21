@@ -12,13 +12,13 @@ $sql = " SELECT RFS_END_DATE ";
 $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS ;
 $sql.= " WHERE RFS_ID='" . htmlspecialchars($_POST['rfs']) . "' ";
 
-$rs = db2_exec($GLOBALS['conn'], $sql);
+$rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
 if(!$rs){
     DbTable::displayErrorMessage($rs, 'ajax', __FILE__, $sql);
 }
 
-$row = db2_fetch_assoc($rs);
+$row = sqlsrv_fetch_array($rs);
 
 $endDate = !empty($row['RFS_END_DATE']) ? $row['RFS_END_DATE'] : null;
 

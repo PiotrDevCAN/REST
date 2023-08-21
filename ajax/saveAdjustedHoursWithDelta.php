@@ -41,12 +41,12 @@ foreach ($adjustedHours as $key => $value){
         $changeExistingRecord = array($newHours,$originalResourceReference, $week);
         var_dump($changeExistingRecord);
 
-        $result = db2_execute($hoursUpdate,$changeExistingRecord);
+        $result = sqlsrv_execute($hoursUpdate,$changeExistingRecord);
 
         $changeDeltaRecord = array($deltaHours,$deltaResourceReference, $week);
         var_dump($changeDeltaRecord);
 
-        $result = db2_execute($hoursUpdate,$changeDeltaRecord);
+        $result = sqlsrv_execute($hoursUpdate,$changeDeltaRecord);
 
         var_dump($result);
         echo "<hr/>";

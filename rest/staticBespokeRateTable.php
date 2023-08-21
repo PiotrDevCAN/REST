@@ -55,7 +55,7 @@ class staticBespokeRateTable extends DbTable
         $sql .= " LEFT JOIN " .  $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_PS_BAND . " as PSB ";
         $sql .= " ON B.PS_BAND_ID = PSB.BAND_ID ";
         
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
@@ -63,7 +63,7 @@ class staticBespokeRateTable extends DbTable
         }
         $displayAble = array();
 
-        while (($row = db2_fetch_assoc($rs))==true) {
+        while (($row = sqlsrv_fetch_array($rs))==true) {
 
             $this->addGlyphicons($row);
             

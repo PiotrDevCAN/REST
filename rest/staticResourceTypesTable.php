@@ -21,13 +21,13 @@ class staticResourceTypesTable extends DbTable
         $sql.= " ON RT.RESOURCE_TYPE_ID = SRT.RESOURCE_TYPE_ID ";
         $sql.= " WHERE RT.RESOURCE_NAME = '" . $resourceName . "'";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         }
-        $row = db2_fetch_assoc($rs);
+        $row = sqlsrv_fetch_array($rs);
 
         return $row;
     }

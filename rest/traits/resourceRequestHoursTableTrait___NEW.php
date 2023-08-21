@@ -455,7 +455,7 @@ trait resourceRequestHoursTableTrait
                 break;
             case $resultSet:
                 $allData = array();
-                while(($row = db2_fetch_assoc($resultSet))==true){
+                while(($row = sqlsrv_fetch_array($resultSet))==true){
                     $allData[]  = array_map('trim',$row);
                 }
                 return $allData;
@@ -477,7 +477,7 @@ trait resourceRequestHoursTableTrait
         $allData = array();
 
         if($assoc){
-            while(($row = db2_fetch_assoc($resultSet))==true){
+            while(($row = sqlsrv_fetch_array($resultSet))==true){
                 $allData[]  = $row;
             }
         }  else {
@@ -497,13 +497,13 @@ trait resourceRequestHoursTableTrait
             $sql.= " where WEEK_ENDING_FRIDAY > DATE('" . $complimentaryFields['WEEK_ENDING_FRIDAY'] ."') ";
             $sql.= " group by RESOURCE_REFERENCE; ";
             
-            $rs = db2_exec($GLOBALS['conn'], $sql);
+            $rs = sqlsrv_query($GLOBALS['conn'], $sql);
             
             if(!$rs){
                 DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             }
             
-            while(($row = db2_fetch_assoc($rs))==true){
+            while(($row = sqlsrv_fetch_array($rs))==true){
                 $this->hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] = $row['HOURS_TO_GO'];
                 $this->hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] = $row['WEEKS_TO_GO'];
              }
@@ -524,7 +524,7 @@ trait resourceRequestHoursTableTrait
         
         error_log($sql);
         
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
                
         error_log("Db2_Num_Rows:" . db2_num_rows($rs));
         
@@ -556,7 +556,7 @@ trait resourceRequestHoursTableTrait
         $preparedStmt = $this->prepareSetHoursForWef($resourceReference);         
         $parameters = array($hours, $wef);
         
-        $rs = db2_execute($preparedStmt,$parameters);
+        $rs = sqlsrv_execute($preparedStmt,$parameters);
         
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, 'prepared sql');
@@ -568,7 +568,7 @@ trait resourceRequestHoursTableTrait
         $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " WHERE RESOURCE_REFERENCE = '" . htmlspecialchars($resourceReference) . "' ";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);

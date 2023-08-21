@@ -31,7 +31,7 @@ foreach ($_POST as $key => $value){
         $hours = $value;
 
         $data = array($hours, $resourceReference, $week);
-        $result = db2_execute($hoursUpdate, $data);
+        $result = sqlsrv_execute($hoursUpdate, $data);
     }
 }
 

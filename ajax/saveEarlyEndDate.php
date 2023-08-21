@@ -12,7 +12,7 @@ $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
 $sql.= " SET END_DATE = DATE('" . htmlspecialchars($_POST['endEarlyDate']) . "') ";
 $sql.= " WHERE RESOURCE_REFERENCE = '" . htmlspecialchars($_POST['resourceReference']) . "' ";
 
-$rs = db2_exec($GLOBALS['conn'], $sql);
+$rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
 $success = $rs ? true : false;
 

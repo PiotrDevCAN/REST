@@ -41,12 +41,12 @@ trait diaryTableTrait
         $sql.= " WHERE RD.RESOURCE_REFERENCE = " . htmlspecialchars($resourceReference);
         $sql.= " ORDER BY D.CREATED desc ";
         
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
         if (! $rs) {
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
         }
         $comment = '<table class="table table-striped" ><tbody>';
-        while(($row = db2_fetch_assoc($rs))==true){            
+        while(($row = sqlsrv_fetch_array($rs))==true){            
             $comment.= "<tr><td class='diaryEntryCell'>" . $row['ENTRY'] . "</td><td class='diaryCreatorCell'><b>" . $row['CREATOR'] . "</b><br>" . $row['CREATED'] . "</small></td><tr>";
         }
         $comment.= '</tbody></table>';
@@ -66,12 +66,12 @@ trait diaryTableTrait
         
         error_log($sql);
         
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
         if (! $rs) {
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
         }
         $entries = array();
-        while(($row = db2_fetch_assoc($rs))==true){
+        while(($row = sqlsrv_fetch_array($rs))==true){
             $entries[$row['RESOURCE_REFERENCE']] = $row;
         }
         
@@ -82,7 +82,7 @@ trait diaryTableTrait
         $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " WHERE DIARY_REFERENCE = '" . htmlspecialchars($diaryReference) . "' ";
 
-        $rs = db2_exec($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
