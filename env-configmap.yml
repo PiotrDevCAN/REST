@@ -6,7 +6,8 @@ data:
   SERVER_ADMIN: piotr.tajanowicz@ocean.ibm.com
   SERVER_NAME: Azure REST
   email: dev
-  environment: rest_dev
+  environment: rest_ut
+  jwt_token: "VGhpcyBpcyB0aGUgc2VjcmV0IGtleSBmb3IgSldUIG9uIHRoZSBSRVNUIDIwMjAgYXBwbGljYXRpb24u"
   devemailid: piotr.tajanowicz@ocean.ibm.com
   noreplyemailid: rest@noreply.ibm.com
   noreplykyndrylemailid: restNoReply@kyndryl.com
