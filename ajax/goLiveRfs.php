@@ -122,7 +122,7 @@ switch (true) {
         ob_start();
         $success = empty($messages) && $rs;
 
-        $success ? db2_commit($GLOBALS['conn']) : db2_rollback($GLOBALS['conn']);
+        $success ? sqlsrv_commit($GLOBALS['conn']) : sqlsrv_rollback($GLOBALS['conn']);
         sqlsrv_commit($GLOBALS['conn'],$autocommit);
         break;
 }

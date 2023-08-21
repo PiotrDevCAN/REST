@@ -18,7 +18,7 @@ $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_H
 $sql .= " SET HOURS=? " ;
 $sql .= " WHERE RESOURCE_REFERENCE=? and WEEK_ENDING_FRIDAY=? ";
 
-$hoursUpdate = db2_prepare($GLOBALS['conn'], $sql);
+$hoursUpdate = sqlsrv_prepare($GLOBALS['conn'], $sql);
 
 if(!$hoursUpdate){
     echo sqlsrv_errors();

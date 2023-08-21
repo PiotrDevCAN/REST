@@ -134,11 +134,11 @@ switch (true) {
                         }
         
                         if ($saveResponse && $create == true) {
-                            db2_commit($GLOBALS['conn']);
+                            sqlsrv_commit($GLOBALS['conn']);
                         } else {
                             $resourceReference = 'Record has been not created';
                             $saveResponse = false;
-                            db2_rollback($GLOBALS['conn']);
+                            sqlsrv_rollback($GLOBALS['conn']);
                         }
 
                     // } else {
@@ -195,11 +195,11 @@ switch (true) {
                 }
 
                 if ($saveResponse && $update == true) {
-                    db2_commit($GLOBALS['conn']);
+                    sqlsrv_commit($GLOBALS['conn']);
                 } else {
                     $resourceReference = 'Record has been not updated';
                     $saveResponse = false;
-                    db2_rollback($GLOBALS['conn']);
+                    sqlsrv_rollback($GLOBALS['conn']);
                 }
                 break;
             default:

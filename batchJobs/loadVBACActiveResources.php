@@ -102,9 +102,9 @@ if ($err) {
     }
     
     if($success){
-        db2_commit($GLOBALS['conn']);
+        sqlsrv_commit($GLOBALS['conn']);
     } else {
-        db2_rollback($GLOBALS['conn']);
+        sqlsrv_rollback($GLOBALS['conn']);
     }
 
     sqlsrv_commit($GLOBALS['conn'],$autoCommit);

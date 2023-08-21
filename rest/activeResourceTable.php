@@ -50,7 +50,7 @@ class activeResourceTable extends DbTable {
             return false;
         }
 
-        $topRow = db2_fetch_array($rs);
+        $topRow = sqlsrv_fetch_array($rs);
         if(isset($topRow[0])){
             $thisCnum = substr($topRow[0],1,5);
             $next = $thisCnum+1;

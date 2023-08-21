@@ -93,10 +93,10 @@ if($saveResponse){
             
         }
 
-        db2_commit($GLOBALS['conn']);
+        sqlsrv_commit($GLOBALS['conn']);
     } catch (Exception $e) {
         $hoursResponse = $e->getMessage();
-        db2_rollback($GLOBALS['conn']);
+        sqlsrv_rollback($GLOBALS['conn']);
     }
 
 }

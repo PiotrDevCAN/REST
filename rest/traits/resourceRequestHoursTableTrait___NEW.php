@@ -481,7 +481,7 @@ trait resourceRequestHoursTableTrait
                 $allData[]  = $row;
             }
         }  else {
-            while(($row = db2_fetch_array($resultSet))==true){
+            while(($row = sqlsrv_fetch_array($resultSet))==true){
                 $allData[]  = $row;
             }
         }
@@ -542,7 +542,7 @@ trait resourceRequestHoursTableTrait
             $sql.= " SET HOURS= ? " ;
             $sql.= " WHERE DATE(WEEK_ENDING_FRIDAY) =  ? ";
             $sql.= " AND RESOURCE_REFERENCE= " . htmlspecialchars($resourceReference);   
-            $this->preparedSetHrsStatement = db2_prepare($GLOBALS['conn'], $sql);
+            $this->preparedSetHrsStatement = sqlsrv_prepare($GLOBALS['conn'], $sql);
             
             if(!$this->preparedSetHrsStatement){
                 DbTable::displayErrorMessage($this->preparedSetHrsStatement, __CLASS__, __METHOD__, $sql);
