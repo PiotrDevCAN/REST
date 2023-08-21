@@ -27,9 +27,9 @@ class uploadLogRecord extends DbRecord
     }
 
     function logUploadStart($intranet,$filename,$tablename){
-        $this->UPLOAD_INTRANET= db2_escape_string(trim($intranet));
-        $this->UPLOAD_FILENAME = db2_escape_string(trim($filename));
-        $this->UPLOAD_TABLENAME = db2_escape_string(trim($tablename));
+        $this->UPLOAD_INTRANET= htmlspecialchars(trim($intranet));
+        $this->UPLOAD_FILENAME = htmlspecialchars(trim($filename));
+        $this->UPLOAD_TABLENAME = htmlspecialchars(trim($tablename));
         $this->UPLOAD_STATUS = 'Started';
 
         $insertResult = $this->uploadLogTable->insert($this);

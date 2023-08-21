@@ -19,7 +19,7 @@ $rfsTable = new rfsTable(allTables::$RFS);
 
 $loader = new Loader();
 
-$allRequests = $loader->load('RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS," RFS='" . db2_escape_string($_POST['RFS_ID']) . "' ");
+$allRequests = $loader->load('RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS," RFS='" . htmlspecialchars($_POST['RFS_ID']) . "' ");
 
 $allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
 $emailEntry = "A Resource Request &&rr&& linked to RFS &&rfs&& has been deleted by $allocatorNotesid ";
@@ -29,11 +29,11 @@ foreach ($allRequests as $resourceReference) {
     emailNotifications::sendNotification($resourceReference, $emailEntry, $emailPattern);    
     $diaryEntry =  $resourceReference . " was deleted because it's owning RFS " . $_POST['RFS_ID'] . " was deleted by " . $allocatorNotesid;
     resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
-    $rrhTable->deleteData(" RESOURCE_REFERENCE='" . db2_escape_string($resourceReference) . "'",true);
-    $rrTable->deleteData(" RESOURCE_REFERENCE='" . db2_escape_string($resourceReference) . "'",true );    
+    $rrhTable->deleteData(" RESOURCE_REFERENCE='" . htmlspecialchars($resourceReference) . "'",true);
+    $rrTable->deleteData(" RESOURCE_REFERENCE='" . htmlspecialchars($resourceReference) . "'",true );    
 }
 
-$rfsTable->deleteData(" RFS_ID='" . db2_escape_string($_POST['RFS_ID']) . "'",true );
+$rfsTable->deleteData(" RFS_ID='" . htmlspecialchars($_POST['RFS_ID']) . "'",true );
 
 $messages = ob_get_clean();
 

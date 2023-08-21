@@ -222,7 +222,7 @@ trait rfsTableTrait
     static function getRequestorEmail($rfsId){
         $sql = " SELECT REQUESTOR_EMAIL ";
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS;
-        $sql.= " WHERE RFS_ID='" . db2_escape_string($rfsId) . "' ";
+        $sql.= " WHERE RFS_ID='" . htmlspecialchars($rfsId) . "' ";
         $rs = db2_exec($GLOBALS['conn'], $sql);
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);            
@@ -735,7 +735,7 @@ trait rfsTableTrait
 
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " SET ARCHIVE = CURRENT TIMESTAMP ";
-        $sql .= " WHERE RFS_ID = '" . db2_escape_string($rfsid) . "' " ;
+        $sql .= " WHERE RFS_ID = '" . htmlspecialchars($rfsid) . "' " ;
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 
@@ -783,15 +783,15 @@ trait rfsTableTrait
         }
 
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS;
-        $sql .= " SET RFS_ID = '" . db2_escape_string($newRfsId) . "' " ;
-        $sql .= " WHERE RFS_ID = '" . db2_escape_string($oldRfsId) . "' " ;
+        $sql .= " SET RFS_ID = '" . htmlspecialchars($newRfsId) . "' " ;
+        $sql .= " WHERE RFS_ID = '" . htmlspecialchars($oldRfsId) . "' " ;
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 
         if (!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
         } else {
-            // rfsDiaryTable::insertEntry("RFS Id set from " . db2_escape_string(trim($oldRfsId) . " to " . db2_escape_string(trim($newRfsId)), $newRfsId);
+            // rfsDiaryTable::insertEntry("RFS Id set from " . htmlspecialchars(trim($oldRfsId) . " to " . htmlspecialchars(trim($newRfsId)), $newRfsId);
         }
 
         return $rs;

@@ -77,7 +77,7 @@ class rfsPcrTable extends DbTable
 
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " SET ARCHIVE = CURRENT TIMESTAMP ";
-        $sql .= " WHERE PCR_ID = '" . db2_escape_string($pcrid) . "' " ;
+        $sql .= " WHERE PCR_ID = '" . htmlspecialchars($pcrid) . "' " ;
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 

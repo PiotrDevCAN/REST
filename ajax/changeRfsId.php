@@ -24,7 +24,7 @@ if (!empty($oldRfsId) && !empty($newRfsId)) {
             if ($switchRfsUpdate) {
                 
                 $allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
-                $allRequests = $loader->load('RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS," RFS='" . db2_escape_string($oldRfsId) . "' ");
+                $allRequests = $loader->load('RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS," RFS='" . htmlspecialchars($oldRfsId) . "' ");
 
                 if (count($allRequests) > 0) {
                     foreach ($allRequests as $resourceReference) {

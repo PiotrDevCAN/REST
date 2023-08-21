@@ -71,7 +71,7 @@ if ($err) {
                 // -------------------------------------------------------------------
 
                 // $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( EMAIL_ADDRESS, NOTES_ID, PES_STATUS ) ";
-                // $sql .= " Values ('" . db2_escape_string(trim($personEntry->EMAIL_ADDRESS)) . "','" . db2_escape_string($personEntry->NOTES_ID) . "','" . db2_escape_string($personEntry->PES_STATUS) . "' ) ";
+                // $sql .= " Values ('" . htmlspecialchars(trim($personEntry->EMAIL_ADDRESS)) . "','" . htmlspecialchars($personEntry->NOTES_ID) . "','" . htmlspecialchars($personEntry->PES_STATUS) . "' ) ";
                 
                 // $rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
                 // if (! $rs) {
@@ -88,7 +88,7 @@ if ($err) {
                 if ($key > 0) {
                     $sql .= " ,";    
                 }
-                $sql .= " ('" . db2_escape_string(trim($personEntry->EMAIL_ADDRESS)) . "','" . db2_escape_string($personEntry->NOTES_ID) . "','" . db2_escape_string($personEntry->PES_STATUS) . "' ) ";
+                $sql .= " ('" . htmlspecialchars(trim($personEntry->EMAIL_ADDRESS)) . "','" . htmlspecialchars($personEntry->NOTES_ID) . "','" . htmlspecialchars($personEntry->PES_STATUS) . "' ) ";
                 
                 $loadCounter++;
                 

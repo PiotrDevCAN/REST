@@ -11,7 +11,7 @@ trait resourceRequestDiaryTableTrait
 
     function getArchieved($resourceReference=null){
         $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
-        $sql .= " WHERE RESOURCE_REFERENCE = '" . db2_escape_string($resourceReference) . "' ";
+        $sql .= " WHERE RESOURCE_REFERENCE = '" . htmlspecialchars($resourceReference) . "' ";
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 

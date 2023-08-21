@@ -13,7 +13,7 @@ $json = file_get_contents('php://input');
 // Converts it into a PHP object
 $data = json_decode($json, true);
 
-$predicate = " RFS='" . db2_escape_string($data['rfsId']) . "'";
+$predicate = " RFS='" . htmlspecialchars($data['rfsId']) . "'";
 
 $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 $data = $resourceTable->getAllRFSsAndResourceRequestsExtended($predicate);

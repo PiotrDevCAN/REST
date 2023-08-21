@@ -72,16 +72,16 @@ if ($err) {
                     $mappedTribeName = array_key_exists($personEntry['TRIBE_NAME'], rfsRecord::$tribeNameMapping) ? rfsRecord::$tribeNameMapping[$personEntry['TRIBE_NAME']] : $personEntry['TRIBE_NAME'];
 
                     $sql .= " ('" . 
-                        db2_escape_string(trim($personEntry['CNUM'])) . "','" . 
-                        db2_escape_string($email) . "','" . 
-                        db2_escape_string($personEntry['NOTES_ID']) . "','" . 
-                        db2_escape_string($personEntry['PES_STATUS']) . "','" . 
-                        db2_escape_string($personEntry['WORK_STREAM']) . "','" . 
-                        db2_escape_string($personEntry['CIO_ALIGNMENT']) . "','" . 
-                        db2_escape_string($personEntry['INT_STATUS']) . "','" . 
-                        db2_escape_string($personEntry['TRIBE_NAME']) . "','" . 
-                        db2_escape_string($personEntry['SQUAD_NAME']) . "','" . 
-                        db2_escape_string($mappedTribeName) . 
+                        htmlspecialchars(trim($personEntry['CNUM'])) . "','" . 
+                        htmlspecialchars($email) . "','" . 
+                        htmlspecialchars($personEntry['NOTES_ID']) . "','" . 
+                        htmlspecialchars($personEntry['PES_STATUS']) . "','" . 
+                        htmlspecialchars($personEntry['WORK_STREAM']) . "','" . 
+                        htmlspecialchars($personEntry['CIO_ALIGNMENT']) . "','" . 
+                        htmlspecialchars($personEntry['INT_STATUS']) . "','" . 
+                        htmlspecialchars($personEntry['TRIBE_NAME']) . "','" . 
+                        htmlspecialchars($personEntry['SQUAD_NAME']) . "','" . 
+                        htmlspecialchars($mappedTribeName) . 
                     "' ) ";
                     $first = false;
             //     }
@@ -128,16 +128,16 @@ if ($err) {
             $mappedTribeName = array_key_exists($activeResourceEntry->TRIBE_NAME, rfsRecord::$tribeNameMapping) ? rfsRecord::$tribeNameMapping[$activeResourceEntry->TRIBE_NAME] : $activeResourceEntry->TRIBE_NAME;
 
             $sql .= " ('" . 
-                db2_escape_string(trim($activeResourceEntry->CNUM)) . "','" . 
-                db2_escape_string(trim($activeResourceEntry->EMAIL_ADDRESS)) . "','" . 
-                db2_escape_string($activeResourceEntry->NOTES_ID) . "','" . 
-                db2_escape_string($activeResourceEntry->PES_STATUS) . "','" . 
-                db2_escape_string($activeResourceEntry->WORK_STREAM) . "','" . 
-                db2_escape_string($activeResourceEntry->CIO_ALIGNMENT) . "','" . 
-                db2_escape_string($activeResourceEntry->INT_STATUS) . "','" . 
-                db2_escape_string($activeResourceEntry->TRIBE_NAME) . "','" . 
-                db2_escape_string($activeResourceEntry->SQUAD_NAME) . "','" . 
-                db2_escape_string($mappedTribeName) . 
+                htmlspecialchars(trim($activeResourceEntry->CNUM)) . "','" . 
+                htmlspecialchars(trim($activeResourceEntry->EMAIL_ADDRESS)) . "','" . 
+                htmlspecialchars($activeResourceEntry->NOTES_ID) . "','" . 
+                htmlspecialchars($activeResourceEntry->PES_STATUS) . "','" . 
+                htmlspecialchars($activeResourceEntry->WORK_STREAM) . "','" . 
+                htmlspecialchars($activeResourceEntry->CIO_ALIGNMENT) . "','" . 
+                htmlspecialchars($activeResourceEntry->INT_STATUS) . "','" . 
+                htmlspecialchars($activeResourceEntry->TRIBE_NAME) . "','" . 
+                htmlspecialchars($activeResourceEntry->SQUAD_NAME) . "','" . 
+                htmlspecialchars($mappedTribeName) . 
             "' ) ";
         }
 

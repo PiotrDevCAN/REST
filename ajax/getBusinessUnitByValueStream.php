@@ -10,7 +10,7 @@ $predicate=null;
 
 $loader = new Loader();
 
-$predicate = !empty($_POST['valueStream']) ? "VALUE_STREAM = '" . db2_escape_string($_POST['valueStream']) . "'" : false ;
+$predicate = !empty($_POST['valueStream']) ? "VALUE_STREAM = '" . htmlspecialchars($_POST['valueStream']) . "'" : false ;
 $data = $loader->load('BUSINESS_UNIT', allTables::$STATIC_VALUE_STREAM, $predicate, FALSE);
 
 if (count($data) > 0) {

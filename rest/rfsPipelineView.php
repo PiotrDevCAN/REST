@@ -95,7 +95,7 @@ class rfsPipelineView extends DbTable
 
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS;
         $sql .= " SET ARCHIVE = CURRENT TIMESTAMP ";
-        $sql .= " WHERE RFS_ID ='" . db2_escape_string($rfsid) . "' " ;
+        $sql .= " WHERE RFS_ID ='" . htmlspecialchars($rfsid) . "' " ;
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 

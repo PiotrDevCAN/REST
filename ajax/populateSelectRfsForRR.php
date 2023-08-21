@@ -13,11 +13,11 @@ $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTable . " AS R "
 $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
 $sql.= " ON R.RFS = RFS.RFS_ID ";
 $sql.= " WHERE 1=1 and RFS.RFS_ID is not null and R.RFS is not null ";
-$sql.= !empty($_GET['term']) ? " AND UPPER(R.RFS) like '%" . db2_escape_string(strtoupper(trim($_GET['term']))) . "%' " : null;
+$sql.= !empty($_GET['term']) ? " AND UPPER(R.RFS) like '%" . htmlspecialchars(strtoupper(trim($_GET['term']))) . "%' " : null;
 $sql.= $pipelineLiveArchive == 'live' ? " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_LIVE . "' " : null;
 $sql.= $pipelineLiveArchive == 'pipeline' ? " AND RFS_STATUS='" . rfsRecord::RFS_STATUS_PIPELINE . "' " : null;
 $sql.= $pipelineLiveArchive == 'archive' ? " AND ARCHIVE is not null " : " AND ARCHIVE is null " ;
-$sql.= (!empty($organisation) && ($organisation!='All' )) ? " AND ORGANISATION='" . db2_escape_string(trim($organisation)) . "' " : null;
+$sql.= (!empty($organisation) && ($organisation!='All' )) ? " AND ORGANISATION='" . htmlspecialchars(trim($organisation)) . "' " : null;
 $sql.= " ORDER BY 1 " ;
 $rs = db2_exec($GLOBALS['conn'], $sql);
 $data = array();

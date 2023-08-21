@@ -12,7 +12,7 @@ $id = !empty($_POST['ID']) ? trim($_POST['ID']) : null;
 
 if (!empty($id)) {
     $table = new staticBespokeRateTable(allTables::$BESPOKE_RATES);
-    $table->deleteData(" BESPOKE_RATE_ID='" . db2_escape_string($id) . "'",true );    
+    $table->deleteData(" BESPOKE_RATE_ID='" . htmlspecialchars($id) . "'",true );    
 }
 
 $messages = ob_get_clean();

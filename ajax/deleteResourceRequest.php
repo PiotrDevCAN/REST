@@ -15,10 +15,10 @@ $emailPattern = array('RFS'=>'/&&rfs&&/');
 emailNotifications::sendNotification($_POST['RESOURCE_REFERENCE'],$emailEntry, $emailPattern);
 
 $rrTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
-$rrTable->deleteData(" RESOURCE_REFERENCE='" . db2_escape_string($_POST['RESOURCE_REFERENCE']) . "'",true );
+$rrTable->deleteData(" RESOURCE_REFERENCE='" . htmlspecialchars($_POST['RESOURCE_REFERENCE']) . "'",true );
 
 $rrhTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
-$rrhTable->deleteData(" RESOURCE_REFERENCE='" . db2_escape_string($_POST['RESOURCE_REFERENCE']) . "'",true);
+$rrhTable->deleteData(" RESOURCE_REFERENCE='" . htmlspecialchars($_POST['RESOURCE_REFERENCE']) . "'",true);
 
 $diaryEntry = !empty($_POST['RESOURCE_NAME']) ? $_POST['RESOURCE_NAME'] . " deleted " : "Unallocated request " . $_POST['RESOURCE_REFERENCE'] . " deleted";
 resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['RESOURCE_REFERENCE']);

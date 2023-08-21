@@ -1,0 +1,118 @@
+---
+name: ci-build-and-deploy-production
+on:
+  push:
+    branches:
+      - cirrus
+jobs:
+  Build:
+    runs-on:
+      - aro-dev-westus3
+    environment: production
+    steps:
+      - name: Get JFROG Credentials
+        id: import-secrets
+        uses: hashicorp/vault-action@v2
+        with:
+          url: https://vault.kyndryl.net
+          method: token
+          namespace: kyndryl/KYNDRYL_PRACTICES/
+          token: ${{ secrets.VAULT_TOKEN }}
+          tlsSkipVerify: false
+          secrets: |
+            kps-gd-app-rest/data/dev/w3us/jfrog  JFROG_USER | JFROG_USER ; 
+            kps-gd-app-rest/data/dev/w3us/jfrog  JFROG_TOKEN | JFROG_TOKEN
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Login to Jfrog
+        uses: docker/login-action@v2
+        with:
+          registry: kyndryl.jfrog.io
+          username: ${{ steps.import-secrets.outputs.JFROG_USER }}
+          password: ${{ steps.import-secrets.outputs.JFROG_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: | 
+            kyndryl.jfrog.io/uki-business-intelligence-test-docker-local/rest:prod_${{ github.run_number }}
+  Deploy:
+    name: Deploy
+    needs:
+      - Build
+    runs-on:
+      - aro-dev-westus3
+    environment: production
+    steps:
+      - name: Checkout Sourcecode
+        uses: actions/checkout@v3
+      - name: Import JFROG & ARO Secrets
+        id: import-secrets
+        uses: hashicorp/vault-action@v2
+        with:
+          url: https://vault.kyndryl.net
+          method: token
+          namespace: kyndryl/KYNDRYL_PRACTICES/
+          token: ${{ secrets.VAULT_TOKEN }}
+          tlsSkipVerify: false
+          secrets: |
+            kps-gd-app-rest/data/dev/w3us/jfrog  JFROG_USER | JFROG_USER ;
+            kps-gd-app-rest/data/dev/w3us/jfrog  JFROG_TOKEN | JFROG_TOKEN ;
+            kps-gd-app-rest/data/dev/w3us/openshift-sa  SERVER_URL | SERVER_URL ;
+            kps-gd-app-rest/data/dev/w3us/openshift-sa  SA_TOKEN | SA_TOKEN ;
+            kps-gd-app-rest/data/dev/w3us/openshift-sa  NAMESPACE | NAMESPACE ;
+            kps-gd-app-rest/data/dev/w3us/sqlserver_wus3 server | DB_SERVER ;
+            kps-gd-app-rest/data/dev/w3us/sqlserver_wus3 username | DB_USER_NAME ;
+            kps-gd-app-rest/data/dev/w3us/sqlserver_wus3 password | DB_USER_PW
+      - name: Login to ARO Cluster
+        id: set-aro-context
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ steps.import-secrets.outputs.SERVER_URL }}
+          openshift_token: eyJhbGciOiJSUzI1NiIsImtpZCI6InRUZEpQeHdGSDRxQ3YteDgtQV95SEY3WGcxYkFfcmZOSjB6bjB2eGRSMFEifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJucy1yZXN0LWdkLWtwcy1kZXYtd3VzMyIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJzYS1yZXN0LWdkLWtwcy1kZXYtd3VzMy10b2tlbi1yc3Q0ZyIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJzYS1yZXN0LWdkLWtwcy1kZXYtd3VzMyIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6Ijg5OGM1YTJmLWZmOWEtNGZkMi1hYTA5LWExMzA1MTkwZGFjOCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpucy1yZXN0LWdkLWtwcy1kZXYtd3VzMzpzYS1yZXN0LWdkLWtwcy1kZXYtd3VzMyJ9.fi5lPd9uU3YF7nn3tB0ZdJGwQd8bvIuyWvMZ78w_uUTTJV1qvvI09Gx_SvBzmrBrhhOZKERbtaVl1hA-eEHNzcVjU20R1RzL--IZkw-gdyh9BFRBaAghCQ9gSiEO3J_9wxz3kE7I9dfdhh3dPs4CPszX-YcFgky0WW9oDka_RL4hSb6h7Fe6BOOGb-pfvd0T8SuB-n1ySyM9NKjdEBjCTF13pjzmN_wN-9HZsyTT4254EPIkeGAlq9IrJy-C_rfMnnFoQbLxgjQ4YjUX5TPJs37nh79cmrEEN-JWH3_lKQehtSDuOxo9nHLZp4YJciMXBaPjvgHoPBrGGBfg_mNwkcygX7iOH0gUsCU_NSHZ9OQFylxrXiGey3n4GMXPT3kEiQHE6jYp7PbbJMYC4OvNfprMHB-85EWuFpX3hhfng0-hzhCl8MoBgZ0MOirv0ZYl8tbuoSWOV1S_-6t7GCotSLqqiZZ3KJRNMUNqvzDVFz26MhU47TctuOn7oF969iwqZJQsXrSqL1P-BZKmJ1gY-eB5Fy_PvlOpHHkS_FD6CeGRRVys7pINjKlxhxxPJGpisTPLWgjXwqvtGeq4tikLLS8EuqKDYAGIXOY_cGg_WPxh5aPdSMZKvHlVMHaede0jiU59lcEcoqOI1uVvmH8DJlBQp54IZjpaSWnFQ0PSRxs 
+          insecure_skip_tls_verify: true
+          namespace: ${{ steps.import-secrets.outputs.NAMESPACE }}
+      - name: Set ImagePullSecrets
+        id: image_secret
+        uses: Azure/k8s-create-secret@v4.0
+        with:
+          namespace: ${{ steps.import-secrets.outputs.NAMESPACE }}
+          secret-name: rest-app-docker-secrets
+          container-registry-url: kyndryl.jfrog.io
+          container-registry-username: ${{ steps.import-secrets.outputs.JFROG_USER }}
+          container-registry-password: ${{ steps.import-secrets.outputs.JFROG_TOKEN }}
+      - name: Set ImagePullSecrets 2
+        id: image_secret-2
+        uses: azure/k8s-actions/k8s-create-secret@master
+        # uses: Azure/k8s-create-secret@v4.0
+        with:
+          namespace: ${{ steps.import-secrets.outputs.NAMESPACE }}
+          secret-name: rest-app-docker-secrets-generic
+          secret-type: 'generic'
+          arguments: --from-literal=db-server=${{ steps.import-secrets.outputs.DB_SERVER }}  --from-literal=db-name=${{ steps.import-secrets.outputs.DB_NAME }} --from-literal=db-user-name=${{ steps.import-secrets.outputs.DB_USER_NAME }} --from-literal=db-user-pw=${{ steps.import-secrets.outputs.DB_USER_PW }}          
+      - name: Deploy application
+        id: deploy-app
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: ${{ steps.import-secrets.outputs.NAMESPACE }}
+          images: |
+            kyndryl.jfrog.io/uki-business-intelligence-test-docker-local/rest:prod_${{ github.run_number }}
+          # Path to the manifest files to be used for deployment. 
+          manifests: |
+            ./env-configmap.yml
+            ./env-secrets.yml
+            ./myapp-deployment.yml
+            ./myapp-service.yml
+            ./myapp-sn-dev_route.yml
+          # Multiline input where each line contains the name of a docker-registry secret 
+          # that has already been setup within the cluster. 
+          # Each of these secret names are added under imagePullSecrets field for the workloads found in the input manifest files
+          imagepullsecrets: |
+            rest-app-docker-secrets
+            rest-app-docker-secrets-generic
+            env-configmap
+            env-secrets

@@ -36,7 +36,7 @@ if($startDateWasObj < $startDateObj){
     echo "Push Start Date Out";
     $movement = " pushed out to ";
     // They've moved the date in - so just delete dates.
-    $predicate = " RESOURCE_REFERENCE=" . db2_escape_string($_POST['resourceReference']) . " and \"WEEK_ENDING_FRIDAY\" < DATE('". db2_escape_string($startDateObj->format('Y-m-d')) ."') ";
+    $predicate = " RESOURCE_REFERENCE=" . htmlspecialchars($_POST['resourceReference']) . " and \"WEEK_ENDING_FRIDAY\" < DATE('". htmlspecialchars($startDateObj->format('Y-m-d')) ."') ";
     $rrHoursTable->deleteData($predicate);
     $weeksSaved = 0;
 } else {

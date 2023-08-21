@@ -297,7 +297,7 @@ trait resourceRequestHoursTableTrait
     function clearResourceReference($resourceReference=null){
         if($resourceReference){
             $sql = " DELETE FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName ;
-            $sql .= " WHERE RESOURCE_REFERENCE='" . db2_escape_string($resourceReference) . "' ";
+            $sql .= " WHERE RESOURCE_REFERENCE='" . htmlspecialchars($resourceReference) . "' ";
             $this->execute($sql);
             $this->commitUpdates();
         }
@@ -526,7 +526,7 @@ trait resourceRequestHoursTableTrait
         $sql.= " WHERE RESOURCE_REFERENCE IN ( ";
         $sql.= "      SELECT RESOURCE_REFERENCE ";
         $sql.= "      FROM " .  $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
-        $sql.= "      where RR.RFS = '" . db2_escape_string($rfsId) . "' ";
+        $sql.= "      where RR.RFS = '" . htmlspecialchars($rfsId) . "' ";
         $sql.= "      ) ";
         $sql.= " AND DATE(WEEK_ENDING_FRIDAY) < CURRENT_DATE ";
         
@@ -549,7 +549,7 @@ trait resourceRequestHoursTableTrait
             $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
             $sql.= " SET HOURS= ? " ;
             $sql.= " WHERE DATE(WEEK_ENDING_FRIDAY) =  ? ";
-            $sql.= " AND RESOURCE_REFERENCE= " . db2_escape_string($resourceReference);   
+            $sql.= " AND RESOURCE_REFERENCE= " . htmlspecialchars($resourceReference);   
             $this->preparedSetHrsStatement = db2_prepare($GLOBALS['conn'], $sql);
             
             if(!$this->preparedSetHrsStatement){
@@ -574,7 +574,7 @@ trait resourceRequestHoursTableTrait
 
     function getArchieved($resourceReference=null){
         $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
-        $sql .= " WHERE RESOURCE_REFERENCE = '" . db2_escape_string($resourceReference) . "' ";
+        $sql .= " WHERE RESOURCE_REFERENCE = '" . htmlspecialchars($resourceReference) . "' ";
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 

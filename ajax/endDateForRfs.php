@@ -10,7 +10,7 @@ ob_start();
 
 $sql = " SELECT RFS_END_DATE ";
 $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS ;
-$sql.= " WHERE RFS_ID='" . db2_escape_string($_POST['rfs']) . "' ";
+$sql.= " WHERE RFS_ID='" . htmlspecialchars($_POST['rfs']) . "' ";
 
 $rs = db2_exec($GLOBALS['conn'], $sql);
 

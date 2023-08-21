@@ -48,7 +48,7 @@ if($saveResponse){
         $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
         
         $loader = new Loader();
-        $predicate = " RESOURCE_REFERENCE='" . db2_escape_string($_POST['resourceReference']). "'";
+        $predicate = " RESOURCE_REFERENCE='" . htmlspecialchars($_POST['resourceReference']). "'";
         $currentHoursPerWef = $loader->loadIndexed('HOURS','WEEK_ENDING_FRIDAY',allTables::$RESOURCE_REQUEST_HOURS,$predicate);
         
         if($delta){

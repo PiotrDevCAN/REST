@@ -37,9 +37,9 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
 
     $predicate  =   empty($rfsId)  ? rfsTable::rfsPredicateFilterOnPipeline($pipelineLive) : null;
-    $predicate .= ! empty($rfsId) ? " AND RFS='" . db2_escape_string($rfsId) . "' " : null;
-    $predicate .= ! empty($organisation) ? " AND ORGANISATION='" . db2_escape_string($organisation) . "' " : null;
-    $predicate .= ! empty($businessUnit) ? " AND BUSINESS_UNIT='" . db2_escape_string($businessUnit) . "' " : null;
+    $predicate .= ! empty($rfsId) ? " AND RFS='" . htmlspecialchars($rfsId) . "' " : null;
+    $predicate .= ! empty($organisation) ? " AND ORGANISATION='" . htmlspecialchars($organisation) . "' " : null;
+    $predicate .= ! empty($businessUnit) ? " AND BUSINESS_UNIT='" . htmlspecialchars($businessUnit) . "' " : null;
 
     error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
 

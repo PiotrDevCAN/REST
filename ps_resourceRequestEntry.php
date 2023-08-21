@@ -16,7 +16,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 <?php
 
 if (isset($_REQUEST['resource']) && !empty($_REQUEST['resource'])) {
-    $rrId = db2_escape_string(trim($_REQUEST['resource']));
+    $rrId = htmlspecialchars(trim($_REQUEST['resource']));
 } else {
     $rrId = '';
 }

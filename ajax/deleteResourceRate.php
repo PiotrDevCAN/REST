@@ -12,7 +12,7 @@ $id = !empty($_POST['ID']) ? trim($_POST['ID']) : null;
 
 if (!empty($id)) {
     $table = new staticResourceRateTable(allTables::$RESOURCE_TYPE_RATES);
-    $table->deleteData(" ID='" . db2_escape_string($id) . "'",true );    
+    $table->deleteData(" ID='" . htmlspecialchars($id) . "'",true );    
 }
 
 $messages = ob_get_clean();

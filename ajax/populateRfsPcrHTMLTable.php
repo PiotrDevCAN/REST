@@ -14,7 +14,7 @@ $rfsPcrTable = new rfsPcrTable(allTables::$RFS_PCR);
 $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
 
 $predicate = " 1=1 ";
-$predicate .= ! empty($rfsId) && $rfsId !=='All'  ? " AND PCR.RFS_ID='" . db2_escape_string($rfsId) . "' " : null;
+$predicate .= ! empty($rfsId) && $rfsId !=='All'  ? " AND PCR.RFS_ID='" . htmlspecialchars($rfsId) . "' " : null;
 
 if (empty($rfsId)) {
     $response = array(

@@ -1,5 +1,5 @@
 ---
-name: ci-build-and-deploy
+name: ci-build-and-deploy-development
 on:
   push:
     branches:
@@ -8,6 +8,7 @@ jobs:
   Build:
     runs-on:
       - aro-dev-westus3
+    environment: development
     steps:
       - name: Get JFROG Credentials
         id: import-secrets
@@ -16,7 +17,7 @@ jobs:
           url: https://vault.kyndryl.net
           method: token
           namespace: kyndryl/KYNDRYL_PRACTICES/
-          token: ${{secrets.VAULT_TOKEN}}
+          token: ${{ secrets.VAULT_TOKEN }}
           tlsSkipVerify: false
           secrets: |
             kps-gd-app-rest/data/dev/w3us/jfrog  JFROG_USER | JFROG_USER ; 
@@ -38,13 +39,14 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: | 
-            kyndryl.jfrog.io/uki-business-intelligence-test-docker-local/rest:dev_${{ github.run_number }}
+            kyndryl.jfrog.io/uki-business-intelligence-test-docker-local/rest:devel_${{ github.run_number }}
   Deploy:
     name: Deploy
     needs:
       - Build
     runs-on:
       - aro-dev-westus3
+    environment: development
     steps:
       - name: Checkout Sourcecode
         uses: actions/checkout@v3
@@ -55,7 +57,7 @@ jobs:
           url: https://vault.kyndryl.net
           method: token
           namespace: kyndryl/KYNDRYL_PRACTICES/
-          token: ${{secrets.VAULT_TOKEN}}
+          token: ${{ secrets.VAULT_TOKEN }}
           tlsSkipVerify: false
           secrets: |
             kps-gd-app-rest/data/dev/w3us/jfrog  JFROG_USER | JFROG_USER ;
@@ -98,7 +100,7 @@ jobs:
         with:
           namespace: ${{ steps.import-secrets.outputs.NAMESPACE }}
           images: |
-            kyndryl.jfrog.io/uki-business-intelligence-test-docker-local/rest:dev_${{ github.run_number }}
+            kyndryl.jfrog.io/uki-business-intelligence-test-docker-local/rest:devel_${{ github.run_number }}
           # Path to the manifest files to be used for deployment. 
           manifests: |
             ./env-configmap.yml

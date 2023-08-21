@@ -26,10 +26,10 @@ $businessUnit = $businessUnit=='All' ? null : $businessUnit;
 $requestor = $requestor=='All' ? null : $requestor;
 
 $predicate = " 1=1 ";
-$predicate .= ! empty($rfsId) ? " AND RFS_ID='" . db2_escape_string($rfsId) . "' " : null;
-$predicate .= ! empty($valueStream) ? " AND VALUE_STREAM='" . db2_escape_string($valueStream) . "' " : null;
-$predicate .= ! empty($businessUnit) ? " AND BUSINESS_UNIT='" . db2_escape_string($businessUnit) . "' " : null;
-$predicate .= ! empty($requestor) ? " AND lower(REQUESTOR_EMAIL)='" . db2_escape_string(strtolower($requestor)) . "' " : null;
+$predicate .= ! empty($rfsId) ? " AND RFS_ID='" . htmlspecialchars($rfsId) . "' " : null;
+$predicate .= ! empty($valueStream) ? " AND VALUE_STREAM='" . htmlspecialchars($valueStream) . "' " : null;
+$predicate .= ! empty($businessUnit) ? " AND BUSINESS_UNIT='" . htmlspecialchars($businessUnit) . "' " : null;
+$predicate .= ! empty($requestor) ? " AND lower(REQUESTOR_EMAIL)='" . htmlspecialchars(strtolower($requestor)) . "' " : null;
 
 // if (empty($rfsId) && empty($valueStream) && empty($requestor) && empty($businessUnit)) {
 //     $response = array(

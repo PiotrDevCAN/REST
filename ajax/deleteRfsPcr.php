@@ -9,7 +9,7 @@ ob_start();
 
 $rfsPcrTable = new rfsPcrTable(allTables::$RFS_PCR);
 
-$rfsPcrTable->deleteData(" PCR_ID='" . db2_escape_string($_POST['ID']) . "'",true );
+$rfsPcrTable->deleteData(" PCR_ID='" . htmlspecialchars($_POST['ID']) . "'",true );
 
 $messages = ob_get_clean();
 

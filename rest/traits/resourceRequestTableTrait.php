@@ -48,7 +48,7 @@ trait resourceRequestTableTrait
         
         if ($this->hrsThisWeekByResourceReference==null){
             $loader = $this->loader;
-            $predicate = " WEEK_NUMBER='" . db2_escape_string($today->format('W')) . "' ";
+            $predicate = " WEEK_NUMBER='" . htmlspecialchars($today->format('W')) . "' ";
             $this->hrsThisWeekByResourceReference = $loader->loadIndexed('HOURS','RESOURCE_REFERENCE',allTables::$RESOURCE_REQUEST_HOURS, $predicate);            
         }
 
@@ -57,7 +57,7 @@ trait resourceRequestTableTrait
 
     function getResourceName($resourceReference){
         $sql  = " SELECT RESOURCE_NAME FROM  " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
-        $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference);
+        $sql .= " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceReference);
 
         $rs = $this->execute($sql);
         
@@ -82,11 +82,11 @@ trait resourceRequestTableTrait
             throw new \Exception('Paramaters Missing in call to ' . __FUNCTION__);
         }
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
-        $sql .= " SET RESOURCE_NAME='" . db2_escape_string($resourceName) . "', ";
-        $sql .= " EMAIL_ADDRESS='" . db2_escape_string($resourceEmail) . "', ";
-        $sql .= " KYN_EMAIL_ADDRESS='" . db2_escape_string($resourceKynEmail) . "', ";
+        $sql .= " SET RESOURCE_NAME='" . htmlspecialchars($resourceName) . "', ";
+        $sql .= " EMAIL_ADDRESS='" . htmlspecialchars($resourceEmail) . "', ";
+        $sql .= " KYN_EMAIL_ADDRESS='" . htmlspecialchars($resourceKynEmail) . "', ";
         $sql .= " STATUS='" . $status . "' ";
-        $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference);
+        $sql .= " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceReference);
         
         $result = $this->execute($sql);
         
@@ -811,8 +811,8 @@ trait resourceRequestTableTrait
     
     static function setEndDate($resourceReference, $endDate){
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
-        $sql .= "  SET END_DATE = DATE('" . db2_escape_string($endDate) ."') ";
-        $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference) ." ";
+        $sql .= "  SET END_DATE = DATE('" . htmlspecialchars($endDate) ."') ";
+        $sql .= " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceReference) ." ";
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 
@@ -826,8 +826,8 @@ trait resourceRequestTableTrait
     
     static function setStartDate($resourceReference, $startDate){
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
-        $sql .= "  SET START_DATE = DATE('" . db2_escape_string($startDate) ."') ";
-        $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference) ." ";
+        $sql .= "  SET START_DATE = DATE('" . htmlspecialchars($startDate) ."') ";
+        $sql .= " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceReference) ." ";
   
         $rs = db2_exec($GLOBALS['conn'], $sql);
         
@@ -842,9 +842,9 @@ trait resourceRequestTableTrait
     static function setHrsPerWeek($resourceReference, $hrsPerWeek){
         $hrsPerWeekInt = intval($hrsPerWeek);
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
-        $sql .= "  SET HRS_PER_WEEK     = " . db2_escape_string($hrsPerWeek) ;
-        $sql .= "  ,   HRS_PER_WEEK_INT = " . db2_escape_string($hrsPerWeekInt) ;
-        $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference) ." ";
+        $sql .= "  SET HRS_PER_WEEK     = " . htmlspecialchars($hrsPerWeek) ;
+        $sql .= "  ,   HRS_PER_WEEK_INT = " . htmlspecialchars($hrsPerWeekInt) ;
+        $sql .= " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceReference) ." ";
       
         $rs = db2_exec($GLOBALS['conn'], $sql);
         
@@ -858,8 +858,8 @@ trait resourceRequestTableTrait
     
     static function setTotalHours($resourceReference, $totalHours){
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
-        $sql .= "  SET TOTAL_HOURS     = " . db2_escape_string($totalHours) ;
-        $sql .= " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceReference) ." ";
+        $sql .= "  SET TOTAL_HOURS     = " . htmlspecialchars($totalHours) ;
+        $sql .= " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceReference) ." ";
        
         $rs = db2_exec($GLOBALS['conn'], $sql);
         
@@ -972,7 +972,7 @@ trait resourceRequestTableTrait
        
         $sql = " SELECT RESOURCE_REFERENCE, START_DATE, END_DATE, ORGANISATION, SERVICE, DESCRIPTION ";
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
-        $sql.= " WHERE RFS = '" . db2_escape_string($rfsId) . "' ";
+        $sql.= " WHERE RFS = '" . htmlspecialchars($rfsId) . "' ";
         
         $rs = db2_exec($GLOBALS['conn'], $sql);
         
@@ -990,22 +990,22 @@ trait resourceRequestTableTrait
 
     static function setRequestStatus($resourceRequest=null, $status=null){
         $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
-        $sql.= !empty($status) && !empty($resourceRequest) ? " SET STATUS='" . db2_escape_string(trim($status)) . "' " : null ;
-        $sql.= !empty($status) && !empty($resourceRequest) ? " WHERE RESOURCE_REFERENCE=" . db2_escape_string($resourceRequest) . "  " : null;
+        $sql.= !empty($status) && !empty($resourceRequest) ? " SET STATUS='" . htmlspecialchars(trim($status)) . "' " : null ;
+        $sql.= !empty($status) && !empty($resourceRequest) ? " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceRequest) . "  " : null;
         
         $rs = db2_exec($GLOBALS['conn'], $sql);
         
         if (!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
         } else {
-            resourceRequestDiaryTable::insertEntry("Status set to " . db2_escape_string(trim($status)), $resourceRequest); 
+            resourceRequestDiaryTable::insertEntry("Status set to " . htmlspecialchars(trim($status)), $resourceRequest); 
         }
         return $rs;
     }
 
     function getArchieved($rfsId=null){
         $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
-        $sql .= " WHERE RFS = '" . db2_escape_string($rfsId) . "' ";
+        $sql .= " WHERE RFS = '" . htmlspecialchars($rfsId) . "' ";
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 
@@ -1023,15 +1023,15 @@ trait resourceRequestTableTrait
         }
 
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
-        $sql .= " SET RFS = '" . db2_escape_string($newRfsId) . "' " ;
-        $sql .= " WHERE RFS = '" . db2_escape_string($oldRfsId) . "' " ;
+        $sql .= " SET RFS = '" . htmlspecialchars($newRfsId) . "' " ;
+        $sql .= " WHERE RFS = '" . htmlspecialchars($oldRfsId) . "' " ;
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 
         if (!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
         } else {
-            resourceRequestDiaryTable::insertEntry("RFS Id set from " . db2_escape_string(trim($oldRfsId)) . " to " . db2_escape_string(trim($newRfsId)), $newRfsId);
+            resourceRequestDiaryTable::insertEntry("RFS Id set from " . htmlspecialchars(trim($oldRfsId)) . " to " . htmlspecialchars(trim($newRfsId)), $newRfsId);
         }
 
         return $rs;

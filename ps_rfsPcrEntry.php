@@ -14,7 +14,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 <?php
 
 if (isset($_REQUEST['rfs']) && !empty($_REQUEST['rfs'])) {
-    $rfsId = db2_escape_string(trim($_REQUEST['rfs']));
+    $rfsId = htmlspecialchars(trim($_REQUEST['rfs']));
 } else {
     $rfsId = '';
 }

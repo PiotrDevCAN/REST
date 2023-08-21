@@ -107,8 +107,8 @@ class activeResourceTable extends DbTable {
 
         $predicate = " 1=1  ";
 
-        $predicate .= $isFM ? " AND P.FM_CNUM='" . db2_escape_string(trim($myCnum)) . "' " : "";
-        $predicate .= $justaUser ? " AND P.CNUM='" . db2_escape_string(trim($myCnum)) . "' " : ""; // FM Can only see their own people.
+        $predicate .= $isFM ? " AND P.FM_CNUM='" . htmlspecialchars(trim($myCnum)) . "' " : "";
+        $predicate .= $justaUser ? " AND P.CNUM='" . htmlspecialchars(trim($myCnum)) . "' " : ""; // FM Can only see their own people.
         $predicate .= $preboadersAction==self::PORTAL_PRE_BOARDER_EXCLUDE ? " AND ( PES_STATUS_DETAILS not like 'Boarded as%' or PES_STATUS_DETAILS is null) " : null;
         $predicate .= $preboadersAction==self::PORTAL_PRE_BOARDER_WITH_LINKED ? " AND ( PES_STATUS_DETAILS like 'Boarded as%' or PRE_BOARDED  is not  null) " : null;
         $predicate .= $preboadersAction==self::PORTAL_ONLY_ACTIVE ? "  AND ( PES_STATUS_DETAILS not like 'Boarded as%' or PES_STATUS_DETAILS is null ) AND " . personTable::activePersonPredicate() : null;
@@ -443,7 +443,7 @@ class activeResourceTable extends DbTable {
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " SET ";
         $sql .= $version=='original' ? " SQUAD_NUMBER = null " : " OLD_SQUAD_NUMBER = null";
-        $sql .= " WHERE CNUM='" . db2_escape_string($cnum) . "' ";
+        $sql .= " WHERE CNUM='" . htmlspecialchars($cnum) . "' ";
 
         $result = db2_exec($GLOBALS['conn'], $sql);
 
@@ -467,7 +467,7 @@ class activeResourceTable extends DbTable {
         }
 
         $sql = ' SELECT FM_MANAGER_FLAG FROM "' . $GLOBALS['Db2Schema'] . '".' . allTables::$ACTIVE_RESOURCE;
-        $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . db2_escape_string(strtoupper(trim($emailAddress))) . "' ";
+        $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . htmlspecialchars(strtoupper(trim($emailAddress))) . "' ";
 
         $resultSet = db2_exec($GLOBALS['conn'], $sql);
 
@@ -498,7 +498,7 @@ class activeResourceTable extends DbTable {
         }
 
         $sql = " SELECT CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
-        $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . db2_escape_string(strtoupper(trim($_SESSION['ssoEmail']))) . "' ";
+        $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . htmlspecialchars(strtoupper(trim($_SESSION['ssoEmail']))) . "' ";
 
         $resultSet = db2_exec($GLOBALS['conn'], $sql);
 
@@ -523,7 +523,7 @@ class activeResourceTable extends DbTable {
         }
 
         $sql = " SELECT FM_CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
-        $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . db2_escape_string(strtoupper(trim($_SESSION['ssoEmail']))) . "' ";
+        $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . htmlspecialchars(strtoupper(trim($_SESSION['ssoEmail']))) . "' ";
 
         $resultSet = db2_exec($GLOBALS['conn'], $sql);
 
@@ -540,7 +540,7 @@ class activeResourceTable extends DbTable {
 
     static function getNotesidFromCnum($cnum){
         $sql = " SELECT NOTES_ID FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
-        $sql .= " WHERE CNUM = '" . db2_escape_string(strtoupper(trim($cnum))) . "' ";
+        $sql .= " WHERE CNUM = '" . htmlspecialchars(strtoupper(trim($cnum))) . "' ";
 
         $resultSet = db2_exec($GLOBALS['conn'], $sql);
 
@@ -566,7 +566,7 @@ class activeResourceTable extends DbTable {
             $availPreBoPredicate .= ",'" . activeResourceRecord::PES_STATUS_REMOVED ."' ";
             $availPreBoPredicate .= " )";
         } else {
-            $availPreBoPredicate  = " ( CNUM = '" . db2_escape_string($preBoarded) . "' ) ";
+            $availPreBoPredicate  = " ( CNUM = '" . htmlspecialchars($preBoarded) . "' ) ";
         }
 
         $sql =  " SELECT distinct FIRST_NAME, LAST_NAME, EMAIL_ADDRESS, CNUM  FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;

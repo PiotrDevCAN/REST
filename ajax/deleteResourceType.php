@@ -12,7 +12,7 @@ $id = !empty($_POST['ID']) ? trim($_POST['ID']) : null;
 
 if (!empty($id)) {
     $table = new staticResourceTypeTable(allTables::$STATIC_RESOURCE_TYPE);
-    $table->deleteData(" RESOURCE_TYPE_ID='" . db2_escape_string($id) . "'",true );    
+    $table->deleteData(" RESOURCE_TYPE_ID='" . htmlspecialchars($id) . "'",true );    
 }
 
 $messages = ob_get_clean();

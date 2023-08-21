@@ -10,7 +10,7 @@ class emailNotifications
     static function sendNotification($resourceReference, $emailEntry, $emailPattern){
     
         $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
-        $resourceRequestData = $resourceTable->getPredicate(" RESOURCE_REFERENCE='" . db2_escape_string($resourceReference) . "' ");
+        $resourceRequestData = $resourceTable->getPredicate(" RESOURCE_REFERENCE='" . htmlspecialchars($resourceReference) . "' ");
         
         $startDate = new \DateTime($resourceRequestData['START_DATE']);
         $endDate   = new \DateTime($resourceRequestData['END_DATE']);
@@ -88,7 +88,7 @@ class emailNotifications
     static function sendRfsNotification($rfsid, $emailEntry, $emailPattern){
         
         $rfsTable = new rfsTable(allTables::$RFS);
-        $rfsData = $rfsTable->getPredicate(" RFS_ID ='" . db2_escape_string($rfsid) . "' ");
+        $rfsData = $rfsTable->getPredicate(" RFS_ID ='" . htmlspecialchars($rfsid) . "' ");
         $endDate   = new \DateTime($rfsData['RFS_END_DATE']);
         
         $requestorEmail = rfsTable::getRequestorEmail($rfsid);

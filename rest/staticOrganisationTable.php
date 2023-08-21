@@ -39,8 +39,8 @@ class staticOrganisationTable extends DbTable
         $sql = 'UPDATE ';
         $sql.= $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
         $sql.= " SET STATUS='" . self::DISABLED . "' ";
-        $sql.= " WHERE ORGANISATION='" . db2_escape_string($organisation) . "'  ";
-        $sql.= "   AND SERVICE='" . db2_escape_string($service) . "'  ";
+        $sql.= " WHERE ORGANISATION='" . htmlspecialchars($organisation) . "'  ";
+        $sql.= "   AND SERVICE='" . htmlspecialchars($service) . "'  ";
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 
@@ -56,8 +56,8 @@ class staticOrganisationTable extends DbTable
         $sql = 'UPDATE ';
         $sql.= $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
         $sql.= " SET STATUS='" . self::ENABLED . "' ";
-        $sql.= " WHERE ORGANISATION='" . db2_escape_string($organisation) . "'  ";
-        $sql.= "   AND SERVICE='" . db2_escape_string($service) . "'  ";
+        $sql.= " WHERE ORGANISATION='" . htmlspecialchars($organisation) . "'  ";
+        $sql.= "   AND SERVICE='" . htmlspecialchars($service) . "'  ";
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 

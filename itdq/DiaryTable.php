@@ -30,12 +30,12 @@ class DiaryTable  extends DbTable {
 		$latestDiaryId++;
 
 		$sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$DIARY . " ( DIARY_REFERENCE, ENTRY, CREATOR ) ";
-		$sql .= " Values ('" . db2_escape_string(trim($latestDiaryId)) . "', '" . db2_escape_string(trim($entry)) . "','" . db2_escape_string($_SESSION['ssoEmail']) . "' ) ";
+		$sql .= " Values ('" . htmlspecialchars(trim($latestDiaryId)) . "', '" . htmlspecialchars(trim($entry)) . "','" . htmlspecialchars($_SESSION['ssoEmail']) . "' ) ";
 		
 		// --- temporary walkaround ---
 
 		// $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$DIARY . " ( ENTRY, CREATOR) ";
-		// $sql .= " Values ('" . db2_escape_string(trim($entry)) . "','" . db2_escape_string($_SESSION['ssoEmail']) . "' ) ";
+		// $sql .= " Values ('" . htmlspecialchars(trim($entry)) . "','" . htmlspecialchars($_SESSION['ssoEmail']) . "' ) ";
 
 		$rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
 		if (! $rs) {		

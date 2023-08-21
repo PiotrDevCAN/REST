@@ -26,23 +26,23 @@ $bothStatuses = $pipelineLiveArchive=='both' ? true : false;
 $withArchive = $pipelineLiveArchive=='archive' ? true : false;
 
 $predicate = " 1=1 ";
-$predicate .= ! empty($rfsId) && $rfsId !=='All'  ? " AND RFS.RFS_ID='" . db2_escape_string($rfsId) . "' " : null;
-$predicate .= ! empty($requestor) && $requestor !=='All' ? " AND lower(REQUESTOR_EMAIL)='" . db2_escape_string(strtolower($requestor)) . "' " : null;
-$predicate .= ! empty($businessUnit) && $businessUnit!=='All' ? " AND BUSINESS_UNIT='" . db2_escape_string($businessUnit) . "' " : null;
-$predicate .= ! empty($valueStream) && $valueStream!=='All' ? " AND VALUE_STREAM='" . db2_escape_string($valueStream) . "' " : null;
+$predicate .= ! empty($rfsId) && $rfsId !=='All'  ? " AND RFS.RFS_ID='" . htmlspecialchars($rfsId) . "' " : null;
+$predicate .= ! empty($requestor) && $requestor !=='All' ? " AND lower(REQUESTOR_EMAIL)='" . htmlspecialchars(strtolower($requestor)) . "' " : null;
+$predicate .= ! empty($businessUnit) && $businessUnit!=='All' ? " AND BUSINESS_UNIT='" . htmlspecialchars($businessUnit) . "' " : null;
+$predicate .= ! empty($valueStream) && $valueStream!=='All' ? " AND VALUE_STREAM='" . htmlspecialchars($valueStream) . "' " : null;
 
 if ($bothStatuses && !$withArchive) {
     $predicate .= " AND (";
     foreach (rfsRecord::$rfsStatus as $key => $rfsState) {
         if ($key == 0) {
-            $predicate .= " ( RFS_STATUS='" . db2_escape_string($rfsState) . "')";
+            $predicate .= " ( RFS_STATUS='" . htmlspecialchars($rfsState) . "')";
         } else {
-            $predicate .= " OR ( RFS_STATUS='" . db2_escape_string($rfsState) . "')";
+            $predicate .= " OR ( RFS_STATUS='" . htmlspecialchars($rfsState) . "')";
         }
     }
     $predicate .= ")";
 } else {
-    $predicate .= ! empty($pipelineLiveArchive) && !$withArchive ? " AND RFS_STATUS='" . db2_escape_string($pipelineSelection) . "' " : null;
+    $predicate .= ! empty($pipelineLiveArchive) && !$withArchive ? " AND RFS_STATUS='" . htmlspecialchars($pipelineSelection) . "' " : null;
 }
 
 if (empty($rfsId) && empty($valueStream) && empty($requestor) && empty($businessUnit)) {

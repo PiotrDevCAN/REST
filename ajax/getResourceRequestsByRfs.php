@@ -14,7 +14,7 @@ $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 
 $loader = new Loader();
-$predicate = " RFS='" . db2_escape_string($data['rfsId']) . "'";
+$predicate = " RFS='" . htmlspecialchars($data['rfsId']) . "'";
 $data = $loader->load('RESOURCE_REFERENCE', allTables::$RESOURCE_REQUESTS, $predicate);
 
 $messages = ob_get_clean();

@@ -16,10 +16,10 @@ $businessUnit = !empty($_POST['businessunit']) ? trim($_POST['businessunit']) : 
 $requestor    = !empty($_POST['requestor'])    ? trim($_POST['requestor']) : null;
 
 $predicate = " 1=1 ";
-$predicate .= ! empty($rfsId) && $rfsId !=='All'  ? " AND RFS_ID='" . db2_escape_string($rfsId) . "' " : null;
-$predicate .= ! empty($requestor) && $requestor !=='All' ? " AND lower(REQUESTOR_EMAIL)='" . db2_escape_string(strtolower($requestor)) . "' " : null;
-$predicate .= ! empty($businessUnit) && $businessUnit!=='All' ? " AND BUSINESS_UNIT='" . db2_escape_string($businessUnit) . "' " : null;
-$predicate .= ! empty($valueStream) && $valueStream!=='All' ? " AND VALUE_STREAM='" . db2_escape_string($valueStream) . "' " : null;
+$predicate .= ! empty($rfsId) && $rfsId !=='All'  ? " AND RFS_ID='" . htmlspecialchars($rfsId) . "' " : null;
+$predicate .= ! empty($requestor) && $requestor !=='All' ? " AND lower(REQUESTOR_EMAIL)='" . htmlspecialchars(strtolower($requestor)) . "' " : null;
+$predicate .= ! empty($businessUnit) && $businessUnit!=='All' ? " AND BUSINESS_UNIT='" . htmlspecialchars($businessUnit) . "' " : null;
+$predicate .= ! empty($valueStream) && $valueStream!=='All' ? " AND VALUE_STREAM='" . htmlspecialchars($valueStream) . "' " : null;
 
 if (empty($rfsId) && empty($valueStream) && empty($requestor) && empty($businessUnit)) {
     $response = array(

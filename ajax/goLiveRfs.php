@@ -46,7 +46,7 @@ switch (true) {
     default:
         // If the start date is in the past - bring it up to today.
         $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);$loader = new Loader();
-        $predicate = " RFS='" . db2_escape_string($rfsId) . "' AND START_DATE <= CURRENT_DATE AND TOTAL_HOURS is not null AND END_DATE is not null " ;
+        $predicate = " RFS='" . htmlspecialchars($rfsId) . "' AND START_DATE <= CURRENT_DATE AND TOTAL_HOURS is not null AND END_DATE is not null " ;
         $allRequestsHours   = $loader->loadIndexed('TOTAL_HOURS','RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS, $predicate, 'asc');
         $allRequestsEnd     = $loader->loadIndexed('END_DATE'   ,'RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS, $predicate, 'asc');
         $allRequestsStart   = $loader->loadIndexed('START_DATE' ,'RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS, $predicate, 'asc');
@@ -102,9 +102,9 @@ switch (true) {
         $sql = " UPDATE ";
         $sql.=   $GLOBALS['Db2Schema'] . "." . allTables::$RFS;
         $sql.= " SET RFS_STATUS='" . rfsRecord::RFS_STATUS_LIVE . "' ";
-        $sql.= " , REQUESTOR_NAME = '" . db2_escape_string($rfsRequestorName) . "' " ;
-        $sql.= " , REQUESTOR_EMAIL = '" . db2_escape_string($rfsRequestorEmail) . "' " ;
-        $sql.= " WHERE RFS_ID='" . db2_escape_string($rfsId) . "' ";
+        $sql.= " , REQUESTOR_NAME = '" . htmlspecialchars($rfsRequestorName) . "' " ;
+        $sql.= " , REQUESTOR_EMAIL = '" . htmlspecialchars($rfsRequestorEmail) . "' " ;
+        $sql.= " WHERE RFS_ID='" . htmlspecialchars($rfsId) . "' ";
 
         $rs = db2_exec($GLOBALS['conn'], $sql);
 
