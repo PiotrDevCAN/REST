@@ -112,9 +112,9 @@ class BlueMail
 
                 // no BREAK - need to drop through to proper email.
                 case 'on':
-                    if (isset(AllItdqTables::$EMAIL_LOG)) {
-                        $emailLogRecordID = self::prelog($to, $subject, $message, null, $cc, $bcc);
-                    }
+                    // if (isset(AllItdqTables::$EMAIL_LOG)) {
+                    //     $emailLogRecordID = self::prelog($to, $subject, $message, null, $cc, $bcc);
+                    // }
 
                     // $mail->SMTPDebug = SMTP::DEBUG_OFF; // Enable verbose debug output ; SMTP::DEBUG_OFF
                     // $mail->isSMTP(); // Send using SMTP
@@ -125,13 +125,14 @@ class BlueMail
                     
                     $mail->SMTPDebug = SMTP::DEBUG_OFF; // Enable verbose debug output ; SMTP::DEBUG_OFF
                     $mail->isSMTP(); // Send using SMTP
-                    $mail->Host = 'authnz.proofpoint.com'; // Set the SMTP server to send through
+                    $mail->Host = $_ENV['smtp-server']; // Set the SMTP server to send through
                     $mail->SMTPAuth = true;
                     $mail->SMTPAutoTLS = true;
+                    $mail->SMTPSecure = 'ssl';
                     $mail->Port = 465; // 25, 465, or 587
-                    $mail->Username = "55745349-a422-4d7c-aa40-5c52dab03574";             
-                    $mail->Password = "mG46S=caDv+G"; 
-
+                    $mail->Username = $_ENV['smtp-user-name'];             
+                    $mail->Password = $_ENV['smtp-user-pw']; 
+    
                     $replyto = 'UKI.Business.Intelligence@kyndryl.com';
 
                     $mail->setFrom($replyto);
@@ -196,9 +197,6 @@ class BlueMail
         return true;
     }
 
-
-
-
     static function prelog(array $to, $subject, $message, $data_json, $cc=null, $bcc=null)
     {
         $auditString = "Invoked:<b>" . __METHOD__ . "</b>To:" . serialize($to) . "</br>";
@@ -225,7 +223,7 @@ class BlueMail
 
         !empty($cc)  ? $data[] = serialize($cc) : null;
         !empty($bcc) ? $data[] = serialize($bcc) : null;
-        $rs = sqlsrv_execute($preparedStatement,$data);
+        $rs = sqlsrv_execute($preparedStatement, $data);
 
 
 //         $sql  = " INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
@@ -244,7 +242,6 @@ class BlueMail
         }
 
         return $emailRecordId;
-
     }
 
     static function updatelog($recordId, $result)
@@ -279,7 +276,6 @@ class BlueMail
         return true;
     }
 
-
     static function clearLog($retainPeriod = ' 3 months')
     {
        $sql  = " DELETE FROM " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
@@ -312,8 +308,6 @@ class BlueMail
 
         self::logStatus($recordId, $status);
         return $status;
-
-
     }
 
     static function resend($recordId, $resendUrl)
@@ -344,7 +338,6 @@ class BlueMail
 //         return $resp;
     }
 
-
     private static function validateIbmEmail($emailAddress){
         $domain = strtolower(substr($emailAddress,-7));
         $hasTheAt = stripos($emailAddress, '@');
@@ -359,7 +352,4 @@ class BlueMail
         }
         return $arrayOfEmailAddress;
     }
-
-
-
 }
