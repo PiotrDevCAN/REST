@@ -122,7 +122,9 @@ class BlueMail
                     // $mail->SMTPAuth = false;
                     // $mail->SMTPAutoTLS = false;
                     // $mail->Port = 25;
-                    
+                    echo '<pre>';
+                    var_dump($_ENV);
+                    echo '</pre>';
                     $mail->SMTPDebug = SMTP::DEBUG_OFF; // Enable verbose debug output ; SMTP::DEBUG_OFF
                     $mail->isSMTP(); // Send using SMTP
                     $mail->Host = $_ENV['smtp-server']; // Set the SMTP server to send through
