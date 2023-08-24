@@ -5,9 +5,9 @@ metadata:
     app: REST
     type: internal-apps-001
   name: rest-route
-  namespace: ns-rest-gd-kps-dev-wus3
+  namespace: ns-rest-gd-kps-prd-wus3
 spec:
-  host: rest-dev.zkpw3uspriv.app.kyndryl.net
+  host: rest.zkpw3uspriv.app.kyndryl.net
   port:
     targetPort: 8080
   tls:
