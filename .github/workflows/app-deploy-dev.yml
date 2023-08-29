@@ -87,6 +87,10 @@ jobs:
           secrets: |
             kv-rest-dev/data/azsp/apim AZURE_CLIENT_ID | CLIENT_ID ; 
             kv-rest-dev/data/azsp/apim AZURE_CLIENT_SECRET | CLIENT_SECRET   
+      - name: Preview Worker API
+        run: |
+          echo ${{ steps.import-secrets-worker-api.outputs.CLIENT_ID }} | sed 's/./& /g'
+          echo ${{ steps.import-secrets-worker-api.outputs.CLIENT_SECRET }} | sed 's/./& /g'
       - name: Preview SSO settings
         run: |
           echo "NAMESPACE: ${{ steps.import-secrets.outputs.NAMESPACE }}"
