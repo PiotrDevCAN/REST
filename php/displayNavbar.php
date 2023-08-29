@@ -4,6 +4,8 @@ use itdq\Navbar;
 use itdq\NavbarMenu;
 use itdq\NavbarOption;
 use itdq\NavbarDivider;
+use itdq\OKTAGroups;
+
 include ('itdq/PlannedOutages.php');
 include ('itdq/DbTable.php');
 $plannedOutagesLabel = "Planned Outages";
@@ -124,14 +126,14 @@ $privacy = new NavbarOption('Privacy','https://w3.ibm.com/w3publisher/w3-privacy
 $navbar->addOption($privacy);
 
 $navbar->createNavbar($page);
-$isCdi    	 = employee_in_group($_SESSION['cdiBg'],     $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isAdmin  	 = employee_in_group($_SESSION['adminBg'],   $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isDemand 	 = employee_in_group($_SESSION['demandBg'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isSupply 	 = employee_in_group($_SESSION['supplyBg'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isSupplyX	 = employee_in_group($_SESSION['supplyXBg'], $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isRfs    	 = employee_in_group($_SESSION['rfsBg'],     $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isRfsADTeam = employee_in_group($_SESSION['rfsADBg'], 	 $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isReports	 = employee_in_group($_SESSION['reportsBg'], $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isCdi    	 = OKTAGroups::inAGroup($_SESSION['cdiBg'],     $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isAdmin  	 = OKTAGroups::inAGroup($_SESSION['adminBg'],   $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isDemand 	 = OKTAGroups::inAGroup($_SESSION['demandBg'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isSupply 	 = OKTAGroups::inAGroup($_SESSION['supplyBg'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isSupplyX	 = OKTAGroups::inAGroup($_SESSION['supplyXBg'], $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isRfs    	 = OKTAGroups::inAGroup($_SESSION['rfsBg'],     $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isRfsADTeam = OKTAGroups::inAGroup($_SESSION['rfsADBg'], 	 $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isReports	 = OKTAGroups::inAGroup($_SESSION['reportsBg'], $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
 
 // For Testing only
 // $isCdi = null;

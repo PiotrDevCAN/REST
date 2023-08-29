@@ -50,3 +50,5 @@ spec:
             name: rest-app-docker-secrets-smtp
         - secretRef:
             name: rest-app-docker-secrets-sso
+        - secretRef:
+            name: rest-app-docker-secrets-worker-api
