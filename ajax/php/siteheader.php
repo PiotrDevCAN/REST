@@ -24,6 +24,6 @@ $handler = new JwtSecureSession($sessionConfig);
 
 error_log(__FILE__ . "session:" . session_id());
 
-$GLOBALS['Db2Schema'] = strtoupper($_ENV['environment']);
+$GLOBALS['Db2Schema'] = strtoupper($_ENV['db-name']);
 
 include "connect.php";

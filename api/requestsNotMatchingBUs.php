@@ -8,10 +8,6 @@ function ob_html_compress($buf){
     return str_replace(array("\n","\r"),'',$buf);
 }
 
-// $GLOBALS['Db2Schema'] = 'REST_DEV';
-// $GLOBALS['Db2Schema'] = 'REST_UT';
-$GLOBALS['Db2Schema'] = 'REST';
-
 $notArchivePredicate = ' AND ARCHIVE IS NULL ';
 $predicate = '';
 

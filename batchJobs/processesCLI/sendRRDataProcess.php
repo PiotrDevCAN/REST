@@ -15,8 +15,6 @@ error_reporting(E_ALL);
 set_time_limit(0);
 ini_set('memory_limit','4096M');
 
-// $GLOBALS['Db2Schema'] = 'REST_UT';
-$GLOBALS['Db2Schema'] = 'REST';
 $_ENV['email'] = 'on';
 
 // require_once __DIR__ . '/../../src/Bootstrap.php';

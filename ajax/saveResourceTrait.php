@@ -44,8 +44,8 @@ if($mode==FormClass::$modeDEFINE){
 }
 
 if(!$db2result){
-   echo sqlsrv_errors();
-   echo sqlsrv_errors();
+   echo print_r(sqlsrv_errors());
+   echo print_r(sqlsrv_errors());
 }
 
 $messages = ob_get_clean();

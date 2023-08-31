@@ -121,10 +121,6 @@ trait resourceRequestTableTrait
 
         // $this->populateLastDiaryEntriesArray();
         
-        // $GLOBALS['Db2Schema'] = 'REST_DEV';
-        // $GLOBALS['Db2Schema'] = 'REST_UT';
-        // $GLOBALS['Db2Schema'] = 'REST';
-
         if ($withButtons === true) {
             $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
             $data = $resourceTable->getVbacActiveResourcesForSelect2();
@@ -280,10 +276,6 @@ trait resourceRequestTableTrait
 
         // $this->populateLastDiaryEntriesArray();
         
-        // $GLOBALS['Db2Schema'] = 'REST_DEV';
-        // $GLOBALS['Db2Schema'] = 'REST_UT';
-        // $GLOBALS['Db2Schema'] = 'REST';
-
         $resourceRequestTableName = allTables::$RESOURCE_REQUESTS;
 
         $countSql = " SELECT COUNT(*) AS COUNTER ";

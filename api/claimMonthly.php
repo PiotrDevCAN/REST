@@ -6,9 +6,6 @@ use rest\rfsTable;
 set_time_limit(0);
 ini_set('memory_limit','1024M');
 
-// $GLOBALS['Db2Schema'] = 'REST_UT';
-// $GLOBALS['Db2Schema'] = 'REST';
-
 function ob_html_compress($buf){
     return str_replace(array("\n","\r"),'',$buf);
 }

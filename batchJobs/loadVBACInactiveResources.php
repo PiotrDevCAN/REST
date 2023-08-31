@@ -7,10 +7,6 @@ set_time_limit(0);
 
 $url = $_ENV['vbac_url'] . '/api/employeesLeft.php?token=' . $_ENV['vbac_api_token'];
 
-// $GLOBALS['Db2Schema'] = 'REST_DEV';
-// $GLOBALS['Db2Schema'] = 'REST_UT';
-// $GLOBALS['Db2Schema'] = 'REST';
-
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
@@ -47,8 +43,8 @@ if ($err) {
             $db2result = $activeResourceTable->insert($activeResourceRecord);
     
             if(!$db2result){
-                echo sqlsrv_errors();
-                echo sqlsrv_errors();
+                echo print_r(sqlsrv_errors());
+                echo print_r(sqlsrv_errors());
             }
         }
     }

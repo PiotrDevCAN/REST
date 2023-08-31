@@ -9,8 +9,6 @@ set_time_limit(0);
 ob_start();
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
-$GLOBALS['Db2Schema'] = 'REST';
-
 $notArchivePredicate = ' AND ARCHIVE IS NULL ';
 $predicate = '';
 

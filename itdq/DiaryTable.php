@@ -19,8 +19,8 @@ class DiaryTable  extends DbTable {
 
 		$rs = DB2_EXEC ( $GLOBALS['conn'], $latestDiaryIdSql );
 		if (! $rs) {		
-			echo "<BR/>" . db2_stmt_error ();
-			echo "<BR/>" . sqlsrv_errors() () . "<BR/>";
+			echo "<BR/>" . print_r(sqlsrv_errors());
+			echo "<BR/>" . print_r(sqlsrv_errors()) . "<BR/>";
 			exit ( "Error in: " . __METHOD__ . " running: " . $sql );
 		}
 
@@ -39,8 +39,8 @@ class DiaryTable  extends DbTable {
 
 		$rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
 		if (! $rs) {		
-			echo "<BR/>" . db2_stmt_error ();
-			echo "<BR/>" . sqlsrv_errors() () . "<BR/>";
+			echo "<BR/>" . print_r(sqlsrv_errors());
+			echo "<BR/>" . print_r(sqlsrv_errors()) . "<BR/>";
 			exit ( "Error in: " . __METHOD__ . " running: " . $sql );
 		}
 		return	db2_last_insert_id($GLOBALS['conn']);

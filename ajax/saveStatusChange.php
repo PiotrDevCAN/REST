@@ -16,8 +16,8 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 // $statusUpdate = sqlsrv_query($GLOBALS['conn'], $sql);
 
 // if(!$statusUpdate){
-//     echo sqlsrv_errors();
-//     echo sqlsrv_errors();
+//     echo print_r(sqlsrv_errors());
+//     echo print_r(sqlsrv_errors());
 // }
 
 $statusUpdate = resourceRequestTable::setRequestStatus($_POST['statusChangeRR'],$_POST['statusRadio']);
