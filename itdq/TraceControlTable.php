@@ -17,8 +17,8 @@ class TraceControlTable extends DbTable {
 		$rs = DB2_EXEC ( $_SESSION ['conn'], $sql );
 		if (! $rs) {
 			print_r ( $_SESSION );
-			echo "<BR/>" . print_r(sqlsrv_errors());
-			echo "<BR/>" . print_r(sqlsrv_errors()) . "<BR/>";
+			echo "<BR/>" . json_encode(sqlsrv_errors());
+			echo "<BR/>" . json_encode(sqlsrv_errors()) . "<BR/>";
 			exit ( "Error in: " . __METHOD__ . " running: " . $sql );
 		}
 	}
@@ -36,8 +36,8 @@ class TraceControlTable extends DbTable {
 		$rs = DB2_EXEC ( $_SESSION ['conn'], $sql );
 		if (! $rs) {
 			print_r ( $_SESSION );
-			echo "<BR/>" . print_r(sqlsrv_errors());
-			echo "<BR/>" . print_r(sqlsrv_errors()) . "<BR/>";
+			echo "<BR/>" . json_encode(sqlsrv_errors());
+			echo "<BR/>" . json_encode(sqlsrv_errors()) . "<BR/>";
 			exit ( "Error in: " . __METHOD__ . " running: " . $sql );
 		}
 	}

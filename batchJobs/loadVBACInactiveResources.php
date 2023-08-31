@@ -43,8 +43,8 @@ if ($err) {
             $db2result = $activeResourceTable->insert($activeResourceRecord);
     
             if(!$db2result){
-                echo print_r(sqlsrv_errors());
-                echo print_r(sqlsrv_errors());
+                echo json_encode(sqlsrv_errors());
+                echo json_encode(sqlsrv_errors());
             }
         }
     }

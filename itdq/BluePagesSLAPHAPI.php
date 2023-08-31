@@ -638,8 +638,8 @@ class BluePagesSLAPHAPI {
 				if ((stripos ( $data [0], '*FUN' ) === false)) { // Don't record the Functional Ids.
 					$rs = sqlsrv_execute ( $this->preparedInsert, $data );
 					if (! $rs) {
-						echo "<BR>" . print_r(sqlsrv_errors());
-						echo "<BR>" . print_r(sqlsrv_errors()) . "<BR>";
+						echo "<BR>" . json_encode(sqlsrv_errors());
+						echo "<BR>" . json_encode(sqlsrv_errors()) . "<BR>";
 						echo "<BR> Data :";
 						print_r ( $data );
 						exit ( "Unable to Execute $sql" );
@@ -657,8 +657,8 @@ class BluePagesSLAPHAPI {
 			$rs = DB2_EXEC ( $_SESSION ['conn'], " COMMIT" );
 			if (! $rs) {
 				print_r ( $_SESSION );
-				echo "<BR>" . print_r(sqlsrv_errors());
-				echo "<BR>" . print_r(sqlsrv_errors()) . "<BR>";
+				echo "<BR>" . json_encode(sqlsrv_errors());
+				echo "<BR>" . json_encode(sqlsrv_errors()) . "<BR>";
 				exit ( "Error in: " . __METHOD__ . " running: COMMIT " );
 			}
 		}
@@ -688,8 +688,8 @@ class BluePagesSLAPHAPI {
 			if ((stripos ( $data [0], '*FUN' ) === false)) { // Don't record the Functional Ids.
 				$rs = sqlsrv_execute ( $this->preparedInsert, $data );
 				if (! $rs) {
-					echo "<BR>" . print_r(sqlsrv_errors());
-					echo "<BR>" . print_r(sqlsrv_errors()) . "<BR>";
+					echo "<BR>" . json_encode(sqlsrv_errors());
+					echo "<BR>" . json_encode(sqlsrv_errors()) . "<BR>";
 					echo "<BR> Data :";
 					print_r ( $data );
 					exit ( "Unable to Execute $sql" );
@@ -703,8 +703,8 @@ class BluePagesSLAPHAPI {
 //			$rs = DB2_EXEC ( $_SESSION ['conn'], " COMMIT" );
 //			if (! $rs) {
 //				print_r ( $_SESSION );
-//				echo "<BR>" . print_r(sqlsrv_errors());
-//				echo "<BR>" . print_r(sqlsrv_errors()) . "<BR>";
+//				echo "<BR>" . json_encode(sqlsrv_errors());
+//				echo "<BR>" . json_encode(sqlsrv_errors()) . "<BR>";
 //				exit ( "Error in: " . __METHOD__ . " running: COMMIT " );
 //			}
 		}

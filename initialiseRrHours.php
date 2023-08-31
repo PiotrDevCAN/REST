@@ -27,8 +27,8 @@ if($resultSet){
         }
     }
 } else {
-    print_r(sqlsrv_errors());
-    print_r(sqlsrv_errors());
+    json_encode(sqlsrv_errors());
+    json_encode(sqlsrv_errors());
 }
 
 

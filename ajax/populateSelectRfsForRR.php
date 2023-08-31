@@ -29,8 +29,8 @@ if($rs){
     }
 } else {
     echo $sql;
-    echo print_r(sqlsrv_errors());
-    echo print_r(sqlsrv_errors());
+    echo json_encode(sqlsrv_errors());
+    echo json_encode(sqlsrv_errors());
     throw new Exception('Db2 Exec failed in ' . __FILE__);
 }
 

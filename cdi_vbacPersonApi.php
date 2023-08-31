@@ -62,8 +62,8 @@ if ($err) {
                 // if(!$db2result){
                 //     $success = false;
 
-                //     echo print_r(sqlsrv_errors());
-                //     echo print_r(sqlsrv_errors());
+                //     echo json_encode(sqlsrv_errors());
+                //     echo json_encode(sqlsrv_errors());
                 // } else {
                 //     $loadCounter++;
                 // } 
