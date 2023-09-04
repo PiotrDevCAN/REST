@@ -41,7 +41,7 @@ spec:
           value: Linux
         envFrom:
         - configMapRef:
-            name: env-configmap
+            name: env-configmap-dev
         - secretRef:
             name: rest-app-docker-secrets
         - secretRef:

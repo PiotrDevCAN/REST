@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-configmap-prod
+data:
+  SERVER_ADMIN: piotr.tajanowicz@ocean.ibm.com
+  SERVER_NAME: Azure REST
+  email: dev
+  environment: rest
+  jwt_token: "VGhpcyBpcyB0aGUgc2VjcmV0IGtleSBmb3IgSldUIG9uIHRoZSBSRVNUIDIwMjAgYXBwbGljYXRpb24u"
+  devemailid: piotr.tajanowicz@ocean.ibm.com
+  noreplyemailid: rest@noreply.ibm.com
+  noreplykyndrylemailid: restNoReply@kyndryl.com
+  automationemailid: piotr.tajanowicz@ocean.ibm.com
+  upes_audit: https://hooks.slack.com/services/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
+  vbac_api_token: soEkCfj8zGNDLZ8yXH2YJjpehd8ijzlS
+  vbac_url_prod: https://vbac-dev.zkpw3uspriv.app.kyndryl.net
+  vbac_url: https://vbac-dev.zkpw3uspriv.app.kyndryl.net
