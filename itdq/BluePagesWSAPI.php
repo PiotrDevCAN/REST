@@ -514,7 +514,7 @@ class BluePages {
 				$data[13] = $this->dept['NOTESID'][$key];
 				$data[14] = $this->dept['JOBRESPONSIB'][$key];
 				if ((stripos ( $data [0], '*FUN' ) === false)) { // Don't record the Functional Ids.
-					$rs = sqlsrv_execute ( $this->preparedInsert, $data );
+					$rs = sqlsrv_execute( $this->preparedInsert, $data );
 					if (! $rs) {
 						echo "<BR>" . json_encode(sqlsrv_errors());
 						echo "<BR>" . json_encode(sqlsrv_errors()) . "<BR>";
@@ -532,7 +532,7 @@ class BluePages {
 			if($this->online){
 				echo "<H2>Saved Department of $this->size ($actual) People for : " . $this->CNUM . "</H2>";
 			}
-			$rs = DB2_EXEC ( $_SESSION ['conn'], " COMMIT" );
+			$rs = sqlsrv_query( $_SESSION ['conn'], " COMMIT" );
 			if (! $rs) {
 				print_r ( $_SESSION );
 				echo "<BR>" . json_encode(sqlsrv_errors());
@@ -565,7 +565,7 @@ class BluePages {
 			$data[13] = $this->person['NOTESID'];
 			$data[14] = $this->person['JOBRESPONSIB'];
 			if ((stripos ( $data [0], '*FUN' ) === false)) { // Don't record the Functional Ids.
-				$rs = sqlsrv_execute ( $this->preparedInsert, $data );
+				$rs = sqlsrv_execute( $this->preparedInsert, $data );
 				if (! $rs) {
 					echo "<BR>" . json_encode(sqlsrv_errors());
 					echo "<BR>" . json_encode(sqlsrv_errors()) . "<BR>";
@@ -579,7 +579,7 @@ class BluePages {
 			if($this->online){
 				echo "<H2>Saved Details for : " . $this->CNUM . " " . $this->person  ['NAME'] . "</H2>";
 			}
-//			$rs = DB2_EXEC ( $_SESSION ['conn'], " COMMIT" );
+//			$rs = sqlsrv_query( $_SESSION ['conn'], " COMMIT" );
 //			if (! $rs) {
 //				print_r ( $_SESSION );
 //				echo "<BR>" . json_encode(sqlsrv_errors());

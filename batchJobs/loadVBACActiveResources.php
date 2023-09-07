@@ -91,7 +91,7 @@ if ($err) {
         echo $sql;
         exit; 
 
-        $rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
+        $rs = sqlsrv_query( $GLOBALS['conn'], $sql );
         if (! $rs) {
             $success = false;
         }

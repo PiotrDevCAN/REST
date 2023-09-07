@@ -1,0 +1,115 @@
+@CHARSET "ISO-8859-1";
+
+body {
+    padding-top: 65px;
+}
+
+table.dataTable th, table.dataTable td {
+	white-space: wrap;
+}
+
+td {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.faces-typeahead-results .result {
+    height: 65px;
+    padding: 10px;
+}
+
+.typeahead-results {
+    width: 400px;
+}
+.typeahead, .tt-query, .tt-hint {
+	outline: medium none;
+	padding: 8px 12px;
+	width: 100%;
+}
+
+.twitter-typeahead, .tt-hint, .tt-input, .tt-menu {
+	width: 100%;
+}
+.typeahead {
+	background-color: #FFFFFF;
+}
+.typeahead:focus {
+	border: 2px solid #0097CF;
+}
+.tt-query {
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+}
+.tt-hint {
+	color: #999999;
+}
+.tt-menu {
+	background-color: #FFFFFF;
+	border: 4px solid rgba(0, 128, 255, 0.8);
+	border-radius: 8px;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	margin-top: 12px;
+	padding: 8px 0;
+	width: 322px;
+}
+.tt-suggestion {
+	font-size: 12px;  /* Set suggestion dropdown font size */
+	padding: 3px 5px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+}
+.tt-suggestion:hover {
+	cursor: pointer;
+	background-color: #0097CF;
+	color: #FFFFFF;
+}
+.tt-suggestion p {
+	margin: 0;
+}
+
+.userLevel {
+	color:#ffffff;
+}
+
+.required .control-label:after {
+  content:"*";
+  color:red;
+}
+
+.glyphicon.spinningsm {
+		    animation: spin 1s infinite linear;
+		    -webkit-animation: spin2 1s infinite linear;
+			font-size: 1em;
+		}
+
+.glyphicon.spinning {
+    animation: spin 1s infinite linear;
+    -webkit-animation: spin2 1s infinite linear;
+}
+
+.btn.spinning {
+    animation: spin 1s infinite linear;
+    -webkit-animation: spin2 1s infinite linear;
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg); }
+    to { transform: scale(1) rotate(360deg); }
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+
+
+th { font-size: 11px; }
+td { font-size: 10px; }
+
+
+.select2-container .select2-selection--single {
+	padding-top: 5px;
+    height: 38px;
+}
+
+.modal-body {
+	padding-top: 0px;
+}

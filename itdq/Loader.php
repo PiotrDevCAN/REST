@@ -55,11 +55,12 @@ class Loader
             return false;
         }
         $queryCompleted = microtime(TRUE);
-
         while (($row = sqlsrv_fetch_array($rs5)) !== false) {
            // Trace::traceVariable($row, __METHOD__, __LINE__);
 //             $column = trim($column, '"');
-            if (trim($row[0]) == null) {
+            if ($row == null) {
+                $value = 'null';
+            } elseif (trim($row[0]) == null) {
                 $value = 'null';
             } else {
                 $value = trim($row[0]);

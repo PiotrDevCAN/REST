@@ -73,7 +73,7 @@ if ($err) {
                 // $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( EMAIL_ADDRESS, NOTES_ID, PES_STATUS ) ";
                 // $sql .= " Values ('" . htmlspecialchars(trim($personEntry->EMAIL_ADDRESS)) . "','" . htmlspecialchars($personEntry->NOTES_ID) . "','" . htmlspecialchars($personEntry->PES_STATUS) . "' ) ";
                 
-                // $rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
+                // $rs = sqlsrv_query( $GLOBALS['conn'], $sql );
                 // if (! $rs) {
                 //     $success = false;
                 // } else {
@@ -96,7 +96,7 @@ if ($err) {
 
             }
 
-            $rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
+            $rs = sqlsrv_query( $GLOBALS['conn'], $sql );
             if (! $rs) {
                 $success = false;
             } else {

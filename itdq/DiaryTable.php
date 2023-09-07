@@ -17,7 +17,7 @@ class DiaryTable  extends DbTable {
 		$latestDiaryIdSql = "SELECT MAX(DIARY_REFERENCE) as LATEST_DIARY_REF "; 
         $latestDiaryIdSql.= " FROM " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$DIARY;
 
-		$rs = DB2_EXEC ( $GLOBALS['conn'], $latestDiaryIdSql );
+		$rs = sqlsrv_query( $GLOBALS['conn'], $latestDiaryIdSql );
 		if (! $rs) {		
 			echo "<BR/>" . json_encode(sqlsrv_errors());
 			echo "<BR/>" . json_encode(sqlsrv_errors()) . "<BR/>";
@@ -37,7 +37,7 @@ class DiaryTable  extends DbTable {
 		// $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$DIARY . " ( ENTRY, CREATOR) ";
 		// $sql .= " Values ('" . htmlspecialchars(trim($entry)) . "','" . htmlspecialchars($_SESSION['ssoEmail']) . "' ) ";
 
-		$rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
+		$rs = sqlsrv_query( $GLOBALS['conn'], $sql );
 		if (! $rs) {		
 			echo "<BR/>" . json_encode(sqlsrv_errors());
 			echo "<BR/>" . json_encode(sqlsrv_errors()) . "<BR/>";

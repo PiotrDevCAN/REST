@@ -83,7 +83,7 @@ if ($err) {
             //     }
             }
 
-            $rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
+            $rs = sqlsrv_query( $GLOBALS['conn'], $sql );
             if (! $rs) {
                 echo $sql;
                 echo json_encode(sqlsrv_errors());
@@ -137,7 +137,7 @@ if ($err) {
             "' ) ";
         }
 
-        $rs = DB2_EXEC ( $GLOBALS['conn'], $sql );
+        $rs = sqlsrv_query( $GLOBALS['conn'], $sql );
         if (! $rs) {
             $success = false;
         }
