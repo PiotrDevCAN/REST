@@ -24,7 +24,7 @@ $endDateWasObj = new DateTime($_POST['endDateWas']);
 
 $rrHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
 
-$autoCommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+// $autoCommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
 echo $endDateObj->format('Y-m-d');
 echo $endDateWasObj->format('Y-m-d');
@@ -62,7 +62,7 @@ $emailEntry.= "<br/><b>To: " . $endDateObj->format('d M Y') . "</b>";
 $emailPattern = array('RFS'=>'/&&rfs&&/','RESOURCE_REFERENCE'=>'/&&ref&&/');
 emailNotifications::sendNotification($_POST['resourceReference'],$emailEntry, $emailPattern); 
 
-sqlsrv_commit($GLOBALS['conn'],$autoCommit);
+// sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
 $messages = ob_get_clean();
 ob_start();

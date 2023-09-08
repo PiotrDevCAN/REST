@@ -22,7 +22,7 @@ ob_start();
  */
 
 
-$autoCommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+// $autoCommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
 if(empty($_POST['ModalSTART_DATE'])){
     throw new Exception('No Start Date provided for Slipping Start Date function');
@@ -70,7 +70,7 @@ $resourceHoursTable->commitUpdates();
 $diaryEntry = "Start Date set to " . $_POST['ModalSTART_DATE'];
 $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['ModalResourceReference']);
 
-sqlsrv_commit($GLOBALS['conn'],$autoCommit);
+// sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
 $messages = ob_get_clean();
 ob_start();

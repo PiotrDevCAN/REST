@@ -24,7 +24,7 @@ $startDateWasObj = new DateTime($_POST['startDateWas']); // Original Start Date
 
 $rrHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
 
-$autoCommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+// $autoCommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
 echo $startDateObj->format('Y-m-d');
 echo $startDateWasObj->format('Y-m-d');
@@ -61,7 +61,7 @@ $emailEntry.= "<br/><b>To: " . $startDateObj->format('d M Y') . "</b>";
 $emailPattern = array('RFS'=>'/&&rfs&&/','RESOURCE_REFERENCE'=>'/&&ref&&/');
 emailNotifications::sendNotification($_POST['resourceReference'],$emailEntry, $emailPattern); 
 
-sqlsrv_commit($GLOBALS['conn'],$autoCommit);
+// sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
 $messages = ob_get_clean();
 ob_start();

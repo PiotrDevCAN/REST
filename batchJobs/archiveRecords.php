@@ -22,8 +22,8 @@ use rest\archived\archivedDiaryRecord;
 // set_time_limit(0);
 // ob_start();
 
-$autoCommit = sqlsrv_commit($GLOBALS['conn']);
-sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+// $autoCommit = sqlsrv_commit($GLOBALS['conn']);
+// sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
 $messages = '';
 $rfsRecordsArchived = 0;
@@ -236,7 +236,7 @@ if($success){
     sqlsrv_rollback($GLOBALS['conn']);
 }
 
-sqlsrv_commit($GLOBALS['conn'],$autoCommit);
+// sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
 ob_start();
 

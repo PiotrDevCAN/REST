@@ -15,7 +15,7 @@ use rest\resourceRequestTable;
 set_time_limit(0);
 ob_start();
 
-$autocommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+// $autocommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
 
 $rfsRequestorEmail = !empty($_POST['requestorEmail']) ? trim($_POST['requestorEmail']) : null;
 $rfsRequestorName = !empty($_POST['requestorName']) ? trim($_POST['requestorName']) : null;
@@ -123,7 +123,7 @@ switch (true) {
         $success = empty($messages) && $rs;
 
         $success ? sqlsrv_commit($GLOBALS['conn']) : sqlsrv_rollback($GLOBALS['conn']);
-        sqlsrv_commit($GLOBALS['conn'],$autocommit);
+        // sqlsrv_commit($GLOBALS['conn'],$autocommit);
         break;
 }
 
