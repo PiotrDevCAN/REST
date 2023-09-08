@@ -18,20 +18,14 @@ $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_H
 $sql .= " SET HOURS=? " ;
 $sql .= " WHERE RESOURCE_REFERENCE=? and WEEK_ENDING_FRIDAY=? ";
 
-$hoursUpdate = sqlsrv_prepare($GLOBALS['conn'], $sql);
-
-if(!$hoursUpdate){
-    echo json_encode(sqlsrv_errors());
-    echo json_encode(sqlsrv_errors());
-}
-
 foreach ($_POST as $key => $value){
     if(substr($key,0,14)== "ModalHRSForWef"){
         $week = substr($key,14,10);
         $hours = $value;
 
         $data = array($hours, $resourceReference, $week);
-        $result = sqlsrv_execute($hoursUpdate, $data);
+        $hoursUpdate = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
+        $result = sqlsrv_execute($hoursUpdate);
     }
 }
 

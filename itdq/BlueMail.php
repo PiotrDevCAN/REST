@@ -218,13 +218,13 @@ class BlueMail
         $sql.= !empty($bcc) ? " ,? " : null ;
         $sql.= " ); ";
 
-        $preparedStatement = sqlsrv_prepare($GLOBALS['conn'], $sql);
         $data = array(serialize($to),$subject,$message,$data_json);
 
         !empty($cc)  ? $data[] = serialize($cc) : null;
         !empty($bcc) ? $data[] = serialize($bcc) : null;
-        $rs = sqlsrv_execute($preparedStatement, $data);
 
+        $preparedStatement = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
+        $rs = sqlsrv_execute($preparedStatement);
 
 //         $sql  = " INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
 //         $sql .= " (TO, SUBJECT, MESSAGE, DATA_JSON ) VALUES ( '" . htmlspecialchars(serialize($to)) ."','" . htmlspecialchars($subject) . "'";

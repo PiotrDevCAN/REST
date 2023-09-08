@@ -296,8 +296,8 @@ trait resourceRequestTableTrait
 
         $data = array();
 
-        $preparedCountStatement = sqlsrv_prepare($GLOBALS['conn'], $countSql);
-        $rs = sqlsrv_execute($preparedCountStatement, $data);
+        $preparedCountStatement = sqlsrv_prepare($GLOBALS['conn'], $countSql, $data);
+        $rs = sqlsrv_execute($preparedCountStatement);
         if (! $rs) {
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $countSql);
             return false;

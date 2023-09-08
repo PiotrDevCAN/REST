@@ -543,14 +543,14 @@ trait resourceRequestHoursTableTrait
         return $rs;
     }
 
-    function prepareSetHoursForWef(int $resourceReference){  
+    function prepareSetHoursForWef(int $resourceReference, $data){  
        
         if(!isset($this->preparedSetHrsStatement)){
             $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
             $sql.= " SET HOURS= ? " ;
             $sql.= " WHERE DATE(WEEK_ENDING_FRIDAY) =  ? ";
             $sql.= " AND RESOURCE_REFERENCE= " . htmlspecialchars($resourceReference);   
-            $this->preparedSetHrsStatement = sqlsrv_prepare($GLOBALS['conn'], $sql);
+            $this->preparedSetHrsStatement = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
             
             if(!$this->preparedSetHrsStatement){
                 DbTable::displayErrorMessage($this->preparedSetHrsStatement, __CLASS__, __METHOD__, $sql);
@@ -561,10 +561,10 @@ trait resourceRequestHoursTableTrait
     }
 
     function setHoursForWef(int $resourceReference, string $wef, float $hours){
-        $preparedStmt = $this->prepareSetHoursForWef($resourceReference);         
         $parameters = array($hours, $wef);
+        $preparedStmt = $this->prepareSetHoursForWef($resourceReference, $parameters);         
         
-        $rs = sqlsrv_execute($preparedStmt,$parameters);
+        $rs = sqlsrv_execute($preparedStmt);
         
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, 'prepared sql');

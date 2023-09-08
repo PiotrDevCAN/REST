@@ -24,13 +24,6 @@ $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_H
 $sql .= " SET HOURS=? " ;
 $sql .= " WHERE RESOURCE_REFERENCE=? and DATE=? ";
 
-$hoursUpdate = sqlsrv_prepare($GLOBALS['conn'], $sql);
-
-if(!$hoursUpdate){
-    echo json_encode(sqlsrv_errors());
-    echo json_encode(sqlsrv_errors());
-}
-
 foreach ($adjustedHours as $key => $value){
     if(substr($key,0,15)== "ModalHRSForWeek"){
         $week = substr($key,15,10);
@@ -38,19 +31,20 @@ foreach ($adjustedHours as $key => $value){
 
         $deltaHours = isset($originalWeeklyProfile[$week]) ? (string)($originalWeeklyProfile[$week] - $newHours) : "0";
 
-        $changeExistingRecord = array($newHours,$originalResourceReference, $week);
+        $changeExistingRecord = array($newHours, $originalResourceReference, $week);
         var_dump($changeExistingRecord);
 
-        $result = sqlsrv_execute($hoursUpdate,$changeExistingRecord);
+        $hoursUpdate = sqlsrv_prepare($GLOBALS['conn'], $sql, $changeExistingRecord);
+        $result = sqlsrv_execute($hoursUpdate);
 
-        $changeDeltaRecord = array($deltaHours,$deltaResourceReference, $week);
+        $changeDeltaRecord = array($deltaHours, $deltaResourceReference, $week);
         var_dump($changeDeltaRecord);
 
-        $result = sqlsrv_execute($hoursUpdate,$changeDeltaRecord);
+        $hoursUpdate = sqlsrv_prepare($GLOBALS['conn'], $sql, $changeDeltaRecord);
+        $result = sqlsrv_execute($hoursUpdate);
 
         var_dump($result);
         echo "<hr/>";
-
 
         sqlsrv_commit($GLOBALS['conn']);
     }
