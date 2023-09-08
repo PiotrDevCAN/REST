@@ -6,7 +6,7 @@ if(!isset($_SESSION['uid'])) {
 }
 
 $workerAPI = new WorkerAPI();
-$workerData = json_decode($workerAPI->getworkerByEmail($_SESSION['uid']));
+$workerData = json_decode($workerAPI->getworkerByEmail($_SESSION['ssoEmail']));
 
 // echo '<pre>';
 // echo 'ENVIRONMENT <br>';
