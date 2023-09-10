@@ -3,15 +3,15 @@ kind: ConfigMap
 metadata:
   name: env-configmap-testqa
 data:
-  SERVER_ADMIN: piotr.tajanowicz@ocean.ibm.com
+  SERVER_ADMIN: piotr.tajanowicz@kyndryl.com
   SERVER_NAME: Azure REST
   email: dev
   environment: rest_ut
   jwt_token: "VGhpcyBpcyB0aGUgc2VjcmV0IGtleSBmb3IgSldUIG9uIHRoZSBSRVNUIDIwMjAgYXBwbGljYXRpb24u"
-  devemailid: piotr.tajanowicz@ocean.ibm.com
+  devemailid: piotr.tajanowicz@kyndryl.com
   noreplyemailid: rest@noreply.ibm.com
   noreplykyndrylemailid: restNoReply@kyndryl.com
-  automationemailid: piotr.tajanowicz@ocean.ibm.com
+  automationemailid: piotr.tajanowicz@kyndryl.com
   upes_audit: https://hooks.slack.com/services/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
   vbac_api_token: soEkCfj8zGNDLZ8yXH2YJjpehd8ijzlS
   vbac_url_prod: https://vbac-dev.zkpw3uspriv.app.kyndryl.net

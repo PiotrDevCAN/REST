@@ -5,7 +5,7 @@ use itdq\AllItdqTables;
 use itdq\TraceControlRecord;
 
 
-do_auth($_SESSION['cdiBg']);
+do_auth($_SESSION['cdiBgAz']);
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
