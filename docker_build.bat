@@ -1,2 +1,2 @@
-docker build -t rest_2020 . --no-cache 
+docker build -t rest_2020 --no-cache  --progress=plain  . 2> build.log
 docker run -dit -p 8088:8080  --name rest_2020 -v C:/CETAapps/REST:/var/www/html --env-file C:/CETAapps/REST/dev_env.list rest_2020
