@@ -5,7 +5,7 @@ metadata:
 data:
   SERVER_ADMIN: piotr.tajanowicz@kyndryl.com
   SERVER_NAME: Azure REST
-  email: dev
+  email: user
   environment: rest
   jwt_token: "VGhpcyBpcyB0aGUgc2VjcmV0IGtleSBmb3IgSldUIG9uIHRoZSBSRVNUIDIwMjAgYXBwbGljYXRpb24u"
   devemailid: piotr.tajanowicz@kyndryl.com
