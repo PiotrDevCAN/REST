@@ -26,7 +26,7 @@ if ($err) {
     echo "cURL Error #:" . $err;
 } else {
     
-    // $rootDir = stripos($_ENV['environment'], 'dev')  ? '/' : '/';
+    // $rootDir = (stripos($_ENV['environment'], 'dev') || stripos($_ENV['environment'], 'local')) ? '/' : '/';
     $rootDir = '/';
     $fileName = 'InactiveVBACPersons.csv';
 

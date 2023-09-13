@@ -127,14 +127,14 @@ $navbar->addOption($privacy);
 
 $OKTAGroups = new OKTAGroups();
 $navbar->createNavbar($page);
-$isCdi    	 = $OKTAGroups->inAGroup($_SESSION['cdiBgAz'],     $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isAdmin  	 = $OKTAGroups->inAGroup($_SESSION['adminBgAz'],   $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isDemand 	 = $OKTAGroups->inAGroup($_SESSION['demandBgAz'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isSupply 	 = $OKTAGroups->inAGroup($_SESSION['supplyBgAz'],  $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isSupplyX	 = $OKTAGroups->inAGroup($_SESSION['supplyXBgAz'], $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isRfs    	 = $OKTAGroups->inAGroup($_SESSION['rfsBgAz'],     $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isRfsADTeam = $OKTAGroups->inAGroup($_SESSION['rfsADBgAz'], 	 $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
-$isReports	 = $OKTAGroups->inAGroup($_SESSION['reportsBgAz'], $_SESSION['ssoEmail']) || strstr($_ENV['environment'], 'dev')  ? true : null;
+$isCdi    	 = $OKTAGroups->inAGroup($_SESSION['cdiBgAz'],     $_SESSION['ssoEmail']) || (stripos($_ENV['environment'], 'dev') || stripos($_ENV['environment'], 'local')) ? true : null;
+$isAdmin  	 = $OKTAGroups->inAGroup($_SESSION['adminBgAz'],   $_SESSION['ssoEmail']) || (stripos($_ENV['environment'], 'dev') || stripos($_ENV['environment'], 'local')) ? true : null;
+$isDemand 	 = $OKTAGroups->inAGroup($_SESSION['demandBgAz'],  $_SESSION['ssoEmail']) || (stripos($_ENV['environment'], 'dev') || stripos($_ENV['environment'], 'local')) ? true : null;
+$isSupply 	 = $OKTAGroups->inAGroup($_SESSION['supplyBgAz'],  $_SESSION['ssoEmail']) || (stripos($_ENV['environment'], 'dev') || stripos($_ENV['environment'], 'local')) ? true : null;
+$isSupplyX	 = $OKTAGroups->inAGroup($_SESSION['supplyXBgAz'], $_SESSION['ssoEmail']) || (stripos($_ENV['environment'], 'dev') || stripos($_ENV['environment'], 'local')) ? true : null;
+$isRfs    	 = $OKTAGroups->inAGroup($_SESSION['rfsBgAz'],     $_SESSION['ssoEmail']) || (stripos($_ENV['environment'], 'dev') || stripos($_ENV['environment'], 'local')) ? true : null;
+$isRfsADTeam = $OKTAGroups->inAGroup($_SESSION['rfsADBgAz'],   $_SESSION['ssoEmail']) || (stripos($_ENV['environment'], 'dev') || stripos($_ENV['environment'], 'local')) ? true : null;
+$isReports	 = $OKTAGroups->inAGroup($_SESSION['reportsBgAz'], $_SESSION['ssoEmail']) || (stripos($_ENV['environment'], 'dev') || stripos($_ENV['environment'], 'local')) ? true : null;
 
 // For Testing only
 // $isCdi = null;

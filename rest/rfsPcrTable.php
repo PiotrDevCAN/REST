@@ -76,7 +76,7 @@ class rfsPcrTable extends DbTable
         }
 
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
-        $sql .= " SET ARCHIVE = CURRENT TIMESTAMP ";
+        $sql .= " SET ARCHIVE = CURRENT_TIMESTAMP ";
         $sql .= " WHERE PCR_ID = '" . htmlspecialchars($pcrid) . "' " ;
 
         $rs = sqlsrv_query($GLOBALS['conn'], $sql);

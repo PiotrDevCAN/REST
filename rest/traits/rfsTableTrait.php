@@ -734,7 +734,7 @@ trait rfsTableTrait
         }
 
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
-        $sql .= " SET ARCHIVE = CURRENT TIMESTAMP ";
+        $sql .= " SET ARCHIVE = CURRENT_TIMESTAMP ";
         $sql .= " WHERE RFS_ID = '" . htmlspecialchars($rfsid) . "' " ;
 
         $rs = sqlsrv_query($GLOBALS['conn'], $sql);

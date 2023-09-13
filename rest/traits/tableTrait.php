@@ -45,7 +45,7 @@ trait tableTrait
                     if (!empty($searchValue)) {
                         switch($columnName) {
                             case 'RFS_AND_RESOURCE_REFERENCE_COMPLEX':
-                                $complexSearchPredicate .= " AND REGEXP_LIKE(CONCAT(CONCAT(RFS.RFS_ID, ' : '), RR.RESOURCE_REFERENCE), '" .$searchValue. "', 1, 'i')";
+                                $complexSearchPredicate .= " AND REGEXP_LIKE(CONCAT(RFS.RFS_ID, ' : ', RR.RESOURCE_REFERENCE), '" .$searchValue. "', 1, 'i')";
                                 break;
                             case 'TOTAL_HOURS_COMPLEX':
                                 $complexSearchPredicate .= " AND REGEXP_LIKE(CONCAT('Total Hrs:', TOTAL_HOURS), '" .$searchValue. "', 1, 'i')";

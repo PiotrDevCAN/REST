@@ -634,11 +634,11 @@ trait resourceRequestTableTrait
             break;
         }
 
-        strstr($_ENV['environment'], 'ut')  ? $editable = true : null;
-        strstr($_ENV['environment'], 'ut')  ? $completeable = true : null;
+        strstr($_ENV['environment'], 'ut') ? $editable = true : null;
+        strstr($_ENV['environment'], 'ut') ? $completeable = true : null;
 
-        strstr($_ENV['environment'], 'dev')  ? $editable = true : null;
-        strstr($_ENV['environment'], 'dev')  ? $completeable = true : null;
+        (stripos($_ENV['environment'], 'dev') || stripos($_ENV['environment'], 'local')) ? $editable = true : null;
+        (stripos($_ENV['environment'], 'dev') || stripos($_ENV['environment'], 'local')) ? $completeable = true : null;
 
         $row['STATUS'] = $completeable ? 
         "<button type='button' class='btn btn-xs changeStatusCompleted ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_ADMIN." ".Navbar::$ACCESS_CDI." ".Navbar::$ACCESS_SUPPLY." ".Navbar::$ACCESS_SUPPLY_X." ' aria-label='Left Align'
