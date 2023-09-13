@@ -221,13 +221,21 @@ trait resourceRequestTableTrait
             $perPage = 1000;
         }
 
+        // if ($page === false) {
+        //     $page = 1;
+        //     $sql.= " FOR FETCH ONLY ";
+        // } else {
+        //     $sql.= " LIMIT ".$perPage;
+        //     $sql.= " OFFSET ".(($page -1) * $perPage);
+        //     $sql.= " FOR FETCH ONLY ";
+        // }
+
         if ($page === false) {
             $page = 1;
-            $sql.= " FOR FETCH ONLY ";
         } else {
-            $sql.= " LIMIT ".$perPage;
-            $sql.= " OFFSET ".(($page -1) * $perPage);
-            $sql.= " FOR FETCH ONLY ";
+            $sql.= ' OFFSET ' . (($page -1) * $perPage);
+            $sql.= ' ROWS FETCH FIRST ' . $perPage;
+            $sql.= ' ROWS ONLY';
         }
 
         error_log(__FILE__ . ":" . __LINE__ . ":" . $pipelineLiveArchive);
