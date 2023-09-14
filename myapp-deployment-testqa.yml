@@ -54,3 +54,5 @@ spec:
             name: rest-app-docker-secrets-sso
         - secretRef:
             name: rest-app-docker-secrets-worker-api
+        - secretRef:
+            name: rest-app-docker-secrets-redis
