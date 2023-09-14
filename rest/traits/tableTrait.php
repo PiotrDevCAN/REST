@@ -23,8 +23,8 @@ trait tableTrait
                     $searchRegex = $column['search']['regex']; // boolean
                     if (! strpos ( $columnName, "COMPLEX" )) {
                         if (!empty($searchValue)) {
-                            // $searchPredicate .= " AND " . $columnName . " LIKE '%" . $searchValue . "%'";
-                            $searchPredicate .= " AND REGEXP_LIKE(" .$columnName. ", '" .$searchValue. "', 1, 'i')";
+                            // $searchPredicate .= " AND REGEXP_LIKE(" .$columnName. ", '" .$searchValue. "', 1, 'i')";
+                            $searchPredicate .= " AND " . $columnName . " LIKE '%" . $searchValue . "%'";
                         }
                     }
                 }

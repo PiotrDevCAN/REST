@@ -5,8 +5,14 @@ if(!isset($_SESSION['uid'])) {
 	$_SESSION['uid'] = 'piotr.tajanowicz@kyndryl.com';
 }
 
+$start = microtime(true);
+
 $workerAPI = new WorkerAPI();
 $workerData = $workerAPI->getworkerByEmail($_SESSION['ssoEmail']);
+
+$elapsed = microtime(true);
+echo ("WorkerAPI call took:" . (float)($elapsed-$start));
+echo '</br>';
 
 // echo '<pre>';
 // echo 'ENVIRONMENT <br>';
