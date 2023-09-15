@@ -46,7 +46,7 @@ switch (true) {
     default:
         // If the start date is in the past - bring it up to today.
         $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);$loader = new Loader();
-        $predicate = " RFS='" . htmlspecialchars($rfsId) . "' AND START_DATE <= CURRENT_DATE AND TOTAL_HOURS is not null AND END_DATE is not null " ;
+        $predicate = " RFS='" . htmlspecialchars($rfsId) . "' AND START_DATE <= CURRENT_TIMESTAMP AND TOTAL_HOURS is not null AND END_DATE is not null " ;
         $allRequestsHours   = $loader->loadIndexed('TOTAL_HOURS','RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS, $predicate, 'asc');
         $allRequestsEnd     = $loader->loadIndexed('END_DATE'   ,'RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS, $predicate, 'asc');
         $allRequestsStart   = $loader->loadIndexed('START_DATE' ,'RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS, $predicate, 'asc');

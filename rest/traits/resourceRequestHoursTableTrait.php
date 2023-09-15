@@ -310,8 +310,8 @@ trait resourceRequestHoursTableTrait
                 RFS, 
                 SERVICE,";
             $sql.= " ( CASE 
-                WHEN LOCATE('" . resourceRequestTable::$duplicate . "', RESOURCE_NAME) THEN null
-                WHEN LOCATE('" . resourceRequestTable::$delta . "', RESOURCE_NAME) THEN null
+                WHEN CHARINDEX('" . resourceRequestTable::$duplicate . "', RESOURCE_NAME) != 0 THEN null
+                WHEN CHARINDEX('" . resourceRequestTable::$delta . "', RESOURCE_NAME) != 0 THEN null
                 ELSE RESOURCE_NAME
             END) AS RESOURCE_NAME, ";
             $sql.= " HOURS_TYPE, ";
@@ -364,8 +364,8 @@ trait resourceRequestHoursTableTrait
             RFS, 
             SERVICE,";
         $sql.= " ( CASE 
-            WHEN LOCATE('" . resourceRequestTable::$duplicate . "', RESOURCE_NAME) THEN null
-            WHEN LOCATE('" . resourceRequestTable::$delta . "', RESOURCE_NAME) THEN null
+            WHEN CHARINDEX('" . resourceRequestTable::$duplicate . "', RESOURCE_NAME) != 0 THEN null
+            WHEN CHARINDEX('" . resourceRequestTable::$delta . "', RESOURCE_NAME) != 0 THEN null
             ELSE RESOURCE_NAME
         END) AS RESOURCE_NAME, ";
         $sql.= " HOURS_TYPE, ";
@@ -425,8 +425,8 @@ trait resourceRequestHoursTableTrait
             RFS, 
             SERVICE,";
         $sql.= " ( CASE 
-            WHEN LOCATE('" . resourceRequestTable::$duplicate . "', RESOURCE_NAME) THEN null
-            WHEN LOCATE('" . resourceRequestTable::$delta . "', RESOURCE_NAME) THEN null
+            WHEN CHARINDEX('" . resourceRequestTable::$duplicate . "', RESOURCE_NAME) != 0 THEN null
+            WHEN CHARINDEX('" . resourceRequestTable::$delta . "', RESOURCE_NAME) != 0 THEN null
             ELSE RESOURCE_NAME
         END) AS RESOURCE_NAME, ";
         $sql.= " HOURS_TYPE, ";
@@ -528,7 +528,7 @@ trait resourceRequestHoursTableTrait
         $sql.= "      FROM " .  $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
         $sql.= "      where RR.RFS = '" . htmlspecialchars($rfsId) . "' ";
         $sql.= "      ) ";
-        $sql.= " AND DATE(WEEK_ENDING_FRIDAY) < CURRENT_DATE ";
+        $sql.= " AND DATE(WEEK_ENDING_FRIDAY) < CURRENT_TIMESTAMP ";
         
         error_log($sql);
         

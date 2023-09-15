@@ -183,10 +183,10 @@ trait rfsTableTrait
     static function archivedInLast12MthsPredicate($tableAbbrv = null) {
         $predicate = "(";
         $predicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $predicate.= "ARCHIVE >= CURRENT_DATE - 12 MONTH";
+        $predicate.= "ARCHIVE >= DATEADD(month, -12, CURRENT_TIMESTAMP)";
         $predicate.= " AND ";
         $predicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $predicate.= "ARCHIVE <= CURRENT_DATE"; 
+        $predicate.= "ARCHIVE <= CURRENT_TIMESTAMP"; 
         $predicate.= ")";
         return $predicate;
     }
@@ -468,8 +468,8 @@ trait rfsTableTrait
         $sql.= " RR.RESOURCE_REFERENCE,RR.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE,RR.TOTAL_HOURS, ";
         $sql.= " ";
         $sql.= "( CASE 
-            WHEN LOCATE('" . resourceRequestTable::$duplicate . "', RR.RESOURCE_NAME) THEN null
-            WHEN LOCATE('" . resourceRequestTable::$delta . "', RR.RESOURCE_NAME) THEN null
+            WHEN CHARINDEX('" . resourceRequestTable::$duplicate . "', RR.RESOURCE_NAME) != 0 THEN null
+            WHEN CHARINDEX('" . resourceRequestTable::$delta . "', RR.RESOURCE_NAME) != 0 THEN null
             ELSE RR.RESOURCE_NAME
         END) AS RESOURCE_NAME,";
         $sql.= " RR.RR_CREATOR AS REQUEST_CREATOR,RR.RR_CREATED_TIMESTAMP AS REQUEST_CREATED, ";
@@ -565,8 +565,8 @@ trait rfsTableTrait
         $sql.= " RR.RESOURCE_REFERENCE,RR.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE,RR.TOTAL_HOURS, ";
         $sql.= " ";
         $sql.= "( CASE 
-            WHEN LOCATE('" . resourceRequestTable::$duplicate . "', RR.RESOURCE_NAME) THEN null
-            WHEN LOCATE('" . resourceRequestTable::$delta . "', RR.RESOURCE_NAME) THEN null
+            WHEN CHARINDEX('" . resourceRequestTable::$duplicate . "', RR.RESOURCE_NAME) != 0 THEN null
+            WHEN CHARINDEX('" . resourceRequestTable::$delta . "', RR.RESOURCE_NAME) != 0 THEN null
             ELSE RR.RESOURCE_NAME
         END) AS RESOURCE_NAME,";
         $sql.= " RR.EMAIL_ADDRESS, "; 
@@ -676,8 +676,8 @@ trait rfsTableTrait
         $sql.= " RR.RESOURCE_REFERENCE,RR.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE,RR.TOTAL_HOURS, ";
         $sql.= " ";
         $sql.= "( CASE 
-            WHEN LOCATE('" . resourceRequestTable::$duplicate . "', RR.RESOURCE_NAME) THEN null
-            WHEN LOCATE('" . resourceRequestTable::$delta . "', RR.RESOURCE_NAME) THEN null
+            WHEN CHARINDEX('" . resourceRequestTable::$duplicate . "', RR.RESOURCE_NAME) != 0 THEN null
+            WHEN CHARINDEX('" . resourceRequestTable::$delta . "', RR.RESOURCE_NAME) != 0 THEN null
             ELSE RR.RESOURCE_NAME
         END) AS RESOURCE_NAME,";
         $sql.= " RR.RR_CREATOR AS REQUEST_CREATOR,RR.RR_CREATED_TIMESTAMP AS REQUEST_CREATED, ";

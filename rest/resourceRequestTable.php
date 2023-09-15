@@ -61,10 +61,10 @@ class resourceRequestTable extends DbTable
     static function archivedInLast12MthsPredicate($tableAbbrv = null) {
         $predicate = "(";
         $predicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $predicate.= "RFS_END_DATE >= CURRENT_DATE - 12 MONTH";
+        $predicate.= "RFS_END_DATE >= DATEADD(month, -12, CURRENT_TIMESTAMP)";
         $predicate.= " AND ";
         $predicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $predicate.= "RFS_END_DATE <= CURRENT_DATE"; 
+        $predicate.= "RFS_END_DATE <= CURRENT_TIMESTAMP"; 
         $predicate.= ")";
         return $predicate;
     }
@@ -75,7 +75,7 @@ class resourceRequestTable extends DbTable
         $predicate.= "RFS_END_DATE >= '2022-01-01'";
         $predicate.= " AND ";
         $predicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $predicate.= "RFS_END_DATE <= CURRENT_DATE"; 
+        $predicate.= "RFS_END_DATE <= CURRENT_TIMESTAMP"; 
         $predicate.= ")";
         return $predicate;
     }

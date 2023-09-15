@@ -11,7 +11,7 @@ class rfsTable extends DbTable
 
     const NOT_ARCHIVED = 'RFS.ARCHIVE is null';
     const ARCHIVED = 'RFS.ARCHIVE is not null';
-    const ARCHIVED_IN_LAST_12_MTHS = '(RFS.ARCHIVE >= CURRENT_DATE - 12 MONTH AND RFS.ARCHIVE <= CURRENT_DATE)';
+    const ARCHIVED_IN_LAST_12_MTHS = '(RFS.ARCHIVE >= DATEADD(month, -12, CURRENT_TIMESTAMP) AND RFS.ARCHIVE <= CURRENT_TIMESTAMP)';
 
     function __construct($table, $pwd = null, $log = true)
     {
