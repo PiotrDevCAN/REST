@@ -71,7 +71,7 @@ try {
     $insertDiaryArrayKeys = $archivedDiaryTable->getColumns();
 
     $archivedRfsRs = $rfsTable->getArchieved();
-    while(($rowRFSData=sqlsrv_fetch_array($archivedRfsRs))==true){
+    while(($rowRFSData = sqlsrv_fetch_array($archivedRfsRs))==true){
         // get record data
         $rfsRecord->setFromArray($rowRFSData);
         // $rfsRecord->iterateVisible();
@@ -98,7 +98,7 @@ try {
         $currentRfsId = $rfsRecord->get('RFS_ID');
 
         $archievedResourceRequestsRs = $resReqTable->getArchieved($currentRfsId);
-        while(($rowRRData=sqlsrv_fetch_array($archievedResourceRequestsRs))==true){
+        while(($rowRRData = sqlsrv_fetch_array($archievedResourceRequestsRs))==true){
             // get record data
             $resourceRequestRecord->setFromArray($rowRRData);
 
@@ -132,7 +132,7 @@ try {
             $currentResourceReference = $resourceRequestRecord->get('RESOURCE_REFERENCE');
 
             $archievedResourceRequestsHoursRs = $resReqHoursTable->getArchieved($currentResourceReference);
-            while(($rowRRHData=sqlsrv_fetch_array($archievedResourceRequestsHoursRs))==true){
+            while(($rowRRHData = sqlsrv_fetch_array($archievedResourceRequestsHoursRs))==true){
                 // get record data
                 $resourceRequestHoursRecord->setFromArray($rowRRHData);
                 // $resourceRequestHoursRecord->iterateVisible();
@@ -160,7 +160,7 @@ try {
 
             // cleanup RESOURCE_REQUEST_DIARY table
             $archivedResReqDiaryRs = $resReqDiaryTable->getArchieved($currentResourceReference);
-            while(($rowRRDData=sqlsrv_fetch_array($archivedResReqDiaryRs))==true){
+            while(($rowRRDData = sqlsrv_fetch_array($archivedResReqDiaryRs))==true){
                 // get record data
                 $resourceRequestDiaryRecord->setFromArray($rowRRDData);
                 // $resourceRequestDiaryRecord->iterateVisible();
@@ -188,7 +188,7 @@ try {
 
                 // cleanup DIARY
                 $archievedDiaryRs = $diaryTable->getArchieved($currentDiaryReference);
-                while(($rowADData=sqlsrv_fetch_array($archievedDiaryRs))==true){
+                while(($rowADData = sqlsrv_fetch_array($archievedDiaryRs))==true){
                     // get record data
                     $diaryRecord->setFromArray($rowADData);
                     // $diaryRecord->iterateVisible();
