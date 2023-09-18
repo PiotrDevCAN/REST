@@ -14,5 +14,4 @@ data:
   automationemailid: piotr.tajanowicz@kyndryl.com
   upes_audit: https://hooks.slack.com/services/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
   vbac_api_token: soEkCfj8zGNDLZ8yXH2YJjpehd8ijzlS
-  vbac_url_prod: https://vbac-dev.zkpw3uspriv.app.kyndryl.net
-  vbac_url: https://vbac-dev.zkpw3uspriv.app.kyndryl.net
+  vbac_url: https://vbac-testqa.zkpw3uspriv.app.kyndryl.net
