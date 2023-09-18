@@ -72,7 +72,7 @@ class RRBespokeRateTable extends DbTable
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
-        while(($row = sqlsrv_fetch_array($resultSet))==true){
+        while($row = sqlsrv_fetch_array($resultSet)){
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.

@@ -9,8 +9,8 @@ data:
   environment: rest_ut
   jwt_token: "VGhpcyBpcyB0aGUgc2VjcmV0IGtleSBmb3IgSldUIG9uIHRoZSBSRVNUIDIwMjAgYXBwbGljYXRpb24u"
   devemailid: piotr.tajanowicz@kyndryl.com
-  noreplyemailid: rest@noreply.ibm.com
-  noreplykyndrylemailid: restNoReply@kyndryl.com
+  noreplyemailid: UKI.Business.Intelligence@kyndryl.com
+  noreplykyndrylemailid: UKI.Business.Intelligence@kyndryl.com
   automationemailid: piotr.tajanowicz@kyndryl.com
   upes_audit: https://hooks.slack.com/services/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
   vbac_api_token: soEkCfj8zGNDLZ8yXH2YJjpehd8ijzlS

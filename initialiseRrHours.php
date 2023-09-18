@@ -17,7 +17,7 @@ $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST
 $resultSet = sqlsrv_query($GLOBALS['conn'],$sql);
 
 if($resultSet){
-    while (($row = sqlsrv_fetch_array($resultSet))==true){
+    while($row = sqlsrv_fetch_array($resultSet)){
         print_r($row);
         if(!empty($row['START_DATE']) && !empty($row['END_DATE']) && !empty($row['HRS_PER_WEEK'])){
             $resourceHoursTable->createResourceRequestHours($row['RESOURCE_REFERENCE'],$row['START_DATE'], $row['END_DATE'], $row['HRS_PER_WEEK']);

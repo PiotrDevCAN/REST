@@ -42,7 +42,7 @@ class rfsPipelineView extends DbTable
 
         $allData = array();
 
-        while(($row = sqlsrv_fetch_array($resultSet))==true){
+        while($row = sqlsrv_fetch_array($resultSet)){
             $row = array_map('trim',$row);
             $testJson = json_encode($row);
             if(!$testJson){

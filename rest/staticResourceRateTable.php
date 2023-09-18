@@ -52,7 +52,7 @@ class staticResourceRateTable extends DbTable
 
         $displayAble = array();
 
-        while (($row = sqlsrv_fetch_array($rs))==true) {
+        while($row = sqlsrv_fetch_array($rs)){
             
             $this->addGlyphicons($row);
             
@@ -117,7 +117,7 @@ class staticResourceRateTable extends DbTable
             return false;
         }
         $data = array();
-        while(($row = sqlsrv_fetch_array($rs))==true){
+        while($row = sqlsrv_fetch_array($rs)){
             $data[$row['BAND_ID']] = $row['BAND'];
         }
         return $data;
@@ -139,7 +139,7 @@ class staticResourceRateTable extends DbTable
             return false;
         }
         $data = array();
-        while(($row = sqlsrv_fetch_array($rs))==true){
+        while($row = sqlsrv_fetch_array($rs)){
             $data[$row['BAND_ID']] = $row['BAND'];
         }
         return $data;

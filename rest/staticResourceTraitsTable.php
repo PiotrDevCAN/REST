@@ -45,7 +45,7 @@ class staticResourceTraitsTable extends DbTable
         }
         $displayAble = array();
 
-        while (($row = sqlsrv_fetch_array($rs))==true) {
+        while($row = sqlsrv_fetch_array($rs)){
             
             $this->addGlyphicons($row);
             

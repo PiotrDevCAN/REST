@@ -341,7 +341,7 @@ trait resourceRequestHoursTableTrait
                     break;
                 case $resultSet:
                     $allData = array();
-                    while(($row = sqlsrv_fetch_array($resultSet))==true){
+                    while($row = sqlsrv_fetch_array($resultSet)){
                         $allData[]  = array_map('trim',$row);
                     }
                     return $allData;                
@@ -402,7 +402,7 @@ trait resourceRequestHoursTableTrait
                 break;
             case $resultSet:
                 $allData = array();
-                while(($row = sqlsrv_fetch_array($resultSet))==true){
+                while($row = sqlsrv_fetch_array($resultSet)){
                     $allData[]  = array_map('trim',$row);
                 }
                 return $allData;                
@@ -463,7 +463,7 @@ trait resourceRequestHoursTableTrait
                 break;
             case $resultSet:
                 $allData = array();
-                while(($row = sqlsrv_fetch_array($resultSet))==true){
+                while($row = sqlsrv_fetch_array($resultSet)){
                     $allData[]  = array_map('trim',$row);
                 }
                 return $allData;                
@@ -485,11 +485,11 @@ trait resourceRequestHoursTableTrait
         $allData = null;
 
         if($assoc){
-            while(($row = sqlsrv_fetch_array($resultSet))==true){
+            while($row = sqlsrv_fetch_array($resultSet)){
                 $allData[]  = $row;
             }
         }  else {
-            while(($row = sqlsrv_fetch_array($resultSet))==true){
+            while($row = sqlsrv_fetch_array($resultSet)){
                 $allData[]  = $row;
             }
         }

@@ -212,6 +212,7 @@ trait rfsTableTrait
         var knownRfs = [];
         <?php
 
+        while ($row = sqlsrv_fetch_array($rs)){
         while(($row = sqlsrv_fetch_array($rs))==true){
             ?>knownRfs.push("<?=strtoupper(trim($row['RFS_ID']));?>");
             <?php
@@ -396,7 +397,7 @@ trait rfsTableTrait
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
-        while(($row = sqlsrv_fetch_array($resultSet))==true){
+        while($row = sqlsrv_fetch_array($resultSet)){
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
@@ -487,7 +488,7 @@ trait rfsTableTrait
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
-        while(($row = sqlsrv_fetch_array($resultSet))==true){
+        while($row = sqlsrv_fetch_array($resultSet)){
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
@@ -591,7 +592,7 @@ trait rfsTableTrait
                 return $resultSet;
                 break;
             case $resultSet:
-                while(($row = sqlsrv_fetch_array($resultSet))==true){
+                while($row = sqlsrv_fetch_array($resultSet)){
                     $testJson = json_encode($row);
                     if(!$testJson){
                         break; // It's got invalid chars in it that will be a problem later.
@@ -704,7 +705,7 @@ trait rfsTableTrait
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
-        while(($row = sqlsrv_fetch_array($resultSet))==true){
+        while($row = sqlsrv_fetch_array($resultSet)){
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.

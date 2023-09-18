@@ -82,7 +82,7 @@ class AuditTable extends DbTable {
         $data = array();
         $data['rows'] = array();
 
-        while(($row = sqlsrv_fetch_array($rs))==true){
+        while($row = sqlsrv_fetch_array($rs)){
             $trimmedRow = array_map('trim', $row);
             $data['rows'][] = $trimmedRow;
         }

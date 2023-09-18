@@ -11,8 +11,8 @@ error_reporting(-1);
 // var_dump($rs);
 
 // if($rs){
-//     while(($row = sqlsrv_fetch_array($rs))==true){
-//     echo "<br/>" . var_dump($row);
+//    while($row = sqlsrv_fetch_array($rs)){
+//    echo "<br/>" . var_dump($row);
 //     }
 // }
 echo "<hr/>";
@@ -21,7 +21,7 @@ $rs2 = db2_columns($GLOBALS['conn'], null, $GLOBALS['Db2Schema'], 'INFLIGHT_PROJ
 var_dump($rs2);
 
 if($rs2){
-    while(($row = sqlsrv_fetch_array($rs2))==true){
+    while($row = sqlsrv_fetch_array($rs2)){
     echo "<br/>" . var_dump($row);
     }
 }
@@ -50,7 +50,7 @@ echo "<hr/>";
 // var_dump($rs3);
 
 // if($rs3){
-//     while(($row = sqlsrv_fetch_array($rs3))==true){
+//    while($row = sqlsrv_fetch_array($rs3)){
 //         echo "<br/>" . var_dump($row);
 //     }
 

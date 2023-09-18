@@ -7,7 +7,7 @@ echo "<br/> $sql1";
 $rs1 = sqlsrv_query($GLOBALS['conn'], $sql1);
 $rowCounter = 0 ;
 $preFetch = microtime(true);
-while(($row = sqlsrv_fetch_array($rs1))==true){
+while($row = sqlsrv_fetch_array($rs1)){
     $rowCounter++;
     echo ($rowCounter % 100) == 0 ?  "<br/>varchar Row:$rowCounter Elapsed: " . (microtime(true)-$preFetch) : null;
     ob_flush();
@@ -23,7 +23,7 @@ echo "<br/> $sql2";
 $rs1 = sqlsrv_query($GLOBALS['conn'], $sql2);
 $rowCounter = 0 ;
 $preFetch = microtime(true);
-while(($row = sqlsrv_fetch_array($rs1))==true){
+while($row = sqlsrv_fetch_array($rs1)){
     $rowCounter++;
     echo ($rowCounter % 100) == 0 ?  "<br/>clob Row:$rowCounter Elapsed: " . (microtime(true)-$preFetch) : null;
     ob_flush();
@@ -39,7 +39,7 @@ echo "<br/> $sql3";
 $rs1 = sqlsrv_query($GLOBALS['conn'], $sql3);
 $rowCounter = 0 ;
 $preFetch = microtime(true);
-while(($row = sqlsrv_fetch_array($rs1))==true){
+while($row = sqlsrv_fetch_array($rs1)){
     $rowCounter++;
     echo ($rowCounter % 100) == 0 ?  "<br/>clob Row:$rowCounter Elapsed: " . (microtime(true)-$preFetch) : null;
     ob_flush();
