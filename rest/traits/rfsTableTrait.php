@@ -213,11 +213,11 @@ trait rfsTableTrait
         <?php
 
         while ($row = sqlsrv_fetch_array($rs)){
-        while(($row = sqlsrv_fetch_array($rs))==true){
             ?>knownRfs.push("<?=strtoupper(trim($row['RFS_ID']));?>");
             <?php
         }
-        ?></script><?php
+        ?></script>
+        <?php
     }
 
     static function getRequestorEmail($rfsId){
@@ -311,7 +311,7 @@ trait rfsTableTrait
                 DbTable::displayErrorMessage($rs,__CLASS__, __METHOD__, $sql);
             }
 
-            while (($row = sqlsrv_fetch_array($rs))==true) {
+            while($row = sqlsrv_fetch_array($rs)){
                 $this->rfsMaxEndDate[strtoupper(trim($row['RFS']))] = isset($row['END_DATE']) ? trim($row['END_DATE']) : null ;
             }
         }

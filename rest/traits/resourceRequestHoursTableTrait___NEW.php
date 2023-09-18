@@ -503,7 +503,7 @@ trait resourceRequestHoursTableTrait
                 DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             }
             
-            while(($row = sqlsrv_fetch_array($rs))==true){
+            while($row = sqlsrv_fetch_array($rs)){
                 $this->hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] = $row['HOURS_TO_GO'];
                 $this->hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] = $row['WEEKS_TO_GO'];
              }

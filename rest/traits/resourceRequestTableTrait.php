@@ -110,7 +110,7 @@ trait resourceRequestTableTrait
             return false;
         }
         
-        while(($row= sqlsrv_fetch_array($rs))==true){
+        while($row = sqlsrv_fetch_array($rs)){
             $this->lastDiaryEntriesByResourceReference[$row['RESOURCE_REFERENCE']] = $row;        
         }
         
