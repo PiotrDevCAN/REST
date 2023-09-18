@@ -2029,14 +2029,15 @@ class DbTable
         // $db2StmtErrorMsg = strlen(htmlspecialchars($db2StmtErrorMsg)) > 50 ? substr(htmlspecialchars($db2StmtErrorMsg), 0, 50) : htmlspecialchars($db2StmtErrorMsg);
         $db2StmtErrorMsg = $table->truncateValueToFitColumn($db2StmtErrorMsg, 'DB2_MESSAGE');
 
-        $sql .= " VALUES (?, ?, ?, ?, ? ,?)";
+        $sql .= " VALUES (?, ?, ?, ?, ? ,?, ?)";
         $params = array(
             $userid,
             $_SERVER['PHP_SELF'],
             $db2StmtError,
             $db2StmtErrorMsg,
             $backtrace,
-            $request
+            $request,
+            time()
         );
 
         if (isset($_SESSION['phoneHome']) && class_exists('Email')) {
