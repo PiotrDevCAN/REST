@@ -187,7 +187,7 @@ class resourceRequestTable extends DbTable
         $sql.= " RFS.BUSINESS_UNIT AS RFS_BUSINESS_UNIT,";
         $sql.= " AR.TRIBE_NAME_MAPPED AS INDIVIDUAL_BUSINESS_UNIT,";
 
-        $sql .= " (SELECT LISTAGG(D.ENTRY, '</br>') FROM " . $GLOBALS['Db2Schema'] . ".DIARY AS D ";
+        $sql .= " (SELECT STRING_AGG(D.ENTRY, '</br>') FROM " . $GLOBALS['Db2Schema'] . ".DIARY AS D ";
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_DIARY. " AS RD ";
         $sql .= " ON D.DIARY_REFERENCE = RD.DIARY_REFERENCE ";
         $sql .= " WHERE RD.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE) AS DIARY, CLAIM.* ";
@@ -293,7 +293,7 @@ class resourceRequestTable extends DbTable
         $sql.= " RFS.BUSINESS_UNIT AS RFS_BUSINESS_UNIT,";
         $sql.= " AR.TRIBE_NAME_MAPPED AS INDIVIDUAL_BUSINESS_UNIT,";
 
-        $sql .= " (SELECT LISTAGG(D.ENTRY, '</br>') FROM " . $GLOBALS['Db2Schema'] . ".DIARY AS D ";
+        $sql .= " (SELECT STRING_AGG(D.ENTRY, '</br>') FROM " . $GLOBALS['Db2Schema'] . ".DIARY AS D ";
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_DIARY. " AS RD ";
         $sql .= " ON D.DIARY_REFERENCE = RD.DIARY_REFERENCE ";
         $sql .= " WHERE RD.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE) AS DIARY, CLAIM.* ";
