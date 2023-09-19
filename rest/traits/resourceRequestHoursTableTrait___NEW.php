@@ -492,7 +492,7 @@ trait resourceRequestHoursTableTrait
         if($this->hoursRemainingByReference==null){
             $date = new \DateTime();
             $complimentaryFields = $this->getDateComplimentaryFields($date);
-            $sql = " select RESOURCE_REFERENCE, SUM(HOURS) as HOURS_TO_GO, count(*) as WEEKS_TO_GO ";
+            $sql = " select RESOURCE_REFERENCE, SUM(CAST(HOURS as decimal(6,2))) as HOURS_TO_GO, count(*) as WEEKS_TO_GO ";
             $sql.= " from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS;
             $sql.= " where WEEK_ENDING_FRIDAY > DATE('" . $complimentaryFields['WEEK_ENDING_FRIDAY'] ."') ";
             $sql.= " group by RESOURCE_REFERENCE; ";

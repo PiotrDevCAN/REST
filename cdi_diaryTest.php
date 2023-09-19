@@ -16,7 +16,7 @@ while($row = sqlsrv_fetch_array($rs1)){
 
 echo "<hr/>";
 
-$sql2 = " SELECT DIARY_REFERENCE, cast(ENTRY as VARCHAR(1024)) as ENTRY, CREATOR, CREATED FROM REST_UT.DIARY_CLOB ";
+$sql2 = " SELECT DIARY_REFERENCE, CAST(ENTRY as VARCHAR(1024)) as ENTRY, CREATOR, CREATED FROM REST_UT.DIARY_CLOB ";
 
 echo "<br/> $sql2";
 

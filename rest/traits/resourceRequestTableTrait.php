@@ -196,9 +196,9 @@ trait resourceRequestTableTrait
         $sql .= " , CASE WHEN ( LOWER(TRIM(RFS.BUSINESS_UNIT)) = LOWER(TRIM(AR.TRIBE_NAME_MAPPED)) ) then 'Yes' else 'No' end as BUSINESS_UNIT_MATCH";
         $sql .= " ,  LD.LATEST_ENTRY, LD.CREATOR as ENTRY_CREATOR, LD.CREATED as ENTRY_CREATED ";
         $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
-        $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTableName. " as RR ";
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTableName. " as RR ";
         $sql .= " ON RR.RFS = RFS.RFS_ID ";
-        $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$LATEST_DIARY_ENTRIES. " as LD ";
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$LATEST_DIARY_ENTRIES. " as LD ";
         $sql .= " ON RR.RESOURCE_REFERENCE = LD.RESOURCE_REFERENCE ";
 
         // Active Resources table
@@ -288,9 +288,9 @@ trait resourceRequestTableTrait
 
         $countSql = " SELECT COUNT(*) AS COUNTER ";
         $countSql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
-        $countSql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTableName. " as RR ";
+        $countSql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTableName. " as RR ";
         $countSql .= " ON RR.RFS = RFS.RFS_ID ";
-        $countSql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$LATEST_DIARY_ENTRIES. " as LD ";
+        $countSql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$LATEST_DIARY_ENTRIES. " as LD ";
         $countSql .= " ON RR.RESOURCE_REFERENCE = LD.RESOURCE_REFERENCE ";
 
         // Active Resources table
@@ -426,7 +426,7 @@ trait resourceRequestTableTrait
         $sql .= " BR_SPSB.BAND AS REQUEST_PS_BAND";
 
         $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
-        $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTableName. " AS RR ";
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTableName. " AS RR ";
         $sql .= " ON RR.RFS = RFS.RFS_ID ";
 
         // Resource Trait
@@ -446,7 +446,7 @@ trait resourceRequestTableTrait
         $sql .= " ON RTR.RESOURCE_TYPE_ID = RRC.RESOURCE_TYPE_ID AND RTR.PS_BAND_ID = RRC.PS_BAND_ID";
 
         // Bespoke Rate
-        $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$BESPOKE_RATES. " AS BR ";
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$BESPOKE_RATES. " AS BR ";
         $sql .= " ON TRIM(BR.RFS_ID) = TRIM(RR.RFS) AND TRIM(BR.RESOURCE_REFERENCE) = TRIM(RR.RESOURCE_REFERENCE)";
 
         // Resource Type for BR
@@ -457,7 +457,7 @@ trait resourceRequestTableTrait
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_PS_BAND. " as BR_SPSB ";
         $sql .= " ON BR.PS_BAND_ID = BR_SPSB.BAND_ID ";
         
-        $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$LATEST_DIARY_ENTRIES. " AS LD ";
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$LATEST_DIARY_ENTRIES. " AS LD ";
         $sql .= " ON RR.RESOURCE_REFERENCE = LD.RESOURCE_REFERENCE ";
         $sql .= " WHERE RR.RFS is not null ";
 

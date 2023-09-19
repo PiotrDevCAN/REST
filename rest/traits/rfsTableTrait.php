@@ -446,21 +446,21 @@ trait rfsTableTrait
         $sql.="     SELECT RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME ";
         
         foreach ($monthDetails as $key => $detail) {
-            $sql.=", case when (CLAIM_YEAR = " . $detail['year'] . " AND CLAIM_MONTH = " . $detail['month'] . ") THEN SUM(hours) ELSE null END AS " . $monthLabels[$key];
+            $sql.=", CASE WHEN (CLAIM_YEAR = " . $detail['year'] . " AND CLAIM_MONTH = " . $detail['month'] . ") THEN SUM(CAST(HOURS as decimal(6,2))) ELSE null END AS " . $monthLabels[$key];
         }
         $sql.="      FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
         $sql.="      LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " AS RH ";
         $sql.="      ON RR.RESOURCE_REFERENCE = RH.RESOURCE_REFERENCE ";
         $sql.=" WHERE 1=1 " ;
         $sql.=" AND ( ";
-        $sql.="        ( CLAIM_YEAR = $startYear AND ( CLAIM_MONTH >= $startMonth AND CLAIM_MONTH <= " .  ($startMonth+6) . " )) ";
+        $sql.="        (CLAIM_YEAR = $startYear AND ( CLAIM_MONTH >= $startMonth AND CLAIM_MONTH <= " .  ($startMonth+6) . " )) ";
         $sql.="      OR " ;
         $sql.="        (CLAIM_YEAR = $lastYear  AND ( CLAIM_MONTH <= $lastMonth  AND CLAIM_MONTH >= " . ($lastMonth-6) . "  )) ";
         $sql.="    ) ";
         $sql.="      GROUP BY RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME, CLAIM_YEAR, CLAIM_MONTH ";
         $sql.="      ) AS data ";
         $sql.="      GROUP BY RESOURCE_REFERENCE, RESOURCE_NAME ";
-        $sql.="      ORDER BY 1,2 ";
+        // $sql.="      ORDER BY 1,2 ";
         $sql.=" ) ";
         $sql.=" " ;
         $sql.= " SELECT RFS.RFS_ID,RFS.PRN,RFS.PROJECT_TITLE,RFS.PROJECT_CODE,RFS.REQUESTOR_NAME,RFS.REQUESTOR_EMAIL,RFS.VALUE_STREAM,RFS.BUSINESS_UNIT ";
@@ -476,7 +476,7 @@ trait rfsTableTrait
         $sql.= " RR.RR_CREATOR AS REQUEST_CREATOR,RR.RR_CREATED_TIMESTAMP AS REQUEST_CREATED, ";
         $sql.= " RR.CLONED_FROM, RR.STATUS, RR.RATE_TYPE, RR.HOURS_TYPE, RFS.RFS_STATUS, RFS.RFS_TYPE, CLAIM.* ";
         $sql.= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
-        $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
+        $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
         $sql.= " ON RR.RFS =  RFS.RFS_ID ";
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
@@ -543,21 +543,21 @@ trait rfsTableTrait
         $sql.="     SELECT RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME, RR.EMAIL_ADDRESS, RR.KYN_EMAIL_ADDRESS ";
         
         foreach ($monthDetails as $key => $detail) {
-            $sql.=", CASE WHEN (CLAIM_YEAR = " . $detail['year'] . " AND CLAIM_MONTH = " . $detail['month'] . ") THEN SUM(hours) ELSE NULL END AS " . $monthLabels[$key];
+            $sql.=", CASE WHEN (CLAIM_YEAR = " . $detail['year'] . " AND CLAIM_MONTH = " . $detail['month'] . ") THEN SUM(CAST(HOURS as decimal(6,2))) ELSE null END AS " . $monthLabels[$key];
         }
         $sql.="      FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
         $sql.="      LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " AS RH ";
         $sql.="      ON RR.RESOURCE_REFERENCE = RH.RESOURCE_REFERENCE ";
         $sql.=" WHERE 1=1 " ;
         $sql.=" AND ( ";
-        $sql.="        ( CLAIM_YEAR = $startYear AND ( CLAIM_MONTH >= $startMonth and CLAIM_MONTH <= " .  ($startMonth+6) . " )) ";
+        $sql.="        (CLAIM_YEAR = $startYear AND ( CLAIM_MONTH >= $startMonth and CLAIM_MONTH <= " .  ($startMonth+6) . " )) ";
         $sql.="      OR " ;
         $sql.="        (CLAIM_YEAR = $lastYear  AND ( CLAIM_MONTH <= $lastMonth  and CLAIM_MONTH >= " . ($lastMonth-6) . "  )) ";
         $sql.="    ) ";
         $sql.="      GROUP BY RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME, RR.EMAIL_ADDRESS, RR.KYN_EMAIL_ADDRESS, CLAIM_YEAR, CLAIM_MONTH ";
         $sql.="      ) AS data ";
         $sql.="      GROUP BY RESOURCE_REFERENCE, RESOURCE_NAME, EMAIL_ADDRESS, KYN_EMAIL_ADDRESS ";
-        $sql.="      ORDER BY 1,2 ";
+        // $sql.="      ORDER BY 1,2 ";
         $sql.=" ) ";
         $sql.=" " ;
         $sql.= " SELECT RFS.RFS_ID,RFS.PRN,RFS.PROJECT_TITLE,RFS.PROJECT_CODE,RFS.REQUESTOR_NAME,RFS.REQUESTOR_EMAIL,RFS.VALUE_STREAM,RFS.BUSINESS_UNIT ";
@@ -575,7 +575,7 @@ trait rfsTableTrait
         $sql.= " RR.RR_CREATOR AS REQUEST_CREATOR,RR.RR_CREATED_TIMESTAMP AS REQUEST_CREATED, ";
         $sql.= " RR.CLONED_FROM, RR.STATUS, RR.RATE_TYPE, RR.HOURS_TYPE, RFS.RFS_STATUS, RFS.RFS_TYPE, CLAIM.* ";
         $sql.= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
-        $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
+        $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
         $sql.= " ON RR.RFS =  RFS.RFS_ID ";
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
@@ -644,31 +644,31 @@ trait rfsTableTrait
         }
 
         $sql.= " ) AS ( ";
-        $sql.=" select RESOURCE_REFERENCE, RESOURCE_NAME ";
+        $sql.=" SELECT RESOURCE_REFERENCE, RESOURCE_NAME ";
         
         foreach ($monthLabels as $label) {
             $sql.=", SUM($label) as $label ";
         }
 
-        $sql.=" from ( ";
-        $sql.="     select RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME ";
+        $sql.=" FROM ( ";
+        $sql.="     SELECT RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME ";
         
         foreach ($monthDetails as $key => $detail) {
-            $sql.=", case when (CLAIM_YEAR = " . $detail['year'] . " AND CLAIM_MONTH = " . $detail['month'] . ") then SUM(hours) else null end as " . $monthLabels[$key];
+            $sql.=", CASE WHEN (CLAIM_YEAR = " . $detail['year'] . " AND CLAIM_MONTH = " . $detail['month'] . ") THEN SUM(CAST(HOURS as decimal(6,2))) ELSE null END AS " . $monthLabels[$key];
         }
-        $sql.="      from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " as RR ";
-        $sql.="      left join " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " as RH ";
+        $sql.="      FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
+        $sql.="      LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " AS RH ";
         $sql.="      on RR.RESOURCE_REFERENCE = RH.RESOURCE_REFERENCE ";
         $sql.=" WHERE 1=1 " ;
         $sql.=" AND ( ";
-        $sql.="        ( CLAIM_YEAR = $startYear AND ( CLAIM_MONTH >= $startMonth AND CLAIM_MONTH <= " .  ($startMonth+6) . " )) ";
-        $sql.="      or " ;
+        $sql.="        (CLAIM_YEAR = $startYear AND ( CLAIM_MONTH >= $startMonth AND CLAIM_MONTH <= " .  ($startMonth+6) . " )) ";
+        $sql.="      OR " ;
         $sql.="        (CLAIM_YEAR = $lastYear  AND ( CLAIM_MONTH <= $lastMonth  AND CLAIM_MONTH >= " . ($lastMonth-6) . "  )) ";
         $sql.="    ) ";
         $sql.="      group by RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME, CLAIM_YEAR, CLAIM_MONTH ";
         $sql.="      ) AS data ";
         $sql.="      group by RESOURCE_REFERENCE, RESOURCE_NAME ";
-        $sql.="      order by 1,2 ";
+        // $sql.="      order by 1,2 ";
         $sql.=" ) ";
         $sql.=" " ;
         $sql.= " SELECT RFS.RFS_ID,RFS.PRN,RFS.PROJECT_TITLE,RFS.PROJECT_CODE,RFS.REQUESTOR_NAME,RFS.REQUESTOR_EMAIL,RFS.VALUE_STREAM,RFS.BUSINESS_UNIT ";
@@ -684,9 +684,9 @@ trait rfsTableTrait
         $sql.= " RR.RR_CREATOR AS REQUEST_CREATOR,RR.RR_CREATED_TIMESTAMP AS REQUEST_CREATED, ";
         $sql.= " RR.CLONED_FROM, RR.STATUS, RR.RATE_TYPE, RR.HOURS_TYPE, RFS.RFS_STATUS, RFS.RFS_TYPE, CLAIM.* ";
         $sql.= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
-        $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
+        $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
         $sql.= " ON RR.RFS =  RFS.RFS_ID ";        
-        // $sql.= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
+        // $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
         $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " AS AR ";
         $sql.= " ON LOWER(TRIM(RR.RESOURCE_NAME)) = LOWER(TRIM(AR.NOTES_ID)) ";        
         $sql.= " , CLAIM ";

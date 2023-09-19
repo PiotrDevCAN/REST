@@ -163,7 +163,7 @@ class resourceRequestTable extends DbTable
         $sql.=" SELECT RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME ";
         
         foreach ($monthDetails as $key => $detail) {
-            $sql.=", CASE WHEN (CLAIM_YEAR = " . $detail['year'] . " AND CLAIM_MONTH = " . $detail['month'] . ") THEN SUM(hours) ELSE null END AS " . $monthLabels[$key];
+            $sql.=", CASE WHEN (CLAIM_YEAR = " . $detail['year'] . " AND CLAIM_MONTH = " . $detail['month'] . ") THEN SUM(CAST(HOURS as decimal(6,2))) ELSE null END AS " . $monthLabels[$key];
         }
         $sql.=" FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
         $sql.=" LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " AS RH ";
@@ -177,7 +177,7 @@ class resourceRequestTable extends DbTable
         $sql.="      GROUP BY RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME, CLAIM_YEAR, CLAIM_MONTH ";
         $sql.="      ) AS data ";
         $sql.="      GROUP BY RESOURCE_REFERENCE, RESOURCE_NAME ";
-        $sql.="      ORDER BY 1,2 ";
+        // $sql.="      ORDER BY 1,2 ";
         $sql.=" ) ";
         $sql.=" " ;
         
@@ -188,7 +188,7 @@ class resourceRequestTable extends DbTable
         $sql.= " AR.TRIBE_NAME_MAPPED AS INDIVIDUAL_BUSINESS_UNIT,";
 
         $sql .= " (SELECT LISTAGG(D.ENTRY, '</br>') FROM " . $GLOBALS['Db2Schema'] . ".DIARY AS D ";
-        $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_DIARY. " AS RD ";
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_DIARY. " AS RD ";
         $sql .= " ON D.DIARY_REFERENCE = RD.DIARY_REFERENCE ";
         $sql .= " WHERE RD.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE) AS DIARY, CLAIM.* ";
 
@@ -269,7 +269,7 @@ class resourceRequestTable extends DbTable
         $sql.=" SELECT RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME ";
         
         foreach ($monthDetails as $key => $detail) {
-            $sql.=", CASE WHEN (CLAIM_YEAR = " . $detail['year'] . " AND CLAIM_MONTH = " . $detail['month'] . ") THEN SUM(hours) ELSE null END AS " . $monthLabels[$key];
+            $sql.=", CASE WHEN (CLAIM_YEAR = " . $detail['year'] . " AND CLAIM_MONTH = " . $detail['month'] . ") THEN SUM(CAST(HOURS as decimal(6,2))) ELSE null END AS " . $monthLabels[$key];
         }
         $sql.=" FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
         $sql.=" LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " AS RH ";
@@ -283,7 +283,7 @@ class resourceRequestTable extends DbTable
         $sql.="      GROUP BY RR.RESOURCE_REFERENCE, RR.RESOURCE_NAME, CLAIM_YEAR, CLAIM_MONTH ";
         $sql.="      ) AS data ";
         $sql.="      GROUP BY RESOURCE_REFERENCE, RESOURCE_NAME ";
-        $sql.="      ORDER BY 1,2 ";
+        // $sql.="      ORDER BY 1,2 ";
         $sql.=" ) ";
         $sql.=" " ;
         
@@ -294,7 +294,7 @@ class resourceRequestTable extends DbTable
         $sql.= " AR.TRIBE_NAME_MAPPED AS INDIVIDUAL_BUSINESS_UNIT,";
 
         $sql .= " (SELECT LISTAGG(D.ENTRY, '</br>') FROM " . $GLOBALS['Db2Schema'] . ".DIARY AS D ";
-        $sql .= " LEFT JOIN  " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_DIARY. " AS RD ";
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_DIARY. " AS RD ";
         $sql .= " ON D.DIARY_REFERENCE = RD.DIARY_REFERENCE ";
         $sql .= " WHERE RD.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE) AS DIARY, CLAIM.* ";
 
