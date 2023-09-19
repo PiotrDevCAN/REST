@@ -520,7 +520,7 @@ trait resourceRequestHoursTableTrait
         $sql.= "      from " .  $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
         $sql.= "      where RR.RFS = '" . htmlspecialchars($rfsId) . "' ";
         $sql.= "      ) ";
-        $sql.= " AND DATE(WEEK_ENDING_FRIDAY) < CURRENT_TIMESTAMP ";
+        $sql.= " AND WEEK_ENDING_FRIDAY < GETDATE() ";
         
         error_log($sql);
         
@@ -540,7 +540,7 @@ trait resourceRequestHoursTableTrait
         if(!isset($this->preparedSetHrsStatement)){
             $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
             $sql.= " SET HOURS= ? " ;
-            $sql.= " WHERE DATE(WEEK_ENDING_FRIDAY) =  ? ";
+            $sql.= " WHERE WEEK_ENDING_FRIDAY =  ? ";
             $sql.= " AND RESOURCE_REFERENCE= " . htmlspecialchars($resourceReference);   
             $this->preparedSetHrsStatement = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
             
