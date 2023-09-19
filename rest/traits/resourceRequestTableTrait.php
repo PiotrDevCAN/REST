@@ -897,27 +897,29 @@ trait resourceRequestTableTrait
             throw new \Exception('vBAC CURL call failed');
         } else {
             $allEmployees = json_decode($allEmployeesJson);
-            foreach ($allEmployees as $key => $employeeDetails) {
+            if (is_iterable($allEmployees)) {
+                foreach ($allEmployees as $key => $employeeDetails) {
 
-                // get all tribe names
-                !empty($employeeDetails->TRIBE_NAME) ? $allTribes[trim($employeeDetails->TRIBE_NAME)] = trim($employeeDetails->TRIBE_NAME) : null;
-                
-                // Filter out invalid Notes Ids                    
-                // if (strtolower(substr(trim($employeeDetails->NOTES_ID), -4))=='/ibm' || strtolower(substr(trim($employeeDetails->NOTES_ID), -6))=='/ocean') {
-                    $vbacEmployees[] = array(
-                        'id'=>trim($employeeDetails->NOTES_ID), 
-                        'emailAddress'=>trim($employeeDetails->EMAIL_ADDRESS),
-                        'kynEmailAddress'=>trim($employeeDetails->KYN_EMAIL_ADDRESS),
-                        'text'=>trim($employeeDetails->NOTES_ID), 
-                        'role'=>trim($employeeDetails->SQUAD_NAME),
-                        'tribe'=>trim($employeeDetails->TRIBE_NAME),
-                        'distance'=>'remote'
-                    );
-                // }
-                
-                // get employee's tribe name
-                if (strtolower($employeeDetails->EMAIL_ADDRESS) == strtolower($_SESSION['ssoEmail'])){
-                    $myTribe = $employeeDetails->TRIBE_NAME;
+                    // get all tribe names
+                    !empty($employeeDetails->TRIBE_NAME) ? $allTribes[trim($employeeDetails->TRIBE_NAME)] = trim($employeeDetails->TRIBE_NAME) : null;
+                    
+                    // Filter out invalid Notes Ids                    
+                    // if (strtolower(substr(trim($employeeDetails->NOTES_ID), -4))=='/ibm' || strtolower(substr(trim($employeeDetails->NOTES_ID), -6))=='/ocean') {
+                        $vbacEmployees[] = array(
+                            'id'=>trim($employeeDetails->NOTES_ID), 
+                            'emailAddress'=>trim($employeeDetails->EMAIL_ADDRESS),
+                            'kynEmailAddress'=>trim($employeeDetails->KYN_EMAIL_ADDRESS),
+                            'text'=>trim($employeeDetails->NOTES_ID), 
+                            'role'=>trim($employeeDetails->SQUAD_NAME),
+                            'tribe'=>trim($employeeDetails->TRIBE_NAME),
+                            'distance'=>'remote'
+                        );
+                    // }
+                    
+                    // get employee's tribe name
+                    if (strtolower($employeeDetails->EMAIL_ADDRESS) == strtolower($_SESSION['ssoEmail'])){
+                        $myTribe = $employeeDetails->TRIBE_NAME;
+                    }
                 }
             }
         }
