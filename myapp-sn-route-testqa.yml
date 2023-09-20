@@ -4,7 +4,7 @@ metadata:
   labels:
     app: REST
     type: internal-apps-001
-  name: rest-route
+  name: rest-route-testqa
   namespace: ns-rest-gd-kps-testqa-wus3
 spec:
   host: rest-testqa.zkpw3uspriv.app.kyndryl.net
