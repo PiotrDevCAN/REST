@@ -273,12 +273,18 @@ trait resourceRequestHoursTableTrait
     }
 
     static function populateComplimentaryDateFields($date,$record){
-        $complimentaryField = self::getDateComplimentaryFields($date);
+        $complimentaryFields = self::getDateComplimentaryFields($date);
+        list(
+            'WEEK_ENDING_FRIDAY' => $wef, 
+            'CLAIM_CUTOFF' => $claimCutOff,
+            'CLAIM_MONTH' => $claimMonth,
+            'CLAIM_YEAR' => $claimYear
+        ) = $complimentaryFields;
 
-        $record->WEEK_ENDING_FRIDAY = $complimentaryField['WEEK_ENDING_FRIDAY'];
-        $record->CLAIM_CUTOFF = $complimentaryField['CLAIM_CUTOFF'];
-        $record->CLAIM_MONTH = $complimentaryField['CLAIM_MONTH'];
-        $record->CLAIM_YEAR = $complimentaryField['CLAIM_YEAR'];
+        $record->WEEK_ENDING_FRIDAY = $wef;
+        $record->CLAIM_CUTOFF = $claimCutOff;
+        $record->CLAIM_MONTH = $claimMonth;
+        $record->CLAIM_YEAR = $claimYear;
     }
 
     static function getDateComplimentaryFields($date){
@@ -499,14 +505,21 @@ trait resourceRequestHoursTableTrait
     function getHoursRemainingByReference(){
         if($this->hoursRemainingByReference==null){
             $date = new \DateTime();
-            $complimentaryFields = $this->getDateComplimentaryFields($date);
+            
             $sql = " select RESOURCE_REFERENCE, SUM(CAST(HOURS as decimal(6,2))) as HOURS_TO_GO, count(*) as WEEKS_TO_GO ";
             $sql.= " from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS;
-            $sql.= " where WEEK_ENDING_FRIDAY > DATE('" . $complimentaryFields['WEEK_ENDING_FRIDAY'] ."') ";
+            $sql.= " where WEEK_ENDING_FRIDAY > ? ";
             $sql.= " group by RESOURCE_REFERENCE; ";
-            
-            $rs = sqlsrv_query($GLOBALS['conn'], $sql);
-            
+
+            $complimentaryFields = $this->getDateComplimentaryFields($date);
+            list(
+                'WEEK_ENDING_FRIDAY' => $wef
+            ) = $complimentaryFields;
+
+            $data = array($wef);
+            $stmt = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
+            $rs = sqlsrv_execute($stmt);
+
             if(!$rs){
                 DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             }
@@ -524,10 +537,10 @@ trait resourceRequestHoursTableTrait
         $sql = " DELETE ";
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS;
         $sql.= " WHERE RESOURCE_REFERENCE IN ( ";
-        $sql.= "      SELECT RESOURCE_REFERENCE ";
-        $sql.= "      FROM " .  $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
-        $sql.= "      where RR.RFS = '" . htmlspecialchars($rfsId) . "' ";
-        $sql.= "      ) ";
+        $sql.= " SELECT RESOURCE_REFERENCE ";
+        $sql.= " FROM " .  $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
+        $sql.= " where RR.RFS = '" . htmlspecialchars($rfsId) . "' ";
+        $sql.= " ) ";
         $sql.= " AND WEEK_ENDING_FRIDAY < GETDATE() ";
         
         error_log($sql);
@@ -543,13 +556,13 @@ trait resourceRequestHoursTableTrait
         return $rs;
     }
 
-    function prepareSetHoursForWef(int $resourceReference, $data){  
+    function prepareSetHoursForWef($data){  
        
         if(!isset($this->preparedSetHrsStatement)){
             $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
-            $sql.= " SET HOURS= ? " ;
-            $sql.= " WHERE WEEK_ENDING_FRIDAY =  ? ";
-            $sql.= " AND RESOURCE_REFERENCE= " . htmlspecialchars($resourceReference);   
+            $sql.= " SET HOURS = ? " ;
+            $sql.= " WHERE WEEK_ENDING_FRIDAY = ? ";
+            $sql.= " AND RESOURCE_REFERENCE = ? ";
             $this->preparedSetHrsStatement = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
             
             if(!$this->preparedSetHrsStatement){
@@ -561,10 +574,10 @@ trait resourceRequestHoursTableTrait
     }
 
     function setHoursForWef(int $resourceReference, string $wef, float $hours){
-        $parameters = array($hours, $wef);
-        $preparedStmt = $this->prepareSetHoursForWef($resourceReference, $parameters);         
+        $data = array($hours, $wef, $resourceReference);
+        $stmt = $this->prepareSetHoursForWef($data);         
         
-        $rs = sqlsrv_execute($preparedStmt);
+        $rs = sqlsrv_execute($stmt);
         
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, 'prepared sql');
@@ -574,9 +587,11 @@ trait resourceRequestHoursTableTrait
 
     function getArchieved($resourceReference=null){
         $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
-        $sql .= " WHERE RESOURCE_REFERENCE = '" . htmlspecialchars($resourceReference) . "' ";
-
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
+        $sql .= " WHERE RESOURCE_REFERENCE = ? ";
+        
+        $data = array($resourceReference);
+        $stmt = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
+        $rs = sqlsrv_execute($stmt);
 
         if(!$rs){
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
