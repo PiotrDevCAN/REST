@@ -201,7 +201,7 @@ class resourceRequestTable extends DbTable
 
         // Active Resources table
         $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
-        $sql.= " ON LOWER(TRIM(RR.RESOURCE_NAME)) = LOWER(TRIM(AR.NOTES_ID))";
+        $sql.= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID)";
 
         $sql.= " , CLAIM";
 
@@ -210,7 +210,7 @@ class resourceRequestTable extends DbTable
             " AND RFS.RFS_ID is not null" .
             " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE" .
             " AND (RR.RESOURCE_NAME is not null AND RR.RESOURCE_NAME != '') " .
-            " AND LOWER(TRIM(RFS.BUSINESS_UNIT)) != LOWER(TRIM(AR.TRIBE_NAME_MAPPED))" .            
+            " AND LOWER(RFS.BUSINESS_UNIT) != LOWER(AR.TRIBE_NAME_MAPPED)" .            
             " AND (AR.TRIBE_NAME_MAPPED is not null AND AR.TRIBE_NAME_MAPPED != '') ";
             
         $sql.= " ORDER BY RFS.RFS_ID, RR.RESOURCE_REFERENCE";
@@ -307,7 +307,7 @@ class resourceRequestTable extends DbTable
 
         // Active Resources table
         $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
-        $sql.= " ON LOWER(TRIM(RR.RESOURCE_NAME)) = LOWER(TRIM(AR.NOTES_ID))";
+        $sql.= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID)";
 
         $sql.= " , CLAIM";
 
@@ -316,7 +316,7 @@ class resourceRequestTable extends DbTable
             " AND RFS.RFS_ID is not null" .
             " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE" .
             " AND (RR.RESOURCE_NAME is not null AND RR.RESOURCE_NAME != '') " .
-            " AND LOWER(TRIM(RFS.BUSINESS_UNIT)) != LOWER(TRIM(AR.TRIBE_NAME_MAPPED))" .
+            " AND LOWER(RFS.BUSINESS_UNIT) != LOWER(AR.TRIBE_NAME_MAPPED)" .
             " AND (AR.TRIBE_NAME_MAPPED is not null AND AR.TRIBE_NAME_MAPPED != '') ";
             
         $sql.= " ORDER BY RFS.RFS_ID, RR.RESOURCE_REFERENCE";

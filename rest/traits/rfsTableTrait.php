@@ -688,7 +688,7 @@ trait rfsTableTrait
         $sql.= " ON RR.RFS =  RFS.RFS_ID ";        
         // $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
         $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " AS AR ";
-        $sql.= " ON LOWER(TRIM(RR.RESOURCE_NAME)) = LOWER(TRIM(AR.NOTES_ID)) ";        
+        $sql.= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID) ";        
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
         $sql.= " AND " . rfsTable::NOT_ARCHIVED;

@@ -52,7 +52,7 @@ class RRBespokeRateTable extends DbTable
 
         // Bespoke Rates
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$BESPOKE_RATES. " AS BR ";
-        $sql .= " ON TRIM(BR.RFS_ID) = TRIM(RR.RFS) AND TRIM(BR.RESOURCE_REFERENCE) = TRIM(RR.RESOURCE_REFERENCE)";
+        $sql .= " ON LOWER(BR.RFS_ID) = LOWER(RR.RFS) AND LOWER(BR.RESOURCE_REFERENCE) = LOWER(RR.RESOURCE_REFERENCE)";
 
         // Resource Type for BR
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_RESOURCE_TYPE . " as SRT ";

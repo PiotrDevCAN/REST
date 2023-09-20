@@ -193,7 +193,7 @@ trait resourceRequestTableTrait
         $sql .= " GROUP BY RESOURCE_REFERENCE ";
         $sql .= " ) ";
         $sql .= " SELECT RFS.*, RR.* ";
-        $sql .= " , CASE WHEN ( LOWER(TRIM(RFS.BUSINESS_UNIT)) = LOWER(TRIM(AR.TRIBE_NAME_MAPPED)) ) then 'Yes' else 'No' end as BUSINESS_UNIT_MATCH";
+        $sql .= " , CASE WHEN ( LOWER(RFS.BUSINESS_UNIT) = LOWER(AR.TRIBE_NAME_MAPPED) ) then 'Yes' else 'No' end as BUSINESS_UNIT_MATCH";
         $sql .= " ,  LD.LATEST_ENTRY, LD.CREATOR as ENTRY_CREATOR, LD.CREATED as ENTRY_CREATED ";
         $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " as RFS ";
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTableName. " as RR ";
@@ -203,7 +203,7 @@ trait resourceRequestTableTrait
 
         // Active Resources table
         $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR  ";
-        $sql.= " on LOWER(TRIM(RR.RESOURCE_NAME)) = LOWER(TRIM(AR.NOTES_ID))  ";
+        $sql.= " on LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID)  ";
 
         $sql .=  " WHERE RR.RFS is not null ";
         $sql .= $pipelineLiveArchive=='archive'  ? " AND " . rfsTable::ARCHIVED : " AND " . rfsTable::NOT_ARCHIVED;
@@ -295,7 +295,7 @@ trait resourceRequestTableTrait
 
         // Active Resources table
         $countSql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR  ";
-        $countSql.= " on LOWER(TRIM(RR.RESOURCE_NAME)) = LOWER(TRIM(AR.NOTES_ID))  ";
+        $countSql.= " on LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID)  ";
 
         $countSql .=  " WHERE RR.RFS is not null ";
         $countSql .= $pipelineLiveArchive=='archive'  ? " AND " . rfsTable::ARCHIVED : " AND " . rfsTable::NOT_ARCHIVED;
@@ -447,7 +447,7 @@ trait resourceRequestTableTrait
 
         // Bespoke Rate
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$BESPOKE_RATES. " AS BR ";
-        $sql .= " ON TRIM(BR.RFS_ID) = TRIM(RR.RFS) AND TRIM(BR.RESOURCE_REFERENCE) = TRIM(RR.RESOURCE_REFERENCE)";
+        $sql .= " ON LOWER(BR.RFS_ID) = LOWER(RR.RFS) AND LOWER(BR.RESOURCE_REFERENCE) = LOWER(RR.RESOURCE_REFERENCE)";
 
         // Resource Type for BR
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_RESOURCE_TYPE . " as BR_SRT ";
