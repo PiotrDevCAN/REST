@@ -165,6 +165,7 @@ jobs:
             ./env-secrets.yml
             ./myapp-deployment-dev.yml
             ./myapp-service.yml
+            ./myapp-sn-ingress-dev.yml
             ./myapp-sn-route-dev.yml
           # Multiline input where each line contains the name of a docker-registry secret 
           # that has already been setup within the cluster. 
