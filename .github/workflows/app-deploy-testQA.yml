@@ -166,7 +166,6 @@ jobs:
             ./myapp-deployment-testqa.yml
             ./myapp-service.yml
             ./myapp-sn-ingress-testqa.yml
-            ./myapp-sn-route-testqa.yml
           # Multiline input where each line contains the name of a docker-registry secret 
           # that has already been setup within the cluster. 
           # Each of these secret names are added under imagePullSecrets field for the workloads found in the input manifest files

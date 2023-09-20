@@ -168,7 +168,6 @@ jobs:
             ./myapp-deployment-prod.yml
             ./myapp-service.yml
             ./myapp-sn-ingress-prod.yml
-            ./myapp-sn-route-prod.yml
           # Multiline input where each line contains the name of a docker-registry secret 
           # that has already been setup within the cluster. 
           # Each of these secret names are added under imagePullSecrets field for the workloads found in the input manifest files
