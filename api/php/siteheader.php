@@ -31,14 +31,14 @@ set_error_handler('myErrorHandler');
 register_shutdown_function('fatalErrorShutdownHandler');
 
 $sessionConfig = (new \ByJG\Session\SessionConfig($_SERVER['SERVER_NAME']))
-->withTimeoutHours(24)
+->withTimeoutMinutes(120)
 ->withSecret($_ENV['jwt_token'])
 ->replaceSessionHandler();
 
 $handler = new JwtSecureSession($sessionConfig);
 // session_set_save_handler($handler, true);
 
-session_start();
+// session_start();
 error_log(__FILE__ . "session:" . session_id());
 
 $GLOBALS['Db2Schema'] = strtoupper($_ENV['environment']);

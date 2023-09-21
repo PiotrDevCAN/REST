@@ -63,7 +63,7 @@ $sessionConfig = (new \ByJG\Session\SessionConfig($_SERVER['SERVER_NAME']))
 $handler = new JwtSecureSession($sessionConfig);
 // session_set_save_handler($handler, true);
 
-session_start();
+// session_start();
 error_log(__FILE__ . "session:" . session_id());
 do_auth();
 include "connect.php";
