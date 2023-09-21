@@ -582,23 +582,20 @@ trait resourceRequestHoursTableTrait
         if(!$result){
             DbTable::displayErrorMessage($result, __CLASS__, __METHOD__, 'prepared sql');
         }        
-        return $result ? true : false;        
+        return $result;        
     }
 
     function getArchieved($resourceReference=null){
         $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
-        $sql .= " WHERE RESOURCE_REFERENCE = ? ";
-        
-        $data = array($resourceReference);
-        $stmt = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
+        $sql .= " WHERE RESOURCE_REFERENCE = '" . htmlspecialchars($resourceReference) . "' ";
 
-        $result = sqlsrv_execute($stmt);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
-        if(!$result){
+        if(!$rs){
             DbTable::displayErrorMessage($result, __CLASS__, __METHOD__, $sql);
             return false;
         }
         
-        return $result;
+        return $rs;
     }
 }
