@@ -445,10 +445,10 @@ class activeResourceTable extends DbTable {
         $sql .= $version=='original' ? " SQUAD_NUMBER = null " : " OLD_SQUAD_NUMBER = null";
         $sql .= " WHERE CNUM='" . htmlspecialchars($cnum) . "' ";
 
-        $result = sqlsrv_query($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
-        if(!$result){
-            DbTable::displayErrorMessage($result, __CLASS__,__METHOD__, $sql);
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__,__METHOD__, $sql);
             return false;
         }
 
@@ -469,14 +469,14 @@ class activeResourceTable extends DbTable {
         $sql = ' SELECT FM_MANAGER_FLAG FROM "' . $GLOBALS['Db2Schema'] . '".' . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . htmlspecialchars(strtoupper(trim($emailAddress))) . "' ";
 
-        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
-        if(!$resultSet){
-            DbTable::displayErrorMessage($resultSet, __CLASS__, __METHOD__, $sql);
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         }
 
-        $row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC);
+        $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
 
         if(is_bool($row['FM_MANAGER_FLAG'])){
             throw new \Exception('problem in' . __FILE__ . __FUNCTION__);
@@ -500,14 +500,14 @@ class activeResourceTable extends DbTable {
         $sql = " SELECT CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . htmlspecialchars(strtoupper(trim($_SESSION['ssoEmail']))) . "' ";
 
-        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
-        if(!$resultSet){
-            DbTable::displayErrorMessage($resultSet, __CLASS__, __METHOD__, $sql);
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         }
 
-        $row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC);
+        $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
         $myCnum = strtoupper(trim($row['CNUM']));
         $_SESSION['myCnum'] = $myCnum;
         return $_SESSION['myCnum'];
@@ -525,14 +525,14 @@ class activeResourceTable extends DbTable {
         $sql = " SELECT FM_CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . htmlspecialchars(strtoupper(trim($_SESSION['ssoEmail']))) . "' ";
 
-        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
-        if(!$resultSet){
-            DbTable::displayErrorMessage($resultSet, __CLASS__, __METHOD__, $sql);
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         }
 
-        $row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC);
+        $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
         $myManagersCnum = strtoupper(trim($row['FM_CNUM']));
         $_SESSION['myManagersCnum'] = $myManagersCnum;
         return $_SESSION['myManagersCnum'];
@@ -542,14 +542,14 @@ class activeResourceTable extends DbTable {
         $sql = " SELECT NOTES_ID FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
         $sql .= " WHERE CNUM = '" . htmlspecialchars(strtoupper(trim($cnum))) . "' ";
 
-        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
-        if(!$resultSet){
-            DbTable::displayErrorMessage($resultSet, __CLASS__, __METHOD__, $sql);
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         }
 
-        $row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC);
+        $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
         $notesid = trim($row['NOTES_ID']);
         return $notesid;
     }

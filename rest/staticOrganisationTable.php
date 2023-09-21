@@ -21,15 +21,15 @@ class staticOrganisationTable extends DbTable
         $sql.= " WHERE 1=1 ";
         $sql.= empty($predicate) ? null : " AND " . $predicate;
         $sql .= " ORDER BY ORGANISATION, SERVICE  ";
-        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         $allOrganisations = array();
-        if($resultSet){
-            while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
+        if($rs){
+            while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
                 $allOrganisations[trim($row['ORGANISATION'])][] = trim($row['SERVICE']);
             }
         } else {
-            DbTable::displayErrorMessage($resultSet,__CLASS__, __METHOD__, $sql);
+            DbTable::displayErrorMessage($rs,__CLASS__, __METHOD__, $sql);
             return false;
         }
         return $allOrganisations;

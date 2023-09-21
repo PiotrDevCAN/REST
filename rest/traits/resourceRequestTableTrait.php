@@ -305,9 +305,9 @@ trait resourceRequestTableTrait
         $data = array();
 
         $preparedCountStatement = sqlsrv_prepare($GLOBALS['conn'], $countSql, $data);
-        $rs = sqlsrv_execute($preparedCountStatement);
-        if (! $rs) {
-            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $countSql);
+        $result = sqlsrv_execute($preparedCountStatement);
+        if (! $result) {
+            DbTable::displayErrorMessage($result, __CLASS__, __METHOD__, $countSql);
             return false;
         }
         
@@ -522,15 +522,15 @@ trait resourceRequestTableTrait
         $startDateSortable = !empty($row['START_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Ymd') : null;
         $startDateObj = !empty($row['START_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['START_DATE']) : null;
         
-        $endDate4Picka = !empty($row['END_DATE'])     ? \DateTime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Y-m-d') : null;
-        $endDate         = !empty($row['END_DATE'])     ? \DateTime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
-        $endDateSortable = !empty($row['END_DATE'])     ? \DateTime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
-        $endDateObj = !empty($row['END_DATE'])   ? \DateTime::createFromFormat('Y-m-d', $row['END_DATE']) : null;
+        $endDate4Picka = !empty($row['END_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Y-m-d') : null;
+        $endDate = !empty($row['END_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
+        $endDateSortable = !empty($row['END_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
+        $endDateObj = !empty($row['END_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['END_DATE']) : null;
         
         is_object($endDateObj) ?  $endDateObj->setTime(23, 59, 59) : null; // When setting completed, compare against midnight on END_DATE
         
-        $rfsEndDate      = !empty($row['RFS_END_DATE'])     ? \DateTime::createFromFormat('Y-m-d', $row['RFS_END_DATE'])->format('d M Y') : null;
-        $rfsEndDate4Picka = !empty($row['RFS_END_DATE'])     ? \DateTime::createFromFormat('Y-m-d', $row['RFS_END_DATE'])->format('Y-m-d') : null;
+        $rfsEndDate = !empty($row['RFS_END_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['RFS_END_DATE'])->format('d M Y') : null;
+        $rfsEndDate4Picka = !empty($row['RFS_END_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['RFS_END_DATE'])->format('Y-m-d') : null;
         
         $totalHours = $row['TOTAL_HOURS'];
         $hoursType = $row['HOURS_TYPE'];
@@ -1044,15 +1044,15 @@ trait resourceRequestTableTrait
         $sql.= " WHERE 1=1 ";
         $sql.= empty($predicate) ? null : " AND " . $predicate;
         $sql .= " ORDER BY RFS, RESOURCE_REFERENCE  ";
-        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         $allResourceRequests = array();
-        if($resultSet){
-            while ($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
+        if($rs){
+            while ($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
                 $allResourceRequests[trim($row['RFS'])][] = trim($row['RESOURCE_REFERENCE']);
             }
         } else {
-            DbTable::displayErrorMessage($resultSet,__CLASS__, __METHOD__, $sql);
+            DbTable::displayErrorMessage($rs,__CLASS__, __METHOD__, $sql);
             return false;
         }
         return $allResourceRequests;
@@ -1063,15 +1063,15 @@ trait resourceRequestTableTrait
         $sql.= " WHERE 1=1 ";
         $sql.= empty($predicate) ? null : " AND " . $predicate;
         $sql .= " ORDER BY RFS, RESOURCE_REFERENCE  ";
-        $resultSet = sqlsrv_query($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         $allResourceRequests = array();
-        if($resultSet){
-            while ($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
+        if($rs){
+            while ($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
                 $allResourceRequests[trim($row['RFS'])][] = array_map('trim',$row);
             }
         } else {
-            DbTable::displayErrorMessage($resultSet,__CLASS__, __METHOD__, $sql);
+            DbTable::displayErrorMessage($rs,__CLASS__, __METHOD__, $sql);
             return false;
         }
         return $allResourceRequests;

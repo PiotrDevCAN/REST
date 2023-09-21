@@ -1194,8 +1194,8 @@ class DbTable
         }
         if ($cols['SERIAL_NUMBER'] != null) {
             $this->logRecord($preparedSelect, $cols, "<B>Before image </b>");
-            $rs = sqlsrv_execute($preparedUpdate);
-            if (! $rs) {
+            $result = sqlsrv_execute($preparedUpdate);
+            if (! $result) {
                 echo "<BR/>" . json_encode(sqlsrv_errors());
                 echo "<BR/>" . json_encode(sqlsrv_errors()) . "<BR/>";
                 echo "<BR/> Cols: " . var_export($cols, true) . "<BR/>Db2Columns : " . var_export($cols, true) . "<BR/> ex Serial: $exSerial";

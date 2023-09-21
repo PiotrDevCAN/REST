@@ -518,13 +518,13 @@ trait resourceRequestHoursTableTrait
 
             $data = array($wef);
             $stmt = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
-            $rs = sqlsrv_execute($stmt);
 
-            if(!$rs){
-                DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+            $result = sqlsrv_execute($stmt);
+
+            if(!$result){
+                DbTable::displayErrorMessage($result, __CLASS__, __METHOD__, $sql);
             }
-            
-            while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
+            while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
                 $this->hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] = $row['HOURS_TO_GO'];
                 $this->hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] = $row['WEEKS_TO_GO'];
             }
@@ -546,7 +546,7 @@ trait resourceRequestHoursTableTrait
         error_log($sql);
         
         $rs = sqlsrv_query($GLOBALS['conn'], $sql);
-               
+        
         error_log("Db2_Num_Rows:" . db2_num_rows($rs));
         
         if(!$rs){
@@ -577,12 +577,12 @@ trait resourceRequestHoursTableTrait
         $data = array($hours, $wef, $resourceReference);
         $stmt = $this->prepareSetHoursForWef($data);         
         
-        $rs = sqlsrv_execute($stmt);
+        $result = sqlsrv_execute($stmt);
         
-        if(!$rs){
-            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, 'prepared sql');
+        if(!$result){
+            DbTable::displayErrorMessage($result, __CLASS__, __METHOD__, 'prepared sql');
         }        
-        return $rs ? true : false;        
+        return $result ? true : false;        
     }
 
     function getArchieved($resourceReference=null){
@@ -591,13 +591,14 @@ trait resourceRequestHoursTableTrait
         
         $data = array($resourceReference);
         $stmt = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
-        $rs = sqlsrv_execute($stmt);
 
-        if(!$rs){
-            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+        $result = sqlsrv_execute($stmt);
+
+        if(!$result){
+            DbTable::displayErrorMessage($result, __CLASS__, __METHOD__, $sql);
             return false;
         }
         
-        return $rs;
+        return $result;
     }
 }

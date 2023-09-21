@@ -14,10 +14,10 @@ echo $sql;
 
 $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
 
-$resultSet = sqlsrv_query($GLOBALS['conn'],$sql);
+$rs = sqlsrv_query($GLOBALS['conn'],$sql);
 
-if($resultSet){
-    while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
+if($rs){
+    while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
         print_r($row);
         if(!empty($row['START_DATE']) && !empty($row['END_DATE']) && !empty($row['HRS_PER_WEEK'])){
             $resourceHoursTable->createResourceRequestHours($row['RESOURCE_REFERENCE'],$row['START_DATE'], $row['END_DATE'], $row['HRS_PER_WEEK']);

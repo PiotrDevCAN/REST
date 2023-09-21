@@ -224,16 +224,10 @@ class BlueMail
         !empty($bcc) ? $data[] = serialize($bcc) : null;
 
         $preparedStatement = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
-        $rs = sqlsrv_execute($preparedStatement);
+        $result = sqlsrv_execute($preparedStatement);
 
-//         $sql  = " INSERT INTO " . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
-//         $sql .= " (TO, SUBJECT, MESSAGE, DATA_JSON ) VALUES ( '" . htmlspecialchars(serialize($to)) ."','" . htmlspecialchars($subject) . "'";
-//         $sql .= " ,'" . htmlspecialchars($message) . "','" . htmlspecialchars($data_json) . "'); ";
-
-//         $rs = sqlsrv_query($GLOBALS['conn'], $sql);
-
-        if(!$rs){
-            DbTable::displayErrorMessage($rs,__CLASS__,__METHOD__,$sql);
+        if(!$result){
+            DbTable::displayErrorMessage($result,__CLASS__,__METHOD__,$sql);
             $emailRecordId = false;
         } else {
             sqlsrv_commit($GLOBALS['conn']);
