@@ -45,7 +45,7 @@ class staticResourceTraitsTable extends DbTable
         }
         $displayAble = array();
 
-        while($row = sqlsrv_fetch_array($rs)){
+        while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             
             $this->addGlyphicons($row);
             
@@ -74,7 +74,7 @@ class staticResourceTraitsTable extends DbTable
     //         DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
     //         return false;
     //     }
-    //     $row = sqlsrv_fetch_array($rs);
+    //     $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
 
     //     return $row;
     // }

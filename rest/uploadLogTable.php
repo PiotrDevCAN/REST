@@ -15,7 +15,7 @@ class uploadLogTable extends DbTable
         $sql .= " OPTIMIZE FOR 1 ROW ";
 
         $resultSet = $this->execute($sql);
-        $row = sqlsrv_fetch_array($resultSet);
+        $row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC);
 
         if($row){
             $uploadLogRecord = new uploadLogRecord();
@@ -37,7 +37,7 @@ class uploadLogTable extends DbTable
 
         $resultSet = $this->execute($sql);
 
-        $row = sqlsrv_fetch_array($resultSet);
+        $row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC);
 
         if($row){
             $uploadLogRecord = new uploadLogRecord();

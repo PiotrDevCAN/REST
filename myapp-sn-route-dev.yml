@@ -6,6 +6,9 @@ metadata:
     type: internal-apps-001
   name: rest-route-dev
   namespace: ns-rest-gd-kps-dev-wus3
+  annotations:
+    description: Route for REST Development instance.
+    haproxy.router.openshift.io/timeout: 3600s
 spec:
   host: rest-dev.zkpw3uspriv.app.kyndryl.net
   port:

@@ -50,7 +50,7 @@ class activeResourceTable extends DbTable {
             return false;
         }
 
-        $topRow = sqlsrv_fetch_array($rs);
+        $topRow = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
         if(isset($topRow[0])){
             $thisCnum = substr($topRow[0],1,5);
             $next = $thisCnum+1;
@@ -127,7 +127,7 @@ class activeResourceTable extends DbTable {
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         } else {
-            while($row = sqlsrv_fetch_array($rs)){
+            while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
                 // Only editable, if they're not a "pre-Boarder" who has now been boarded.
                 $preparedRow = $this->prepareFields($row);
                 $rowWithButtonsAdded =(substr($row['PES_STATUS_DETAILS'],0,7)=='Boarded') ? $preparedRow : $this->addButtons($preparedRow);
@@ -151,7 +151,7 @@ class activeResourceTable extends DbTable {
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         } else {
-            while($row = sqlsrv_fetch_array($rs)){
+            while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
                 $cnum = trim($row['CNUM']);
                 $preparedRow = $this->prepareFields($row);
                 $fmCnumField = $preparedRow['FM_CNUM'];
@@ -184,7 +184,7 @@ class activeResourceTable extends DbTable {
 
         $displayAble = array();
 
-        while($row = sqlsrv_fetch_array($rs)){
+        while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             $display = array();
             $row = array_map('trim', $row);
             $display['EMAIL_ADDRESS'] = !empty($row['EMAIL_ADDRESS']) ? $row['EMAIL_ADDRESS'] : 'unavailable in VBAC';
@@ -206,7 +206,7 @@ class activeResourceTable extends DbTable {
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         } else {
-            while($row = sqlsrv_fetch_array($rs)){
+            while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
                 $jsonEncodable = json_encode($row);
                 if(!$jsonEncodable){
                     echo "<hr/><br/>Dirty Data Found in record for : " . $row['CNUM'];
@@ -476,7 +476,7 @@ class activeResourceTable extends DbTable {
             return false;
         }
 
-        $row = sqlsrv_fetch_array($resultSet);
+        $row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC);
 
         if(is_bool($row['FM_MANAGER_FLAG'])){
             throw new \Exception('problem in' . __FILE__ . __FUNCTION__);
@@ -507,7 +507,7 @@ class activeResourceTable extends DbTable {
             return false;
         }
 
-        $row = sqlsrv_fetch_array($resultSet);
+        $row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC);
         $myCnum = strtoupper(trim($row['CNUM']));
         $_SESSION['myCnum'] = $myCnum;
         return $_SESSION['myCnum'];
@@ -532,7 +532,7 @@ class activeResourceTable extends DbTable {
             return false;
         }
 
-        $row = sqlsrv_fetch_array($resultSet);
+        $row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC);
         $myManagersCnum = strtoupper(trim($row['FM_CNUM']));
         $_SESSION['myManagersCnum'] = $myManagersCnum;
         return $_SESSION['myManagersCnum'];
@@ -549,7 +549,7 @@ class activeResourceTable extends DbTable {
             return false;
         }
 
-        $row = sqlsrv_fetch_array($resultSet);
+        $row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC);
         $notesid = trim($row['NOTES_ID']);
         return $notesid;
     }
@@ -580,7 +580,7 @@ class activeResourceTable extends DbTable {
             return false;
         }
         $options = array();
-        while($row = sqlsrv_fetch_array($rs)){
+        while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             $option  = "<option value='" . trim($row['CNUM']) ."'";
             $option .= trim($row['CNUM']) == trim($preBoarded) ? ' selected ' : null;
             $option .= " >" . trim($row['FIRST_NAME']) ." " . trim($row['LAST_NAME'])  . " (" . trim($row['EMAIL_ADDRESS']) .") ";

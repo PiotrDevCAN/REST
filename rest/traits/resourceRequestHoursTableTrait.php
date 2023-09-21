@@ -347,7 +347,7 @@ trait resourceRequestHoursTableTrait
                     break;
                 case $resultSet:
                     $allData = array();
-                    while($row = sqlsrv_fetch_array($resultSet)){
+                    while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
                         $allData[]  = array_map('trim',$row);
                     }
                     return $allData;                
@@ -408,7 +408,7 @@ trait resourceRequestHoursTableTrait
                 break;
             case $resultSet:
                 $allData = array();
-                while($row = sqlsrv_fetch_array($resultSet)){
+                while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
                     $allData[]  = array_map('trim',$row);
                 }
                 return $allData;                
@@ -469,7 +469,7 @@ trait resourceRequestHoursTableTrait
                 break;
             case $resultSet:
                 $allData = array();
-                while($row = sqlsrv_fetch_array($resultSet)){
+                while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
                     $allData[]  = array_map('trim',$row);
                 }
                 return $allData;                
@@ -491,11 +491,11 @@ trait resourceRequestHoursTableTrait
         $allData = null;
 
         if($assoc){
-            while($row = sqlsrv_fetch_array($resultSet)){
+            while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
                 $allData[]  = $row;
             }
         }  else {
-            while($row = sqlsrv_fetch_array($resultSet)){
+            while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
                 $allData[]  = $row;
             }
         }
@@ -524,10 +524,10 @@ trait resourceRequestHoursTableTrait
                 DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             }
             
-            while($row = sqlsrv_fetch_array($rs)){
+            while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
                 $this->hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] = $row['HOURS_TO_GO'];
                 $this->hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] = $row['WEEKS_TO_GO'];
-             }
+            }
         }        
         return $this->hoursRemainingByReference;
     }

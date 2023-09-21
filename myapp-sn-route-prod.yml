@@ -6,6 +6,9 @@ metadata:
     type: internal-apps-001
   name: rest-route-prod
   namespace: ns-rest-gd-kps-prd-wus3
+  annotations:
+    description: Route for REST Production instance.
+    haproxy.router.openshift.io/timeout: 3600s
 spec:
   host: rest.zkpw3uspriv.app.kyndryl.net
   port:

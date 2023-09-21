@@ -212,7 +212,7 @@ trait rfsTableTrait
         var knownRfs = [];
         <?php
 
-        while ($row = sqlsrv_fetch_array($rs)){
+        while ($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             ?>knownRfs.push("<?=strtoupper(trim($row['RFS_ID']));?>");
             <?php
         }
@@ -229,7 +229,7 @@ trait rfsTableTrait
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);            
         }
         
-        $row = sqlsrv_fetch_array($rs);
+        $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
         return trim($row['REQUESTOR_EMAIL']);
     }
 
@@ -311,7 +311,7 @@ trait rfsTableTrait
                 DbTable::displayErrorMessage($rs,__CLASS__, __METHOD__, $sql);
             }
 
-            while($row = sqlsrv_fetch_array($rs)){
+            while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
                 $this->rfsMaxEndDate[strtoupper(trim($row['RFS']))] = isset($row['END_DATE']) ? trim($row['END_DATE']) : null ;
             }
         }
@@ -397,7 +397,7 @@ trait rfsTableTrait
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
-        while($row = sqlsrv_fetch_array($resultSet)){
+        while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
@@ -488,7 +488,7 @@ trait rfsTableTrait
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
-        while($row = sqlsrv_fetch_array($resultSet)){
+        while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.
@@ -592,7 +592,7 @@ trait rfsTableTrait
                 return $resultSet;
                 break;
             case $resultSet:
-                while($row = sqlsrv_fetch_array($resultSet)){
+                while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
                     $testJson = json_encode($row);
                     if(!$testJson){
                         break; // It's got invalid chars in it that will be a problem later.
@@ -705,7 +705,7 @@ trait rfsTableTrait
         $resultSet ? null : die("SQL Failed");
         $allData = array();
 
-        while($row = sqlsrv_fetch_array($resultSet)){
+        while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.

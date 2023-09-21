@@ -77,7 +77,7 @@ class IconRolesTable extends DbTable {
 // 			return false;
 // 		} else {
 // 			$allCustomerRefs = array ();
-// 			while ( $row = sqlsrv_fetch_array( $rs ) ) {
+// 			while ( $row = sqlsrv_fetch_array( $rs, SQLSRV_FETCH_ASSOC ) ) {
 // 				$allCustomerRefs [$row ['CUSTOMER_ID']] = $row ['CUSTOMER_REF'];
 // 			}
 // 			Trace::traceTimings ( null, __METHOD__, __LINE__ );
@@ -97,7 +97,7 @@ class IconRolesTable extends DbTable {
 // 			return false;
 // 		} else {
 // 			$allRoles = array ();
-// 			while ( $row = sqlsrv_fetch_array( $rs ) ) {
+// 			while ( $row = sqlsrv_fetch_array( $rs, SQLSRV_FETCH_ASSOC ) ) {
 // 				$allRoles [$row ['ROLE']] = $row ['ROLE'];
 // 			}
 // 			Trace::traceTimings ( null, __METHOD__, __LINE__ );
@@ -132,7 +132,7 @@ class IconRolesTable extends DbTable {
 // 			return false;
 // 		} else {
 // 			$allAddresses = array ();
-// 			while ( $row = sqlsrv_fetch_array( $rs ) ) {
+// 			while ( $row = sqlsrv_fetch_array( $rs, SQLSRV_FETCH_ASSOC ) ) {
 // 				$allAddresses [$row ['PERSON_INTRANET']] = $row ['PERSON_INTRANET'];
 // 			}
 // 			Trace::traceTimings ( null, __METHOD__, __LINE__ );

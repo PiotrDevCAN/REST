@@ -46,7 +46,7 @@ trait diaryTableTrait
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
         }
         $comment = '<table class="table table-striped" ><tbody>';
-        while($row = sqlsrv_fetch_array($rs)){
+        while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             $comment.= "<tr><td class='diaryEntryCell'>" . $row['ENTRY'] . "</td><td class='diaryCreatorCell'><b>" . $row['CREATOR'] . "</b><br>" . $row['CREATED'] . "</small></td><tr>";
         }
         $comment.= '</tbody></table>';
@@ -71,7 +71,7 @@ trait diaryTableTrait
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
         }
         $entries = array();
-        while($row = sqlsrv_fetch_array($rs)){
+        while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             $entries[$row['RESOURCE_REFERENCE']] = $row;
         }
         

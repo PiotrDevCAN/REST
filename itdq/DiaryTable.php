@@ -24,7 +24,7 @@ class DiaryTable  extends DbTable {
 			exit ( "Error in: " . __METHOD__ . " running: " . $sql );
 		}
 
-		while($row = sqlsrv_fetch_array($rs)){
+		while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
 			$latestDiaryId = $row['LATEST_DIARY_REF'];
 		}
 		$latestDiaryId++;

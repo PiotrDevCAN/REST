@@ -27,7 +27,7 @@ class staticResourceTypesTable extends DbTable
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         }
-        $row = sqlsrv_fetch_array($rs);
+        $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
 
         return $row;
     }

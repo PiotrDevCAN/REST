@@ -24,7 +24,7 @@ $data = array();
 
 if($rs){
     $data[] = array('id'=>'All','text'=>'All'); 
-    while($row = sqlsrv_fetch_array($rs)){
+    while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
         $data[] = array('id'=>trim($row['RFS']),'text'=>trim($row['RFS']));        
     }
 } else {

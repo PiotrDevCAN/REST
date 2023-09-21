@@ -40,7 +40,7 @@ class staticBandTable extends DbTable
 
         $displayAble = array();
 
-        while($row = sqlsrv_fetch_array($rs)){
+        while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             
             $this->addGlyphicons($row);
             

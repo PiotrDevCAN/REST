@@ -18,7 +18,7 @@ if(!$rs){
     DbTable::displayErrorMessage($rs, 'ajax', __FILE__, $sql);
 }
 
-$row = sqlsrv_fetch_array($rs);
+$row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
 
 $endDate = !empty($row['RFS_END_DATE']) ? $row['RFS_END_DATE'] : null;
 

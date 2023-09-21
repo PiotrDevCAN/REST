@@ -25,7 +25,7 @@ class staticOrganisationTable extends DbTable
 
         $allOrganisations = array();
         if($resultSet){
-            while($row = sqlsrv_fetch_array($resultSet)){
+            while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
                 $allOrganisations[trim($row['ORGANISATION'])][] = trim($row['SERVICE']);
             }
         } else {
@@ -81,7 +81,7 @@ class staticOrganisationTable extends DbTable
 
         $displayAble = array();
 
-        while($row = sqlsrv_fetch_array($rs)){
+        while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             $display = array();
             $row = array_map('trim', $row);
             $display['ORGANISATION'] = $row['ORGANISATION'];

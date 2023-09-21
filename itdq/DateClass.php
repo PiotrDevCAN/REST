@@ -235,7 +235,7 @@ class DateClass {
         
         $data = array();
 
-        while($row = sqlsrv_fetch_array($rs)){
+        while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             $data[] = $row['BH_DATE'];
         }
         

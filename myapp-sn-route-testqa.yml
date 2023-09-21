@@ -6,6 +6,9 @@ metadata:
     type: internal-apps-001
   name: rest-route-testqa
   namespace: ns-rest-gd-kps-testqa-wus3
+  annotations:
+    description: Route for REST TestQA instance.
+    haproxy.router.openshift.io/timeout: 3600s
 spec:
   host: rest-testqa.zkpw3uspriv.app.kyndryl.net
   port:

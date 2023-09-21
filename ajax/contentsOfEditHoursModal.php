@@ -113,7 +113,7 @@ ob_start();
 $monthColours = array(1=>'#bdbdbd',2=>'#eeeeee',3=>'#bdbdbd',4=>'#eeeeee',5=>'#bdbdbd',6=>'#eeeeee',7=>'#bdbdbd',8=>'#eeeeee',9=>'#bdbdbd',10=>'#eeeeee',11=>'#bdbdbd',12=>'#eeeeee',);
 $claimMonths = array(1=>'Jan',2=>'Feb',3=>'Mar',4=>'Apr',5=>'May',6=>'Jun',7=>'Jul',8=>'Aug',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Dec',);
 
-while($row = sqlsrv_fetch_array($resourceHoursRs)){
+while($row = sqlsrv_fetch_array($resourceHoursRs, SQLSRV_FETCH_ASSOC)){
     $week = $row['DATE'];
     $hours = $row['HOURS'];
     $wef = $row['WEEK_ENDING_FRIDAY'];

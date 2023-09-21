@@ -224,7 +224,7 @@ class resourceRequestTable extends DbTable
                 return $resultSet;
                 break;
             case $resultSet:
-                while($row = sqlsrv_fetch_array($resultSet)){
+                while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
                     $allData[]  = array_map('trim',$row);
                 }
                 return array('data'=>$allData, 'sql'=>$sql);            
@@ -331,7 +331,7 @@ class resourceRequestTable extends DbTable
                 break;
             case $resultSet:
                 $allData = array();
-                while($row = sqlsrv_fetch_array($resultSet)){
+                while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
                     $allData[]  = array_map('trim',$row);
                 }
                 return array('data'=>$allData, 'sql'=>$sql);            

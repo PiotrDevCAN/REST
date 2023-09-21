@@ -65,7 +65,7 @@ trait resourceRequestTableTrait
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
         }
 
-        $row = sqlsrv_fetch_array($rs);
+        $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
         
         return $row ? trim($row['RESOURCE_NAME']) : false;
     }
@@ -110,7 +110,7 @@ trait resourceRequestTableTrait
             return false;
         }
         
-        while($row = sqlsrv_fetch_array($rs)){
+        while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             $this->lastDiaryEntriesByResourceReference[$row['RESOURCE_REFERENCE']] = $row;        
         }
         
@@ -249,7 +249,7 @@ trait resourceRequestTableTrait
         $allData = array();
         $allData['data'] = array();
 
-        while($row = sqlsrv_fetch_array($resultSet)){
+        while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
             PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
             $testJson = json_encode($row);
             if (!$testJson){
@@ -312,7 +312,7 @@ trait resourceRequestTableTrait
         }
         
         $counter = 0;
-        while($row = sqlsrv_fetch_array($preparedCountStatement)){
+        while($row = sqlsrv_fetch_array($preparedCountStatement, SQLSRV_FETCH_ASSOC)){
             $counter = $row['COUNTER'];
         }
 
@@ -478,7 +478,7 @@ trait resourceRequestTableTrait
         $allData = array();
         $allData['data'] = array();
 
-        while($row = sqlsrv_fetch_array($resultSet)){
+        while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
             PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
             $testJson = json_encode($row);
             if (!$testJson){
@@ -983,7 +983,7 @@ trait resourceRequestTableTrait
         }
      
         $data = array();
-        while ($row = sqlsrv_fetch_array($rs)){
+        while ($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             $data[$row['RESOURCE_REFERENCE']] = $row;
         }
         
@@ -1048,7 +1048,7 @@ trait resourceRequestTableTrait
 
         $allResourceRequests = array();
         if($resultSet){
-            while ($row = sqlsrv_fetch_array($resultSet)){
+            while ($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
                 $allResourceRequests[trim($row['RFS'])][] = trim($row['RESOURCE_REFERENCE']);
             }
         } else {
@@ -1067,7 +1067,7 @@ trait resourceRequestTableTrait
 
         $allResourceRequests = array();
         if($resultSet){
-            while ($row = sqlsrv_fetch_array($resultSet)){
+            while ($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
                 $allResourceRequests[trim($row['RFS'])][] = array_map('trim',$row);
             }
         } else {
