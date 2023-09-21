@@ -12,10 +12,10 @@ spec:
   - host: rest-testqa.zkpw3uspriv.app.kyndryl.net
     http:
       paths:
-      - backend:
+      - path: /
+        pathType: Prefix
+        backend:
           service:
             name: rest-svc
             port:
               number: 8080
-        path: /
-        pathType: Prefix
