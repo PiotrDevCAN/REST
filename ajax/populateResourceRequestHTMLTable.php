@@ -22,13 +22,13 @@ $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
 $organisation = !empty($_POST['organisation']) ? $_POST['organisation'] : null;
 $businessUnit = !empty($_POST['businessunit']) ? $_POST['businessunit'] : null;
 
-// if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
-//     $response = array(
-//         'messages' => 'User hasnt selected from the drop downs.',
-//         'badrecords' => 0,
-//         "data" => array()
-//     );
-// } else {
+if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
+    $response = array(
+        'messages' => 'User hasnt selected from the drop downs.',
+        'badrecords' => 0,
+        "data" => array()
+    );
+} else {
 
     $rfsId        = $rfsId=='All'        ? null : $rfsId;
     $organisation = $organisation=='All' ? null : $organisation;
@@ -44,22 +44,9 @@ $businessUnit = !empty($_POST['businessunit']) ? $_POST['businessunit'] : null;
     error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
 
     $dataAndSql = $resourceRequestTable->returnAsArraySimple($predicate, $pipelineLiveArchive);
-    list('data' => $data, 'sql' => $sql) = $dataAndSql;
+    list('data' => $data, 'sql' => $sql, 'badRecords' => $badRecords) = $dataAndSql;
 
     PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
-
-    $testJson = json_encode($data);
-    $badRecords = 0;
-    if (! $testJson) {
-        foreach ($data as $ref => $record) {
-            $testRecord = json_encode($record);
-            if (! $testRecord) {
-                $badRecords ++;
-                unset($data[$ref]);
-            }
-        }
-    }
-
     PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
 
     echo "Bad Records removed:$badRecords";
@@ -74,10 +61,7 @@ $businessUnit = !empty($_POST['businessunit']) ? $_POST['businessunit'] : null;
         "data" => $data,
         "sql" => $sql
     );
-// }
-
-echo 'TEST 22';
-exit;
+}
 
 $json = json_encode($response);
 

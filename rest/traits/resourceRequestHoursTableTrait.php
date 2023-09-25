@@ -13,7 +13,7 @@ trait resourceRequestHoursTableTrait
 {
     private $preparedGetTotalHrsStatement;
     private $preparedSetHrsStatement;
-    private $hoursRemainingByReference;
+    // private $hoursRemainingByReference;
     
     function createResourceRequestHours($resourceReference=null, $startDate=null, $endDate=null, $hours=0, $deleteExisting=true, $hrsType=resourceRequestRecord::HOURS_TYPE_REGULAR){
         
@@ -503,7 +503,13 @@ trait resourceRequestHoursTableTrait
     }
 
     function getHoursRemainingByReference(){
-        if($this->hoursRemainingByReference==null){
+
+        $redis = $GLOBALS['redis'];
+        $redisKey = md5('getHoursRemainingByReference_TEST_key_'.$_ENV['environment']);
+        if (!$redis->get($redisKey)) {
+
+            $hoursRemainingByReference = array();
+
             $date = new \DateTime();
             
             $sql = " select RESOURCE_REFERENCE, SUM(CAST(HOURS as decimal(6,2))) as HOURS_TO_GO, count(*) as WEEKS_TO_GO ";
@@ -525,11 +531,18 @@ trait resourceRequestHoursTableTrait
                 DbTable::displayErrorMessage($result, __CLASS__, __METHOD__, $sql);
             }
             while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-                $this->hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] = $row['HOURS_TO_GO'];
-                $this->hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] = $row['WEEKS_TO_GO'];
+                $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] = $row['HOURS_TO_GO'];
+                $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] = $row['WEEKS_TO_GO'];
             }
-        }        
-        return $this->hoursRemainingByReference;
+
+            $redis->set($redisKey, json_encode($result));
+            $redis->expire($redisKey, REDIS_EXPIRE);
+        } else {
+            $source = 'Redis Server';
+            $hoursRemainingByReference = json_decode($redis->get($redisKey), true);
+        }
+
+        return $hoursRemainingByReference;
     }
 
     static function removeHoursRecordsForRfsPriorToday($rfsId){

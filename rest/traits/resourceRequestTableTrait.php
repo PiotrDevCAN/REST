@@ -358,16 +358,13 @@ trait resourceRequestTableTrait
         $data = $resourceTable->getVbacActiveResourcesForSelect2();
         list('vbacEmployees' => $vbacEmployees, 'tribeEmployees' => $tribeEmployees) = $data;
         $this->vbacEmployeesWithSquad = array_column($vbacEmployees, 'id');
-
-        // $autoCommit = sqlsrv_commit($GLOBALS['conn']);
-        // sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);        
         
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
         $hoursRemainingByReference = $resourceRequestHoursTable->getHoursRemainingByReference();
         
         $resourceRequestTableName = allTables::$RESOURCE_REQUESTS;
         // $resourceRequestHoursTableName = allTables::$RESOURCE_REQUEST_HOURS;
-
+        
         $sql = " SELECT RFS.RFS_ID,";
         $sql .= " RFS.PRN,";
         $sql .= " RFS.PROJECT_TITLE,";
@@ -471,36 +468,52 @@ trait resourceRequestTableTrait
         error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
         error_log(__FILE__ . ":" . __LINE__ . ":" . $sql);
 
-        $resultSet = $this->execute($sql);
-
-        $resultSet ? null : die("SQL Failed");
-
         $allData = array();
         $allData['data'] = array();
+        $badRecords = 0;
 
-        while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
-            PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
-            $testJson = json_encode($row);
-            if (!$testJson){
-                error_log("Invalid character found");
-                error_log(print_r($row,true));
-                
-                throw new \Exception("Invalid character found in Row ");
-                break; // It's got invalid chars in it that will be a problem later.
-            }
-            $row = array_map('trim',$row);
-            $row['hours_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] : null;
-            $row['weeks_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] : null;
+        $redis = $GLOBALS['redis'];
+        $redisKey = md5($sql.'_key_'.$_ENV['environment']);
+        if (!$redis->get($redisKey)) {
+            $source = 'SQL Server';
             
-            $withButtons ? $this->addGlyphicons($row) : null;
-            $allData['data'][]  = $row;
+            $resultSet = $this->execute($sql);
+            $resultSet ? null : die("SQL Failed");
+
+            $result = array();
+            while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
+                PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
+                $testJson = json_encode($row);
+                if(!$testJson){
+                    $badRecords ++;
+                    break; // It's got invalid chars in it that will be a problem later.
+                }
+                $result[] = $row;
+            }
+
+            $redis->set($redisKey, json_encode($result));
+            $redis->expire($redisKey, REDIS_EXPIRE);
+        } else {
+            $source = 'Redis Server';
+            $result = json_decode($redis->get($redisKey), true);
+        }
+
+        if (is_iterable($result)) {
+            foreach ($result as $key => $row) {
+                $row = array_map('trim',$row);
+                $row['hours_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] : null;
+                $row['weeks_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] : null;
+                
+                $withButtons ? $this->addGlyphicons($row) : null;
+                $allData['data'][]  = $row;
+            }
         }
 
         $allData['sql'] = $sql;
-        
-        // sqlsrv_commit($GLOBALS['conn'],$autoCommit);
+        $allData['badRecords'] = $badRecords;
 
-        return $allData ;
+        echo $source;
+        return $allData;
     }
 
     function addGlyphicons(&$row){
@@ -873,99 +886,112 @@ trait resourceRequestTableTrait
     
     static function getVbacActiveResourcesForSelect2(){
 
-        $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=SQUAD_NAME,TRIBE_NAME,P.EMAIL_ADDRESS,P.KYN_EMAIL_ADDRESS';
+        $redis = $GLOBALS['redis'];
+        $redisKey = md5('getVbacActiveResources_key_'.$_ENV['environment']);
+        if (!$redis->get($redisKey)) {
+            $source = 'cURL Server';
+            
+            $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&withProvClear=true&plus=SQUAD_NAME,TRIBE_NAME,P.EMAIL_ADDRESS,P.KYN_EMAIL_ADDRESS';
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HEADER,         1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HEADER,        FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);  // it doesn't like the self signed certs on Cirrus
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_URL, $url);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_HEADER,         1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_HEADER,        FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);  // it doesn't like the self signed certs on Cirrus
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_URL, $url);
+    
+            $allEmployeesJson = curl_exec($ch);
+            $err = curl_error($ch);
+    
+            curl_close($ch);
+            
+            if ($err) {
+                // echo "cURL Error #:" . $err;
+                throw new \Exception('vBAC CURL call failed');
+            } else {
 
-        $allEmployeesJson = curl_exec($ch);
-        $err = curl_error($ch);
+                $allTribes = array();
+                $vbacEmployees = array();
+                $myTribe = '';
+                $allEmployees = json_decode($allEmployeesJson);
 
-        curl_close($ch);
+                if (is_iterable($allEmployees)) {
+                    foreach ($allEmployees as $key => $employeeDetails) {
 
-        $allTribes = array();
-        $vbacEmployees = array();
-        $myTribe = '';
-        
-        if ($err) {
-            // echo "cURL Error #:" . $err;
-            throw new \Exception('vBAC CURL call failed');
-        } else {
-            $allEmployees = json_decode($allEmployeesJson);
-            if (is_iterable($allEmployees)) {
-                foreach ($allEmployees as $key => $employeeDetails) {
-
-                    // get all tribe names
-                    !empty($employeeDetails->TRIBE_NAME) ? $allTribes[trim($employeeDetails->TRIBE_NAME)] = trim($employeeDetails->TRIBE_NAME) : null;
-                    
-                    // Filter out invalid Notes Ids                    
-                    // if (strtolower(substr(trim($employeeDetails->NOTES_ID), -4))=='/ibm' || strtolower(substr(trim($employeeDetails->NOTES_ID), -6))=='/ocean') {
-                        $vbacEmployees[] = array(
-                            'id'=>trim($employeeDetails->NOTES_ID), 
-                            'emailAddress'=>trim($employeeDetails->EMAIL_ADDRESS),
-                            'kynEmailAddress'=>trim($employeeDetails->KYN_EMAIL_ADDRESS),
-                            'text'=>trim($employeeDetails->NOTES_ID), 
-                            'role'=>trim($employeeDetails->SQUAD_NAME),
-                            'tribe'=>trim($employeeDetails->TRIBE_NAME),
-                            'distance'=>'remote'
-                        );
-                    // }
-                    
-                    // get employee's tribe name
-                    if (strtolower($employeeDetails->EMAIL_ADDRESS) == strtolower($_SESSION['ssoEmail'])){
-                        $myTribe = $employeeDetails->TRIBE_NAME;
-                    }
-                }
-            }
-        }
-
-        // Find business unit for this tribe.     
-//         $bestMatchScore = 0;
-//         $bestMatch = '';
-//         if (!empty($myTribe)){
-//             foreach ($allTribes as $tribe) {
-//                 $matchScore = similar_text($myTribe, $tribe);
-//                 if ($matchScore > $bestMatchScore){
-//                     $bestMatchScore = $matchScore;
-//                     $bestMatch = $tribe;
-//                 }
-//             }
-//         } else {
-//             throw new Exception("No tribe found for : " . $_SESSION['ssoEmail']);
-//         }
-         
-        $tribeEmployees = array();
-        // process the employees, flagging as 'local' those in the "myTribe" tribe
-        foreach ($vbacEmployees as $value) {
-            if (strtolower(substr(trim($value['id']), -4))=='/ibm' || strtolower(substr(trim($value['id']), -6))=='/ocean'){  // Filter out invalid Notes Ids
-                if (!empty(trim($value['role']) && !empty(trim($value['tribe'])))) {
-                    if (!empty($myTribe) && strtolower($value['tribe']) == strtolower($myTribe)){
-                        $value['distance']='local';
-                        // $tribeEmployees[trim($value['id'])] = $value;
-                        $tribeEmployees[] = $value;
-                    } else {
-                        if (isset($_SESSION['isAdmin']) || isset($_SESSION['isSupplyX'])){
-                            // $tribeEmployees[trim($value['id'])] = $value;
-                            $tribeEmployees[] = $value;
+                        // get all tribe names
+                        !empty($employeeDetails->TRIBE_NAME) ? $allTribes[trim($employeeDetails->TRIBE_NAME)] = trim($employeeDetails->TRIBE_NAME) : null;
+                        
+                        // Filter out invalid Notes Ids                    
+                        // if (strtolower(substr(trim($employeeDetails->NOTES_ID), -4))=='/ibm' || strtolower(substr(trim($employeeDetails->NOTES_ID), -6))=='/ocean') {
+                            $vbacEmployees[] = array(
+                                'id'=>trim($employeeDetails->NOTES_ID), 
+                                'emailAddress'=>trim($employeeDetails->EMAIL_ADDRESS),
+                                'kynEmailAddress'=>trim($employeeDetails->KYN_EMAIL_ADDRESS),
+                                'text'=>trim($employeeDetails->NOTES_ID), 
+                                'role'=>trim($employeeDetails->SQUAD_NAME),
+                                'tribe'=>trim($employeeDetails->TRIBE_NAME),
+                                'distance'=>'remote'
+                            );
+                        // }
+                        
+                        // get employee's tribe name
+                        if (strtolower($employeeDetails->EMAIL_ADDRESS) == strtolower($_SESSION['ssoEmail'])){
+                            $myTribe = $employeeDetails->TRIBE_NAME;
                         }
                     }
-                } else {
-                    // $value['distance']='removed';
-                    // $tribeEmployees[trim($value['id'])] = $value;
-                    // $tribeEmployees[] = $value;
                 }
-            }
-        }
 
-        $result = array(
-            'vbacEmployees' => $vbacEmployees,
-            'tribeEmployees' => $tribeEmployees
-        );
+                // Find business unit for this tribe.     
+                // $bestMatchScore = 0;
+                // $bestMatch = '';
+                // if (!empty($myTribe)){
+                //     foreach ($allTribes as $tribe) {
+                //         $matchScore = similar_text($myTribe, $tribe);
+                //         if ($matchScore > $bestMatchScore){
+                //             $bestMatchScore = $matchScore;
+                //             $bestMatch = $tribe;
+                //         }
+                //     }
+                // } else {
+                //     throw new Exception("No tribe found for : " . $_SESSION['ssoEmail']);
+                // }
+                
+                $tribeEmployees = array();
+                // process the employees, flagging as 'local' those in the "myTribe" tribe
+                foreach ($vbacEmployees as $value) {
+                    if (strtolower(substr(trim($value['id']), -4))=='/ibm' || strtolower(substr(trim($value['id']), -6))=='/ocean'){  // Filter out invalid Notes Ids
+                        if (!empty(trim($value['role']) && !empty(trim($value['tribe'])))) {
+                            if (!empty($myTribe) && strtolower($value['tribe']) == strtolower($myTribe)){
+                                $value['distance']='local';
+                                // $tribeEmployees[trim($value['id'])] = $value;
+                                $tribeEmployees[] = $value;
+                            } else {
+                                if (isset($_SESSION['isAdmin']) || isset($_SESSION['isSupplyX'])){
+                                    // $tribeEmployees[trim($value['id'])] = $value;
+                                    $tribeEmployees[] = $value;
+                                }
+                            }
+                        } else {
+                            // $value['distance']='removed';
+                            // $tribeEmployees[trim($value['id'])] = $value;
+                            // $tribeEmployees[] = $value;
+                        }
+                    }
+                }
+
+                $result = array(
+                    'vbacEmployees' => $vbacEmployees,
+                    'tribeEmployees' => $tribeEmployees
+                );
+                
+                $redis->set($redisKey, json_encode($result));
+                $redis->expire($redisKey, REDIS_EXPIRE);   
+            }
+        } else {
+            $source = 'Redis Server';
+            $result = json_decode($redis->get($redisKey), true);
+        }
         
         return $result;
     }
