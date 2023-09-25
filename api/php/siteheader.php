@@ -1,5 +1,6 @@
 <?php
 use itdq\JwtSecureSession;
+use itdq\Redis;
 
 ob_start();
 
@@ -42,7 +43,7 @@ $handler = new JwtSecureSession($sessionConfig);
 error_log(__FILE__ . "session:" . session_id());
 
 $GLOBALS['Db2Schema'] = strtoupper($_ENV['environment']);
-$GLOBALS['Db2Schema'] = str_replace('_LOCAL', '_DEV', $GLOBALS['Db2Schema']);
+$GLOBALS['Db2Schema'] = str_replace('_LOCAL', '', $GLOBALS['Db2Schema']);
 
 $_SESSION['ssoEmail'] = empty($_SESSION['ssoEmail']) ? 'API Invocation' : $_SESSION['ssoEmail'];
 include "connect.php";

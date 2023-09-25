@@ -55,9 +55,8 @@ class rfsPipelineView extends DbTable
             }
             $allData[]  = $row;
         }
-        return $allData ;
+        return $allData;
     }
-
 
     function addGlyphicons(&$row){
         $rfsId = $row['RFS_ID'];
@@ -86,8 +85,6 @@ class rfsPipelineView extends DbTable
         $row['LINK_TO_PGMP'] = empty($linkToPgmp) ? null : "<a href='$linkToPgmp' target='_blank' >$linkToPgmp</a>";
     }
 
-
-
     function  archiveRfs($rfsid){
         if(empty($rfsid)){
             return false;
@@ -103,11 +100,6 @@ class rfsPipelineView extends DbTable
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             return false;
         }
-
         return true;
     }
-
-
-
-
 }

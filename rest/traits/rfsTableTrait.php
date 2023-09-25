@@ -282,8 +282,8 @@ trait rfsTableTrait
     function prepareDatesForResults($row){
         $startDate = !empty($row['START_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['START_DATE'])->format('d M Y') : null;
         $startDateSortable = !empty($row['START_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['START_DATE'])->format('Ymd') : null;
-        $endDate         = !empty($row['END_DATE'])     ? \DateTime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
-        $endDateSortable = !empty($row['END_DATE'])     ? \DateTime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
+        $endDate = !empty($row['END_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['END_DATE'])->format('d M Y') : null;
+        $endDateSortable = !empty($row['END_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['END_DATE'])->format('Ymd') : null;
         
         $dates = array(            
             'startDate' => $startDate,
@@ -321,8 +321,8 @@ trait rfsTableTrait
     function addGlyphicons(&$row){
         $rfsId = trim($row['RFS_ID']);
         $rfsPcrId = trim($row['PCR_ID']);
-        $today = new \DateTime();
-        $rfsEndDate = $this->rfsMaxEndDate($rfsId);
+        // $today = new \DateTime();
+        // $rfsEndDate = $this->rfsMaxEndDate($rfsId);
         // $archiveable = false;
         // if($rfsEndDate){
         //     $archiveable = $rfsEndDate < $today ? true : false;
@@ -361,7 +361,6 @@ trait rfsTableTrait
     }
 
     function returnAsArray($predicate=null, $withArchive=false){
-        // $sql  = " SELECT RFS.*, RDR.* ";
         $sql  = " SELECT 
         RFS.RFS_ID, 
 		RFS.PRN, 
@@ -393,23 +392,43 @@ trait rfsTableTrait
         $sql .= $withArchive ? " AND " . rfsTable::ARCHIVED : " AND " . rfsTable::NOT_ARCHIVED;
         $sql .= !empty($predicate) ? " AND  $predicate " : null ;
         
-        $resultSet = $this->execute($sql);
-        $resultSet ? null : die("SQL Failed");
-        $allData = array();
-
-        while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
-            $testJson = json_encode($row);
-            if(!$testJson){
-                break; // It's got invalid chars in it that will be a problem later.
-            }
-            $this->addGlyphicons($row);
+        $redis = $GLOBALS['redis'];
+		$redisKey = md5($sql.'_key_'.$_ENV['environment']);
+        if (!$redis->get($redisKey)) {
+            $source = 'SQL Server';
             
-            foreach ($row as $key => $data){
-                $row[] = trim($row[$key]);
-                unset($row[$key]);
+            $resultSet = $this->execute($sql);
+            $resultSet ? null : die("SQL Failed");
+            
+            $result = array();
+            while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
+                $testJson = json_encode($row);
+                if(!$testJson){
+                    break; // It's got invalid chars in it that will be a problem later.
+                }
+                $result[] = $row;
             }
-            $allData[]  = $row;            
+
+            $redis->set($redisKey, json_encode($result));
+            $redis->expire($redisKey, REDIS_EXPIRE);
+        } else {
+            $source = 'Redis Server';
+            $result = json_decode($redis->get($redisKey), true);
         }
+
+        $allData = array();
+        if (is_iterable($result)) {
+            foreach ($result as $key => $row) {
+                $this->addGlyphicons($row);
+
+                foreach ($row as $key => $data){
+                    $row[] = trim($row[$key]);
+                    unset($row[$key]);
+                }
+                $allData[]  = $row;
+            }
+        };
+        echo $source;
         return array('data'=>$allData, 'sql'=>$sql);
     }
 
@@ -484,31 +503,50 @@ trait rfsTableTrait
         $sql.= " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE ";
         $sql.= !empty($predicate) ? " AND  $predicate " : null ;
         
-        $resultSet = $this->execute($sql);
-        $resultSet ? null : die("SQL Failed");
-        $allData = array();
-
-        while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
-            $testJson = json_encode($row);
-            if(!$testJson){
-                break; // It's got invalid chars in it that will be a problem later.
-            }     
+        $redis = $GLOBALS['redis'];
+		$redisKey = md5($sql.'_key_'.$_ENV['environment']);
+        if (!$redis->get($redisKey)) {
+            $source = 'SQL Server';
             
-            $rowDates = $this->prepareDatesForResults($row);
-            $startDate = $rowDates['startDate'];
-            $startDateSortable = $rowDates['startDateSortable'];
-            $endDate = $rowDates['endDate'];
-            $endDateSortable = $rowDates['endDateSortable'];
+            $resultSet = $this->execute($sql);
+            $resultSet ? null : die("SQL Failed");
             
-            $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
-            $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
-            
-            foreach ($row as $key => $data){ 
-                $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
-                unset($row[$key]);
+            $result = array();
+            while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
+                $testJson = json_encode($row);
+                if(!$testJson){
+                    break; // It's got invalid chars in it that will be a problem later.
+                }
+                $result[] = $row;
             }
-            $allData[]  = $row;
+
+            $redis->set($redisKey, json_encode($result));
+            $redis->expire($redisKey, REDIS_EXPIRE);
+        } else {
+            $source = 'Redis Server';
+            $result = json_decode($redis->get($redisKey), true);
         }
+
+        $allData = array();
+        if (is_iterable($result)) {
+            foreach ($result as $key => $row) {
+                $rowDates = $this->prepareDatesForResults($row);
+                $startDate = $rowDates['startDate'];
+                $startDateSortable = $rowDates['startDateSortable'];
+                $endDate = $rowDates['endDate'];
+                $endDateSortable = $rowDates['endDateSortable'];
+                
+                $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
+                $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
+                
+                foreach ($row as $key => $data){ 
+                    $row[] = ! is_array($row[$key]) ? trim($row[$key]) : $row[$key];
+                    unset($row[$key]);
+                }
+                $allData[]  = $row;
+            }
+        };
+        echo $source;
         return array('data'=>$allData, 'sql'=>$sql);
     }
 
