@@ -348,7 +348,7 @@ trait resourceRequestHoursTableTrait
                 case $resultSet:
                     $allData = array();
                     while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
-                        $allData[]  = array_map('trim',$row);
+                        $allData[]  = array_map('trim', $row);
                     }
                     return $allData;                
                 default:
@@ -409,7 +409,7 @@ trait resourceRequestHoursTableTrait
             case $resultSet:
                 $allData = array();
                 while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
-                    $allData[]  = array_map('trim',$row);
+                    $allData[]  = array_map('trim', $row);
                 }
                 return $allData;                
             default:
@@ -470,7 +470,7 @@ trait resourceRequestHoursTableTrait
             case $resultSet:
                 $allData = array();
                 while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
-                    $allData[]  = array_map('trim',$row);
+                    $allData[]  = array_map('trim', $row);
                 }
                 return $allData;                
             default:

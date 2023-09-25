@@ -43,7 +43,7 @@ class rfsPipelineView extends DbTable
         $allData = array();
 
         while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
-            $row = array_map('trim',$row);
+            $row = array_map('trim', $row);
             $testJson = json_encode($row);
             if(!$testJson){
                 break; // It's got invalid chars in it that will be a problem later.

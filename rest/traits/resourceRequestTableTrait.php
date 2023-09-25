@@ -259,7 +259,7 @@ trait resourceRequestTableTrait
                 throw new \Exception("Invalid character found in Row ");
                 break; // It's got invalid chars in it that will be a problem later.
             }
-            $row = array_map('trim',$row);
+            $row = array_map('trim', $row);
             $row['hours_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] : null;
             $row['weeks_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] : null;
             
@@ -500,7 +500,7 @@ trait resourceRequestTableTrait
 
         if (is_iterable($result)) {
             foreach ($result as $key => $row) {
-                $row = array_map('trim',$row);
+                $row = array_map('trim', $row);
                 $row['hours_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] : null;
                 $row['weeks_to_go'] = isset($hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks']) ? $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] : null;
                 
@@ -1094,7 +1094,7 @@ trait resourceRequestTableTrait
         $allResourceRequests = array();
         if($rs){
             while ($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
-                $allResourceRequests[trim($row['RFS'])][] = array_map('trim',$row);
+                $allResourceRequests[trim($row['RFS'])][] = array_map('trim', $row);
             }
         } else {
             DbTable::displayErrorMessage($rs,__CLASS__, __METHOD__, $sql);
