@@ -48,12 +48,17 @@ class Rfs {
 
 	listenForREQUESTOR_EMAILChange() {
 		$(document).on('change', '#REQUESTOR_EMAIL', function () {
-			var oceanRegex = RegExp('ocean.ibm.com$');
-			var regex = RegExp('ibm.com$');
 			var email = $('#REQUESTOR_EMAIL').val().trim().toLowerCase();
+
+			var IBMRegex = RegExp('ibm.com$');
+			var oceanRegex = RegExp('ocean.ibm.com$');
+			var kyndrylRegex = RegExp('kyndryl.com$');
+
+			var ibmEmailAddress = IBMRegex.test(email);
 			var oceanEmailAddress = oceanRegex.test(email);
-			var ibmEmailAddress = regex.test(email);
-			if (oceanEmailAddress) {
+			var kyndrylEmailAddress = kyndrylRegex.test(email);
+
+			if (kyndrylEmailAddress) {
 				$("input[name='Submit']").attr('disabled', false);
 				$('#REQUESTOR_EMAIL').css("background-color", "LightGreen");
 				$("#IBMNotAllowed").hide();
@@ -61,7 +66,7 @@ class Rfs {
 				$('input[name="Submit"]').attr('disabled', true);
 				$('#REQUESTOR_EMAIL').css("background-color", "LightPink");
 				$("#IBMNotAllowed").hide();
-				if (ibmEmailAddress) {
+				if (ibmEmailAddress || oceanEmailAddress) {
 					if ($('#REQUESTOR_EMAIL').val() !== $("#originalREQUESTOR_EMAIL").val()) {
 						$("#IBMNotAllowed").show();
 					}

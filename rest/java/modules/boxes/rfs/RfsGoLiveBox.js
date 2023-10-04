@@ -66,12 +66,17 @@ class RfsGoLiveBox {
 
 	listenForplREQUESTOR_EMAILChange() {
 		$(document).on('change', '#plREQUESTOR_EMAIL', function () {
-			var oceanRegex = RegExp('ocean.ibm.com$');
-			var regex = RegExp('ibm.com$');
 			var email = $('#plREQUESTOR_EMAIL').val().trim().toLowerCase();
+
+			var IBMRegex = RegExp('ibm.com$');
+			var oceanRegex = RegExp('ocean.ibm.com$');
+			var kyndrylRegex = RegExp('kyndryl.com$');
+
+			var ibmEmailAddress = IBMRegex.test(email);
 			var oceanEmailAddress = oceanRegex.test(email);
-			var ibmEmailAddress = regex.test(email);
-			if (oceanEmailAddress) {
+			var kyndrylEmailAddress = kyndrylRegex.test(email);
+
+			if (kyndrylEmailAddress) {
 				$("#confirmGoLiveRfs").attr('disabled', false);
 				$('#plREQUESTOR_EMAIL').css("background-color", "LightGreen");
 				$("#plIBMNotAllowed").hide();
@@ -79,7 +84,7 @@ class RfsGoLiveBox {
 				$("#confirmGoLiveRfs").attr('disabled', true);
 				$('#plREQUESTOR_EMAIL').css("background-color", "LightPink");
 				$("#plIBMNotAllowed").hide();
-				if (ibmEmailAddress) {
+				if (ibmEmailAddress || oceanEmailAddress) {
 					$("#plIBMNotAllowed").show();
 				}
 			}
