@@ -128,9 +128,6 @@ trait resourceRequestTableTrait
             $this->vbacEmployeesWithSquad = array_column($vbacEmployees, 'id');
         }
 
-        // $autoCommit = sqlsrv_commit($GLOBALS['conn']);
-        // sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);        
-        
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
         $hoursRemainingByReference = $resourceRequestHoursTable->getHoursRemainingByReference();
         $monthNumber = 0;
@@ -275,8 +272,6 @@ trait resourceRequestTableTrait
             $allData['per_page'] = $perPage;
         }
 
-        // sqlsrv_commit($GLOBALS['conn'],$autoCommit);
-
         return $allData;
     }
 
@@ -323,9 +318,6 @@ trait resourceRequestTableTrait
             $this->vbacEmployeesWithSquad = array_column($vbacEmployees, 'id');
         }
 
-        // $autoCommit = sqlsrv_commit($GLOBALS['conn']);
-        // sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);        
-        
         $sql = 'Statistics only';
 
         $allData = array();
@@ -344,8 +336,6 @@ trait resourceRequestTableTrait
         $allData['per_page'] = $perPage;
         $allData['total'] = $counter;
         $allData['total_pages'] = ceil( $counter / $perPage );
-        
-        // sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
         return $allData;
     }

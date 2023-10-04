@@ -1,12 +1,9 @@
 <?php
 
-use itdq\BluePagesSLAPHAPI;
-use itdq\DbTable;
 use rest\allTables;
 use rest\activeResourceRecord;
 use rest\activeResourceTable;
 use rest\rfsRecord;
-use rest\rfsTable;
 
 set_time_limit(0);
 
@@ -46,8 +43,9 @@ if ($err) {
 
     $success = true;
 
-    // $autoCommit = sqlsrv_commit($GLOBALS['conn']);
-    // sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);   
+    if (sqlsrv_begin_transaction($GLOBALS['conn']) === false ) {
+        die( print_r( sqlsrv_errors(), true ));
+    }
     
     $responseArr = json_decode($response, true);
     if (count($responseArr) > 0) {
@@ -149,8 +147,6 @@ if ($err) {
     } else {
         sqlsrv_rollback($GLOBALS['conn']);
     }
-
-    // sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
     echo count($responseArr) . ' records read from VBAC api';
 }

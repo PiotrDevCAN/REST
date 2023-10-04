@@ -1,13 +1,12 @@
 <?php
 
-use itdq\DbTable;
 use itdq\BluePages;
 use itdq\BluePagesSLAPHAPI;
+use itdq\Loader;
 use rest\emailNotifications;
 use rest\allTables;
 use rest\rfsRecord;
 use rest\resourceRequestHoursTable;
-use itdq\Loader;
 use rest\resourceRequestRecord;
 use rest\resourceRequestDiaryTable;
 use rest\resourceRequestTable;
@@ -15,7 +14,9 @@ use rest\resourceRequestTable;
 set_time_limit(0);
 ob_start();
 
-// $autocommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+if (sqlsrv_begin_transaction($GLOBALS['conn']) === false ) {
+    die( print_r( sqlsrv_errors(), true ));
+}
 
 $rfsRequestorEmail = !empty($_POST['requestorEmail']) ? trim($_POST['requestorEmail']) : null;
 $rfsRequestorName = !empty($_POST['requestorName']) ? trim($_POST['requestorName']) : null;
@@ -26,16 +27,16 @@ if($sp === FALSE){
     // none ocean
     $invalidRequestorEmail = true;
 } else {
-    // is ocean
-    $data = BluePagesSLAPHAPI::getIBMDetailsFromIntranetId($rfsRequestorEmail);
-    if (!empty($data)) {
-        //valid ocean
-        $invalidRequestorEmail = false;
-    } else {
-        //invalid ocean
-        $invalidRequestorEmail = true;
-    }
-    
+    // is ocean or kyndryl
+    // $data = BluePagesSLAPHAPI::getIBMDetailsFromIntranetId($rfsRequestorEmail);
+    // if (!empty($data)) {
+    //     //valid ocean
+    //     $invalidRequestorEmail = false;
+    // } else {
+    //     //invalid ocean
+    //     $invalidRequestorEmail = true;
+    // }
+    $invalidRequestorEmail = false;
 }
 
 switch (true) {
@@ -123,7 +124,6 @@ switch (true) {
         $success = empty($messages) && $rs;
 
         $success ? sqlsrv_commit($GLOBALS['conn']) : sqlsrv_rollback($GLOBALS['conn']);
-        // sqlsrv_commit($GLOBALS['conn'],$autocommit);
         break;
 }
 

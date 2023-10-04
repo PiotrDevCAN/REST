@@ -24,13 +24,14 @@ $startDateWasObj = new DateTime($_POST['startDateWas']); // Original Start Date
 
 $rrHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
 
-// $autoCommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+if (sqlsrv_begin_transaction($GLOBALS['conn']) === false ) {
+    die( print_r( sqlsrv_errors(), true ));
+}
 
 echo $startDateObj->format('Y-m-d');
 echo $startDateWasObj->format('Y-m-d');
 
 echo $startDateWasObj > $startDateObj;
-
 
 if($startDateWasObj < $startDateObj){
     echo "Push Start Date Out";
@@ -47,8 +48,7 @@ if($startDateWasObj < $startDateObj){
 }
 resourceRequestTable::setStartDate($_POST['resourceReference'], $startDateObj->format('Y-m-d'));
 
-$rrHoursTable->commitUpdates();
-
+sqlsrv_commit($GLOBALS['conn']);
 
 $diaryEntry = "Start Date was " . $movement . $_POST['startDate'] . " from " . $_POST['startDateWas'];
 $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['resourceReference']);
@@ -60,8 +60,6 @@ $emailEntry.= "<br/>From: " .  $startDateWasObj->format('d M Y');
 $emailEntry.= "<br/><b>To: " . $startDateObj->format('d M Y') . "</b>";
 $emailPattern = array('RFS'=>'/&&rfs&&/','RESOURCE_REFERENCE'=>'/&&ref&&/');
 emailNotifications::sendNotification($_POST['resourceReference'],$emailEntry, $emailPattern); 
-
-// sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
 $messages = ob_get_clean();
 ob_start();

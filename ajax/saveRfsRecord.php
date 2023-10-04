@@ -1,12 +1,11 @@
 <?php
 
 use itdq\BluePagesSLAPHAPI;
-use itdq\DbTable;
+use itdq\FormClass;
+use itdq\Loader;
 use rest\allTables;
 use rest\rfsRecord;
 use rest\rfsTable;
-use itdq\FormClass;
-use itdq\Loader;
 
 set_time_limit(0);
 ob_start();
@@ -51,15 +50,16 @@ if($sp === FALSE){
         $invalidRequestorEmail = true;
     }
 } else {
-    // is ocean
-    $data = BluePagesSLAPHAPI::getIBMDetailsFromIntranetId($rfsRequestorEmail);
-    if (!empty($data)) {
-        //valid ocean
-        $invalidRequestorEmail = false;
-    } else {
-        // invalid ocean
-        $invalidRequestorEmail = true;
-    }
+    // is ocean or kyndryl
+    // $data = BluePagesSLAPHAPI::getIBMDetailsFromIntranetId($rfsRequestorEmail);
+    // if (!empty($data)) {
+    //     //valid ocean
+    //     $invalidRequestorEmail = false;
+    // } else {
+    //     // invalid ocean
+    //     $invalidRequestorEmail = true;
+    // }
+    $invalidRequestorEmail = false;
 }
 
 // if ($token !== $_SESSION['formToken']) {

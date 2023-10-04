@@ -305,7 +305,6 @@ trait resourceRequestHoursTableTrait
             $sql = " DELETE FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName ;
             $sql .= " WHERE RESOURCE_REFERENCE='" . htmlspecialchars($resourceReference) . "' ";
             $this->execute($sql);
-            $this->commitUpdates();
         }
     }
     

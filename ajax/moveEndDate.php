@@ -24,13 +24,14 @@ $endDateWasObj = new DateTime($_POST['endDateWas']);
 
 $rrHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
 
-// $autoCommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+if (sqlsrv_begin_transaction($GLOBALS['conn']) === false ) {
+    die( print_r( sqlsrv_errors(), true ));
+}
 
 echo $endDateObj->format('Y-m-d');
 echo $endDateWasObj->format('Y-m-d');
 
 echo $endDateWasObj > $endDateObj;
-
 
 if($endDateWasObj > $endDateObj){
     echo "Move date IN";
@@ -47,12 +48,10 @@ if($endDateWasObj > $endDateObj){
 }
 resourceRequestTable::setEndDate($_POST['resourceReference'], $endDateObj->format('Y-m-d'));
 
-$rrHoursTable->commitUpdates();
-
+sqlsrv_commit($GLOBALS['conn']);
 
 $diaryEntry = "End Date was " . $movement . $_POST['endDate'] . " from " . $_POST['endDateWas'];
 $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['resourceReference']);
-
 
 $modifierNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
 
@@ -61,8 +60,6 @@ $emailEntry.= "<br/>From: " .  $endDateWasObj->format('d M Y');
 $emailEntry.= "<br/><b>To: " . $endDateObj->format('d M Y') . "</b>";
 $emailPattern = array('RFS'=>'/&&rfs&&/','RESOURCE_REFERENCE'=>'/&&ref&&/');
 emailNotifications::sendNotification($_POST['resourceReference'],$emailEntry, $emailPattern); 
-
-// sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
 $messages = ob_get_clean();
 ob_start();

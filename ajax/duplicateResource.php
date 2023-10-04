@@ -10,7 +10,9 @@ use itdq\Loader;
 set_time_limit(0);
 ob_start();
 
-// $autoCommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
+if (sqlsrv_begin_transaction($GLOBALS['conn']) === false ) {
+    die( print_r( sqlsrv_errors(), true ));
+}
 
 $resourceRecord = new resourceRequestRecord();
 $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
@@ -92,16 +94,12 @@ if($saveResponse){
             resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['resourceReference']);   
             
         }
-
         sqlsrv_commit($GLOBALS['conn']);
     } catch (Exception $e) {
         $hoursResponse = $e->getMessage();
         sqlsrv_rollback($GLOBALS['conn']);
     }
-
 }
-
-// sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
 $messages = ob_get_clean();
 ob_start();

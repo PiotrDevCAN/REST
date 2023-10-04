@@ -101,8 +101,10 @@ switch (true) {
         $messages = 'Cannot save Resource Request with provided End Date prior to Start Date.';
         break;
     default:
-        // $autoCommit = sqlsrv_commit($GLOBALS['conn'],DB2_AUTOCOMMIT_OFF);
-
+        if (sqlsrv_begin_transaction($GLOBALS['conn']) === false ) {
+            die( print_r( sqlsrv_errors(), true ));
+        }
+        
         $resourceRecord = new resourceRequestRecord();
         $resourceRecord->setFromArray($_POST);
         $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
@@ -206,8 +208,6 @@ switch (true) {
                 echo 'Cannot save Resource Request with provided Mode value.';
                 break;
         }
-
-        // sqlsrv_commit($GLOBALS['conn'],$autoCommit);
 
         $messages = ob_get_clean();
 

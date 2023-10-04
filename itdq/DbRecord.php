@@ -2,6 +2,7 @@
 namespace itdq;
 use DateTime;
 use itdq\FormClass;
+use itdq\DbTable;
 /**
  * Class to deal manipulate data that has come from a DB2 Records.
  *
@@ -24,6 +25,8 @@ class DbRecord extends FormClass {
 	protected $ignoreProperties;
 	protected $autoTruncate;
 	protected $keyColumns = array ();
+	protected $headerTitles;
+
 	protected static $uniqueKeyCounter = 0;
 
 	private static $removeAble = array ("&", " /", " ", "_EC2" );

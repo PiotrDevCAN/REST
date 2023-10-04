@@ -422,7 +422,11 @@ trait rfsTableTrait
                 $this->addGlyphicons($row);
 
                 foreach ($row as $key => $data){
-                    $row[] = trim($row[$key]);
+                    if ($data instanceof \DateTime) {
+                        $row[] = $data->format('Y-m-d H:i:s');
+                    } else {
+                        $row[] = trim($row[$key]);
+                    }                    
                     unset($row[$key]);
                 }
                 $allData[]  = $row;

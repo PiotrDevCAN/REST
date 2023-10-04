@@ -220,7 +220,9 @@ class DbTable
             $uploadLogTable->saveRecord($uploadLogRecord);
             $this->uploadId = $uploadLogTable->lastId();
             $uploadLogRecord->setId($this->uploadId);
-            // $db2CommitState = sqlsrv_commit($GLOBALS['conn'], DB2_AUTOCOMMIT_OFF);
+            if (sqlsrv_begin_transaction($GLOBALS['conn']) === false) {
+                die( print_r( sqlsrv_errors(), true ));
+            }
             echo "<BR/>Log id is " . $this->uploadId;
         }
 
@@ -296,7 +298,7 @@ class DbTable
                         if (isset($_REQUEST['type'])) {
                             if ($_REQUEST['type'] == 'Replace') {
                                 $this->deleteData();
-                                $this->commitUpdates();
+                                // $this->commitUpdates();
                             }
                         }
                         $preparedInsert = $this->prepareInsert();
@@ -463,7 +465,7 @@ class DbTable
                     }
                     unset($insertArray);
                     if (($this->processed) % 50 == 0) {
-                        $this->commitUpdates();
+                        // $this->commitUpdates();
                         echo "<SCRIPT LANGUAGE='JavaScript'>\n";
                         echo "\ndocument.MyForm.processed.value = " . $this->processed;
                         echo "\ndocument.MyForm.inserted.value = " . $this->inserted;
@@ -500,7 +502,6 @@ class DbTable
         if ($withUploadLogId) {
             $uploadLogTable->setStatus($this->uploadId, UploadLogRecord::$statusLOADED);
             sqlsrv_commit($GLOBALS['conn']);
-            // sqlsrv_commit($GLOBALS['conn'], $db2CommitState);
             return $this->uploadId;
         } else {
             return TRUE;
@@ -658,13 +659,17 @@ class DbTable
         $pred = $this->buildKeyPredicate($record);
         $sql = $select . " WHERE " . $pred . $predicate;
         Trace::traceVariable($sql, __METHOD__);
-        $rs = $this->execute($sql);
-        $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
+
+        $row = sqlsrv_fetch_array($this->execute($sql));
         if (! $row) {
             self::displayErrorMessage($row, __CLASS__, __METHOD__, $sql);
         } else {
             foreach ($row as $key => $value) {
-                $row[$key] = trim($value);
+                if ($value instanceof \DateTime) {
+                    $row[$key] = $value->format('Y-m-d H:i:s');
+                } else {
+                    $row[$key] = trim($value);
+                }
             }
         }
         return $row;
@@ -1194,8 +1199,8 @@ class DbTable
         }
         if ($cols['SERIAL_NUMBER'] != null) {
             $this->logRecord($preparedSelect, $cols, "<B>Before image </b>");
-            $result = sqlsrv_execute($preparedUpdate);
-            if (! $result) {
+            $rs = sqlsrv_execute($preparedUpdate);
+            if (! $rs) {
                 echo "<BR/>" . json_encode(sqlsrv_errors());
                 echo "<BR/>" . json_encode(sqlsrv_errors()) . "<BR/>";
                 echo "<BR/> Cols: " . var_export($cols, true) . "<BR/>Db2Columns : " . var_export($cols, true) . "<BR/> ex Serial: $exSerial";
@@ -1312,8 +1317,7 @@ class DbTable
         $pred = $this->buildKeyPredicate($record);
         $sql = $select . " WHERE " . $pred;
         Trace::traceVariable($sql, __METHOD__);
-        $rs = $this->execute($sql);
-        $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
+        $row = sqlsrv_fetch_array($this->execute($sql));
         return $row;
     }
 
@@ -1557,6 +1561,10 @@ class DbTable
         @ob_end_clean();
         Trace::traceComment("Saving: $recordDetails", __METHOD__, __LINE__);
 
+        if (sqlsrv_begin_transaction($GLOBALS['conn']) === false) {
+            die( print_r( sqlsrv_errors(), true ));
+        }
+
         $inserted = null;
         if ($this->existsInDb($record)) {
             Trace::traceComment('Attempting Update', __METHOD__, __LINE__);
@@ -1572,7 +1580,7 @@ class DbTable
             $this->lastId = $this->lastId();
         }
         if ($commit) {
-            $this->commitUpdates();
+            sqlsrv_commit($GLOBALS['conn']);
         }
         Trace::traceVariable($inserted, __METHOD__, __LINE__);
 

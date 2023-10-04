@@ -3,7 +3,6 @@ namespace rest;
 
 use itdq\BlueMail;
 use itdq\BluePages;
-use itdq\BluePagesSLAPHAPI;
 
 class emailNotifications
 {
