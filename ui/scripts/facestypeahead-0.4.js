@@ -662,7 +662,6 @@ var me = window.FacesTypeAhead = {
                 config[prop] = configDefaults[prop];
             }
             
-
             //Detect whether a feature has been enabled.
             //Features will be in the config object as an object with an enabled propery
             //like this:
