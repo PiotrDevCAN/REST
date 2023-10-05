@@ -22,7 +22,7 @@ $rfsRequestorEmail = !empty($_POST['requestorEmail']) ? trim($_POST['requestorEm
 $rfsRequestorName = !empty($_POST['requestorName']) ? trim($_POST['requestorName']) : null;
 $rfsId = !empty($_POST['rfsid']) ? trim($_POST['rfsid']) : null;
 
-$sp = strpos(strtolower($rfsRequestorEmail),'ocean');
+$sp = strpos(strtolower($rfsRequestorEmail),'kyndryl');
 if($sp === FALSE){
     // none ocean
     $invalidRequestorEmail = true;

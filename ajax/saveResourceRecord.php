@@ -112,44 +112,23 @@ switch (true) {
         switch ($mode) {
             case FormClass::$modeDEFINE:
 
-                // if ($token) {
-                    // if ($token === $_SESSION['formToken']) {
+                // insert does NOT begin transaction
+                $saveResponse = $resourceTable->insert($resourceRecord);
+                $resourceReference = $resourceTable->lastId();
+                $create = true;
+                $update = false;
 
-                        // generate new token
-                        // $_SESSION['formToken'] = md5(uniqid(mt_rand(), true));
-                    
-                        $saveResponse = $resourceTable->insert($resourceRecord);
-                        $resourceReference = $resourceTable->lastId();
-                        $create = true;
-                        $update = false;
-        
-                        if($saveResponse){
-                            $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
-                            $resourceHoursSaved = false;
-                            try {
-                                $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $resourceRecord->getValue('HOURS_TYPE') );
-                                $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
-                            } catch (Exception $e) {
-                                $hoursResponse = $e->getMessage();
-                                $create = false;
-                            }
-                        }
-        
-                        if ($saveResponse && $create == true) {
-                            sqlsrv_commit($GLOBALS['conn']);
-                        } else {
-                            $resourceReference = 'Record has been not created';
-                            $saveResponse = false;
-                            sqlsrv_rollback($GLOBALS['conn']);
-                        }
-
-                    // } else {
-                    //     // from has been already submitted
-                    //     echo 'Form has been already submitted.';
-                    // }
-                // } else {
-                //     echo 'Token parameter is missing.';
-                // }
+                if($saveResponse){
+                    $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
+                    $resourceHoursSaved = false;
+                    try {
+                        $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $resourceRecord->getValue('HOURS_TYPE') );
+                        $hoursResponse = $weeksCreated . " weeks saved to the Resource Hours table.";
+                    } catch (Exception $e) {
+                        $hoursResponse = $e->getMessage();
+                        $create = false;
+                    }
+                }
                 break;
             case FormClass::$modeEDIT:
                 
@@ -190,23 +169,23 @@ switch (true) {
                     }
 
                     $diaryEntry = "Hours Type in Request was changed from  " . $originalHoursType . " to " . $_POST['HOURS_TYPE'];
-                    $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
+                    // $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
 
                     $diaryEntry = "Request was re-initialised at  " . $totalHours . " Total Hours (Start Date:" . $startDate . " End Date: " . $endDate . ")";
-                    $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
-                }
-
-                if ($saveResponse && $update == true) {
-                    sqlsrv_commit($GLOBALS['conn']);
-                } else {
-                    $resourceReference = 'Record has been not updated';
-                    $saveResponse = false;
-                    sqlsrv_rollback($GLOBALS['conn']);
+                    // $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
                 }
                 break;
             default:
                 echo 'Cannot save Resource Request with provided Mode value.';
                 break;
+        }
+
+        if ($saveResponse && $create == true || $saveResponse && $update == true) {
+            sqlsrv_commit($GLOBALS['conn']);
+        } else {
+            $resourceReference = 'Record has been not created / updated';
+            $saveResponse = false;
+            sqlsrv_rollback($GLOBALS['conn']);
         }
 
         $messages = ob_get_clean();
@@ -217,12 +196,12 @@ switch (true) {
 ob_start();
 
 $response = array(
-    'resourceReference'=>$resourceReference, 
+    'resourceReference' => $resourceReference, 
     'saveResponse' => $saveResponse, 
-    'hoursResponse'=>$hoursResponse, 
-    'messages'=>$messages,
-    'create'=>$create,
-    'update'=>$update
+    'hoursResponse' => $hoursResponse, 
+    'messages' => $messages,
+    'create' => $create,
+    'update' => $update
     // 'formToken'=>$_SESSION['formToken']
 );
 

@@ -39,7 +39,7 @@ $rfsStartDate = !empty($_POST['RFS_START_DATE']) ? trim($_POST['RFS_START_DATE']
 $rfsEndDate = !empty($_POST['RFS_END_DATE']) ? trim($_POST['RFS_END_DATE']) : null;
 $mode = !empty($_POST['mode']) ? trim($_POST['mode']) : '';
 
-$sp = strpos(strtolower($rfsRequestorEmail),'ocean');
+$sp = strpos(strtolower($rfsRequestorEmail),'kyndryl');
 if($sp === FALSE){
     // none ocean
     if ($rfsRequestorEmail == $rfsOriginalRequestorEmail) {

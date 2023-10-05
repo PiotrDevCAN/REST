@@ -245,13 +245,13 @@ class DbRecord extends FormClass {
 	 * Returns an Array that contains the names (and values) of all the Properties that are Columns in the database.
 	 * Expects $keyColumns to define the Class Properties that are the Keys in the table.
 	 *
-	 * @param boolean $populated =TRUE - then only returns Columns with a non-null value in them.
-	 * @param boolean $keyWanted =TRUE - then returns the field even if it does not have a value (useful for building UPDATE statements for DB2, where you need to know the Key Fields)
-	 * @param boolean $null =TRUE - then returns the string value of 'null' if the column has a null value. (useful for building DB2 predicates)
+	 * @param boolean $populated = TRUE - then only returns Columns with a non-null value in them.
+	 * @param boolean $keyWanted = TRUE - then returns the field even if it does not have a value (useful for building UPDATE statements for DB2, where you need to know the Key Fields)
+	 * @param boolean $null = TRUE - then returns the string value of 'null' if the column has a null value. (useful for building DB2 predicates)
 	 * @return array
 	 *
 	 */
-	function getColumns($populated = false, $keyWanted = true, $null = true, $db2=false) {
+	function getColumns($populated = false, $keyWanted = true, $null = true, $db2 = false) {
 		Trace::traceComment(null,__METHOD__,__LINE__);
 		set_time_limit(120);
 		$columns = null;

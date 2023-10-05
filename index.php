@@ -1,6 +1,5 @@
 <?php
 
-use itdq\DbTable;
 use itdq\WorkerAPI;
 
 if(!isset($_SESSION['uid'])) {

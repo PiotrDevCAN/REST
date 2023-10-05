@@ -255,9 +255,11 @@ trait resourceRequestHoursTableTrait
 
                     $businessHoursInWeek = $businessDaysInWeek * $hrsPerEffortDay;
                     $resourceRequestHoursRecord->HOURS = $businessHoursInWeek;
-                    
-                    $this->saveRecord($resourceRequestHoursRecord);
-                    $weeksCreated++;
+
+                    $saved = $this->saveRecord($resourceRequestHoursRecord);
+                    if ($saved !== null) {
+                        $weeksCreated++;
+                    }
                 } else {
     
                 }

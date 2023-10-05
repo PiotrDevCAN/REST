@@ -53,7 +53,7 @@ foreach ($currentHours as $oldRecord){
     echo "<pre>";
     $resourceHoursRecord->iterateVisible();
     echo "</pre>";
-//    $resourceHoursTable->saveRecord($resourceHoursRecord, true, true, false);
+//    $resourceHoursTable->saveRecord($resourceHoursRecord);
     $resourceHoursTable->insert($resourceHoursRecord);
     $nextDate->modify('+1 week');
     $weeksSaved++;

@@ -1000,20 +1000,21 @@ class DbTable
             }
         }
         $sql = $insert . str_replace("(,", "( ", $colNames) . ") VALUES " . str_replace("(,", "( ", $values) . ")";
-
         if ($sql != $this->preparedInsertSQL) {
             // This is a different INSERT to the one we prepared last time
             // So best prepare a new statement, which we will save in the hope of reusing
             Trace::traceVariable($sql, __METHOD__, __LINE__);
             $this->preparedInsertSQL = $sql;
-            $insertArrayValues = array_values($insertArray);
-            $this->preparedInsert = sqlsrv_prepare($GLOBALS['conn'], $sql, $insertArrayValues);
-            if (! $this->preparedInsert) {
-                echo "<BR/>" . json_encode(sqlsrv_errors());
-                echo "<BR/>" . json_encode(sqlsrv_errors()) . "<BR/>";
-                exit("Unable to Prepare $sql");
-            }
         }
+
+        $insertArrayValues = array_values($insertArray);        
+        $this->preparedInsert = sqlsrv_prepare($GLOBALS['conn'], $this->preparedInsertSQL, $insertArrayValues);
+        if (! $this->preparedInsert) {
+            echo "<BR/>" . json_encode(sqlsrv_errors());
+            echo "<BR/>" . json_encode(sqlsrv_errors()) . "<BR/>";
+            exit("Unable to Prepare $sql");
+        }
+
         return $this->preparedInsert;
     }
 
@@ -1033,20 +1034,20 @@ class DbTable
         $null = false; // Don't return empty columns
         $db2 = FALSE;
         $insertArray = $record->getColumns($populated, $key, $null, $db2);
+
         Trace::traceVariable($insertArray, __METHOD__, __LINE__);
         $preparedInsert = $this->prepareInsert($insertArray);
 
-        $rs = @sqlsrv_execute($preparedInsert);
+        $rs = sqlsrv_execute($preparedInsert);
 
         if (! $rs) {
             $this->lastDb2StmtError = json_encode(sqlsrv_errors());
             $this->lastDb2StmtErrorMsg = json_encode(sqlsrv_errors());
-            echo "<BR/>Insert Array@<pre>" . __METHOD__ . __LINE__ ;
+            echo "<BR/>Insert Array@<pre> " . __METHOD__ . ' ' . __LINE__ . ' ';
             print_r($insertArray);
             echo "</pre>";
             self::displayErrorMessage($rs, __CLASS__, __METHOD__, $this->preparedInsertSQL, $this->pwd, $this->lastDb2StmtError, $this->lastDb2StmtErrorMsg, $insertArray);
         } else {
-            // $this->lastId = db2_last_insert_id($GLOBALS['conn']);
             $this->lastId = $this->lastId();
         }
         if (isset($_SESSION['log'])) {
@@ -1553,7 +1554,7 @@ class DbTable
      * @param DbRecord $record
      * @param boolean $populatedColumns
      */
-    function saveRecord(DbRecord $record, $populatedColumns = true, $nullColumns = true, $commit = true)
+    function saveRecord(DbRecord $record, $populatedColumns = true, $nullColumns = true)
     {
         ob_start();
         $record->iterateVisible();
@@ -1561,38 +1562,29 @@ class DbTable
         @ob_end_clean();
         Trace::traceComment("Saving: $recordDetails", __METHOD__, __LINE__);
 
-        if (sqlsrv_begin_transaction($GLOBALS['conn']) === false) {
-            die( print_r( sqlsrv_errors(), true ));
-        }
-
         $inserted = null;
         if ($this->existsInDb($record)) {
             Trace::traceComment('Attempting Update', __METHOD__, __LINE__);
-            $this->actionBeforeUpdate($record, $populatedColumns, $nullColumns, $commit);
+            $this->actionBeforeUpdate($record, $populatedColumns, $nullColumns);
             $sql = $this->update($record, $populatedColumns, $nullColumns);
-            $this->actionAfterUpdate($record, $populatedColumns, $nullColumns, $commit);
+            $this->actionAfterUpdate($record, $populatedColumns, $nullColumns);
             $inserted = false;
         } else {
             Trace::traceComment('Attempting Insert', __METHOD__, __LINE__);
             $inserted = $this->insert($record);
             $inserted = $inserted ? $inserted : null;
-            // $this->lastId = db2_last_insert_id($GLOBALS['conn']);
             $this->lastId = $this->lastId();
         }
-        if ($commit) {
-            sqlsrv_commit($GLOBALS['conn']);
-        }
         Trace::traceVariable($inserted, __METHOD__, __LINE__);
-
         return $inserted;
     }
 
-    function actionBeforeUpdate(DbRecord $record, $populatedColumns = true, $nullColumns = true, $commit = true)
+    function actionBeforeUpdate(DbRecord $record, $populatedColumns = true, $nullColumns = true)
     {
         return;
     }
 
-    function actionAfterUpdate(DbRecord $record, $populatedColumns = true, $nullColumns = true, $commit = true)
+    function actionAfterUpdate(DbRecord $record, $populatedColumns = true, $nullColumns = true)
     {
         return;
     }
@@ -1625,9 +1617,7 @@ class DbTable
             }
         }
         Trace::traceVariable(str_replace('define a primary key AND', ' ', str_replace("=''", " is null", $predicate)), __METHOD__);
-
-        // var_dump($predicate);
-
+        
         return str_replace('define a primary key AND', ' ', str_replace("=''", " is null", $predicate));
     }
 

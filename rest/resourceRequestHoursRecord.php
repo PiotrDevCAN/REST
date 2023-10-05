@@ -16,7 +16,7 @@ class resourceRequestHoursRecord extends DbRecord
 
     public $RESOURCE_REFERENCE;
     public $DATE;
-    public $HOURS;   //  ALTER TABLE "REST_UT"."RESOURCE_REQUEST_HOURS" ALTER COLUMN "HOURS" SET DATA TYPE DECIMAL(4,2);    
+    public $HOURS;
     public $YEAR;
     public $WEEK_NUMBER;
     public $WEEK_ENDING_FRIDAY;
