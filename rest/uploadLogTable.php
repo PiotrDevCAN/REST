@@ -12,7 +12,6 @@ class uploadLogTable extends DbTable
         $sql = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " WHERE UPLOAD_STATUS='Completed' AND UPLOAD_TABLENAME='" . $uploadTable . "' ";
         $sql .= " ORDER BY UPLOAD_ID DESC ";
-        $sql .= " OPTIMIZE FOR 1 ROW ";
 
         $resultSet = $this->execute($sql);
         $row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC);
@@ -33,7 +32,6 @@ class uploadLogTable extends DbTable
         $sql = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
         $sql .= " WHERE UPLOAD_TABLENAME='" . $uploadTable . "' ";
         $sql .= " ORDER BY UPLOAD_ID DESC ";
-        $sql .= " OPTIMIZE FOR 1 ROW    ";
 
         $resultSet = $this->execute($sql);
 
