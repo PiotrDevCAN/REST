@@ -29,7 +29,10 @@ trait diaryTableTrait
             DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);     
             return false;
         }
-        return	db2_last_insert_id($GLOBALS['conn']);        
+
+        $diaryTable = new DiaryTable(AllItdqTables::$DIARY);
+
+        return	$diaryTable->lastId();  
     }
     
     static function getFormattedDiaryForResourceRequest($resourceReference){

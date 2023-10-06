@@ -665,11 +665,7 @@ class DbTable
             self::displayErrorMessage($row, __CLASS__, __METHOD__, $sql);
         } else {
             foreach ($row as $key => $value) {
-                if ($value instanceof \DateTime) {
-                    $row[$key] = $value->format('Y-m-d H:i:s');
-                } else {
-                    $row[$key] = trim($value);
-                }
+                $row[$key] = trim($value);
             }
         }
         return $row;
@@ -912,10 +908,10 @@ class DbTable
      *            True = create a log entry.
      * @return resource
      */
-    function execute($sql, $log = false)
+    function execute($sql, $log = false, $data = array())
     {
         Trace::traceVariable($sql, __METHOD__);
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql, $data);
         if (! $rs) {
             $this->lastDb2StmtError = json_encode(sqlsrv_errors());
             $this->lastDb2StmtErrorMsg = json_encode(sqlsrv_errors());
@@ -1038,7 +1034,7 @@ class DbTable
         Trace::traceVariable($insertArray, __METHOD__, __LINE__);
         $preparedInsert = $this->prepareInsert($insertArray);
 
-        $rs = sqlsrv_execute($preparedInsert);
+        $rs = @sqlsrv_execute($preparedInsert);
 
         if (! $rs) {
             $this->lastDb2StmtError = json_encode(sqlsrv_errors());
@@ -1077,7 +1073,6 @@ class DbTable
             self::displayErrorMessage($rs, __CLASS__, __METHOD__, $this->preparedInsertSQL, $this->pwd, $this->lastDb2StmtError, $this->lastDb2StmtErrorMsg, $insertArray, $rollbackIfError);
             return false;
         } else {
-            // $this->lastId = db2_last_insert_id($GLOBALS['conn']);
             $this->lastId = $this->lastId();
             return true;
         }
@@ -1742,7 +1737,7 @@ class DbTable
     }
 
     /**
-     * returns the result of db2_last_insert_id
+     * returns the result of TOP (1)
      *
      * Allows you to pick up the insert_id on newly inserted records where the Identity column is set to GENERATE ALWAYS
      */
@@ -2029,7 +2024,7 @@ class DbTable
         $db2StmtErrorMsg = $table->truncateValueToFitColumn($db2StmtErrorMsg, 'DB2_MESSAGE');
 
         $sql .= " VALUES (?, ?, ?, ?, ? ,?, ?)";
-        $params = array(
+        $data = array(
             $userid,
             $_SERVER['PHP_SELF'],
             $db2StmtError,
@@ -2048,7 +2043,7 @@ class DbTable
             echo "<h4>An email has been sent to: $to informing them of this problem</h4>";
         }
 
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql, $params);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql, $data);
         if (! $rs) {
             echo "<BR>Error: " . json_encode(sqlsrv_errors());
             echo "<BR>Msg: " . json_encode(sqlsrv_errors()) . "<BR>";

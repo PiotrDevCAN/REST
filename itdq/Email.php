@@ -23,7 +23,7 @@ class Email
         }
         if ($_SESSION['email']) {
             ?>
-            <div id='<?php echo "email" . $rand;?>' style='display:block;' /><H3><?php echo $rand ?> If this message remains visible or you see a further message : 'Fatal Error: Maximum execution time.....' please contact <a href='maito:daniero@uk.ibm.com'>ITDQ Application Support</a> urgently and inform them.</H3></div>
+            <div id='<?php echo "email" . $rand;?>' style='display:block;' /><H3><?php echo $rand ?> If this message remains visible or you see a further message : 'Fatal Error: Maximum execution time.....' please contact <a href='maito:piotr.tajanowicz@kyndryl.com'>ITDQ Application Support</a> urgently and inform them.</H3></div>
            <?php
             $result = mail($to, $subject, $message, $headers);
             if (! $result) {
@@ -91,7 +91,10 @@ class Email
                 echo "<BR/>" . json_encode(sqlsrv_errors()) . "<BR/>";
                 exit("Error in: " . __METHOD__ . " running: " . htmlspecialchars($sql, ENT_QUOTES));
             }
-            $recordId = db2_last_insert_id($GLOBALS['conn']);
+
+            $emailLogTable = new EmailLogTable(AllItdqTables::$EMAIL_LOG);
+            $recordId = $emailLogTable->lastId();
+
             if (($recordId % 100) == 0) {
                 self::clearLog();
             }
@@ -132,7 +135,7 @@ class Email
                 $keepEmailsFor = " 7 DAYS ";
             }
             $sql = 'DELETE FROM ' . $GLOBALS['Db2Schema'] . "." . AllItdqTables::$EMAIL_LOG;
-            $sql .= " WHERE CREATED < DATEADD(day, 7, CURRENT_TIMESTAMP);";
+            $sql .= " WHERE CREATED < DATEADD (day, $keepEmailsFor, CURRENT_TIMESTAMP);";
             $rs = sqlsrv_query($GLOBALS['conn'], $sql);
             if (! $rs) {
                 print_r($_SESSION);

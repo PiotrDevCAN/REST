@@ -49,6 +49,7 @@ ob_clean();
 $saveResponse = false;
 $create = false;
 $update = false;
+$pcrLastInsertedId = null;
 
 switch (true) {
     case $rfsAlreadyExists:
@@ -104,6 +105,7 @@ switch (true) {
             $create = true;
             $update = false;
         }
+        $pcrLastInsertedId = $rfsPcrTable->lastId();
         $messages = ob_get_clean();
         break;
 }
@@ -112,7 +114,7 @@ ob_start();
 
 $response = array(
     'rfsId' => $parmsTrimmed['RFS_ID'],
-    'pcrId' => db2_last_insert_id($GLOBALS['conn']),
+    'pcrId' => $pcrLastInsertedId,
     'pcrNumber' => $pcrNumber,
     'pcrStartDate' => $pcrStartDate,
     'pcrEndDate' => $pcrEndDate,
