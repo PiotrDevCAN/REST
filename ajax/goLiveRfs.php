@@ -1,6 +1,5 @@
 <?php
 
-use itdq\BluePages;
 use itdq\Loader;
 use itdq\WorkerAPI;
 use rest\emailNotifications;
@@ -30,7 +29,7 @@ if($sp === FALSE){
     // is ocean or kyndryl
     $workerAPI = new WorkerAPI();
     $data = $workerAPI->getworkerByEmail($rfsRequestorEmail);
-    if (array_key_exists('count', $data) || $data['count'] > 0){
+    if (array_key_exists('count', $data) && $data['count'] > 0) {
         //valid ocean
         $invalidRequestorEmail = false;
     } else {

@@ -3,7 +3,6 @@ use rest\allTables;
 use rest\resourceRequestTable;
 use rest\resourceRequestDiaryTable;
 use rest\resourceRequestHoursTable;
-use itdq\BluePages;
 use rest\emailNotifications;
 
 ob_start();

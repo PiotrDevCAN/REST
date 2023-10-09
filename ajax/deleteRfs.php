@@ -1,7 +1,6 @@
 <?php
 namespace ajax;
 use itdq\Loader;
-use itdq\BluePages;
 use rest\allTables;
 use rest\rfsTable;
 use rest\resourceRequestHoursTable;

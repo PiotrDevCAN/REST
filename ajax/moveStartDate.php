@@ -5,7 +5,6 @@ use rest\allTables;
 use rest\resourceRequestTable;
 use rest\resourceRequestHoursTable;
 use rest\resourceRequestDiaryTable;
-use itdq\BluePages;
 use rest\emailNotifications;
 
 set_time_limit(0);

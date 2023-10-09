@@ -2,7 +2,7 @@
 namespace rest;
 
 use itdq\BlueMail;
-use itdq\BluePages;
+use itdq\WorkerAPI;
 
 class emailNotifications
 {
@@ -16,7 +16,9 @@ class emailNotifications
         
         // get resource details
         $resourceNotesid = isset($resourceRequestData['RESOURCE_NAME']) ? trim($resourceRequestData['RESOURCE_NAME'])  : null ;
-        $resourceEmail = !empty($resourceNotesid) ? BluePages::getIntranetIdFromNotesId($resourceNotesid) : null ;
+        // $resourceEmail = !empty($resourceNotesid) ? BluePages::getIntranetIdFromNotesId($resourceNotesid) : null ;
+        $workerAPI = new WorkerAPI();
+        $resourceEmail = !empty($resourceNotesid) ? $workerAPI::getIntranetIdFromNotesId($resourceNotesid) : null ;
         
         // get requestor details
         $requestorEmail = rfsTable::getRequestorEmail($resourceRequestData['RFS']);

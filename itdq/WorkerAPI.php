@@ -86,47 +86,47 @@ class WorkerAPI {
 	// Below endpoints will return extended worker data model
 
 	// Worker Profile By Worker Id : GET /workers/wid/{wid}
-	public function getworkerByWId($wid)
+	public function getworkerByWId($wid = '')
 	{
 		$url = "/workers/wid/" . urlencode($wid);
 		return $this->processURL($url);
 	}
 
 	// Worker Profile By CNUM : GET /workers/cnum/{cnum}
-	public function getworkerByCNUM($cnum)
+	public function getworkerByCNUM($cnum = '')
 	{
 		$url = "/workers/cnum/" . urlencode($cnum);
 		return $this->processURL($url);
 	}
 
 	// Worker Profile By Email : GET /workers/email/{email}
-	public function getworkerByEmail($email)
+	public function getworkerByEmail($email = '')
 	{
 		$url = "/workers/email/" . urlencode($email);
 		return $this->processURL($url);
 	}
 
 	// Worker Profile By Dynamic Id : GET /workers/dynamicid/{Dynamic_id}
-	public function getworkerByDynamicId($dynamicId)
+	public function getworkerByDynamicId($dynamicId = '')
 	{
 		$url = "/workers/dynamicid/" . urlencode($dynamicId);
 		return $this->processURL($url);
 	}
 
 	// Manager Profile By Dynamic Id : GET /workers/dynamicid/{Dynamic_id}/manager
-	public function getManager($dynamicId)
+	public function getManager($dynamicId = '')
 	{
 		$url = "/workers/dynamicid/" . urlencode($dynamicId) . "/manager";
 		return $this->processURL($url);
 	}
 
-	public function getReports($dynamicId)
+	public function getReports($dynamicId = '')
 	{
 		$url = "/workers/dynamicid/" . urlencode($dynamicId) . "/reports";
 		return $this->processURL($url);
 	}
 
-	public function getPhoto($dynamicId)
+	public function getPhoto($dynamicId = '')
 	{
 		$url = "/workers/dynamicid/" . urlencode($dynamicId) . "/photo";
 		return $this->processURL($url);
@@ -140,7 +140,7 @@ class WorkerAPI {
 		includeManager	boolean	false / true	Optional parameter, default value is false. Include manager objects within employees' record.
 		pageSize	int	number of returned employees	Optional parameter, default value is 100. The value should be between 1 and 999.
 	*/
-	public function getworkerByAttributeSearch($search)
+	public function getworkerByAttributeSearch($search = '')
 	{
 		$url = "/workers/search?" . urlencode($search);
 		return $this->processURL($url);
@@ -151,7 +151,7 @@ class WorkerAPI {
 		includeManager	boolean	false / true	Optional parameter, default value is false. Include manager objects within employees' record.
 		pageSize	int	number of returned employees	Optional parameter, default value is 100. The value should be between 1 and 999.
 	*/
-	public function getworkerByMultiAttributeSearch($search)
+	public function getworkerByMultiAttributeSearch($search = '')
 	{
 		$url = "/workers/search";
 		return $this->processURL($url, 'POST');
@@ -189,7 +189,7 @@ class WorkerAPI {
 	// To return a worker's direct reports data alone, the below endpoint will return an array of basic worker profiles for all direct reports.
 
 	// Reports Profile By Dynamic Id : GET /workers/dynamicid/{Dynamic_id}/reports
-	public function getReportsFromDynamicId($dynamicId)
+	public function getReportsFromDynamicId($dynamicId = '')
 	{
 		$url = "/workers/dynamicid/" . urlencode($dynamicId) . "/reports";
 		return $this->processURL($url);
@@ -213,5 +213,17 @@ class WorkerAPI {
 	{
 		$url = "/tools/download_worker_file_delta";
 		return $this->processURL($url);
+	}
+
+	public function getIntranetIdFromNotesId($notesId = '')
+	{
+		$employeeData = explode('/', $notesId);
+		$data = $this->typeaheadSearch($employeeData[0]);
+		if (array_key_exists('count', $data) && $data['count'] > 0) {
+			$intranetId = $data['results'][0]['email'];
+		} else {
+			$intranetId = ' not found ';
+		}
+		return $intranetId;
 	}
 }
