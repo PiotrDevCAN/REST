@@ -73,6 +73,11 @@ class displayNavbar {
 			this.selectors.push('.' + ACCESS_USER);
 			// this.userLevel.push('User');
 		}
+		if (isDevUser) {
+			this.selectors.push('.' + ACCESS_DEV_USER);
+			this.userLevel.push('DEV User');
+		}
+
 		this.selectorsStr = this.selectors.join(',');
 		if (this.userLevel.length > 4) {
 			const half = Math.ceil(this.userLevel.length / 2);    

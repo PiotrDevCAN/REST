@@ -1,4 +1,5 @@
 <?php
+
 use rest\allTables;
 use rest\activeResourceRecord;
 use rest\activeResourceTable;
@@ -24,6 +25,8 @@ curl_setopt_array($curl, array(
 
 $response = curl_exec($curl);
 $err = curl_error($curl);
+
+$http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE); //check if 504 return.
 
 curl_close($curl);
 

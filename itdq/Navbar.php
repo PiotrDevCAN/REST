@@ -23,6 +23,7 @@ class Navbar
     public static $ACCESS_PMO = 'accessPmo';
     public static $ACCESS_FM = 'accessFm';
     public static $ACCESS_USER = 'accessUser';
+    public static $ACCESS_DEV_USER = 'accessDevUser';
     
     public static $ACCESS_RESTRICT = 'accessRestrict';
     public static $ACCESS_SUPPLY = 'accessSupply';

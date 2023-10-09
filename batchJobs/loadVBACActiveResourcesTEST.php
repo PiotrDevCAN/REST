@@ -7,7 +7,7 @@ use rest\rfsRecord;
 
 set_time_limit(0);
 
-$_ENV['vbac_url'] = 'https://vbac.dal1a.cirrus.ibm.com';
+$_ENV['vbac_url'] = 'https://vbac.zkpw3uspriv.app.kyndryl.net';
 $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&onlyactive=false&withProvClear=true&plus=P.EMAIL_ADDRESS,P.CNUM,P.PES_STATUS,SQUAD_NAME,TRIBE_NAME,P.WORK_STREAM,P.CIO_ALIGNMENT';
 
 $curl = curl_init();
@@ -41,12 +41,58 @@ if ($err) {
 
     $activeResourceTable->clear(false);
 
+    $responseObj = json_decode($response);
+    if (count($responseObj) > 0) {
+        foreach ($responseObj as $personEntry) {
+            $activeResourceRecord->setFromArray($personEntry);
+            $db2result = $activeResourceTable->insert($activeResourceRecord);
+    
+            if(!$db2result){
+                echo json_encode(sqlsrv_errors());
+                echo json_encode(sqlsrv_errors());
+            }
+        }
+    }
+
+    /*
     $success = true;
 
     if (sqlsrv_begin_transaction($GLOBALS['conn']) === false ) {
         die( print_r( sqlsrv_errors(), true ));
     }
-    
+
+    $responseObj = json_decode($response);
+    if (count($responseObj) > 0) {
+        
+        $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( CNUM, EMAIL_ADDRESS, NOTES_ID, PES_STATUS, WORK_STREAM, CIO_ALIGNMENT, STATUS, TRIBE_NAME, SQUAD_NAME, TRIBE_NAME_MAPPED )  Values ";
+        
+        foreach ($responseObj as $key => $activeResourceEntry) {
+            if ($key > 0) {
+                $sql .= " ,";    
+            }
+
+            $mappedTribeName = array_key_exists($activeResourceEntry->TRIBE_NAME, rfsRecord::$tribeNameMapping) ? rfsRecord::$tribeNameMapping[$activeResourceEntry->TRIBE_NAME] : $activeResourceEntry->TRIBE_NAME;
+
+            $sql .= " ('" . 
+                htmlspecialchars(trim($activeResourceEntry->CNUM)) . "','" . 
+                htmlspecialchars(trim($activeResourceEntry->EMAIL_ADDRESS)) . "','" . 
+                htmlspecialchars($activeResourceEntry->NOTES_ID) . "','" . 
+                htmlspecialchars($activeResourceEntry->PES_STATUS) . "','" . 
+                htmlspecialchars($activeResourceEntry->WORK_STREAM) . "','" . 
+                htmlspecialchars($activeResourceEntry->CIO_ALIGNMENT) . "','" . 
+                htmlspecialchars($activeResourceEntry->INT_STATUS) . "','" . 
+                htmlspecialchars($activeResourceEntry->TRIBE_NAME) . "','" . 
+                htmlspecialchars($activeResourceEntry->SQUAD_NAME) . "','" . 
+                htmlspecialchars($mappedTribeName) . 
+            "' ) ";
+        }
+
+        $rs = sqlsrv_query( $GLOBALS['conn'], $sql );
+        if (! $rs) {
+            $success = false;
+        }
+    }
+
     $responseArr = json_decode($response, true);
     if (count($responseArr) > 0) {
         $chunkedData = array_chunk($responseArr, 10);
@@ -92,61 +138,12 @@ if ($err) {
         }
     }
     
-    /*
-    $responseObj = json_decode($response);
-    var_dump(count($responseObj));
-    if (count($responseObj) > 0) {
-        foreach ($responseObj as $personEntry) {
-            $activeResourceRecord->setFromArray($personEntry);
-            $db2result = $activeResourceTable->insert($activeResourceRecord);
-    
-            if(!$db2result){
-                echo json_encode(sqlsrv_errors());
-                echo json_encode(sqlsrv_errors());
-            }
-        }
-    }
-    */
-
-    /*
-    $responseObj = json_decode($response);
-    if (count($responseObj) > 0) {
-        
-        $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( CNUM, EMAIL_ADDRESS, NOTES_ID, PES_STATUS, WORK_STREAM, CIO_ALIGNMENT, STATUS, TRIBE_NAME, SQUAD_NAME, TRIBE_NAME_MAPPED )  Values ";
-        
-        foreach ($responseObj as $key => $activeResourceEntry) {
-            if ($key > 0) {
-                $sql .= " ,";    
-            }
-
-            $mappedTribeName = array_key_exists($activeResourceEntry->TRIBE_NAME, rfsRecord::$tribeNameMapping) ? rfsRecord::$tribeNameMapping[$activeResourceEntry->TRIBE_NAME] : $activeResourceEntry->TRIBE_NAME;
-
-            $sql .= " ('" . 
-                htmlspecialchars(trim($activeResourceEntry->CNUM)) . "','" . 
-                htmlspecialchars(trim($activeResourceEntry->EMAIL_ADDRESS)) . "','" . 
-                htmlspecialchars($activeResourceEntry->NOTES_ID) . "','" . 
-                htmlspecialchars($activeResourceEntry->PES_STATUS) . "','" . 
-                htmlspecialchars($activeResourceEntry->WORK_STREAM) . "','" . 
-                htmlspecialchars($activeResourceEntry->CIO_ALIGNMENT) . "','" . 
-                htmlspecialchars($activeResourceEntry->INT_STATUS) . "','" . 
-                htmlspecialchars($activeResourceEntry->TRIBE_NAME) . "','" . 
-                htmlspecialchars($activeResourceEntry->SQUAD_NAME) . "','" . 
-                htmlspecialchars($mappedTribeName) . 
-            "' ) ";
-        }
-
-        $rs = sqlsrv_query( $GLOBALS['conn'], $sql );
-        if (! $rs) {
-            $success = false;
-        }
-    }
-    */
-    
     if($success){
         sqlsrv_commit($GLOBALS['conn']);
     } else {
         sqlsrv_rollback($GLOBALS['conn']);
     }
+    */
 
     echo count($responseArr) . ' records read from VBAC api';
 }
