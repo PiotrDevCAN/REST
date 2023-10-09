@@ -1,8 +1,8 @@
 <?php
 
-use itdq\BluePagesSLAPHAPI;
 use itdq\FormClass;
 use itdq\Loader;
+use itdq\WorkerAPI;
 use rest\allTables;
 use rest\rfsRecord;
 use rest\rfsTable;
@@ -51,15 +51,15 @@ if($sp === FALSE){
     }
 } else {
     // is ocean or kyndryl
-    // $data = BluePagesSLAPHAPI::getIBMDetailsFromIntranetId($rfsRequestorEmail);
-    // if (!empty($data)) {
-    //     //valid ocean
-    //     $invalidRequestorEmail = false;
-    // } else {
-    //     // invalid ocean
-    //     $invalidRequestorEmail = true;
-    // }
-    $invalidRequestorEmail = false;
+    $workerAPI = new WorkerAPI();
+    $data = $workerAPI->getworkerByEmail($rfsRequestorEmail);
+    if (array_key_exists('count', $data) || $data['count'] > 0){
+        //valid ocean
+        $invalidRequestorEmail = false;
+    } else {
+        // invalid ocean
+        $invalidRequestorEmail = true;
+    }
 }
 
 // if ($token !== $_SESSION['formToken']) {

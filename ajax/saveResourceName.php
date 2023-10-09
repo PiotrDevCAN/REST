@@ -32,7 +32,8 @@ $requestBespokeRateId = isset($_POST['BESPOKE_RATE_ID']) ? $_POST['BESPOKE_RATE_
 try {
     $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);   
     $currentResource = $resourceTable->getResourceName($resourceReference);
-    $allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
+    // $allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
+    $allocatorNotesid = $_SESSION['ssoEmail'];
     
     if(empty($clear) && $currentResource && (strtolower($currentResource) != strtolower(trim($resourceName))) && (substr($currentResource,0,5)!=='Delta')){        
         // resource removed notification

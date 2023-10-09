@@ -21,7 +21,8 @@ $loader = new Loader();
 
 $allRequests = $loader->load('RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS," RFS='" . htmlspecialchars($_POST['RFS_ID']) . "' ");
 
-$allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
+// $allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
+$allocatorNotesid = $_SESSION['ssoEmail'];
 $emailEntry = "A Resource Request &&rr&& linked to RFS &&rfs&& has been deleted by $allocatorNotesid ";
 $emailPattern = array('RESOURCE_REFERENCE'=>'/&&rr&&/','RFS'=>'/&&rfs&&/');
 

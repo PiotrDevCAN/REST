@@ -9,7 +9,8 @@ use rest\emailNotifications;
 ob_start();
 set_time_limit(0);
 
-$allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
+// $allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
+$allocatorNotesid = $_SESSION['ssoEmail'];
 $emailEntry = "A Resource Request linked to  RFS &&rfs&& has been deleted by $allocatorNotesid ";
 $emailPattern = array('RFS'=>'/&&rfs&&/');
 emailNotifications::sendNotification($_POST['RESOURCE_REFERENCE'],$emailEntry, $emailPattern);

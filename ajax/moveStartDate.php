@@ -53,7 +53,8 @@ sqlsrv_commit($GLOBALS['conn']);
 $diaryEntry = "Start Date was " . $movement . $_POST['startDate'] . " from " . $_POST['startDateWas'];
 $diaryRef = resourceRequestDiaryTable::insertEntry($diaryEntry, $_POST['resourceReference']);
 
-$modifierNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
+// $modifierNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
+$modifierNotesid = $_SESSION['ssoEmail'];
 
 $emailEntry = "The start date for your allocation to RFS &&rfs&& under Resource Request &&ref&& has been modified by $modifierNotesid";
 $emailEntry.= "<br/>From: " .  $startDateWasObj->format('d M Y');

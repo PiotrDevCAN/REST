@@ -1,8 +1,8 @@
 <?php
 
 use itdq\BluePages;
-use itdq\BluePagesSLAPHAPI;
 use itdq\Loader;
+use itdq\WorkerAPI;
 use rest\emailNotifications;
 use rest\allTables;
 use rest\rfsRecord;
@@ -28,15 +28,15 @@ if($sp === FALSE){
     $invalidRequestorEmail = true;
 } else {
     // is ocean or kyndryl
-    // $data = BluePagesSLAPHAPI::getIBMDetailsFromIntranetId($rfsRequestorEmail);
-    // if (!empty($data)) {
-    //     //valid ocean
-    //     $invalidRequestorEmail = false;
-    // } else {
-    //     //invalid ocean
-    //     $invalidRequestorEmail = true;
-    // }
-    $invalidRequestorEmail = false;
+    $workerAPI = new WorkerAPI();
+    $data = $workerAPI->getworkerByEmail($rfsRequestorEmail);
+    if (array_key_exists('count', $data) || $data['count'] > 0){
+        //valid ocean
+        $invalidRequestorEmail = false;
+    } else {
+        // invalid ocean
+        $invalidRequestorEmail = true;
+    }
 }
 
 switch (true) {
@@ -114,7 +114,8 @@ switch (true) {
             echo json_encode(sqlsrv_errors());
         }
 
-        $allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
+        // $allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
+        $allocatorNotesid = $_SESSION['ssoEmail'];
         $emailEntry = "You have been assigned as the Project Manager for RFS &&rfs&& by $allocatorNotesid ";
         $emailPattern = array('RFS_ID'=>'/&&rfs&&/');
         emailNotifications::sendRfsNotification($rfsId,$emailEntry, $emailPattern);
