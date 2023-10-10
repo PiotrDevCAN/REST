@@ -231,11 +231,11 @@ class resourceRequestRecord extends DbRecord
                <select class='form-control select' id='SERVICE'
                     name='SERVICE'
                     required='required'
-                    data-placeholder="Select Service"
+                    data-placeholder="Select Organisation first"
                     data-allow-clear="true"
                     <?=$disabledSubService;?>
                 >
-                <option value=''>Select Service<option>
+                <option value=''>Select Organisation first<option>
               </select>
               </div>
         </div>
