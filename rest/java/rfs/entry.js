@@ -162,7 +162,6 @@ Entry.listenForEditResultModalHidden();
 $('#LINK_TO_PGMP').attr('required', false);
 
 $('.typeahead').bind('typeahead:select', function (ev, suggestion) {
-	console.log(suggestion);
 	$('.tt-menu').hide();
 	$('#REQUESTOR_NAME').val(suggestion.value);
 });

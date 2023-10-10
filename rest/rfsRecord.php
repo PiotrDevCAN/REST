@@ -108,9 +108,9 @@ class rfsRecord extends DbRecord
         $allValueStream = $loader->load('VALUE_STREAM', allTables::$STATIC_VALUE_STREAM);
        
         $notEditable = $mode == FormClass::$modeEDIT ? ' disabled ' : '';
-		$readOnly = $mode==FormClass::$modeDISPLAY ? ' disabled ' : null;
-        if ($mode==FormClass::$modeDISPLAY) {
-            $notEditable = 'disabled';
+		$readOnly = $mode == FormClass::$modeDISPLAY ? ' readonly ' : null;
+        if ($mode == FormClass::$modeDISPLAY) {
+            $notEditable = 'readonly';
         }
         ?>
         <div class="form-group " id="RFS_IDFormGroup">
@@ -178,23 +178,10 @@ class rfsRecord extends DbRecord
 		</div>
 
 		<div class="form-group required " id="REQUESTOR_NAMEFormGroup">
-			<label for="REQUESTOR_NAME"
-				class="col-md-2 control-label ceta-label-left" data-toggle="tooltip"
-				data-placement="top" title="">Requestor Name</label>
-			<div class="col-md-3">
-				<input class="form-control" id="REQUESTOR_NAME" name="REQUESTOR_NAME"
-					value="<?=$this->REQUESTOR_NAME?>"
-					placeholder="Enter Requestor Name" required="required" type="text"
-					maxlength="<?=$this->rfsTable->getColumnLength('REQUESTOR_NAME');?>"
-					<?=$readOnly?>
-				>
-				<input id="originalREQUESTOR_NAME" name="originalREQUESTOR_NAME"
-					value="<?=$this->REQUESTOR_NAME?>" type="hidden">
-			</div>
 			<label for="REQUESTOR_EMAIL"
 				class="col-md-2 control-label ceta-label-left" data-toggle="tooltip"
 				data-placement="top" title="">Requestor Email</label>
-			<div class="col-md-5">
+			<div class="col-md-3">
 				<input class="form-control typeahead" id="REQUESTOR_EMAIL"
 					name="REQUESTOR_EMAIL" value="<?=$this->REQUESTOR_EMAIL;?>"
 					placeholder="Enter Requestor Kyndryl Email" required="required" type="email"
@@ -205,6 +192,19 @@ class rfsRecord extends DbRecord
 				<input id="originalREQUESTOR_EMAIL" name="originalREQUESTOR_EMAIL"
 					value="<?=$this->REQUESTOR_EMAIL;?>" type="hidden">
 				<p id="IBMNotAllowed" style="display:none; color: CRIMSON">IBM / Ocean email address is no longer allowed.</p>
+			</div>
+			<label for="REQUESTOR_NAME"
+				class="col-md-2 control-label ceta-label-left" data-toggle="tooltip"
+				data-placement="top" title="">Requestor Name</label>
+			<div class="col-md-5">
+				<input class="form-control" id="REQUESTOR_NAME" name="REQUESTOR_NAME"
+					value="<?=$this->REQUESTOR_NAME?>"
+					placeholder="Enter Requestor Kyndryl Email first" required="required" type="text"
+					maxlength="<?=$this->rfsTable->getColumnLength('REQUESTOR_NAME');?>"
+					readonly
+				>
+				<input id="originalREQUESTOR_NAME" name="originalREQUESTOR_NAME"
+					value="<?=$this->REQUESTOR_NAME?>" type="hidden">
 			</div>
 		</div>
 
@@ -232,51 +232,10 @@ class rfsRecord extends DbRecord
 					value="<?=$this->BUSINESS_UNIT?>" placeholder="Select Value Stream first"
 					type="text"
 					maxlength="<?=$this->rfsTable->getColumnLength('BUSINESS_UNIT');?>"
-					disabled >
-			</div>
-		</div>
-
-		<div class='form-group' id="RFS_TypeIlcFormGroup">
-			<div class='required_not_yet'>
-				<label for="ILC_WORK_ITEM"
-					class="col-md-2 control-label ceta-label-left"
-					data-toggle="tooltip" data-placement="top"
-					title="Claim Code - max length <?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM')-1;?>"
-					data-original-title="">ILC Work Item - Regular</label>
-				<div class="col-md-3">
-					<input class="form-control" id="ILC_WORK_ITEM" name="ILC_WORK_ITEM"
-						value="<?=$this->ILC_WORK_ITEM?>" placeholder="ILC Work Item - Regular"
-						type="text"
-						maxlength="<?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM')-1;?>"
-						>
-				</div>
-			</div>
-			<label for="RFS_START_DATE"
-				class="col-md-2 control-label ceta-label-left" data-toggle="tooltip"
-				data-placement="top" title="">RFS Start Date</label>
-			<div class="col-md-3">
-				<div id='calendarFormGroupRFS_START_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='RFS_START_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
-					<input id='InputRFS_START_DATE' class='form-control' type='text'  value='<?=$this->RFS_START_DATE;?>' placeholder='Select Start Date' required  <?=$notEditable?>/>
-					<input type='hidden' id='RFS_START_DATE' name='RFS_START_DATE' value='<?=$this->RFS_START_DATE;?>' required/>
-					<span class='input-group-addon'><span id='calendarIconRFS_START_DATE' class='glyphicon glyphicon-calendar'></span></span>
-				</div>
+					readonly >
 			</div>
 		</div>
 		<div class='form-group' id="RFS_TypeIlcFormGroup">
-			<div class='required_not_yet'>
-				<label for="ILC_WORK_ITEM_WEEKDAY_OVERTIME"
-					class="col-md-2 control-label ceta-label-left"
-					data-toggle="tooltip" data-placement="top"
-					title="Claim Code - max length <?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM_WEEKDAY_OVERTIME')-1;?>"
-					data-original-title="">ILC Work Item - Weekday Overtime</label>
-				<div class="col-md-3">
-					<input class="form-control" id="ILC_WORK_ITEM_WEEKDAY_OVERTIME" name="ILC_WORK_ITEM_WEEKDAY_OVERTIME"
-						value="<?=$this->ILC_WORK_ITEM_WEEKDAY_OVERTIME?>" placeholder="ILC Work Item - Weekday Overtime"
-						type="text"
-						maxlength="<?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM_WEEKDAY_OVERTIME')-1;?>"
-						>
-				</div>
-			</div>
 			<label for="RFS_END_DATE"
 				class="col-md-2 control-label ceta-label-left" data-toggle="tooltip"
 				data-placement="top" title="">RFS End Date</label>
@@ -286,22 +245,7 @@ class rfsRecord extends DbRecord
 					<input type='hidden' id='RFS_END_DATE' name='RFS_END_DATE' value='<?=$this->RFS_END_DATE;?>' required/>
 					<span class='input-group-addon'><span id='calendarIconRFS_END_DATE' class='glyphicon glyphicon-calendar'></span></span>
 				</div>
-			</div>
-		</div>
-		<div class='form-group' id="RFS_TypeIlcFormGroup">
-			<div class='required_not_yet'>
-				<label for="ILC_WORK_ITEM_WEEKEND_OVERTIME"
-					class="col-md-2 control-label ceta-label-left"
-					data-toggle="tooltip" data-placement="top"
-					title="Claim Code - max length <?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM_WEEKEND_OVERTIME')-1;?>"
-					data-original-title="">ILC Work Item - Weekend Overtime</label>
-				<div class="col-md-3">
-					<input class="form-control" id="ILC_WORK_ITEM_WEEKEND_OVERTIME" name="ILC_WORK_ITEM_WEEKEND_OVERTIME"
-						value="<?=$this->ILC_WORK_ITEM_WEEKEND_OVERTIME?>" placeholder="ILC Work Item - Weekend Overtime"
-						type="text"
-						maxlength="<?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM_WEEKEND_OVERTIME')-1;?>"
-						>
-				</div>
+				<input type='hidden' id='RFS_START_DATE' name='RFS_START_DATE' value='<?=$this->RFS_START_DATE;?>' required/>
 			</div>
 			<div class='required' >
 				<label for='RFS_TYPE'
@@ -317,7 +261,7 @@ class rfsRecord extends DbRecord
 						}
 				?>
 				</div>
-			</div>	
+			</div>
 			<div class='required' >
 				<label for='RFS_STATUS'
 					class='col-md-2 control-label ceta-label-left'>RFS Status</label>
@@ -335,15 +279,33 @@ class rfsRecord extends DbRecord
 						}
 				?>
 				</div>
-			</div>
+			</div>			
+		</div>
+		<div class='form-group' id="RFS_TypeIlcFormGroup">
+			<div class='required_not_yet'>
+				<label for="ILC_WORK_ITEM"
+					class="col-md-2 control-label ceta-label-left"
+					data-toggle="tooltip" data-placement="top"
+					title="Claim Code - max length <?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>"
+					data-original-title="">ILC Work Item</label>
+				<div class="col-md-3">
+					<input class="form-control" id="ILC_WORK_ITEM" name="ILC_WORK_ITEM"
+						value="<?=$this->ILC_WORK_ITEM?>" placeholder="ILC Work Item"
+						type="text"
+						maxlength="<?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>"
+						disabled
+						>
+					<input type='hidden' id='ILC_WORK_ITEM_WEEKDAY_OVERTIME' name='ILC_WORK_ITEM_WEEKDAY_OVERTIME' value='<?=$this->ILC_WORK_ITEM_WEEKDAY_OVERTIME;?>'/>
+					<input type='hidden' id='ILC_WORK_ITEM_WEEKEND_OVERTIME' name='ILC_WORK_ITEM_WEEKEND_OVERTIME' value='<?=$this->ILC_WORK_ITEM_WEEKEND_OVERTIME;?>'/>
+				</div>
+			</div>			
 		</div>
 		<div id="invalidILCWorkItems" class="col-md-12" style="display:none; color: CRIMSON">
 			<div class="col-md-2">
 			</div>				
 			<div class="col-md-7">
-				<p>Provided values of ILC Work Items are incorrect.</p>
-				<p>Each of item has to be 8 characters lenght.</p>
-				<p>Providing a Work Item value of at least one type is required.</p>
+				<p>Provided value of ILC Work Item is incorrect.</p>
+				<p>The value has to be 9 characters lenght.</p>
 			</div>
 		</div>
 		<div class="form-group" id='LinkToPgmpFormGroup'>

@@ -2,6 +2,7 @@
  *
  */
 
+let helper = await cacheBustImport('./modules/helper.js');
 let BankHolidays = await cacheBustImport('./modules/dataSources/bankHolidays.js');
 
 class startAndEnd {
