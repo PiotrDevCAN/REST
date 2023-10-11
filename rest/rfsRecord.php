@@ -201,7 +201,7 @@ class rfsRecord extends DbRecord
 					value="<?=$this->REQUESTOR_NAME?>"
 					placeholder="Enter Requestor Kyndryl Email first" required="required" type="text"
 					maxlength="<?=$this->rfsTable->getColumnLength('REQUESTOR_NAME');?>"
-					readonly
+					<?=$readOnly?>
 				>
 				<input id="originalREQUESTOR_NAME" name="originalREQUESTOR_NAME"
 					value="<?=$this->REQUESTOR_NAME?>" type="hidden">
@@ -287,13 +287,12 @@ class rfsRecord extends DbRecord
 					class="col-md-2 control-label ceta-label-left"
 					data-toggle="tooltip" data-placement="top"
 					title="Claim Code - max length <?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>"
-					data-original-title="">ILC Work Item</label>
+					data-original-title="">WBS element id</label>
 				<div class="col-md-3">
 					<input class="form-control" id="ILC_WORK_ITEM" name="ILC_WORK_ITEM"
-						value="<?=$this->ILC_WORK_ITEM?>" placeholder="ILC Work Item"
+						value="<?=$this->ILC_WORK_ITEM?>" placeholder="WBS element id"
 						type="text"
 						maxlength="<?=$this->rfsTable->getColumnLength('ILC_WORK_ITEM');?>"
-						disabled
 						>
 					<input type='hidden' id='ILC_WORK_ITEM_WEEKDAY_OVERTIME' name='ILC_WORK_ITEM_WEEKDAY_OVERTIME' value='<?=$this->ILC_WORK_ITEM_WEEKDAY_OVERTIME;?>'/>
 					<input type='hidden' id='ILC_WORK_ITEM_WEEKEND_OVERTIME' name='ILC_WORK_ITEM_WEEKEND_OVERTIME' value='<?=$this->ILC_WORK_ITEM_WEEKEND_OVERTIME;?>'/>
@@ -304,7 +303,7 @@ class rfsRecord extends DbRecord
 			<div class="col-md-2">
 			</div>				
 			<div class="col-md-7">
-				<p>Provided value of ILC Work Item is incorrect.</p>
+				<p>Provided value of WBS element id is incorrect.</p>
 				<p>The value has to be 9 characters lenght.</p>
 			</div>
 		</div>
