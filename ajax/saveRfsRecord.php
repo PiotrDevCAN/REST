@@ -71,7 +71,7 @@ if($sp === FALSE){
 
 $invalidRfsType = !in_array($rfsType, rfsRecord::$rfsType);
 $invalidRfsStatus = !in_array($rfsStatus, rfsRecord::$rfsStatus);
-$invalidRfsStartDate = rfsTable::validateDate($rfsStartDate) === false;
+// $invalidRfsStartDate = rfsTable::validateDate($rfsStartDate) === false;
 $invalidRfsEndDate = rfsTable::validateDate($rfsEndDate) === false;
 
 // clean all potential errors
@@ -99,9 +99,9 @@ switch (true) {
     case $invalidRfsStatus:
         $messages = 'Cannot save RFS Record with provided RFS Status value.';
         break;
-    case $invalidRfsStartDate:
-        $messages = 'Cannot save RFS Record with provided RFS Start Date value.';
-        break;
+    // case $invalidRfsStartDate:
+    //     $messages = 'Cannot save RFS Record with provided RFS Start Date value.';
+    //     break;
     case $invalidRfsEndDate:
         $messages = 'Cannot save RFS Record with provided RFS End Date value.';
         break;
