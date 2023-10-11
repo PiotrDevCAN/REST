@@ -21,7 +21,7 @@ trait diaryTableTrait
         
         $diaryRef = DiaryTable::insertEntry($entry);
         
-        $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_DIARY . " ( DIARY_REFERENCE, RESOURCE_REFERENCE) ";
+        $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_DIARY . " ( DIARY_REFERENCE, RESOURCE_REFERENCE ) ";
         $sql .= " Values ('" . htmlspecialchars(trim($diaryRef)) . "','" . htmlspecialchars($resourceRef) . "' ) ";
         
         $rs = sqlsrv_query( $GLOBALS['conn'], $sql );
