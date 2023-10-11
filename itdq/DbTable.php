@@ -637,9 +637,7 @@ class DbTable
         }
         $sql .= " WHERE " . $predicate;
         Trace::traceVariable($sql, __METHOD__);
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql, array(
-            'cursor' => SQLSRV_CURSOR_DYNAMIC
-        ));
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
         return $rs;
     }
 
