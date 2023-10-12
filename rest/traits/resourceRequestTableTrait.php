@@ -1064,7 +1064,7 @@ trait resourceRequestTableTrait
                                 'emailAddress'=>trim($employeeDetails->EMAIL_ADDRESS),
                                 'kynEmailAddress'=>trim($employeeDetails->KYN_EMAIL_ADDRESS),
                                 'notesId'=>trim($employeeDetails->NOTES_ID),
-                                'text'=>trim($employeeDetails->FIRST_NAME) . ' ' . trim($employeeDetails->LAST_NAME) . ' (' . trim($employeeDetails->EMAIL_ADDRESS) . ')',
+                                'text'=>trim($employeeDetails->FIRST_NAME) . ' ' . trim($employeeDetails->LAST_NAME) . ' (' . trim($employeeDetails->KYN_EMAIL_ADDRESS) . ')',
                                 'role'=>trim($employeeDetails->SQUAD_NAME),
                                 'tribe'=>trim($employeeDetails->TRIBE_NAME),
                                 'distance'=>'remote'
