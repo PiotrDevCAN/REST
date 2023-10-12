@@ -98,8 +98,7 @@ class archivedRfsRecord extends DbRecord
 		<label for="PROJECT_CODE"
 			class="col-md-2	 control-label ceta-label-left" data-toggle="tooltip"
 			data-placement="top" data-original-title=""
-			title="Project Code - max length <?=$this->rfsTable->getColumnLength('PROJECT_CODE');?>">Project
-			Code<br />
+			title="Client Project Number - max length <?=$this->rfsTable->getColumnLength('PROJECT_CODE');?>">Client Project Number<br />
 		<span style="font-size: 0.8em">(WBS Number)</span>
 		</label>
 		<div class="col-md-3">

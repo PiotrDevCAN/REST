@@ -78,10 +78,29 @@ class resourceRequestRecord extends DbRecord
 
     function displayForm($mode)
     {
-        $notEditable = $mode==FormClass::$modeEDIT ? ' disabled ' : null;
-        $readOnly = $mode==FormClass::$modeDISPLAY ? ' disabled ' : null;
-        if ($mode==FormClass::$modeDISPLAY) {
-            $notEditable = 'disabled';
+        switch($mode) {
+            case FormClass::$modeDEFINE:
+                // Define
+                $notEditable = null;
+                $notEditableForNew = null;
+                $readOnly = null;
+                break;
+            case FormClass::$modeEDIT:
+                $notEditable = ' readonly ';
+                if (empty($this->RESOURCE_NAME) && $this->STATUS == self::STATUS_NEW) {
+                    $notEditableForNew = null;
+                } else {
+                    $notEditableForNew = ' readonly ';
+                }
+                $readOnly = null;
+                break;
+            case FormClass::$modeDISPLAY:
+                $notEditable = ' disabled ';
+                $notEditableForNew = ' disabled ';
+                $readOnly = ' disabled ';
+                break;
+            default:
+                break;
         }
         ?>
         <form id='resourceRequestForm' class="form-horizontal"  method='post'>
@@ -135,7 +154,7 @@ class resourceRequestRecord extends DbRecord
                 <label for='START_DATE' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>Start Date</label>
                 <div class='col-md-3'>
                     <div id='calendarFormGroupSTART_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='START_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
-                        <input id='InputSTART_DATE' class='form-control' type='text'  value='<?=$startDateStr?>' placeholder='Select Start Date' required  <?=$notEditable?>/>
+                        <input id='InputSTART_DATE' class='form-control' type='text'  value='<?=$startDateStr?>' placeholder='Select Start Date' required  <?=$notEditableForNew?>/>
                         <input type='hidden' id='START_DATE' name='START_DATE' value='<?=$startDateStr2?>' required/>
                         <!-- <input type='hidden' id='startDateWas' name='startDateWas' value='<?=$startDateStr2?>' required/> -->
                         <span class='input-group-addon'><span id='calendarIconSTART_DATE' class='glyphicon glyphicon-calendar'></span></span>
@@ -147,7 +166,7 @@ class resourceRequestRecord extends DbRecord
                 <label for='END_DATE' class='col-md-2 control-label ceta-label-left' data-toggle='tooltip' data-placement='top' title=''>End Date</label>
                 <div class='col-md-3'>
                     <div id='calendarFormGroupEND_DATE' class='input-group date form_datetime' data-date-format='dd MM yyyy - HH:ii p' data-link-field='END_DATE' data-link-format='yyyy-mm-dd-hh.ii.00'>
-                        <input id='InputEND_DATE' class='form-control' type='text'  value='<?=$endDateStr?>' placeholder='Select End Date' required <?=$notEditable?> />
+                        <input id='InputEND_DATE' class='form-control' type='text'  value='<?=$endDateStr?>' placeholder='Select End Date' required <?=$notEditableForNew?> />
                         <input type='hidden' id='END_DATE' name='END_DATE' value='<?=$endDateStr2?>' required />
                         <!-- <input type='hidden' id='endDateWas' name='endDateWas' value='<?=$endDateStr2?>' required/> -->
                         <span class='input-group-addon'><span id='calendarIconEND_DATE' class='glyphicon glyphicon-calendar'></span></span>
@@ -161,7 +180,7 @@ class resourceRequestRecord extends DbRecord
             <div id='HrsPerWeekFormGroup'>
                 <label for="TOTAL_HOURS" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="">Total Hours<br/><small>For this request</small></label>
                 <div class="col-md-3">
-                    <input type='number' step='0.01' min=0 max=6000 class="form-control" id="TOTAL_HOURS" name="TOTAL_HOURS" value="<?=$this->TOTAL_HOURS?>" placeholder="Total Hrs For RFS" <?=$notEditable?> required >
+                    <input type='number' step='0.01' min=0 max=6000 class="form-control" id="TOTAL_HOURS" name="TOTAL_HOURS" value="<?=$this->TOTAL_HOURS?>" placeholder="Total Hrs For RFS" <?=$notEditableForNew?> required >
                     <input id="originalTotal_Hours" name="originalTotal_Hours" value="<?=$this->TOTAL_HOURS?>" type="hidden">
                 </div>
             </div>
