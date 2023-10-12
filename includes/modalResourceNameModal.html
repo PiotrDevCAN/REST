@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div id="resourceNameModal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -13,7 +13,7 @@
         <form id="resourceNameForm" class="form-horizontalAA">
           <div class="container-fluid">
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <div class="form-group">
                   <label for="BUSINESS_UNIT" class="control-label ceta-label-left" data-toggle="tooltip"
                     data-placement="top" title="" data-original-title="">Business Unit</label>
@@ -31,63 +31,26 @@
                   <input type="hidden" id="currentResourceName" name="currentResourceName" value="" />
                 </div>
                 <div class="form-group">
+                  <label for="RESOURCE_CNUM" class="control-label ceta-label-left" data-toggle="tooltip"
+                    data-placement="top" title="" data-original-title="">Resource CNUM</label>
+                  <input type="text" class="form-control" id="RESOURCE_CNUM" name="RESOURCE_CNUM" value="" readonly />
+                </div>
+                <div class="form-group">
                   <label for="RESOURCE_EMAIL_ADDRESS" class="control-label ceta-label-left" data-toggle="tooltip"
                     data-placement="top" title="" data-original-title="">Resource Email</label>
                   <input type="text" class="form-control" id="RESOURCE_EMAIL_ADDRESS" name="RESOURCE_EMAIL_ADDRESS"
-                    value="" disabled />
+                    value="" readonly />
                 </div>
                 <div class="form-group">
                   <label for="RESOURCE_KYN_EMAIL_ADDRESS" class="control-label ceta-label-left" data-toggle="tooltip"
                     data-placement="top" title="" data-original-title="">Resource Kyndryl
                     Email</label>
                   <input type="text" class="form-control" id="RESOURCE_KYN_EMAIL_ADDRESS"
-                    name="RESOURCE_KYN_EMAIL_ADDRESS" value="" disabled />
+                    name="RESOURCE_KYN_EMAIL_ADDRESS" value="" readonly />
                 </div>
                 <div class='messageArea'></div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="RESOURCE_TYPE_ID" class="control-label ceta-label-left" data-toggle="tooltip"
-                    data-placement="top" title="" data-original-title="">Resource Type</label>
-                  <select class="form-control select" id="RESOURCE_TYPE_ID" name="RESOURCE_TYPE_ID" required="required"
-                    data-placeholder="Select Resource Type" data-allow-clear="true">
-                    <option value="">Select Resource Type</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="PS_BAND_ID" class="control-label ceta-label-left" data-toggle="tooltip"
-                    data-placement="top" title="" data-original-title="">PS Band</label>
-                  <select class="form-control select" id="PS_BAND_ID" name="PS_BAND_ID" required="required"
-                    data-placeholder="Select PS Band" data-allow-clear="true" disabled>
-                    <option value="">Select PS Band</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="DAY_RATE" class="control-label ceta-label-left" data-toggle="tooltip" data-placement="top"
-                    title="" data-original-title="">Day Rate</label>
-                  <input type="text" class="form-control" id="DAY_RATE" name="DAY_RATE" value="" disabled />
-                </div>
-                <div class="form-group">
-                  <label for="HOURLY_RATE" class="control-label ceta-label-left" data-toggle="tooltip"
-                    data-placement="top" title="" data-original-title="">Hourly Rate</label>
-                  <input type="text" class="form-control" id="HOURLY_RATE" name="HOURLY_RATE" value="" disabled />
-                </div>
-                <div class="form-group">
-                  <hr style="margin: 5px 0;"/>
-                  <h4>Bespoke Rate details</h4>
-                  <p id="bespokeRateMessage"></p>
-                  <p id="bespokeRateErrorMessage"></p>
-                  <hr style="margin: 5px 0;"/>
-                  <h4>Rate Card details</h4>
-                  <p id="rateCardMessage"></p>
-                  <p id="rateCardErrorMessage"></p>
-                  <hr style="margin: 5px 0;"/>
-                  <h4>Assignment details</h4>
-                  <p id="assignmentTypeMessage"></p>
-                </div>
                 <input type="hidden" id="RFS_ID" name="RFS_ID" value="" />
                 <input type="hidden" id="RESOURCE_REFERENCE" name="RESOURCE_REFERENCE" value="" />
-                <input type="hidden" id="BESPOKE_RATE_ID" name="BESPOKE_RATE_ID" value="" />
               </div>
             </div>
           </div>

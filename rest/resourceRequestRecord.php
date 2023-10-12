@@ -35,6 +35,7 @@ class resourceRequestRecord extends DbRecord
     protected $TOTAL_HOURS; // ALTER TABLE "REST_DEV"."RESOURCE_REQUESTS" ADD COLUMN "TOTAL_HOURS" DECIMAL(8,2);
     protected $EMAIL_ADDRESS;
     protected $KYN_EMAIL_ADDRESS;
+    protected $CNUM;
 
     static public $columnHeadings = array(
         "Resource Ref", 

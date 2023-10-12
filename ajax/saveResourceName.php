@@ -4,15 +4,8 @@ use itdq\Trace;
 use itdq\AuditTable;
 use rest\allTables;
 use rest\resourceRequestTable;
-use rest\resourceRequestHoursTable;
 use rest\resourceRequestDiaryTable;
 use rest\emailNotifications;
-use rest\staticBespokeRateRecord;
-use rest\staticBespokeRateTable;
-use rest\staticResourcePSBandsRecord;
-use rest\staticResourcePSBandsTable;
-use rest\staticResourceTypesRecord;
-use rest\staticResourceTypesTable;
 
 set_time_limit(0);
 ob_start();
@@ -23,15 +16,11 @@ $resourceReference = isset($_POST['RESOURCE_REFERENCE']) ? $_POST['RESOURCE_REFE
 $resourceName = isset($_POST['RESOURCE_NAME']) ? $_POST['RESOURCE_NAME'] : null;
 $resourceEmailAddress = isset($_POST['RESOURCE_EMAIL_ADDRESS']) ? $_POST['RESOURCE_EMAIL_ADDRESS'] : null;
 $resourceKynEmailAddress = isset($_POST['RESOURCE_KYN_EMAIL_ADDRESS']) ? $_POST['RESOURCE_KYN_EMAIL_ADDRESS'] : null;
-
-$resourceTypeId = isset($_POST['RESOURCE_TYPE_ID']) ? $_POST['RESOURCE_TYPE_ID'] : null;
-$resourcePSBandId = isset($_POST['PS_BAND_ID']) ? $_POST['PS_BAND_ID'] : null;
-$requestBespokeRateId = isset($_POST['BESPOKE_RATE_ID']) ? $_POST['BESPOKE_RATE_ID'] : null;
+$resourceCNUM = isset($_POST['RESOURCE_CNUM']) ? $_POST['RESOURCE_CNUM'] : null;
 
 try {
     $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);   
     $currentResource = $resourceTable->getResourceName($resourceReference);
-    // $allocatorNotesid = BluePages::getNotesidFromIntranetId($_SESSION['ssoEmail']);
     $allocatorNotesid = $_SESSION['ssoEmail'];
     
     if(empty($clear) && $currentResource && (strtolower($currentResource) != strtolower(trim($resourceName))) && (substr($currentResource,0,5)!=='Delta')){        
@@ -48,17 +37,7 @@ try {
         emailNotifications::sendNotification($resourceReference, $emailEntry, $emailPattern);         
     }
     
-    $resourceTable->updateResourceName($resourceReference, $resourceName, $resourceEmailAddress, $resourceKynEmailAddress, $clear);
-
-    // save bespoke rate
-    // $table  = new staticBespokeRateTable(allTables::$BESPOKE_RATES);
-    // $record = new staticBespokeRateRecord();
-    // $record->setFromArray(
-    //     array(
-    //         'RFS_ID'=>$_POST['RFS_ID'],
-    //         'RESOURCE_REFERENCE'=>$_POST['RESOURCE_REFERENCE']
-    //     )
-    // );
+    $resourceTable->updateResourceName($resourceReference, $resourceName, $resourceEmailAddress, $resourceKynEmailAddress, $resourceCNUM, $clear);
 
     $diaryEntry = empty($clear) ?  $resourceName . " allocated to request" : " Resource name cleared";
     resourceRequestDiaryTable::insertEntry($diaryEntry, $resourceReference);
@@ -85,9 +64,7 @@ $response = array(
     'resourceName' => $resourceName,
     'resourceEmail' => $resourceEmailAddress,
     'resourceKynEmail' => $resourceKynEmailAddress,
-    'resourceTypeId' => $resourceTypeId,
-    'resourcePSBandId' => $resourcePSBandId,
-    'requestBespokeRateId' => $requestBespokeRateId,
+    'resourceCNUM' => $resourceCNUM,
     'messages'=>$messages, 
     'Exception'=> $exception
     ) ;

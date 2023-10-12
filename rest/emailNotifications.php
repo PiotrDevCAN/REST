@@ -18,7 +18,7 @@ class emailNotifications
         $resourceNotesid = isset($resourceRequestData['RESOURCE_NAME']) ? trim($resourceRequestData['RESOURCE_NAME'])  : null ;
         // $resourceEmail = !empty($resourceNotesid) ? BluePages::getIntranetIdFromNotesId($resourceNotesid) : null ;
         $workerAPI = new WorkerAPI();
-        $resourceEmail = !empty($resourceNotesid) ? $workerAPI::getIntranetIdFromNotesId($resourceNotesid) : null ;
+        $resourceEmail = !empty($resourceNotesid) ? $workerAPI->getIntranetIdFromNotesId($resourceNotesid) : null ;
         
         // get requestor details
         $requestorEmail = rfsTable::getRequestorEmail($resourceRequestData['RFS']);
