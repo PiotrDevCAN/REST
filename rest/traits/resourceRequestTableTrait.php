@@ -28,6 +28,7 @@ trait resourceRequestTableTrait
     private $lastDiaryEntriesByResourceReference;
 
     private $vbacEmployeesWithSquad = array();
+    private $vbacEmployees = array();
 
     static function buildHTMLTable($tableId = 'resourceRequests', $startDate, $endDate){
         $RRheaderCells = resourceRequestRecord::htmlHeaderCellsStatic($startDate);
@@ -128,6 +129,7 @@ trait resourceRequestTableTrait
             $data = $resourceTable->getVbacActiveResourcesForSelect2();
             list('vbacEmployees' => $vbacEmployees, 'tribeEmployees' => $tribeEmployees) = $data;
             $this->vbacEmployeesWithSquad = array_column($vbacEmployees, 'id');
+            $this->vbacEmployees = $vbacEmployees;
         }
 
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
@@ -318,6 +320,7 @@ trait resourceRequestTableTrait
             $data = $resourceTable->getVbacActiveResourcesForSelect2();
             list('vbacEmployees' => $vbacEmployees, 'tribeEmployees' => $tribeEmployees) = $data;
             $this->vbacEmployeesWithSquad = array_column($vbacEmployees, 'id');
+            $this->vbacEmployees = $vbacEmployees;
         }
 
         $sql = 'Statistics only';
@@ -350,6 +353,7 @@ trait resourceRequestTableTrait
         $data = $resourceTable->getVbacActiveResourcesForSelect2();
         list('vbacEmployees' => $vbacEmployees, 'tribeEmployees' => $tribeEmployees) = $data;
         $this->vbacEmployeesWithSquad = array_column($vbacEmployees, 'id');
+        $this->vbacEmployees = $vbacEmployees;
         
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
         $hoursRemainingByReference = $resourceRequestHoursTable->getHoursRemainingByReference();
@@ -665,12 +669,6 @@ trait resourceRequestTableTrait
          <span data-toggle='tooltip' title='Change Status to Completed' class='glyphicon glyphicon-check ' aria-hidden='true' ></span>
             </button>&nbsp;<span class='$assignColor'>$status</span>" : "<span class='$assignColor'>$status</span>";
 
-        $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';
-        $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::$duplicate))==resourceRequestTable::$duplicate ? 'text-success' : $editButtonColor;
-        $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::$delta))==resourceRequestTable::$delta ? 'text-success' : $editButtonColor;
-
-        $resName = $editButtonColor == 'text-success' ? "<i>$resourceName</i>" : $resourceName;
-
         $duplicatable = true; //Can clone any record.
 
         $canBeAmendedByDemandTeam = empty(trim($resourceName)) ? Navbar::$ACCESS_DEMAND : null; // Demand can amend any Request that is yet to have resource allocated to it.
@@ -715,9 +713,34 @@ trait resourceRequestTableTrait
                 <span data-toggle='tooltip' class=' glyphicon glyphicon-flash text-primary' aria-hidden='true' title='Indicate Completed'></span>
             </button>" : null;
         
+        if (isset($this->vbacEmployees[$resourceName])) {
+            $resCnum = $this->vbacEmployees[$resourceName]['cnum'];
+            $resEmail = $this->vbacEmployees[$resourceName]['emailAddress'];
+            $resKynEmail = $this->vbacEmployees[$resourceName]['kynEmailAddress'];
+        
+            if (!empty($resKynEmail)) {
+                $displayResourceName = $resKynEmail;
+            } else {
+                if (!empty($resEmail)) {
+                    $displayResourceName = $resEmail;
+                } else {
+                    $displayResourceName = $resourceName;
+                }
+            }
+        } else {
+            $resCnum = '';
+            $resEmail = '';
+            $resKynEmail = '';
+            $displayResourceName = $resourceName;
+        }
+
+        $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';
+        $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::$duplicate))==resourceRequestTable::$duplicate ? 'text-success' : $editButtonColor;
+        $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::$delta))==resourceRequestTable::$delta ? 'text-success' : $editButtonColor;
+
+        $resName = $editButtonColor == 'text-success' ? "<i>$resourceName</i>" : $displayResourceName;
+
         $resName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $resName;
-        // $resName = substr($resourceName,0,strlen(resourceRequestTable::$delta))==resourceRequestTable::$delta ? "<i>Unallocated</i><br/>" . trim($resourceName) : $resName;
-        // $resName = substr($resourceName,0,strlen(resourceRequestTable::$duplicate))==resourceRequestTable::$duplicate ? "<i>Unallocated</i><br/>" . trim($resourceName) : $resName;
         $resName = substr($resourceName,0,strlen(resourceRequestTable::$delta))==resourceRequestTable::$delta ? "<i>Unallocated</i>" : $resName;
         $resName = substr($resourceName,0,strlen(resourceRequestTable::$duplicate))==resourceRequestTable::$duplicate ? "<i>Unallocated</i>" : $resName;
 
@@ -1033,7 +1056,9 @@ trait resourceRequestTableTrait
                         
                         // Filter out invalid Notes Ids                    
                         // if (strtolower(substr(trim($employeeDetails->NOTES_ID), -4))=='/ibm' || strtolower(substr(trim($employeeDetails->NOTES_ID), -6))=='/ocean') {
-                            $vbacEmployees[] = array(
+                            // $vbacEmployees[] = array(
+                            $key = trim($employeeDetails->NOTES_ID);
+                            $vbacEmployees[$key] = array(
                                 'id'=>trim($employeeDetails->NOTES_ID),
                                 'cnum'=>trim($employeeDetails->CNUM),
                                 'emailAddress'=>trim($employeeDetails->EMAIL_ADDRESS),

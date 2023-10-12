@@ -111,7 +111,7 @@ if ($err) {
                 die( print_r( sqlsrv_errors(), true ));
             }
 
-            $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( CNUM, EMAIL_ADDRESS, NOTES_ID, PES_STATUS, WORK_STREAM, CIO_ALIGNMENT, STATUS, TRIBE_NAME, SQUAD_NAME, TRIBE_NAME_MAPPED )  Values ";
+            $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( CNUM, EMAIL_ADDRESS, NOTES_ID, PES_STATUS, CIO_ALIGNMENT, STATUS, TRIBE_NAME, SQUAD_NAME, TRIBE_NAME_MAPPED )  Values ";
             $first = true;
 
             foreach ($personEnties as $key => $personEntry) {
@@ -128,8 +128,7 @@ if ($err) {
                         htmlspecialchars(trim($personEntry['CNUM'])) . "','" . 
                         htmlspecialchars($email) . "','" . 
                         htmlspecialchars($personEntry['NOTES_ID']) . "','" . 
-                        htmlspecialchars($personEntry['PES_STATUS']) . "','" . 
-                        htmlspecialchars($personEntry['WORK_STREAM']) . "','" . 
+                        htmlspecialchars($personEntry['PES_STATUS']) . "','" .
                         htmlspecialchars($personEntry['CIO_ALIGNMENT']) . "','" . 
                         htmlspecialchars($personEntry['INT_STATUS']) . "','" . 
                         htmlspecialchars($personEntry['TRIBE_NAME']) . "','" . 

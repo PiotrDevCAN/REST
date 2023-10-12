@@ -115,7 +115,7 @@ $bothDisabled     = (!($_SESSION['isAdmin'])) && !$_SESSION['isRfs'] ? 'disabled
         <label for='pipelineLiveArchive' class='col-md-3 control-label text-right'>RFS Status</label>
           <div class='col-md-9  text-left' >
             <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$liveChecked?> <?=$defaultToLive?> data-toggle="button" value='live' <?=$liveDisabled?> >Live</label>
-            <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$archiveChecked?> data-toggle="button" value='archive'  <?=$archiveDisabled?>>Archive</label>
+            <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$archiveChecked?> data-toggle="button" value='archive' <?=$archiveDisabled?> >Archive</label>
             <label class='radio-inline control-label '><input type="radio" name="pipelineLiveArchive" <?=$bothChecked?> data-toggle="button" value='both' <?=$bothDisabled?> >Both</label>
           </div>
       </div>
