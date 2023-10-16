@@ -2,6 +2,7 @@
 namespace rest;
 
 use itdq\DbTable;
+use itdq\Navbar;
 
 /**
  *
@@ -29,8 +30,17 @@ class staticValueStreamTable extends DbTable
         while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             $display = array();
             $row = array_map('trim', $row);
-            $display['VALUE_STREAM'] = $row['VALUE_STREAM'];
-            $display['BUSINESS_UNIT'] = $row['BUSINESS_UNIT'];
+            $valueStream = $row['VALUE_STREAM'];
+            $businessUnit = $row['BUSINESS_UNIT'];
+            $display['VALUE_STREAM'] = "";
+            $display['VALUE_STREAM'] .="<button type='button' class='btn btn-danger btn-xs deleteRecord ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_ADMIN." ".Navbar::$ACCESS_DEMAND." ".Navbar::$ACCESS_CDI." ".Navbar::$ACCESS_RFS."' aria-label='Left Align' data-valuestream='" . $valueStream . "' data-businessunit='" . $businessUnit . "'>  
+                    <span class='glyphicon glyphicon-trash' aria-hidden='true'  data-toggle='tooltip' title='Delete Record' ></span>
+                </button>";
+            $display['VALUE_STREAM'] .="&nbsp;<button type='button' class='btn btn-success btn-xs editRecord ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_ADMIN." ".Navbar::$ACCESS_CDI."' aria-label='Left Align' data-valuestream='" . $valueStream . "' data-businessunit='" . $businessUnit . "'>
+                <span data-toggle='tooltip' class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Record'></span>
+            </button>";
+            $display['VALUE_STREAM'] .= " <span>".$valueStream."</span>";
+            $display['BUSINESS_UNIT'] = $businessUnit;
             $displayAble[] = $display;
         }
         return $displayAble;

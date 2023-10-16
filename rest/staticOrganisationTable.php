@@ -2,6 +2,7 @@
 namespace rest;
 
 use itdq\DbTable;
+use itdq\Navbar;
 
 /**
  *
@@ -84,10 +85,18 @@ class staticOrganisationTable extends DbTable
         while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             $display = array();
             $row = array_map('trim', $row);
-            $display['ORGANISATION'] = $row['ORGANISATION'];
-            $display['SERVICE'] = $row['SERVICE'];
+            $organisation = $row['ORGANISATION'];
+            $service = $row['SERVICE'];
+            $display['ORGANISATION'] = "";
+            $display['ORGANISATION'] .="<button type='button' class='btn btn-danger btn-xs deleteRecord ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_ADMIN." ".Navbar::$ACCESS_DEMAND." ".Navbar::$ACCESS_CDI." ".Navbar::$ACCESS_RFS."' aria-label='Left Align' data-organisation='" . $organisation . "' data-service='" . $service . "'>  
+                    <span class='glyphicon glyphicon-trash' aria-hidden='true'  data-toggle='tooltip' title='Delete Record' ></span>
+                </button>";
+            $display['ORGANISATION'] .="&nbsp;<button type='button' class='btn btn-success btn-xs editRecord ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_ADMIN." ".Navbar::$ACCESS_CDI."' aria-label='Left Align' data-organisation='" . $organisation . "' data-service='" . $service . "'>
+                <span data-toggle='tooltip' class='glyphicon glyphicon-edit ' aria-hidden='true' title='Edit Record'></span>
+            </button>";
+            $display['ORGANISATION'] .= " <span>".$organisation."</span>";
+            $display['SERVICE'] = $service;
             $display['STATUS'] = self::getStatusCellWithButton($row['STATUS'], $row['ORGANISATION'], $row['SERVICE']);
-            //           $data[] = array($display['COUNTRY'],$display['MARKET'],$display['STATUS']);
             $displayAble[] = $display;
         }
         return $displayAble;

@@ -8,8 +8,24 @@ class businessUnitsValuesStreamsEntry {
     responseObj;
 
     constructor() {
+        this.listenForDeleteRecord();
+        this.listenForEditRecord();
         this.listenForSaveOrganisation();
         this.listenForResetForm();
+    }
+
+    listenForEditRecord() {
+        $(document).on("click", ".editRecord", function () {
+            $("#VALUE_STREAM").val($(this).data("valuestream"));
+            $("#BUSINESS_UNIT").val($(this).data("businessunit"));
+            $("#mode").val("edit");
+        });
+    }
+
+    listenForDeleteRecord() {
+        $(document).on("click", ".deleteRecord", function () {
+            return false;
+        });
     }
 
     listenForSaveOrganisation() {
