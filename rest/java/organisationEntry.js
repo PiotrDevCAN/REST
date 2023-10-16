@@ -29,15 +29,41 @@ class organisationEntry {
 
     listenForDeleteRecord() {
         $(document).on("click", ".deleteRecord", function () {
-            return false;
+            var status = $(this).data('status');
+            var organisation = $(this).data('organisation');
+            var service = $(this).data('service');
+            $.ajax({
+                url: "ajax/deleteOrganisation.php",
+                type: 'POST',
+                data: {
+                    currentStatus: status,
+                    ORGANISATION: organisation,
+                    SERVICE: service
+                },
+                success: function (result) {
+                    try {
+                        var resultObj = JSON.parse(result);
+                        var success = resultObj.success;
+                        var messages = resultObj.messages;
+                        if (success) {
+                            messages = 'Record deleted';
+                        }
+                        helper.displaySaveResultModal(messages);
+                        $('.spinning').removeClass('spinning').attr('disabled', false);
+                    } catch (e) {
+                        helper.unlockButton();
+                        helper.displayTellDevMessageModal(e);
+                    }
+                }
+            });
         });
     }
 
     listenForSaveOrganisation() {
         var $this = this;
-        $(document).on('click', '#saveService', function (e) {
+        $(document).on('click', '#saveOrganisation', function (e) {
             e.preventDefault();
-            $('#saveService').addClass('spinning').attr('disabled', true);
+            $('#saveOrganisation').addClass('spinning').attr('disabled', true);
             var disabledFields = $(':disabled:not(:submit)');
             $(disabledFields).removeAttr('disabled');
             var formData = $('#organisationForm').serialize();

@@ -10,7 +10,7 @@ class businessUnitsValuesStreamsEntry {
     constructor() {
         this.listenForDeleteRecord();
         this.listenForEditRecord();
-        this.listenForSaveOrganisation();
+        this.listenForSaveValueStream();
         this.listenForResetForm();
     }
 
@@ -24,11 +24,35 @@ class businessUnitsValuesStreamsEntry {
 
     listenForDeleteRecord() {
         $(document).on("click", ".deleteRecord", function () {
-            return false;
+            var valuestream = $(this).data('valuestream');
+            var businessunit = $(this).data('businessunit');
+            $.ajax({
+                url: "ajax/deleteValueStream.php",
+                type: 'POST',
+                data: {
+                    VALUE_STREAM: valuestream,
+                    BUSINESS_UNIT: businessunit
+                },
+                success: function (result) {
+                    try {
+                        var resultObj = JSON.parse(result);
+                        var success = resultObj.success;
+                        var messages = resultObj.messages;
+                        if (success) {
+                            messages = 'Record deleted';
+                        }
+                        helper.displaySaveResultModal(messages);
+                        $('.spinning').removeClass('spinning').attr('disabled', false);
+                    } catch (e) {
+                        helper.unlockButton();
+                        helper.displayTellDevMessageModal(e);
+                    }
+                }
+            });
         });
     }
 
-    listenForSaveOrganisation() {
+    listenForSaveValueStream() {
         var $this = this;
         $(document).on('click', '#saveValueStream', function (e) {
             e.preventDefault();
