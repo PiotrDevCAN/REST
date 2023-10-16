@@ -46,7 +46,7 @@ $adminMenu->addOption($organisation);
 // $adminMenu->addOption($businessUnit);
 // $valueStream   = new NavbarOption('Value Stream','pa_valueStream.php' ,Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
 // $adminMenu->addOption($valueStream);
-$businessUnitValueStream   = new NavbarOption('Value Stream to Business Unit','pa_businessUnitValueStreams.php' ,Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
+$businessUnitValueStream   = new NavbarOption('Value Stream','pa_businessUnitValueStreams.php' ,Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
 $adminMenu->addOption($businessUnitValueStream);
 // $adminMenu->addOption( new NavbarDivider(Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN));
 // $resType 		= new NavbarOption('Resource Type - <b>NEW!</b>','pa_resourceType.php', Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_RFS_AD);
