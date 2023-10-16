@@ -669,6 +669,11 @@ trait resourceRequestTableTrait
          <span data-toggle='tooltip' title='Change Status to Completed' class='glyphicon glyphicon-check ' aria-hidden='true' ></span>
             </button>&nbsp;<span class='$assignColor'>$status</span>" : "<span class='$assignColor'>$status</span>";
 
+
+        $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';
+        $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::$duplicate))==resourceRequestTable::$duplicate ? 'text-success' : $editButtonColor;
+        $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::$delta))==resourceRequestTable::$delta ? 'text-success' : $editButtonColor;
+
         $duplicatable = true; //Can clone any record.
 
         $canBeAmendedByDemandTeam = empty(trim($resourceName)) ? Navbar::$ACCESS_DEMAND : null; // Demand can amend any Request that is yet to have resource allocated to it.
@@ -733,10 +738,6 @@ trait resourceRequestTableTrait
             $resKynEmail = '';
             $displayResourceName = $resourceName;
         }
-
-        $editButtonColor = empty($resourceName) ? 'text-success' : 'text-warning';
-        $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::$duplicate))==resourceRequestTable::$duplicate ? 'text-success' : $editButtonColor;
-        $editButtonColor = substr($resourceName,0,strlen(resourceRequestTable::$delta))==resourceRequestTable::$delta ? 'text-success' : $editButtonColor;
 
         $resName = $editButtonColor == 'text-success' ? "<i>$resourceName</i>" : $displayResourceName;
 
