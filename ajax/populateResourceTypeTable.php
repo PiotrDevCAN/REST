@@ -12,7 +12,7 @@ $data = $staticResourceType->returnForDataTables();
 $messages = ob_get_clean();
 ob_start();
 
-$response = array("data"=>$data,'messages'=>$messages);
+$response = array('data'=>$data,'messages'=>$messages);
 
 ob_clean();
 

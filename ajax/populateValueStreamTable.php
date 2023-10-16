@@ -1,18 +1,18 @@
 <?php
 
 use rest\allTables;
-use rest\activeResourceTable;
+use rest\staticValueStreamTable;
 
 set_time_limit(0);
 ob_start();
 
-$activeResource = new activeResourceTable(allTables::$ACTIVE_RESOURCE);
-$data = $activeResource->returnForDataTables();
+$staticOrganisation = new staticValueStreamTable(allTables::$STATIC_VALUE_STREAM);
+$data = $staticOrganisation->returnForDataTables();
 
 $messages = ob_get_clean();
 ob_start();
 
-$response = array('data'=>$data,'messages'=>$messages,'count'=>count($data));
+$response = array('data'=>$data,'messages'=>$messages);
 
 ob_clean();
 

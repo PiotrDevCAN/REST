@@ -19,7 +19,7 @@ if(!empty($_GET['query'])){
 }
 
 $messages = ob_get_clean();
-$response = array("data"=>$data,'messages'=>$messages,'count'=>count($data));
+$response = array('data'=>$data,'messages'=>$messages,'count'=>count($data));
 
 ob_clean();
 header('Content-Type: application/json');

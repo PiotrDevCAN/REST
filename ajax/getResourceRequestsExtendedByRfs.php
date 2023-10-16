@@ -19,7 +19,7 @@ $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 $data = $resourceTable->getAllRFSsAndResourceRequestsExtended($predicate);
 
 $messages = ob_get_clean();
-$response = array("data"=>$data,'messages'=>$messages,'count'=>count($data));
+$response = array('data'=>$data,'messages'=>$messages,'count'=>count($data));
 
 ob_clean();
 echo json_encode($response);

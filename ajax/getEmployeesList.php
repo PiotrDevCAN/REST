@@ -33,7 +33,7 @@ if(!empty($_GET['query'])){
 }
 
 $messages = ob_get_clean();
-$response = array("data"=>$data,'messages'=>$messages,'count'=>count($data),'source'=>$source);
+$response = array('data'=>$data,'messages'=>$messages,'count'=>count($data),'source'=>$source);
 
 ob_clean();
 header('Content-Type: application/json');

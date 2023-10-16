@@ -16,7 +16,7 @@ $staticResourceType = new staticResourceRateTable(allTables::$RESOURCE_TYPE_RATE
 $data = $staticResourceType->returnPSBandsForResourceTypeId($data['resourceTypeId']);
 
 $messages = ob_get_clean();
-$response = array("data"=>$data,'messages'=>$messages,'count'=>count($data));
+$response = array('data'=>$data,'messages'=>$messages,'count'=>count($data));
 
 ob_clean();
 echo json_encode($response);
