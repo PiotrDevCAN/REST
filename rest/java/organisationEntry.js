@@ -16,8 +16,13 @@ class organisationEntry {
 
     listenForEditRecord() {
         $(document).on("click", ".editRecord", function () {
-            $("#VALUE_STREAM").val($(this).data("valuestream"));
-            $("#BUSINESS_UNIT").val($(this).data("businessunit"));
+            $("#ORGANISATION").val($(this).data("organisation"));
+            $("#SERVICE").val($(this).data("service"));
+            if ($(this).data("status") == "enabled") {
+                $("#statusRadioEnabled").prop("checked", true);
+            } else {
+                $("#statusRadioDisabled").prop("checked", true);
+            }
             $("#mode").val("edit");
         });
     }
