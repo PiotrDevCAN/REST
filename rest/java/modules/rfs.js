@@ -76,7 +76,6 @@ class Rfs {
 	}
 
 	listenForILC_WORK_ITEMChange() {
-		alert('listenForILC_WORK_ITEMChange');
 		$(document).on('change', '#ILC_WORK_ITEM', function () {
 
 			var invalid = false;
