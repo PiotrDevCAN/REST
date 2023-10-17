@@ -2,7 +2,8 @@
  *
  */
 
-let startAndEnd = await cacheBustImport('./modules/calendars/startAndEnd.js');
+let helper = await cacheBustImport('./modules/helper.js');
+let BankHolidays = await cacheBustImport('./modules/dataSources/bankHolidays.js');
 let FormMessageArea = await cacheBustImport('./modules/helpers/formMessageArea.js');
 let rfsIdValidator = await cacheBustImport('./modules/validators/rfsId.js');
 let StaticValueStreams = await cacheBustImport('./modules/dataSources/staticValueStreams.js');
@@ -15,12 +16,38 @@ class entry {
 	static startFieldId = 'RFS_START_DATE';
 	static endFieldId = 'RFS_END_DATE';
 
-	startAndEnd;
+	endPicker;
+	endDateMoment;    // Moment object
 
 	responseObj;
 
 	constructor() {
+		// this.initialiseEndDate();
+	}
 
+	async initialiseEndDate() {
+
+		let events = await BankHolidays.getFormattedEvents();
+		let eventsRaw = await BankHolidays.getEvents();
+		let eventTitles = await BankHolidays.getEventTitles();
+
+		var $this = this;
+		this.endPicker = new Pikaday({
+			events: events,
+			firstDay: 1,
+			field: document.getElementById('InputRFS_END_DATE'),
+			format: 'D MMM YYYY',
+			showTime: false,
+			minDate: new Date(),
+			onSelect: function () {
+				$this.endDateMoment = this.getMoment();
+				var db2Value = $this.endDateMoment.format('YYYY-MM-DD');
+				$('#RFS_END_DATE').val(db2Value);
+			},
+			onDraw: function () {
+				helper.addEventTitlesToPicker(eventsRaw, eventTitles);
+			}
+		});
 	}
 
 	prepareSelect2() {
@@ -164,12 +191,8 @@ class entry {
 }
 
 const Entry = new entry();
+Entry.initialiseEndDate();
 Entry.prepareSelect2();
-
-const StartAndEnd = new startAndEnd(entry.startFieldId, entry.endFieldId);
-StartAndEnd.initPickers();
-Entry.startAndEnd = StartAndEnd;
-
 Entry.listenForRFS_IDInput();
 Entry.listenForRFS_IDFocusOut();
 Entry.listenForValueStreamChange();
