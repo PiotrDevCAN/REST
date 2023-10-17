@@ -5,6 +5,7 @@
 let startAndEnd = await cacheBustImport('./modules/calendars/startAndEnd.js');
 let FormMessageArea = await cacheBustImport('./modules/helpers/formMessageArea.js');
 let rfsIdValidator = await cacheBustImport('./modules/validators/rfsId.js');
+let StaticValueStreams = await cacheBustImport('./modules/dataSources/staticValueStreams.js');
 let Rfs = await cacheBustImport('./modules/rfs.js');
 
 class entry {
@@ -25,6 +26,23 @@ class entry {
 	prepareSelect2() {
 
 		FormMessageArea.showMessageArea();
+
+		let valueStreamsPromise = StaticValueStreams.getValueStreams().then((response) => {
+			$("#VALUE_STREAM").select2({
+				data: response,
+				tags: true,
+				createTag: function (params) {
+					return undefined;
+				}
+			});
+		});
+
+		const promises = [valueStreamsPromise];
+		Promise.allSettled(promises)
+			.then((results) => {
+				results.forEach((result) => console.log(result.status));
+				FormMessageArea.clearMessageArea();
+			});
 
 		$(".select").select2({
 			tags: true,

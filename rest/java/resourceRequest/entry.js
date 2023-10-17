@@ -10,7 +10,7 @@ let StaticServices = await cacheBustImport('./modules/dataSources/staticServices
 
 class entry {
 
-	static formId = 'resourceRequestForm';
+  static formId = 'resourceRequestForm';
 
   static startFieldId = 'START_DATE';
   static endFieldId = 'END_DATE';
@@ -134,8 +134,8 @@ class entry {
           }
         },
         complete: function () {
-					document.getElementById(entry.formId).reset();
-				}
+          document.getElementById(entry.formId).reset();
+        }
       });
     });
   }

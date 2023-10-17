@@ -104,9 +104,6 @@ class rfsRecord extends DbRecord
         $this->additional_comments = null;
         $today = new \DateTime();
 
-        $loader = new Loader();
-        $allValueStream = $loader->load('VALUE_STREAM', allTables::$STATIC_VALUE_STREAM);
-       
         $notEditable = $mode == FormClass::$modeEDIT ? ' disabled ' : '';
 		$readOnly = $mode == FormClass::$modeDISPLAY ? ' readonly ' : null;
         if ($mode == FormClass::$modeDISPLAY) {
@@ -209,20 +206,16 @@ class rfsRecord extends DbRecord
 		<div class='form-group required'>
 			<label for='VALUE_STREAM' class='col-md-2 control-label ceta-label-left'>Value Stream</label>
 			<div class='col-md-3'>
-				<select class='form-control select' id='VALUE_STREAM'
-					name='VALUE_STREAM' required='required'
-					data-placeholder="Select Value Stream" data-allow-clear="true"
-					<?=$readOnly?>
-				>
-					<option value=''>Select Value Stream</option>
-					<?php
-					foreach ($allValueStream as $key => $value) {
-						$displayValue = trim($value);
-						$returnValue = trim($value);
-					?>
-					<option value='<?=$returnValue?>' <?=htmlspecialchars_decode(trim($this->VALUE_STREAM))==htmlspecialchars_decode($returnValue) ? 'selected' : null;?>><?=$displayValue?></option>
-					<?php } ?>
-				</select>
+				<select class='form-control select'
+                    id='VALUE_STREAM'
+                    name='VALUE_STREAM'
+                    required='required'
+                    data-placeholder="Select Value Stream" 
+                    data-allow-clear="true"
+                    <?=$readOnly?>
+                >
+                    <option value=''>Select Value Stream<option>
+                </select>
 			</div>
 			<label for='BUSINESS_UNIT' class='col-md-2 control-label ceta-label-left'>Business Unit</label>
 			<div class='col-md-5'>
@@ -328,7 +321,8 @@ class rfsRecord extends DbRecord
 			$allButtons = array();
 			$rfsCreator = $mode==FormClass::$modeEDIT ? $this->RFS_CREATOR : $_SESSION['ssoEmail']; 
 			$this->formHiddenInput('RFS_CREATOR',$rfsCreator,'RFS_CREATOR');
-			// $token = $_SESSION['formToken'];
+			$this->formHiddenInput('originalVALUE_STREAM',$this->VALUE_STREAM,'originalVALUE_STREAM');
+        	// $token = $_SESSION['formToken'];
 			// $this->formHiddenInput('formToken',$token,'formToken');
 			$this->formHiddenInput('mode',$mode,'mode');
 			$submitButton = $mode==FormClass::$modeEDIT ?  $this->formButton('submit','Submit','updateRfs',null,'Update') :  $this->formButton('submit','Submit','saveRfs',null,'Submit');

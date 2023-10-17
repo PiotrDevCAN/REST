@@ -4,6 +4,7 @@
 
 let FormMessageArea = await cacheBustImport('./modules/helpers/formMessageArea.js');
 let rfsIdValidator = await cacheBustImport('./modules/validators/rfsId.js');
+let StaticValueStreams = await cacheBustImport('./modules/dataSources/staticValueStreams.js');
 let Rfs = await cacheBustImport('./modules/rfs.js');
 
 class RfsEditBox {
@@ -119,7 +120,18 @@ class RfsEditBox {
 	listenForEditRfsModalShown() {
 		$(document).on('shown.bs.modal', '#editRfsModal', function (e) {
 			$("input[type='radio'][name='RFS_STATUS']").attr('disabled', true);
-			$('#VALUE_STREAM').select2();
+			var selectedValueStream = $("#originalVALUE_STREAM").val();
+			StaticValueStreams.getValueStreams().then((response) => {
+				$("#VALUE_STREAM").select2({
+					data: response,
+					tags: true,
+					createTag: function (params) {
+						return undefined;
+					}
+				})
+					.val(selectedValueStream)
+					.trigger('change');
+			});
 		});
 	}
 
