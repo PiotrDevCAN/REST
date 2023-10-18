@@ -13,7 +13,7 @@ class Rfs {
 	constructor() {
 		// common elements
 		this.listenForREQUESTOR_EMAILChange();
-		this.listenForILC_WORK_ITEMChange();
+		// this.listenForILC_WORK_ITEMChange();
 		// common elements
 	}
 
