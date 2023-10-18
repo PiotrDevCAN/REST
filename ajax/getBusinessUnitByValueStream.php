@@ -7,11 +7,11 @@ set_time_limit(0);
 ob_start();
 
 $redis = $GLOBALS['redis'];
-$key = 'getBusinessUnitByValueStream';
+$key = 'getBusinessUnitByValueStream_'.htmlspecialchars($_POST['valueStream']);
 $redisKey = md5($key.'_key_'.$_ENV['environment']);
 if (!$redis->get($redisKey)) {
     $source = 'SQL Server';
-        
+    
     $predicate = !empty($_POST['valueStream']) ? "VALUE_STREAM = '" . htmlspecialchars($_POST['valueStream']) . "'" : false ;
     
     $loader = new Loader();
