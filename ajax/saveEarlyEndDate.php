@@ -9,7 +9,7 @@ ob_start();
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
-$sql.= " SET END_DATE = DATE('" . htmlspecialchars($_POST['endEarlyDate']) . "') ";
+$sql.= " SET END_DATE = '" . htmlspecialchars($_POST['endEarlyDate']) . "' ";
 $sql.= " WHERE RESOURCE_REFERENCE = '" . htmlspecialchars($_POST['resourceReference']) . "' ";
 
 $rs = sqlsrv_query($GLOBALS['conn'], $sql);

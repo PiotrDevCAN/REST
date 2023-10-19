@@ -224,7 +224,7 @@ class DateClass {
         
         $sql = " SELECT * ";
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$BANK_HOLIDAYS;
-        $sql.= " WHERE BH_DATE >= DATE('" . $startDate->format('Y-m-d') . "') AND BH_DATE <= DATE('" . $endDate->format('Y-m-d') . "') ";
+        $sql.= " WHERE BH_DATE >= '" . $startDate->format('Y-m-d') . "' AND BH_DATE <= '" . $endDate->format('Y-m-d') . "' ";
         $sql.= " ORDER BY 1 ";
         
         $rs = sqlsrv_query($GLOBALS['conn'], $sql);

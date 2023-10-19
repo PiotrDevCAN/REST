@@ -843,7 +843,7 @@ trait resourceRequestTableTrait
     
     static function setEndDate($resourceReference, $endDate){
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
-        $sql .= "  SET END_DATE = DATE('" . htmlspecialchars($endDate) ."') ";
+        $sql .= "  SET END_DATE = '" . htmlspecialchars($endDate) ."' ";
         $sql .= " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceReference) ." ";
 
         $rs = sqlsrv_query($GLOBALS['conn'], $sql);
@@ -858,7 +858,7 @@ trait resourceRequestTableTrait
     
     static function setStartDate($resourceReference, $startDate){
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
-        $sql .= "  SET START_DATE = DATE('" . htmlspecialchars($startDate) ."') ";
+        $sql .= "  SET START_DATE = '" . htmlspecialchars($startDate) ."' ";
         $sql .= " WHERE RESOURCE_REFERENCE=" . htmlspecialchars($resourceReference) ." ";
   
         $rs = sqlsrv_query($GLOBALS['conn'], $sql);

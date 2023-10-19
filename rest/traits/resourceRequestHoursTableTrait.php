@@ -11,10 +11,6 @@ use rest\rfsTable;
 
 trait resourceRequestHoursTableTrait
 {
-    private $preparedGetTotalHrsStatement;
-    private $preparedSetHrsStatement;
-    // private $hoursRemainingByReference;
-    
     function createResourceRequestHours($resourceReference=null, $startDate=null, $endDate=null, $hours=0, $deleteExisting=true, $hrsType=resourceRequestRecord::HOURS_TYPE_REGULAR){
         
         $weeksCreated = 0;
@@ -571,20 +567,17 @@ trait resourceRequestHoursTableTrait
     }
 
     function prepareSetHoursForWef($data){  
-       
-        if(!isset($this->preparedSetHrsStatement)){
-            $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
-            $sql.= " SET HOURS = ? " ;
-            $sql.= " WHERE WEEK_ENDING_FRIDAY = ? ";
-            $sql.= " AND RESOURCE_REFERENCE = ? ";
-            $this->preparedSetHrsStatement = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
-            
-            if(!$this->preparedSetHrsStatement){
-                DbTable::displayErrorMessage($this->preparedSetHrsStatement, __CLASS__, __METHOD__, $sql);
-            }
+        $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
+        $sql.= " SET HOURS = ? " ;
+        $sql.= " WHERE WEEK_ENDING_FRIDAY = ? ";
+        $sql.= " AND RESOURCE_REFERENCE = ? ";
+        $preparedStmt = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
+        
+        if(!$preparedStmt){
+            DbTable::displayErrorMessage($preparedStmt, __CLASS__, __METHOD__, $sql);
         }
-              
-        return $this->preparedSetHrsStatement ? $this->preparedSetHrsStatement : false;
+
+        return $preparedStmt;
     }
 
     function setHoursForWef(int $resourceReference, string $wef, float $hours){
