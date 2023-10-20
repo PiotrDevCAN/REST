@@ -620,8 +620,6 @@ trait rfsTableTrait
         $sql.= " AND " . rfsTable::NOT_ARCHIVED;
         $sql.= " AND RR.RESOURCE_REFERENCE = CLAIM.RESOURCE_REFERENCE ";
         $sql.= !empty($predicate) ? " AND  $predicate " : null ;
-echo $sql;
-exit;
         $resultSet = $this->execute($sql);
         $resultSet ? null : die("SQL Failed");
         $allData = array();

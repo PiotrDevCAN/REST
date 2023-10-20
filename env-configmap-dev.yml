@@ -8,6 +8,7 @@ data:
   email: dev
   environment: rest_dev
   jwt_token: "VGhpcyBpcyB0aGUgc2VjcmV0IGtleSBmb3IgSldUIG9uIHRoZSBSRVNUIDIwMjAgYXBwbGljYXRpb24u"
+  api_token: "7605a00a-48b9-42f4-948e-2f98d379ff64"
   devemailid: piotr.tajanowicz@kyndryl.com
   noreplyemailid: UKI.Business.Intelligence@kyndryl.com
   noreplykyndrylemailid: UKI.Business.Intelligence@kyndryl.com
