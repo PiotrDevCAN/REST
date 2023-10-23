@@ -6,18 +6,18 @@ let ResourceRequest = await cacheBustImport('./modules/resourceRequest.js');
 
 class RRListActions {
 
-	static startDateColumnIndex = 21;
-	static endDateColumnIndex = 24;
-	static statusColumnIndex = 28;
+	static startDateColumnIndex = 24;
+	static endDateColumnIndex = 25;
+	static statusColumnIndex = 33;
 
 	constructor() {
 		// List action buttons
-		this.listenForResetReport();
 		this.listenForUnallocated();
 		this.listenForCompleteable();
 		this.listenForPlannedOnly();
 		this.listenForActiveOnly();
 		this.listenForRemovePassed();
+		this.listenForResetReport();
 		// List action buttons
 	}
 
@@ -40,7 +40,7 @@ class RRListActions {
 	listenForPlannedOnly() {
 		$(document).on('click', '#plannedOnly', function (e) {
 			ResourceRequest.table
-				.column(RRListActions.statusColumnIndex).search('Planned')
+				.column(RRListActions.startDateColumnIndex).search('Planned')
 				.draw();
 		});
 	}
@@ -48,7 +48,7 @@ class RRListActions {
 	listenForActiveOnly() {
 		$(document).on('click', '#activeOnly', function (e) {
 			ResourceRequest.table
-				.column(RRListActions.statusColumnIndex).search('Active')
+				.column(RRListActions.startDateColumnIndex).search('Active')
 				.draw();
 		});
 	}
@@ -59,7 +59,7 @@ class RRListActions {
 				.column(RRListActions.statusColumnIndex).search("");
 			$.fn.dataTable.ext.search.push(
 				function (settings, data, dataIndex) {
-					if (data[RRListActions.statusColumnIndex].includes('Completed')) {
+					if (data[RRListActions.startDateColumnIndex].includes('Completed')) {
 						return false;
 					}
 					return true;

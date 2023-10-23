@@ -64,8 +64,13 @@ class resourceRequestRecord extends DbRecord
 //     CONST STATUS_REQUESTOR  = 'With Requestor';
     CONST STATUS_ASSIGNED   = 'Assigned';
     CONST STATUS_COMPLETED  = 'Completed';
-
-    static public $allStatus = array(self::STATUS_NEW,self::STATUS_ASSIGNED,self::STATUS_COMPLETED);
+    static public $allStatus = array(self::STATUS_NEW, self::STATUS_ASSIGNED, self::STATUS_COMPLETED);
+    
+    CONST DATE_STATUS_PLANNED   = 'Planned';
+    CONST DATE_STATUS_ACTIVE    = 'Active';
+    CONST DATE_STATUS_COMPLETED = 'Completed';
+    const DATE_STATUS_UNCLEAR   = 'Unclear';
+    static public $allDateStatus = array(self::DATE_STATUS_PLANNED, self::DATE_STATUS_ACTIVE, self::DATE_STATUS_COMPLETED, self::DATE_STATUS_UNCLEAR);
     
     CONST RATE_TYPE_BLENDED      = 'Blended';
     CONST RATE_TYPE_PROFESSIONAL = 'Professional';
@@ -74,7 +79,7 @@ class resourceRequestRecord extends DbRecord
     CONST HOURS_TYPE_REGULAR      = 'Regular';
     CONST HOURS_TYPE_OT_WEEK_DAY  = 'Weekday Overtime';
     CONST HOURS_TYPE_OT_WEEK_END  = 'Weekend Overtime';
-    static public $allHourTypes   = array(self::HOURS_TYPE_REGULAR,self::HOURS_TYPE_OT_WEEK_DAY,self::HOURS_TYPE_OT_WEEK_END);
+    static public $allHourTypes   = array(self::HOURS_TYPE_REGULAR, self::HOURS_TYPE_OT_WEEK_DAY, self::HOURS_TYPE_OT_WEEK_END);
 
     function displayForm($mode)
     {

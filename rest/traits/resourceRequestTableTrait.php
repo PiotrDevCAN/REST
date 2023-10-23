@@ -628,20 +628,20 @@ trait resourceRequestTableTrait
         switch (true) {
             case $today < $startDateObj:
                 $assignColor = 'text-success';
-                $started     = '<br/>Planned';
+                $started     = resourceRequestRecord::DATE_STATUS_PLANNED;
                 break;
             case $today <= $endDateObj:
                 $assignColor = 'text-warning';
-                $started     = 'Active';
+                $started     = resourceRequestRecord::DATE_STATUS_ACTIVE;
                 break;
             case $today > $endDateObj:
                 $assignColor = 'text-danger';
-                $started     = 'Completed';
+                $started     = resourceRequestRecord::DATE_STATUS_COMPLETED;
                 $editable = false;
-                break;           
+                break;
             default:
                 $assignColor = 'text-primary';
-                $started     = 'Unclear';
+                $started     = resourceRequestRecord::DATE_STATUS_UNCLEAR;
             break;
         }
 
@@ -820,7 +820,7 @@ trait resourceRequestTableTrait
         $displayStartDate = '';
         $displayStartDate.= "<span class='$assignColor'>$startDate  to  $endDate <br/>";
         $displayStartDate.= "Total Hours: " . $row['TOTAL_HOURS'] . "<br/>";
-        $displayStartDate.= ($started == 'Active') ? "Hrs This Week: " . $hrsThisWeek . "<br/>" : null;
+        $displayStartDate.= ($started == resourceRequestRecord::DATE_STATUS_ACTIVE) ? "Hrs This Week: " . $hrsThisWeek . "<br/>" : null;
         $displayStartDate.= (isset($row['hours_to_go'])) ? "Hrs remaining:" . $row['hours_to_go'] . "<br/>" : null;
         $displayStartDate.= (isset($row['weeks_to_go'])) ? "Weeks remaining:" . $row['weeks_to_go'] . "<br/>" : null;
         $displayStartDate.= "$started";
@@ -833,7 +833,7 @@ trait resourceRequestTableTrait
         $displayHrsPerWeek = "";
         
         $displayHrsPerWeek = "Total Hrs:" . $totalHours . "<br/>";
-        $displayHrsPerWeek.= ($started == 'Active') ? "This Week:" . $hrsThisWeek : null;
+        $displayHrsPerWeek.= ($started == resourceRequestRecord::DATE_STATUS_ACTIVE) ? "This Week:" . $hrsThisWeek : null;
         
         $row['TOTAL_HOURS'] = array('display'=>$displayHrsPerWeek,'sort'=>$totalHours);
         
