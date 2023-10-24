@@ -9,7 +9,6 @@ error_reporting(E_ALL);
 $email = $_SESSION['ssoEmail'];
 $scriptsDirectory = '/var/www/html/batchJobs/';
 $processDirectory = 'processesCLI/'; 
-// $processFile = 'sendRRDataProcess_OLD.php';
 $processFile = 'sendRRDataProcess.php';
 try {
     $cmd = 'php ';

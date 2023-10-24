@@ -1,22 +1,25 @@
 <?php
 
+use itdq\Process;
 
-use itdq\Loader;
-use rest\resourceRequestRecord;
-use rest\allTables;
-use rest\resourceRequestTable;
-use rest\resourceRequestDiaryTable;
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-$loader = new Loader();
-$predicate = " END_DATE < CURRENT_TIMESTAMP and STATUS != '" . resourceRequestRecord::STATUS_COMPLETED . "' ";
-$date = new DateTime();
-
-$allOpenTicketsPassedEndDate = $loader->load('RESOURCE_REFERENCE',allTables::$RESOURCE_REQUESTS,$predicate);
-
-if($allOpenTicketsPassedEndDate){
-    foreach ($allOpenTicketsPassedEndDate as $resourceReference) {
-        resourceRequestDiaryTable::insertEntry("Auto-Closed " . $date->format('d-M-Y'), $resourceReference);
-        resourceRequestTable::setRequestStatus($resourceReference,resourceRequestRecord::STATUS_COMPLETED);
-        
-    }
+$email = $_SESSION['ssoEmail'];
+$scriptsDirectory = '/var/www/html/batchJobs/';
+$processDirectory = 'processesCLI/'; 
+$processFile = 'autoCloseProcess.php';
+try {
+    $cmd = 'php ';
+    $cmd .= '-d auto_prepend_file=' . $scriptsDirectory . 'php/siteheader.php ';
+    $cmd .= '-d auto_append_file=' . $scriptsDirectory . 'php/sitefooter.php ';
+    $cmd .= '-f ' . $scriptsDirectory . $processDirectory. $processFile . ' ' . $email;
+    $process = new Process($cmd);
+    $pid = $process->getPid();
+    echo "Auto Close Script has succeed to be executed: <b>".$email."</b>".PHP_EOL;
+    echo $cmd;
+} catch (Exception $exception) {
+    echo $exception->getMessage();
+    echo "Auto Close Script has failed to be executed: <b>".$email."</b>";
 }

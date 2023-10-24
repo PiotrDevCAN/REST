@@ -2,7 +2,7 @@
  *
  */
 
-let APIData = await cacheBustImport('./modules/dataSources/fetch/organisations.js');
+let APIData = await cacheBustImport('./modules/dataSources/fetch/services.js');
 let mapper = await cacheBustImport('./modules/select2dataMapper.js');
 
 class services {
