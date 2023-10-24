@@ -64,12 +64,8 @@ class EmailLogTable  extends DbTable {
             }
         }
 
-
-
 //          $rows[] = array('id','to','subject','message','response','status','sent timestamp','status_timestamp');
 //          $rows[] = array('id2','to2','subject2','message2','response2','status2','sent timestamp2','status_timestamp2');
         return $data;
-
     }
-
 }

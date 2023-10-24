@@ -66,6 +66,6 @@ $handler = new JwtSecureSession($sessionConfig);
 
 // session_start();
 error_log(__FILE__ . "session:" . session_id());
-do_auth();
+// do_auth();
 include "connect.php";
 $redisClient = new Redis();
