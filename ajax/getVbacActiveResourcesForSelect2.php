@@ -20,7 +20,7 @@ error_log('opening ' . __FILE__);
 
 $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 $data = $resourceTable->getVbacActiveResourcesForSelect2();
-list('tribeEmployees' => $activeResources) = $data;
+list('tribeEmployees' => $activeResources, 'tribeEmployees' => $tribeEmployees, 'source' => $source) = $data;
 
 error_log('returned from resourceRequestTable::getVbacActiveResourcesForSelect2()');
 error_log(count($activeResources) . " active resources");
@@ -30,7 +30,9 @@ $success = empty($messages);
 $response = array(
     'data'=>$activeResources,
     'success'=> $success,
-    'messages'=>$messages
+    'messages'=>$messages,
+    'count'=>count($activeResources),
+    'source'=>$source
 );
 // header('Content-Type: application/json');
 echo json_encode($response);

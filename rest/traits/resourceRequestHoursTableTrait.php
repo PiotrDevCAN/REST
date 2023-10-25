@@ -502,7 +502,8 @@ trait resourceRequestHoursTableTrait
     function getHoursRemainingByReference(){
 
         $redis = $GLOBALS['redis'];
-        $redisKey = md5('getHoursRemainingByReference_TEST_key_'.$_ENV['environment']);
+        $key = 'getHoursRemainingByReference';
+        $redisKey = md5($key.'_key_'.$_ENV['environment']);
         if (!$redis->get($redisKey)) {
 
             $hoursRemainingByReference = array();
