@@ -61,7 +61,8 @@ try {
     curl_close($curl);
     
     if ($err) {
-        echo "cURL Error #:" . $err;
+        // echo "cURL Error #:" . $err;
+        throw new \Exception('Load vBAC Active Resources CURL call failed');
     } else {
     
         $activeResourceTable  = new activeResourceTable(allTables::$ACTIVE_RESOURCE);

@@ -965,7 +965,6 @@ trait resourceRequestTableTrait
                             if (strtolower($employeeDetails->EMAIL_ADDRESS) == strtolower($_SESSION['ssoEmail'])){
                                 $myTribe = $employeeDetails->TRIBE_NAME;
                             }
-                            
                         }
                     }
                 }

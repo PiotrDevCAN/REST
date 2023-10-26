@@ -63,7 +63,8 @@ try {
     curl_close($curl);
 
     if ($err) {
-        echo "cURL Error #:" . $err;
+        // echo "cURL Error #:" . $err;
+        throw new \Exception('Lloyds Claim API CURL call failed');
     } else {
         $responseObj = json_decode($response, true);
         if ($responseObj !== null) {

@@ -33,7 +33,8 @@ $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE); //check if 504 return.
 curl_close($curl);
 
 if ($err) {
-    echo "cURL Error #:" . $err;
+    // echo "cURL Error #:" . $err;
+    throw new \Exception('Load vBAC Active Resources TEST CURL call failed');
 } else {
 
     $activeResourceTable  = new activeResourceTable(allTables::$ACTIVE_RESOURCE);
