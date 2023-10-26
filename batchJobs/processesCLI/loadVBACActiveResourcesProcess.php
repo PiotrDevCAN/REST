@@ -36,7 +36,7 @@ $emailAddressBCC = array();
 
 try {
 
-    $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&onlyactive=false&withProvClear=true&plus=P.EMAIL_ADDRESS,P.CNUM,P.PES_STATUS,SQUAD_NAME,TRIBE_NAME,P.WORK_STREAM,P.CIO_ALIGNMENT';
+    $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&onlyactive=false&withProvClear=true&plus=P.CNUM,P.EMAIL_ADDRESS,P.KYN_EMAIL_ADDRESS,P.PES_STATUS,SQUAD_NAME,TRIBE_NAME,P.WORK_STREAM,P.CIO_ALIGNMENT';
 
     $curl = curl_init();
     
@@ -81,7 +81,7 @@ try {
                     die( print_r( sqlsrv_errors(), true ));
                 }
     
-                $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( CNUM, EMAIL_ADDRESS, NOTES_ID, PES_STATUS, CIO_ALIGNMENT, STATUS, TRIBE_NAME, SQUAD_NAME, TRIBE_NAME_MAPPED )  Values ";
+                $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( CNUM, EMAIL_ADDRESS, KYN_EMAIL_ADDRESS, NOTES_ID, PES_STATUS, CIO_ALIGNMENT, STATUS, TRIBE_NAME, SQUAD_NAME, TRIBE_NAME_MAPPED )  Values ";
                 $first = true;
     
                 foreach ($personEnties as $key => $personEntry) {
@@ -97,6 +97,7 @@ try {
                         $sql .= " ('" . 
                             htmlspecialchars(trim($personEntry['CNUM'])) . "','" . 
                             htmlspecialchars($email) . "','" . 
+                            htmlspecialchars($personEntry['KYN_EMAIL_ADDRESS']) . "','" . 
                             htmlspecialchars($personEntry['NOTES_ID']) . "','" . 
                             htmlspecialchars($personEntry['PES_STATUS']) . "','" .
                             htmlspecialchars($personEntry['CIO_ALIGNMENT']) . "','" . 
