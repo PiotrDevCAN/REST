@@ -948,7 +948,7 @@ trait resourceRequestTableTrait
                             // $key = trim($employeeDetails->NOTES_ID);
                             $key = trim($employeeDetails->CNUM);
                             $vbacEmployees[$key] = array(
-                                'id'=>trim($employeeDetails->NOTES_ID),
+                                'id'=>trim($employeeDetails->KYN_EMAIL_ADDRESS),
                                 'cnum'=>trim($employeeDetails->CNUM),
                                 'emailAddress'=>trim($employeeDetails->EMAIL_ADDRESS),
                                 'kynEmailAddress'=>trim($employeeDetails->KYN_EMAIL_ADDRESS),
@@ -961,8 +961,10 @@ trait resourceRequestTableTrait
                         // }
                         
                         // get employee's tribe name
-                        if (strtolower($employeeDetails->EMAIL_ADDRESS) == strtolower($_SESSION['ssoEmail'])){
-                            $myTribe = $employeeDetails->TRIBE_NAME;
+                        if (array_key_exists('ssoEmail', $_SESSION)) {
+                            if (strtolower($employeeDetails->EMAIL_ADDRESS) == strtolower($_SESSION['ssoEmail'])){
+                                $myTribe = $employeeDetails->TRIBE_NAME;
+                            }
                         }
                     }
                 }
