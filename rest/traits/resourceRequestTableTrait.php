@@ -28,9 +28,6 @@ trait resourceRequestTableTrait
     private $hrsThisWeekByResourceReference;
     private $lastDiaryEntriesByResourceReference;
 
-    private $vbacEmployeesWithSquad = array();
-    private $vbacEmployees = array();
-
     static function buildHTMLTable($tableId = 'resourceRequests', $startDate, $endDate){
         $RRheaderCells = resourceRequestRecord::htmlHeaderCellsStatic($startDate);
         $RFSheaderCells = rfsRecord::htmlHeaderCellsStatic();
@@ -125,14 +122,6 @@ trait resourceRequestTableTrait
     function returnAsArray($startDate, $endDate, $predicate=null, $pipelineLiveArchive = 'Live', $withButtons = true, $page = false, $perPage = false){
 
         // $this->populateLastDiaryEntriesArray();
-        
-        if ($withButtons === true) {
-            $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
-            $data = $resourceTable->getVbacActiveResourcesForSelect2();
-            list('vbacEmployees' => $vbacEmployees, 'tribeEmployees' => $tribeEmployees) = $data;
-            $this->vbacEmployeesWithSquad = array_column($vbacEmployees, 'id');
-            $this->vbacEmployees = $vbacEmployees;
-        }
 
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
         $hoursRemainingByReference = $resourceRequestHoursTable->getHoursRemainingByReference();
@@ -317,14 +306,6 @@ trait resourceRequestTableTrait
             $counter = $row['COUNTER'];
         }
 
-        if ($withButtons === true) {
-            $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
-            $data = $resourceTable->getVbacActiveResourcesForSelect2();
-            list('vbacEmployees' => $vbacEmployees, 'tribeEmployees' => $tribeEmployees) = $data;
-            $this->vbacEmployeesWithSquad = array_column($vbacEmployees, 'id');
-            $this->vbacEmployees = $vbacEmployees;
-        }
-
         $sql = 'Statistics only';
 
         $allData = array();
@@ -348,15 +329,7 @@ trait resourceRequestTableTrait
     }
 
     function returnAsArraySimple($predicate=null, $pipelineLiveArchive = 'Live', $withButtons=true){
-
         // $this->populateLastDiaryEntriesArray();
-        // $start_time = microtime(true);
-        // $resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
-        // $data = $resourceTable->getVbacActiveResourcesForSelect2();
-        // list('vbacEmployees' => $vbacEmployees, 'tribeEmployees' => $tribeEmployees) = $data;
-        // $this->vbacEmployeesWithSquad = array_column($vbacEmployees, 'id');
-        // $this->vbacEmployees = $vbacEmployees;
-        
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
         $hoursRemainingByReference = $resourceRequestHoursTable->getHoursRemainingByReference();
         
@@ -576,57 +549,57 @@ trait resourceRequestTableTrait
         $editable = true;
         
         // override Hours Type if Rate Type equals Blended
-        switch ($rateType) {
-            case resourceRequestRecord::RATE_TYPE_BLENDED:
-                $row['HOURS_TYPE'] = '';
-                break;
-            case resourceRequestRecord::RATE_TYPE_PROFESSIONAL:
-                $displayValues = '';
-                $displayValues.= "<span><b>Resource Request</b><br/>";
-                $displayValues.= "Rate Type: <b>$rateType</b><br/>";
-                $displayValues.="</span>";
+        // switch ($rateType) {
+        //     case resourceRequestRecord::RATE_TYPE_BLENDED:
+        //         $row['HOURS_TYPE'] = '';
+        //         break;
+        //     case resourceRequestRecord::RATE_TYPE_PROFESSIONAL:
+        //         $displayValues = '';
+        //         $displayValues.= "<span><b>Resource Request</b><br/>";
+        //         $displayValues.= "Rate Type: <b>$rateType</b><br/>";
+        //         $displayValues.="</span>";
                 
-                if (!empty(trim($resourceName))) {
-                    $displayValues.= "<span><b>Individual</b><br/>";
-                    $displayValues.= "<hr style='margin: 2px 0;'/>";
-                    $displayValues.= "Resource Type: <b>$individualType</b><br/>";
-                    $displayValues.= "PS Band: <b>$individualPSBand</b><br/>";
-                    $displayValues.= "Overrides PS Band: <b>$individualPSBandOverride</b><br/>";
-                    if (!empty($resourceTraitId)) {
-                        $displayValues.= "<hr style='margin: 2px 0;'/>";
-                        $displayValues.= "Day Rate: <b>$individualDayRate</b><br/>";
-                        $displayValues.= "Hourly Rate: <b>$individualHourlyRate</b><br/>";
-                    }
-                    $displayValues.="</span>";
+        //         if (!empty(trim($resourceName))) {
+        //             $displayValues.= "<span><b>Individual</b><br/>";
+        //             $displayValues.= "<hr style='margin: 2px 0;'/>";
+        //             $displayValues.= "Resource Type: <b>$individualType</b><br/>";
+        //             $displayValues.= "PS Band: <b>$individualPSBand</b><br/>";
+        //             $displayValues.= "Overrides PS Band: <b>$individualPSBandOverride</b><br/>";
+        //             if (!empty($resourceTraitId)) {
+        //                 $displayValues.= "<hr style='margin: 2px 0;'/>";
+        //                 $displayValues.= "Day Rate: <b>$individualDayRate</b><br/>";
+        //                 $displayValues.= "Hourly Rate: <b>$individualHourlyRate</b><br/>";
+        //             }
+        //             $displayValues.="</span>";
 
-                    if (empty($resourceTraitId)) {
-                        $assignColor = 'text-danger';
-                        $displayValues.="<span class='$assignColor'>";
-                        $displayValues.="This resource is not allocated to a Resource Type/PS Band, please contact the RFS Team (enter contact details) to have them populate their record";
-                        $displayValues.="</span>";
-                    } else {
-                        $displayValues.="<button type='button' class='btn btn-xs overrideBespokeRate ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_ADMIN." ".Navbar::$ACCESS_CDI." ".Navbar::$ACCESS_SUPPLY." ".Navbar::$ACCESS_SUPPLY_X." ' aria-label='Left Align'
-                            data-id='" . $resourceTraitId . "'>
-                            <span data-toggle='tooltip' title='Override Bespoke Rate' class='glyphicon glyphicon-check ' aria-hidden='true' ></span>
-                        </button>";
+        //             if (empty($resourceTraitId)) {
+        //                 $assignColor = 'text-danger';
+        //                 $displayValues.="<span class='$assignColor'>";
+        //                 $displayValues.="This resource is not allocated to a Resource Type/PS Band, please contact the RFS Team (enter contact details) to have them populate their record";
+        //                 $displayValues.="</span>";
+        //             } else {
+        //                 $displayValues.="<button type='button' class='btn btn-xs overrideBespokeRate ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_ADMIN." ".Navbar::$ACCESS_CDI." ".Navbar::$ACCESS_SUPPLY." ".Navbar::$ACCESS_SUPPLY_X." ' aria-label='Left Align'
+        //                     data-id='" . $resourceTraitId . "'>
+        //                     <span data-toggle='tooltip' title='Override Bespoke Rate' class='glyphicon glyphicon-check ' aria-hidden='true' ></span>
+        //                 </button>";
 
-                        if (empty($rateCardId)) {
-                            $assignColor = 'text-danger';
-                            $displayValues.="<br/><span class='$assignColor'>";
-                            $displayValues.="Selected Resource Type and PS Band values do not match to Resource Rates";
-                            $displayValues.="</span>";
-                        }
-                    }
+        //                 if (empty($rateCardId)) {
+        //                     $assignColor = 'text-danger';
+        //                     $displayValues.="<br/><span class='$assignColor'>";
+        //                     $displayValues.="Selected Resource Type and PS Band values do not match to Resource Rates";
+        //                     $displayValues.="</span>";
+        //                 }
+        //             }
                     
-                } else {
-                    $displayValues.= "<span><b>Unallocated resource</b></span>";
-                }
+        //         } else {
+        //             $displayValues.= "<span><b>Unallocated resource</b></span>";
+        //         }
 
-                $row['RATE_TYPE'] = $displayValues;
-                break;
-            default:
-                break;
-        }
+        //         $row['RATE_TYPE'] = $displayValues;
+        //         break;
+        //     default:
+        //         break;
+        // }
 
         $completeable = (($status == resourceRequestRecord::STATUS_ASSIGNED) && ($endDateObj < $this->today)) ? true : false; // Someone has been assigned and the End Date has passed.;
 
@@ -722,27 +695,6 @@ trait resourceRequestTableTrait
             "<button type='button' class='btn btn-xs endEarly ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_ADMIN." ".Navbar::$ACCESS_CDI." ".Navbar::$ACCESS_SUPPLY." ".Navbar::$ACCESS_SUPPLY_X." ' aria-label='Left Align' data-reference='" . $resourceReference . "'  data-endDate='" . $endDate . "' >
                 <span data-toggle='tooltip' class=' glyphicon glyphicon-flash text-primary' aria-hidden='true' title='Indicate Completed'></span>
             </button>" : null;
-        
-        // if (isset($this->vbacEmployees[$resourceName])) {
-        //     $resCnum = $this->vbacEmployees[$resourceName]['cnum'];
-        //     $resEmail = $this->vbacEmployees[$resourceName]['emailAddress'];
-        //     $resKynEmail = $this->vbacEmployees[$resourceName]['kynEmailAddress'];
-        
-        //     if (!empty($resKynEmail)) {
-        //         $displayResourceName = $resKynEmail;
-        //     } else {
-        //         if (!empty($resEmail)) {
-        //             $displayResourceName = $resEmail;
-        //         } else {
-        //             $displayResourceName = $resourceName;
-        //         }
-        //     }
-        // } else {
-        //     $resCnum = '';
-        //     $resEmail = '';
-        //     $resKynEmail = '';
-        //     $displayResourceName = $resourceName;
-        // }
         $displayResourceName = $resourceName;
 
         $resName = $editButtonColor == 'text-success' ? "<i>$resourceName</i>" : $displayResourceName;
@@ -750,14 +702,6 @@ trait resourceRequestTableTrait
         $resName = empty(trim($resourceName)) ? "<i>Unallocated</i>" : $resName;
         $resName = substr($resourceName,0,strlen(resourceRequestTable::$delta))==resourceRequestTable::$delta ? "<i>Unallocated</i>" : $resName;
         $resName = substr($resourceName,0,strlen(resourceRequestTable::$duplicate))==resourceRequestTable::$duplicate ? "<i>Unallocated</i>" : $resName;
-
-        // if (!empty(trim($resourceName))) {
-        //     if (in_array($resourceName, $this->vbacEmployeesWithSquad)) {
-        //         $resName = '<span class="text-success" title="Employee found in vBAC">' . $resName .'</span>';
-        //     } else {
-        //         $resName = '<span class="text-danger" title="Employee not found in vBAC">' . $resName .'</span>';
-        //     }
-        // }
 
         if (!empty(trim($resourceName))) {
             if (array_key_exists('VBAC_STATUS', $row) && !empty($row['VBAC_STATUS'])) {
@@ -923,7 +867,7 @@ trait resourceRequestTableTrait
         $key = 'getVbacActiveResources_DB';
         $redisKey = md5($key.'_key_'.$_ENV['environment']);
         if (!$redis->get($redisKey)) {
-            $source = 'cURL Server';
+            $source = 'SQL Server';
             
             $sql = " SELECT * ";
             $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
