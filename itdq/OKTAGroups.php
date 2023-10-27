@@ -265,7 +265,9 @@ class OKTAGroups {
 
 		$groupId = false;
 		foreach($result as $key => $row) {
-			$groupId = 	$row['id'];
+			if ($row['profile']['name'] == $groupName) {
+				$groupId = 	$row['id'];
+			}
 		}
 		return $groupId;
 	}
