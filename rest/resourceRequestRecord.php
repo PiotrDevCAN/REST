@@ -54,7 +54,7 @@ class resourceRequestRecord extends DbRecord
         "Request Created",
         "Cloned From", 
         "Status",
-        "Rate Type of Resource Request",
+        "Rate Type",
         "Hours Type"
     );
 

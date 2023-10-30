@@ -133,14 +133,14 @@ class resourceRequestTable extends DbTable
     function returnNotMatchingBUs($predicate= null, $rsOnly = false) {
 
         $dates = $this->prepareDatesForQuery();
-        $monthLabels = $dates['monthLabels'];
-        $monthDetails = $dates['monthDetails'];
-
-        $startYear = $dates['startYear'];
-        $startMonth = $dates['startMonth'];
-
-        $lastYear = $dates['lastYear'];
-        $lastMonth = $dates['lastMonth'];
+        list(      
+            'monthLabels' => $monthLabels,
+            'monthDetails' => $monthDetails,
+            'startYear' => $startYear,
+            'startMonth' => $startMonth,
+            'lastYear' => $lastYear,
+            'lastMonth' => $lastMonth
+        ) = $dates;
 
         $sql = $this->prepareListQuery();
 
@@ -237,14 +237,14 @@ class resourceRequestTable extends DbTable
     function returnNotMatchingBUsForDataTables($predicate= null, $rsOnly = false) {
 
         $dates = $this->prepareDatesForQuery();
-        $monthLabels = $dates['monthLabels'];
-        $monthDetails = $dates['monthDetails'];
-
-        $startYear = $dates['startYear'];
-        $startMonth = $dates['startMonth'];
-
-        $lastYear = $dates['lastYear'];
-        $lastMonth = $dates['lastMonth'];
+        list(
+            'monthLabels' => $monthLabels,
+            'monthDetails' => $monthDetails,
+            'startYear' => $startYear,
+            'startMonth' => $startMonth,
+            'lastYear' => $lastYear,
+            'lastMonth' => $lastMonth
+        ) = $dates;
 
         $sql = $this->prepareListQuery();
 

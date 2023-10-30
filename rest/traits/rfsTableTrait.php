@@ -435,14 +435,14 @@ trait rfsTableTrait
     function returnClaimReportAsArray($predicate=null, $withArchive=false){
         
         $dates = $this->prepareDatesForQuery();
-        $monthLabels = $dates['monthLabels'];
-        $monthDetails = $dates['monthDetails'];
-
-        $startYear = $dates['startYear'];
-        $startMonth = $dates['startMonth'];
-
-        $lastYear = $dates['lastYear'];
-        $lastMonth = $dates['lastMonth'];
+        list(      
+            'monthLabels' => $monthLabels,
+            'monthDetails' => $monthDetails,
+            'startYear' => $startYear,
+            'startMonth' => $startMonth,
+            'lastYear' => $lastYear,
+            'lastMonth' => $lastMonth
+        ) = $dates;
 
         $sql = $this->prepareListQuery();
 
@@ -530,11 +530,8 @@ trait rfsTableTrait
         $allData = array();
         if (is_iterable($result)) {
             foreach ($result as $key => $row) {
-                $rowDates = $this->prepareDatesForResults($row);
-                $startDate = $rowDates['startDate'];
-                $startDateSortable = $rowDates['startDateSortable'];
-                $endDate = $rowDates['endDate'];
-                $endDateSortable = $rowDates['endDateSortable'];
+                $rowDatesData = $this->prepareDatesForResults($row);
+                list('startDate' => $startDate, 'startDateSortable' => $startDateSortable, 'endDate' => $endDate, 'endDateSortable' => $endDateSortable) = $rowDatesData;
                 
                 $row['START_DATE'] = array('display'=> $startDate,'sort'=>$startDateSortable);
                 $row['END_DATE']   = array('display'=> $endDate, 'sort'=>$endDateSortable);
@@ -553,14 +550,14 @@ trait rfsTableTrait
     function returnClaimReportAsJson($predicate=null, $withArchive=false, $rsOnly = false){
         
         $dates = $this->prepareDatesForQuery();
-        $monthLabels = $dates['monthLabels'];
-        $monthDetails = $dates['monthDetails'];
-
-        $startYear = $dates['startYear'];
-        $startMonth = $dates['startMonth'];
-
-        $lastYear = $dates['lastYear'];
-        $lastMonth = $dates['lastMonth'];
+        list(      
+            'monthLabels' => $monthLabels,
+            'monthDetails' => $monthDetails,
+            'startYear' => $startYear,
+            'startMonth' => $startMonth,
+            'lastYear' => $lastYear,
+            'lastMonth' => $lastMonth
+        ) = $dates;
 
         $sql = "";
         $sql.=" WITH ";
@@ -663,14 +660,14 @@ trait rfsTableTrait
     function returnNoneActiveReportAsArray($predicate=null, $withArchive = false){
 
         $dates = $this->prepareDatesForQuery();
-        $monthLabels = $dates['monthLabels'];
-        $monthDetails = $dates['monthDetails'];
-
-        $startYear = $dates['startYear'];
-        $startMonth = $dates['startMonth'];
-
-        $lastYear = $dates['lastYear'];
-        $lastMonth = $dates['lastMonth'];
+        list(      
+            'monthLabels' => $monthLabels,
+            'monthDetails' => $monthDetails,
+            'startYear' => $startYear,
+            'startMonth' => $startMonth,
+            'lastYear' => $lastYear,
+            'lastMonth' => $lastMonth
+        ) = $dates;
 
         $sql = "";
         $sql.=" WITH ";
