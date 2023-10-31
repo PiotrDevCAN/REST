@@ -255,7 +255,8 @@ class OKTAGroups {
 
 	public function getGroupId($groupName)
 	{
-		$redisKey = md5($groupName.'_key');
+		$key = $groupName.'_key';
+		$redisKey = md5($key.'_key_'.$_ENV['environment']);
 		if (!$this->redis->get($redisKey)) {
 			$source = 'SQL Server';
 
@@ -277,10 +278,10 @@ class OKTAGroups {
 		return $groupId;
 	}
 
-	// 00g7bmr9g08QvcuGn697
 	public function getGroupName($groupId)
 	{
-		$redisKey = md5($groupId.'_getGroupName_key');
+		$key = $groupId.'_getGroupName_key';
+		$redisKey = md5($key.'_key_'.$_ENV['environment']);
 		if (!$this->redis->get($redisKey)) {
 			$source = 'SQL Server';
 
