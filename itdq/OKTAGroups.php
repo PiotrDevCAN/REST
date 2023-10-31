@@ -13,14 +13,17 @@ class OKTAGroups {
 	private $token = null;
 	private $hostname = null;
 
+	private $redis = null;
+
 	public function __construct()
 	{
 		$auth = new Auth();
 		$auth->ensureAuthorized();
 
-		// $this->hostname = trim($_ENV['sso_host']);
-		$this->hostname = 'https://connect.kyndryl.net';
+		$this->hostname = trim($_ENV['sso_host']);
 		$this->token = trim($_ENV['sso_api_token']);
+		
+		$this->redis = $GLOBALS['redis'];
 	}
 
 	private function createCurl($type = "GET")
@@ -50,22 +53,8 @@ class OKTAGroups {
 		$ret = curl_exec($ch);
 
 		$info = curl_getinfo($ch);
-		
-		// var_dump($ret);
-		// echo '<pre>';
-		// var_dump($ret);
-		// echo '</pre>';
-		// var_dump($info);
-		// exit;
 
 		$result = json_decode($ret, true);
-
-		// var_dump($ret);
-		// echo '<pre>';
-		// var_dump($result);
-		// echo '</pre>';
-		// var_dump($info);
-		// exit;
 
 		if (empty($ret)) {
 			// some kind of an error happened
@@ -125,10 +114,10 @@ class OKTAGroups {
 		return $this->processURL($url, 'GET');
 	}
 
-	public function getGroupByName($groupName)
+	public function getGroupByName($groupName, $limit = 10)
 	{
 		$groupName = urlencode($groupName);
-		$url = "/api/v1/groups?q=$groupName&limit=10";
+		$url = "/api/v1/groups?q=$groupName&limit=$limit";
 		return $this->processURL($url, 'GET');
 	}
 
@@ -220,25 +209,42 @@ class OKTAGroups {
 	* Auxiliary operations
  	*/
 
-	public function inAGroup($groupName, $ssoEmail)
+	public function getGroupMembersKey($groupName)
 	{
-		$redis = $GLOBALS['redis'];
-		$redisKey = md5($groupName.'_members');
-		if (!$redis->get($redisKey)) {
+		return md5($groupName.'_members');
+	}
+
+	public function getGroupMembers($groupName)
+	{
+		$redisKey = $this->getGroupMembersKey($groupName);
+		$this->redis->expire($redisKey, REDIS_EXPIRE);
+		if (!$this->redis->get($redisKey)) {
 			$source = 'SQL Server';
 
 			$groupId = $this->getGroupId($groupName);
 			$result = $this->listMembers($groupId);
 
-			$redis->set($redisKey, json_encode($result));
-			$redis->expire($redisKey, REDIS_EXPIRE);
+			$this->redis->set($redisKey, json_encode($result));
+			$this->redis->expire($redisKey, REDIS_EXPIRE);
 		} else {
 			$source = 'Redis Server';
-			$result = json_decode($redis->get($redisKey), true);
+			$result = json_decode($this->redis->get($redisKey), true);
 		}
+		return $result;
+	}
+
+	public function clearGroupMembersCache($groupName)
+	{
+		$redisKey = $this->getGroupMembersKey($groupName);
+		$this->redis->del($redisKey);
+	}
+
+	public function inAGroup($groupName, $ssoEmail)
+	{
+		$users = $this->getGroupMembers($groupName);
 
 		$found = false;
-		foreach($result as $key => $row) {
+		foreach($users as $key => $row) {
 			$email = $row['profile']['email'];
 			if (strtolower(trim($email)) == strtolower(trim($ssoEmail))) {
 				$found = true;
@@ -249,18 +255,17 @@ class OKTAGroups {
 
 	public function getGroupId($groupName)
 	{
-		$redis = $GLOBALS['redis'];
 		$redisKey = md5($groupName.'_key');
-		if (!$redis->get($redisKey)) {
+		if (!$this->redis->get($redisKey)) {
 			$source = 'SQL Server';
 
 			$result = $this->getGroupByName($groupName);
 
-			$redis->set($redisKey, json_encode($result));
-			$redis->expire($redisKey, REDIS_EXPIRE);
+			$this->redis->set($redisKey, json_encode($result));
+			$this->redis->expire($redisKey, REDIS_EXPIRE);
 		} else {
 			$source = 'Redis Server';
-			$result = json_decode($redis->get($redisKey), true);
+			$result = json_decode($this->redis->get($redisKey), true);
 		}
 
 		$groupId = false;
@@ -272,9 +277,24 @@ class OKTAGroups {
 		return $groupId;
 	}
 
-	public function getUserID($email)
+	// 00g7bmr9g08QvcuGn697
+	public function getGroupName($groupId)
 	{
-	
+		$redisKey = md5($groupId.'_getGroupName_key');
+		if (!$this->redis->get($redisKey)) {
+			$source = 'SQL Server';
+
+			$result = $this->getGroup($groupId);
+
+			$this->redis->set($redisKey, json_encode($result));
+			$this->redis->expire($redisKey, REDIS_EXPIRE);
+		} else {
+			$source = 'Redis Server';
+			$result = json_decode($this->redis->get($redisKey), true);
+		}
+
+		$groupName = $result['profile']['name'];
+		return $groupName;
 	}
 }
 ?>

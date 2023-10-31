@@ -18,12 +18,8 @@ class OKTAUsers {
 		$auth = new Auth();
 		$auth->ensureAuthorized();
 
-		// $this->hostname = trim($_ENV['sso_host']);
-		$this->hostname = 'https://connect.kyndryl.net';
-		$this->token = trim($_SESSION['sso_api_token']);
-	
-		// $this->hostname = 'https://connect.kyndryl.net';
-		// $this->token = '001GvGE4m4VjLGEtlFh4Ivi55PNDsKmeE0YUByU8tQ';
+		$this->hostname = trim($_ENV['sso_host']);
+		$this->token = trim($_ENV['sso_api_token']);
 	}
 
 	private function createCurl($type = "GET")
@@ -86,6 +82,79 @@ class OKTAUsers {
 			}
 		}
 		return $result;
+	}
+
+	/*
+	* User operations
+	*/
+
+	/*
+	* Create User
+	*/
+
+	// public function createUser()
+	// {
+
+	// }
+
+	/*
+	* Get User
+	*/
+
+	public function getCurrentUser()
+	{
+		$url = "/api/v1/users/me";
+		return $this->processURL($url, 'GET');
+	}
+
+	public function getUserWithID($id)
+	{
+		$url = "/api/v1/users/$id";
+		return $this->processURL($url, 'GET');
+	}
+
+	public function getUserWithLogin($email)
+	{
+		$login = urlencode($email);
+		$url = "/api/v1/users/$login";
+		return $this->processURL($url, 'GET');
+	}
+
+	public function getUserWithLoginShortname($shortName)
+	{
+		$name = urlencode($shortName);
+		$url = "/api/v1/users/$name";
+		return $this->processURL($url, 'GET');
+	}
+
+	/*
+	* List User
+	*/
+
+	public function listUsers()
+	{
+		// $url = "/api/v1/groups/rules";
+		// return $this->processURL($url, 'POST');
+	}
+
+	/*
+	* Update User
+	*/
+
+	public function updateUser()
+	{
+		// $url = "/api/v1/groups/rules";
+		// return $this->processURL($url, 'POST');
+	}
+
+	/*
+	* Auxiliary operations
+ 	*/
+
+	public function getUserID($email)
+	{
+		$userData = $this->getUserWithLogin($email);
+		return $userData['id'];
 	}
 }
 ?>

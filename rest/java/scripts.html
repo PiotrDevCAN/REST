@@ -18,6 +18,9 @@ $hash = 'v='.substr($hash, 0, 7);
 
 $file = $_SERVER['PHP_SELF'];
 
+// CDI Admin
+$isOktaUserManage = strpos($file, 'pi_manageGroups.php') !== false;
+
 // REST Admin
 $isOrganisation = strpos($file, 'pa_organisation.php') !== false;
 $isService = strpos($file, 'pa_service.php') !== false;
@@ -76,6 +79,11 @@ $isforecastedHours =  strpos($file, 'ps_forecastedHours.php') != false;
 <?php
 
 switch (true) {
+    case $isOktaUserManage:
+    ?>
+<script type="module" src="rest/java/OKTAUserList.js?<?=$hash;?>"></script>
+<?php
+    break;
     case $isRRList:
         ?>
 <script type="module" src="rest/java/resourceRequest/list.js?<?=$hash;?>"></script>

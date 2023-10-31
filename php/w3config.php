@@ -59,10 +59,18 @@ $site = array(
     'SITE_NAME' => $_ENV['environment'],
     'iconDirectory' => 'ICON'
 
+); // Sets the start date for the Date Pickr
 
-
-) // Sets the start date for the Date Pickr
-;
+$site['allGroups'] = array(
+    'CDI' => $site['cdiBgAz'],
+    'admin' => $site['adminBgAz'],
+    'demand' => $site['demandBgAz'],
+    'supply' => $site['supplyBgAz'],
+    'supply-x' => $site['supplyXBgAz'],
+    'rfs' => $site['rfsBgAz'],
+    'rfs-ad' => $site['rfsADBgAz'],
+    'reports' => $site['reportsBgAz']
+);
 
 // # These settings are used for the meta tags on each page. These are
 // # all mandatory for Intranet sites. A full description of meta tags
@@ -143,6 +151,9 @@ $w3php = array(
 );
 
 foreach ($site as $key => $value) {
-    $GLOBALS['site'][$key] = trim($value);
-    $_SESSION[$key] = trim($value);
+    if (!is_array($value)) {
+        $value = trim($value);
+    }
+    $GLOBALS['site'][$key] = $value;
+    $_SESSION[$key] = $value;
 }

@@ -48,6 +48,9 @@ include ('splClassLoader.php');
 include ('includes/startsWith.php');
 include ('includes/endsWith.php');
 
+// global var and config file
+include_once ('../php/w3config.php');
+
 require_once("../php/errorHandlers.php");
 
 set_error_handler('myErrorHandler');

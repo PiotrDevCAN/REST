@@ -30,9 +30,13 @@ $trace          = new NavbarOption('View Trace','pi_trace.php', Navbar::$ACCESS_
 $traceControl   = new NavbarOption('Trace Control','pi_traceControl.php' ,Navbar::$ACCESS_CDI);
 $traceDelete    = new NavbarOption('Trace Deletion', 'pi_traceDelete.php' ,Navbar::$ACCESS_CDI);
 
+$manageGroups    = new NavbarOption('Manage Okta Groups', 'pi_manageGroups.php' ,Navbar::$ACCESS_CDI);
+
 $cdiAdmin->addOption($trace);
 $cdiAdmin->addOption($traceControl);
 $cdiAdmin->addOption($traceDelete);
+$cdiAdmin->addOption(new NavbarDivider(Navbar::$ACCESS_CDI));
+$cdiAdmin->addOption($manageGroups);
 
 $adminMenu      = new NavbarMenu('REST Admin' ,Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
 $organisation   = new NavbarOption('Organisation','pa_organisation.php' ,Navbar::$ACCESS_CDI.' '.Navbar::$ACCESS_ADMIN);
