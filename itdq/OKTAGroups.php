@@ -211,7 +211,9 @@ class OKTAGroups {
 
 	public function getGroupMembersKey($groupName)
 	{
-		return md5($groupName.'_members');
+		$key = $groupName.'_getGroupMembers';
+		$redisKey = md5($key.'_key_'.$_ENV['environment']);
+		return $redisKey;
 	}
 
 	public function getGroupMembers($groupName)
@@ -245,9 +247,11 @@ class OKTAGroups {
 
 		$found = false;
 		foreach($users as $key => $row) {
-			$email = $row['profile']['email'];
-			if (strtolower(trim($email)) == strtolower(trim($ssoEmail))) {
-				$found = true;
+			if (array_key_exists('profile', $row)) {
+				$email = $row['profile']['email'];
+				if (strtolower(trim($email)) == strtolower(trim($ssoEmail))) {
+					$found = true;
+				}
 			}
 		}
 		return $found;
@@ -255,7 +259,7 @@ class OKTAGroups {
 
 	public function getGroupId($groupName)
 	{
-		$key = $groupName.'_key';
+		$key = $groupName.'_getGroupId';
 		$redisKey = md5($key.'_key_'.$_ENV['environment']);
 		if (!$this->redis->get($redisKey)) {
 			$source = 'SQL Server';
@@ -280,7 +284,7 @@ class OKTAGroups {
 
 	public function getGroupName($groupId)
 	{
-		$key = $groupId.'_getGroupName_key';
+		$key = $groupId.'_getGroupName';
 		$redisKey = md5($key.'_key_'.$_ENV['environment']);
 		if (!$this->redis->get($redisKey)) {
 			$source = 'SQL Server';
