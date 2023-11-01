@@ -247,11 +247,26 @@ class OKTAGroups {
 
 		$found = false;
 		foreach($users as $key => $row) {
-			if (array_key_exists('profile', $row)) {
-				$email = $row['profile']['email'];
-				if (strtolower(trim($email)) == strtolower(trim($ssoEmail))) {
-					$found = true;
+			if (is_array($row)) {
+				if (array_key_exists('profile', $row)) {
+					$profile = $row['profile'];
+					if (is_array($profile)) {
+						if (array_key_exists('email', $profile)) {
+							$email = $profile['email'];
+							if (strtolower(trim($email)) == strtolower(trim($ssoEmail))) {
+								$found = true;
+							}
+						} else {
+							trigger_error("Failing PROFILE missing EMAIL data ".json_encode($profile), E_USER_WARNING);
+						}
+					} else {
+						trigger_error("Failing PROFILE because it is a string (".serialize($profile).")", E_USER_WARNING);
+					}
+				} else {
+					trigger_error("Failing ROW missing PROFILE data ".json_encode($row), E_USER_WARNING);
 				}
+			} else {			
+				trigger_error("Failing ROW because it is a string (".serialize($row).")", E_USER_WARNING);
 			}
 		}
 		return $found;

@@ -1,7 +1,6 @@
 <?php
 
-use itdq\OKTAGroups;
-use itdq\OKTAUsers;
+use itdq\FormClass;
 use itdq\Trace;
 use rest\staticOKTAGroupRecord;
 
@@ -13,7 +12,7 @@ use rest\staticOKTAGroupRecord;
 // Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $record = new staticOKTAGroupRecord();
-$record->displayForm(itdq\FormClass::$modeDEFINE);
+$record->displayForm(FormClass::$modeDEFINE);
 ?>
 </div>
 
