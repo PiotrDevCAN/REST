@@ -98,6 +98,7 @@ class OKTAGroups {
 
 	public function addGroup($groupName, $description)
 	{
+		
 		$profile = [
 			"name" => $groupName,
 			"description" => $description
