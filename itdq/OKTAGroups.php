@@ -13,10 +13,14 @@ class OKTAGroups {
 	private $token = null;
 	private $hostname = null;
 
+	private $url = null;
+
 	private $redis = null;
 
 	public function __construct()
 	{
+		// $_ENV['environment'] = 'rest';
+
 		$auth = new Auth();
 		$auth->ensureAuthorized();
 
@@ -30,7 +34,7 @@ class OKTAGroups {
 	{
 		// create a new cURL resource
 		$ch = curl_init();
-		$authorization = "Authorization: SSWS ".$this->token; // Prepare the authorisation token
+		$authorization = "Authorization: SSWS ".$this->token; // Prepare the authorization token
 		$headers = [
 			'Content-Type: application/json',
 			'Accept: application/json, text/json, application/xml, text/xml',
@@ -144,6 +148,7 @@ class OKTAGroups {
 	public function listMembers($groupId)
 	{
 		$url = "/api/v1/groups/$groupId/users";
+		$this->url = $url;
 		return $this->processURL($url, 'GET');
 	}
 
@@ -219,20 +224,38 @@ class OKTAGroups {
 	public function getGroupMembers($groupName)
 	{
 		$redisKey = $this->getGroupMembersKey($groupName);
-		$this->redis->expire($redisKey, REDIS_EXPIRE);
-		if (!$this->redis->get($redisKey)) {
+		$this->redis->del($redisKey);
+		$cacheValue = $this->redis->get($redisKey);
+		if (!$cacheValue) {
 			$source = 'SQL Server';
 
 			$groupId = $this->getGroupId($groupName);
 			$result = $this->listMembers($groupId);
 
-			$this->redis->set($redisKey, json_encode($result));
-			$this->redis->expire($redisKey, REDIS_EXPIRE);
+			if (array_key_exists('errorCode', $result)) {
+
+				$debug = array(
+					'token' => $this->token,
+					'url' => $this->url,
+					'groupId' => $groupId,
+					'groupName' => $groupName,
+					'result' => $result,
+					'source' => $source
+				);
+	
+				trigger_error("Failing Okta API call ".json_encode($debug), E_USER_WARNING);
+				
+				$result = array();
+			} else {
+				$this->redis->set($redisKey, json_encode($result));
+				$this->redis->expire($redisKey, REDIS_EXPIRE);
+			}
 		} else {
 			$source = 'Redis Server';
-			$result = json_decode($this->redis->get($redisKey), true);
+			$result = json_decode($cacheValue, true);
 		}
-		return $result;
+		$data = array('users'=>$result, 'source'=>$source);
+		return $data;
 	}
 
 	public function clearGroupMembersCache($groupName)
@@ -243,8 +266,9 @@ class OKTAGroups {
 
 	public function inAGroup($groupName, $ssoEmail)
 	{
-		$users = $this->getGroupMembers($groupName);
-
+		$membersData = $this->getGroupMembers($groupName);
+		list('users' => $users, 'source' => $source) = $membersData;
+		
 		$found = false;
 		foreach($users as $key => $row) {
 			if (is_array($row)) {
@@ -257,16 +281,16 @@ class OKTAGroups {
 								$found = true;
 							}
 						} else {
-							trigger_error("Failing PROFILE missing EMAIL data ".json_encode($profile), E_USER_WARNING);
+							// trigger_error("Failing PROFILE missing EMAIL data ".json_encode($profile), E_USER_WARNING);
 						}
 					} else {
-						trigger_error("Failing PROFILE because it is a string (".serialize($profile).")", E_USER_WARNING);
+						// trigger_error("Failing PROFILE because it is a string (".serialize($profile).")", E_USER_WARNING);
 					}
 				} else {
-					trigger_error("Failing ROW missing PROFILE data ".json_encode($row), E_USER_WARNING);
+					// trigger_error("Failing ROW missing PROFILE data ".json_encode($row), E_USER_WARNING);
 				}
 			} else {			
-				trigger_error("Failing ROW because it is a string (".serialize($row).")", E_USER_WARNING);
+				// trigger_error("Failing ROW because it is a string (".serialize($row).")", E_USER_WARNING);
 			}
 		}
 		return $found;

@@ -5,17 +5,6 @@ use itdq\OKTAGroups;
 set_time_limit(0);
 ob_start();
 
-
-// $cdiUsers = $OKTAGroups->getGroupMembers($GLOBALS['site']['cdiBgAz']);
-// $adminUsers = $OKTAGroups->getGroupMembers($GLOBALS['site']['adminBgAz']);
-// $demandUsers = $OKTAGroups->getGroupMembers($GLOBALS['site']['demandBgAz']);
-// $supplyUsers = $OKTAGroups->getGroupMembers($GLOBALS['site']['supplyBgAz']);
-// $supplyXUsers = $OKTAGroups->getGroupMembers($GLOBALS['site']['supplyXBgAz']);
-// $rfsUsers = $OKTAGroups->getGroupMembers($GLOBALS['site']['rfsBgAz']);
-// $rfsAdUsers =$OKTAGroups->getGroupMembers($GLOBALS['site']['rfsADBgAz']);
-// $reportsUsers = $OKTAGroups->getGroupMembers($GLOBALS['site']['reportsBgAz']);
-
-
 $redis = $GLOBALS['redis'];
 $key = 'getOktaGroupMembers';
 $redisKey = md5($key.'_key_'.$_ENV['environment']);
@@ -23,7 +12,8 @@ if (!$redis->get($redisKey)) {
     $source = 'SQL Server';
     
     $OKTAGroups = new OKTAGroups();
-    $data = $OKTAGroups->getGroupMembers($GLOBALS['site']['cdiBgAz']);
+    $membersData = $OKTAGroups->getGroupMembers($GLOBALS['site']['cdiBgAz']);
+    list('users' => $data, 'source' => $source) = $membersData;
     
     $redis->set($redisKey, json_encode($data));
     $redis->expire($redisKey, REDIS_EXPIRE);

@@ -13,7 +13,8 @@ if (!empty($group)) {
     $OKTAGroups = new OKTAGroups();
     $groupName = $GLOBALS['site']['allGroups'][$group];
     $groupId = $OKTAGroups->getGroupId($groupName);
-    $members = $OKTAGroups->getGroupMembers($groupName);
+    $membersData = $OKTAGroups->getGroupMembers($groupName);
+    list('users' => $members, 'source' => $source) = $membersData;
 }
 
 foreach ($members as $key => $member){
