@@ -224,7 +224,6 @@ class OKTAGroups {
 	public function getGroupMembers($groupName)
 	{
 		$redisKey = $this->getGroupMembersKey($groupName);
-		$this->redis->del($redisKey);
 		$cacheValue = $this->redis->get($redisKey);
 		if (!$cacheValue) {
 			$source = 'SQL Server';
@@ -298,6 +297,41 @@ class OKTAGroups {
 
 	public function getGroupId($groupName)
 	{
+		$groupId = false;
+		switch(trim($groupName)) {
+			case 'the REST tool - production-ventus_cdi':
+				$groupId = '00g7befn0uWuxzoJk697';
+				break;
+			case 'the REST tool - production-ventus_rest_admin':
+				$groupId = '00g7bi1ff5Yi7OImi697';
+				break;
+			case 'the REST tool - production-ventus_rest_demand':
+				$groupId = '00g7bmnoljefNZR4p697';
+				break;
+			case 'the REST tool - production-ventus_rest_supply':
+				$groupId = '00g7bis1izkQ6hSoQ697';
+				break;
+			case 'the REST tool - production-ventus_rest_supply_x':
+				$groupId = '00g7bn3fy2LO4JsmF697';
+				break;
+			case 'the REST tool - production-ventus_rest_rfs':
+				$groupId = '00g7bmr9g08QvcuGn697';
+				break;
+			case 'the REST tool - production-ventus_rest_rfs_ad':
+				$groupId = '00g7bn5o8jAW72Mid697';
+				break;
+			case 'the REST tool - production-ventus_rest_ro':
+				$groupId = '00g7bmyjodrf0C4vP697';
+				break;
+			default:
+				break;
+		}
+		return $groupId;
+	}
+
+	/*
+	public function getGroupId_($groupName)
+	{
 		$key = $groupName.'_getGroupId';
 		$redisKey = md5($key.'_key_'.$_ENV['environment']);
 		if (!$this->redis->get($redisKey)) {
@@ -320,6 +354,7 @@ class OKTAGroups {
 		}
 		return $groupId;
 	}
+	*/
 
 	public function getGroupName($groupId)
 	{
