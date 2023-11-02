@@ -19,12 +19,13 @@ class OKTAGroups {
 
 	public function __construct()
 	{
-		// $_ENV['environment'] = 'rest';
-
 		$auth = new Auth();
 		$auth->ensureAuthorized();
 
-		$this->hostname = trim($_ENV['sso_host']);
+		$oAuthPrefix = '/oauth2/v1';
+		$envHostName = trim($_ENV['sso_host']);
+
+		$this->hostname = str_replace($oAuthPrefix, '', $envHostName);
 		$this->token = trim($_ENV['sso_api_token']);
 		
 		$this->redis = $GLOBALS['redis'];
