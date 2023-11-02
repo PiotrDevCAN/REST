@@ -98,7 +98,6 @@ class OKTAGroups {
 
 	public function addGroup($groupName, $description)
 	{
-		
 		$profile = [
 			"name" => $groupName,
 			"description" => $description
@@ -235,8 +234,9 @@ class OKTAGroups {
 			if (array_key_exists('errorCode', $result)) {
 
 				$debug = array(
-					'token' => $this->token,
+					'hostname' => $this->hostname,
 					'url' => $this->url,
+					'token' => $this->token,
 					'groupId' => $groupId,
 					'groupName' => $groupName,
 					'result' => $result,
