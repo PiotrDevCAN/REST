@@ -3,8 +3,6 @@ namespace ajax;
 
 use itdq\OKTAGroups;
 use itdq\OKTAUsers;
-use rest\allTables;
-use rest\staticPSBandTable;
 
 set_time_limit(0);
 

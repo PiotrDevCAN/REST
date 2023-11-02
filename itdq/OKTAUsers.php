@@ -1,10 +1,6 @@
 <?php
 namespace itdq;
 
-use WorkerApi\Auth;
-
-include_once "WorkerAPI/class/include.php";
-
 /*
  *  Handles OKTA Users.
  */
@@ -13,13 +9,19 @@ class OKTAUsers {
 	private $token = null;
 	private $hostname = null;
 
+	private $url = null;
+
+	private $redis = null;
+
 	public function __construct()
 	{
-		$auth = new Auth();
-		$auth->ensureAuthorized();
+		$oAuthPrefix = '/oauth2/v1';
+		$envHostName = trim($_ENV['sso_host']);
 
-		$this->hostname = trim($_ENV['sso_host']);
+		$this->hostname = str_replace($oAuthPrefix, '', $envHostName);
 		$this->token = trim($_ENV['sso_api_token']);
+		
+		$this->redis = $GLOBALS['redis'];
 	}
 
 	private function createCurl($type = "GET")

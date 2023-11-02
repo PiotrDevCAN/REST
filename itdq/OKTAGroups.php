@@ -1,10 +1,6 @@
 <?php
 namespace itdq;
 
-use WorkerApi\Auth;
-
-include_once "WorkerAPI/class/include.php";
-
 /*
  *  Handles OKTA Groups.
  */
@@ -19,9 +15,6 @@ class OKTAGroups {
 
 	public function __construct()
 	{
-		$auth = new Auth();
-		$auth->ensureAuthorized();
-
 		$oAuthPrefix = '/oauth2/v1';
 		$envHostName = trim($_ENV['sso_host']);
 
