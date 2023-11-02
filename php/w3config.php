@@ -15,11 +15,33 @@ if(!isset($_ENV['environment'])){
 
 $site = array(
 
+    // if not empty will override the site title from menuconf.php
+    'site_title' => 'REST : Aurora Resourcing Tool', // CHANGE THIS WHEN STARTING NEW APP
+
+    // enable w3 local search
+    'local_search' => FALSE,
+
+    // show bread crumb navigation
+    'bread_crumbs' => TRUE,
+
     // url to send feedback too. See meta tags below as well
-    'feedback_uri' => 'mailto:piotr.tajanowicz@kyndryl.com',
+    'feedback_uri' => 'mailto:Piotr.Tajanowicz@kyndryl.com',
 
     // base location of css, js, and images
     'assets' => '/ui',
+
+    // display the IBM w3 Intranet Password logo
+    'secure_logo' => TRUE,
+
+    // display the cool Linux logo
+    'linux_logo' => FALSE,
+
+    // display the xhtml valid icon
+    // this only works for http pages, not https pages
+    'xhtml_valid' => FALSE,
+
+    // page dates displayed are either 'LASTMOD' or 'CURRENT' or FALSE
+    'page_date' => 'CURRENT',
 
     // prefix to use if your site is not located at /
     // do not include the trailing slash
@@ -55,6 +77,10 @@ $site = array(
 
     'email' => false,
     'emailId' => 'DoNotReply_rest@uk.ibm.com',
+    'devEmailId' => 'Piotr.Tajanowicz@kyndryl.com',
+
+    'AuditLife' => '13 months',
+    'AuditDetailsLife' => '6 months',
 
     'SITE_NAME' => $_ENV['environment'],
     'iconDirectory' => 'ICON'
@@ -92,7 +118,7 @@ $meta = array(
     // feedback email received through the central Intranet Feedback
     // Form (w3.ibm.com/feedback) to the correct handler, without human
     // intervention.
-    'feedback' => 'piotr.tajanowicz@ibm.com',
+    'feedback' => 'Piotr.Tajanowicz@kyndryl.com',
 
     // security class for this web site
     'security' => 'IBM internal use only',
