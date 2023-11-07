@@ -125,5 +125,6 @@ const ResourceRateEntry = new resourceRateEntry();
 
 const StartAndEnd = new startAndEnd(resourceRateEntry.startFieldId, resourceRateEntry.endFieldId);
 StartAndEnd.initPickers();
+ResourceRateEntry.startAndEnd = StartAndEnd;
 
 export { ResourceRateEntry as default };

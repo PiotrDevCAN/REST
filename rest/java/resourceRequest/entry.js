@@ -20,7 +20,17 @@ class entry {
   responseObj;
 
   constructor() {
+    this.prepareSelect2();
 
+    const StartAndEnd = new startAndEnd(entry.startFieldId, entry.endFieldId);
+    StartAndEnd.initPickers();
+    this.startAndEnd = StartAndEnd;
+
+    this.listenForOrganisationSelect();
+    this.listenForRfsSelect();
+    this.listenForFormReset();
+    this.listenForResourceRequestFormSubmit();
+    this.listenForEditResultModalHidden();
   }
 
   prepareSelect2() {
@@ -63,27 +73,62 @@ class entry {
     // $(".select").select2();
   }
 
+  listenForOrganisationSelect() {
+    $('#ORGANISATION').on('select2:select', function (e) {
+      FormMessageArea.showMessageArea();
+      var serviceSelected = $(e.params.data)[0].text;
+      Services.getServices().then((response) => {
+        var data = response[serviceSelected];
+        if ($('#SERVICE').hasClass("select2-hidden-accessible")) {
+          // Select2 has been initialized
+          $('#SERVICE').val("").trigger("change");
+          $('#SERVICE').empty().select2('destroy').attr('disabled', true);
+        }
+        $("#SERVICE").select2({
+          data: data
+        }).attr('disabled', false).val('').trigger('change');
+
+        if (data.length == 2) {
+          $("#SERVICE").val(data[1].text).trigger('change');
+        }
+        FormMessageArea.clearMessageArea();
+      });
+    });
+  }
+
+  listenForRfsSelect() {
+    var $this = this;
+    $('#RFS').on('select2:select', function (e) {
+      FormMessageArea.showMessageArea();
+      var rfsSelected = $(e.params.data)[0].text;
+      var maxEndDate = null;
+      $.ajax({
+        url: "ajax/endDateForRfs.php",
+        type: 'POST',
+        data: {
+          rfs: rfsSelected
+        },
+        success: function (result) {
+          try {
+            var resultObj = JSON.parse(result);
+            if (resultObj.rfsEndDate !== null) {
+              maxEndDate = new Date(resultObj.rfsEndDate);
+              $this.startAndEnd.updateMaxDate(maxEndDate);
+            }
+          } catch (e) {
+            helper.unlockButton();
+            helper.displayTellDevMessageModal(e);
+          }
+          FormMessageArea.clearMessageArea();
+        }
+      });
+    });
+  }
+
   listenForFormReset() {
     $(document).on('reset', 'form', function (e) {
       $(".select").val('').trigger('change');
       $("#STATUS").val('New').trigger('change');
-    });
-  }
-
-  listenForEditResultModalHidden() {
-    var $this = this;
-    $(document).on('hidden.bs.modal', '#myModal', function (e) {
-      // do something…
-      if ($this.responseObj.create == true || $this.responseObj.update == true) {
-        // reset form
-        // $('#resetResourceRequest').click();
-        // reload form
-        location.reload();
-      } else {
-        // there must be an issue so show message and summary
-        window.close();
-      }
-      $(':submit').removeClass('spinning').attr('disabled', false);
     });
   }
 
@@ -140,68 +185,22 @@ class entry {
     });
   }
 
-  listenForOrganisationSelect() {
-    $('#ORGANISATION').on('select2:select', function (e) {
-      FormMessageArea.showMessageArea();
-      var serviceSelected = $(e.params.data)[0].text;
-      Services.getServices().then((response) => {
-        var data = response[serviceSelected];
-        if ($('#SERVICE').hasClass("select2-hidden-accessible")) {
-          // Select2 has been initialized
-          $('#SERVICE').val("").trigger("change");
-          $('#SERVICE').empty().select2('destroy').attr('disabled', true);
-        }
-        $("#SERVICE").select2({
-          data: data
-        }).attr('disabled', false).val('').trigger('change');
-
-        if (data.length == 2) {
-          $("#SERVICE").val(data[1].text).trigger('change');
-        }
-        FormMessageArea.clearMessageArea();
-      });
-    });
-  }
-
-  listenForRfsSelect() {
+  listenForEditResultModalHidden() {
     var $this = this;
-    $('#RFS').on('select2:select', function (e) {
-      FormMessageArea.showMessageArea();
-      var rfsSelected = $(e.params.data)[0].text;
-      var maxEndDate = null;
-      $.ajax({
-        url: "ajax/endDateForRfs.php",
-        type: 'POST',
-        data: {
-          rfs: rfsSelected
-        },
-        success: function (result) {
-          try {
-            var resultObj = JSON.parse(result);
-            if (resultObj.rfsEndDate !== null) {
-              maxEndDate = new Date(resultObj.rfsEndDate);
-              $this.startAndEnd.updateMaxDate(maxEndDate);
-            }
-          } catch (e) {
-            helper.unlockButton();
-            helper.displayTellDevMessageModal(e);
-          }
-          FormMessageArea.clearMessageArea();
-        }
-      });
+    $(document).on('hidden.bs.modal', '#myModal', function (e) {
+      // do something…
+      if ($this.responseObj.create == true || $this.responseObj.update == true) {
+        // reset form
+        // $('#resetResourceRequest').click();
+        // reload form
+        location.reload();
+      } else {
+        // there must be an issue so show message and summary
+        window.close();
+      }
+      $(':submit').removeClass('spinning').attr('disabled', false);
     });
   }
 }
 
 const Entry = new entry();
-Entry.prepareSelect2();
-
-const StartAndEnd = new startAndEnd(entry.startFieldId, entry.endFieldId);
-StartAndEnd.initPickers();
-Entry.startAndEnd = StartAndEnd;
-
-Entry.listenForFormReset();
-Entry.listenForResourceRequestFormSubmit();
-Entry.listenForOrganisationSelect();
-Entry.listenForRfsSelect();
-Entry.listenForEditResultModalHidden();

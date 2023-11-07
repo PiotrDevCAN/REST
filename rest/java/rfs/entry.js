@@ -16,24 +16,51 @@ class entry {
 	static startFieldId = 'RFS_START_DATE';
 	static endFieldId = 'RFS_END_DATE';
 
+	events;
+	eventsRaw;
+	eventTitles;
+
 	endPicker;
 	endDateMoment;    // Moment object
 
 	responseObj;
 
 	constructor() {
-		// this.initialiseEndDate();
+		this.initialiseDateFields();
+		this.prepareSelect2();
+		this.listenForRFS_IDInput();
+		this.listenForRFS_IDFocusOut();
+		this.listenForValueStreamChange();
+		this.listenForFormReset();
+		this.listenForRfsFormSubmit();
+		this.listenForEditResultModalHidden();
 	}
 
-	async initialiseEndDate() {
+	initialiseDateFields() {
 
-		let events = await BankHolidays.getFormattedEvents();
-		let eventsRaw = await BankHolidays.getEvents();
-		let eventTitles = await BankHolidays.getEventTitles();
+		var $this = this;
+		let eventsPromise = BankHolidays.getFormattedEvents().then((response) => {
+			$this.events = response;
+		});
+		let eventsRawPromise = BankHolidays.getEvents().then((response) => {
+			$this.eventsRaw = response;
+		});
+		let eventTitlesPromise = BankHolidays.getEventTitles().then((response) => {
+			$this.eventTitles = response;
+		});
+
+		const promises = [eventsPromise, eventsRawPromise, eventTitlesPromise];
+		Promise.allSettled(promises)
+			.then((results) => {
+				$this.initialiseEndDate();
+			});
+	}
+
+	initialiseEndDate() {
 
 		var $this = this;
 		this.endPicker = new Pikaday({
-			events: events,
+			events: $this.events,
 			firstDay: 1,
 			field: document.getElementById('InputRFS_END_DATE'),
 			format: 'D MMM YYYY',
@@ -45,7 +72,7 @@ class entry {
 				$('#RFS_END_DATE').val(db2Value);
 			},
 			onDraw: function () {
-				helper.addEventTitlesToPicker(eventsRaw, eventTitles);
+				helper.addEventTitlesToPicker($this.eventsRaw, $this.eventTitles);
 			}
 		});
 	}
@@ -89,8 +116,8 @@ class entry {
 	}
 
 	listenForRFS_IDFocusOut() {
-		$(document).on('focusout', '#RFS_ID', function (e) {
-			Rfs.changeValueStreamIfUnique(this);
+		$(document).on('focusout', '#RFS_ID', async function (e) {
+			await Rfs.changeValueStreamIfUnique(this);
 		});
 	}
 
@@ -191,14 +218,6 @@ class entry {
 }
 
 const Entry = new entry();
-Entry.initialiseEndDate();
-Entry.prepareSelect2();
-Entry.listenForRFS_IDInput();
-Entry.listenForRFS_IDFocusOut();
-Entry.listenForValueStreamChange();
-Entry.listenForFormReset();
-Entry.listenForRfsFormSubmit();
-Entry.listenForEditResultModalHidden();
 
 $('#LINK_TO_PGMP').attr('required', false);
 

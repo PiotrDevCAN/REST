@@ -2,7 +2,6 @@
  *
  */
 
-let buttonCommon = await cacheBustImport('./modules/buttonCommon.js');
 let OKTAUserEntry = await cacheBustImport('./OKTAUserEntry.js');
 
 class OKTAUserList {
@@ -10,18 +9,10 @@ class OKTAUserList {
     table;
 
     constructor() {
-        // this.initialiseTable();
+        this.initialisePillsTables();
+    }
 
-
-        // CDIMembersTable
-        // adminMembersTable
-        // demandMembersTable
-        // supplyMembersTable
-        // supplyXMembersTable
-        // rfsMembersTable
-        // rfsAdMembersTable
-        // reportsMembersTable
-
+    initialisePillsTables() {
         var $this = this;
         var tables = $('.dataTable');
         tables.each((i, table) => {
@@ -29,7 +20,6 @@ class OKTAUserList {
             var groupName = $(table).data('group');
             $this.initialiseTable(tableId, groupName);
         });
-
     }
 
     initialiseTable(tableId, groupName) {

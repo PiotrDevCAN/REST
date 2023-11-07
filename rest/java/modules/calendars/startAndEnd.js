@@ -11,6 +11,8 @@ class startAndEnd {
     static dateFormat2 = 'D MMM YYYY';
 
     events;
+    eventsRaw;
+    eventTitles;
 
     startFieldId;
     endFieldId;
@@ -28,10 +30,8 @@ class startAndEnd {
     startDateMoment;  // Moment object
     endDateMoment;    // Moment object
 
-    async onDrawCallback() {
-        let eventsRaw = await BankHolidays.getEvents();
-        let eventTitles = await BankHolidays.getEventTitles();
-        helper.addEventTitlesToPicker(eventsRaw, eventTitles);
+    onDrawCallback(events, titles) {
+        helper.addEventTitlesToPicker(events, titles);
     }
 
     updateStartDate(date) {
@@ -57,6 +57,26 @@ class startAndEnd {
 
     initPickers() {
 
+        var $this = this;
+        let eventsPromise = BankHolidays.getFormattedEvents().then((response) => {
+            $this.events = response;
+        });
+        let eventsRawPromise = BankHolidays.getEvents().then((response) => {
+            $this.eventsRaw = response;
+        });
+        let eventTitlesPromise = BankHolidays.getEventTitles().then((response) => {
+            $this.eventTitles = response;
+        });
+
+        const promises = [eventsPromise, eventsRawPromise, eventTitlesPromise];
+        Promise.allSettled(promises)
+            .then((results) => {
+                $this.initialiseDateFields();
+            });
+    }
+
+    initialiseDateFields() {
+
         // read initial value of START date field
         var startDateField = document.getElementById(this.startFieldId);
         if (startDateField !== null) {
@@ -75,122 +95,121 @@ class startAndEnd {
             }
         }
 
-        let eventsPromise = BankHolidays.getFormattedEvents().then((response) => {
-            var $this = this;
-            $this.events = response;
-            let startPickerPromise = new Promise((resolve, reject) => {
-                this.startPicker = new Pikaday({
-                    events: $this.events,
-                    firstDay: 1,
-                    field: document.getElementById('Input' + $this.startFieldId),
-                    format: startAndEnd.dateFormat2,
-                    showTime: false,
+        var $this = this;
+        let startPickerPromise = new Promise((resolve, reject) => {
+            this.startPicker = new Pikaday({
+                events: $this.events,
+                firstDay: 1,
+                field: document.getElementById('Input' + $this.startFieldId),
+                format: startAndEnd.dateFormat2,
+                showTime: false,
+                minDate: new Date(),
 
-                    defaultDate: $this.startDateDefaultDate,
-                    setDefaultDate: $this.startDateDefaultDate !== null,
+                defaultDate: $this.startDateDefaultDate,
+                setDefaultDate: $this.startDateDefaultDate !== null,
 
-                    onSelect: function () {
-                        $this.startDateMoment = this.getMoment();
-                        var db2Value = $this.startDateMoment.format(startAndEnd.dateFormat);
-                        var relatedField = document.getElementById($this.startFieldId);
-                        if (relatedField !== null) {
-                            relatedField.setAttribute('value', db2Value);
-                        }
-                        $this.updateStartDate($this.startDateMoment.toDate());
-                    },
-                    onClose: function () {
-                        var dateWas = $this.startDateDefault;
-                        var dateCurrent = $this.startDateMoment.format(startAndEnd.dateFormat);
-                        if (dateWas != dateCurrent) {
-                            if ($this.endDateDefault !== '') {
-                                if ($this.startDateMoment.isAfter($this.endDateMoment)) {
-                                    // restore previous start date
-                                    this.setDate(dateWas);
-                                    dateCurrent = dateWas;
-                                }
+                onSelect: function () {
+                    $this.startDateMoment = this.getMoment();
+                    var db2Value = $this.startDateMoment.format(startAndEnd.dateFormat);
+                    var relatedField = document.getElementById($this.startFieldId);
+                    if (relatedField !== null) {
+                        relatedField.setAttribute('value', db2Value);
+                    }
+                    $this.updateStartDate($this.startDateMoment.toDate());
+                },
+                onClose: function () {
+                    var dateWas = $this.startDateDefault;
+                    var dateCurrent = $this.startDateMoment.format(startAndEnd.dateFormat);
+                    if (dateWas != dateCurrent) {
+                        if ($this.endDateDefault !== '') {
+                            if ($this.startDateMoment.isAfter($this.endDateMoment)) {
+                                // restore previous start date
+                                this.setDate(dateWas);
+                                dateCurrent = dateWas;
                             }
-                            $this.startDateDefault = dateCurrent;
                         }
-                    },
-                    onDraw: this.onDrawCallback
-                });
-                resolve('Success');
+                        $this.startDateDefault = dateCurrent;
+                    }
+                },
+                onDraw: this.onDrawCallback($this.eventsRaw, $this.eventTitles)
             });
-
-            let endPickerPromise = new Promise((resolve, reject) => {
-                this.endPicker = new Pikaday({
-                    events: $this.events,
-                    firstDay: 1,
-                    field: document.getElementById('Input' + $this.endFieldId),
-                    format: startAndEnd.dateFormat2,
-                    showTime: false,
-
-                    defaultDate: $this.endDateDefaultDate,
-                    setDefaultDate: $this.endDateDefaultDate !== null,
-
-                    onSelect: function () {
-                        $this.endDateMoment = this.getMoment();
-                        var db2Value = $this.endDateMoment.format(startAndEnd.dateFormat);
-                        var relatedField = document.getElementById($this.endFieldId);
-                        if (relatedField !== null) {
-                            relatedField.setAttribute('value', db2Value);
-                        }
-                        $this.updateEndDate($this.endDateMoment.toDate());
-                    },
-                    onClose: function () {
-                        var dateWas = $this.endDateDefault;
-                        var dateCurrent = $this.startDateMoment.format(startAndEnd.dateFormat);
-                        if (dateWas != dateCurrent) {
-                            if ($this.startDateDefault !== '') {
-                                if ($this.startDateMoment.isAfter($this.endDateMoment)) {
-                                    // restore previous end date
-                                    this.setDate(dateWas);
-                                    dateCurrent = dateWas;
-                                }
-                            }
-                            $this.endDateDefault = dateCurrent;
-                        }
-                    },
-                    onDraw: this.onDrawCallback
-                });
-                resolve('Success');
-            });
-
-            const promises = [startPickerPromise, endPickerPromise];
-            Promise.allSettled(promises)
-                // Promise.all(promises)
-                .then((results) => {
-                    results.forEach((result) => console.log(result.status));
-
-                    this.startPicker = this.startPicker;
-                    this.endPicker = this.endPicker;
-
-                    var _startDate = this.startPicker.getMoment();
-                    var _endDate = this.endPicker.getMoment();
-
-                    if (_startDate) {
-                        this.startDateMoment = _startDate;
-                        var relatedField = document.getElementById($this.startFieldId);
-                        if (relatedField !== null) {
-                            this.startDateDefault = relatedField.getAttribute('value');
-                        }
-                    }
-                    if (typeof this.startDateDefaultDate !== 'undefined') {
-                        this.updateStartDate(this.startDateMoment.toDate());
-                    }
-
-                    if (_endDate) {
-                        this.endDateMoment = _endDate;
-                        var relatedField = document.getElementById($this.endFieldId);
-                        if (relatedField !== null) {
-                            this.endDateDefault = relatedField.getAttribute('value');
-                        }
-                    }
-                    if (typeof this.endDateDefaultDate !== 'undefined') {
-                        this.updateEndDate(this.endDateMoment.toDate());
-                    }
-                });
+            resolve('Success');
         });
+
+        let endPickerPromise = new Promise((resolve, reject) => {
+            this.endPicker = new Pikaday({
+                events: $this.events,
+                firstDay: 1,
+                field: document.getElementById('Input' + $this.endFieldId),
+                format: startAndEnd.dateFormat2,
+                showTime: false,
+                minDate: new Date(),
+
+                defaultDate: $this.endDateDefaultDate,
+                setDefaultDate: $this.endDateDefaultDate !== null,
+
+                onSelect: function () {
+                    $this.endDateMoment = this.getMoment();
+                    var db2Value = $this.endDateMoment.format(startAndEnd.dateFormat);
+                    var relatedField = document.getElementById($this.endFieldId);
+                    if (relatedField !== null) {
+                        relatedField.setAttribute('value', db2Value);
+                    }
+                    $this.updateEndDate($this.endDateMoment.toDate());
+                },
+                onClose: function () {
+                    var dateWas = $this.endDateDefault;
+                    var dateCurrent = $this.startDateMoment.format(startAndEnd.dateFormat);
+                    if (dateWas != dateCurrent) {
+                        if ($this.startDateDefault !== '') {
+                            if ($this.startDateMoment.isAfter($this.endDateMoment)) {
+                                // restore previous end date
+                                this.setDate(dateWas);
+                                dateCurrent = dateWas;
+                            }
+                        }
+                        $this.endDateDefault = dateCurrent;
+                    }
+                },
+                onDraw: this.onDrawCallback($this.eventsRaw, $this.eventTitles)
+            });
+            resolve('Success');
+        });
+
+        const promises = [startPickerPromise, endPickerPromise];
+        Promise.allSettled(promises)
+            // Promise.all(promises)
+            .then((results) => {
+                results.forEach((result) => console.log(result.status));
+
+                this.startPicker = this.startPicker;
+                this.endPicker = this.endPicker;
+
+                var _startDate = this.startPicker.getMoment();
+                var _endDate = this.endPicker.getMoment();
+
+                if (_startDate) {
+                    this.startDateMoment = _startDate;
+                    var relatedField = document.getElementById($this.startFieldId);
+                    if (relatedField !== null) {
+                        this.startDateDefault = relatedField.getAttribute('value');
+                    }
+                }
+                if (typeof this.startDateDefaultDate !== 'undefined') {
+                    this.updateStartDate(this.startDateMoment.toDate());
+                }
+
+                if (_endDate) {
+                    this.endDateMoment = _endDate;
+                    var relatedField = document.getElementById($this.endFieldId);
+                    if (relatedField !== null) {
+                        this.endDateDefault = relatedField.getAttribute('value');
+                    }
+                }
+                if (typeof this.endDateDefaultDate !== 'undefined') {
+                    this.updateEndDate(this.endDateMoment.toDate());
+                }
+            });
     }
 
     destroyPickers() {

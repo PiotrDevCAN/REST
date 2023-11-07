@@ -9,7 +9,7 @@ use rest\staticOKTAGroupRecord;
 <h2>Define Okta Group employee record</h2>
 <?php
 
-// Trace::pageOpening($_SERVER['PHP_SELF']);
+Trace::pageOpening($_SERVER['PHP_SELF']);
 
 $record = new staticOKTAGroupRecord();
 $record->displayForm(FormClass::$modeDEFINE);
@@ -181,4 +181,4 @@ $record->displayForm(FormClass::$modeDEFINE);
 	include_once 'includes/modalSaveResultModal.html';
 ?>
 <?php
-// Trace::pageLoadComplete($_SERVER['PHP_SELF']);
+Trace::pageLoadComplete($_SERVER['PHP_SELF']);
