@@ -59,8 +59,11 @@ class activeResourcesList {
                 });
             },
             columns: [
+                { data: "CNUM","defaultContent": "" },
                 { data: "EMAIL_ADDRESS","defaultContent": "" },
                 { data: "NOTES_ID","defaultContent": "" },
+                { data: "FIRST_NAME","defaultContent": "" },
+                { data: "LAST_NAME","defaultContent": "" },
                 { data: "PES_STATUS","defaultContent": "" }
             ]
         });

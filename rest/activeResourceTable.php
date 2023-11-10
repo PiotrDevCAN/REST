@@ -186,8 +186,11 @@ class activeResourceTable extends DbTable {
         while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             $display = array();
             $row = array_map('trim', $row);
+            $display['CNUM'] = $row['CNUM'];
             $display['EMAIL_ADDRESS'] = !empty($row['EMAIL_ADDRESS']) ? $row['EMAIL_ADDRESS'] : 'unavailable in VBAC';
             $display['NOTES_ID'] = $row['NOTES_ID'];
+            $display['FIRST_NAME'] = $row['FIRST_NAME'];
+            $display['LAST_NAME'] = $row['LAST_NAME'];
             $display['PES_STATUS'] = $row['PES_STATUS'];
             $displayAble[] = $display;
         }

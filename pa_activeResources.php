@@ -11,12 +11,12 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 <div style='width: 75%'>
 <table id='leaverTable' >
 <thead>
-<tr><th>Email Address</th><th>Notes ID</th><th>PES Status</th></tr>
+<tr><th>CNUM</th><th>Email Address</th><th>Notes ID</th><th>First Name</th><th>Last Name</th><th>PES Status</th></tr>
 </thead>
 <tbody>
 </tbody>
 <tfoot>
-<tr><th>Email Address</th><th>Notes ID</th><th>PES Status</th></tr>
+<tr><th>CNUM</th><th>Email Address</th><th>Notes ID</th><th>First Name</th><th>Last Name</th><th>PES Status</th></tr>
 </tfoot>
 </table>
 </div>
