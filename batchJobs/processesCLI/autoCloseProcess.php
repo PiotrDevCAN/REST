@@ -27,8 +27,7 @@ $_ENV['email'] = 'on';
 
 $noreplemailid = $_ENV['noreplykyndrylemailid'];
 $emailAddress = array(
-    // 'philip.bibby@kyndryl.com',
-    'piotr.tajanowicz@kyndryl.com',
+    'philip.bibby@kyndryl.com',
     $_ENV['automationemailid']
 );
 $emailAddressCC = array();

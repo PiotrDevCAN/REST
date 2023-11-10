@@ -3,170 +3,15 @@ namespace rest;
 
 use itdq\DbTable;
 use itdq\AuditTable;
-use itdq\Loader;
-use itdq\Navbar;
 use rest\activeResourceRecord;
 
 class activeResourceTable extends DbTable {
 
-    public $employeeTypeMapping;
-
-    private $allNotesIdByCnum;
-    private $loader;
-
-    private $thirtyDaysHence;
-
-    protected $allDelegates;
-
     const INT_STATUS_ACTIVE = 'active';
     const INT_STATUS_INACTIVE = 'inactive'; 
 
-    const PORTAL_PRE_BOARDER_EXCLUDE = 'exclude';
-    const PORTAL_PRE_BOARDER_INCLUDE = 'include';
-    const PORTAL_PRE_BOARDER_WITH_LINKED = 'withLinked';
-    const PORTAL_ONLY_ACTIVE = 'onlyActive';
-
-    const ACTIVE_WITH_PROVISIONAL_CLEARANCE = true;
-    const ACTIVE_WITHOUT_PROVISIONAL_CLEARANCE = false;
-
-    const PES_LEVEL_ONE = 'Level 1';
-    const PES_LEVEL_TWO = 'Level 2';
-    const PES_LEVEL_DEFAULT = self::PES_LEVEL_TWO;
-
     function __construct($table,$pwd=null,$log=true){
         parent::__construct($table,$pwd,$log);
-    }
-
-    static function getNextVirtualCnum(){
-        $sql  = " SELECT CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
-        $sql .= " WHERE CNUM LIKE '%XXX' or CNUM LIKE '%xxx' or CNUM LIKE '%999' ";
-        $sql .= " ORDER BY CNUM desc ";
-
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
-
-        if(!$rs){
-            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
-            return false;
-        }
-
-        $topRow = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
-        if(isset($topRow[0])){
-            $thisCnum = substr($topRow[0],1,5);
-            $next = $thisCnum+1;
-            $nextVirtualCnum = 'V' . substr('000000' . $next ,-5) . 'XXX';
-        } else {
-            $nextVirtualCnum = 'V00001XXX';
-        }
-
-        return $nextVirtualCnum;
-    }
-
-    static function activePersonPredicate($includeProvisionalClearance = true, $tableAbbrv = null ){
-        $activePredicate = " ((( " ;
-        $activePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $activePredicate.= "REVALIDATION_STATUS in ('" . activeResourceRecord::REVALIDATED_FOUND . "','" . activeResourceRecord::REVALIDATED_VENDOR . "','" . activeResourceRecord::REVALIDATED_POTENTIAL . "') or trim(";
-        $activePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $activePredicate.= "REVALIDATION_STATUS) is null or ";
-        $activePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $activePredicate.= "REVALIDATION_STATUS like '" . activeResourceRecord::REVALIDATED_OFFBOARDING . "%') ";
-        $activePredicate.= "   OR ";
-        $activePredicate.= " ( trim( ";
-        $activePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $activePredicate.= "REVALIDATION_STATUS) is null ) )";
-        $activePredicate.= " AND ";
-        $activePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $activePredicate.= "REVALIDATION_STATUS not like '" . activeResourceRecord::REVALIDATED_OFFBOARDING . "%:%" .activeResourceRecord::REVALIDATED_LEAVER . "%' " ;
-        $activePredicate.= " AND ";
-        $activePredicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $activePredicate.= "PES_STATUS in ('". activeResourceRecord::PES_STATUS_CLEARED ."','". activeResourceRecord::PES_STATUS_CLEARED_PERSONAL ."','". activeResourceRecord::PES_STATUS_EXCEPTION ."','". activeResourceRecord::PES_STATUS_RECHECK_REQ ."','". activeResourceRecord::PES_STATUS_RECHECK_PROGRESSING ."','". activeResourceRecord::PES_STATUS_MOVER ."'";
-        $activePredicate.= $includeProvisionalClearance ? ",'" . activeResourceRecord::PES_STATUS_PROVISIONAL . "'" : null ;
-        $activePredicate.= " ) ) ";
-
-        return $activePredicate;
-    }
-
-    function returnAsArray($preboadersAction=self::PORTAL_PRE_BOARDER_EXCLUDE){
-
-        // $this->allDelegates = delegateTable::allDelegates();
-        $this->allDelegates = array();
-
-        $preboadersAction = empty($preboadersAction) ? self::PORTAL_PRE_BOARDER_EXCLUDE : $preboadersAction;
-
-        $sixtyDays = new \DateInterval('P60D');
-        $this->thirtyDaysHence = new \DateTime();
-
-        $this->thirtyDaysHence = rfsTable::addTime($this->thirtyDaysHence, 60, 0, 0); // Modified 4th July 2017
-
-        $data = array();
-
-        $isFM   = activeResourceTable::isManager($_SESSION['ssoEmail']);
-        $myCnum = activeResourceTable::myCnum();
-
-        $justaUser = !$_SESSION['isCdi']  && !$_SESSION['isPmo'] && !$_SESSION['isPes'] && !$_SESSION['isFm'] ;
-
-        $predicate = " 1=1  ";
-
-        $predicate .= $isFM ? " AND P.FM_CNUM='" . htmlspecialchars(trim($myCnum)) . "' " : "";
-        $predicate .= $justaUser ? " AND P.CNUM='" . htmlspecialchars(trim($myCnum)) . "' " : ""; // FM Can only see their own people.
-        $predicate .= $preboadersAction==self::PORTAL_PRE_BOARDER_EXCLUDE ? " AND ( PES_STATUS_DETAILS not like 'Boarded as%' or PES_STATUS_DETAILS is null) " : null;
-        $predicate .= $preboadersAction==self::PORTAL_PRE_BOARDER_WITH_LINKED ? " AND ( PES_STATUS_DETAILS like 'Boarded as%' or PRE_BOARDED  is not  null) " : null;
-        $predicate .= $preboadersAction==self::PORTAL_ONLY_ACTIVE ? "  AND ( PES_STATUS_DETAILS not like 'Boarded as%' or PES_STATUS_DETAILS is null ) AND " . personTable::activePersonPredicate() : null;
-
-        $sql  = " SELECT P.*, PT.PROCESSING_STATUS , PT.PROCESSING_STATUS_CHANGED, AS1.SQUAD_NAME ";
-        $sql .= " FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName . " as P ";
-        $sql .= " LEFT JOIN " .  $GLOBALS['Db2Schema'] . "." . allTables::$PES_TRACKER . " as PT ";
-        $sql .= " ON PT.CNUM = P.CNUM ";
-        $sql .= " LEFT JOIN " .  $GLOBALS['Db2Schema'] . "." . allTables::$AGILE_SQUAD . " AS AS1 ";
-        $sql .= " ON AS1.SQUAD_NUMBER = P.SQUAD_NUMBER ";
-        $sql .= " WHERE " . $predicate;
-        
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
-
-        if(!$rs){
-            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
-            return false;
-        } else {
-            while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
-                // Only editable, if they're not a "pre-Boarder" who has now been boarded.
-                $preparedRow = $this->prepareFields($row);
-                $rowWithButtonsAdded =(substr($row['PES_STATUS_DETAILS'],0,7)=='Boarded') ? $preparedRow : $this->addButtons($preparedRow);
-                $data[] = $rowWithButtonsAdded;
-            }
-        }
-        return $data;
-    }
-
-    function returnPersonFinderArray($includeProvisionalClearance = false){
-        $activePredicate = $this->activePersonPredicate($includeProvisionalClearance);
-        $data = array();
-
-        $sql = " SELECT CNUM, FIRST_NAME, LAST_NAME, EMAIL_ADDRESS, NOTES_ID, FM_CNUM ";
-        $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName ;
-        $sql.= " WHERE " . $activePredicate;
-
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
-
-        if(!$rs){
-            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
-            return false;
-        } else {
-            while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
-                $cnum = trim($row['CNUM']);
-                $preparedRow = $this->prepareFields($row);
-                $fmCnumField = $preparedRow['FM_CNUM'];
-                $transferButton = "<button type='button' class='btn btn-default btn-xs btnTransfer' aria-label='Left Align' ";
-                $transferButton.= "data-cnum='" .$cnum . "' ";
-                $transferButton.= "data-notesid='" .trim($row['NOTES_ID']) . "' ";
-                $transferButton.= "data-fromCnum ='" .trim($row['FM_CNUM']) . "' ";
-                $transferButton.= "data-fromNotesid ='" .$preparedRow['FM_CNUM'] . "' ";
-                $transferButton.= " > ";
-                $transferButton.= "<span class='glyphicon glyphicon-transfer ' aria-hidden='true'></span>";
-                $transferButton.= " </button> ";
-                $preparedRow['FM_CNUM'] = $transferButton . $fmCnumField;
-                $data[] = $preparedRow;
-            }
-        }
-        return $data;
     }
 
     function returnForDataTables(){
@@ -196,608 +41,117 @@ class activeResourceTable extends DbTable {
         }
         return $displayAble;
     }
-    
-    function findDirtyData($autoClear=false){
 
-        $sql  = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName ;
-        $sql .= " ORDER BY CNUM ";
+    function getVbacActiveResourcesForSelect2(){
 
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
+        $sql = " SELECT * ";
+        $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
+        $sql.= " WHERE STATUS = 'active' ";
 
-        if(!$rs){
-            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
-            return false;
-        } else {
-            while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
-                $jsonEncodable = json_encode($row);
-                if(!$jsonEncodable){
-                    echo "<hr/><br/>Dirty Data Found in record for : " . $row['CNUM'];
-                    foreach ($row as $key => $value) {
-                        $jsonEncodableField = json_encode($value);
-                        if(!$jsonEncodableField){
-                            echo "Column: $key Value: $value";
-                            if($autoClear && !$jsonEncodable){
-                                $row[$key] = null;
-                                $activeResourceRecord = new activeResourceRecord();
-                                $activeResourceRecord->setFromArray($row);
-                                $this->saveRecord($activeResourceRecord);
-                            }
-                        }
+        $allEmployees = array();
+        $allTribes = array();
+        $vbacEmployees = array();
+        $myTribe = '';
+
+        $redis = $GLOBALS['redis'];
+        $key = 'getVbacActiveResources_DB_employeeDetails';
+        $redisKey = md5($key.'_key_'.$_ENV['environment']);
+        if (!$redis->get($redisKey)) {
+            $source = 'SQL Server';
+
+            $rs = sqlsrv_query($GLOBALS['conn'], $sql);
+            
+            if (!$rs){
+                DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+            }
+
+            while ($employeeDetails = sqlsrv_fetch_object($rs)){
+
+                // save read employee
+                $allEmployees[] = $employeeDetails;
+            
+                // get all tribe names
+                !empty($employeeDetails->TRIBE_NAME) ? $allTribes[trim($employeeDetails->TRIBE_NAME)] = trim($employeeDetails->TRIBE_NAME) : null;
+                
+                // Filter out invalid Notes Ids                    
+                // if (strtolower(substr(trim($employeeDetails->NOTES_ID), -4))=='/ibm' || strtolower(substr(trim($employeeDetails->NOTES_ID), -6))=='/ocean') {
+                    // $vbacEmployees[] = array(
+                    // $key = trim($employeeDetails->NOTES_ID);
+                    $key = trim($employeeDetails->CNUM);
+                    $vbacEmployees[$key] = array(
+                        'id'=>trim($employeeDetails->KYN_EMAIL_ADDRESS),
+                        'cnum'=>trim($employeeDetails->CNUM),
+                        'emailAddress'=>trim($employeeDetails->EMAIL_ADDRESS),
+                        'kynEmailAddress'=>trim($employeeDetails->KYN_EMAIL_ADDRESS),
+                        'notesId'=>trim($employeeDetails->NOTES_ID),
+                        'text'=>trim($employeeDetails->FIRST_NAME) . ' ' . trim($employeeDetails->LAST_NAME) . ' (' . trim($employeeDetails->KYN_EMAIL_ADDRESS) . ')',
+                            'role'=>trim($employeeDetails->SQUAD_NAME),
+                            'tribe'=>trim($employeeDetails->TRIBE_NAME),
+                            'distance'=>'remote'
+                    );
+                // }
+                    
+                // get employee's tribe name
+                if (array_key_exists('ssoEmail', $_SESSION)) {
+                    if (strtolower($employeeDetails->EMAIL_ADDRESS) == strtolower($_SESSION['ssoEmail'])){
+                        $myTribe = $employeeDetails->TRIBE_NAME;
                     }
                 }
-
-            }
-        }
-   }
-
-    function  prepareFields($row){
-        $this->loader = empty($this->loader) ? new Loader() : $this->loader;
-        $this->allNotesIdByCnum = empty($this->allNotesIdByCnum) ? $this->loader->loadIndexed('NOTES_ID','CNUM',allTables::$ACTIVE_RESOURCE) : $this->allNotesIdByCnum;
-        $this->employeeTypeMapping = empty($this->employeeTypeMapping) ? $this->loader->loadIndexed('DESCRIPTION','CODE',allTables::$EMPLOYEE_TYPE_MAPPING) : $this->employeeTypeMapping ;
-
-        $preparedRow = array_map('trim', $row);
-        $fmNotesid = isset($this->allNotesIdByCnum[trim($row['FM_CNUM'])]) ? $this->allNotesIdByCnum[trim($row['FM_CNUM'])]  :  trim($row['FM_CNUM']);
-        $preparedRow['fmCnum'] = $row['FM_CNUM'];
-        $preparedRow['FM_CNUM'] = $fmNotesid;
-
-        if (isset($preparedRow['EMPLOYEE_TYPE'])){
-            $preparedRow['EMPLOYEE_TYPE'] = isset($this->employeeTypeMapping[strtoupper($preparedRow['EMPLOYEE_TYPE'])]) ? $this->employeeTypeMapping[strtoupper($preparedRow['EMPLOYEE_TYPE'])]  : $preparedRow['EMPLOYEE_TYPE'];
-            $preparedRow['EMPLOYEE_TYPE'] = ucwords($preparedRow['EMPLOYEE_TYPE'],' -');
-        }
-        return $preparedRow;
-    }
-
-    function addButtons($row){
-        // save some fields before we change the,
-        $notesId = trim($row['NOTES_ID']);
-        $email   = trim($row['EMAIL_ADDRESS']);
-        $cnum = trim($row['CNUM']);
-        $row['actualCNUM'] = $cnum;
-        $flag = isset($row['FM_MANAGER_FLAG']) ? $row['FM_MANAGER_FLAG'] : null ;
-        $status = empty($row['PES_STATUS']) ? activeResourceRecord::PES_STATUS_NOT_REQUESTED : trim($row['PES_STATUS']) ;
-        $projectedEndDateObj = !empty($row['PROJECTED_END_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['PROJECTED_END_DATE']) : false;
-        $potentialForOffboarding = $projectedEndDateObj ? $projectedEndDateObj <= $this->thirtyDaysHence : false; // Thirty day rule.
-        $potentialForOffboarding = $potentialForOffboarding || $row['REVALIDATION_STATUS']==activeResourceRecord::REVALIDATED_LEAVER ? true : $potentialForOffboarding;  // Any leaver - has potential to be offboarded
-        $potentialForOffboarding = substr(trim($row['REVALIDATION_STATUS']),0,10)==activeResourceRecord::REVALIDATED_OFFBOARDED ? false : $potentialForOffboarding;
-        $potentialForOffboarding = substr(trim($row['REVALIDATION_STATUS']),0,11)==activeResourceRecord::REVALIDATED_OFFBOARDING ? false : $potentialForOffboarding;
-        $potentialForOffboarding = trim($row['REVALIDATION_STATUS'])==activeResourceRecord::REVALIDATED_PREBOARDER ? true : $potentialForOffboarding;
-
-        $offboardingHint = $projectedEndDateObj <= $this->thirtyDaysHence ? '&nbsp;End date within 60 days' : null; // Thirty day rule. (MOdified 4th July
-        $offboardingHint = $row['REVALIDATION_STATUS']==activeResourceRecord::REVALIDATED_LEAVER ? '&nbsp;Flagged as Leaver' : $offboardingHint; // flagged as a leaver.
-        $offboardingHint = $row['REVALIDATION_STATUS']==activeResourceRecord::REVALIDATED_PREBOARDER ? '&nbsp;Is a preboarder' : $offboardingHint; // flagged as a preboarder.
-
-
-        $revalidationStatus = trim($row['REVALIDATION_STATUS']);
-        $ctid = trim($row['CT_ID']);
-
-
-
-        if(!empty($row['PRE_BOARDED'])){
-            $row['CNUM'] = $cnum . "<br/><small>" . $row['PRE_BOARDED'] .  "</small>";
-        }
-
-        // PMO_STATUS
-        if($_SESSION['isPmo'] || $_SESSION['isCdi']){
-            // depending on what the current status is - well give buttons to set to "Confirmed" or "Aware";
-            $pmoStatus = trim($row['PMO_STATUS']);
-            $pmoStatus = empty($pmoStatus) ? 'To be assessed' : $pmoStatus;
-            $row['PMO_STATUS']  = "";
-
-            if($pmoStatus=='To be assessed' || $pmoStatus==activeResourceRecord::PMO_STATUS_AWARE){
-                $row['PMO_STATUS'] .= "<button type='button' class='btn btn-default btn-xs btnSetPmoStatus' aria-label='Left Align' ";
-                $row['PMO_STATUS'] .= "data-cnum='" .$cnum . "' ";
-                $row['PMO_STATUS'] .= "data-setpmostatusto='" .activeResourceRecord::PMO_STATUS_CONFIRMED . "' ";
-                $row['PMO_STATUS'] .= " data-toggle='tooltip' data-placement='top' title='Set PMO Status Aware'";
-                $row['PMO_STATUS'] .= " > ";
-                $row['PMO_STATUS'] .= "<span class='glyphicon glyphicon-thumbs-up ' aria-hidden='true'></span>";
-                $row['PMO_STATUS'] .= " </button> ";
             }
 
-            if($pmoStatus=='To be assessed' || $pmoStatus==activeResourceRecord::PMO_STATUS_CONFIRMED){
-                $row['PMO_STATUS'] .= "<button type='button' class='btn btn-default btn-xs btnSetPmoStatus' aria-label='Left Align' ";
-                $row['PMO_STATUS'] .= "data-cnum='" .$cnum . "' ";
-                $row['PMO_STATUS'] .= "data-setpmostatusto='" .activeResourceRecord::PMO_STATUS_AWARE . "' ";
-                $row['PMO_STATUS'] .= " data-toggle='tooltip' data-placement='top' title='Set PMO Status Confirmed'";
-                $row['PMO_STATUS'] .= " > ";
-                $row['PMO_STATUS'] .= "<span class='glyphicon glyphicon-thumbs-down ' aria-hidden='true'></span>";
-                $row['PMO_STATUS'] .= " </button> ";
-            }
+            $redis->set($redisKey, json_encode($vbacEmployees));
+            $redis->expire($redisKey, REDIS_EXPIRE);
 
-            $row['PMO_STATUS'] .= "&nbsp;" . $pmoStatus;
-        }
-
-        // FM_MANAGER_FLAG
-        if($_SESSION['isPmo'] || $_SESSION['isCdi']){
-            if(strtoupper(substr($flag,0,1))=='N' || empty($flag)){
-                $row['FM_MANAGER_FLAG']  = "<button type='button' class='btn btn-default btn-xs btnSetFmFlag' aria-label='Left Align' ";
-                $row['FM_MANAGER_FLAG'] .= "data-cnum='" .$cnum . "' ";
-                $row['FM_MANAGER_FLAG'] .= "data-notesid='" .$notesId . "' ";
-                $row['FM_MANAGER_FLAG'] .= "data-fmflag='Yes' ";
-                $row['FM_MANAGER_FLAG'] .= " data-toggle='tooltip' data-placement='top' title='Toggle FM Flag'";
-                $row['FM_MANAGER_FLAG'] .= " > ";
-                $row['FM_MANAGER_FLAG'] .= "<span class='glyphicon glyphicon-edit ' aria-hidden='true'></span>";
-                $row['FM_MANAGER_FLAG'] .= " </button> ";
-            } elseif (strtoupper(substr($flag,0,1)=='Y')){
-                $row['FM_MANAGER_FLAG']  = "<button type='button' class='btn btn-default btn-xs btnSetFmFlag' aria-label='Left Align' ";
-                $row['FM_MANAGER_FLAG'] .= "data-cnum='" .$cnum . "' ";
-                $row['FM_MANAGER_FLAG'] .= "data-notesid='" .$notesId . "' ";
-                $row['FM_MANAGER_FLAG'] .= "data-fmflag='No' ";
-                $row['FM_MANAGER_FLAG'] .= " data-toggle='tooltip' data-placement='top' title='Toggle FM Flag'";
-                $row['FM_MANAGER_FLAG'] .= " > ";
-                $row['FM_MANAGER_FLAG'] .= "<span class='glyphicon glyphicon-edit ' aria-hidden='true'></span>";
-                $row['FM_MANAGER_FLAG'] .= " </button> ";
-            }
-            $row['FM_MANAGER_FLAG'] .= $flag;
-        }
-
-        if($_SESSION['isPes'] || $_SESSION['isPmo'] || $_SESSION['isFm'] || $_SESSION['isCdi']){
-            $row['PES_STATUS'] = self::getPesStatusWithButtons($row);
         } else {
-            $row['PES_STATUS'] = array('display'=>$row['PES_STATUS'],'sort'=>$row['PES_STATUS']);
+            $source = 'Redis Server';
+            $vbacEmployees = json_decode($redis->get($redisKey), true);
         }
 
-
-        $btnColor = isset($this->allDelegates[$row['CNUM']]) ? 'btn-success' : 'btn-secondary';
-        $row['NOTES_ID'] = "<button ";
-        $row['NOTES_ID'] .= " type='button' class='btn $btnColor  btn-xs ' aria-label='Left Align' ";
-
-        if(isset($this->allDelegates[$row['CNUM']]) ){
-            $delegates = implode(",", $this->allDelegates[$row['CNUM']]);
-            $row['NOTES_ID'] .= " data-placement='bottom' data-toggle='popover' title='' data-content='$delegates' data-original-title='Delegates' ";
-            $row['HAS_DELEGATES'] = 'Yes';
-        } else {
-            $row['NOTES_ID'] .= " data-placement='bottom' data-toggle='popover' title='' data-content='Has not defined a delegate' data-original-title='Delegates' ";
-            $row['HAS_DELEGATES'] = 'No';
+        // Find business unit for this tribe.     
+        // $bestMatchScore = 0;
+        // $bestMatch = '';
+        // if (!empty($myTribe)){
+        //     foreach ($allTribes as $tribe) {
+        //         $matchScore = similar_text($myTribe, $tribe);
+        //         if ($matchScore > $bestMatchScore){
+        //             $bestMatchScore = $matchScore;
+        //             $bestMatch = $tribe;
+        //         }
+        //     }
+        // } else {
+        //     throw new Exception("No tribe found for : " . $_SESSION['ssoEmail']);
+        // }
+            
+        $tribeEmployees = array();
+        // process the employees, flagging as 'local' those in the "myTribe" tribe
+        foreach ($vbacEmployees as $value) {
+            // if (strtolower(substr(trim($value['id']), -4))=='/ibm' || strtolower(substr(trim($value['id']), -6))=='/ocean'){  // Filter out invalid Notes Ids
+                // if (!empty(trim($value['role']) && !empty(trim($value['tribe'])))) {
+                    if (!empty($myTribe) && strtolower($value['tribe']) == strtolower($myTribe)){
+                        $value['distance']='local';
+                        // $tribeEmployees[trim($value['id'])] = $value;
+                        $tribeEmployees[] = $value;
+                    } else {
+                        if (isset($_SESSION['isAdmin']) || isset($_SESSION['isSupplyX'])){
+                            // $tribeEmployees[trim($value['id'])] = $value;
+                            $tribeEmployees[] = $value;
+                        }
+                    }
+                // } else {
+                    // $value['distance']='removed';
+                    // $tribeEmployees[trim($value['id'])] = $value;
+                    // $tribeEmployees[] = $value;
+                // }
+            // }
         }
-
-        $row['NOTES_ID'] .= " > ";
-        $row['NOTES_ID'] .= "<i class='fas fa-user-friends'></i>";
-        $row['NOTES_ID'] .= " </button>";
-
-
-        if(($_SESSION['isPes'] || $_SESSION['isPmo'] || $_SESSION['isFm'] || $_SESSION['isCdi']) && ($revalidationStatus!=activeResourceRecord::REVALIDATED_OFFBOARDED))  {
-            $row['NOTES_ID'] .= "<button type='button' class='btn btn-default btn-xs btnEditPerson' aria-label='Left Align' ";
-            $row['NOTES_ID'] .= "data-cnum='" .$cnum . "'";
-            $row['NOTES_ID'] .= " data-toggle='tooltip' data-placement='top' title='Edit Person Record'";
-            $row['NOTES_ID'] .= " > ";
-            $row['NOTES_ID'] .= "<span class='glyphicon glyphicon-edit ' aria-hidden='true'></span>";
-            $row['NOTES_ID'] .= " </button> ";
-        }
-
-        $row['NOTES_ID'] .= $notesId;
-
-
-        if( ($_SESSION['isPmo'] || $_SESSION['isCdi']) && (substr(trim($row['REVALIDATION_STATUS']),0,11)==activeResourceRecord::REVALIDATED_OFFBOARDING))  {
-            $row['REVALIDATION_STATUS']  = "<button type='button' class='btn btn-default btn-xs btnStopOffboarding btn-danger' aria-label='Left Align' ";
-            $row['REVALIDATION_STATUS'] .= "data-cnum='" .$cnum . "'";
-            $row['REVALIDATION_STATUS'] .= " data-toggle='tooltip' data-placement='top' title='Stop Offboarding Process'";
-            $row['REVALIDATION_STATUS'] .= "title='Stop Offboarding'";
-            $row['REVALIDATION_STATUS'] .= " > ";
-            $row['REVALIDATION_STATUS'] .= "<span class='glyphicon glyphicon-remove-sign ' aria-hidden='true'></span>";
-            $row['REVALIDATION_STATUS'] .= " </button> ";
-            $row['REVALIDATION_STATUS'] .= "<button type='button' class='btn btn-default btn-xs btnOffboarded btn-danger' aria-label='Left Align' ";
-            $row['REVALIDATION_STATUS'] .= "data-cnum='" .$cnum . "'";
-            $row['REVALIDATION_STATUS'] .= "title='Complete Offboarding.'";
-            $row['REVALIDATION_STATUS'] .= " > ";
-            $row['REVALIDATION_STATUS'] .= "<span class='glyphicon glyphicon-log-out ' aria-hidden='true'></span>";
-            $row['REVALIDATION_STATUS'] .= " </button> ";
-            $row['REVALIDATION_STATUS'] .= $revalidationStatus;
-        }
-
-        if( $potentialForOffboarding && ($_SESSION['isPmo'] || $_SESSION['isCdi']) && substr(trim($row['REVALIDATION_STATUS']),0,11)!=activeResourceRecord::REVALIDATED_OFFBOARDING )  {
-            $row['REVALIDATION_STATUS']  = "<button type='button' class='btn btn-default btn-xs btnOffboarding btn-warning' aria-label='Left Align' ";
-            $row['REVALIDATION_STATUS'] .= "data-cnum='" .$cnum . "'";
-            $row['REVALIDATION_STATUS'] .= " data-toggle='tooltip' data-placement='top' title='Initiate Offboarding." . $offboardingHint . "' ";
-            $row['REVALIDATION_STATUS'] .= " > ";
-            $row['REVALIDATION_STATUS'] .= "<span class='glyphicon glyphicon-log-out ' aria-hidden='true'></span>";
-            $row['REVALIDATION_STATUS'] .= " </button> ";
-            $row['REVALIDATION_STATUS'] .= $revalidationStatus;
-         }
-
-         if( ($_SESSION['isPmo'] || $_SESSION['isCdi']) && substr(trim($row['REVALIDATION_STATUS']),0,10)==activeResourceRecord::REVALIDATED_OFFBOARDED )  {
-             $row['REVALIDATION_STATUS']  = "<button type='button' class='btn btn-default btn-xs btnDeoffBoarding btn-danger' aria-label='Left Align' ";
-             $row['REVALIDATION_STATUS'] .= "data-cnum='" .$cnum . "'";
-             $row['REVALIDATION_STATUS'] .= "title='Bring back from Offboarding.'";
-             $row['REVALIDATION_STATUS'] .= " data-toggle='tooltip' data-placement='top' title='Recover person from Offboarding'";
-             $row['REVALIDATION_STATUS'] .= " > ";
-             $row['REVALIDATION_STATUS'] .= "<span class='glyphicon glyphicon-log-in ' aria-hidden='true'></span>";
-             $row['REVALIDATION_STATUS'] .= " </button> ";
-             $row['REVALIDATION_STATUS'] .= $revalidationStatus;
-         }
-
-         if( ($_SESSION['isPmo'] || $_SESSION['isCdi']) && !empty($ctid)  )  {
-             $row['CT_ID']  = "<button type='button' class='btn btn-default btn-xs btnClearCtid btn-danger' aria-label='Left Align' ";
-             $row['CT_ID'] .= "data-cnum='" .$cnum . "'";
-             $row['CT_ID'] .= "title='Delete CT ID.'";
-             $row['CT_ID'] .= " data-toggle='tooltip' data-placement='top' title='Clear CT ID'";
-             $row['CT_ID'] .= " > ";
-             $row['CT_ID'] .= "<span class='glyphicon glyphicon-trash ' aria-hidden='true'></span>";
-             $row['CT_ID'] .= " </button> ";
-             $row['CT_ID'] .= $ctid;
-         }
-
-         $functionalMgr = $row['FM_CNUM'];
-         $btnColor = isset($this->allDelegates[$row['fmCnum']]) ? 'btn-success' : 'btn-secondary';
-
-//         $row['FM_CNUM']  = "<a href='#' data-toggle='popover' title='Popover Header' data-content='Some content inside the popover'>";
-         $row['FM_CNUM'] = "<button ";
-         $row['FM_CNUM'] .= " type='button' class='btn $btnColor  btn-xs ' aria-label='Left Align' ";
-
-         if(isset($this->allDelegates[$row['fmCnum']]) ){
-             $delegates = implode(",", $this->allDelegates[$row['fmCnum']]);
-             $row['FM_CNUM'] .= " data-placement='bottom' data-toggle='popover' title='' data-content='$delegates' data-original-title='Delegates' ";
-         } else {
-             $row['FM_CNUM'] .= " data-placement='bottom' data-toggle='popover' title='' data-content='Has not defined a delegate' data-original-title='Delegates' ";
-         }
-         $row['FM_CNUM'] .= " > ";
-         $row['FM_CNUM'] .= "<i class='fas fa-user-friends'></i>";
-         $row['FM_CNUM'] .= " </button>";
-         $row['FM_CNUM'] .= $functionalMgr;
-
-
-         $row['SQUAD_NAME'] = $this->getAgileSquadWithButtons($row,true);
-         $row['OLD_SQUAD_NAME'] = $this->getAgileSquadWithButtons($row,false);
-
-        return $row;
-    }
-
-    function clearSquadNumber($cnum,$version='original'){
-        $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
-        $sql .= " SET ";
-        $sql .= $version=='original' ? " SQUAD_NUMBER = null " : " OLD_SQUAD_NUMBER = null";
-        $sql .= " WHERE CNUM='" . htmlspecialchars($cnum) . "' ";
-
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
-
-        if(!$rs){
-            DbTable::displayErrorMessage($rs, __CLASS__,__METHOD__, $sql);
-            return false;
-        }
-
-        AuditTable::audit("Clear " . $version . " Agile Number for $cnum",AuditTable::RECORD_TYPE_AUDIT);
-
-        return true;
-    }
-
-    static function isManager($emailAddress){
-         if(isset($_SESSION['isFm'])) {
-            return $_SESSION['isFm'];
-        }
-
-        if (empty($emailAddress)) {
-            return false;
-        }
-
-        $sql = ' SELECT FM_MANAGER_FLAG FROM "' . $GLOBALS['Db2Schema'] . '".' . allTables::$ACTIVE_RESOURCE;
-        $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . htmlspecialchars(strtoupper(trim($emailAddress))) . "' ";
-
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
-
-        if(!$rs){
-            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
-            return false;
-        }
-
-        $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
-
-        if(is_bool($row['FM_MANAGER_FLAG'])){
-            throw new \Exception('problem in' . __FILE__ . __FUNCTION__);
-        }
-
-
-        $flagValue = strtoupper(substr(trim($row['FM_MANAGER_FLAG']),0,1));
-        $_SESSION['isFm'] = ($flagValue=='Y');
-        return $_SESSION['isFm'];
-    }
-
-    static function myCnum(){
-        if(isset($_SESSION['myCnum'])) {
-           return $_SESSION['myCnum'];
-        }
-
-        if (!isset($_SESSION['ssoEmail'])) {
-            return false;
-        }
-
-        $sql = " SELECT CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
-        $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . htmlspecialchars(strtoupper(trim($_SESSION['ssoEmail']))) . "' ";
-
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
-
-        if(!$rs){
-            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
-            return false;
-        }
-
-        $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
-        $myCnum = strtoupper(trim($row['CNUM']));
-        $_SESSION['myCnum'] = $myCnum;
-        return $_SESSION['myCnum'];
-    }
-
-    static function myManagersCnum(){
-        if(isset($_SESSION['myManagersCnum'])) {
-            return $_SESSION['myManagersCnum'];
-        }
-
-        if (!isset($_SESSION['ssoEmail'])) {
-            return false;
-        }
-
-        $sql = " SELECT FM_CNUM FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
-        $sql .= " WHERE UPPER(EMAIL_ADDRESS) = '" . htmlspecialchars(strtoupper(trim($_SESSION['ssoEmail']))) . "' ";
-
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
-
-        if(!$rs){
-            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
-            return false;
-        }
-
-        $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
-        $myManagersCnum = strtoupper(trim($row['FM_CNUM']));
-        $_SESSION['myManagersCnum'] = $myManagersCnum;
-        return $_SESSION['myManagersCnum'];
-    }
-
-    static function getNotesidFromCnum($cnum){
-        $sql = " SELECT NOTES_ID FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
-        $sql .= " WHERE CNUM = '" . htmlspecialchars(strtoupper(trim($cnum))) . "' ";
-
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
-
-        if(!$rs){
-            DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
-            return false;
-        }
-
-        $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
-        $notesid = trim($row['NOTES_ID']);
-        return $notesid;
-    }
-
-
-    static function optionsForPreBoarded($preBoarded=null){
-
-        if(empty($preBoarded)){
-            $availPreBoPredicate  = " ( CNUM LIKE '%xxx' or CNUM LIKE '%XXX' or CNUM LIKE '%999' ) ";
-            $availPreBoPredicate .= " AND ( REVALIDATION_STATUS in ('" . activeResourceRecord::REVALIDATED_PREBOARDER . "','" . activeResourceRecord::REVALIDATED_VENDOR . "')) ";
-            $availPreBoPredicate .= " AND ((PES_STATUS_DETAILS not like 'Boarded as%' )  or ( PES_STATUS_DETAILS is null)) ";
-            $availPreBoPredicate .= " AND PES_STATUS not in (";
-            $availPreBoPredicate .= " '" . activeResourceRecord::PES_STATUS_FAILED . "' "; // Pre-boarded who haven't been boarded
-            $availPreBoPredicate .= ",'" . activeResourceRecord::PES_STATUS_REMOVED ."' ";
-            $availPreBoPredicate .= " )";
-        } else {
-            $availPreBoPredicate  = " ( CNUM = '" . htmlspecialchars($preBoarded) . "' ) ";
-        }
-
-        $sql =  " SELECT distinct FIRST_NAME, LAST_NAME, EMAIL_ADDRESS, CNUM  FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
-        $sql .= " WHERE " . $availPreBoPredicate;
-        $sql .= " ORDER BY FIRST_NAME, LAST_NAME ";
-
-        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
-
-        if (!$rs){
-            DbTable::displayErrorMessage($rs,__CLASS__ , __METHOD__ , $sql);
-            return false;
-        }
-        $options = array();
-        while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
-            $option  = "<option value='" . trim($row['CNUM']) ."'";
-            $option .= trim($row['CNUM']) == trim($preBoarded) ? ' selected ' : null;
-            $option .= " >" . trim($row['FIRST_NAME']) ." " . trim($row['LAST_NAME'])  . " (" . trim($row['EMAIL_ADDRESS']) .") ";
-            $option .=  "</option>";
-            $options[] = $option;
-        }
-        return $options;
-    }
-
-    static function getPesStatusWithButtons($row){
-        $notesId = trim($row['NOTES_ID']);
-        $email   = trim($row['EMAIL_ADDRESS']);
-        $actualCnum = isset($row['actualCNUM']) ? trim($row['actualCNUM']) : trim($row['CNUM']);
-        $status  = trim($row['PES_STATUS']);
-        $currentValue = $status;
-        $boarder = stripos(trim($row['PES_STATUS_DETAILS']),'Boarded as')!== false ;
-        $passportFirst   = array_key_exists('PASSPORT_FIRST_NAME', $row) ? $row['PASSPORT_FIRST_NAME'] : null;
-        $passportSurname = array_key_exists('PASSPORT_SURNAME', $row)    ? $row['PASSPORT_SURNAME'] : null;
-
-        $pesStatusWithButton = '';
-        $pesStatusWithButton.= "<span class='pesStatusField' data-cnum='" . $actualCnum . "'>" .  $status . "</span><br/>";
-        switch (true) {
-            case $boarder:
-                // Don't add buttons if this is a boarded - pre-boarder record.
-                break;
-            case $status == activeResourceRecord::PES_STATUS_TBD && !$_SESSION['isPes']:
-            case $status == activeResourceRecord::PES_STATUS_NOT_REQUESTED:
-                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesInitiate ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_PMO." ".Navbar::$ACCESS_FM."' ";
-                $pesStatusWithButton.= "aria-label='Left Align' ";
-                $pesStatusWithButton.= " data-cnum='" .$actualCnum . "' ";
-                $pesStatusWithButton.= " data-pesstatus='$status' ";
-                $pesStatusWithButton.= " data-toggle='tooltip' data-placement='top' title='Initiate PES Request'";
-                $pesStatusWithButton.= " > ";
-                $pesStatusWithButton.= "<span class='glyPesInitiate glyphicon glyphicon-plane ' aria-hidden='true'></span>";
-                $pesStatusWithButton.= "</button>&nbsp;";
-                break;
-            case $status == activeResourceRecord::PES_STATUS_INITIATED && $_SESSION['isPes'] ;           
-            case $status == activeResourceRecord::PES_STATUS_RESTART   && $_SESSION['isPes'] ;
-            case $status == activeResourceRecord::PES_STATUS_RECHECK_REQ && $_SESSION['isPes'] :
-                $emailAddress = trim($row['EMAIL_ADDRESS']);
-                $firstName    = trim($row['FIRST_NAME']);
-                $lastName     = trim($row['LAST_NAME']);
-                $country      = trim($row['COUNTRY']);
-                $openseat     = trim($row['OPEN_SEAT_NUMBER']);
-                $cnum         = trim($row['CNUM']);
-                $recheck      = ($status==activeResourceRecord::PES_STATUS_RECHECK_REQ) ? 'yes' : 'no' ;
-                $aeroplaneColor= ($status==activeResourceRecord::PES_STATUS_RECHECK_REQ)? 'yellow' : 'green' ;
-
-                $missing = !empty($emailAddress) ? '' : ' Email Address';
-                $missing.= !empty($firstName) ? '' : ' First Name';
-                $missing.= !empty($lastName) ? '' : ' Last Name';
-                $missing.= !empty($country) ? '' : ' Country';
-
-                $valid = empty(trim($missing));
-
-                $disabled = $valid ? '' : 'disabled';
-                $tooltip = $valid ? 'Confirm PES Email details' : "Missing $missing";
-
-                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnSendPesEmail ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_PMO." ".Navbar::$ACCESS_FM."' ";
-                $pesStatusWithButton.= "aria-label='Left Align' ";
-                $pesStatusWithButton.= " data-emailaddress='$emailAddress' ";
-                $pesStatusWithButton.= " data-firstname='$firstName' ";
-                $pesStatusWithButton.= " data-lastname='$lastName' ";
-                $pesStatusWithButton.= " data-country='$country' ";
-                $pesStatusWithButton.= " data-openseat='$openseat' ";
-                $pesStatusWithButton.= " data-cnum='$cnum' ";
-                $pesStatusWithButton.= " data-recheck='$recheck' ";
-                $pesStatusWithButton.= " data-toggle='tooltip' data-placement='top' title='$tooltip'";
-                $pesStatusWithButton.= " $disabled  ";
-                $pesStatusWithButton.= " > ";
-                $pesStatusWithButton.= "<span class='glyphicon glyphicon-send ' aria-hidden='true' style='color:$aeroplaneColor' ></span>";
-                $pesStatusWithButton.= "</button>&nbsp;";
-                
-                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesStatus' aria-label='Left Align' ";
-                $pesStatusWithButton.= " data-cnum='" .$actualCnum . "' ";
-                $pesStatusWithButton.= " data-notesid='" . $notesId . "' ";
-                $pesStatusWithButton.= " data-email='" . $email . "' ";
-                $pesStatusWithButton.= " data-pesdaterequested='" .trim($row['PES_DATE_REQUESTED']) . "' ";
-                $pesStatusWithButton.= " data-pesrequestor='" .trim($row['PES_REQUESTOR']) . "' ";
-                $pesStatusWithButton.= " data-revalidationstatus='" .trim($row['REVALIDATION_STATUS']) . "' ";
-                $pesStatusWithButton.= " data-pesstatus='" .$status . "' ";
-                $pesStatusWithButton.= array_key_exists('PASSPORT_FIRST_NAME', $row) ?  " data-passportfirst='" .$passportFirst . "' " : null;
-                $pesStatusWithButton.= array_key_exists('PASSPORT_SURNAME', $row) ? " data-passportsurname='" .$passportSurname . "' " : null;
-                $pesStatusWithButton.= " data-toggle='tooltip' data-placement='top' title='Amend PES Status'";
-                $pesStatusWithButton.= " > ";
-                $pesStatusWithButton.= "<span class='glyphicon glyphicon-edit ' aria-hidden='true'></span>";
-                $pesStatusWithButton.= "</button> ";
-                break;
-            case $status == activeResourceRecord::PES_STATUS_DECLINED && ( $_SESSION['isFm'] || $_SESSION['isCdi'] )  ;
-            case $status == activeResourceRecord::PES_STATUS_FAILED && ( $_SESSION['isFm'] || $_SESSION['isCdi'] )  ;
-            case $status == activeResourceRecord::PES_STATUS_REMOVED && ( $_SESSION['isFm'] || $_SESSION['isCdi'] )  :
-                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesRestart ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_FM." ".Navbar::$ACCESS_CDI."' aria-label='Left Align' ";
-                $pesStatusWithButton.= " data-cnum='" .$actualCnum . "' ";
-                $pesStatusWithButton.= " data-notesid='" . $notesId . "' ";
-                $pesStatusWithButton.= " data-email='" . $email . "' ";
-                $pesStatusWithButton.= " data-pesdaterequested='" .trim($row['PES_DATE_REQUESTED']) . "' ";
-                $pesStatusWithButton.= " data-pesrequestor='" .trim($row['PES_REQUESTOR']) . "' ";
-                $pesStatusWithButton.= " data-pesstatus='" .$status . "' ";
-                $pesStatusWithButton.= array_key_exists('PASSPORT_FIRST_NAME', $row) ?  " data-passportfirst='" .$passportFirst . "' " : null;
-                $pesStatusWithButton.= array_key_exists('PASSPORT_SURNAME', $row) ? " data-passportsurname='" .$passportSurname . "' " : null;
-                $pesStatusWithButton.= " data-toggle='tooltip' data-placement='top' title='Restart PES Process'";
-                $pesStatusWithButton.= " > ";
-                $pesStatusWithButton.= "<span class='glyphicon glyphicon-refresh ' aria-hidden='true' ></span>";
-                $pesStatusWithButton.= "</button>";
-                break;
-            case $status == activeResourceRecord::PES_STATUS_REQUESTED && $_SESSION['isPes'] :
-            case $status == activeResourceRecord::PES_STATUS_CLEARED_PERSONAL && $_SESSION['isPes'] :
-            case $status == activeResourceRecord::PES_STATUS_CLEARED && $_SESSION['isPes'] :
-            case $status == activeResourceRecord::PES_STATUS_EXCEPTION && $_SESSION['isPes'] :
-            case $status == activeResourceRecord::PES_STATUS_DECLINED && $_SESSION['isPes'] ;
-            case $status == activeResourceRecord::PES_STATUS_FAILED && $_SESSION['isPes'] ;
-            case $status == activeResourceRecord::PES_STATUS_REMOVED && $_SESSION['isPes'] :
-            case $status == activeResourceRecord::PES_STATUS_REVOKED && $_SESSION['isPes'] :
-            case $status == activeResourceRecord::PES_STATUS_LEFT_IBM && $_SESSION['isPes'] :
-            case $status == activeResourceRecord::PES_STATUS_PROVISIONAL && $_SESSION['isPes'] :
-            case $status == activeResourceRecord::PES_STATUS_TBD && $_SESSION['isPes'] :
-            case $status == activeResourceRecord::PES_STATUS_MOVER && $_SESSION['isPes'] :
-            case $status == activeResourceRecord::PES_STATUS_RECHECK_PROGRESSING && $_SESSION['isPes'] ;
-                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesStatus' aria-label='Left Align' ";
-                $pesStatusWithButton.= " data-cnum='" .$actualCnum . "' ";
-                $pesStatusWithButton.= " data-notesid='" . $notesId . "' ";
-                $pesStatusWithButton.= " data-email='" . $email . "' ";
-                $pesStatusWithButton.= " data-pesdaterequested='" .trim($row['PES_DATE_REQUESTED']) . "' ";
-                $pesStatusWithButton.= " data-pesrequestor='" .trim($row['PES_REQUESTOR']) . "' ";
-                $pesStatusWithButton.= " data-revalidationstatus='" .trim($row['REVALIDATION_STATUS']) . "' ";
-                $pesStatusWithButton.= " data-pesstatus='" .$status . "' ";
-                $pesStatusWithButton.= array_key_exists('PASSPORT_FIRST_NAME', $row) ?  " data-passportfirst='" .$passportFirst . "' " : null;
-                $pesStatusWithButton.= array_key_exists('PASSPORT_SURNAME', $row) ? " data-passportsurname='" .$passportSurname . "' " : null;
-				$pesStatusWithButton.= " data-toggle='tooltip' data-placement='top' title='Amend PES Status'";
-                $pesStatusWithButton.= " > ";
-                $pesStatusWithButton.= "<span class='glyphicon glyphicon-edit ' aria-hidden='true'></span>";
-                $pesStatusWithButton.= "</button>";
-                break;
-            case $status == activeResourceRecord::PES_STATUS_REQUESTED && !$_SESSION['isPes'] :
-            case $status == activeResourceRecord::PES_STATUS_RECHECK_REQ && !$_SESSION['isPes'] :
-            case $status == activeResourceRecord::PES_STATUS_MOVER && !$_SESSION['isPes'] :
-            case $status == activeResourceRecord::PES_STATUS_INITIATED && !$_SESSION['isPes'] ;
-            case $status == activeResourceRecord::PES_STATUS_RECHECK_PROGRESSING && !$_SESSION['isPes'] ;
-                $pesStatusWithButton.= "<button type='button' class='btn btn-default btn-xs btnPesStop ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_FM."' aria-label='Left Align' ";
-                $pesStatusWithButton.= " data-cnum='" .$actualCnum . "' ";
-                $pesStatusWithButton.= " data-notesid='" . $notesId . "' ";
-                $pesStatusWithButton.= " data-email='" . $email . "' ";
-                $pesStatusWithButton.= " data-pesdaterequested='" .trim($row['PES_DATE_REQUESTED']) . "' ";
-                $pesStatusWithButton.= " data-pesrequestor='" .trim($row['PES_REQUESTOR']) . "' ";
-                $pesStatusWithButton.= array_key_exists('PASSPORT_FIRST_NAME', $row) ?  " data-passportfirst='" .$passportFirst . "' " : null;
-                $pesStatusWithButton.= array_key_exists('PASSPORT_SURNAME', $row) ? " data-passportsurname='" .$passportSurname . "' " : null;
-                $pesStatusWithButton.= " data-toggle='tooltip' data-placement='top' title='Request PES be Stopped'";
-                $pesStatusWithButton.= " > ";
-                $pesStatusWithButton.= "<span class='glyphicon glyphicon-ban-circle ' aria-hidden='true' ></span>";
-                $pesStatusWithButton.= "</button>";
-                break;
-            case $status == activeResourceRecord::PES_STATUS_CANCEL_CONFIRMED && $_SESSION['isPes'] :
-            default:
-                break;
-        }
-
-        if(isset($row['PROCESSING_STATUS']) && ( $row['PES_STATUS']== activeResourceRecord::PES_STATUS_INITIATED || $row['PES_STATUS']==activeResourceRecord::PES_STATUS_RECHECK_PROGRESSING || $row['PES_STATUS']==activeResourceRecord::PES_STATUS_REQUESTED || $row['PES_STATUS']==activeResourceRecord::PES_STATUS_RECHECK_REQ || $row['PES_STATUS']==activeResourceRecord::PES_STATUS_MOVER ) ){
-
-            $pesStatusWithButton .= "<br/><button type='button' class='btn btn-default btn-xs btnTogglePesTrackerStatusDetails' aria-label='Left Align' data-toggle='tooltip' data-placement='top' title='See PES Tracker Status' >";
-            $pesStatusWithButton .= !empty($row['PROCESSING_STATUS']) ? "&nbsp;<small>" . $row['PROCESSING_STATUS'] . "</small>&nbsp;" : null;
-            $pesStatusWithButton .= "<span class='glyphicon glyphicon-search  ' aria-hidden='true' ></span>";
-            $pesStatusWithButton .= "</button>";
-
-            $pesStatusWithButton .= "<div class='alert alert-info text-center pesProcessStatusDisplay' role='alert' style='display:none' >";
-            ob_start();
-            \vbac\pesTrackerTable::formatProcessingStatusCell($row);
-            $pesStatusWithButton .= ob_get_clean();
-            $pesStatusWithButton .= "</div>";
-        }
-        return array('display'=>$pesStatusWithButton,'sort'=>$currentValue);
-
-    }
-
-    function getAgileSquadWithButtons($row,$original=true){
-        $squadNumberField =  $original ? $row['SQUAD_NUMBER']  : $row['OLD_SQUAD_NUMBER'];
-
-        $originalSquadName = !empty($row['SQUAD_NAME']) ?  $row['SQUAD_NAME'] : "Not allocated to Squad";
-        $oldSquadName = !empty($row['OLD_SQUAD_NAME']) ?  $row['OLD_SQUAD_NAME'] : "Not allocated to Squad";
-        $squadName = $original ? $originalSquadName : $oldSquadName;
-        $cnum = $row['actualCNUM'];
-
-        $agileSquadWithButton = $original ? "<button type='button' class='btn btn-default btn-xs btnEditAgileNumber ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_CDI."' aria-label='Left Align' " : null;
-        $agileSquadWithButton.= $original ? " data-cnum='" .$cnum . "' ": null ;
-        $agileSquadWithButton.= $original ? " data-version='original' " : null ;
-        $agileSquadWithButton.= $original ? " data-toggle='tooltip' data-placement='top' " : null;
-        $agileSquadWithButton.= $original ?  " title='Amend Agile Squad'" : null;
-        $agileSquadWithButton.= $original ?" > ": null ;
-        $agileSquadWithButton.= $original ?"<span class='glyphicon glyphicon-edit' aria-hidden='true' ></span>": null ;
-        $agileSquadWithButton.= $original ?"</button>": null ;
-        $agileSquadWithButton.= $original ?"&nbsp;" : null ;
-
-        if(!empty($squadNumberField) && $original){
-            $agileSquadWithButton.= "<button type='button' class='btn btn-danger btn-xs btnClearSquadNumber ".Navbar::$ACCESS_RESTRICT." ".Navbar::$ACCESS_CDI."' aria-label='Left Align' ";
-            $agileSquadWithButton.= " data-cnum='" .$cnum . "' ";
-            $agileSquadWithButton.= $original ? " data-version='original' " : " data-version='new' ";
-            $agileSquadWithButton.= " data-toggle='tooltip' data-placement='top' ";
-            $agileSquadWithButton.= $original ? " title='Clear Squad Number'" : " title='Clear New Squad Number'";
-            $agileSquadWithButton.= " > ";
-            $agileSquadWithButton.= "<span class='glyphicon glyphicon-erase' aria-hidden='true' ></span>";
-            $agileSquadWithButton.= "</button>";
-            $agileSquadWithButton.= "&nbsp;";
-        }
-
-        $agileSquadWithButton.= $squadName;
-
-        return array('display'=>$agileSquadWithButton,'sort'=>$squadName);
-    }
-    
-    function headerRowForDatatable(){
-        $headerRow = "<tr>";
-        foreach ($this->columns as $columnName => $db2ColumnProperties) {
-            $headerRow.= "<th>" . str_replace("_"," ", $columnName );
-        }
-        $headerRow.= "</th><th>Has Delegates";
-        $headerRow.= "</th></tr>";
-        return $headerRow;
+        
+        $result = array(
+            'allEmployees' => $allEmployees,
+            'vbacEmployees' => $vbacEmployees,
+            'tribeEmployees' => $tribeEmployees,
+            'source' => $source
+        );
+
+        return $result;
     }
 }

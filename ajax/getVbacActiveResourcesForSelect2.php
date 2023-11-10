@@ -1,7 +1,7 @@
 <?php
 use itdq\Trace;
+use rest\activeResourceTable;
 use rest\allTables;
-use rest\resourceRequestTable;
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 // ob_start();
@@ -18,11 +18,11 @@ if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
 
 error_log('opening ' . __FILE__);
 
-$resourceTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
-$data = $resourceTable->getVbacActiveResourcesForSelect2();
+$activeResources = new activeResourceTable(allTables::$ACTIVE_RESOURCE);
+$data = $activeResources->getVbacActiveResourcesForSelect2();
 list('tribeEmployees' => $activeResources, 'tribeEmployees' => $tribeEmployees, 'source' => $source) = $data;
 
-error_log('returned from resourceRequestTable::getVbacActiveResourcesForSelect2()');
+error_log('returned from resourceRequestTable->getVbacActiveResourcesForSelect2()');
 error_log(count($activeResources) . " active resources");
 
 $messages = ob_get_clean();

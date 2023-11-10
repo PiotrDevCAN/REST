@@ -74,57 +74,75 @@ try {
         $insertCounter = 0;
         $failedCounter = 0;
         if (count($responseArr) > 0) {
-            $chunkedData = array_chunk($responseArr, 10);
-            foreach ($chunkedData as $key => $personEnties) {
-    
-                $success = true;
-    
-                if (sqlsrv_begin_transaction($GLOBALS['conn']) === false ) {
-                    die( print_r( sqlsrv_errors(), true ));
+
+            // start transaction
+            if (sqlsrv_begin_transaction($GLOBALS['conn']) === false ) {
+                die( print_r( sqlsrv_errors(), true ));
+            }
+
+            // define query
+            $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( CNUM, EMAIL_ADDRESS, KYN_EMAIL_ADDRESS, FIRST_NAME, LAST_NAME, NOTES_ID, PES_STATUS, CIO_ALIGNMENT, STATUS, TRIBE_NAME, SQUAD_NAME, TRIBE_NAME_MAPPED )";
+            $sql .= " VALUES (?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ? ,?)";
+            
+            $cnum = '';
+            $emailAddress = '';
+            $kynEmailAddress = '';
+            $firstName = '';
+            $lastName = '';
+            $notesId = '';
+            $pesStatus = '';
+            $cioAlignment = '';
+            $status = '';
+            $tribeName = '';
+            $squadName = '';
+            $mappedTribeName = '';
+
+            // prepare query for later use
+            $stmt = sqlsrv_prepare($GLOBALS['conn'], $sql, array(
+                &$cnum,
+                &$emailAddress,
+                &$kynEmailAddress,
+                &$firstName,
+                &$lastName,
+                &$notesId,
+                &$pesStatus,
+                &$cioAlignment,
+                &$status,
+                &$tribeName,
+                &$squadName,
+                &$mappedTribeName
+            ));
+            if(!$stmt){
+                die( print_r( sqlsrv_errors(), true));
+            }
+
+            // iterate through read entries
+            foreach ($responseArr as $key => $personEntry) {
+
+                $cnum = trim($personEntry['CNUM']);
+                if (empty($cnum)) {
+                    $cnum = 'unknown cnum';
                 }
-    
-                $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( CNUM, EMAIL_ADDRESS, KYN_EMAIL_ADDRESS, FIRST_NAME, LAST_NAME, NOTES_ID, PES_STATUS, CIO_ALIGNMENT, STATUS, TRIBE_NAME, SQUAD_NAME, TRIBE_NAME_MAPPED )  Values ";
-                $first = true;
-    
-                foreach ($personEnties as $key => $personEntry) {
-                    $email = $personEntry['EMAIL_ADDRESS'];
-                    // $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-                    // if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        if (!$first) {
-                            $sql .= " ,";
-                        }
-    
-                        $mappedTribeName = array_key_exists($personEntry['TRIBE_NAME'], rfsRecord::$tribeNameMapping) ? rfsRecord::$tribeNameMapping[$personEntry['TRIBE_NAME']] : $personEntry['TRIBE_NAME'];
-    
-                        $sql .= " ('" . 
-                            htmlspecialchars(trim($personEntry['CNUM'])) . "','" . 
-                            htmlspecialchars($email) . "','" . 
-                            htmlspecialchars($personEntry['KYN_EMAIL_ADDRESS']) . "','" . 
-                            htmlspecialchars($personEntry['FIRST_NAME']) . "','" . 
-                            htmlspecialchars($personEntry['LAST_NAME']) . "','" . 
-                            htmlspecialchars($personEntry['NOTES_ID']) . "','" . 
-                            htmlspecialchars($personEntry['PES_STATUS']) . "','" .
-                            htmlspecialchars($personEntry['CIO_ALIGNMENT']) . "','" . 
-                            htmlspecialchars($personEntry['INT_STATUS']) . "','" . 
-                            htmlspecialchars($personEntry['TRIBE_NAME']) . "','" . 
-                            htmlspecialchars($personEntry['SQUAD_NAME']) . "','" . 
-                            htmlspecialchars($mappedTribeName) . 
-                        "' ) ";
-                        $first = false;
-                //     }
-                }
-    
-                $rs = sqlsrv_query( $GLOBALS['conn'], $sql );
-                if (! $rs) {
-                    $success = false;
-                }
+                $emailAddress = trim($personEntry['EMAIL_ADDRESS']);
+                $kynEmailAddress = trim($personEntry['KYN_EMAIL_ADDRESS']);
+                $firstName = trim($personEntry['FIRST_NAME']);
+                $lastName = trim($personEntry['LAST_NAME']);
+                $notesId = trim($personEntry['NOTES_ID']);
+                $pesStatus = trim($personEntry['PES_STATUS']);
+                $cioAlignment = trim($personEntry['CIO_ALIGNMENT']);
+                $status = trim($personEntry['INT_STATUS']);
+                $tribeName = trim($personEntry['TRIBE_NAME']);
+                $squadName = trim($personEntry['SQUAD_NAME']);
+                $mappedTribeName = array_key_exists($personEntry['TRIBE_NAME'], rfsRecord::$tribeNameMapping) ? rfsRecord::$tribeNameMapping[$personEntry['TRIBE_NAME']] : trim($personEntry['TRIBE_NAME']);
                 
-                if($success){
-                    $insertCounter++;
-                    sqlsrv_commit($GLOBALS['conn']);
-                } else {
+                // exacute prepared statement with new data
+                $rs = sqlsrv_execute($stmt);
+                if(!$rs){
                     $failedCounter++;
                     sqlsrv_rollback($GLOBALS['conn']);
+                } else {
+                    $insertCounter++;
+                    sqlsrv_commit($GLOBALS['conn']);
                 }
             }
         }
