@@ -71,6 +71,8 @@ try {
         $activeResourceTable->clear(false);
     
         $responseArr = json_decode($response, true);
+        $insertCounter = 0;
+        $failedCounter = 0;
         if (count($responseArr) > 0) {
             $chunkedData = array_chunk($responseArr, 10);
             foreach ($chunkedData as $key => $personEnties) {
@@ -118,8 +120,10 @@ try {
                 }
                 
                 if($success){
+                    $insertCounter++;
                     sqlsrv_commit($GLOBALS['conn']);
                 } else {
+                    $failedCounter++;
                     sqlsrv_rollback($GLOBALS['conn']);
                 }
             }
@@ -127,8 +131,10 @@ try {
         
         $subject = 'Load VBAC Active Records';
         $message = 'Employees records have been loaded';
-        $message .= '<br> Amount of imported records: ' . count($responseArr);
-        $message .= '<br> VBAC Data source: ' . $_ENV['vbac_url'];
+        $message .= '<br> Amount of records read from vBAC: ' . count($responseArr);
+        $message .= '<br> Amount of records imported to REST: ' . $insertCounter;
+        $message .= '<br> Amount of records failed to import to REST: ' . $failedCounter;
+        $message .= '<br> VBAC Data source: ' . $url;
         $result = BlueMail::send_mail($emailAddress, $subject, $message, $noreplemailid, $emailAddressCC, $emailAddressBCC);    
         // trigger_error('BlueMail::send_mail result: '.serialize($result), E_USER_WARNING);
     }
