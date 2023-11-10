@@ -26,7 +26,7 @@ $_ENV['email'] = 'on';
 // }
 
 $noreplemailid = $_ENV['noreplykyndrylemailid'];
-$emailAddress = array(
+$emailAddressTO = array(
     // 'philip.bibby@kyndryl.com',
     'piotr.tajanowicz@kyndryl.com',
     $_ENV['automationemailid']
@@ -153,7 +153,7 @@ try {
         $message .= '<br> Amount of records imported to REST: ' . $insertCounter;
         $message .= '<br> Amount of records failed to import to REST: ' . $failedCounter;
         $message .= '<br> VBAC Data source: ' . $url;
-        $result = BlueMail::send_mail($emailAddress, $subject, $message, $noreplemailid, $emailAddressCC, $emailAddressBCC);    
+        $result = BlueMail::send_mail($emailAddressTO, $subject, $message, $noreplemailid, $emailAddressCC, $emailAddressBCC);    
         // trigger_error('BlueMail::send_mail result: '.serialize($result), E_USER_WARNING);
     }
 
