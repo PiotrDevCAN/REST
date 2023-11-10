@@ -65,9 +65,9 @@ class RRResourceNameBox {
 	}
 
 	checkResourceNameIsActive(resourceName) {
-		var resourceNames = this.VBACActiveResourcesData;
 		var employeeFound = false;
 		if (typeof (resourceName) !== 'undefined') {
+			var resourceNames = this.VBACActiveResourcesData;
 			for (var i = 0; i < resourceNames.length; i++) {
 				if (resourceNames[i].id == resourceName) {
 					employeeFound = true;
@@ -266,18 +266,29 @@ class RRResourceNameBox {
 		}
 		$('#pleaseWaitMessage').html(messageForUser);
 
+		var notFound = 'Not found in vBAC';
+		var cnum = '';
+		var emailAddress = '';
+		var kynEmailAddress = '';
+
 		// read email addresses
-		var employeeFound = $this.checkResourceNameIsActive(resourceName);
-		if (employeeFound === true) {
-			var emails = $this.getEmails(resourceName);
-			$this.basicFormData.RESOURCE_CNUM = emails.cnum;
-			$this.basicFormData.RESOURCE_EMAIL = emails.emailAddress;
-			$this.basicFormData.RESOURCE_KYN_EMAIL = emails.kynEmailAddress;
-		} else {
-			$this.basicFormData.RESOURCE_CNUM = 'Not found in VBAC';
-			$this.basicFormData.RESOURCE_EMAIL = 'Not found in VBAC';
-			$this.basicFormData.RESOURCE_KYN_EMAIL = 'Not found in VBAC';
+		if (resourceName !== '') {
+			var employeeFound = $this.checkResourceNameIsActive(resourceName);
+			if (employeeFound === true) {
+				var emails = $this.getEmails(resourceName);
+				cnum = emails.cnum;
+				emailAddress = emails.emailAddress;
+				kynEmailAddress = emails.kynEmailAddress;
+			} else {
+				cnum = notFound;
+				emailAddress = notFound;
+				kynEmailAddress = notFound;
+			}
 		}
+
+		$this.basicFormData.RESOURCE_CNUM = cnum;
+		$this.basicFormData.RESOURCE_EMAIL = emailAddress;
+		$this.basicFormData.RESOURCE_KYN_EMAIL = kynEmailAddress;
 
 		// setup Kyndryl Employee Data form
 		$this.setResourceKyndrylDataForm();
