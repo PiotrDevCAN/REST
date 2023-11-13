@@ -101,11 +101,12 @@ class RRResourceNameBox {
 
 	setResourceNameForm() {
 		var data = this.basicFormData;
+		var formObj = $('#' + RRResourceNameBox.formId);
 		if (typeof (data) !== 'undefined') {
-			$('#' + RRResourceNameBox.formId).find('#BUSINESS_UNIT').val(data.BUSINESS_UNIT);
-			$('#' + RRResourceNameBox.formId).find('#RFS_ID').val(data.RFS_ID);
-			$('#' + RRResourceNameBox.formId).find('#RESOURCE_REFERENCE').val(data.RESOURCE_REFERENCE);
-			$('#' + RRResourceNameBox.formId).find('#RESOURCE_NAME')
+			formObj.find('#BUSINESS_UNIT').val(data.BUSINESS_UNIT);
+			formObj.find('#RFS_ID').val(data.RFS_ID);
+			formObj.find('#RESOURCE_REFERENCE').val(data.RESOURCE_REFERENCE);
+			formObj.find('#RESOURCE_NAME')
 				.val(data.RESOURCE_NAME)
 				.trigger('change');
 		}
@@ -113,9 +114,12 @@ class RRResourceNameBox {
 
 	setResourceKyndrylDataForm() {
 		var data = this.basicFormData;
-		$('#' + RRResourceNameBox.formId).find('#RESOURCE_CNUM').val(data.RESOURCE_CNUM);
-		$('#' + RRResourceNameBox.formId).find('#RESOURCE_EMAIL_ADDRESS').val(data.RESOURCE_EMAIL);
-		$('#' + RRResourceNameBox.formId).find('#RESOURCE_KYN_EMAIL_ADDRESS').val(data.RESOURCE_KYN_EMAIL);
+		var formObj = $('#' + RRResourceNameBox.formId);
+		if (typeof (data) !== 'undefined') {
+			formObj.find('#RESOURCE_CNUM').val(data.RESOURCE_CNUM);
+			formObj.find('#RESOURCE_EMAIL_ADDRESS').val(data.RESOURCE_EMAIL);
+			formObj.find('#RESOURCE_KYN_EMAIL_ADDRESS').val(data.RESOURCE_KYN_EMAIL);
+		}
 	}
 
 	modalShownCallback(event) {
@@ -292,6 +296,8 @@ class RRResourceNameBox {
 
 		// setup Kyndryl Employee Data form
 		$this.setResourceKyndrylDataForm();
+
+		ModalMessageArea.clearMessageArea();
 	};
 
 	listenForChangeResourceName() {
@@ -302,7 +308,7 @@ class RRResourceNameBox {
 
 	listenForSaveResourceName() {
 		var $this = this;
-		$(document).on('click', '#saveResourceName', function (e) {
+		$(document).on('click', '#' + RRResourceNameBox.saveButonId, function (e) {
 			$(this).addClass('spinning').attr('disabled', true);
 			$this.disableClearResourceName();
 			var formData = $('#' + RRResourceNameBox.formId).serialize();
@@ -371,7 +377,7 @@ class RRResourceNameBox {
 
 	listenForClearResourceName() {
 		var $this = this;
-		$(document).on('click', '#clearResourceName', function (e) {
+		$(document).on('click', '#' + RRResourceNameBox.clearButonId, function (e) {
 			$(this).addClass('spinning').attr('disabled', true);
 			$this.disableSaveResourceName();
 			var formData = $('#' + RRResourceNameBox.formId).serialize();

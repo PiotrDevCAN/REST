@@ -731,7 +731,7 @@ trait rfsTableTrait
             RR.RESOURCE_NAME NOT LIKE '" . resourceRequestTable::$duplicate . "%' 
             OR RR.RESOURCE_NAME NOT LIKE '" . resourceRequestTable::$delta . "%'
         )";
-        $sql.= " AND RR.Status = '" . resourceRequestRecord::STATUS_ASSIGNED . "'";
+        $sql.= " AND RR.STATUS = '" . resourceRequestRecord::STATUS_ASSIGNED . "'";
         $sql.= " AND AR.STATUS = '" . activeResourceTable::INT_STATUS_INACTIVE . "'";
         $sql.= !empty($predicate) ? " AND  $predicate " : null ;
 

@@ -47,6 +47,7 @@ class activeResourceTable extends DbTable {
         $sql = " SELECT * ";
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
         $sql.= " WHERE STATUS = 'active' ";
+        $sql.= " ORDER BY EMAIL_ADDRESS ASC";
 
         $allEmployees = array();
         $allTribes = array();
