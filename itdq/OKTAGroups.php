@@ -242,7 +242,7 @@ class OKTAGroups {
 				$result = array();
 			} else {
 				$this->redis->set($redisKey, json_encode($result));
-				$this->redis->expire($redisKey, REDIS_EXPIRE);
+				$this->redis->expire($redisKey, REDIS_EXPIRE_3600);
 			}
 		} else {
 			$source = 'Redis Server';
@@ -292,41 +292,6 @@ class OKTAGroups {
 
 	public function getGroupId($groupName)
 	{
-		$groupId = false;
-		switch(trim($groupName)) {
-			case 'the REST tool - production-ventus_cdi':
-				$groupId = '00g7befn0uWuxzoJk697';
-				break;
-			case 'the REST tool - production-ventus_rest_admin':
-				$groupId = '00g7bi1ff5Yi7OImi697';
-				break;
-			case 'the REST tool - production-ventus_rest_demand':
-				$groupId = '00g7bmnoljefNZR4p697';
-				break;
-			case 'the REST tool - production-ventus_rest_supply':
-				$groupId = '00g7bis1izkQ6hSoQ697';
-				break;
-			case 'the REST tool - production-ventus_rest_supply_x':
-				$groupId = '00g7bn3fy2LO4JsmF697';
-				break;
-			case 'the REST tool - production-ventus_rest_rfs':
-				$groupId = '00g7bmr9g08QvcuGn697';
-				break;
-			case 'the REST tool - production-ventus_rest_rfs_ad':
-				$groupId = '00g7bn5o8jAW72Mid697';
-				break;
-			case 'the REST tool - production-ventus_rest_ro':
-				$groupId = '00g7bmyjodrf0C4vP697';
-				break;
-			default:
-				break;
-		}
-		return $groupId;
-	}
-
-	/*
-	public function getGroupId_($groupName)
-	{
 		$key = $groupName.'_getGroupId';
 		$redisKey = md5($key.'_key_'.$_ENV['environment']);
 		if (!$this->redis->get($redisKey)) {
@@ -335,7 +300,7 @@ class OKTAGroups {
 			$result = $this->getGroupByName($groupName);
 
 			$this->redis->set($redisKey, json_encode($result));
-			$this->redis->expire($redisKey, REDIS_EXPIRE);
+			$this->redis->expire($redisKey, REDIS_EXPIRE_3600);
 		} else {
 			$source = 'Redis Server';
 			$result = json_decode($this->redis->get($redisKey), true);
@@ -349,7 +314,6 @@ class OKTAGroups {
 		}
 		return $groupId;
 	}
-	*/
 
 	public function getGroupName($groupId)
 	{
@@ -361,7 +325,7 @@ class OKTAGroups {
 			$result = $this->getGroup($groupId);
 
 			$this->redis->set($redisKey, json_encode($result));
-			$this->redis->expire($redisKey, REDIS_EXPIRE);
+			$this->redis->expire($redisKey, REDIS_EXPIRE_3600);
 		} else {
 			$source = 'Redis Server';
 			$result = json_decode($this->redis->get($redisKey), true);

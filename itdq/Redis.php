@@ -1,10 +1,6 @@
 <?php
 namespace itdq;
 
-// use WorkerApi\Auth;
-
-// include_once "WorkerAPI/class/include.php";
-
 /*
  *  Handles Worker API.
  */
@@ -20,7 +16,12 @@ class Redis {
 		$this->port = $_ENV['redis_port'];
 		$this->password = $_ENV['redis_password'];
 
+		// default
 		define('REDIS_EXPIRE', 120);
+
+		// seconds
+		define('REDIS_EXPIRE_120', 120);
+		define('REDIS_EXPIRE_3600', 3600);
 		
 		$redis = new \Redis();
 		//Connecting to Redis

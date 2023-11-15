@@ -106,7 +106,5 @@ class Navbar
         </nav>
         <?php
     }
-
-
 }
 ?>

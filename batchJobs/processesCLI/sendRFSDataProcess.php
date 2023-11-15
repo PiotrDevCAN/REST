@@ -9,7 +9,7 @@ use rest\allTables;
 use rest\rfsTable;
 
 set_time_limit(0);
-ini_set('memory_limit','4096M');
+ini_set('memory_limit','6144M');
 
 $_ENV['email'] = 'on';
 
