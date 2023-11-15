@@ -7,8 +7,8 @@ use rest\allTables;
 use rest\resourceRequestTable;
 use rest\resourceRequestHoursTable;
 
-
-ini_set('memory_limit', '4096M');
+set_time_limit(0);
+ini_set('memory_limit', '2048M');
 
 // require_once __DIR__ . '/../../src/Bootstrap.php';
 $helper = new Sample();
@@ -36,7 +36,6 @@ try {
     if ($part1) {
         $start_time = microtime(true);
 
-        set_time_limit(0);
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
         $rsOnly = true;
         $rs = $resourceRequestHoursTable->returnHrsPerWeek(null, $rsOnly);

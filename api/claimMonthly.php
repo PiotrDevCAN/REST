@@ -4,7 +4,7 @@ use rest\allTables;
 use rest\rfsTable;
 
 set_time_limit(0);
-ini_set('memory_limit','1024M');
+ini_set('memory_limit','2048M');
 
 function ob_html_compress($buf){
     return str_replace(array("\n","\r"),'',$buf);

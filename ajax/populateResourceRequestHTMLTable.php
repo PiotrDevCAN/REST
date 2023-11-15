@@ -8,7 +8,8 @@ use itdq\PhpMemoryTrace;
 use rest\rfsRecord;
 
 set_time_limit(0);
-ini_set('memory_limit','1024M');
+ini_set('memory_limit','2048M');
+
 ob_start();
 PhpMemoryTrace::reportPeek(__FILE__,__LINE__);
 
