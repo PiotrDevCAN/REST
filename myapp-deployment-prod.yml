@@ -23,7 +23,8 @@ spec:
         image: kyndryl.jfrog.io/uki-business-intelligence-prod-docker-local/rest:latest
         resources:
           limits:
-            cpu: 500m
+            # no cpu limit! this is excluded on purpose
+            # cpu: "1"
             memory: 2Gi
           requests:
             cpu: 32m
