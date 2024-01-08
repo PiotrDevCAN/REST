@@ -434,7 +434,12 @@ trait resourceRequestHoursTableTrait
         END) AS RESOURCE_NAME, ";
         $sql.= " HOURS_TYPE, ";
         $sql.= " RR.RATE_TYPE,";
+        $sql.= " RFS.RFS_START_DATE, ";
         $sql.= " RFS.RFS_END_DATE, ";
+        $sql.= " RR.DESCRIPTION, ";
+        $sql.= " RFS.RFS_TYPE, ";
+        $sql.= " RFS.PROJECT_TITLE, ";
+        $sql.= " RFS.REQUESTOR_NAME, ";
         $sql.= " CASE WHEN ";
         // All open RFS' RR
         $sql.= rfsTable::notArchivedPredicate('RFS');

@@ -93,6 +93,10 @@ try {
 
     $subject = 'Resource Request Report : ' . $fileNameSuffix;
     $message = 'Please find attached Resource Request Report XLS';
+    $message .= 'List of recent changes:<br>';
+    $message .= '<ul>';
+    $message .= '<li>Following fields has been attached to the report: Start Date, Description, RFS Type, Project Title and Requestor Name</li>';
+    $message .= '</ul>';
     $result = BlueMail::send_mail($emailAddress, $subject, $message, $noreplemailid, $emailAddressCC, $emailAddressBCC, true, $attachments);    
     // var_dump($result);
     trigger_error('BlueMail::send_mail result: '.serialize($result), E_USER_WARNING);

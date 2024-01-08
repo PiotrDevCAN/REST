@@ -22,13 +22,6 @@ include ('splClassLoader.php');
 // $handler = new \ByJG\Session\JwtSession($sessionConfig);
 // session_set_save_handler($handler, true);
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-ini_set('memory_limit', '2048M');
-ini_set('max_execution_time', 360);
-
 require_once("php/errorHandlers.php");
 
 set_error_handler('myErrorHandler');
