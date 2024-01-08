@@ -8,7 +8,7 @@ use itdq\DbTable;
 use rest\allTables;
 use rest\resourceRequestHoursTable;
 
-ini_set('memory_limit', '2048M');
+ini_set('memory_limit', '3072M');
 
 if (isset($argv[1])) {
     

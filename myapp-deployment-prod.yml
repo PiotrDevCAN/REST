@@ -25,7 +25,7 @@ spec:
           limits:
             # no cpu limit! this is excluded on purpose
             # cpu: "1"
-            memory: 2Gi
+            memory: 3Gi
           requests:
             cpu: 32m
             memory: 128Mi
