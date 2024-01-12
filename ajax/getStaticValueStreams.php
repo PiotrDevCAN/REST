@@ -15,7 +15,7 @@ if (!$redis->get($redisKey)) {
     $predicate=null;
     
     $loader = new Loader();
-    $data = $loader->loadIndexed('VALUE_STREAM','VALUE_STREAM_ID',allTables::$STATIC_VALUE_STREAM_BUSINESS_UNIT,$predicate);
+    $data = $loader->loadIndexed('VALUE_STREAM','VALUE_STREAM_ID',allTables::$STATIC_VALUE_STREAM,$predicate);
 
     $redis->set($redisKey, json_encode($data));
     $redis->expire($redisKey, REDIS_EXPIRE);
