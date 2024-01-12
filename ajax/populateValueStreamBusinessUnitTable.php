@@ -6,7 +6,7 @@ use rest\staticValueStreamBusinessUnitTable;
 set_time_limit(0);
 ob_start();
 
-$staticOrganisation = new staticValueStreamBusinessUnitTable(allTables::$STATIC_VALUE_STREAM);
+$staticOrganisation = new staticValueStreamBusinessUnitTable(allTables::$STATIC_VALUE_STREAM_BUSINESS_UNIT);
 $data = $staticOrganisation->returnForDataTables();
 
 $messages = ob_get_clean();
