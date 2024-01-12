@@ -5,7 +5,7 @@ use rest\resourceRequestHoursTable;
 use rest\rfsRecord;
 
 set_time_limit(0);
-ini_set('memory_limit','2048M');
+ini_set('memory_limit','3072M');
 
 function ob_html_compress($buf){
     return str_replace(array("\n","\r"),'',$buf);

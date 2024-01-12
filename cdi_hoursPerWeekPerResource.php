@@ -8,7 +8,7 @@ use rest\resourceRequestTable;
 use rest\resourceRequestHoursTable;
 
 set_time_limit(0);
-ini_set('memory_limit', '2048M');
+ini_set('memory_limit', '3072M');
 
 // require_once __DIR__ . '/../../src/Bootstrap.php';
 $helper = new Sample();

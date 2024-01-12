@@ -2,7 +2,6 @@
 
 use itdq\Loader;
 use rest\allTables;
-use rest\staticOrganisationTable;
 
 set_time_limit(0);
 ob_start();
@@ -16,7 +15,7 @@ if (!$redis->get($redisKey)) {
     $predicate=null;
     
     $loader = new Loader();
-    $data = $loader->load('ORGANISATION',allTables::$STATIC_ORGANISATION,$predicate);
+    $data = $loader->loadIndexed('ORGANISATION','ORGANISATION_ID',allTables::$STATIC_ORGANISATION_SERVICE,$predicate);
 
     $redis->set($redisKey, json_encode($data));
     $redis->expire($redisKey, REDIS_EXPIRE);
@@ -29,4 +28,16 @@ $messages = ob_get_clean();
 $response = array('data'=>$data,'messages'=>$messages,'count'=>count($data),'source'=>$source);
 
 ob_clean();
+
+if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+    if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+        ob_start("ob_gzhandler");
+    } else {
+        ob_start("ob_html_compress");
+    }
+} else {
+    ob_start("ob_html_compress");
+}
+
+header('Content-Type: application/json');
 echo json_encode($response);

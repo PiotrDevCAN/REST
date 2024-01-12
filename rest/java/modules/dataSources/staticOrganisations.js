@@ -3,7 +3,7 @@
  */
 
 let APIData = await cacheBustImport('./modules/dataSources/fetch/staticOrganisations.js');
-let mapper = await cacheBustImport('./modules/select2dataMapper.js');
+let mapper = await cacheBustImport('./modules/select2dataIdValueMapper.js');
 
 class staticOrganisations {
 

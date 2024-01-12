@@ -61,4 +61,16 @@ Trace::pageLoadComplete($_SERVER['PHP_SELF']);
 $response = $resourceTraitsData;
 
 ob_clean();
+
+if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+    if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+        ob_start("ob_gzhandler");
+    } else {
+        ob_start("ob_html_compress");
+    }
+} else {
+    ob_start("ob_html_compress");
+}
+
+header('Content-Type: application/json');
 echo json_encode($response);

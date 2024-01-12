@@ -6,8 +6,8 @@ use rest\staticValueStreamTable;
 set_time_limit(0);
 ob_start();
 
-$staticOrganisation = new staticValueStreamTable(allTables::$STATIC_VALUE_STREAM);
-$data = $staticOrganisation->returnForDataTables();
+$table = new staticValueStreamTable(allTables::$STATIC_VALUE_STREAM);
+$data = $table->returnForDataTables();
 
 $messages = ob_get_clean();
 ob_start();

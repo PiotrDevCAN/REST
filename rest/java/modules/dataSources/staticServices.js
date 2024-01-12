@@ -3,6 +3,7 @@
  */
 
 let APIData = await cacheBustImport('./modules/dataSources/fetch/staticServices.js');
+let mapper = await cacheBustImport('./modules/select2dataIdValueMapper.js');
 
 class staticServices {
 
@@ -15,7 +16,8 @@ class staticServices {
     async getServices() {
         // await for API data
         var dataRaw = await APIData.data;
-        this.services = dataRaw;
+        var data = mapper(dataRaw);
+        this.services = data;
         return this.services;
     }
 }

@@ -133,9 +133,8 @@ class RREditBox {
 				url: "ajax/getEditResourceForm.php",
 				type: 'POST',
 				data: { resourceReference: resourceReference },
-				success: function (result) {
+				success: function (resultObj) {
 					try {
-						var resultObj = JSON.parse(result);
 						helper.unlockButton();
 						$('#editRequestModalBody').html(resultObj.form);
 						$('#editRequestModal').modal('show');

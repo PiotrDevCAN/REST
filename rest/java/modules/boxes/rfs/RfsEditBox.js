@@ -101,10 +101,9 @@ class RfsEditBox {
 				url: "ajax/getEditRfsForm.php",
 				type: 'POST',
 				data: { rfsId: rfsId },
-				success: function (result) {
+				success: function (resultObj) {
 					try {
 						helper.unlockButton();
-						var resultObj = JSON.parse(result);
 						$('#editRfsModalBody').html(resultObj.form);
 						FormMessageArea.clearMessageArea();
 						$('#editRfsModal').modal('show');

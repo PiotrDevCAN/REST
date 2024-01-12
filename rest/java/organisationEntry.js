@@ -8,37 +8,28 @@ class organisationEntry {
     responseObj;
 
     constructor() {
-        this.listenForDeleteRecord();
         this.listenForEditRecord();
-        this.listenForSaveOrganisation();
+        this.listenForDeleteRecord();
+        this.listenForSaveRecord();
         this.listenForResetForm();
     }
 
     listenForEditRecord() {
         $(document).on("click", ".editRecord", function () {
             $("#ORGANISATION").val($(this).data("organisation"));
-            $("#SERVICE").val($(this).data("service"));
-            if ($(this).data("status") == "enabled") {
-                $("#statusRadioEnabled").prop("checked", true);
-            } else {
-                $("#statusRadioDisabled").prop("checked", true);
-            }
             $("#mode").val("edit");
         });
     }
 
     listenForDeleteRecord() {
+        var $this = this;
         $(document).on("click", ".deleteRecord", function () {
-            var status = $(this).data('status');
             var organisation = $(this).data('organisation');
-            var service = $(this).data('service');
             $.ajax({
                 url: "ajax/deleteOrganisation.php",
                 type: 'POST',
                 data: {
-                    currentStatus: status,
-                    ORGANISATION: organisation,
-                    SERVICE: service
+                    ORGANISATION: organisation
                 },
                 success: function (result) {
                     try {
@@ -50,6 +41,7 @@ class organisationEntry {
                         }
                         helper.displaySaveResultModal(messages);
                         $('.spinning').removeClass('spinning').attr('disabled', false);
+                        $this.table.ajax.reload();
                     } catch (e) {
                         helper.unlockButton();
                         helper.displayTellDevMessageModal(e);
@@ -59,7 +51,7 @@ class organisationEntry {
         });
     }
 
-    listenForSaveOrganisation() {
+    listenForSaveRecord() {
         var $this = this;
         $(document).on('click', '#saveOrganisation', function (e) {
             e.preventDefault();
@@ -82,9 +74,6 @@ class organisationEntry {
                         }
                         helper.displaySaveResultModal(messages);
                         $('#ORGANISATION').val('');
-                        $('#SERVICE').val('');
-                        $('#statusRadioDisabled').prop('checked', false);
-                        $('#statusRadioEnabled').prop('checked', true);
                         $('.spinning').removeClass('spinning').attr('disabled', false);
                         $this.table.ajax.reload();
                     } catch (e) {
@@ -99,11 +88,7 @@ class organisationEntry {
 
     listenForResetForm() {
         $(document).on('click', '#resetOrganisation', function () {
-            $("input[name=statusRadio][value=enabled]").prop('checked', true);
-            $("input[name=statusRadio]").attr('disabled', false);
             $('#ORGANISATION').val('');
-            $('#SERVICE').val('');
-            $('#saveCtbService').val('Submit');
             $('#mode').val('Define');
         });
     }

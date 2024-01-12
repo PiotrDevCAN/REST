@@ -8,12 +8,12 @@ if(!isset($_SESSION['uid'])) {
 
 $start = microtime(true);
 
-$workerAPI = new WorkerAPI();
-$workerData = $workerAPI->getworkerByEmail($_SESSION['ssoEmail']);
+// $workerAPI = new WorkerAPI();
+// $workerData = $workerAPI->getworkerByEmail($_SESSION['ssoEmail']);
 
-$elapsed = microtime(true);
-echo ("WorkerAPI call took:" . (float)($elapsed-$start));
-echo '</br>';
+// $elapsed = microtime(true);
+// echo ("WorkerAPI call took:" . (float)($elapsed-$start));
+// echo '</br>';
 
 // echo '<pre>';
 // echo 'ENVIRONMENT <br>';

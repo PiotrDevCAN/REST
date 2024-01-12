@@ -45,7 +45,6 @@ if (!empty($oldRfsId) && !empty($newRfsId)) {
     }
 }
 
-
 $messages = ob_get_clean();
 ob_start();
 

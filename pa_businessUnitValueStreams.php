@@ -2,26 +2,26 @@
 
 use itdq\FormClass;
 use itdq\Trace;
-use rest\staticValueStreamRecord;
+use rest\staticValueStreamBusinessUnitRecord;
 
 ?>
 <div class='container'>
-<h2>Define Value Stream</h2>
+<h2>Define Value Stream / Business Unit</h2>
 <?php
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
-$record = new staticValueStreamRecord();
+$record = new staticValueStreamBusinessUnitRecord();
 $record->displayForm(FormClass::$modeDEFINE);
 
 ?>
 </div>
 
 <div class='container'>
-<h2>Manage Value Streams</h2>
+<h2>Manage Business Unit to Value Streams assignment</h2>
 
 <div style='width: 75%'>
-<table id='valueStreamTable' >
+<table id='valueStreamBusinessUnitTable' >
 <thead>
 <tr><th>Value Stream</th><th>Business Unit</th></tr>
 </thead>

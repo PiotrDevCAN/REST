@@ -2,17 +2,56 @@
  *
  */
 
+let StaticValueStreams = await cacheBustImport('./modules/dataSources/staticValueStreams.js');
+let StaticBusinessUnits = await cacheBustImport('./modules/dataSources/staticBusinessUnits.js');
+
 class businessUnitsValuesStreamsEntry {
 
     table;
     responseObj;
 
     constructor() {
+        this.prepareSelect2();
         this.listenForDeleteRecord();
         this.listenForEditRecord();
         this.listenForSaveValueStream();
         this.listenForResetForm();
     }
+
+
+    prepareSelect2() {
+
+		// FormMessageArea.showMessageArea();
+
+		let orgaisationPromise = StaticValueStreams.getValueStreams().then((response) => {
+			$("#VALUE_STREAM").select2({
+				data: response,
+				tags: true,
+				createTag: function (params) {
+					return undefined;
+				}
+			});
+		});
+
+        let servicePromise = StaticBusinessUnits.getBusinessUnits().then((response) => {
+			$("#BUSINESS_UNIT").select2({
+				data: response,
+				tags: true,
+				createTag: function (params) {
+					return undefined;
+				}
+			});
+		});
+
+		const promises = [orgaisationPromise, servicePromise];
+		Promise.allSettled(promises)
+			.then((results) => {
+				results.forEach((result) => console.log(result.status));
+				// FormMessageArea.clearMessageArea();
+			});
+
+		// FormMessageArea.clearMessageArea();
+	}
 
     listenForEditRecord() {
         $(document).on("click", ".editRecord", function () {

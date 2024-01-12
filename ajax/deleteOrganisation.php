@@ -2,22 +2,21 @@
 namespace ajax;
 
 use rest\allTables;
-use rest\staticPSBandTable;
+use rest\staticOrganisationTable;
 
 set_time_limit(0);
 
 ob_start();
 
 $organisation = !empty($_POST['ORGANISATION']) ? trim($_POST['ORGANISATION']) : null;
-$service = !empty($_POST['SERVICE']) ? trim($_POST['SERVICE']) : null;
 
-if (!empty($organisation) && !empty($service)) {
-    $table = new staticPSBandTable(allTables::$STATIC_ORGANISATION);
-    $table->deleteData(" ORGANISATION='" . htmlspecialchars($organisation) . "' AND SERVICE='" . htmlspecialchars($service) . "'" , true);        
+if (!empty($organisation)) {
+    $table = new staticOrganisationTable(allTables::$STATIC_ORGANISATION_SERVICE);
+    $table->deleteData(" ORGANISATION='" . htmlspecialchars($organisation) . "'", true);        
 }
 
 $messages = ob_get_clean();
 
-$response = array('organisation' => $_POST['ORGANISATION'], 'service' => $_POST['SERVICE'], 'messages'=>$messages);
+$response = array('organisation' => $_POST['ORGANISATION'], 'messages'=>$messages);
 
 echo json_encode($response);

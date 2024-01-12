@@ -2,22 +2,22 @@
 use itdq\Trace;
 use rest\allTables;
 use itdq\FormClass;
-use rest\staticOrganisationTable;
 use rest\staticOrganisationRecord;
+use rest\staticOrganisationTable;
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
 ob_start();
 
-$organisationTable  = new staticOrganisationTable(allTables::$STATIC_ORGANISATION);
-$organisationTableRecord = new staticOrganisationRecord();
-$organisationTableRecord->setFromArray(array('ORGANISATION'=>$_POST['ORGANISATION'],'SERVICE'=>$_POST['SERVICE'],'STATUS'=>$_POST['statusRadio']));
+$table  = new staticOrganisationTable(allTables::$STATIC_ORGANISATION_SERVICE);
+$record = new staticOrganisationRecord();
+$record->setFromArray(array('ORGANISATION'=>$_POST['ORGANISATION']));
 
 $mode = isset($_POST['mode']) ? $_POST['mode'] : null;
 if($mode==FormClass::$modeDEFINE){
-   $db2result = $organisationTable->insert($organisationTableRecord);
+   $db2result = $table->insert($record);
 } else {
-   $db2result = $organisationTable->update($organisationTableRecord);
+   $db2result = $table->update($record);
 }
 
 if(!$db2result){

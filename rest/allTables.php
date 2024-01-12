@@ -16,12 +16,11 @@ class allTables
     public static $ARCHIVED_RESOURCE_REQUEST_DIARY = 'ARCHIVED_RESOURCE_REQUEST_DIARY';
     public static $ARCHIVED_DIARY                  = 'ARCHIVED_DIARY';
 
-    
     public static $BANK_HOLIDAYS                   = 'BANK_HOLIDAYS';
     
 //    public static $MQT_MAX_REF                     = 'MQT_MAX_REF';
     public static $LATEST_DIARY_ENTRIES            = 'LATEST_DIARY_ENTRIES';
-    
+
     public static $RESOURCE_REQUESTS      = 'RESOURCE_REQUESTS';
     public static $RESOURCE_REQUEST_DIARY = 'RESOURCE_REQUEST_DIARY';
     public static $RESOURCE_REQUEST_HOURS = 'RESOURCE_REQUEST_HOURS';
@@ -31,13 +30,18 @@ class allTables
     public static $RFS_PIPELINE           = 'RFS_PIPELINE';  // View
     public static $RFS_PCR                = 'RFS_PCR'; 
 
- //   public static $STATIC_BUSINESS_UNIT   = 'STATIC_BUSINESS_UNIT'; Now a field in Value Stream.
-    public static $STATIC_VALUE_STREAM    = 'STATIC_VALUE_STREAM';
-    public static $STATIC_ORGANISATION    = 'STATIC_ORGANISATION';
+    public static $STATIC_BUSINESS_UNIT                 = 'STATIC_BUSINESS_UNIT';
+    public static $STATIC_VALUE_STREAM                  = 'STATIC_VALUE_STREAM';
+    public static $STATIC_VALUE_STREAM_BUSINESS_UNIT    = 'STATIC_VALUE_STREAM_BUSINESS_UNIT';
+
+    public static $STATIC_SERVICE                 = 'STATIC_SERVICE';
+    public static $STATIC_ORGANISATION            = 'STATIC_ORGANISATION';
+    public static $STATIC_ORGANISATION_SERVICE    = 'STATIC_ORGANISATION_SERVICE';
 
     public static $STATIC_BAND            = 'STATIC_BAND';
     public static $STATIC_PS_BAND         = 'STATIC_PS_BAND';
     public static $STATIC_RESOURCE_TYPE   = 'STATIC_RESOURCE_TYPE';
+
     public static $RESOURCE_TYPE_RATES    = 'RESOURCE_TYPE_RATES';
     public static $RESOURCE_TRAITS        = 'RESOURCE_TRAITS';
 
@@ -47,14 +51,3 @@ class allTables
 
     public static $ACTIVE_RESOURCE = 'INACTIVE_PERSON';
 }
-
-/*
- *  CREATE VIEW "REST".RFS_DATE_RANGE
-		   ( RFS_ID, START_DATE, END_DATE, READY_FOR_LIVE)
-		AS SELECT RFS as RFS_ID, MIN(START_DATE) as START_DATE, MAX(END_DATE) as END_DATE,
-		    case when MIN(START_DATE) >= CURRENT_TIMESTAMP then 'Yes' else 'No' end as READY_FOR_LIVE
-		   FROM REST.RESOURCE_REQUESTS
-		   GROUP BY RFS
-	       WITH NO ROW MOVEMENT;
- * 
- */

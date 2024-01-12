@@ -21,12 +21,12 @@ $organisationRecord->displayForm(itdq\FormClass::$modeDEFINE);
 <div style='width: 75%'>
 <table id='organisationTable' >
 <thead>
-<tr><th>Organisation</th><th>Service</th><th>Status</th></tr>
+<tr><th>Organisation</th></tr>
 </thead>
 <tbody>
 </tbody>
 <tfoot>
-<tr><th>Organisation</th><th>Service</th><th>Status</th></tr>
+<tr><th>Organisation</th></tr>
 </tfoot>
 </table>
 </div>

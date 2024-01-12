@@ -15,7 +15,7 @@ class businessUnitsValuesStreamsList {
 
     initialiseTable() {
         // DataTable
-        this.table = $('#valueStreamTable').DataTable({
+        this.table = $('#valueStreamBusinessUnitTable').DataTable({
             autoWidth: false,
             processing: true,
             responsive: false,
@@ -51,7 +51,7 @@ class businessUnitsValuesStreamsList {
                 })
             ],
             ajax: {
-                "url": "ajax/populateValueStreamTable.php",
+                "url": "ajax/populateValueStreamBusinessUnitTable.php",
                 "type": "GET",
             },
             columns: [

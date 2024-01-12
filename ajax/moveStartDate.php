@@ -32,6 +32,9 @@ echo $startDateWasObj->format('Y-m-d');
 
 echo $startDateWasObj > $startDateObj;
 
+$movement = ' ';
+$weeksSaved = 0;
+
 if($startDateWasObj < $startDateObj){
     echo "Push Start Date Out";
     $movement = " pushed out to ";
@@ -67,4 +70,15 @@ ob_start();
 $response = array( 'WeeksSaved'=> $weeksSaved, 'messages'=>$messages, 'DiaryRef'=>$diaryRef);
 
 ob_clean();
+
+if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+    if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+        ob_start("ob_gzhandler");
+    } else {
+        ob_start("ob_html_compress");
+    }
+} else {
+    ob_start("ob_html_compress");
+}
+
 echo json_encode($response);

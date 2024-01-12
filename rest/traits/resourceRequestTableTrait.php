@@ -29,8 +29,8 @@ trait resourceRequestTableTrait
     private $lastDiaryEntriesByResourceReference;
 
     static function buildHTMLTable($tableId = 'resourceRequests', $startDate, $endDate){
-        $RRheaderCells = resourceRequestRecord::htmlHeaderCellsStatic($startDate);
         $RFSheaderCells = rfsRecord::htmlHeaderCellsStatic();
+        $RRheaderCells = resourceRequestRecord::htmlHeaderCellsStatic($startDate);
         ?>
         <table id='<?=$tableId;?>Table_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%' style='display: none;'>
         <thead><tr><?=$RFSheaderCells . $RRheaderCells ;?></tr></thead>

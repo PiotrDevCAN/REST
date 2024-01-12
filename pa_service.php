@@ -1,6 +1,6 @@
 <?php
 use itdq\Trace;
-use rest\staticOrganisationRecord;
+use rest\staticServiceRecord;
 
 ?>
 <div class='container'>
@@ -9,8 +9,8 @@ use rest\staticOrganisationRecord;
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
-$organisationRecord = new staticOrganisationRecord();
-$organisationRecord->displayForm(itdq\FormClass::$modeDEFINE);
+$serviceRecord = new staticServiceRecord();
+$serviceRecord->displayForm(itdq\FormClass::$modeDEFINE);
 
 ?>
 </div>
@@ -19,14 +19,14 @@ $organisationRecord->displayForm(itdq\FormClass::$modeDEFINE);
 <h2>Manage Services</h2>
 
 <div style='width: 75%'>
-<table id='organisationTable' >
+<table id='serviceTable' >
 <thead>
-<tr><th>Organisation</th><th>Service</th><th>Status</th></tr>
+<tr><th>Service</th></tr>
 </thead>
 <tbody>
 </tbody>
 <tfoot>
-<tr><th>Organisation</th><th>Service</th><th>Status</th></tr>
+<tr><th>Service</th></tr>
 </tfoot>
 </table>
 </div>

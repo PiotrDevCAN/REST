@@ -13,8 +13,6 @@ class staticOrganisationRecord extends DbRecord
 {
 
     public $ORGANISATION;
-    public $SERVICE;
-    public $STATUS;
 
 	function displayForm($mode){
         $allButtons = array();
@@ -28,22 +26,6 @@ class staticOrganisationRecord extends DbRecord
         		</div>
         	</div>
         </div>
-        <div class="form-group ">
-			<div class='required'>
-        		<label for="SERVICE" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Market">Service</label>
-        		<div class="col-md-6">
-        		<input class="form-control" id="SERVICE" name="SERVICE" value="<?=$this->SERVICE?>" placeholder="Enter Service" required="required" type="text" >
-        		</div>
-        	</div>
-        </div>
-		<div class="form-group required">
-
-        	<label class='col-md-2 control-label ceta-label-left'>Status</label>
-        	<div class='col-md-4'>
-  		 		<label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='disabled' id='statusRadioDisabled' >Disabled</label>
-		 		<label class="radio-inline col-sm-3"><input type="radio" name="statusRadio" value='enabled'  id='statusRadioEnabled' checked  >Enabled</label>
-		 	</div>
-		</div>
         <?php
    		$this->formHiddenInput('mode',$mode,'mode');
 

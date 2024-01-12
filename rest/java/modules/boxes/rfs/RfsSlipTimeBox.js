@@ -98,10 +98,9 @@ class RfsSlipTimeBox {
 				url: "ajax/getSlipRfsForm.php",
 				type: 'POST',
 				data: { rfsId: rfsId },
-				success: function (result) {
+				success: function (resultObj) {
 					try {
 						helper.unlockButton();
-						var resultObj = JSON.parse(result);
 						$('#slipRfsModalBody').html(resultObj.form);
 						$('#slipRfsModal').modal('show');
 					} catch (e) {

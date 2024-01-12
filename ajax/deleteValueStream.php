@@ -2,7 +2,7 @@
 namespace ajax;
 
 use rest\allTables;
-use rest\staticPSBandTable;
+use rest\staticValueStreamTable;
 
 set_time_limit(0);
 
@@ -12,7 +12,7 @@ $valueStream = !empty($_POST['VALUE_STREAM']) ? trim($_POST['VALUE_STREAM']) : n
 $businessUnit = !empty($_POST['BUSINESS_UNIT']) ? trim($_POST['BUSINESS_UNIT']) : null;
 
 if (!empty($valueStream) && !empty($businessUnit)) {
-    $table = new staticPSBandTable(allTables::$STATIC_VALUE_STREAM);
+    $table = new staticValueStreamTable(allTables::$STATIC_VALUE_STREAM);
     $table->deleteData(" VALUE_STREAM='" . htmlspecialchars($valueStream) . "' AND BUSINESS_UNIT='" . htmlspecialchars($businessUnit) . "'" , true);    
 }
 

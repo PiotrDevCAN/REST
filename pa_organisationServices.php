@@ -1,25 +1,25 @@
 <?php
 use itdq\Trace;
-use rest\staticOrganisationRecord;
+use rest\staticOrganisationServiceRecord;
 
 ?>
 <div class='container'>
-<h2>Define Organisation/Service</h2>
+<h2>Define Organisation / Service</h2>
 <?php
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
-$organisationRecord = new staticOrganisationRecord();
-$organisationRecord->displayForm(itdq\FormClass::$modeDEFINE);
+$record = new staticOrganisationServiceRecord();
+$record->displayForm(itdq\FormClass::$modeDEFINE);
 
 ?>
 </div>
 
 <div class='container'>
-<h2>Manage Organisations</h2>
+<h2>Manage Service to Organisation assignment</h2>
 
 <div style='width: 75%'>
-<table id='organisationTable' >
+<table id='organisationServiceTable' >
 <thead>
 <tr><th>Organisation</th><th>Service</th><th>Status</th></tr>
 </thead>

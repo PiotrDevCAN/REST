@@ -91,11 +91,33 @@ trait rfsTableTrait
         <table id='<?=$tableId;?>Table_id' class='table table-striped table-bordered compact' cellspacing='0' width='100%' style='display: none;'>
         <thead>
         <tr>
-        <th>RFS ID</th><th>PRN</th><th>Project Title</th><th>Project Code</th><th>Requestor Name</th><th>Requestor Email</th><th>Value Stream</th><th>Business Unit</th>
-        <th>Link to PGMP</th><th>RFS Creator</th><th>RFS Created</th>
-        <th>Resource Ref</th><th>Organisation</th><th>Service</th><th>Description</th><th>Start Date</th><th>End Date</th>
-        <th>Total Hours</th><th>Resource Name</th><th>Request Creator</th><th>Request Created</th>
-        <th>Cloned From</th><th>Status</th><th>Rate Type</th><th>Hours Type</th><th>RFS Status</th><th>RFS Type</th>
+        <th>RFS ID</th>
+        <th>PRN</th>
+        <th>Project Title</th>
+        <th>Project Code</th>
+        <th>Requestor Name</th>
+        <th>Requestor Email</th>
+        <th>Value Stream</th>
+        <th>Business Unit</th>
+        <th>RFS Creator</th>
+        <th>RFS Created</th>
+        <th>Link to PGMP</th>
+        <th>Resource Ref</th>
+        <th>Organisation</th>
+        <th>Service</th>
+        <th>Description</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Total Hours</th>
+        <th>Resource Name</th>
+        <th>Request Creator</th>
+        <th>Request Created</th>
+        <th>Cloned From</th>
+        <th>Status</th>
+        <th>Rate Type</th>
+        <th>Hours Type</th>
+        <th>RFS Status</th>
+        <th>RFS Type</th>
         <?php 
         foreach ($monthLabels as $label) {
             ?><th><?=$label?></th><?php 
@@ -105,11 +127,33 @@ trait rfsTableTrait
         <tbody>
         </tbody>
         <tfoot><tr>
-        <th>RFS ID</th><th>PRN</th><th>Project Title</th><th>Project Code</th><th>Requestor Name</th><th>Requestor Email</th><th>Value Stream</th><th>Business Unit</th>
-        <th>RFS Creator</th><th>RFS Created</th>
-        <th>Link to PGMP</th><th>Resource Ref</th><th>Organisation</th><th>Service</th><th>Description</th><th>Start Date</th><th>End Date</th>
-        <th>Total Hours</th><th>Resource Name</th><th>Request Creator</th><th>Request Created</th>
-        <th>Cloned From</th><th>Status</th><th>Rate Type</th><th>Hours Type</th><th>RFS Status</th><th>RFS Type</th>
+        <th>RFS ID</th>
+        <th>PRN</th>
+        <th>Project Title</th>
+        <th>Project Code</th>
+        <th>Requestor Name</th>
+        <th>Requestor Email</th>
+        <th>Value Stream</th>
+        <th>Business Unit</th>
+        <th>RFS Creator</th>
+        <th>RFS Created</th>
+        <th>Link to PGMP</th>
+        <th>Resource Ref</th>
+        <th>Organisation</th>
+        <th>Service</th>
+        <th>Description</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Total Hours</th>
+        <th>Resource Name</th>
+        <th>Request Creator</th>
+        <th>Request Created</th>
+        <th>Cloned From</th>
+        <th>Status</th>
+        <th>Rate Type</th>
+        <th>Hours Type</th>
+        <th>RFS Status</th>
+        <th>RFS Type</th>
         <?php 
         foreach ($monthLabels as $label) {
             ?><th><?=$label?></th><?php 
@@ -364,9 +408,9 @@ trait rfsTableTrait
         $sql  = " SELECT 
         RFS.RFS_ID, 
 		RFS.PRN, 
-		RFS.PROJECT_CODE,
 		RFS.PROJECT_TITLE,
-		RFS.REQUESTOR_NAME,
+		RFS.PROJECT_CODE,
+        RFS.REQUESTOR_NAME,
 		RFS.REQUESTOR_EMAIL,
 		RFS.VALUE_STREAM,
 		RFS.BUSINESS_UNIT,

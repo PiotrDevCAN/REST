@@ -3,7 +3,7 @@
  */
 
 let APIData = await cacheBustImport('./modules/dataSources/fetch/staticValueStreams.js');
-let mapper = await cacheBustImport('./modules/select2dataMapper.js');
+let mapper = await cacheBustImport('./modules/select2dataIdValueMapper.js');
 
 class staticValueStreams {
 
@@ -17,8 +17,8 @@ class staticValueStreams {
         // await for API data
         var dataRaw = await APIData.data;
         var data = mapper(dataRaw);
-        this.servvalueStreamsices = data;
-        return this.servvalueStreamsices;
+        this.valueStreams = data;
+        return this.valueStreams;
     }
 }
 

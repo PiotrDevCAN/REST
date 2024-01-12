@@ -73,8 +73,8 @@ class rfsRecord extends DbRecord
     static public $columnHeadings = array(
 		"RFS ID", 
 		"PRN", 
-		"Project Code", 
 		"Project Title", 
+		"Project Code", 
 		"Requestor Name", 
 		"Requestor Email", 
 		"Value Stream", 

@@ -7,7 +7,7 @@ use itdq\Loader;
 use rest\resourceRequestTable;
 use itdq\DateClass;
 use rest\rfsTable;
-use rest\staticOrganisationTable;
+use rest\staticOrganisationServiceTable;
 use itdq\JavaScript;
 
 set_time_limit(0);
@@ -27,8 +27,8 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 // $nonPipelineDisabled =  $_SESSION['isRfs'] ? ' disabled ' : null;
 // $defaultToLive       =  empty($pipelineChecked) ? 'checked' : null;
 
-// $predicate = " STATUS='" . staticOrganisationTable::ENABLED . "' ";
-// $allService = staticOrganisationTable::getAllOrganisationsAndServices($predicate);
+// $predicate = " STATUS='" . staticOrganisationServiceTable::ENABLED . "' ";
+// $allService = staticOrganisationServiceTable::getAllOrganisationsAndServices($predicate);
 // JavaScript::buildSelectArray($allService, 'organisation');
 
 ?>

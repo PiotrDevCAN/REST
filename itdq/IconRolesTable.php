@@ -1,6 +1,7 @@
 <?php
 namespace itdq;
 
+use itdq\DbTable;
 use itdq\OKTAGroups;
 
 /**

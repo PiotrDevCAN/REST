@@ -32,8 +32,11 @@ echo $endDateWasObj->format('Y-m-d');
 
 echo $endDateWasObj > $endDateObj;
 
+$movement = ' ';
+$weeksSaved = 0;
+
 if($endDateWasObj > $endDateObj){
-    echo "Move date IN";
+    echo "Move date In";
     $movement = " pulled back to ";
     // They've moved the date in - so just delete dates.
     $predicate = " RESOURCE_REFERENCE=" . htmlspecialchars($_POST['resourceReference']) . " and \"DATE\" > '". htmlspecialchars($endDateObj->format('Y-m-d')) ."' ";
@@ -67,4 +70,15 @@ ob_start();
 $response = array( 'WeeksSaved'=> $weeksSaved, 'messages'=>$messages, 'DiaryRef'=>$diaryRef);
 
 ob_clean();
+
+if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+    if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+        ob_start("ob_gzhandler");
+    } else {
+        ob_start("ob_html_compress");
+    }
+} else {
+    ob_start("ob_html_compress");
+}
+
 echo json_encode($response);

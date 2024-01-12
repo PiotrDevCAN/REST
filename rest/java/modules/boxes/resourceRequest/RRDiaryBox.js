@@ -25,9 +25,8 @@ class RRDiaryBox {
 				url: "ajax/getDiaryForResourceReference.php",
 				type: 'POST',
 				data: { resourceReference: resourceReference },
-				success: function (result) {
+				success: function (resultObj) {
 					try {
-						var resultObj = JSON.parse(result);
 						$('#saveDiaryEntry').attr('disabled', false);
 						$('#newDiaryEntry').html('').attr('contenteditable', true);
 						$('#diary').html(resultObj.diary);
