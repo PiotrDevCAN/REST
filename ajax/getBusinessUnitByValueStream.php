@@ -15,7 +15,7 @@ if (!$redis->get($redisKey)) {
     $predicate = !empty($_POST['valueStream']) ? "VALUE_STREAM = '" . $_POST['valueStream'] . "'" : false ;
     
     $loader = new Loader();
-    $data = $loader->load('BUSINESS_UNIT', allTables::$STATIC_VALUE_STREAM, $predicate, FALSE);
+    $data = $loader->load('BUSINESS_UNIT', allTables::$STATIC_VALUE_STREAM_BUSINESS_UNIT, $predicate, FALSE);
     
     $redis->set($redisKey, json_encode($data));
     $redis->expire($redisKey, REDIS_EXPIRE);

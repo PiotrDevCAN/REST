@@ -12,7 +12,7 @@ $valueStream = !empty($_POST['VALUE_STREAM']) ? trim($_POST['VALUE_STREAM']) : n
 $businessUnit = !empty($_POST['BUSINESS_UNIT']) ? trim($_POST['BUSINESS_UNIT']) : null;
 
 if (!empty($valueStream) && !empty($businessUnit)) {
-    $table = new staticValueStreamTable(allTables::$STATIC_VALUE_STREAM);
+    $table = new staticValueStreamTable(allTables::$STATIC_VALUE_STREAM_BUSINESS_UNIT);
     $table->deleteData(" VALUE_STREAM='" . htmlspecialchars($valueStream) . "' AND BUSINESS_UNIT='" . htmlspecialchars($businessUnit) . "'" , true);    
 }
 
