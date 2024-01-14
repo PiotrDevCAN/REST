@@ -341,7 +341,7 @@ trait resourceRequestTableTrait
         $sql .= " RFS.PROJECT_CODE,";
         $sql .= " RFS.REQUESTOR_NAME,";
         $sql .= " RFS.REQUESTOR_EMAIL,";
-        $sql .= " RFS.VALUE_STREAM,";
+        $sql .= " VS.VALUE_STREAM,";
         $sql .= " RFS.LINK_TO_PGMP,";
         $sql .= " RFS.RFS_CREATOR,";
         $sql .= " RFS.RFS_CREATED_TIMESTAMP,";
@@ -400,6 +400,10 @@ trait resourceRequestTableTrait
         $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . $resourceRequestTableName. " AS RR ";
         $sql .= " ON RR.RFS = RFS.RFS_ID ";
+
+        // Value Stream
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_VALUE_STREAM . " as VS ";
+        $sql .= " ON RFS.VALUE_STREAM = VS.VALUE_STREAM_ID";
 
         // Active Person
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";

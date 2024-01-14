@@ -412,7 +412,7 @@ trait rfsTableTrait
 		RFS.PROJECT_CODE,
         RFS.REQUESTOR_NAME,
 		RFS.REQUESTOR_EMAIL,
-		RFS.VALUE_STREAM,
+		VS.VALUE_STREAM,
 		RFS.BUSINESS_UNIT,
 		RFS.ILC_WORK_ITEM,
 		RFS.ILC_WORK_ITEM_WEEKDAY_OVERTIME,
@@ -428,6 +428,9 @@ trait rfsTableTrait
         RDR.*,
         RPCR.PCR_ID ";
         $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
+        // Value Stream
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_VALUE_STREAM . " as VS ";
+        $sql .= " ON RFS.VALUE_STREAM = VS.VALUE_STREAM_ID";
         $sql .= " LEFT JOIN ". $GLOBALS['Db2Schema'] . "." . allTables::$RFS_DATE_RANGE . " AS RDR ";
         $sql .= " ON RFS.RFS_ID = RDR.RFS ";
         $sql .= " LEFT JOIN ". $GLOBALS['Db2Schema'] . "." . allTables::$RFS_PCR . " AS RPCR ";
@@ -526,7 +529,7 @@ trait rfsTableTrait
         // $sql.="      ORDER BY 1,2 ";
         $sql.=" ) ";
         $sql.=" " ;
-        $sql.= " SELECT RFS.RFS_ID,RFS.PRN,RFS.PROJECT_TITLE,RFS.PROJECT_CODE,RFS.REQUESTOR_NAME,RFS.REQUESTOR_EMAIL,RFS.VALUE_STREAM,RFS.BUSINESS_UNIT ";
+        $sql.= " SELECT RFS.RFS_ID,RFS.PRN,RFS.PROJECT_TITLE,RFS.PROJECT_CODE,RFS.REQUESTOR_NAME,RFS.REQUESTOR_EMAIL,VS.VALUE_STREAM,RFS.BUSINESS_UNIT ";
         $sql.= " ,RFS.LINK_TO_PGMP, ";
         $sql.= " RFS.RFS_CREATOR,RFS.RFS_CREATED_TIMESTAMP AS RFS_CREATED , ";
         $sql.= " RR.RESOURCE_REFERENCE,RR.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE,RR.TOTAL_HOURS, ";
@@ -541,6 +544,9 @@ trait rfsTableTrait
         $sql.= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
         $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
         $sql.= " ON RR.RFS =  RFS.RFS_ID ";
+        // Value Stream
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_VALUE_STREAM . " as VS ";
+        $sql .= " ON RFS.VALUE_STREAM = VS.VALUE_STREAM_ID";
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
         $sql.= " AND " . rfsTable::NOT_ARCHIVED;
@@ -639,7 +645,7 @@ trait rfsTableTrait
         // $sql.="      ORDER BY 1,2 ";
         $sql.=" ) ";
         $sql.=" " ;
-        $sql.= " SELECT RFS.RFS_ID,RFS.PRN,RFS.PROJECT_TITLE,RFS.PROJECT_CODE,RFS.REQUESTOR_NAME,RFS.REQUESTOR_EMAIL,RFS.VALUE_STREAM,RFS.BUSINESS_UNIT ";
+        $sql.= " SELECT RFS.RFS_ID,RFS.PRN,RFS.PROJECT_TITLE,RFS.PROJECT_CODE,RFS.REQUESTOR_NAME,RFS.REQUESTOR_EMAIL,VS.VALUE_STREAM,RFS.BUSINESS_UNIT ";
         $sql.= " ,RFS.LINK_TO_PGMP, ";
         $sql.= " RFS.RFS_CREATOR,RFS.RFS_CREATED_TIMESTAMP AS RFS_CREATED , ";
         $sql.= " RR.RESOURCE_REFERENCE,RR.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE,RR.TOTAL_HOURS, ";
@@ -656,6 +662,9 @@ trait rfsTableTrait
         $sql.= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
         $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
         $sql.= " ON RR.RFS =  RFS.RFS_ID ";
+        // Value Stream
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_VALUE_STREAM . " as VS ";
+        $sql .= " ON RFS.VALUE_STREAM = VS.VALUE_STREAM_ID";
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
         $sql.= " AND " . rfsTable::NOT_ARCHIVED;
@@ -749,7 +758,7 @@ trait rfsTableTrait
         // $sql.="      order by 1,2 ";
         $sql.=" ) ";
         $sql.=" " ;
-        $sql.= " SELECT RFS.RFS_ID,RFS.PRN,RFS.PROJECT_TITLE,RFS.PROJECT_CODE,RFS.REQUESTOR_NAME,RFS.REQUESTOR_EMAIL,RFS.VALUE_STREAM,RFS.BUSINESS_UNIT ";
+        $sql.= " SELECT RFS.RFS_ID,RFS.PRN,RFS.PROJECT_TITLE,RFS.PROJECT_CODE,RFS.REQUESTOR_NAME,RFS.REQUESTOR_EMAIL,VS.VALUE_STREAM,RFS.BUSINESS_UNIT ";
         $sql.= " ,RFS.LINK_TO_PGMP, ";
         $sql.= " RFS.RFS_CREATOR,RFS.RFS_CREATED_TIMESTAMP AS RFS_CREATED , ";
         $sql.= " RR.RESOURCE_REFERENCE,RR.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE,RR.TOTAL_HOURS, ";
@@ -764,6 +773,9 @@ trait rfsTableTrait
         $sql.= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
         $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
         $sql.= " ON RR.RFS =  RFS.RFS_ID ";        
+        // Value Stream
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_VALUE_STREAM . " as VS ";
+        $sql .= " ON RFS.VALUE_STREAM = VS.VALUE_STREAM_ID";
         // $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
         $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " AS AR ";
         $sql.= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID) ";        
