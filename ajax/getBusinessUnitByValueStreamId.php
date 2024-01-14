@@ -12,7 +12,7 @@ $redisKey = md5($key.'_key_'.$_ENV['environment']);
 if (!$redis->get($redisKey)) {
     $source = 'SQL Server';
     
-    $predicate = !empty($_POST['valueStream']) ? "VALUE_STREAM = '" . $_POST['valueStream'] . "'" : false ;
+    $predicate = !empty($_POST['valueStream']) ? "VALUE_STREAM_ID = '" . $_POST['valueStream'] . "'" : false ;
     
     $loader = new Loader();
     $valueStreams = $loader->load('VALUE_STREAM', allTables::$STATIC_VALUE_STREAM, $predicate, FALSE);
