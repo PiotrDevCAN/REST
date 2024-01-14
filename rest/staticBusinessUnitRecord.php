@@ -16,7 +16,7 @@ class staticBusinessUnitRecord extends DbRecord
     function displayForm($mode){
         $allButtons = array();
         ?>
-        <form id='valueStreamForm' class="form-horizontal"  method='post'>
+        <form id='businessUnitForm' class="form-horizontal"  method='post'>
         <div class="form-group ">
 			<div class='required'>
         		<label for="BUSINESS_UNIT" class="col-md-2 control-label ceta-label-left" data-toggle="tooltip" data-placement="top" title="Business Unit">Business Unit</label>
@@ -28,8 +28,8 @@ class staticBusinessUnitRecord extends DbRecord
         <?php
    		$this->formHiddenInput('mode',$mode,'mode');
 
-   		$submitButton = $mode==FormClass::$modeEDIT ?  $this->formButton('submit','Submit','updateValueStream',null,'Update') :  $this->formButton('submit','Submit','saveValueStream',null,'Submit');
-   		$resetButton  = $this->formButton('reset','Reset','resetValueStream',null,'Reset','btn-warning');
+   		$submitButton = $mode==FormClass::$modeEDIT ?  $this->formButton('submit','Submit','updateBusinessUnit',null,'Update') :  $this->formButton('submit','Submit','saveBusinessUnit',null,'Submit');
+   		$resetButton  = $this->formButton('reset','Reset','resetBusinessUnit',null,'Reset','btn-warning');
    		$allButtons[] = $submitButton;
    		$allButtons[] = $resetButton;
    		?>

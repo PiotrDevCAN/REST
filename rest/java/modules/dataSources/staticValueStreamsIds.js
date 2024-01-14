@@ -3,9 +3,9 @@
  */
 
 let APIData = await cacheBustImport('./modules/dataSources/fetch/staticValueStreams.js');
-let mapper = await cacheBustImport('./modules/select2dataMapper.js');
+let mapper = await cacheBustImport('./modules/select2dataIdValueMapper.js');
 
-class staticValueStreams {
+class staticValueStreamsIds {
 
     valueStreams = [];
 
@@ -22,6 +22,6 @@ class staticValueStreams {
     }
 }
 
-const StaticValueStreams = new staticValueStreams();
+const StaticValueStreamsIds = new staticValueStreamsIds();
 
-export { StaticValueStreams as default };
+export { StaticValueStreamsIds as default };

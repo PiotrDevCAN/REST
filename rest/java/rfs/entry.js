@@ -6,7 +6,7 @@ let helper = await cacheBustImport('./modules/helper.js');
 let BankHolidays = await cacheBustImport('./modules/dataSources/bankHolidays.js');
 let FormMessageArea = await cacheBustImport('./modules/helpers/formMessageArea.js');
 let rfsIdValidator = await cacheBustImport('./modules/validators/rfsId.js');
-let StaticValueStreams = await cacheBustImport('./modules/dataSources/staticValueStreams.js');
+let StaticValueStreams = await cacheBustImport('./modules/dataSources/staticValueStreamsIds.js');
 let Rfs = await cacheBustImport('./modules/rfs.js');
 
 class entry {
@@ -127,13 +127,14 @@ class entry {
 			FormMessageArea.showMessageArea();
 			var valueStream = $('#VALUE_STREAM option:selected').val();
 			$.ajax({
-				url: "ajax/getBusinessUnitByValueStream.php",
+				url: "ajax/getBusinessUnitByValueStreamId.php",
 				type: 'POST',
-				data: { valueStream: valueStream },
+				data: {
+					valueStream: valueStream
+				},
 				success: function (result) {
 					try {
-						var resultObj = JSON.parse(result);
-						$('#BUSINESS_UNIT').val(resultObj.businessUnit);
+						$('#BUSINESS_UNIT').val(result.businessUnit);
 					} catch (e) {
 						helper.unlockButton();
 						helper.displayErrorMessageModal("<h2>Json call to get business unit for value stream Failed.Tell Piotr</h2><p>" + e + "</p>");

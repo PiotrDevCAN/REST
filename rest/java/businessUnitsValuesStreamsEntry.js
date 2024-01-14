@@ -18,40 +18,39 @@ class businessUnitsValuesStreamsEntry {
         this.listenForResetForm();
     }
 
-
     prepareSelect2() {
 
-		// FormMessageArea.showMessageArea();
+        // FormMessageArea.showMessageArea();
 
-		let orgaisationPromise = StaticValueStreams.getValueStreams().then((response) => {
-			$("#VALUE_STREAM").select2({
-				data: response,
-				tags: true,
-				createTag: function (params) {
-					return undefined;
-				}
-			});
-		});
+        let orgaisationPromise = StaticValueStreams.getValueStreams().then((response) => {
+            $("#VALUE_STREAM").select2({
+                data: response,
+                tags: true,
+                createTag: function (params) {
+                    return undefined;
+                }
+            });
+        });
 
         let servicePromise = StaticBusinessUnits.getBusinessUnits().then((response) => {
-			$("#BUSINESS_UNIT").select2({
-				data: response,
-				tags: true,
-				createTag: function (params) {
-					return undefined;
-				}
-			});
-		});
+            $("#BUSINESS_UNIT").select2({
+                data: response,
+                tags: true,
+                createTag: function (params) {
+                    return undefined;
+                }
+            });
+        });
 
-		const promises = [orgaisationPromise, servicePromise];
-		Promise.allSettled(promises)
-			.then((results) => {
-				results.forEach((result) => console.log(result.status));
-				// FormMessageArea.clearMessageArea();
-			});
+        const promises = [orgaisationPromise, servicePromise];
+        Promise.allSettled(promises)
+            .then((results) => {
+                results.forEach((result) => console.log(result.status));
+                // FormMessageArea.clearMessageArea();
+            });
 
-		// FormMessageArea.clearMessageArea();
-	}
+        // FormMessageArea.clearMessageArea();
+    }
 
     listenForEditRecord() {
         $(document).on("click", ".editRecord", function () {
@@ -66,7 +65,7 @@ class businessUnitsValuesStreamsEntry {
             var valuestream = $(this).data('valuestream');
             var businessunit = $(this).data('businessunit');
             $.ajax({
-                url: "ajax/deleteValueStream.php",
+                url: "ajax/deleteBusinessUnitValueStream.php",
                 type: 'POST',
                 data: {
                     VALUE_STREAM: valuestream,
@@ -93,15 +92,15 @@ class businessUnitsValuesStreamsEntry {
 
     listenForSaveValueStream() {
         var $this = this;
-        $(document).on('click', '#saveValueStream', function (e) {
+        $(document).on('click', '#saveValueStreamBusinessUnit', function (e) {
             e.preventDefault();
-            $('#saveValueStream').addClass('spinning').attr('disabled', true);
+            $('#saveValueStreamBusinessUnit').addClass('spinning').attr('disabled', true);
             var disabledFields = $(':disabled:not(:submit)');
             $(disabledFields).removeAttr('disabled');
-            var formData = $('#valueStreamForm').serialize();
+            var formData = $('#valueStreamBusinessUnitForm').serialize();
             $(disabledFields).attr('disabled', true);
             $.ajax({
-                url: "ajax/saveValueStream.php",
+                url: "ajax/saveBusinessUnitValueStream.php",
                 type: 'POST',
                 data: formData,
                 success: function (result) {
@@ -113,8 +112,8 @@ class businessUnitsValuesStreamsEntry {
                             messages = 'Save successful';
                         }
                         helper.displaySaveResultModal(messages);
-                        $('#VALUE_STREAM').val('');
-                        $('#BUSINESS_UNIT').val('');
+                        $('#VALUE_STREAM').val('').trigger('change');
+                        $('#BUSINESS_UNIT').val('').trigger('change');
                         $('.spinning').removeClass('spinning').attr('disabled', false);
                         $this.table.ajax.reload();
                     } catch (e) {
@@ -128,10 +127,10 @@ class businessUnitsValuesStreamsEntry {
     }
 
     listenForResetForm() {
-        $(document).on('click', '#resetValueStream', function () {
-            $('#VALUE_STREAM').val('');
-            $('#BUSINESS_UNIT').val('');
-            $('#saveValueStream').val('Submit');
+        $(document).on('click', '#resetValueStreamBusinessUnit', function () {
+            $('#VALUE_STREAM').val('').trigger('change');
+            $('#BUSINESS_UNIT').val('').trigger('change');
+            $('#saveValueStreamBusinessUnit').val('Submit');
             $('#mode').val('Define');
         });
     }

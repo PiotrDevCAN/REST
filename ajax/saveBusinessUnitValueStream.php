@@ -2,16 +2,16 @@
 use itdq\Trace;
 use rest\allTables;
 use itdq\FormClass;
-use rest\staticValueStreamRecord;
-use rest\staticValueStreamTable;
+use rest\staticValueStreamBusinessUnitRecord;
+use rest\staticValueStreamBusinessUnitTable;
 
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
 ob_start();
 
-$table  = new staticValueStreamTable(allTables::$STATIC_VALUE_STREAM);
-$record = new staticValueStreamRecord();
-$record->setFromArray(array('VALUE_STREAM'=>$_POST['VALUE_STREAM']));
+$table  = new staticValueStreamBusinessUnitTable(allTables::$STATIC_VALUE_STREAM_BUSINESS_UNIT);
+$record = new staticValueStreamBusinessUnitRecord();
+$record->setFromArray(array('VALUE_STREAM'=>$_POST['VALUE_STREAM'],'BUSINESS_UNIT'=>$_POST['BUSINESS_UNIT']));
 
 $mode = isset($_POST['mode']) ? $_POST['mode'] : null;
 if($mode==FormClass::$modeDEFINE){
