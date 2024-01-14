@@ -9,20 +9,37 @@ ob_start();
 $redis = $GLOBALS['redis'];
 $key = 'getValueStreams';
 $redisKey = md5($key.'_key_'.$_ENV['environment']);
-if (!$redis->get($redisKey)) {
+// if (!$redis->get($redisKey)) {
     $source = 'SQL Server';
         
     $predicate=null;
     
-    $loader = new Loader();
-    $data = $loader->load('VALUE_STREAM', allTables::$RFS, " ARCHIVE is null ", false);
+    $sql = " SELECT DISTINCT VS.VALUE_STREAM ";
+    $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
+    $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_VALUE_STREAM . " AS VS ";
+    $sql.= " ON RFS.VALUE_STREAM = VS.VALUE_STREAM_ID ";
+    $sql.= " ORDER BY 1 " ;
+    $rs = sqlsrv_query($GLOBALS['conn'], $sql);
+    
+    $data = array();
+
+    if($rs){
+        while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
+            $data[trim($row['VALUE_STREAM'])] = trim($row['VALUE_STREAM']);
+        }
+    } else {
+        echo $sql;
+        echo json_encode(sqlsrv_errors());
+        echo json_encode(sqlsrv_errors());
+        throw new Exception('Db2 Exec failed in ' . __FILE__);
+    }
 
     $redis->set($redisKey, json_encode($data));
     $redis->expire($redisKey, REDIS_EXPIRE);
-} else {
-    $source = 'Redis Server';
-    $data = json_decode($redis->get($redisKey), true);
-}
+// } else {
+//     $source = 'Redis Server';
+//     $data = json_decode($redis->get($redisKey), true);
+// }
 
 $messages = ob_get_clean();
 $response = array('data'=>$data,'messages'=>$messages,'count'=>count($data),'source'=>$source);

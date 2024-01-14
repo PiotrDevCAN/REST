@@ -27,7 +27,7 @@ $requestor = $requestor=='All' ? null : $requestor;
 
 $predicate = " 1=1 ";
 $predicate .= ! empty($rfsId) ? " AND RFS_ID='" . htmlspecialchars($rfsId) . "' " : null;
-$predicate .= ! empty($valueStream) ? " AND VALUE_STREAM='" . htmlspecialchars($valueStream) . "' " : null;
+$predicate .= ! empty($valueStream) ? " AND VS.VALUE_STREAM='" . htmlspecialchars($valueStream) . "' " : null;
 $predicate .= ! empty($businessUnit) ? " AND BUSINESS_UNIT='" . htmlspecialchars($businessUnit) . "' " : null;
 $predicate .= ! empty($requestor) ? " AND lower(REQUESTOR_EMAIL)='" . htmlspecialchars(strtolower($requestor)) . "' " : null;
 

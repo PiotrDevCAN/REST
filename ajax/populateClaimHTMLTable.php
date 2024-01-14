@@ -17,9 +17,9 @@ $requestor    = !empty($_POST['requestor'])    ? trim($_POST['requestor']) : nul
 
 $predicate = " 1=1 ";
 $predicate .= ! empty($rfsId) && $rfsId !=='All'  ? " AND RFS_ID='" . htmlspecialchars($rfsId) . "' " : null;
-$predicate .= ! empty($requestor) && $requestor !=='All' ? " AND lower(REQUESTOR_EMAIL)='" . htmlspecialchars(strtolower($requestor)) . "' " : null;
+$predicate .= ! empty($valueStream) && $valueStream!=='All' ? " AND VS.VALUE_STREAM='" . htmlspecialchars($valueStream) . "' " : null;
 $predicate .= ! empty($businessUnit) && $businessUnit!=='All' ? " AND BUSINESS_UNIT='" . htmlspecialchars($businessUnit) . "' " : null;
-$predicate .= ! empty($valueStream) && $valueStream!=='All' ? " AND VALUE_STREAM='" . htmlspecialchars($valueStream) . "' " : null;
+$predicate .= ! empty($requestor) && $requestor !=='All' ? " AND lower(REQUESTOR_EMAIL)='" . htmlspecialchars(strtolower($requestor)) . "' " : null;
 
 if (empty($rfsId) && empty($valueStream) && empty($requestor) && empty($businessUnit)) {
     $response = array(
