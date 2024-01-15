@@ -354,7 +354,7 @@ trait resourceRequestTableTrait
         $sql .= " RFS.RFS_END_DATE,";
         $sql .= " RR.RESOURCE_REFERENCE,";
         $sql .= " RR.RFS,";
-        $sql .= " RR.ORGANISATION,";
+        $sql .= " OR.ORGANISATION,";
         $sql .= " RR.SERVICE,";
         $sql .= " RR.DESCRIPTION,";
         $sql .= " RR.START_DATE,";
@@ -404,6 +404,10 @@ trait resourceRequestTableTrait
         // Value Stream
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_VALUE_STREAM . " as VS ";
         $sql .= " ON RFS.VALUE_STREAM = VS.VALUE_STREAM_ID";
+
+        // Organisation
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as OR ";
+        $sql .= " ON RR.ORGANISATION = OR.ORGANISATION_ID";
 
         // Active Person
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
