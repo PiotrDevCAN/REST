@@ -39,7 +39,7 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
 
     $predicate  =   empty($rfsId)  ? rfsTable::rfsPredicateFilterOnPipeline($pipelineLive) : null;
     $predicate .= ! empty($rfsId) ? " AND RFS='" . htmlspecialchars($rfsId) . "' " : null;
-    $predicate .= ! empty($organisation) ? " AND ORGANISATION='" . htmlspecialchars($organisation) . "' " : null;
+    $predicate .= ! empty($organisation) ? " AND ORG.ORGANISATION='" . htmlspecialchars($organisation) . "' " : null;
     $predicate .= ! empty($businessUnit) ? " AND BUSINESS_UNIT='" . htmlspecialchars($businessUnit) . "' " : null;
 
     error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
