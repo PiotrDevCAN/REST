@@ -18,7 +18,7 @@ class staticOrganisationServiceTable extends DbTable
     const DISABLED = 'disabled';
 
     static function getAllOrganisationsAndServices($predicate){
-        $sql = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
+        $sql = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION_SERVICE;
         $sql.= " WHERE 1=1 ";
         $sql.= empty($predicate) ? null : " AND " . $predicate;
         $sql .= " ORDER BY ORGANISATION, SERVICE  ";
@@ -38,7 +38,7 @@ class staticOrganisationServiceTable extends DbTable
 
     static function disableService($organisation,$service){
         $sql = 'UPDATE ';
-        $sql.= $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
+        $sql.= $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION_SERVICE;
         $sql.= " SET STATUS='" . self::DISABLED . "' ";
         $sql.= " WHERE ORGANISATION='" . htmlspecialchars($organisation) . "'  ";
         $sql.= "   AND SERVICE='" . htmlspecialchars($service) . "'  ";
@@ -55,7 +55,7 @@ class staticOrganisationServiceTable extends DbTable
 
     static function enableService($organisation,$service){
         $sql = 'UPDATE ';
-        $sql.= $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION;
+        $sql.= $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION_SERVICE;
         $sql.= " SET STATUS='" . self::ENABLED . "' ";
         $sql.= " WHERE ORGANISATION='" . htmlspecialchars($organisation) . "'  ";
         $sql.= "   AND SERVICE='" . htmlspecialchars($service) . "'  ";
