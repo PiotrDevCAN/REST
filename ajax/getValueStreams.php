@@ -9,15 +9,16 @@ ob_start();
 $redis = $GLOBALS['redis'];
 $key = 'getValueStreams';
 $redisKey = md5($key.'_key_'.$_ENV['environment']);
-// if (!$redis->get($redisKey)) {
+if (!$redis->get($redisKey)) {
     $source = 'SQL Server';
-        
+
     $predicate=null;
     
     $sql = " SELECT DISTINCT VS.VALUE_STREAM ";
     $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
     $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_VALUE_STREAM . " AS VS ";
     $sql.= " ON RFS.VALUE_STREAM = VS.VALUE_STREAM_ID ";
+    $sql.= " WHERE 1=1 AND RFS.VALUE_STREAM is not null ";
     $sql.= " ORDER BY 1 " ;
     $rs = sqlsrv_query($GLOBALS['conn'], $sql);
     
@@ -36,10 +37,10 @@ $redisKey = md5($key.'_key_'.$_ENV['environment']);
 
     $redis->set($redisKey, json_encode($data));
     $redis->expire($redisKey, REDIS_EXPIRE);
-// } else {
-//     $source = 'Redis Server';
-//     $data = json_decode($redis->get($redisKey), true);
-// }
+} else {
+    $source = 'Redis Server';
+    $data = json_decode($redis->get($redisKey), true);
+}
 
 $messages = ob_get_clean();
 $response = array('data'=>$data,'messages'=>$messages,'count'=>count($data),'source'=>$source);
