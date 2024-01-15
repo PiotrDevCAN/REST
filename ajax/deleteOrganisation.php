@@ -11,7 +11,7 @@ ob_start();
 $organisation = !empty($_POST['ORGANISATION']) ? trim($_POST['ORGANISATION']) : null;
 
 if (!empty($organisation)) {
-    $table = new staticOrganisationTable(allTables::$STATIC_ORGANISATION_SERVICE);
+    $table = new staticOrganisationTable(allTables::$STATIC_ORGANISATION);
     $table->deleteData(" ORGANISATION='" . htmlspecialchars($organisation) . "'", true);        
 }
 

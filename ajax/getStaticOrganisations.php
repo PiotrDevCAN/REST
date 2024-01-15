@@ -15,7 +15,7 @@ if (!$redis->get($redisKey)) {
     $predicate=null;
     
     $loader = new Loader();
-    $data = $loader->loadIndexed('ORGANISATION','ORGANISATION_ID',allTables::$STATIC_ORGANISATION_SERVICE,$predicate);
+    $data = $loader->loadIndexed('ORGANISATION','ORGANISATION_ID',allTables::$STATIC_ORGANISATION,$predicate);
 
     $redis->set($redisKey, json_encode($data));
     $redis->expire($redisKey, REDIS_EXPIRE);

@@ -532,7 +532,7 @@ trait rfsTableTrait
         $sql.= " SELECT RFS.RFS_ID,RFS.PRN,RFS.PROJECT_TITLE,RFS.PROJECT_CODE,RFS.REQUESTOR_NAME,RFS.REQUESTOR_EMAIL,VS.VALUE_STREAM,RFS.BUSINESS_UNIT ";
         $sql.= " ,RFS.LINK_TO_PGMP, ";
         $sql.= " RFS.RFS_CREATOR,RFS.RFS_CREATED_TIMESTAMP AS RFS_CREATED , ";
-        $sql.= " RR.RESOURCE_REFERENCE,OR.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE,RR.TOTAL_HOURS, ";
+        $sql.= " RR.RESOURCE_REFERENCE,ORG.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE,RR.TOTAL_HOURS, ";
         $sql.= " ";
         $sql.= "( CASE 
             WHEN CHARINDEX('" . resourceRequestTable::$duplicate . "', RR.RESOURCE_NAME) != 0 THEN null
@@ -548,8 +548,8 @@ trait rfsTableTrait
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_VALUE_STREAM . " as VS ";
         $sql .= " ON RFS.VALUE_STREAM = VS.VALUE_STREAM_ID";
         // Organisation
-        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as OR ";
-        $sql .= " ON RR.ORGANISATION = OR.ORGANISATION_ID";
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as ORG ";
+        $sql .= " ON RR.ORGANISATION = ORG.ORGANISATION_ID";
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
         $sql.= " AND " . rfsTable::NOT_ARCHIVED;
@@ -651,7 +651,7 @@ trait rfsTableTrait
         $sql.= " SELECT RFS.RFS_ID,RFS.PRN,RFS.PROJECT_TITLE,RFS.PROJECT_CODE,RFS.REQUESTOR_NAME,RFS.REQUESTOR_EMAIL,VS.VALUE_STREAM,RFS.BUSINESS_UNIT ";
         $sql.= " ,RFS.LINK_TO_PGMP, ";
         $sql.= " RFS.RFS_CREATOR,RFS.RFS_CREATED_TIMESTAMP AS RFS_CREATED , ";
-        $sql.= " RR.RESOURCE_REFERENCE,OR.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE,RR.TOTAL_HOURS, ";
+        $sql.= " RR.RESOURCE_REFERENCE,ORG.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE,RR.TOTAL_HOURS, ";
         $sql.= " ";
         $sql.= "( CASE 
             WHEN CHARINDEX('" . resourceRequestTable::$duplicate . "', RR.RESOURCE_NAME) != 0 THEN null
@@ -669,8 +669,8 @@ trait rfsTableTrait
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_VALUE_STREAM . " as VS ";
         $sql .= " ON RFS.VALUE_STREAM = VS.VALUE_STREAM_ID";
         // Organisation
-        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as OR ";
-        $sql .= " ON RR.ORGANISATION = OR.ORGANISATION_ID";
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as ORG ";
+        $sql .= " ON RR.ORGANISATION = ORG.ORGANISATION_ID";
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
         $sql.= " AND " . rfsTable::NOT_ARCHIVED;
@@ -767,7 +767,7 @@ trait rfsTableTrait
         $sql.= " SELECT RFS.RFS_ID,RFS.PRN,RFS.PROJECT_TITLE,RFS.PROJECT_CODE,RFS.REQUESTOR_NAME,RFS.REQUESTOR_EMAIL,VS.VALUE_STREAM,RFS.BUSINESS_UNIT ";
         $sql.= " ,RFS.LINK_TO_PGMP, ";
         $sql.= " RFS.RFS_CREATOR,RFS.RFS_CREATED_TIMESTAMP AS RFS_CREATED , ";
-        $sql.= " RR.RESOURCE_REFERENCE,OR.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE,RR.TOTAL_HOURS, ";
+        $sql.= " RR.RESOURCE_REFERENCE,ORG.ORGANISATION,RR.SERVICE,RR.DESCRIPTION,RR.START_DATE,RR.END_DATE,RR.TOTAL_HOURS, ";
         $sql.= " ";
         $sql.= "( CASE 
             WHEN CHARINDEX('" . resourceRequestTable::$duplicate . "', RR.RESOURCE_NAME) != 0 THEN null
@@ -783,8 +783,8 @@ trait rfsTableTrait
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_VALUE_STREAM . " as VS ";
         $sql .= " ON RFS.VALUE_STREAM = VS.VALUE_STREAM_ID";
         // Organisation
-        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as OR ";
-        $sql .= " ON RR.ORGANISATION = OR.ORGANISATION_ID";
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as ORG ";
+        $sql .= " ON RR.ORGANISATION = ORG.ORGANISATION_ID";
         // $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
         $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " AS AR ";
         $sql.= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID) ";        

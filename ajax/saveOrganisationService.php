@@ -9,7 +9,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 
 ob_start();
 
-$table  = new staticOrganisationServiceTable(allTables::$STATIC_ORGANISATION);
+$table  = new staticOrganisationServiceTable(allTables::$STATIC_ORGANISATION_SERVICE);
 $record = new staticOrganisationServiceRecord();
 $record->setFromArray(array('ORGANISATION'=>$_POST['ORGANISATION'],'SERVICE'=>$_POST['SERVICE'],'STATUS'=>$_POST['statusRadio']));
 

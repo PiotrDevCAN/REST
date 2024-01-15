@@ -6,7 +6,7 @@ use rest\allTables;
 set_time_limit(0);
 ob_start();
 
-$staticOrganisation = new staticOrganisationServiceTable(allTables::$STATIC_ORGANISATION);
+$staticOrganisation = new staticOrganisationServiceTable(allTables::$STATIC_ORGANISATION_SERVICE);
 $data = $staticOrganisation->returnForDataTables();
 
 $messages = ob_get_clean();
