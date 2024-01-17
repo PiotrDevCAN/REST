@@ -119,9 +119,17 @@ switch (true) {
         
         $rfsRecord = new rfsRecord();
 
-        $allBusinessUnit = $loader->loadIndexed('BUSINESS_UNIT','VALUE_STREAM', allTables::$STATIC_VALUE_STREAM_BUSINESS_UNIT);
-        $businessUnit = isset($_POST['VALUE_STREAM']) ? $allBusinessUnit[$_POST['VALUE_STREAM']]: null;
-        
+        $businessUnit = null;
+        if (isset($_POST['VALUE_STREAM'])) {
+
+            $valueStreamId = $_POST['VALUE_STREAM'];
+            $valueStreams = $loader->loadIndexed('VALUE_STREAM', 'VALUE_STREAM_ID', allTables::$STATIC_VALUE_STREAM, "VALUE_STREAM_ID='$valueStreamId'");
+            $valueStream = $valueStreams[$valueStreamId];
+
+            $allBusinessUnit = $loader->loadIndexed('BUSINESS_UNIT','VALUE_STREAM', allTables::$STATIC_VALUE_STREAM_BUSINESS_UNIT);
+            $businessUnit = $allBusinessUnit[$valueStream];            
+        }
+
         $rfsRecord->setFromArray($parmsTrimmed);
         $rfsRecord->setFromArray(array('BUSINESS_UNIT'=>$businessUnit));
         
