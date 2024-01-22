@@ -4,7 +4,7 @@
 
 let FormMessageArea = await cacheBustImport('./modules/helpers/formMessageArea.js');
 let rfsIdValidator = await cacheBustImport('./modules/validators/rfsId.js');
-let StaticValueStreams = await cacheBustImport('./modules/dataSources/staticValueStreams.js');
+let StaticValueStreams = await cacheBustImport('./modules/dataSources/staticValueStreamsIds.js');
 let Rfs = await cacheBustImport('./modules/rfs.js');
 
 class RfsEditBox {
