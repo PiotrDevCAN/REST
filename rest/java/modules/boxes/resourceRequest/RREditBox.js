@@ -6,7 +6,7 @@ let formMessageArea = await cacheBustImport('./modules/helpers/formMessageArea.j
 let ModalMessageArea = await cacheBustImport('./modules/helpers/modalMessageArea.js');
 let Services = await cacheBustImport('./modules/dataSources/servicesByOrganisation.js');
 let ResourceRequest = await cacheBustImport('./modules/resourceRequest.js');
-let StaticOrganisations = await cacheBustImport('./modules/dataSources/staticOrganisations.js');
+let StaticOrganisations = await cacheBustImport('./modules/dataSources/staticOrganisationsIds.js');
 let StaticServices = await cacheBustImport('./modules/dataSources/staticServices.js');
 
 class RREditBox {
@@ -45,7 +45,7 @@ class RREditBox {
 			var selectedService = $("#originalSERVICE").val();
 			StaticServices.getServices().then((response) => {
 				$("#SERVICE").select2({
-					data: response[selectedOrganisation],
+					data: response,
 					tags: true,
 					createTag: function (params) {
 						return undefined;

@@ -3,10 +3,9 @@
  */
 
 let APIData = await cacheBustImport('./modules/dataSources/fetch/staticOrganisations.js');
-// let mapper = await cacheBustImport('./modules/select2dataIdValueMapper.js');
-let mapper = await cacheBustImport('./modules/select2dataMapper.js');
+let mapper = await cacheBustImport('./modules/select2dataIdValueMapper.js');
 
-class staticOrganisations {
+class staticOrganisationsIds {
 
     organisations = [];
 
@@ -23,6 +22,6 @@ class staticOrganisations {
     }
 }
 
-const StaticOrganisations = new staticOrganisations();
+const StaticOrganisationsIds = new staticOrganisationsIds();
 
-export { StaticOrganisations as default };
+export { StaticOrganisationsIds as default };

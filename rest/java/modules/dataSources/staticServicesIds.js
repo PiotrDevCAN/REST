@@ -3,10 +3,9 @@
  */
 
 let APIData = await cacheBustImport('./modules/dataSources/fetch/staticServices.js');
-// let mapper = await cacheBustImport('./modules/select2dataIdValueMapper.js');
-let mapper = await cacheBustImport('./modules/select2dataMapper.js');
+let mapper = await cacheBustImport('./modules/select2dataIdValueMapper.js');
 
-class staticServices {
+class staticServicesIds {
 
     services = [];
 
@@ -23,6 +22,6 @@ class staticServices {
     }
 }
 
-const StaticServices = new staticServices();
+const StaticServices = new staticServicesIds();
 
 export { StaticServices as default };

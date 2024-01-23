@@ -5,7 +5,7 @@
 let FormMessageArea = await cacheBustImport('./modules/helpers/formMessageArea.js');
 let startAndEnd = await cacheBustImport('./modules/calendars/startAndEnd.js');
 let Services = await cacheBustImport('./modules/dataSources/servicesByOrganisation.js');
-let StaticOrganisations = await cacheBustImport('./modules/dataSources/staticOrganisations.js');
+let StaticOrganisations = await cacheBustImport('./modules/dataSources/staticOrganisationsIds.js');
 let StaticServices = await cacheBustImport('./modules/dataSources/staticServices.js');
 
 class entry {
