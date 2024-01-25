@@ -60,6 +60,8 @@ class RRIndicateCompletedBox {
 			$('#endEarlyInputEND_DATE').val('');
 			$('#endEarlyEND_DATE').val('');
 			$('#endEarlyEndWas').val('');
+			$('#endEarlyTotalHrs').val('');
+			$('#endEarlyHrsPerWeek').val('');
 			ResourceRequest.ModalendEarlyPicker.destroy();
 		});
 	}
@@ -70,6 +72,8 @@ class RRIndicateCompletedBox {
 			var resourceReference = $('#endEarlyRR').val();
 			var endDate = $('#endEarlyEND_DATE').val();
 			var endDateWas = $('#endEarlyEndWas').val();
+			var totalHrs = $('#endEarlyTotalHrs').val();
+			var hrsPerWeek = $('#endEarlyHrsPerWeek').val();
 			ResourceRequest.ModalendEarlyPicker.destroy();
 
 			$.ajax({
@@ -78,7 +82,9 @@ class RRIndicateCompletedBox {
 				data: {
 					resourceReference: resourceReference,
 					endDate: endDate,
-					endDateWas: endDateWas
+					endDateWas: endDateWas,
+					totalHours: totalHrs,
+					hrsPerWeek: hrsPerWeek
 				},
 				success: function (result) {
 					helper.unlockButton();
@@ -89,6 +95,8 @@ class RRIndicateCompletedBox {
 					$('#endEarlyInputEND_DATE').val('');
 					$('#endEarlyEND_DATE').val('');
 					$('#endEarlyEndWas').val('');
+					$('#endEarlyTotalHrs').val('');
+					$('#endEarlyHrsPerWeek').val('');
 					$('#endEarlyModal').modal('hide');
 					ResourceRequest.table.ajax.reload();
 				}
@@ -108,6 +116,10 @@ class RRIndicateCompletedBox {
 			$('#endEarlyInputEND_DATE').val(moment().format('D MMM YYYY'));
 			$('#endEarlyEND_DATE').val(moment().format('YYYY-MM-DD'));
 			$('#endEarlyEndWas').val(dataOwner.data('end'));
+
+			$('#endEarlyTotalHrs').val(dataOwner.data('hrs'));
+			$('#endEarlyHrsPerWeek').val(dataOwner.data('hrsperweek'));
+			
 			$('#endEarlyStart_Date').val(dataOwner.data('startpika'));
 			$('#endEarlyModal').modal('show');
 		});

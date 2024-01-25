@@ -536,6 +536,10 @@ trait resourceRequestTableTrait
         $rfsEndDate4Picka = !empty($row['RFS_END_DATE']) ? \DateTime::createFromFormat('Y-m-d', $row['RFS_END_DATE'])->format('Y-m-d') : null;
         
         $totalHours = $row['TOTAL_HOURS'];
+
+        $displayHrsPerWeek = "";
+        $hrsThisWeek =   $displayHrsPerWeek.= isset($this->hrsThisWeekByResourceReference[$resourceReference]) ?  $this->hrsThisWeekByResourceReference[$resourceReference] : "N/A";
+        
         $hoursType = $row['HOURS_TYPE'];
         $rateType = $row['RATE_TYPE'];
         $status = !empty($row['STATUS']) ? $row['STATUS'] : resourceRequestRecord::STATUS_NEW;
@@ -694,6 +698,7 @@ trait resourceRequestTableTrait
         $displayedResourceName.= "  data-rfsenddate='" . $rfsEndDate . "' ";
         $displayedResourceName.= "  data-rfsenddatepika='" . $rfsEndDate4Picka . "' ";
         $displayedResourceName.= "  data-hrs='" . $totalHours . "' ";
+        $displayedResourceName.= "  data-hrsperweek='" . $hrsThisWeek . "' ";
         $displayedResourceName.= "  data-hrstype='" . $hoursType . "' ";
         $displayedResourceName.= "  data-ratetype='" . $rateType . "' ";
         $displayedResourceName.= "  >";
@@ -786,9 +791,6 @@ trait resourceRequestTableTrait
             </button>": null;
         
         $row['RFS'] = array('display'=> $displayRfsId, 'sort'=>$rfsId);
-        
-        $displayHrsPerWeek = "";
-        $hrsThisWeek =   $displayHrsPerWeek.= isset($this->hrsThisWeekByResourceReference[$resourceReference]) ?  $this->hrsThisWeekByResourceReference[$resourceReference] : "N/A";
         
         $displayStartDate = '';
         $displayStartDate.= "<span class='$assignColor'>$startDate  to  $endDate <br/>";

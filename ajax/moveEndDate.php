@@ -46,7 +46,7 @@ if($endDateWasObj > $endDateObj){
     echo "Moved Out";
     $movement = " pushed out to ";
     // they are adding weeks.
-    $weeksSaved = $rrHoursTable->createResourceRequestHours($_POST['resourceReference'], $endDateWasObj->format('Y-m-d'),$endDateObj->format(('Y-m-d')), $_POST['hrsPerWeek'],false);
+    $weeksSaved = $rrHoursTable->createResourceRequestHours($_POST['resourceReference'], $endDateWasObj->format('Y-m-d'), $endDateObj->format(('Y-m-d')), $_POST['hrsPerWeek'], false);
 }
 resourceRequestTable::setEndDate($_POST['resourceReference'], $endDateObj->format('Y-m-d'));
 
