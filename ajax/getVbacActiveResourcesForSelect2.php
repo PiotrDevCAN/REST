@@ -20,18 +20,18 @@ error_log('opening ' . __FILE__);
 
 $activeResources = new activeResourceTable(allTables::$ACTIVE_RESOURCE);
 $data = $activeResources->getVbacActiveResourcesForSelect2();
-list('tribeEmployees' => $activeResources, 'tribeEmployees' => $tribeEmployees, 'source' => $source) = $data;
+list('tribeEmployees' => $tribeEmployees, 'source' => $source) = $data;
 
 error_log('returned from resourceRequestTable->getVbacActiveResourcesForSelect2()');
-error_log(count($activeResources) . " active resources");
+error_log(count($tribeEmployees) . " active resources");
 
 $messages = ob_get_clean();
 $success = empty($messages);
 $response = array(
-    'data'=>$activeResources,
+    'data'=>$tribeEmployees,
     'success'=> $success,
     'messages'=>$messages,
-    'count'=>count($activeResources),
+    'count'=>count($tribeEmployees),
     'source'=>$source
 );
 

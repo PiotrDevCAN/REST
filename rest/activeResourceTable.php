@@ -44,11 +44,6 @@ class activeResourceTable extends DbTable {
 
     function getVbacActiveResourcesForSelect2(){
 
-        $sql = " SELECT * ";
-        $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
-        $sql.= " WHERE STATUS = 'active' ";
-        $sql.= " ORDER BY EMAIL_ADDRESS ASC";
-
         $allEmployees = array();
         $allTribes = array();
         $vbacEmployees = array();
@@ -60,6 +55,11 @@ class activeResourceTable extends DbTable {
         if (!$redis->get($redisKey)) {
             $source = 'SQL Server';
 
+            $sql = " SELECT * ";
+            $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
+            $sql.= " WHERE STATUS = 'active' ";
+            $sql.= " ORDER BY EMAIL_ADDRESS ASC";
+    
             $rs = sqlsrv_query($GLOBALS['conn'], $sql);
             
             if (!$rs){
@@ -78,10 +78,12 @@ class activeResourceTable extends DbTable {
                 // if (strtolower(substr(trim($employeeDetails->NOTES_ID), -4))=='/ibm' || strtolower(substr(trim($employeeDetails->NOTES_ID), -6))=='/ocean') {
                     // $vbacEmployees[] = array(
                     // $key = trim($employeeDetails->NOTES_ID);
-                    $key = trim($employeeDetails->CNUM);
+                    // $key = trim($employeeDetails->CNUM);
+                    $key = trim($employeeDetails->EMAIL_ADDRESS);
                     $vbacEmployees[$key] = array(
                         'id'=>trim($employeeDetails->KYN_EMAIL_ADDRESS),
                         'cnum'=>trim($employeeDetails->CNUM),
+                        'workerId'=>trim($employeeDetails->WORKER_ID),
                         'emailAddress'=>trim($employeeDetails->EMAIL_ADDRESS),
                         'kynEmailAddress'=>trim($employeeDetails->KYN_EMAIL_ADDRESS),
                         'notesId'=>trim($employeeDetails->NOTES_ID),

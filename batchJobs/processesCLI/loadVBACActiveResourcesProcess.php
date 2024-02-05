@@ -35,7 +35,7 @@ $emailAddressBCC = array();
 
 try {
 
-    $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&onlyactive=false&withProvClear=true&plus=P.CNUM,P.EMAIL_ADDRESS,P.KYN_EMAIL_ADDRESS,P.FIRST_NAME,P.LAST_NAME,P.PES_STATUS,SQUAD_NAME,TRIBE_NAME,P.WORK_STREAM,P.CIO_ALIGNMENT';
+    $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&onlyactive=false&withProvClear=true&plus=P.CNUM,P.EMAIL_ADDRESS,P.KYN_EMAIL_ADDRESS,P.FIRST_NAME,P.LAST_NAME,P.PES_STATUS,SQUAD_NAME,TRIBE_NAME,P.WORK_STREAM,P.CIO_ALIGNMENT,P.WORKER_ID';
 
     $curl = curl_init();
     
@@ -80,12 +80,13 @@ try {
             }
 
             // define query
-            $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( CNUM, EMAIL_ADDRESS, KYN_EMAIL_ADDRESS, FIRST_NAME, LAST_NAME, NOTES_ID, PES_STATUS, CIO_ALIGNMENT, STATUS, TRIBE_NAME, SQUAD_NAME, TRIBE_NAME_MAPPED )";
-            $sql .= " VALUES (?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ? ,?)";
+            $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( CNUM, EMAIL_ADDRESS, KYN_EMAIL_ADDRESS, WORKER_ID, FIRST_NAME, LAST_NAME, NOTES_ID, PES_STATUS, CIO_ALIGNMENT, STATUS, TRIBE_NAME, SQUAD_NAME, TRIBE_NAME_MAPPED )";
+            $sql .= " VALUES (?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ? ,?, ?)";
             
             $cnum = '';
             $emailAddress = '';
             $kynEmailAddress = '';
+            $workerId = '';
             $firstName = '';
             $lastName = '';
             $notesId = '';
@@ -101,6 +102,7 @@ try {
                 &$cnum,
                 &$emailAddress,
                 &$kynEmailAddress,
+                &$workerId,
                 &$firstName,
                 &$lastName,
                 &$notesId,
@@ -124,6 +126,7 @@ try {
                 }
                 $emailAddress = trim($personEntry['EMAIL_ADDRESS']);
                 $kynEmailAddress = trim($personEntry['KYN_EMAIL_ADDRESS']);
+                $workerId = trim($personEntry['WORKER_ID']);
                 $firstName = trim($personEntry['FIRST_NAME']);
                 $lastName = trim($personEntry['LAST_NAME']);
                 $notesId = trim($personEntry['NOTES_ID']);
