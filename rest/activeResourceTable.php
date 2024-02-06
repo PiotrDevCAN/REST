@@ -32,6 +32,7 @@ class activeResourceTable extends DbTable {
             $display = array();
             $row = array_map('trim', $row);
             $display['CNUM'] = $row['CNUM'];
+            $display['WORKER_ID'] = $row['WORKER_ID'];
             $display['EMAIL_ADDRESS'] = !empty($row['EMAIL_ADDRESS']) ? $row['EMAIL_ADDRESS'] : 'unavailable in VBAC';
             $display['NOTES_ID'] = $row['NOTES_ID'];
             $display['FIRST_NAME'] = $row['FIRST_NAME'];

@@ -60,6 +60,7 @@ class activeResourcesList {
             },
             columns: [
                 { data: "CNUM","defaultContent": "" },
+                { data: "WORKER_ID","defaultContent": "" },
                 { data: "EMAIL_ADDRESS","defaultContent": "" },
                 { data: "NOTES_ID","defaultContent": "" },
                 { data: "FIRST_NAME","defaultContent": "" },
