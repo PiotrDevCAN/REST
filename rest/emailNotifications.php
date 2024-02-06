@@ -30,8 +30,13 @@ class emailNotifications
 
         // If we have a RESOURCE_NAME send it to them, else just to the REQUESTOR
         $to = !empty($resourceEmail) ? array($resourceEmail) : array($requestorEmail);
-        // CC the requestor, if we have an IBM email address for them.
-        $cc = substr(trim(strtolower($requestorEmail)),-7 ) === 'ibm.com' ?  array($requestorEmail) : array();
+        $cc = array();
+        // CC the requestor, if we have an IBM / Kyndryl email address for them.
+        $isIbmEmail = strtolower(substr($requestorEmail,-7))=='ibm.com';
+        $isKyndrylEmail = strtolower(substr($requestorEmail,-11))=='kyndryl.com';
+        if($isIbmEmail || $isKyndrylEmail) {
+            $cc = array($requestorEmail);
+        }
 
         $replacements = array();
         foreach ($emailPattern as $field => $pattern) {
