@@ -111,18 +111,16 @@ try {
     $subject = 'vBAC Claim Data Report : ' . $fileNameSuffix;
     $message = 'Please find attached vBAC Claim Data Report XLS';
     $result = BlueMail::send_mail($emailAddress, $subject, $message, $noreplemailid, $emailAddressCC, $emailAddressBCC, true, $attachments);    
-    // var_dump($result);
-    trigger_error('BlueMail::send_mail result: '.serialize($result), E_USER_WARNING);
     
     if (file_exists($fileName)) {
         $deleteOk = unlink($fileName);
         if ($deleteOk) {
-            trigger_error("File deleted", E_USER_WARNING);
+            error_log("File deleted");
         } else {
-            trigger_error("Problem deleting file", E_USER_WARNING);
+            error_log("Problem deleting file");
         }
     } else {
-        trigger_error("File does not exist", E_USER_WARNING);
+        error_log("File does not exist");
     }
 
 } catch (Exception $e) {
@@ -134,5 +132,4 @@ try {
     $replyto = $_ENV['noreplyemailid'];
     
     $resonse = BlueMail::send_mail($to, $subject, $message, $replyto, $cc);
-    trigger_error($subject . " - ". $message, E_USER_ERROR);
 }

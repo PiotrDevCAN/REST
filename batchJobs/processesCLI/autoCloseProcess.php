@@ -52,8 +52,7 @@ try {
     $subject = 'REST Auto Close';
     $message = 'REST Auto Close script has completed.';
     $message .= '<br>Amount of closed records: ' . count($allOpenTicketsPassedEndDate);
-    $result = BlueMail::send_mail($emailAddress, $subject, $message, $noreplemailid, $emailAddressCC, $emailAddressBCC);    
-    // trigger_error('BlueMail::send_mail result: '.serialize($result), E_USER_WARNING);
+    $result = BlueMail::send_mail($emailAddress, $subject, $message, $noreplemailid, $emailAddressCC, $emailAddressBCC);
     
 } catch (Exception $e) {
     $subject = 'Error in: Auto Close ';

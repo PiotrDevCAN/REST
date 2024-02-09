@@ -80,8 +80,7 @@ try {
     $message = 'Add Missing RR Hours script has completed.';
     $message .= '<br>Amount of updated records: ' . $recordsToUpdate;
     $message .= $hoursResponse;
-    $result = BlueMail::send_mail($emailAddress, $subject, $message, $noreplemailid, $emailAddressCC, $emailAddressBCC);    
-    // trigger_error('BlueMail::send_mail result: '.serialize($result), E_USER_WARNING);
+    $result = BlueMail::send_mail($emailAddress, $subject, $message, $noreplemailid, $emailAddressCC, $emailAddressBCC);
     
 } catch (Exception $e) {
     $subject = 'Error in: Add Missing RR Hours ';

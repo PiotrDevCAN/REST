@@ -156,7 +156,6 @@ try {
         $message .= '<br> Amount of records failed to import to REST: ' . $failedCounter;
         $message .= '<br> VBAC Data source: ' . $url;
         $result = BlueMail::send_mail($emailAddressTO, $subject, $message, $noreplemailid, $emailAddressCC, $emailAddressBCC);    
-        // trigger_error('BlueMail::send_mail result: '.serialize($result), E_USER_WARNING);
     }
 
 } catch (Exception $e) {
