@@ -1,7 +1,7 @@
 <?php
 
 use itdq\Trace;
-use rest\rfsTable;
+use rest\rfsNoMatchBUsTable;
 
 set_time_limit(0);
 
@@ -19,7 +19,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 <div class='container-fluid'>
 <div id='noMatchBUTableDiv'>
 <?php
-  rfsTable::buildHTMLNoMatchBUsTable('noMatchBU');
+  rfsNoMatchBUsTable::buildHTMLTable('noMatchBU');
 ?>
 </div>
 </div>

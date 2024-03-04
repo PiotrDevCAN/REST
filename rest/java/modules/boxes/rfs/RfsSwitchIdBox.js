@@ -69,7 +69,7 @@ class RfsSwitchIdBox {
 				data: formData,
 				success: function (result) {
 					try {
-						Rfs.table.ajax.reload();
+						Rfs.refreshAndReloadTable();
 						var resultObj = JSON.parse(result);
 						$('#switchRfsIdModalBody').html(resultObj.messages);
 						setTimeout(function () { $('#switchRfsIdModal').modal('hide'); }, 2000);

@@ -1,8 +1,6 @@
 <?php
 use itdq\Trace;
-use itdq\Loader;
-use rest\allTables;
-use rest\rfsTable;
+use rest\rfsClaimMonthlyTable;
 
 set_time_limit(0);
 
@@ -71,7 +69,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 <div class='container-fluid'>
 <div id='claimTableDiv'>
 <?php
-    rfsTable::buildHTMLRequestsTable('claim');
+    rfsClaimMonthlyTable::buildHTMLTable('claim');
 ?>
 </div>
 </div>

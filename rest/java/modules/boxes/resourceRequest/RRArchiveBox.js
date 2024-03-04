@@ -78,7 +78,7 @@ class RRArchiveBox {
 						var clickedButtons = $('.spinning');
 						clickedButtons.removeClass('spinning');
 						clickedButtons.not('#confirmArchiveResource').attr('disabled', false);
-						ResourceRequest.table.ajax.reload();
+						ResourceRequest.refreshAndReloadTable();
 					} catch (e) {
 						helper.unlockButton();
 						helper.displayErrorMessageModal("<h2>Json call to archive resource request Failed.Tell Piotr</h2><p>" + e + "</p>");

@@ -1,14 +1,14 @@
 <?php
 
 use rest\allTables;
-use rest\rfsTable;
 use itdq\Trace;
+use rest\rfsNoneActiveTable;
 
 set_time_limit(0);
 ob_start();
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
-$rfsTable = new rfsTable(allTables::$RFS);
+$rfsTable = new rfsNoneActiveTable(allTables::$RFS);
 
 // $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
 // $valueStream  = !empty($_POST['valuestream']) ? trim($_POST['valuestream']) : null;
@@ -38,7 +38,7 @@ $predicate .= ! empty($requestor) ? " AND lower(REQUESTOR_EMAIL)='" . htmlspecia
 //     );
 // } else {
 
-    $dataAndSql = $rfsTable->returnNoneActiveReportAsArray($predicate);
+    $dataAndSql = $rfsTable->returnAsArray($predicate);
     list('data' => $data, 'sql' => $sql) = $dataAndSql;
     $message = ob_get_clean();
     ob_start();

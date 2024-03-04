@@ -68,7 +68,7 @@ class RRHoursBox {
 				helper.unlockButton();
 				$(modalId).modal('hide');
 
-				ResourceRequest.table.ajax.reload();
+				ResourceRequest.refreshAndReloadTable();
 			}
 		});
 	}
@@ -233,7 +233,7 @@ class RRHoursBox {
 							helper.unlockButton();
 							$('#recordSaveDiv').html(hoursResponse + messages);
 							$('#recordSavedModal').modal('show');
-							ResourceRequest.table.ajax.reload();
+							ResourceRequest.refreshAndReloadTable();
 						} else {
 							$('#resourceHoursModal').modal('hide');
 							helper.unlockButton();
@@ -242,7 +242,7 @@ class RRHoursBox {
 							} else {
 								helper.displayErrorMessageModal(messages);
 							}
-							ResourceRequest.table.ajax.reload();
+							ResourceRequest.refreshAndReloadTable();
 						}
 					} catch (e) {
 						helper.unlockButton();
@@ -357,7 +357,7 @@ class RRHoursBox {
 				data: formData,
 				success: function (result) {
 					helper.unlockButton();
-					ResourceRequest.table.ajax.reload();
+					ResourceRequest.refreshAndReloadTable();
 					$('#resourceHoursModal').modal('hide');
 				}
 			});
@@ -404,7 +404,7 @@ class RRHoursBox {
 				success: function (result) {
 					$('#editResourceHours').html('<p></p>');
 					$('#resourceHoursModal').modal('hide');
-					ResourceRequest.table.ajax.reload();
+					ResourceRequest.refreshAndReloadTable();
 				}
 			});
 		});

@@ -10,6 +10,8 @@ class RRListActions {
 	static endDateColumnIndex = 25;
 	static statusColumnIndex = 33;
 
+	static resetColumns = [20, 21, 23, 24, 27, 33, 34, 35];
+
 	constructor() {
 		// List action buttons
 		this.listenForUnallocated();
@@ -17,7 +19,9 @@ class RRListActions {
 		this.listenForPlannedOnly();
 		this.listenForActiveOnly();
 		this.listenForRemovePassed();
-		this.listenForResetReport();
+		this.listenForReportAll();
+		this.listenForReportReload();
+		this.listenForReportReset();
 		// List action buttons
 	}
 
@@ -70,16 +74,28 @@ class RRListActions {
 		});
 	}
 
-	listenForResetReport() {
-		$(document).on('click', '#resetReport', function (e) {
-			ResourceRequest.table.columns().visible(true, false);
-			ResourceRequest.table.columns([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 19, 22, 23, 25, 26, 27, 29, 30, 31]).visible(false, false);
-			ResourceRequest.table.columns
-				.adjust()
-				.column(RRListActions.startDateColumnIndex).search("")
-				.column(RRListActions.endDateColumnIndex).search("")
-				.column(RRListActions.statusColumnIndex).search("")
-				.draw(false);
+	listenForReportAll() {
+		$(document).on('click', '#reportAll', function (e) {
+			$.fn.dataTableExt.afnFiltering.pop();
+			ResourceRequest.table.columns().visible(true);
+			ResourceRequest.table.columns().search("");
+			ResourceRequest.table.order([0, "asc"]).draw();
+		});
+	}
+
+	listenForReportReload() {
+		$(document).on('click', '#reportReload', function (e) {
+			$.fn.dataTableExt.afnFiltering.pop();
+			ResourceRequest.reloadTable();
+		});
+	}
+
+	listenForReportReset() {
+		$(document).on('click', '#reportReset', function (e) {
+			$.fn.dataTableExt.afnFiltering.pop();
+			ResourceRequest.table.columns().visible(false, false);
+			ResourceRequest.table.columns(RRListActions.resetColumns).visible(true);
+			ResourceRequest.table.search("").order([0, "asc"]).draw();
 		});
 	}
 }

@@ -10,6 +10,8 @@ class Rfs {
 
 	table;
 
+	disableCache = false;
+
 	constructor() {
 		// common elements
 		this.listenForREQUESTOR_EMAILChange();
@@ -117,6 +119,16 @@ class Rfs {
 
 	destroyRfsReport() {
 		$('#rfsTable_id').DataTable().destroy();
+	}
+
+	reloadTable() {
+		this.disableCache = false;
+		this.table.ajax.reload();
+	}
+
+	refreshAndReloadTable() {
+		this.disableCache = true;
+		this.table.ajax.reload();
 	}
 }
 

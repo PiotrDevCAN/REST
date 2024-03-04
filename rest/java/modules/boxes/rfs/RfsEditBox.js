@@ -96,7 +96,7 @@ class RfsEditBox {
 			var rfsId = $(this).data('rfsid');
 			// var URL = "pd_newRfs.php?rfs=" + rfsId;
 			// var child = window.open(URL, "_blank");
-			// child.onunload = function(){ console.log('Child window closed'); Rfs.table.ajax.reload(); };
+			// child.onunload = function(){ console.log('Child window closed'); Rfs.refreshAndReloadTable(); };
 			$.ajax({
 				url: "ajax/getEditRfsForm.php",
 				type: 'POST',
@@ -136,7 +136,7 @@ class RfsEditBox {
 
 	listenForEditRfsModalHidden() {
 		$(document).on('hidden.bs.modal', '#editRfsModal', function (e) {
-			Rfs.table.ajax.reload();
+			Rfs.refreshAndReloadTable();
 		});
 	}
 }

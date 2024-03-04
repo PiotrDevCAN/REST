@@ -38,7 +38,7 @@ class RfsDeleteBox {
 						$('#deleteRfsModalBody').html(resultObj.messages);
 						setTimeout(function () { $('#deleteRfsModal').modal('hide'); }, 3000);
 						helper.unlockButton();
-						Rfs.table.ajax.reload();
+						Rfs.refreshAndReloadTable();
 					} catch (e) {
 						helper.unlockButton();
 						helper.displayTellDevMessageModal(e);

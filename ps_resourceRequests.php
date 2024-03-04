@@ -114,7 +114,10 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 <button id='plannedOnly' class='btn btn-primary btn-sm'>Planned Only</button>
 <button id='activeOnly' class='btn btn-primary btn-sm'>Active Only</button>
 <button id='removePassed' class='btn btn-primary btn-sm'>Remove past end date</button>
-<button id='resetReport' class='btn btn-primary btn-sm'>Reset</button>
+<button id='reportAll' class='btn btn-primary btn-sm '>Show all Columns</button>
+&nbsp;
+<button id='reportReload' class='btn btn-warning btn-sm '>Reload Data</button>
+<button id='reportReset' class='btn btn-warning btn-sm '>Reset</button>
 <input type='hidden' id='bwo' value='' />
 <div id='messageArea'></div>
 <div id='resourceTableDiv'>

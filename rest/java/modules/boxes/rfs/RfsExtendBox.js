@@ -66,7 +66,7 @@ class RfsExtendBox {
 				data: formData,
 				success: function (result) {
 					try {
-						Rfs.table.ajax.reload();
+						Rfs.refreshAndReloadTable();
 						var resultObj = JSON.parse(result);
 						$('#extendRfsModalBody').html(resultObj.messages);
 						setTimeout(function () { $('#extendRfsModal').modal('hide'); }, 2000);

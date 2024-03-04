@@ -58,7 +58,7 @@ class RRChangeStatusCompletedBox {
 				},
 				success: function (result) {
 					helper.unlockButton();
-					ResourceRequest.table.ajax.reload();
+					ResourceRequest.refreshAndReloadTable();
 				}
 			});
 		});

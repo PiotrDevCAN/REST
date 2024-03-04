@@ -98,7 +98,7 @@ class RRIndicateCompletedBox {
 					$('#endEarlyTotalHrs').val('');
 					$('#endEarlyHrsPerWeek').val('');
 					$('#endEarlyModal').modal('hide');
-					ResourceRequest.table.ajax.reload();
+					ResourceRequest.refreshAndReloadTable();
 				}
 			});
 		});

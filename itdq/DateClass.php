@@ -8,9 +8,54 @@ use rest\resourceRequestRecord;
 use rest\resourceRequestTable;
 
 class DateClass {
+
     const FRIDAY = 5;
     const SATURDAY = 6;
     const SUNDAY = 7;
+
+    // $days, $months, $years - values to add
+    static function addTime(\DateTime $date_time, $days, $months, $years){
+        if ($days) {
+            $xDays = new \DateInterval('P'.$days.'D');
+            $date_time->add($xDays);
+        }
+
+        // Preserve day number
+        if ($months or $years) {
+            $old_day = $date_time->format('d');
+        }
+
+        if ($months) {
+            $xMonths = new \DateInterval('P'.$months.'M');
+            $date_time->add($xMonths);
+        }
+
+        if ($years) {
+            $xYears = new \DateInterval('P'.$years.'Y');
+            $date_time->add($xYears);
+        }
+        
+        // Patch for adding months or years    
+        if ($months or $years) {
+            $new_day = $date_time->format("d");
+
+            // The day is changed - set the last day of the previous month
+            if ($old_day != $new_day) {
+                $subxDays = new \DateInterval('P'.$new_day.'D');
+                $date_time->sub($subxDays);
+            }
+        }
+        // You can chage returned format here
+        // return $date_time->format('Y-m-d');
+        return $date_time;
+    }
+
+    static function getThisMonthsClaimCutoff($dateObj){
+        $thisMonthsClaimCutoff = self::claimMonth($dateObj);
+        $thisMonthsClaimCutoff = self::addTime($thisMonthsClaimCutoff, 1, 0, 0);
+    
+        return $thisMonthsClaimCutoff;
+    }
 
     static function weekEnding($date){
         $dateObj = new \DateTime($date);

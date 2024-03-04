@@ -150,7 +150,7 @@ class RfsSlipTimeBox {
 							$('#resourceHoursModal').modal('hide');
 							helper.unlockButton();
 							$('#slipRfsModal').modal('hide');
-							Rfs.table.ajax.reload();
+							Rfs.refreshAndReloadTable();
 						}
 					}
 				});

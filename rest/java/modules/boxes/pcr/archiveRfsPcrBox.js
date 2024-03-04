@@ -37,7 +37,7 @@ class archiveRfsPcrBox {
 						$('#archiveRfsPcrModalBody').html(resultObj.messages);
 						setTimeout(function () { $('#archiveRfsPcrModal').modal('hide'); }, 2000);
 						helper.unlockButton();
-						Rfs.table.ajax.reload();
+						Rfs.refreshAndReloadTable();
 					} catch (e) {
 						helper.unlockButton();
 						helper.displayTellDevMessageModal(e);

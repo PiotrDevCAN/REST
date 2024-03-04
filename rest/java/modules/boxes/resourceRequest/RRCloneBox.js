@@ -25,7 +25,7 @@ class RRCloneBox {
 				helper.unlockButton();
 				$(modalId).modal('hide');
 
-				ResourceRequest.table.ajax.reload();
+				ResourceRequest.refreshAndReloadTable();
 			}
 		});
 	}

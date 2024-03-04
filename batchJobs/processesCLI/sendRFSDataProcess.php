@@ -6,7 +6,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use itdq\DbTable;
 use itdq\BlueMail;
 use rest\allTables;
-use rest\rfsTable;
+use rest\rfsClaimMonthlyTable;
 
 set_time_limit(0);
 ini_set('memory_limit','3072M');
@@ -46,8 +46,8 @@ $predicate = " 1=1 ";
 
 try {
 
-    $rfsTable = new rfsTable(allTables::$RFS);
-    $resultSet = $rfsTable->returnClaimReportAsJson($predicate, false, true);
+    $rfsTable = new rfsClaimMonthlyTable(allTables::$RFS);
+    $resultSet = $rfsTable->returnAsJson($predicate, false, true);
 
     if ($resultSet) {
         DbTable::writeResultSetToXls($resultSet, $spreadsheet);

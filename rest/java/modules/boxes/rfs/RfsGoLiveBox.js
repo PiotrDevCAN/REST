@@ -32,7 +32,7 @@ class RfsGoLiveBox {
 				success: function (result) {
 					try {
 						var resultObj = JSON.parse(result);
-						Rfs.table.ajax.reload();
+						Rfs.refreshAndReloadTable();
 						$('#goLiveRfsId').val('');
 						$('#plREQUESTOR_NAME').val('');
 						$('#plREQUESTOR_EMAIL').val('');

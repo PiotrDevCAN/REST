@@ -1,14 +1,14 @@
 <?php
 
 use rest\allTables;
-use rest\rfsTable;
 use itdq\Trace;
+use rest\rfsClaimMonthlyTable;
 
 set_time_limit(0);
 ob_start();
 Trace::pageOpening($_SERVER['PHP_SELF']);
 
-$rfsTable = new rfsTable(allTables::$RFS);
+$rfsTable = new rfsClaimMonthlyTable(allTables::$RFS);
 
 $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
 $valueStream  = !empty($_POST['valuestream'])   ? trim($_POST['valuestream']) : null;
@@ -27,7 +27,7 @@ if (empty($rfsId) && empty($valueStream) && empty($requestor) && empty($business
         "data" => array()
     );
 } else {
-    $dataAndSql = $rfsTable->returnClaimReportAsArray($predicate);
+    $dataAndSql = $rfsTable->returnAsArray($predicate);
     list('data' => $data, 'sql' => $sql) = $dataAndSql;
     $message = ob_get_clean();
     ob_start();

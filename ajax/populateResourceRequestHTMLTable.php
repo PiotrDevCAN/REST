@@ -23,6 +23,12 @@ $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
 $organisation = !empty($_POST['organisation']) ? $_POST['organisation'] : null;
 $businessUnit = !empty($_POST['businessunit']) ? $_POST['businessunit'] : null;
 
+$withButtons = true;
+
+// ignore Redis cache and refresh table data from DB
+$disableCacheParam = !empty($_POST['disableCache']) ? $_POST['disableCache'] : null;
+$disableCache = $disableCacheParam === 'true' ? true: false;
+
 if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     $response = array(
         'messages' => 'User hasnt selected from the drop downs.',
@@ -44,14 +50,11 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
 
     error_log(__FILE__ . ":" . __LINE__ . ":" . $predicate);
 
-    $dataAndSql = $resourceRequestTable->returnAsArraySimple($predicate, $pipelineLiveArchive);
-    list('data' => $data, 'sql' => $sql, 'badRecords' => $badRecords) = $dataAndSql;
+    $dataAndSql = $resourceRequestTable->returnAsArray($predicate, $pipelineLiveArchive, $withButtons, $disableCache);
+    list('data' => $data, 'sql' => $sql, 'source' => $source, 'badRecords' => $badRecords) = $dataAndSql;
 
     PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
     PhpMemoryTrace::reportPeek(__FILE__, __LINE__);
-
-    echo "Bad Records removed:$badRecords";
-    echo " ".$_SESSION['peekUsage'];
 
     $messages = ob_get_clean();
     ob_start();
@@ -59,6 +62,8 @@ if (empty($rfsId) && empty($organisation) && empty($businessUnit)) {
     $response = array(
         'messages' => $messages,
         'badrecords' => $badRecords,
+        'peekusage' => $_SESSION['peekUsage']/1024,
+        'source' => $source,
         "data" => $data,
         "sql" => $sql
     );

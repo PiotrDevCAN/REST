@@ -1,6 +1,6 @@
 <?php
 use itdq\Trace;
-use rest\rfsTable;
+use rest\rfsPipelineTable;
 
 set_time_limit(0);
 
@@ -10,7 +10,7 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 <h3>Pipeline Report</h3>
 <div id='rfsTableDiv'>
 <?php
-  rfsTable::buildHTMLPipelineTable();
+  rfsPipelineTable::buildHTMLTable();
 ?>
 </div>
 </div>

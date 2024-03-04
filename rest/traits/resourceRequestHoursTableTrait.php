@@ -307,52 +307,58 @@ trait resourceRequestHoursTableTrait
     }
     
     function returnHrsPerWeek($predicate= null, $rsOnly = false) {
-            $sql = " SELECT RRH.RESOURCE_REFERENCE AS RR, 
-                WEEK_ENDING_FRIDAY AS WEF, 
-                HOURS, 
-                RFS, 
-                SERVICE,";
-            $sql.= " ( CASE 
-                WHEN CHARINDEX('" . resourceRequestTable::$duplicate . "', RESOURCE_NAME) != 0 THEN null
-                WHEN CHARINDEX('" . resourceRequestTable::$delta . "', RESOURCE_NAME) != 0 THEN null
-                ELSE RESOURCE_NAME
-            END) AS RESOURCE_NAME, ";
-            $sql.= " HOURS_TYPE, ";
-            $sql.= " RR.RATE_TYPE,";
-            $sql.= " RFS.RFS_END_DATE, ";
-            $sql.= " CASE WHEN ";
-            // All open RFS' RR
-            $sql.= rfsTable::notArchivedPredicate('RFS');
-            $sql.= " OR ";
-            // All Archived RFS' RR where the RFS' End Date was in the past 12 months
-            $sql.= resourceRequestTable::archivedInLast12MthsPredicate('RFS');
-            $sql.= " THEN '' ELSE 'archived' END AS RR_ARCHIVED, ";
-            $sql.= " RFS.ARCHIVE AS RFS_ARCHIVED ";
-            $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " AS RRH ";
-            $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR  ";
-            $sql.= " ON RRH.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE  ";  
-            $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
-            $sql.= " ON RR.RFS = RFS.RFS_ID ";
-            $sql.= empty($predicate) ? null : " WHERE 1=1 AND " . $predicate;
-            $sql.= " ORDER BY RRH.RESOURCE_REFERENCE, WEEK_ENDING_FRIDAY";
-            
-            $resultSet = $this->execute($sql);
-            
-            switch (true) {
-                case $rsOnly:
-                    return $resultSet;
-                    break;
-                case $resultSet:
-                    $allData = array();
-                    while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
-                        $allData[]  = array_map('trim', $row);
-                    }
-                    return $allData;                
-                default:
-                    return false;
-                    break;
-            }
+        
+        // The RR Extract should contain all Open RR along with all Archived RR
+        // where the RFS_END_DATE is in the last 12 months.
+        // Yeah, when an RFS is archived then all associated RR to that RFS should also be marked as Archived
+        // not archived = open archived = closed
+
+        $sql = " SELECT RRH.RESOURCE_REFERENCE AS RR, 
+            WEEK_ENDING_FRIDAY AS WEF, 
+            HOURS, 
+            RFS, 
+            SERVICE,";
+        $sql.= " ( CASE 
+            WHEN CHARINDEX('" . resourceRequestTable::$duplicate . "', RESOURCE_NAME) != 0 THEN null
+            WHEN CHARINDEX('" . resourceRequestTable::$delta . "', RESOURCE_NAME) != 0 THEN null
+            ELSE RESOURCE_NAME
+        END) AS RESOURCE_NAME, ";
+        $sql.= " HOURS_TYPE, ";
+        $sql.= " RR.RATE_TYPE,";
+        $sql.= " RFS.RFS_END_DATE, ";
+        $sql.= " CASE WHEN ";
+        // All open RFS' RR
+        $sql.= rfsTable::notArchivedPredicate('RFS');
+        $sql.= " OR ";
+        // All Archived RFS' RR where the RFS' End Date was in the past 12 months
+        $sql.= resourceRequestTable::archivedInLast12MthsPredicate('RFS');
+        $sql.= " THEN '' ELSE 'archived' END AS RR_ARCHIVED, ";
+        $sql.= " RFS.ARCHIVE AS RFS_ARCHIVED ";
+        $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS . " AS RRH ";
+        $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR  ";
+        $sql.= " ON RRH.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE  ";  
+        $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RFS . " AS RFS ";
+        $sql.= " ON RR.RFS = RFS.RFS_ID ";
+        $sql.= empty($predicate) ? null : " WHERE 1=1 AND " . $predicate;
+        $sql.= " ORDER BY RRH.RESOURCE_REFERENCE, WEEK_ENDING_FRIDAY";
+        
+        $resultSet = $this->execute($sql);
+        
+        switch (true) {
+            case $rsOnly:
+                return $resultSet;
+                break;
+            case $resultSet:
+                $allData = array();
+                while($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)){
+                    $allData[]  = array_map('trim', $row);
+                }
+                return $allData;                
+            default:
+                return false;
+                break;
         }
+    }
 
     function returnHrsPerWeekForExtract($rsOnly = false) {
 
@@ -457,7 +463,7 @@ trait resourceRequestHoursTableTrait
         $sql.= " AND (";
         // All open RFS' RR
         $sql.= rfsTable::notArchivedPredicate('RFS');
-        $sql.= " OR ";         
+        $sql.= " OR ";
         // All open RFS' RR & All Archived RFS' RR where the RFS' End Date is on or after 01/01/2022
         $sql.= resourceRequestTable::archivedSince2022Predicate('RFS');
         $sql.= ")";

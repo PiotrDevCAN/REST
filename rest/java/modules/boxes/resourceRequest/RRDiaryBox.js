@@ -76,7 +76,7 @@ class RRDiaryBox {
 				},
 				success: function (result) {
 					helper.unlockButton();
-					ResourceRequest.table.ajax.reload();
+					ResourceRequest.refreshAndReloadTable();
 					$('#RESOURCE_REQUEST').val('');
 					$('#newDiaryEntry').html('');
 					$('#diaryModal').modal('hide');

@@ -4,7 +4,6 @@ namespace rest\traits;
 ini_set('display_startup_errors',1);
 ini_set('display_errors',1);
 
-// use DateTime;
 use itdq\DbTable;
 use itdq\PhpMemoryTrace;
 use itdq\Loader;
@@ -19,6 +18,8 @@ use rest\resourceRequestHoursTable;
 
 trait resourceRequestTableTrait
 {
+    use tableTrait;
+
     static $duplicate = 'Dup of';
     static $delta = 'Delta from';
 
@@ -117,9 +118,9 @@ trait resourceRequestTableTrait
         }
         
         error_log(__FILE__ . ":" . __LINE__ . "Elapsed:" . (microtime(true)-$postExec));
-     }
+    }
     
-    function returnAsArray($startDate, $endDate, $predicate=null, $pipelineLiveArchive = 'Live', $withButtons = true, $page = false, $perPage = false){
+    function returnForAPI($startDate, $endDate, $predicate=null, $pipelineLiveArchive = 'Live', $withButtons = true, $page = false, $perPage = false){
 
         // $this->populateLastDiaryEntriesArray();
 
@@ -328,8 +329,10 @@ trait resourceRequestTableTrait
         return $allData;
     }
 
-    function returnAsArraySimple($predicate=null, $pipelineLiveArchive = 'Live', $withButtons=true){
+    function returnAsArray($predicate=null, $pipelineLiveArchive = 'Live', $withButtons = true, $disableCache = false){
+        
         // $this->populateLastDiaryEntriesArray();
+
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
         $hoursRemainingByReference = $resourceRequestHoursTable->getHoursRemainingByReference();
         
@@ -461,7 +464,7 @@ trait resourceRequestTableTrait
 
         $redis = $GLOBALS['redis'];
         $redisKey = md5($sql.'_key_'.$_ENV['environment']);
-        if (!$redis->get($redisKey)) {
+        if (!$redis->get($redisKey) || $disableCache) {
             $source = 'SQL Server';
             
             $resultSet = $this->execute($sql);
@@ -497,9 +500,9 @@ trait resourceRequestTableTrait
         }
 
         $allData['sql'] = $sql;
+        $allData['source'] = $source;
         $allData['badRecords'] = $badRecords;
 
-        echo $source;
         return $allData;
     }
 
@@ -815,7 +818,7 @@ trait resourceRequestTableTrait
         $row['ORGANISATION']=array('display'=>$row['ORGANISATION'] . "<br/><small>" . $row['SERVICE'] . "</small>", 'sort'=>$organisation);
         
     }
-    
+
     static function setEndDate($resourceReference, $endDate){
         $sql  = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS;
         $sql .= "  SET END_DATE = '" . htmlspecialchars($endDate) ."' ";

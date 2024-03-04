@@ -1,7 +1,7 @@
 <?php
 
 use rest\allTables;
-use rest\rfsTable;
+use rest\rfsClaimMonthlyTable;
 
 set_time_limit(0);
 ini_set('memory_limit','3072M');
@@ -21,8 +21,8 @@ $predicate .= ! empty($valueStream) && $valueStream!=='All' ? " AND VS.VALUE_STR
 $predicate .= ! empty($businessUnit) && $businessUnit!=='All' ? " AND BUSINESS_UNIT='" . htmlspecialchars($businessUnit) . "' " : null;
 $predicate .= ! empty($requestor) && $requestor !=='All' ? " AND lower(REQUESTOR_EMAIL)='" . htmlspecialchars(strtolower($requestor)) . "' " : null;
 
-$rfsTable = new rfsTable(allTables::$RFS);
-$data = $rfsTable->returnClaimReportAsJson($predicate);
+$rfsTable = new rfsClaimMonthlyTable(allTables::$RFS);
+$data = $rfsTable->returnAsJson($predicate);
 
 $messages = ob_get_clean();
 

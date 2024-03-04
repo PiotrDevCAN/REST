@@ -5,6 +5,8 @@
 let buttonCommon = await cacheBustImport('./modules/buttonCommon.js');
 let tableSearch = await cacheBustImport('./modules/functions/tableSearch.js');
 
+let ResourceRequest = await cacheBustImport('./modules/resourceRequest.js');
+
 const thenableResourceRequestsTable = {
 
 	table: null,
@@ -36,6 +38,7 @@ const thenableResourceRequestsTable = {
 			},
 			ajax: {
 				url: 'ajax/populateResourceRequestHTMLTable.php',
+				type: 'POST',
 				data: function (d) {
 					// d.pipelineLiveArchive = $("input:radio[name=pipelineLiveArchive]:checked").val();
 					d.pipelineLiveArchive = $('input[name="pipelineLiveArchive"]').val();
@@ -43,8 +46,11 @@ const thenableResourceRequestsTable = {
 					d.rfsid = $('#selectRfs option:selected').val();
 					d.organisation = $('#selectOrganisation option:selected').val();
 					d.businessunit = $('#selectBusinessUnit option:selected').val();
+					d.disableCache = ResourceRequest.disableCache;
 				},
-				type: 'POST',
+				complete: function () {
+					ResourceRequest.disableCache = false;
+				}
 			},
 			autoWidth: false,
 			deferRender: true,

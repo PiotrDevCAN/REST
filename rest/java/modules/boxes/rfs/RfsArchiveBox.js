@@ -38,7 +38,7 @@ class RfsArchiveBox {
 						$('#archiveRfsModalBody').html(resultObj.messages);
 						setTimeout(function () { $('#archiveRfsModal').modal('hide'); }, 2000);
 						helper.unlockButton();
-						Rfs.table.ajax.reload();
+						Rfs.refreshAndReloadTable();
 					} catch (e) {
 						helper.unlockButton();
 						helper.displayTellDevMessageModal(e);

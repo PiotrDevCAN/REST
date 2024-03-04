@@ -12,9 +12,15 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
 $rfsTable = new rfsTable(allTables::$RFS);
 
 $rfsId = !empty($_POST['rfsid']) ? $_POST['rfsid'] : null;
-$valueStream  = !empty($_POST['valuestream'])   ? trim($_POST['valuestream']) : null;
+$valueStream  = !empty($_POST['valuestream'])  ? trim($_POST['valuestream']) : null;
 $businessUnit = !empty($_POST['businessunit']) ? trim($_POST['businessunit']) : null;
 $requestor    = !empty($_POST['requestor'])    ? trim($_POST['requestor']) : null;
+
+$withButtons = true;
+
+// ignore Redis cache and refresh table data from DB
+$disableCacheParam = !empty($_POST['disableCache']) ? $_POST['disableCache'] : null;
+$disableCache = $disableCacheParam === 'true' ? true: false;
 
 $pipelineLiveArchive = !empty($_POST['pipelineLiveArchive']) ? trim($_POST['pipelineLiveArchive']) : null;
 if (array_key_exists($pipelineLiveArchive, rfsRecord::$rfsStatusMapping)) {
@@ -51,11 +57,17 @@ if (empty($rfsId) && empty($valueStream) && empty($requestor) && empty($business
         "data" => array()
     );
 } else {
-    $dataAndSql = $rfsTable->returnAsArray($predicate,$withArchive);
-    list('data' => $data, 'sql' => $sql) = $dataAndSql;
+    $dataAndSql = $rfsTable->returnAsArray($predicate, $withArchive, $withButtons, $disableCache);
+    list('data' => $data, 'sql' => $sql, 'source' => $source) = $dataAndSql;
+
     $message = ob_get_clean();
     ob_start();
-    $response = array("data"=>$data,'message'=>$message,'sql'=>$sql);
+    $response = array(
+        'message' => $message,
+        'source' => $source,
+        "data" => $data,
+        "sql" => $sql
+    );
 }
 
 ob_clean();

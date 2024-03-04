@@ -3,11 +3,13 @@
  */
 
 class ResourceRequest {
-	
+
 	table;
 	resourceNamesForSelect2 = [];
 	ModalendEarlyPicker;
-	
+
+	disableCache = false;
+
 	constructor() {
 
 	}
@@ -28,6 +30,16 @@ class ResourceRequest {
 		$(document).on('shown.bs.modal', function (e) {
 			helper.unlockButton();
 		});
+	}
+
+	reloadTable() {
+		this.disableCache = false;
+		this.table.ajax.reload();
+	}
+
+	refreshAndReloadTable() {
+		this.disableCache = true;
+		this.table.ajax.reload();
 	}
 }
 

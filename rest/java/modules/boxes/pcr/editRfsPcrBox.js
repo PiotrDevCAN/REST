@@ -158,7 +158,7 @@ class editRfsPcrBox {
 						var messages = "<p>" + responseObj.messages + "</p>";
 						helper.addRfsPcrIdToKnown(responseObj.pcrNumber);
 						helper.displayMessageModal(rfsIdTxt + pcrIdTxt + pcrNumberTxt + pcrStartDateTxt + pcrEndDateTxt + pcrAmountTxt + savedResponseTxt + messages);
-						Rfs.table.ajax.reload();
+						Rfs.refreshAndReloadTable();
 					} catch (e) {
 						helper.unlockButton();
 						helper.displayErrorMessageModal("<h2>Json call to save RFS PCR record Failed.Tell Piotr</h2><p>" + e + "</p>");

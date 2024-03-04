@@ -1,6 +1,6 @@
 <?php
 
-use rest\rfsTable;
+use rest\rfsNoMatchBUsTable;
 
 set_time_limit(0);
 // ob_start();
@@ -15,4 +15,4 @@ if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
     ob_start("ob_html_compress");
 }
 
-rfsTable::buildHTMLNoMatchBUsTable('noMatchBU');
+rfsNoMatchBUsTable::buildHTMLTable('noMatchBU');

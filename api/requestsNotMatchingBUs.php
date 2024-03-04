@@ -1,7 +1,7 @@
 <?php
 
 use rest\allTables;
-use rest\resourceRequestTable;
+use rest\rfsNoMatchBUsTable;
 use rest\rfsRecord;
 
 function ob_html_compress($buf){
@@ -16,8 +16,8 @@ $tribeNamesString = "('" . $tribeNamesString . "') ";
 
 $predicate.= " RFS.BUSINESS_UNIT IN " . $tribeNamesString;
 
-$resourceRequestable = new resourceRequestTable(allTables::$RFS);
-$dataAndSql = $resourceRequestable->returnNotMatchingBUs($predicate.$notArchivePredicate);
+$rfsTable = new rfsNoMatchBUsTable(allTables::$RFS);
+$dataAndSql = $rfsTable->returnForAPI($predicate.$notArchivePredicate);
 list('data' => $data, 'sql' => $sql) = $dataAndSql;
 
 $messages = ob_get_clean();

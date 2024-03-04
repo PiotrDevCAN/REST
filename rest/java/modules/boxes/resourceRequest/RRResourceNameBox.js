@@ -358,13 +358,13 @@ class RRResourceNameBox {
 							$('#' + RRResourceNameBox.modalId).modal('hide');
 							helper.unlockButton();
 							helper.displayMessageModal(resourceRefTxt + resourceNameTxt + resourceEmailTxt + resourceKynEmailTxt + savedResponseTxt + messages);
-							ResourceRequest.table.ajax.reload();
+							ResourceRequest.refreshAndReloadTable();
 						} else {
 							$('#' + RRResourceNameBox.modalId).modal('hide');
 							$this.enableSaveResourceName();
 							helper.unlockButton();
 							helper.displayErrorMessageModal(resultObj.messages);
-							ResourceRequest.table.ajax.reload();
+							ResourceRequest.refreshAndReloadTable();
 						}
 					} catch (e) {
 						helper.unlockButton();
@@ -410,13 +410,13 @@ class RRResourceNameBox {
 							$('#' + RRResourceNameBox.modalId).modal('hide');
 							helper.unlockButton();
 							helper.displayMessageModal(resourceRefTxt + savedResponseTxt + messages);
-							ResourceRequest.table.ajax.reload();
+							ResourceRequest.refreshAndReloadTable();
 						} else {
 							$('#' + RRResourceNameBox.modalId).modal('hide');
 							$this.enableSaveResourceName();
 							helper.unlockButton();
 							helper.displayErrorMessageModal(resultObj.messages);
-							ResourceRequest.table.ajax.reload();
+							ResourceRequest.refreshAndReloadTable();
 						}
 					} catch (e) {
 						helper.unlockButton();

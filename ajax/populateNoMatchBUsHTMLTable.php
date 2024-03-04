@@ -2,7 +2,7 @@
 
 use rest\allTables;
 use itdq\Trace;
-use rest\resourceRequestTable;
+use rest\rfsNoMatchBUsTable;
 use rest\rfsRecord;
 
 set_time_limit(0);
@@ -18,8 +18,8 @@ $tribeNamesString = "('" . $tribeNamesString . "') ";
 $predicate.= " RFS.BUSINESS_UNIT IN " . $tribeNamesString .
 " AND AR.TRIBE_NAME_MAPPED IN " . $tribeNamesString;
 
-$resourceRequestable = new resourceRequestTable(allTables::$RFS);
-$dataAndSql = $resourceRequestable->returnNotMatchingBUsForDataTables($predicate.$notArchivePredicate);
+$rfsTable = new rfsNoMatchBUsTable(allTables::$RFS);
+$dataAndSql = $rfsTable->returnAsArray($predicate.$notArchivePredicate);
 list('data' => $records, 'sql' => $sql) = $dataAndSql;
 
 $message = ob_get_clean();

@@ -4,6 +4,8 @@
 
 let tableSearch = await cacheBustImport('./modules/functions/tableSearch.js');
 
+let Rfs = await cacheBustImport('./modules/rfs.js');
+
 const thenableRfsTable = {
 
 	table: null,
@@ -42,7 +44,11 @@ const thenableRfsTable = {
 					d.businessunit = $('#selectBusinessUnit option:selected').val();
 					d.requestor = $('#selectRequestor option:selected').val();
 					d.pipelineLiveArchive = $("input:radio[name=pipelineLiveArchive]:checked").val();
+					d.disableCache = Rfs.disableCache;
 				},
+				complete: function () {
+					Rfs.disableCache = false;
+				}
 			},
 			autoWidth: true,
 			deferRender: true,

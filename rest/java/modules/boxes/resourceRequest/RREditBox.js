@@ -107,7 +107,7 @@ class RREditBox {
 						$('#editRequestModal').modal('hide');
 
 						helper.unlockButton();
-						ResourceRequest.table.ajax.reload();
+						ResourceRequest.refreshAndReloadTable();
 
 						$('#recordSaveDiv').html(resourceRefTxt + savedResponseTxt + hoursResponseTxt + messages);
 						$('#recordSavedModal').modal('show');
