@@ -15,9 +15,8 @@ namespace itdq;
  * @package itdqLib
  *
  */
-class DbTable
+class DbTable {
 
-{
     use xls;
 
     protected $tableName;
@@ -657,14 +656,16 @@ class DbTable
         $pred = $this->buildKeyPredicate($record);
         $sql = $select . " WHERE " . $pred . $predicate;
         Trace::traceVariable($sql, __METHOD__);
-
-        $row = sqlsrv_fetch_array($this->execute($sql));
-        if (! $row) {
-            self::displayErrorMessage($row, __CLASS__, __METHOD__, $sql);
-        } else {
-            foreach ($row as $key => $value) {
-                $row[$key] = trim($value);
+        $rs = $this->execute($sql);
+        if ($rs) {
+            $row = sqlsrv_fetch_array($rs);
+            if ($row) {
+                foreach ($row as $key => $value) {
+                    $row[$key] = trim($value);
+                }
             }
+        } else {
+            $row = null;    
         }
         return $row;
     }
@@ -940,7 +941,7 @@ class DbTable
      *
      *
      * @param array $insertArray
-     *            Array containing the data to be inserted
+     * Array containing the data to be inserted
      * @return resource
      */
     function prepareInsert(&$insertArray = null)
@@ -1001,7 +1002,7 @@ class DbTable
             $this->preparedInsertSQL = $sql;
         }
 
-        $insertArrayValues = array_values($insertArray);        
+        $insertArrayValues = array_values($insertArray);
         $this->preparedInsert = sqlsrv_prepare($GLOBALS['conn'], $this->preparedInsertSQL, $insertArrayValues);
         if (! $this->preparedInsert) {
             echo "<BR/>" . json_encode(sqlsrv_errors());
@@ -1087,11 +1088,12 @@ class DbTable
     function update(DbRecord $record, $populatedColumns = true, $nullColumns = true)
     {
         Trace::traceComment(null, __METHOD__, __LINE__);
-        $pred = $this->buildKeyPredicate($record);
+        $predicate = $this->buildKeyPredicate($record);
         $db2 = FALSE;
         $updateArray = $record->getColumns($populatedColumns, true, $nullColumns, $db2);
+        $data = array();
         Trace::traceVariable($updateArray, __METHOD__, __LINE__);
-        $values = " SET";
+        $colNames = " SET";
         $sql = " UPDATE " . $GLOBALS['Db2Schema'] . ".$this->tableName ";
 
         foreach ($this->columns as $key => $properties) {
@@ -1108,43 +1110,52 @@ class DbTable
              */
             if (isset($updateArray[$key]) && (! isset($this->primary_keys[$key]))) {
                 switch ($properties['Type']) {
-                    case 13: // BLOB
-                        $values .= ", $key = BLOB('$updateArray[$key]')";
+                    case -2: // Timestamp Field
+                        // skip 
                         break;
-
+                    case 13: // BLOB
+                        $colNames .= ", $key = BLOB( ? ) ";
+                        $data[] = $updateArray[$key];
+                        break;
                     case 98: // Encrypted Field.
                     case - 3: // Encrypted Field.
-                        $values .= ", $key = ENCRYPT_RC2('$updateArray[$key]','$this->pwd')";
+                        $colNames .= ", $key = ENCRYPT_RC2(CAST(? as VARCHAR(" . $properties['CHAR_OCTET_LENGTH'] . ")),'$this->pwd')";
+                        $data[] = $updateArray[$key];
                         break;
                     case 91: // Date Field
+                        $colNames .= ", $key = ? ";
                         if (empty($updateArray[$key])) {
-                            $values .= ", $key = null ";
+                            // $setDefinition .= ", $key = null ";
+                            $data[] = null;
                         } else {
-                            $values .= ", $key = '$updateArray[$key]' ";
+                            $data[] = $updateArray[$key];
                         }
                         break;
                     case 93:
+                        $colNames .= ", $key = ? ";
                         if (empty($updateArray[$key])) {
-                            $values .= ", $key = null ";
+                            $data[] = null;
                         } elseif ($updateArray[$key] == 'CURRENT_TIMESTAMP') {
-                            $values .= ", $key = $updateArray[$key] ";
+                            $data[] = $updateArray[$key];
                         } else {
-                            $values .= ", $key = '$updateArray[$key]' ";
+                            $data[] = $updateArray[$key];
                         }
                         break;
                     case 4: // Integer
                     case 2: // Float
+                        $colNames .= ", $key = ? ";
                         if (empty($updateArray[$key]) or $updateArray[$key] == 'null') {
-                            $values .= ", $key = 0 ";
+                            $data[] = 0;
                         } else {
-                            $values .= ", $key = '" . htmlspecialchars($updateArray[$key]) . "' ";
+                            $data[] = $updateArray[$key];
                         }
                         break;
                     default:
+                        $colNames .= ", $key = ? ";
                         if (empty($updateArray[$key])) {
-                            $values .= ", $key = null ";
+                            $data[] = null;
                         } else {
-                            $values .= ", $key = '" . htmlspecialchars($updateArray[$key]) . "' ";
+                            $data[] = $updateArray[$key];
                         }
                         break;
                 }
@@ -1152,15 +1163,19 @@ class DbTable
                 if (! $populatedColumns) {}
             }
         }
-        $values = str_replace('SET,', 'SET ', $values);
+        $colNames = str_replace('SET,', 'SET ', $colNames);
 
-        if (strlen(trim($values)) > 3) {
-            $sql .= $values . " WHERE " . $pred;
+        if (strlen(trim($colNames)) > 3) {
+            $sql .= $colNames . " WHERE " . $predicate;
             Trace::traceVariable($sql, __METHOD__, __LINE__);
 
-            $this->lastUpdateSql = $sql;
-            $rs = $this->execute($sql);
+            $rs = sqlsrv_query($GLOBALS['conn'], $sql, $data);
+            if (! $rs) {
+                DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
+                return false;
+            }
 
+            $this->lastUpdateSql = $sql;
             Trace::traceVariable($rs, __METHOD__, __LINE__);
 
             if (! $rs) {
@@ -1311,7 +1326,12 @@ class DbTable
         $pred = $this->buildKeyPredicate($record);
         $sql = $select . " WHERE " . $pred;
         Trace::traceVariable($sql, __METHOD__);
-        $row = sqlsrv_fetch_array($this->execute($sql));
+        $rs = $this->execute($sql);
+        if ($rs) {
+            $row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
+        } else {
+            $row = null;
+        }
         return $row;
     }
 
@@ -1327,9 +1347,9 @@ class DbTable
         Trace::traceVariable($predicate, __METHOD__);
         $sql = "SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName . " WHERE " . $predicate;
         Trace::traceVariable($sql, __METHOD__);
-        $resultSet = $this->execute($sql);
-        if ($resultSet) {
-            $result = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC);
+        $rs = $this->execute($sql);
+        if ($rs) {
+            $result = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC);
         } else {
             return false;
         }
@@ -2096,7 +2116,7 @@ class DbTable
         return $truncatedValue;
     }
 
-    function getWordCloudCsv($fileName, $colourCode = 1, $column, $predicate = null, $factor=null)
+    function getWordCloudCsv($fileName, $colourCode = 1, $column = null, $predicate = null, $factor = null)
     {
         $factor = empty($factor) ? self::$wordCloudMagnifyFactor : $factor;
         $fileMode = (trim($colourCode) == '1') ? self::$wordCloudCreateMode : self::$wordCloudAppendMode;
