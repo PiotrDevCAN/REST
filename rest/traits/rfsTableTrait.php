@@ -249,6 +249,7 @@ trait rfsTableTrait
         }
 
         $allData = array();
+        $allData['data'] = array();
         if (is_iterable($result)) {
             foreach ($result as $key => $row) {
                 $withButtons ? $this->addGlyphicons($row) : null;
