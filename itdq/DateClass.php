@@ -50,8 +50,8 @@ class DateClass {
         return $date_time;
     }
 
-    static function getThisMonthsClaimCutoff($dateObj){
-        $thisMonthsClaimCutoff = self::claimMonth($dateObj);
+    static function getThisMonthsClaimCutoff($date){
+        $thisMonthsClaimCutoff = self::claimMonth($date);
         $thisMonthsClaimCutoff = self::addTime($thisMonthsClaimCutoff, 1, 0, 0);
     
         return $thisMonthsClaimCutoff;
@@ -73,6 +73,7 @@ class DateClass {
     }
 
     static function claimMonth($date){
+
         $dateObj = new \DateTime($date);
         $month = $dateObj->format('m');
         $year = $dateObj->format('Y');
@@ -85,16 +86,9 @@ class DateClass {
 
         $nextMonthString = $year . "-" . $nextMonth . "-01";
         $nextMonthObj = new \DateTime($nextMonthString);
-        $lastMondayOfMonthObj = new \DateTime($nextMonthObj->format('Y-m-d'));
-        $lastMondayOfMonthObj->modify('previous Monday');
-        $claimCutofFriday = new \DateTime($lastMondayOfMonthObj->format('Y-m-d'));
-        $claimCutofFriday->modify('previous Friday');
+        $nextMonthObj->modify('last Friday');
 
-        if($dateObj > $claimCutofFriday){
-            $claimCutofFriday = self::claimMonth($nextMonthString); // We've past the cutoff - get the next cutoff
-        }
-
-        return $claimCutofFriday;
+        return $nextMonthObj;
     }
     
     /**

@@ -35,6 +35,9 @@ try {
     $loader = new Loader();
     $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS_TEST);
 
+    // clear the hours table
+    $resourceHoursTable->clear();
+
     $predicate = " NOT EXISTS (
         SELECT RESOURCE_REFERENCE
         FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS_TEST . " AS RRH
@@ -77,14 +80,14 @@ try {
         }
     }
     
-    $subject = 'Add Missing RR Hours';
-    $message = 'Add Missing RR Hours script has completed.';
+    $subject = 'Refresh RR Hours';
+    $message = 'Refresh RR Hours script has completed.';
     $message .= '<br>Amount of updated RR records: ' . $recordsToUpdate;
     $message .= '<br>' . $hoursResponse;
     $result = BlueMail::send_mail($emailAddress, $subject, $message, $noreplemailid, $emailAddressCC, $emailAddressBCC);
     
 } catch (Exception $e) {
-    $subject = 'Error in: Add Missing RR Hours ';
+    $subject = 'Error in: Refresh RR Hours ';
     $message = $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
 
     $to = array('piotr.tajanowicz@kyndryl.com');

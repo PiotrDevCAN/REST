@@ -36,15 +36,15 @@ trait resourceRequestHoursTableTrait
         }
 
         if ($hours == 0) {
-            error_log("Invalid Total Hours amount");
-            throw new \Exception("Invalid Total Hours amount");
+            error_log("Invalid Total Hours amount (" . $hours . ")");
+            throw new \Exception("Invalid Total Hours amount (" . $hours . ")");
             $stopped = true;
         }
 
         $invalidHoursType = !in_array($hrsType, resourceRequestRecord::$allHourTypes);
         if ($invalidHoursType) {
-            error_log("Invalid Hours Type found");
-            throw new \Exception("Invalid Hours Type found");
+            error_log("Invalid Hours Type found (" . $hrsType . ")");
+            throw new \Exception("Invalid Hours Type found (" . $hrsType . ")");
             $stopped = true;
         }
 
@@ -270,7 +270,22 @@ trait resourceRequestHoursTableTrait
         return $weeksCreated;
     }
 
-    static function populateComplimentaryDateFields($date,$record){
+    static function getDateComplimentaryFields($date){
+
+        $weekEndingFriday = DateClass::weekEnding($date->format('Y-m-d'));
+        $claimCutoff  = DateClass::claimMonth($date->format('Y-m-d'));
+
+        $complimentaryField = array(
+            'WEEK_ENDING_FRIDAY' => $weekEndingFriday->format('Y-m-d'),
+            'CLAIM_CUTOFF' => $claimCutoff->format('Y-m-d'),
+            'CLAIM_MONTH' => $claimCutoff->format('m'),
+            'CLAIM_YEAR' => $claimCutoff->format('Y')
+        );
+
+        return $complimentaryField;
+    }
+
+    static function populateComplimentaryDateFields($date, $record){
         $complimentaryFields = self::getDateComplimentaryFields($date);
         list(
             'WEEK_ENDING_FRIDAY' => $wef, 
@@ -283,19 +298,6 @@ trait resourceRequestHoursTableTrait
         $record->CLAIM_CUTOFF = $claimCutOff;
         $record->CLAIM_MONTH = $claimMonth;
         $record->CLAIM_YEAR = $claimYear;
-    }
-
-    static function getDateComplimentaryFields($date){
-
-        $weekEndingFriday = DateClass::weekEnding($date->format('Y-m-d'));
-        $claimCutoff  = DateClass::claimMonth($date->format('Y-m-d'));
-
-        $complimentaryField['WEEK_ENDING_FRIDAY'] = $weekEndingFriday->format('Y-m-d');
-        $complimentaryField['CLAIM_CUTOFF'] = $claimCutoff->format('Y-m-d');
-        $complimentaryField['CLAIM_MONTH'] = $claimCutoff->format('m');
-        $complimentaryField['CLAIM_YEAR'] = $claimCutoff->format('Y');
-
-        return $complimentaryField;
     }
 
     function clearResourceReference($resourceReference=null){
@@ -512,46 +514,49 @@ trait resourceRequestHoursTableTrait
 
     function getHoursRemainingByReference(){
 
+        $allData = array();
+        
         $redis = $GLOBALS['redis'];
         $key = 'getHoursRemainingByReference';
         $redisKey = md5($key.'_key_'.$_ENV['environment']);
         if (!$redis->get($redisKey)) {
+            $source = 'SQL Server';
 
-            $hoursRemainingByReference = array();
-
-            $date = new \DateTime();
-            
             $sql = " select RESOURCE_REFERENCE, SUM(CAST(HOURS as decimal(6,2))) as HOURS_TO_GO, count(*) as WEEKS_TO_GO ";
             $sql.= " from " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS;
             $sql.= " where WEEK_ENDING_FRIDAY > ? ";
             $sql.= " group by RESOURCE_REFERENCE; ";
 
+            // this week ending date
+            $date = new \DateTime();
             $complimentaryFields = $this->getDateComplimentaryFields($date);
             list(
                 'WEEK_ENDING_FRIDAY' => $wef
             ) = $complimentaryFields;
 
             $data = array($wef);
-            $stmt = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
-
-            $result = sqlsrv_execute($stmt);
-
-            if(!$result){
-                DbTable::displayErrorMessage($result, __CLASS__, __METHOD__, $sql);
+            $rs = sqlsrv_query($GLOBALS['conn'], $sql, $data);
+            if(!$rs){
+                DbTable::displayErrorMessage($rs, __CLASS__, __METHOD__, $sql);
             }
-            while($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+
+            $hoursRemainingByReference = array();
+            while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
                 $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['hours'] = $row['HOURS_TO_GO'];
                 $hoursRemainingByReference[$row['RESOURCE_REFERENCE']]['weeks'] = $row['WEEKS_TO_GO'];
             }
 
-            $redis->set($redisKey, json_encode($result));
+            $redis->set($redisKey, json_encode($hoursRemainingByReference));
             $redis->expire($redisKey, REDIS_EXPIRE);
         } else {
             $source = 'Redis Server';
             $hoursRemainingByReference = json_decode($redis->get($redisKey), true);
         }
 
-        return $hoursRemainingByReference;
+        $allData['data'] = $hoursRemainingByReference;
+        $allData['source'] = $source;
+        
+        return $allData;
     }
 
     static function removeHoursRecordsForRfsPriorToday($rfsId){

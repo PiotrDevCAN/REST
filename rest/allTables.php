@@ -24,6 +24,7 @@ class allTables
     public static $RESOURCE_REQUESTS      = 'RESOURCE_REQUESTS';
     public static $RESOURCE_REQUEST_DIARY = 'RESOURCE_REQUEST_DIARY';
     public static $RESOURCE_REQUEST_HOURS = 'RESOURCE_REQUEST_HOURS';
+    public static $RESOURCE_REQUEST_HOURS_TEST = 'RESOURCE_REQUEST_HOURS_TEST';
 
     public static $RFS                    = 'RFS';    
     public static $RFS_DATE_RANGE         = 'RFS_DATE_RANGE'; // View

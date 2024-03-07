@@ -1,6 +1,5 @@
 <?php
 
-use itdq\DbTable;
 use rest\allTables;
 use rest\resourceRequestRecord;
 use rest\resourceRequestTable;

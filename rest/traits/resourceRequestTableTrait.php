@@ -125,7 +125,11 @@ trait resourceRequestTableTrait
         // $this->populateLastDiaryEntriesArray();
 
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
-        $hoursRemainingByReference = $resourceRequestHoursTable->getHoursRemainingByReference();
+        $hoursData = $resourceRequestHoursTable->getHoursRemainingByReference();
+        list(
+            'data' => $hoursRemainingByReference,
+            'source' => $source
+        ) = $hoursData;
         $monthNumber = 0;
         $startDateObj = new \DateTime($startDate);
         $endDateObj = new \DateTime($endDate);
@@ -334,7 +338,11 @@ trait resourceRequestTableTrait
         // $this->populateLastDiaryEntriesArray();
 
         $resourceRequestHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
-        $hoursRemainingByReference = $resourceRequestHoursTable->getHoursRemainingByReference();
+        $hoursData = $resourceRequestHoursTable->getHoursRemainingByReference();
+        list(
+            'data' => $hoursRemainingByReference,
+            'source' => $source
+        ) = $hoursData;
         
         $resourceRequestTableName = allTables::$RESOURCE_REQUESTS;
         // $resourceRequestHoursTableName = allTables::$RESOURCE_REQUEST_HOURS;

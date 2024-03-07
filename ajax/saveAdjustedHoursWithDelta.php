@@ -1,11 +1,6 @@
 <?php
 
-use itdq\DbTable;
 use rest\allTables;
-use rest\resourceRequestRecord;
-use rest\resourceRequestTable;
-use rest\resourceRequestHoursRecord;
-use rest\resourceRequestHoursTable;
 use itdq\Loader;
 
 set_time_limit(0);
