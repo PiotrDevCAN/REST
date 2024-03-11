@@ -1,9 +1,9 @@
 <?php
 
 use itdq\BlueMail;
-use itdq\Loader;
 use rest\allTables;
 use rest\resourceRequestHoursTable;
+use rest\resourceRequestTable;
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -32,29 +32,20 @@ $emailAddressBCC = array();
 
 try {
 
-    $loader = new Loader();
+    $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
     $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS_TEST);
 
     // clear the hours table
     $resourceHoursTable->clear();
 
-    $predicate = " NOT EXISTS (
-        SELECT RESOURCE_REFERENCE
-        FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS_TEST . " AS RRH
-        WHERE RR.RESOURCE_REFERENCE = RRH.RESOURCE_REFERENCE
-    )";
+    $predicate = $resourceHoursTable->notExistsPredicate('RR');
     
-    $sql  = " SELECT 
-        RR.RESOURCE_REFERENCE,
-        RR.START_DATE,
-        RR.END_DATE,
-        RR.TOTAL_HOURS,
-        RR.HOURS_TYPE ";
-    $sql .= " FROM  " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
+    $sql = $resourceRequestTable->getSelect(null, 'RR');
     $sql .= " WHERE 1=1 " ;
     $sql .= !empty($predicate) ? " AND  $predicate " : null ;
     $sql .= " AND TOTAL_HOURS IS NOT NULL";
     $sql .= " AND HOURS_TYPE IS NOT NULL";
+    $sql .= " AND TOTAL_HOURS != '0.00'";
 
     $rs = sqlsrv_query( $GLOBALS['conn'], $sql );
     if (! $rs) {
@@ -76,14 +67,14 @@ try {
             $weeksCreated = $resourceHoursTable->createResourceRequestHours($resourceReference, $startDate, $endDate, $totalHours, true, $hoursType);
             $hoursResponse .= "<br>" . $weeksCreated . " weeks saved to the Resource Hours table.";
         } catch (Exception $e) {
-            $hoursResponse = $e->getMessage();
+            $hoursResponse .= "<br>" . $e->getMessage();
         }
     }
     
     $subject = 'Refresh RR Hours';
     $message = 'Refresh RR Hours script has completed.';
     $message .= '<br>Amount of updated RR records: ' . $recordsToUpdate;
-    $message .= '<br>' . $hoursResponse;
+    $message .= $hoursResponse;
     $result = BlueMail::send_mail($emailAddress, $subject, $message, $noreplemailid, $emailAddressCC, $emailAddressBCC);
     
 } catch (Exception $e) {

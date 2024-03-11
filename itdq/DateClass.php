@@ -118,11 +118,12 @@ class DateClass {
         return array(
             'businessDays' => $businessDays,
             'workingDays'=> $workingDays,
-            'bankHolidays' => $bankHolidaysDates
+            'bankHolidays' => $bankHolidays,
+            'bankHolidaysList' => $bankHolidaysDates
         );        
     }
     
-    static function businessDaysForWeekEndingFriday(string $weekEndingFriday,array $bankHolidays, \DateTime $startDate,\DateTime $endDate ){
+    static function businessDaysForWeekEndingFriday(string $weekEndingFriday, array $bankHolidays, \DateTime $startDate, \DateTime $endDate, $includeBankHolidays = true){
         $wef = \DateTime::createFromFormat('Y-m-d', $weekEndingFriday);
         $monday = clone $wef;
         $monday->modify('-4 days');
@@ -142,7 +143,11 @@ class DateClass {
             $day->modify('+1 day');
         }
         
-        $workingDaysArray = array_diff($weekDays, $bankHolidays); // now remove any bankholidays
+        if ($includeBankHolidays) {
+            $workingDaysArray = array_diff($weekDays, $bankHolidays); // now remove any bankholidays
+        } else {
+            $workingDaysArray = $weekDays;
+        }
     
         return count($workingDaysArray);
     }

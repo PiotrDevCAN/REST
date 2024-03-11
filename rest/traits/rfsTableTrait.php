@@ -69,7 +69,7 @@ trait rfsTableTrait
     static function archivedPredicate($tableAbbrv = null) {
         $predicate = '';
         $predicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $predicate.= ' ARCHIVE IS NOT NULL ';
+        $predicate.= 'ARCHIVE IS NOT NULL ';
         return $predicate;
     }
 
@@ -87,7 +87,7 @@ trait rfsTableTrait
     static function notArchivedPredicate($tableAbbrv = null) {
         $predicate = '';
         $predicate.= !empty($tableAbbrv) ? $tableAbbrv ."." : null ;
-        $predicate.= ' ARCHIVE IS NULL ';
+        $predicate.= 'ARCHIVE IS NULL ';
         return $predicate;
     }
 

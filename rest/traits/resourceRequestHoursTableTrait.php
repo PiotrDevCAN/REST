@@ -18,33 +18,33 @@ trait resourceRequestHoursTableTrait
         $callbackMessage = '';
 
         if ($resourceReference === null) {
-            error_log("Invalid Resource Reference");
-            throw new \Exception("Invalid Resource Reference");
+            error_log("Invalid Resource Reference (" . $resourceReference . ")");
+            throw new \Exception("Invalid Resource Reference (" . $resourceReference . ")");
             $stopped = true;
         }
 
         if ($startDate === null || self::validateDate($startDate) === false) {
-            error_log("Invalid Start Date");                
-            throw new \Exception("Invalid Start Date");
+            error_log("(" . $resourceReference . ") Invalid Start Date (" . $startDate . ")");
+            throw new \Exception("(" . $resourceReference . ") Invalid Start Date (" . $startDate . ")");
             $stopped = true;
         }
 
         if ($endDate === null || self::validateDate($endDate) === false) {
-            error_log("Invalid End Date");
-            throw new \Exception("Invalid End Date");
+            error_log("(" . $resourceReference . ") Invalid End Date (" . $endDate . ")");
+            throw new \Exception("(" . $resourceReference . ") Invalid End Date (" . $endDate . ")");
             $stopped = true;
         }
 
         if ($hours == 0) {
-            error_log("Invalid Total Hours amount (" . $hours . ")");
-            throw new \Exception("Invalid Total Hours amount (" . $hours . ")");
+            error_log("(" . $resourceReference . ") Invalid Total Hours amount (" . $hours . ")");
+            throw new \Exception("(" . $resourceReference . ") Invalid Total Hours amount (" . $hours . ")");
             $stopped = true;
         }
 
         $invalidHoursType = !in_array($hrsType, resourceRequestRecord::$allHourTypes);
         if ($invalidHoursType) {
-            error_log("Invalid Hours Type found (" . $hrsType . ")");
-            throw new \Exception("Invalid Hours Type found (" . $hrsType . ")");
+            error_log("(" . $resourceReference . ") Invalid Hours Type found (" . $hrsType . ")");
+            throw new \Exception("(" . $resourceReference . ") Invalid Hours Type found (" . $hrsType . ")");
             $stopped = true;
         }
 
@@ -57,15 +57,20 @@ trait resourceRequestHoursTableTrait
         $calculatedBusinessDays = DateClass::businessDaysFromStartToEnd($sdate, $edate);
         list(
             'businessDays' => $businessDays,
-            'bankHolidays' => $bankHolidays
+            'bankHolidays' => $bankHolidays,
+            'bankHolidaysList' => $bankHolidaysList
         ) = $calculatedBusinessDays;
 
         $allowedHoursType = array();
 
         // echo '<br/>';
         // echo ' Amount of business days '.$businessDays;
+        // error_log("Start date " . $sdate->format('d-m-Y'));
+        // error_log("End date " . $edate->format('d-m-Y'));
+        // error_log("Amount of business days ".$businessDays);
         // echo '<br/>';
         // echo ' Amount of weekend days '.$weekendDays;
+        // error_log("Amount of weekend days ".$weekendDays);
 
         if ($businessDays > 0 && $weekendDays > 0) {
             // all type are correct
@@ -80,18 +85,37 @@ trait resourceRequestHoursTableTrait
                 $allowedHoursType = array(
                     resourceRequestRecord::HOURS_TYPE_OT_WEEK_END
                 );
-                $callbackMessage = 'For selected period of time "'.resourceRequestRecord::HOURS_TYPE_OT_WEEK_END.'" hours type must be choosen.';
+                $callbackMessage = '(' . $resourceReference . ') For selected period of time "'.resourceRequestRecord::HOURS_TYPE_OT_WEEK_END.'" hours type must be chosen.';
             } elseif ($weekendDays == 0 && $businessDays > 0 ) {
                 // If weekendhrs (or whatever it is called) is 0 they can choose regular or weekday overtime
                 $allowedHoursType = array(
                     resourceRequestRecord::HOURS_TYPE_REGULAR,
                     resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY
                 );
-                $callbackMessage = 'For selected period of time either "'.resourceRequestRecord::HOURS_TYPE_REGULAR.'" or "'.resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY.'" hours type must be choosen.';
+                $callbackMessage = '(' . $resourceReference . ') For selected period of time either "'.resourceRequestRecord::HOURS_TYPE_REGULAR.'" or "'.resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY.'" hours type must be chosen.';
             } else {
-                error_log("Invalid Calculation Of Business Or Weekend Days");
-                throw new \Exception("Invalid Calculation Of Business Or Weekend Days");
-                $stopped = true;
+                if ($bankHolidays > 0) {
+                    $allowedHoursType = array(
+                        resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY
+                    );
+
+                    error_log("Start date " . $sdate->format('d-m-Y'));
+                    error_log("End date " . $edate->format('d-m-Y'));
+                    error_log("Amount of business days ".$businessDays);
+                    error_log("Amount of weekend days ".$weekendDays);
+                    error_log("Amount of bank holiday days ".$bankHolidays);
+    
+                    error_log("Hours type ".$hrsType);
+                    error_log(serialize($allowedHoursType));
+
+                    $notAllowedHoursType = !in_array($hrsType, $allowedHoursType);
+                    var_dump($notAllowedHoursType); // false
+
+                } else {
+                    error_log("Invalid Calculation Of Business Or Weekend Days");
+                    throw new \Exception("(" . $resourceReference . ") Invalid Calculation Of Business Or Weekend Days");
+                    $stopped = true;
+                }
             }
         }
 
@@ -101,11 +125,12 @@ trait resourceRequestHoursTableTrait
         switch (true) {
             case $notAllowedHoursType:
                 // hours type protection
-                error_log("Not Allowed Hours Type found");
                 if (!empty($callbackMessage)) {
+                    error_log($callbackMessage);
                     throw new \Exception($callbackMessage);
                 } else {
-                    throw new \Exception("Not Allowed Hours Type found");
+                    error_log("(" . $resourceReference . ") Not Allowed Hours Type found (" . $hrsType . ") in " . serialize($allowedHoursType) );
+                    throw new \Exception("(" . $resourceReference . ") Not Allowed Hours Type found (" . $hrsType . ") in " . serialize($allowedHoursType) );
                 }
                 $stopped = true;
                 break;
@@ -118,7 +143,6 @@ trait resourceRequestHoursTableTrait
             switch ($hrsType) {
                 case resourceRequestRecord::HOURS_TYPE_OT_WEEK_END:
                     $effortDays = $weekendDays;
-                    $bankHolidays = array();
                     if ($effortDays > 0) {
                         $hrsPerEffortDay = $hours / $effortDays;
                     } else {
@@ -131,7 +155,6 @@ trait resourceRequestHoursTableTrait
                 case resourceRequestRecord::HOURS_TYPE_REGULAR:
                 case resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY:
                     $effortDays = $businessDays;
-                    // $bankHolidays = $calculatedBusinessDays['bankHolidays'];
                     if ($effortDays > 0) {
                         $hrsPerEffortDay = $hours / $effortDays;
                     } else {
@@ -142,9 +165,6 @@ trait resourceRequestHoursTableTrait
                     $sdate = DateClass::adjustStartDate($sdate); // changed to next monday
                     break;
                 default:
-                    error_log("Invalid Hours Type found");
-                    throw new \Exception("Invalid Hours Type found");
-                    $stopped = true;
                     break;
             }
 
@@ -234,14 +254,15 @@ trait resourceRequestHoursTableTrait
                         }  
                         break;
                     case resourceRequestRecord::HOURS_TYPE_REGULAR:
+                        $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($resourceRequestHoursRecord->WEEK_ENDING_FRIDAY, $bankHolidaysList, $sdate, $edate);
+                        break;
                     case resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY:
-                        $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($resourceRequestHoursRecord->WEEK_ENDING_FRIDAY, $bankHolidays, $sdate, $edate);
-                        break;        
+                        $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($resourceRequestHoursRecord->WEEK_ENDING_FRIDAY, $bankHolidaysList, $sdate, $edate, false);
+                        break;
                     default:
                         $businessDaysInWeek = 0;
                         break;
                 }
-    
                 if($businessDaysInWeek > 0){
                     
                     // echo '<br/>';
@@ -257,7 +278,7 @@ trait resourceRequestHoursTableTrait
                         $weeksCreated++;
                     }
                 } else {
-    
+                    
                 }
                 
                 $nextDate->add($oneWeek);

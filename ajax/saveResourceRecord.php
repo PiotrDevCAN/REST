@@ -19,7 +19,7 @@ $rfs = !empty($_POST['RFS']) ? trim($_POST['RFS']) : null;
 $startDate = !empty($_POST['START_DATE']) ? trim($_POST['START_DATE']) : null;
 $endDate = !empty($_POST['END_DATE']) ? trim($_POST['END_DATE']) : $_POST['START_DATE'];
 
-$totalHours = !empty($_POST['TOTAL_HOURS']) ? trim($_POST['TOTAL_HOURS']) : 0;
+$totalHours = !empty($_POST['TOTAL_HOURS']) ? trim($_POST['TOTAL_HOURS']) : '0';
 $rateType = !empty($_POST['RATE_TYPE']) ? trim($_POST['RATE_TYPE']) : resourceRequestRecord::RATE_TYPE_BLENDED;
 $hoursType = !empty($_POST['HOURS_TYPE']) ? trim($_POST['HOURS_TYPE']) : resourceRequestRecord::HOURS_TYPE_REGULAR;
 $organisation = !empty($_POST['ORGANISATION']) ? trim($_POST['ORGANISATION']) : null;
@@ -47,7 +47,7 @@ if ($startDate == null || $endDate == null || $rateType == null || $organisation
 
 $invalidRateType = !in_array($rateType, resourceRequestRecord::$allRateTypes);
 $invalidHoursType = !in_array($hoursType, resourceRequestRecord::$allHourTypes);
-$invalidTotalHoursAmount = empty($totalHours);
+$invalidTotalHoursAmount = in_array($totalHours, array('', 0, 0.00, '0', '0.00'));
 $invalidStartDate = resourceRequestTable::validateDate($startDate) === false;
 $invalidEndDate = resourceRequestTable::validateDate($endDate) === false;
 
@@ -86,7 +86,7 @@ switch (true) {
         break;
     case $invalidTotalHoursAmount:
         // zero total hours protection
-        $messages = 'Cannot save Resource Request with zero total hours.';
+        $messages = 'Cannot save Resource Request with zero Total Hours.';
         break;
     case $invalidStartDate:
         // start date protection
