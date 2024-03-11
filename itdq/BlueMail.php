@@ -17,7 +17,9 @@ class BlueMail
 
     static function send_mail(array $to, $subject, $message, $replyto, array $cc=array(), array $bcc=array()
         , $asynchronous = true
-        , array $attachments=array())
+        , array $attachments=array()
+        , $newServer = false
+    )
     {
         $emailLogRecordID = null;
 
@@ -125,7 +127,14 @@ class BlueMail
 
                     $mail->SMTPDebug = SMTP::DEBUG_OFF; // Enable verbose debug output ; SMTP::DEBUG_OFF
                     $mail->isSMTP(); // Send using SMTP
-                    $mail->Host = $_ENV['smtp-server']; // Set the SMTP server to send through
+
+                    // Set the SMTP server to send through
+                    if ($newServer) {
+                        $mail->Host = $_ENV['smtp-server-new'];
+                    } else {
+                        $mail->Host = $_ENV['smtp-server'];
+                    }
+
                     $mail->SMTPAuth = true;
                     $mail->SMTPAutoTLS = true;
                     $mail->SMTPSecure = 'ssl';

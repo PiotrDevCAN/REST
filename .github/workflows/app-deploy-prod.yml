@@ -72,6 +72,7 @@ jobs:
             kps-gd-app-rest/data/prod/w3us/sqlserver_wus3 username | DB_USER_NAME ;
             kps-gd-app-rest/data/prod/w3us/sqlserver_wus3 password | DB_USER_PW ;
             kps-gd-app-rest/data/dev/w3us/smtpserver host | SMTP_HOST ;
+            kps-gd-app-rest/data/dev/w3us/smtpserver host_new | SMTP_HOST_NEW ;
             kps-gd-app-rest/data/dev/w3us/smtpserver username | SMTP_USER_NAME ;
             kps-gd-app-rest/data/dev/w3us/smtpserver password | SMTP_USER_PW ;
             kps-gd-app-rest/data/prod/w3us/SSOserver host | SSO_HOST ;
@@ -126,7 +127,7 @@ jobs:
           namespace: ${{ steps.import-secrets.outputs.NAMESPACE }}
           secret-name: rest-app-docker-secrets-smtp
           secret-type: 'generic'
-          arguments: --from-literal=smtp-server=${{ steps.import-secrets.outputs.SMTP_HOST }} --from-literal=smtp-user-name=${{ steps.import-secrets.outputs.SMTP_USER_NAME }} --from-literal=smtp-user-pw=${{ steps.import-secrets.outputs.SMTP_USER_PW }}
+          arguments: --from-literal=smtp-server=${{ steps.import-secrets.outputs.SMTP_HOST }} --from-literal=smtp-server-new=${{ steps.import-secrets.outputs.SMTP_HOST_NEW }} --from-literal=smtp-user-name=${{ steps.import-secrets.outputs.SMTP_USER_NAME }} --from-literal=smtp-user-pw=${{ steps.import-secrets.outputs.SMTP_USER_PW }}
       - name: Set ImagePullSecrets SSO
         id: image_secret-sso
         uses: azure/k8s-actions/k8s-create-secret@master
