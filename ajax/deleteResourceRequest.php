@@ -12,7 +12,7 @@ set_time_limit(0);
 $allocatorNotesid = $_SESSION['ssoEmail'];
 $emailEntry = "A Resource Request linked to  RFS &&rfs&& has been deleted by $allocatorNotesid ";
 $emailPattern = array('RFS'=>'/&&rfs&&/');
-emailNotifications::sendNotification($_POST['RESOURCE_REFERENCE'],$emailEntry, $emailPattern);
+emailNotifications::sendNotification($_POST['RESOURCE_REFERENCE'], $emailEntry, $emailPattern);
 
 $rrTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
 $rrTable->deleteData(" RESOURCE_REFERENCE='" . htmlspecialchars($_POST['RESOURCE_REFERENCE']) . "'",true );

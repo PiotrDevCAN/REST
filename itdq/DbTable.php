@@ -521,13 +521,18 @@ class DbTable {
         // }
 
         $sql = "SELECT * FROM ".$GLOBALS['Db2Schema'].'.'.strtoupper($this->tableName);
-        $stmt = sqlsrv_prepare( $GLOBALS['conn'], $sql );
-        foreach( sqlsrv_field_metadata( $stmt ) as $row ) {
-            foreach( $row as $name => $value) {
-                if($name == 'Name') {
-                    Trace::traceVariable($row, __METHOD__, __LINE__);
-                    $row['Type_name_new'] = self::$typeNames[$row["Type"]];
-                    $this->columns[trim($value)] = $row;
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql);
+
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, null, __FILE__, $sql);
+        } else {
+            foreach( sqlsrv_field_metadata( $rs ) as $row ) {
+                foreach( $row as $name => $value) {
+                    if($name == 'Name') {
+                        Trace::traceVariable($row, __METHOD__, __LINE__);
+                        $row['Type_name_new'] = self::$typeNames[$row["Type"]];
+                        $this->columns[trim($value)] = $row;
+                    }
                 }
             }
         }

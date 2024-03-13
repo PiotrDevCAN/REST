@@ -1,5 +1,6 @@
 <?php
 
+use itdq\DbTable;
 use rest\allTables;
 use itdq\Loader;
 
@@ -16,8 +17,9 @@ $loader = new Loader();
 $originalWeeklyProfile = $loader->loadIndexed('HOURS','DATE',allTables::$RESOURCE_REQUEST_HOURS," RESOURCE_REFERENCE='$originalResourceReference' ");
 
 $sql = " UPDATE " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_HOURS;
-$sql .= " SET HOURS=? " ;
-$sql .= " WHERE RESOURCE_REFERENCE=? and DATE=? ";
+$sql .= " SET HOURS = ? " ;
+$sql .= " WHERE RESOURCE_REFERENCE = ? ";
+$sql .= " AND DATE = ? ";
 
 foreach ($adjustedHours as $key => $value){
     if(substr($key,0,15)== "ModalHRSForWeek"){
@@ -29,16 +31,22 @@ foreach ($adjustedHours as $key => $value){
         $changeExistingRecord = array($newHours, $originalResourceReference, $week);
         var_dump($changeExistingRecord);
 
-        $hoursUpdate = sqlsrv_prepare($GLOBALS['conn'], $sql, $changeExistingRecord);
-        $result = sqlsrv_execute($hoursUpdate);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql, $changeExistingRecord);
+
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, 'ajax', __FILE__, $sql);
+        }
 
         $changeDeltaRecord = array($deltaHours, $deltaResourceReference, $week);
         var_dump($changeDeltaRecord);
 
-        $hoursUpdate = sqlsrv_prepare($GLOBALS['conn'], $sql, $changeDeltaRecord);
-        $result = sqlsrv_execute($hoursUpdate);
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql, $changeDeltaRecord);
 
-        var_dump($result);
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, 'ajax', __FILE__, $sql);
+        }
+
+        var_dump($rs);
         echo "<hr/>";
 
         sqlsrv_commit($GLOBALS['conn']);

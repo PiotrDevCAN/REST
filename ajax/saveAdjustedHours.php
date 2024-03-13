@@ -1,5 +1,6 @@
 <?php
 
+use itdq\DbTable;
 use rest\allTables;
 use rest\resourceRequestTable;
 use itdq\Trace;
@@ -20,8 +21,12 @@ foreach ($_POST as $key => $value){
         $hours = $value;
 
         $data = array($hours, $resourceReference, $week);
-        $hoursUpdate = sqlsrv_prepare($GLOBALS['conn'], $sql, $data);
-        $result = sqlsrv_execute($hoursUpdate);
+
+        $rs = sqlsrv_query($GLOBALS['conn'], $sql, $data);
+
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, 'ajax', __FILE__, $sql);
+        }
     }
 }
 

@@ -299,15 +299,15 @@ trait resourceRequestTableTrait
 
         $data = array();
 
-        $preparedCountStatement = sqlsrv_prepare($GLOBALS['conn'], $countSql, $data);
-        $result = sqlsrv_execute($preparedCountStatement);
-        if (! $result) {
-            DbTable::displayErrorMessage($result, __CLASS__, __METHOD__, $countSql);
+        $rs = sqlsrv_query($GLOBALS['conn'], $countSql, $data);
+
+        if(!$rs){
+            DbTable::displayErrorMessage($rs, __CLASS__,__METHOD__, $countSql);
             return false;
         }
         
         $counter = 0;
-        while($row = sqlsrv_fetch_array($preparedCountStatement, SQLSRV_FETCH_ASSOC)){
+        while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
             $counter = $row['COUNTER'];
         }
 

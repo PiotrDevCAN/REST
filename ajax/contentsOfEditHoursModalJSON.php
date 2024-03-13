@@ -27,9 +27,11 @@ $data = array();
 
 while($row = sqlsrv_fetch_array($resourceHoursRs, SQLSRV_FETCH_ASSOC)){
   $week = $row['DATE'];
-  $hours = $row['HOURS'];
   $wef = $row['WEEK_ENDING_FRIDAY'];
-
+  $hours = $row['HOURS'];
+  if (startsWith($hours, '.')) {
+    $hours = '0' . $hours;
+  }
   $stripe = $monthColours[$row['CLAIM_MONTH']];
   $claimMonth = $claimMonths[$row['CLAIM_MONTH']];
   $weekObj = new DateTime($wef);
