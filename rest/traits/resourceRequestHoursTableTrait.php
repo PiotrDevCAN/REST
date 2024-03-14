@@ -61,17 +61,24 @@ trait resourceRequestHoursTableTrait
             'bankHolidaysList' => $bankHolidaysList
         ) = $calculatedBusinessDays;
 
-        $allowedHoursType = array();
-
+        // echo '<br/>';
+        // echo "Start date " . $sdate->format('d-m-Y');        
+        // error_log("Start date " . $sdate->format('d-m-Y'));
+        // echo '<br/>';
+        // error_log("End date " . $edate->format('d-m-Y'));
+        // echo "End date " . $edate->format('d-m-Y');
         // echo '<br/>';
         // echo ' Amount of business days '.$businessDays;
-        // error_log("Start date " . $sdate->format('d-m-Y'));
-        // error_log("End date " . $edate->format('d-m-Y'));
         // error_log("Amount of business days ".$businessDays);
         // echo '<br/>';
         // echo ' Amount of weekend days '.$weekendDays;
         // error_log("Amount of weekend days ".$weekendDays);
 
+        $allowedHoursType = array();
+
+        /*
+        *   Validation of Hours Type
+        */
         if ($businessDays > 0 && $weekendDays > 0) {
             // all type are correct
             $allowedHoursType = array(
@@ -98,19 +105,6 @@ trait resourceRequestHoursTableTrait
                     $allowedHoursType = array(
                         resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY
                     );
-
-                    error_log("Start date " . $sdate->format('d-m-Y'));
-                    error_log("End date " . $edate->format('d-m-Y'));
-                    error_log("Amount of business days ".$businessDays);
-                    error_log("Amount of weekend days ".$weekendDays);
-                    error_log("Amount of bank holiday days ".$bankHolidays);
-    
-                    error_log("Hours type ".$hrsType);
-                    error_log(serialize($allowedHoursType));
-
-                    $notAllowedHoursType = !in_array($hrsType, $allowedHoursType);
-                    var_dump($notAllowedHoursType); // false
-
                 } else {
                     error_log("Invalid Calculation Of Business Or Weekend Days");
                     throw new \Exception("(" . $resourceReference . ") Invalid Calculation Of Business Or Weekend Days");
@@ -119,7 +113,9 @@ trait resourceRequestHoursTableTrait
             }
         }
 
-        // validate if an appropriate type is selected
+        /*
+        *   validate if an appropriate type is selected
+        */
         $notAllowedHoursType = !in_array($hrsType, $allowedHoursType);
 
         switch (true) {
@@ -138,9 +134,18 @@ trait resourceRequestHoursTableTrait
                 break;
         }
 
+        /*
+        *   The main part of calculation
+        */
         if ($stopped == false) {
 
+            $sdateInit = clone $sdate;
+            
+            // echo '<br/>';
+            // echo ' start date INITIAL '.$sdate->format('Y-m-d'); // 2024-04-21
+
             switch ($hrsType) {
+                // 'Weekend Overtime'
                 case resourceRequestRecord::HOURS_TYPE_OT_WEEK_END:
                     $effortDays = $weekendDays;
                     if ($effortDays > 0) {
@@ -149,9 +154,11 @@ trait resourceRequestHoursTableTrait
                         $hrsPerEffortDay = $hours;
                     }
                     $dayOfWeek = 6;
-                    $startDay = 'saturday';
-                    $sdate = DateClass::adjustStartDate($sdate, $hrsType); // changed to next saturday
+                    $startDay = 'Saturday';
+                    $sdate = DateClass::adjustStartDate($sdate, $hrsType); // changed to next Saturday
                     break;
+                // 'Regular'
+                // 'Weekday Overtime'
                 case resourceRequestRecord::HOURS_TYPE_REGULAR:
                 case resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY:
                     $effortDays = $businessDays;
@@ -161,16 +168,16 @@ trait resourceRequestHoursTableTrait
                         $hrsPerEffortDay = $hours;
                     }
                     $dayOfWeek = 1;
-                    $startDay = 'monday';
-                    $sdate = DateClass::adjustStartDate($sdate); // changed to next monday
+                    $startDay = 'Monday';
+                    $sdate = DateClass::adjustStartDate($sdate); // changed to next Monday
                     break;
                 default:
                     break;
             }
 
             $nextDate = clone $sdate;
-            $endPeriod = $edate->format('oW');  // number of week
             $nextPeriod = $nextDate->format('oW');  // number of week
+            $endPeriod = $edate->format('oW');  // number of week
             
             $deleteExisting ? $this->clearResourceReference($resourceReference) : null;
     
@@ -180,7 +187,7 @@ trait resourceRequestHoursTableTrait
             while($nextPeriod <= $endPeriod) {
                 
                 // echo '<br/>';
-                // echo ' iteration '.$iteration;
+                // echo ' <b>iteration '.$iteration. ' </b>';
                 // echo '<br/>----------------------------------------------';
 
                 // echo '<br/>';
@@ -189,19 +196,35 @@ trait resourceRequestHoursTableTrait
                 // echo ' nextPeriod '.$nextPeriod;
 
                 // echo '<br/>';
-                // echo ' sdate '.$sdate->format('Y-m-d'); // 2021-06-12
+                // echo ' start date ADJUSTED '.$sdate->format('Y-m-d'); // 2024-04-21
                 // echo '<br/>';
-                // echo ' nextDate '.$nextDate->format('Y-m-d'); // 2021-06-12 / 2021-06-19 / 2021-06-26
+                // echo ' next date '.$nextDate->format('Y-m-d'); // 2024-04-21 / 2024-04-28
+                // echo '<br/>';
+                // echo ' end date '.$edate->format('Y-m-d'); // 2024-04-21
+                // echo '<br/>----------------------------------------------';
 
                 // echo '<br/>';
-                // echo ' check 1 '.$nextDate->format('N'); // 6
+                // echo ' check 1 - DAY OF WEEK '.$dayOfWeek; // 6
                 // echo '<br/>';
-                // echo ' check 2 '.$dayOfWeek; // 6
-
+                // echo ' check 2 - START DATE '.$sdate->format('N'); // 6
+                // echo '<br/>';
+                // echo ' check 3 - NEXT DATE '.$nextDate->format('N'); // 6
+                // echo '<br/>';
+                // echo ' check 4 - END DATE '.$edate->format('N'); // 6
+                
                 if($nextDate > $sdate && $nextDate->format('N') != $dayOfWeek){
                     // Once we're past the Start Date, get 'nextDate' to always be a Monday/Saturday
                     $nextDate->modify('previous ' . $startDay);
+                    // echo '<br/>';
+                    // echo ' <b>ENTERS HERE - get back to previous '.$startDay.'</b>';
+                    // echo '<br/>----------------------------------------------';
                 }
+                // echo '<br/>';
+                // echo ' NEW NEXT DATE '.$nextDate->format('Y-m-d'); // 2024-04-21 / 2024-04-28
+                // echo '<br/>';
+                // echo ' NEW NEXT DATE NUMBER '.$nextDate->format('N'); // 6
+                // echo '<br/>----------------------------------------------';
+
                 $resourceRequestHoursRecord = new resourceRequestHoursRecord();
                 $resourceRequestHoursRecord->RESOURCE_REFERENCE = $resourceReference;
                 $resourceRequestHoursRecord->DATE = $nextDate->format('Y-m-d');
@@ -211,12 +234,38 @@ trait resourceRequestHoursTableTrait
                 self::populateComplimentaryDateFields($nextDate, $resourceRequestHoursRecord);
                 
                 $resourceRequestHoursRecord->DATE = $resourceRequestHoursRecord->WEEK_ENDING_FRIDAY;
-                $weelEndingFriday_Date = new \DateTime($resourceRequestHoursRecord->WEEK_ENDING_FRIDAY);
+                $weekEndingFriday_Date = new \DateTime($resourceRequestHoursRecord->WEEK_ENDING_FRIDAY);
                 
+                // echo '<br/>';
+                // echo ' WEEK ENDING FRIDAY '.$weekEndingFriday_Date->format('Y-m-d'); // 2024-04-21
+                // echo '<br/>';
+                // echo ' check 6 - WEEK ENDING FRIDAY '.$weekEndingFriday_Date->format('N'); // 6
+
                 switch ($hrsType) {
+                    // 'Weekend Overtime'
                     case resourceRequestRecord::HOURS_TYPE_OT_WEEK_END:
-                        if($edate > $weelEndingFriday_Date){
-                            $businessDaysInWeek = 2; // Includes whole weekend
+                        if($edate > $weekEndingFriday_Date) {
+                            if($iteration == 1) {
+                                switch ($sdateInit->format('N')) {
+                                    case 6: // Starts on a Saturday
+                                        $businessDaysInWeek = 2;
+                                        break;
+                                    case 7: // Ends on a Sunday
+                                        $businessDaysInWeek = 1;
+                                        break; 
+                                    default:
+                                        if($nextPeriod < $endPeriod) {
+                                            // Starts in the next period
+                                            $businessDaysInWeek = 2;
+                                        } else {
+                                            // Starts before the weekend starts
+                                            $businessDaysInWeek = 0;
+                                        }
+                                        break;
+                                }
+                            } else {
+                                $businessDaysInWeek = 2; // Includes whole weekend
+                            }
                         } else {
 
                             // echo '<br/>';
@@ -232,12 +281,12 @@ trait resourceRequestHoursTableTrait
                             // echo ' ends on '.$edate->format('N');
                             
                             // echo '<br/>';
-                            // echo ' weelEndingFriday_Date on '.$weelEndingFriday_Date->format('d-M-Y');
+                            // echo ' weekEndingFriday_Date on '.$weekEndingFriday_Date->format('d-M-Y');
                             
                             switch ($edate->format('N')) {
                                 case 6: // Ends on a Saturday
                                     $businessDaysInWeek = 1;
-                                    break; 
+                                    break;
                                 case 7: // Ends on a Sunday
                                     $businessDaysInWeek = 2;
                                     break; 
@@ -253,9 +302,11 @@ trait resourceRequestHoursTableTrait
                             }
                         }  
                         break;
+                    // 'Regular'
                     case resourceRequestRecord::HOURS_TYPE_REGULAR:
                         $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($resourceRequestHoursRecord->WEEK_ENDING_FRIDAY, $bankHolidaysList, $sdate, $edate);
                         break;
+                    // 'Weekday Overtime'
                     case resourceRequestRecord::HOURS_TYPE_OT_WEEK_DAY:
                         $businessDaysInWeek = DateClass::businessDaysForWeekEndingFriday($resourceRequestHoursRecord->WEEK_ENDING_FRIDAY, $bankHolidaysList, $sdate, $edate, false);
                         break;
