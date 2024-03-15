@@ -35,6 +35,15 @@ trait resourceRequestHoursTableTrait
             $stopped = true;
         }
 
+        $sdate = new \DateTime($startDate);
+        $edate = new \DateTime($endDate);
+
+        if ($sdate > $edate) {
+            error_log("(" . $resourceReference . ") Start Date (" . $startDate . ") and End Date (" . $endDate . ") are swapped");
+            throw new \Exception("(" . $resourceReference . ") Start Date (" . $startDate . ") and End Date (" . $endDate . ") are swapped");
+            $stopped = true;
+        }
+
         if ($hours == 0) {
             error_log("(" . $resourceReference . ") Invalid Total Hours amount (" . $hours . ")");
             throw new \Exception("(" . $resourceReference . ") Invalid Total Hours amount (" . $hours . ")");
@@ -47,9 +56,6 @@ trait resourceRequestHoursTableTrait
             throw new \Exception("(" . $resourceReference . ") Invalid Hours Type found (" . $hrsType . ")");
             $stopped = true;
         }
-
-        $sdate = new \DateTime($startDate);
-        $edate = new \DateTime($endDate);
 
         // get amount of days per type
         $weekendDays = DateClass::weekendDaysFromStartToEnd($sdate, $edate);

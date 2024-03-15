@@ -23,8 +23,7 @@ $_ENV['email'] = 'on';
 
 $noreplemailid = $_ENV['noreplykyndrylemailid'];
 $emailAddress = array(
-    // 'philip.bibby@kyndryl.com',
-    'piotr.tajanowicz@kyndryl.com',
+    'philip.bibby@kyndryl.com',
     $_ENV['automationemailid']
 );
 $emailAddressCC = array();
@@ -35,15 +34,33 @@ try {
     $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
     $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS_TEST);
 
+    $swappedStartEndDateRecords = 0;
     $hoursRecords = 0;
-    $totalNullRecords = 0;
     $totalZeroRecords = 0;
+    $totalNullRecords = 0;
 
     $predicate = $resourceHoursTable->notExistsPredicate('RR');
     
     $sql = $resourceRequestTable->getSelect(null, 'RR');
     $sql .= " WHERE 1=1 " ;
     $sql .= !empty($predicate) ? " AND  $predicate " : null ;
+
+    $swappedStartEndDatesSql = $sql;
+    $swappedStartEndDatesSql .= " AND START_DATE > END_DATE";
+
+    $rs = sqlsrv_query( $GLOBALS['conn'], $swappedStartEndDatesSql );
+    if (! $rs) {
+        error_log("<BR>" . json_encode(sqlsrv_errors()));
+        error_log("<BR>" . json_encode(sqlsrv_errors()) . "<BR>");
+        exit ( "Error in: " . __METHOD__ . " running: COMMIT " );
+    }
+
+    $swappedStartEndDateResponce = '';
+    while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
+        $swappedStartEndDateRecords++;
+        $swappedStartEndDateResponce = trim($row['RESOURCE_REFERENCE']);
+        $swappedStartEndDateResponce .= "<br>(" . $resourceReference . ") - Start and End dates are swapped";
+    }
 
     $hoursSql = $sql;
     $hoursSql .= " AND HOURS_TYPE IS NULL";
@@ -60,23 +77,6 @@ try {
         $hoursRecords++;
         $resourceReference = trim($row['RESOURCE_REFERENCE']);
         $hoursResponse .= "<br>(" . $resourceReference . ") - Hours Type is null";
-    }
-
-    $totalHoursSql = $sql;
-    $totalHoursSql .= " AND TOTAL_HOURS IS NOT NULL";
-
-    $rs = sqlsrv_query( $GLOBALS['conn'], $totalHoursSql );
-    if (! $rs) {
-        error_log("<BR>" . json_encode(sqlsrv_errors()));
-        error_log("<BR>" . json_encode(sqlsrv_errors()) . "<BR>");
-        exit ( "Error in: " . __METHOD__ . " running: COMMIT " );
-    }
-
-    $totalNullResponse = '';
-    while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
-        $totalNullRecords++;
-        $resourceReference = trim($row['RESOURCE_REFERENCE']);
-        $totalNullResponse .= "<br>(" . $resourceReference . ") - Total Hours is null";
     }
     
     $totalHoursZeroSql = $sql;
@@ -96,21 +96,40 @@ try {
         $totalZeroResponse .= "<br>(" . $resourceReference . ") - Total Hours is 0.00";
     }
 
+    $totalHoursSql = $sql;
+    $totalHoursSql .= " AND TOTAL_HOURS IS NOT NULL";
+
+    $rs = sqlsrv_query( $GLOBALS['conn'], $totalHoursSql );
+    if (! $rs) {
+        error_log("<BR>" . json_encode(sqlsrv_errors()));
+        error_log("<BR>" . json_encode(sqlsrv_errors()) . "<BR>");
+        exit ( "Error in: " . __METHOD__ . " running: COMMIT " );
+    }
+
+    $totalNullResponse = '';
+    while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
+        $totalNullRecords++;
+        $resourceReference = trim($row['RESOURCE_REFERENCE']);
+        $totalNullResponse .= "<br>(" . $resourceReference . ") - Total Hours is null";
+    }
+    
     $subject = 'Validate RR Hours';
     $message = 'Validate RR Hours script has completed.';
-    $message .= '<br>Amount of records in section 1: ' . $hoursRecords;
+    $message .= '<br>Amount of records in section 1 (Start and End dates are swapped): ' . $swappedStartEndDateRecords;
+    $message .= $swappedStartEndDateResponce;
+    $message .= '<br>Amount of records in section 2 (Hours Type is null): ' . $hoursRecords;
     $message .= $hoursResponse;
-    $message .= '<br>Amount of records in section 2: ' . $totalNullRecords;
-    $message .= $totalNullResponse;
-    $message .= '<br>Amount of records in section 2: ' . $totalZeroRecords;
+    $message .= '<br>Amount of records in section 3 (Total Hours is zero): ' . $totalZeroRecords;
     $message .= $totalZeroResponse;
+    $message .= '<br>Amount of records in section 4 (Total Hours is null): ' . $totalNullRecords;
+    $message .= $totalNullResponse;
     $result = BlueMail::send_mail($emailAddress, $subject, $message, $noreplemailid, $emailAddressCC, $emailAddressBCC);
     
 } catch (Exception $e) {
     $subject = 'Error in: Validate RR Hours ';
     $message = $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
 
-    $to = array('piotr.tajanowicz@kyndryl.com');
+    $to = array($_ENV['automationemailid']);
     $cc = array();
     $replyto = $_ENV['noreplyemailid'];
     

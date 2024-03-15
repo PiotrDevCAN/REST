@@ -53,7 +53,11 @@ $invalidEndDate = resourceRequestTable::validateDate($endDate) === false;
 
 $endDatePriorStartDate = false;
 if ($invalidStartDate !== false  && $invalidEndDate !== false) {
-    if ($startDate > $endDate) {
+    
+    $sdate = new \DateTime($startDate);
+    $edate = new \DateTime($endDate);
+
+    if ($sdate > $edate) {
         $endDatePriorStartDate = true;
     }
 }

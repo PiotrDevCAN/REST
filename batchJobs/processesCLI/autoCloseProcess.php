@@ -58,7 +58,7 @@ try {
     $subject = 'Error in: Auto Close ';
     $message = $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
 
-    $to = array('piotr.tajanowicz@kyndryl.com');
+    $to = array($_ENV['automationemailid']);
     $cc = array();
     $replyto = $_ENV['noreplyemailid'];
     

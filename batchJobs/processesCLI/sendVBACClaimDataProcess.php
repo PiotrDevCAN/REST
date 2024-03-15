@@ -127,7 +127,7 @@ try {
     $subject = 'Error in: send vBAC Claim data ';
     $message = $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
 
-    $to = array('piotr.tajanowicz@kyndryl.com');
+    $to = array($_ENV['automationemailid']);
     $cc = array();
     $replyto = $_ENV['noreplyemailid'];
     

@@ -162,7 +162,7 @@ try {
     $subject = 'Error in: Load VBAC Active Resources ';
     $message = $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
 
-    $to = array('piotr.tajanowicz@kyndryl.com');
+    $to = array($_ENV['automationemailid']);
     $cc = array();
     $replyto = $_ENV['noreplyemailid'];
     

@@ -23,8 +23,7 @@ $_ENV['email'] = 'on';
 
 $noreplemailid = $_ENV['noreplykyndrylemailid'];
 $emailAddress = array(
-    // 'philip.bibby@kyndryl.com',
-    'piotr.tajanowicz@kyndryl.com',
+    'philip.bibby@kyndryl.com',
     $_ENV['automationemailid']
 );
 $emailAddressCC = array();
@@ -78,7 +77,7 @@ try {
     $subject = 'Error in: Add Missing RR Hours ';
     $message = $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
 
-    $to = array('piotr.tajanowicz@kyndryl.com');
+    $to = array($_ENV['automationemailid']);
     $cc = array();
     $replyto = $_ENV['noreplyemailid'];
     
