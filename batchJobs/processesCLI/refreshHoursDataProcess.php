@@ -32,7 +32,7 @@ $emailAddressBCC = array();
 try {
 
     $resourceRequestTable = new resourceRequestTable(allTables::$RESOURCE_REQUESTS);
-    $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS_TEST);
+    $resourceHoursTable = new resourceRequestHoursTable(allTables::$RESOURCE_REQUEST_HOURS);
 
     // clear the hours table
     $resourceHoursTable->clear();
