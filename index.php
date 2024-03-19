@@ -1,29 +1,5 @@
 <?php
 
-use itdq\WorkerAPI;
-
-if(!isset($_SESSION['uid'])) {
-	$_SESSION['uid'] = 'piotr.tajanowicz@kyndryl.com';
-}
-
-$start = microtime(true);
-
-// $workerAPI = new WorkerAPI();
-// $workerData = $workerAPI->getworkerByEmail($_SESSION['ssoEmail']);
-
-// $elapsed = microtime(true);
-// echo ("WorkerAPI call took:" . (float)($elapsed-$start));
-// echo '</br>';
-
-// echo '<pre>';
-// echo 'ENVIRONMENT <br>';
-// var_dump($_ENV);
-// echo 'SESSION <br>';
-// var_dump($_SESSION);
-// echo 'WORKER DATA <br>';
-// var_dump($workerData);
-// echo '</pre>';
-
 echo 'Emails status: '.trim($_ENV['email']);
 
 ?>
@@ -44,5 +20,3 @@ body {
 	</div>
 </div>
 <!-- /.container-fluid -->
-
-
