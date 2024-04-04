@@ -1,7 +1,6 @@
 <?php
 
 use PhpOffice\PhpSpreadsheet\Helper\Sample;
-use itdq\DbTable;
 use itdq\BlueMail;
 
 use rest\allTables;
@@ -35,7 +34,7 @@ $emailAddressBCC = array();
 
 try {
 
-    $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&onlyactive=false&withProvClear=true&plus=P.CNUM,P.EMAIL_ADDRESS,P.KYN_EMAIL_ADDRESS,P.FIRST_NAME,P.LAST_NAME,P.PES_STATUS,SQUAD_NAME,TRIBE_NAME,P.WORK_STREAM,P.CIO_ALIGNMENT,P.WORKER_ID';
+    $url = $_ENV['vbac_url'] . '/api/squadTribePlus.php?token=' . $_ENV['vbac_api_token'] . '&onlyactive=false&onlyprimary=false&withProvClear=true&plus=P.CNUM,P.EMAIL_ADDRESS,P.KYN_EMAIL_ADDRESS,P.FIRST_NAME,P.LAST_NAME,P.PES_STATUS,SQUAD_NAME,TRIBE_NAME,P.WORK_STREAM,P.CIO_ALIGNMENT,P.WORKER_ID,ASSIGNMENT_TYPE';
 
     $curl = curl_init();
     
@@ -80,8 +79,8 @@ try {
             }
 
             // define query
-            $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( CNUM, EMAIL_ADDRESS, KYN_EMAIL_ADDRESS, WORKER_ID, FIRST_NAME, LAST_NAME, NOTES_ID, PES_STATUS, CIO_ALIGNMENT, STATUS, TRIBE_NAME, SQUAD_NAME, TRIBE_NAME_MAPPED )";
-            $sql .= " VALUES (?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ? ,?, ?)";
+            $sql = "INSERT INTO " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " ( CNUM, EMAIL_ADDRESS, KYN_EMAIL_ADDRESS, WORKER_ID, FIRST_NAME, LAST_NAME, NOTES_ID, PES_STATUS, CIO_ALIGNMENT, STATUS, TRIBE_NAME, SQUAD_NAME, TRIBE_NAME_MAPPED, ASSIGNMENT_TYPE )";
+            $sql .= " VALUES (?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ? ,?, ?, ?)";
             
             $cnum = '';
             $emailAddress = '';
@@ -96,6 +95,7 @@ try {
             $tribeName = '';
             $squadName = '';
             $mappedTribeName = '';
+            $assignmentType = '';
 
             // prepare query for later use
             $stmt = sqlsrv_prepare($GLOBALS['conn'], $sql, array(
@@ -111,7 +111,8 @@ try {
                 &$status,
                 &$tribeName,
                 &$squadName,
-                &$mappedTribeName
+                &$mappedTribeName,
+                &$assignmentType
             ));
             if(!$stmt){
                 die( print_r( sqlsrv_errors(), true));
@@ -136,6 +137,7 @@ try {
                 $tribeName = trim($personEntry['TRIBE_NAME']);
                 $squadName = trim($personEntry['SQUAD_NAME']);
                 $mappedTribeName = array_key_exists($personEntry['TRIBE_NAME'], rfsRecord::$tribeNameMapping) ? rfsRecord::$tribeNameMapping[$personEntry['TRIBE_NAME']] : trim($personEntry['TRIBE_NAME']);
+                $assignmentType = trim($personEntry['ASSIGNMENT_TYPE']);
                 
                 // exacute prepared statement with new data
                 $rs = sqlsrv_execute($stmt);
