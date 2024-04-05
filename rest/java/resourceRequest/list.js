@@ -23,10 +23,11 @@ let RRDiaryBox = await cacheBustImport('./modules/boxes/resourceRequest/RRDiaryB
 let RRIndicateCompletedBox = await cacheBustImport('./modules/boxes/resourceRequest/RRIndicateCompletedBox.js');
 let RRChangeStatusCompletedBox = await cacheBustImport('./modules/boxes/resourceRequest/RRChangeStatusCompletedBox.js');
 
-let editResourceTraitBox = await cacheBustImport('./modules/boxes/resourceRequest/RREditResourceTraitBox.js');
-
 let onReject = await cacheBustImport('./modules/tables/onReject.js');
-let thenableTable = await cacheBustImport('./modules/tables/thenableResourceRequestsTable.js');
+// let thenableTable = await cacheBustImport('./modules/tables/thenableResourceRequestsTable.js');
+import { default as thenableTable } from '/rest/java/modules/tables/thenableResourceRequestsTable.js';
+
+let VBACActiveResources = await cacheBustImport('./modules/dataSources/vbacActiveResources.js');
 
 class resourceRequestsList {
 
@@ -36,26 +37,27 @@ class resourceRequestsList {
 }
 
 const RRList = new resourceRequestsList();
-// removed functions
-// var allowPast = true;
-// RRList.initialiseDateSelect(allowPast); // This was causing the use of up and down arrows to change the Date Field on the form which we didn't want.
-// removed functions
-// RRList.buildResourceReport(false).then(function (table) {
-// 	console.log('Success, resource request list');
-// 	organisationSelect.listenForSelectChange(table);
-// 	businessUnitSelect.listenForSelectChange(table);
-// 	rfsSelect.listenForSelectChange(table);
-// });
 
-ResourceRequest.table = thenableTable;
+const promises = [];
 
-// const onTableInitialized = (table) => {
-	organisationSelect.listenForSelectChange(thenableTable);
-	businessUnitSelect.listenForSelectChange(thenableTable);
-	rfsSelect.listenForSelectChange(thenableTable);
-// };
-// thenableTable.then(onTableInitialized, onReject);
+// check for vBAC employees
+let resourceNamesPromise = VBACActiveResources.getActiveResources();
+promises.push(resourceNamesPromise);
 
-const EditResourceTraitBox = new editResourceTraitBox(thenableTable);
+// Promise.allSettled(promises)
+Promise.all(promises)
+	.then((results) => {
+		// results.forEach((result) => console.log(result.status));
+		const onTableInitialized = (obj, table) => {
+			ResourceRequest.table = table;
+			organisationSelect.listenForSelectChange(table);
+			businessUnitSelect.listenForSelectChange(table);
+			rfsSelect.listenForSelectChange(table);
+		};
+		thenableTable.then(onTableInitialized, onReject);
+		$('[data-toggle="tooltip"]').tooltip();
 
-$('[data-toggle="tooltip"]').tooltip();
+	})
+	.catch((err) => {
+		console.log("error:", err);
+	});

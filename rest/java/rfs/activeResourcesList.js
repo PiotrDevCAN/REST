@@ -65,7 +65,11 @@ class activeResourcesList {
                 { data: "NOTES_ID","defaultContent": "" },
                 { data: "FIRST_NAME","defaultContent": "" },
                 { data: "LAST_NAME","defaultContent": "" },
-                { data: "PES_STATUS","defaultContent": "" }
+                { data: "PES_STATUS","defaultContent": "" },
+                { data: "TRIBE_NAME","defaultContent": "" },
+                { data: "TRIBE_NAME_MAPPED","defaultContent": "" },
+                { data: "SQUAD_NAME","defaultContent": "" },
+                { data: "ASSIGNMENT_TYPE","defaultContent": "" },
             ]
         });
     }

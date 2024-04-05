@@ -75,10 +75,10 @@ trait rfsNoMatchBUsTrait
         $sql.= " RFS.BUSINESS_UNIT AS RFS_BUSINESS_UNIT,";
         $sql.= " AR.TRIBE_NAME_MAPPED AS INDIVIDUAL_BUSINESS_UNIT,";
 
-        $sql .= " (SELECT STRING_AGG(D.ENTRY, '</br>') FROM " . $GLOBALS['Db2Schema'] . ".DIARY AS D ";
-        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_DIARY. " AS RD ";
-        $sql .= " ON D.DIARY_REFERENCE = RD.DIARY_REFERENCE ";
-        $sql .= " WHERE RD.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE) AS DIARY, CLAIM.* ";
+        $sql.= " (SELECT STRING_AGG(D.ENTRY, '</br>') FROM " . $GLOBALS['Db2Schema'] . ".DIARY AS D ";
+        $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_DIARY. " AS RD ";
+        $sql.= " ON D.DIARY_REFERENCE = RD.DIARY_REFERENCE ";
+        $sql.= " WHERE RD.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE) AS DIARY, CLAIM.* ";
 
         // RFS table
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
@@ -89,7 +89,8 @@ trait rfsNoMatchBUsTrait
 
         // Active Resources table
         $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
-        $sql.= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID)";
+        $sql.= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID) ";
+        $sql.= " OR RR.RESOURCE_NAME = AR.EMAIL_ADDRESS ";
 
         $sql.= " , CLAIM";
 
@@ -179,10 +180,10 @@ trait rfsNoMatchBUsTrait
         $sql.= " RFS.BUSINESS_UNIT AS RFS_BUSINESS_UNIT,";
         $sql.= " AR.TRIBE_NAME_MAPPED AS INDIVIDUAL_BUSINESS_UNIT,";
 
-        $sql .= " (SELECT STRING_AGG(D.ENTRY, '</br>') FROM " . $GLOBALS['Db2Schema'] . ".DIARY AS D ";
-        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_DIARY. " AS RD ";
-        $sql .= " ON D.DIARY_REFERENCE = RD.DIARY_REFERENCE ";
-        $sql .= " WHERE RD.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE) AS DIARY, CLAIM.* ";
+        $sql.= " (SELECT STRING_AGG(D.ENTRY, '</br>') FROM " . $GLOBALS['Db2Schema'] . ".DIARY AS D ";
+        $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUEST_DIARY. " AS RD ";
+        $sql.= " ON D.DIARY_REFERENCE = RD.DIARY_REFERENCE ";
+        $sql.= " WHERE RD.RESOURCE_REFERENCE = RR.RESOURCE_REFERENCE) AS DIARY, CLAIM.* ";
 
         // RFS table
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_REQUESTS . " AS RR ";
@@ -193,7 +194,8 @@ trait rfsNoMatchBUsTrait
 
         // Active Resources table
         $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
-        $sql.= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID)";
+        $sql.= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID) ";
+        $sql.= " OR RR.RESOURCE_NAME = AR.EMAIL_ADDRESS ";
 
         $sql.= " , CLAIM";
 

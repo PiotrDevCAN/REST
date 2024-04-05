@@ -140,7 +140,6 @@ Trace::pageOpening($_SERVER['PHP_SELF']);
   include_once 'includes/modalEditRequestModal.html';
   include_once 'includes/modalDiaryModal.html';
   include_once 'includes/modalStatusModal.html';
-  include_once 'includes/modalOverrideBespokeRateModal.html';
 ?>
 
 <?php

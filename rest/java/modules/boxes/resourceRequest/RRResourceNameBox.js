@@ -205,21 +205,6 @@ class RRResourceNameBox {
 				});
 				promises.push(resourceNamesPromise);
 
-				// let resourceNamesPromise = new Promise((resolve, reject) => {
-				// 	check for vBAC employees
-				// 	if (typeof ($this.VBACActiveResourcesData) !== 'undefined') {
-				// 		resolve('from cache');
-				// 	} else {
-				// 		let VBACActiveResources = cacheBustImport('./modules/dataSources/vbacActiveResources.js').then((response) => {
-				// 			response.getActiveResources().then((response) => {
-				// 				$this.VBACActiveResourcesData = response;
-				// 				resolve('from API');
-				// 			});
-				// 		});
-				// 	}
-				// });
-				// promises.push(resourceNamesPromise);
-
 				// Promise.allSettled(promises)
 				Promise.all(promises)
 					.then((results) => {
@@ -260,7 +245,7 @@ class RRResourceNameBox {
 		var messageForUser = '';
 		if (resourceName === null) {
 			$this.enableClearResourceName();
-			messageForUser = 'Presently assigned employee not found in dataset read from VBAC. New resource must be assigned.';
+			messageForUser = 'Presently assigned employee is not found in dataset read from VBAC <br/>or is not active resource. <br/><b>New resource must be assigned</b>.';
 		} else if (resourceName === '') {
 			messageForUser = 'Resource has been not allocated yet.';
 		} else {

@@ -18,9 +18,20 @@ if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
 
 error_log('opening ' . __FILE__);
 
+// Takes raw data from the request
+$json = file_get_contents('php://input');
+
+// Converts it into a PHP object
+$data = json_decode($json, true);
+
+$fetchAll = null;
+if(isset($data['fetchAll'])){
+    $fetchAll = true;
+}
+
 $activeResources = new activeResourceTable(allTables::$ACTIVE_RESOURCE);
-$data = $activeResources->getVbacActiveResourcesForSelect2();
-list('tribeEmployees' => $tribeEmployees, 'source' => $source) = $data;
+$data = $activeResources->getVbacActiveResourcesForSelect2($fetchAll);
+list('tribeEmployees' => $tribeEmployees, 'source' => $source, 'sql' => $sql) = $data;
 
 error_log('returned from resourceRequestTable->getVbacActiveResourcesForSelect2()');
 error_log(count($tribeEmployees) . " active resources");
@@ -32,7 +43,8 @@ $response = array(
     'success'=> $success,
     'messages'=>$messages,
     'count'=>count($tribeEmployees),
-    'source'=>$source
+    'source'=>$source,
+    'sql'=>$sql
 );
 
 Trace::pageLoadComplete($_SERVER['PHP_SELF']);

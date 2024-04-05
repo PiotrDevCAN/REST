@@ -5,11 +5,11 @@ metadata:
   labels:
     app: rest
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type }}
   selector:
     app: rest
   ports:
   - name: rest-svc-port
+    port: {{ .Values.service.port }}
     protocol: TCP
-    port: 8080
-    targetPort: 8080
+    targetPort: {{ .Values.service.port }}

@@ -2,22 +2,33 @@
 namespace rest;
 
 use itdq\DbTable;
-use itdq\AuditTable;
-use rest\activeResourceRecord;
 
 class activeResourceTable extends DbTable {
 
     const INT_STATUS_ACTIVE = 'active';
     const INT_STATUS_INACTIVE = 'inactive'; 
 
+    const INT_STATUS_LOCAL = 'local';
+    const INT_STATUS_REMOTE = 'remote';
+
     function __construct($table,$pwd=null,$log=true){
         parent::__construct($table,$pwd,$log);
+    }
+
+    static function addRecord($row = array()){
+        // initial state of record
+        $row['disabled'] = false;
+        // override disabled if record is inactive
+        if ($row['status'] == self::INT_STATUS_INACTIVE) {
+            $row['disabled'] = true;
+        }
+        return $row;
     }
 
     function returnForDataTables(){
         $sql = " SELECT * ";
         $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . $this->tableName;
-        $sql.= " WHERE STATUS='" . self::INT_STATUS_ACTIVE. "'";
+        $sql.= " WHERE STATUS = '" . self::INT_STATUS_ACTIVE. "'";
 
         $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
@@ -38,29 +49,32 @@ class activeResourceTable extends DbTable {
             $display['FIRST_NAME'] = $row['FIRST_NAME'];
             $display['LAST_NAME'] = $row['LAST_NAME'];
             $display['PES_STATUS'] = $row['PES_STATUS'];
+            $display['TRIBE_NAME'] = $row['TRIBE_NAME'];
+            $display['SQUAD_NAME'] = $row['SQUAD_NAME'];
+            $display['TRIBE_NAME_MAPPED'] = $row['TRIBE_NAME_MAPPED'];
+            $display['ASSIGNMENT_TYPE'] = $row['ASSIGNMENT_TYPE'];
             $displayAble[] = $display;
         }
         return $displayAble;
     }
 
-    function getVbacActiveResourcesForSelect2(){
+    function getVbacActiveResourcesForSelect2($fetchAll = null){
 
         $allEmployees = array();
         $allTribes = array();
         $vbacEmployees = array();
-        $myTribe = '';
-
+        $myTribes = array();
+        $sql = '';
         $redis = $GLOBALS['redis'];
         $key = 'getVbacActiveResources_DB_employeeDetails';
-        $redisKey = md5($key.'_key_'.$_ENV['environment']);
+        $redisKey = md5($key.'_key_'.$_ENV['environment'].'_param_'.$fetchAll);
         if (!$redis->get($redisKey)) {
             $source = 'SQL Server';
 
-            $sql = " SELECT * ";
+            $sql = " SELECT CNUM, WORKER_ID, NOTES_ID, EMAIL_ADDRESS, KYN_EMAIL_ADDRESS, FIRST_NAME, LAST_NAME, SQUAD_NAME, TRIBE_NAME, ASSIGNMENT_TYPE, STATUS ";
             $sql.= " FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE;
-            $sql.= " WHERE STATUS = 'active' ";
-            $sql.= " ORDER BY EMAIL_ADDRESS ASC";
-    
+            $sql.= " ORDER BY STATUS ASC, EMAIL_ADDRESS ASC";
+
             $rs = sqlsrv_query($GLOBALS['conn'], $sql);
             
             if (!$rs){
@@ -80,7 +94,13 @@ class activeResourceTable extends DbTable {
                     // $vbacEmployees[] = array(
                     // $key = trim($employeeDetails->NOTES_ID);
                     // $key = trim($employeeDetails->CNUM);
-                    $key = trim($employeeDetails->EMAIL_ADDRESS);
+                    // $key = trim($employeeDetails->EMAIL_ADDRESS);
+                    $key = md5($employeeDetails->EMAIL_ADDRESS
+                        .'_'.$employeeDetails->CNUM
+                        .'_'.$employeeDetails->SQUAD_NAME
+                        .'_'.$employeeDetails->TRIBE_NAME
+                        .'_'.$employeeDetails->ASSIGNMENT_TYPE
+                    );
                     $vbacEmployees[$key] = array(
                         'id'=>trim($employeeDetails->KYN_EMAIL_ADDRESS),
                         'cnum'=>trim($employeeDetails->CNUM),
@@ -89,16 +109,19 @@ class activeResourceTable extends DbTable {
                         'kynEmailAddress'=>trim($employeeDetails->KYN_EMAIL_ADDRESS),
                         'notesId'=>trim($employeeDetails->NOTES_ID),
                         'text'=>trim($employeeDetails->FIRST_NAME) . ' ' . trim($employeeDetails->LAST_NAME) . ' (' . trim($employeeDetails->KYN_EMAIL_ADDRESS) . ')',
-                            'role'=>trim($employeeDetails->SQUAD_NAME),
-                            'tribe'=>trim($employeeDetails->TRIBE_NAME),
-                            'distance'=>'remote'
+                        'role'=>trim($employeeDetails->SQUAD_NAME),
+                        'tribe'=>trim($employeeDetails->TRIBE_NAME),
+                        'type'=>trim($employeeDetails->ASSIGNMENT_TYPE),
+                        'status'=>trim($employeeDetails->STATUS),
+                        'distance'=>self::INT_STATUS_REMOTE,
+                        'disabled'=>true
                     );
                 // }
                     
                 // get employee's tribe name
                 if (array_key_exists('ssoEmail', $_SESSION)) {
                     if (strtolower($employeeDetails->EMAIL_ADDRESS) == strtolower($_SESSION['ssoEmail'])){
-                        $myTribe = $employeeDetails->TRIBE_NAME;
+                        $myTribes[] = strtolower($employeeDetails->TRIBE_NAME);
                     }
                 }
             }
@@ -127,33 +150,33 @@ class activeResourceTable extends DbTable {
         // }
             
         $tribeEmployees = array();
-        // process the employees, flagging as 'local' those in the "myTribe" tribe
-        foreach ($vbacEmployees as $value) {
-            // if (strtolower(substr(trim($value['id']), -4))=='/ibm' || strtolower(substr(trim($value['id']), -6))=='/ocean'){  // Filter out invalid Notes Ids
-                // if (!empty(trim($value['role']) && !empty(trim($value['tribe'])))) {
-                    if (!empty($myTribe) && strtolower($value['tribe']) == strtolower($myTribe)){
-                        $value['distance']='local';
-                        // $tribeEmployees[trim($value['id'])] = $value;
-                        $tribeEmployees[] = $value;
-                    } else {
-                        if (isset($_SESSION['isAdmin']) || isset($_SESSION['isSupplyX'])){
-                            // $tribeEmployees[trim($value['id'])] = $value;
-                            $tribeEmployees[] = $value;
-                        }
-                    }
-                // } else {
-                    // $value['distance']='removed';
-                    // $tribeEmployees[trim($value['id'])] = $value;
-                    // $tribeEmployees[] = $value;
-                // }
-            // }
+        if (isset($_SESSION['isAdmin']) || isset($_SESSION['isSupplyX']) || !is_null($fetchAll)){
+            foreach ($vbacEmployees as $value) {
+                $tribeEmployees[] = self::addRecord($value);
+            }
+        } else {
+            // put local individuals at the top of list
+            $localEmails = array();
+            foreach ($vbacEmployees as $value) {
+                if (!empty($myTribes) && in_array(strtolower($value['tribe']), $myTribes) ){
+                    $value['distance'] = self::INT_STATUS_LOCAL;
+                    $tribeEmployees[] = self::addRecord($value);
+                    $localEmails[] = $value['emailAddress'];
+                }
+            }
+            foreach ($vbacEmployees as $value) {
+                if (!in_array($value['emailAddress'], $localEmails)) {
+                    $tribeEmployees[] = self::addRecord($value);
+                }
+            }
         }
-        
+
         $result = array(
             'allEmployees' => $allEmployees,
             'vbacEmployees' => $vbacEmployees,
             'tribeEmployees' => $tribeEmployees,
-            'source' => $source
+            'source' => $source,
+            'sql' => $sql
         );
 
         return $result;

@@ -1,10 +1,21 @@
 function formatResourceName(resource) {
 	var symbol = resource.distance == 'local' ? '' : '';
-
-	// resource.emailAddress
-	// resource.kynEmailAddress
-
-	var text = $("<span style='color:black' >&nbsp;" + resource.text + "</span><br/>&nbsp;&nbsp;" + resource.role + "<br/>&nbsp;&nbsp;<span style='color:silver'>" + resource.tribe + "<span>");
+	var cssClass = '';
+	switch (resource.disabled) {
+		case false:
+			cssClass = 'text-success';
+			break;
+		case true:
+			cssClass = 'text-warning';
+			break;
+		default:
+			break;
+	}
+	var text = $("<span class='" + cssClass + "'>&nbsp;(<b>" + resource.status + "</b>) " + resource.text + "</span>"
+		+ "<br/>&nbsp;&nbsp;" + resource.role
+		+ "<br/>&nbsp;&nbsp;<span style='color:silver'>" + resource.tribe + "<span>"
+		+ "<br/>&nbsp;&nbsp;<span style='color:silver'>Assignment Type: " + resource.type + "<span>"
+	);
 	return text;
 }
 

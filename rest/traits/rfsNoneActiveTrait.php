@@ -89,15 +89,15 @@ trait rfsNoneActiveTrait
         $sql.= " ON RR.RFS =  RFS.RFS_ID ";        
         
         // Value Stream
-        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_VALUE_STREAM . " as VS ";
-        $sql .= " ON RFS.VALUE_STREAM = VS.VALUE_STREAM_ID";
+        $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_VALUE_STREAM . " as VS ";
+        $sql.= " ON RFS.VALUE_STREAM = VS.VALUE_STREAM_ID";
         
         // Organization
-        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as ORG ";
-        $sql .= " ON RR.ORGANISATION = ORG.ORGANISATION_ID";
-        // $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
-        $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " AS AR ";
-        $sql.= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID) ";        
+        $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as ORG ";
+        $sql.= " ON RR.ORGANISATION = ORG.ORGANISATION_ID";
+        $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
+        $sql.= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID) ";
+        $sql.= " OR RR.RESOURCE_NAME = AR.EMAIL_ADDRESS ";
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
         $sql.= " AND " . rfsTable::NOT_ARCHIVED;

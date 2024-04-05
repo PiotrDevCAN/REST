@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: rest
 spec:
-  replicas: 5
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
   revisionHistoryLimit: 0 # Default to 10 if not specified
   selector:
     matchLabels:
@@ -20,40 +22,60 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
       - name: rest
-        image: kyndryl.jfrog.io/uki-business-intelligence-prod-docker-local/rest:latest
+        image: {{ .Values.image.repository | trim }}:{{ .Values.image.tag | trim }}
         resources:
           limits:
             # no cpu limit! this is excluded on purpose
-            # cpu: "1"
-            memory: 3Gi
+            # cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
           requests:
-            cpu: 32m
-            memory: 128Mi
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
         terminationMessagePath: /dev/termination-log
         ports:
         - name: http
-          containerPort: 8080
+          containerPort: {{ .Values.service.port }}
           protocol: TCP
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         terminationMessagePolicy: File
         env:
         - name: PORT
-          value: "8080"
+          value: '{{ .Values.service.port }}'
         - name: TEMP_INLINE_VALUE
           # we can also pass env variables like in this way 
           value: Linux
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MY_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: MY_POD_SERVICE_ACCOUNT
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName
         envFrom:
         - configMapRef:
-            name: env-configmap-prod
+            name: env-configmap
         - secretRef:
             name: rest-app-docker-secrets
         - secretRef:
             name: rest-app-docker-secrets-db
+        - secretRef:
+            name: rest-app-docker-secrets-redis
         - secretRef:
             name: rest-app-docker-secrets-smtp
         - secretRef:
             name: rest-app-docker-secrets-sso
         - secretRef:
             name: rest-app-docker-secrets-worker-api
-        - secretRef:
-            name: rest-app-docker-secrets-redis

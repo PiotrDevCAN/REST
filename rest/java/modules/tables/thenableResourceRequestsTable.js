@@ -31,7 +31,7 @@ const thenableResourceRequestsTable = {
 		this.table = $('#resourceRequestsTable_id').DataTable({
 			initComplete: (settings, json) => {
 				console.log('DataTables has finished its initialisation.');
-				onFulfilled(this.table);
+				onFulfilled(this, this.table);
 			},
 			language: {
 				emptyTable: "Please select Organisation, Business Unit and/or RFS from dropdowns above"

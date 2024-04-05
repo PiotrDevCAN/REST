@@ -2,11 +2,12 @@
  *
  */
 
-let APIData = await cacheBustImport('./modules/dataSources/fetch/vbacActiveResources.js');
+let vbacActiveResourcesData = await cacheBustImport('./modules/dataSources/data/vbacActiveResourcesData.js');
 
 class vbacActiveResources {
 
     activeResources = [];
+    allActiveResources = [];
 
     constructor() {
 
@@ -14,9 +15,20 @@ class vbacActiveResources {
 
     async getActiveResources() {
         // await for API data
-        var dataRaw = await APIData.data;
-        this.activeResources = dataRaw;
+        if (this.activeResources.length == 0) {
+            var dataRaw = await vbacActiveResourcesData();
+            this.activeResources = dataRaw;
+        }
         return this.activeResources;
+    }
+
+    async getAllActiveResources() {
+        // await for API data
+        if (this.allActiveResources.length == 0) {
+            var dataRaw = await vbacActiveResourcesData(true);
+            this.allActiveResources = dataRaw;
+        }
+        return this.allActiveResources;
     }
 }
 

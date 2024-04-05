@@ -8,6 +8,7 @@ use itdq\DbTable;
 use itdq\PhpMemoryTrace;
 use itdq\Loader;
 use itdq\Navbar;
+use rest\activeResourceTable;
 use rest\allTables;
 use rest\rfsRecord;
 use rest\rfsTable;
@@ -199,8 +200,9 @@ trait resourceRequestTableTrait
         $sql .= " ON RR.RESOURCE_REFERENCE = LD.RESOURCE_REFERENCE ";
 
         // Active Resources table
-        $sql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR  ";
-        $sql.= " on LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID)  ";
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
+        $sql .= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID) ";
+        $sql .= " OR RR.RESOURCE_NAME = AR.EMAIL_ADDRESS ";
 
         $sql .=  " WHERE RR.RFS is not null ";
         $sql .= $pipelineLiveArchive=='archive'  ? " AND " . rfsTable::ARCHIVED : " AND " . rfsTable::NOT_ARCHIVED;
@@ -289,8 +291,9 @@ trait resourceRequestTableTrait
         $countSql .= " ON RR.RESOURCE_REFERENCE = LD.RESOURCE_REFERENCE ";
 
         // Active Resources table
-        $countSql.= " left join " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR  ";
-        $countSql.= " on LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID)  ";
+        $countSql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
+        $countSql .= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID) ";
+        $countSql .= " OR RR.RESOURCE_NAME = AR.EMAIL_ADDRESS ";
 
         $countSql .=  " WHERE RR.RFS is not null ";
         $countSql .= $pipelineLiveArchive=='archive'  ? " AND " . rfsTable::ARCHIVED : " AND " . rfsTable::NOT_ARCHIVED;
@@ -385,8 +388,11 @@ trait resourceRequestTableTrait
         $sql .= " LD.CREATOR as ENTRY_CREATOR,";
         $sql .= " LD.CREATED AS ENTRY_CREATED,";
 
-        // Active Person
-        $sql .= " AR.STATUS AS VBAC_STATUS,";
+        // Active Person data
+        $sql .= "(SELECT TOP 1 STATUS FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " AS AR";
+        $sql .= " WHERE LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID) ";
+        $sql .= " OR RR.RESOURCE_NAME = AR.EMAIL_ADDRESS ";
+        $sql .= ") AS VBAC_STATUS,";
 
         // Resource Trait        
         $sql .= " RTR.ID AS RESOURCE_TRAIT_ID,";
@@ -419,10 +425,6 @@ trait resourceRequestTableTrait
         // Organisation
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as ORG ";
         $sql .= " ON RR.ORGANISATION = ORG.ORGANISATION_ID";
-
-        // Active Person
-        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
-        $sql .= " ON RR.RESOURCE_NAME = AR.EMAIL_ADDRESS AND AR.STATUS = 'active'";
 
         // Resource Trait
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_TRAITS . " as RTR ";
@@ -735,10 +737,16 @@ trait resourceRequestTableTrait
         $resName = substr($resourceName,0,strlen(resourceRequestTable::$duplicate))==resourceRequestTable::$duplicate ? "<i>Unallocated</i>" : $resName;
 
         if (!empty(trim($resourceName))) {
-            if (array_key_exists('VBAC_STATUS', $row) && !empty($row['VBAC_STATUS'])) {
-                $resName = '<span class="text-success" title="Employee found in vBAC">' . $resName .'</span>';
-            } else {
-                $resName = '<span class="text-danger" title="Employee not found in vBAC">' . $resName .'</span>';
+            switch($row['VBAC_STATUS']) {
+                case activeResourceTable::INT_STATUS_ACTIVE:
+                    $resName = '<span class="text-success" title="Employee found in vBAC and is ACTIVE">' . $resName .'</span>';
+                    break;
+                case activeResourceTable::INT_STATUS_INACTIVE:
+                    $resName = '<span class="text-warning" title="Employee found in vBAC altough is INACTIVE">' . $resName .'</span>';
+                    break;
+                default:
+                    $resName = '<span class="text-danger" title="Employee not found in vBAC - missing data issue">' . $resName .'</span>';
+                    break;
             }
         }
 

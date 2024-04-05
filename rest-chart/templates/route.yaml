@@ -4,15 +4,15 @@ metadata:
   labels:
     app: REST
     type: internal-apps-001
-  name: rest-route-dev
-  namespace: ns-rest-gd-kps-dev-wus3
+  name: rest-route
+  namespace: {{ .Values.nameOverride }}
   annotations:
-    description: Route for REST Development instance.
+    description: Route for REST Production instance.
     haproxy.router.openshift.io/timeout: 3600s
 spec:
-  host: rest-dev.zkpw3uspriv.app.kyndryl.net
+  host: {{ .Values.hostUrlOverride }}
   port:
-    targetPort: 8080
+    targetPort: {{ .Values.service.port }}
   tls:
     insecureEdgeTerminationPolicy: Redirect
     termination: edge
