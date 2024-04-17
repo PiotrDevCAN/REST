@@ -96,7 +96,7 @@ trait claimReportTrait
         
         // Service
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_SERVICE . " as SRV ";
-        $sql .= " ON RR.SERVICE_ID = SRV.SERVICE_ID";
+        $sql .= " ON RR.SERVICE = SRV.SERVICE_ID";
 
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
@@ -224,7 +224,7 @@ trait claimReportTrait
         
         // Service
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_SERVICE . " as SRV ";
-        $sql .= " ON RR.SERVICE_ID = SRV.SERVICE_ID";
+        $sql .= " ON RR.SERVICE = SRV.SERVICE_ID";
 
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
