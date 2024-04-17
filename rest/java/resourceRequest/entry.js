@@ -6,7 +6,7 @@ let FormMessageArea = await cacheBustImport('./modules/helpers/formMessageArea.j
 let startAndEnd = await cacheBustImport('./modules/calendars/startAndEnd.js');
 let Services = await cacheBustImport('./modules/dataSources/servicesByOrganisation.js');
 let StaticOrganisations = await cacheBustImport('./modules/dataSources/staticOrganisationsIds.js');
-let StaticServices = await cacheBustImport('./modules/dataSources/staticServices.js');
+let StaticServices = await cacheBustImport('./modules/dataSources/staticServicesIds.js');
 
 class entry {
 
@@ -76,9 +76,9 @@ class entry {
   listenForOrganisationSelect() {
     $('#ORGANISATION').on('select2:select', function (e) {
       FormMessageArea.showMessageArea();
-      var serviceSelected = $(e.params.data)[0].text;
+      var organisationSelectedId = $(e.params.data)[0].id;
       Services.getServices().then((response) => {
-        var data = response[serviceSelected];
+        var data = response[organisationSelectedId];
         if ($('#SERVICE').hasClass("select2-hidden-accessible")) {
           // Select2 has been initialized
           $('#SERVICE').val("").trigger("change");

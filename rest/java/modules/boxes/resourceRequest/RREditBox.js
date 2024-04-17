@@ -7,7 +7,7 @@ let ModalMessageArea = await cacheBustImport('./modules/helpers/modalMessageArea
 let Services = await cacheBustImport('./modules/dataSources/servicesByOrganisation.js');
 let ResourceRequest = await cacheBustImport('./modules/resourceRequest.js');
 let StaticOrganisations = await cacheBustImport('./modules/dataSources/staticOrganisationsIds.js');
-let StaticServices = await cacheBustImport('./modules/dataSources/staticServices.js');
+let StaticServices = await cacheBustImport('./modules/dataSources/staticServicesIds.js');
 
 class RREditBox {
 
@@ -149,9 +149,9 @@ class RREditBox {
 
 	listenForOrganisationSelect() {
 		$(document).on('select2:select', '#ORGANISATION', function (e) {
-			var serviceSelected = $(e.params.data)[0].text;
+			var organisationSelectedId = $(e.params.data)[0].id;
 			Services.getServices().then((response) => {
-				var data = response[serviceSelected];
+				var data = response[organisationSelectedId];
 				if ($('#SERVICE').hasClass("select2-hidden-accessible")) {
 					// Select2 has been initialized
 					$('#SERVICE').val("").trigger("change");

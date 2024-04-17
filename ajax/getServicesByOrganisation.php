@@ -7,7 +7,7 @@ use rest\staticOrganisationServiceTable;
 set_time_limit(0);
 ob_start();
 
-$predicate = " STATUS='" . staticOrganisationServiceTable::ENABLED . "' ";
+$predicate = " SOS.STATUS='" . staticOrganisationServiceTable::ENABLED . "' ";
 $data = staticOrganisationServiceTable::getAllOrganisationsAndServices($predicate);
 
 $messages = ob_get_clean();

@@ -95,6 +95,11 @@ trait rfsNoneActiveTrait
         // Organization
         $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as ORG ";
         $sql.= " ON RR.ORGANISATION = ORG.ORGANISATION_ID";
+        
+        // Service
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_SERVICE . " as SRV ";
+        $sql .= " ON RR.SERVICE_ID = SRV.SERVICE_ID";
+
         $sql.= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$ACTIVE_RESOURCE . " as AR ";
         $sql.= " ON LOWER(RR.RESOURCE_NAME) = LOWER(AR.NOTES_ID) ";
         $sql.= " OR RR.RESOURCE_NAME = AR.EMAIL_ADDRESS ";

@@ -93,6 +93,11 @@ trait claimReportTrait
         // Organization
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as ORG ";
         $sql .= " ON RR.ORGANISATION = ORG.ORGANISATION_ID";
+        
+        // Service
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_SERVICE . " as SRV ";
+        $sql .= " ON RR.SERVICE_ID = SRV.SERVICE_ID";
+
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
         $sql.= " AND " . rfsTable::NOT_ARCHIVED;
@@ -216,6 +221,11 @@ trait claimReportTrait
         // Organization
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as ORG ";
         $sql .= " ON RR.ORGANISATION = ORG.ORGANISATION_ID";
+        
+        // Service
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_SERVICE . " as SRV ";
+        $sql .= " ON RR.SERVICE_ID = SRV.SERVICE_ID";
+
         $sql.= " , CLAIM ";
         $sql.= " WHERE 1=1 " ;
         $sql.= " AND " . rfsTable::NOT_ARCHIVED;

@@ -18,16 +18,29 @@ class staticOrganisationServiceTable extends DbTable
     const DISABLED = 'disabled';
 
     static function getAllOrganisationsAndServices($predicate){
-        $sql = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION_SERVICE;
+        $sql = " SELECT * FROM " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION_SERVICE . " as SOS ";
+
+        // Organization
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as ORG ";
+        $sql .= " ON SOS.ORGANISATION = ORG.ORGANISATION";
+                
+        // Service
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_SERVICE . " as SRV ";
+        $sql .= " ON SOS.SERVICE= SRV.SERVICE";
+
         $sql.= " WHERE 1=1 ";
         $sql.= empty($predicate) ? null : " AND " . $predicate;
-        $sql .= " ORDER BY ORGANISATION, SERVICE  ";
+        $sql .= " ORDER BY SOS.ORGANISATION, SOS.SERVICE  ";
         $rs = sqlsrv_query($GLOBALS['conn'], $sql);
 
         $allOrganisations = array();
         if($rs){
             while($row = sqlsrv_fetch_array($rs, SQLSRV_FETCH_ASSOC)){
-                $allOrganisations[trim($row['ORGANISATION'])][] = trim($row['SERVICE']);
+                $service = array(
+                    'id' =>  trim($row['SERVICE_ID']),
+                    'text' =>  trim($row['SERVICE'])
+                );
+                $allOrganisations[trim($row['ORGANISATION_ID'])][] = $service;
             }
         } else {
             DbTable::displayErrorMessage($rs,__CLASS__, __METHOD__, $sql);

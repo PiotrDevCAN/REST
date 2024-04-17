@@ -369,7 +369,7 @@ trait resourceRequestTableTrait
         $sql .= " RR.RESOURCE_REFERENCE,";
         $sql .= " RR.RFS,";
         $sql .= " ORG.ORGANISATION,";
-        $sql .= " RR.SERVICE,";
+        $sql .= " SRV.SERVICE,";
         $sql .= " RR.DESCRIPTION,";
         $sql .= " RR.START_DATE,";
         $sql .= " RR.END_DATE,";
@@ -425,6 +425,10 @@ trait resourceRequestTableTrait
         // Organisation
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_ORGANISATION . " as ORG ";
         $sql .= " ON RR.ORGANISATION = ORG.ORGANISATION_ID";
+
+        // Service
+        $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$STATIC_SERVICE . " as SRV ";
+        $sql .= " ON RR.SERVICE_ID = SRV.SERVICE_ID";
 
         // Resource Trait
         $sql .= " LEFT JOIN " . $GLOBALS['Db2Schema'] . "." . allTables::$RESOURCE_TRAITS . " as RTR ";
