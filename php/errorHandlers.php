@@ -30,7 +30,8 @@ function myErrorHandler($code, $message, $file, $line) {
 
     $mailError->SMTPDebug = SMTP::DEBUG_OFF; // Enable verbose debug output ; SMTP::DEBUG_OFF
     $mailError->isSMTP(); // Send using SMTP
-    $mailError->Host = $_ENV['smtp-server']; // Set the SMTP server to send through
+    // $mailError->Host = $_ENV['smtp-server']; // Set the SMTP server to send through
+    $mailError->Host = $_ENV['smtp-server-new'];; // Set the SMTP server to send through
     $mailError->SMTPAuth = true;
     $mailError->SMTPAutoTLS = true;
     $mailError->SMTPSecure = 'ssl';

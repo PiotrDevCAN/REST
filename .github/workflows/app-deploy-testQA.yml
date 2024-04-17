@@ -159,6 +159,7 @@ jobs:
           string-data: |
             {
               "smtp-server": "${{ env.SMTP_HOST }}",
+              "smtp-server-new": "${{ env.SMTP_HOST_NEW }}",
               "smtp-user-name": "${{ env.SMTP_USER_NAME }}",
               "smtp-user-pw": "${{ env.SMTP_USER_PW }}"
             }

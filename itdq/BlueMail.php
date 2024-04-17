@@ -18,7 +18,7 @@ class BlueMail
     static function send_mail(array $to, $subject, $message, $replyto, array $cc=array(), array $bcc=array()
         , $asynchronous = true
         , array $attachments=array()
-        , $newServer = false
+        , $newServer = true
     )
     {
         $emailLogRecordID = null;
